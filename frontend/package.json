@@ -6,7 +6,7 @@
     "npm": ">=6 <7"
   },
   "scripts": {
-    "lint:js": "npx eslint \"src/**/*.{ts,tsx}\" --resolve-plugins-relative-to .",
+    "lint:js": "npx eslint \"src/**/*.{ts,tsx}\"",
     "lint:css": "npx stylelint \"src/**/*.scss\" --syntax scss",
     "lint": "npm run lint:css && npm run lint:js",
     "start": "BROWSER=none react-scripts start",

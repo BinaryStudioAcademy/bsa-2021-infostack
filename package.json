@@ -31,7 +31,8 @@
     "start:dev": "concurrently -k -p \"{name}\" -n \"FRONTEND,BACKEND\" -c \"green,blue\" \"npm:start:frontend\" \"npm:start:backend\"",
     "start": "cd build && npm run start",
     "heroku-prebuild": "npm run install:all",
-    "heroku-postbuild": "npm run build && npm run move:deploy"
+    "heroku-postbuild": "npm run build && npm run move:deploy",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "1.9.2",
@@ -40,15 +41,14 @@
     "concurrently": "6.2.0",
     "editorconfig-checker": "4.0.2",
     "eslint": "7.30.0",
-    "lint-staged": "11.0.0",
-    "simple-git-hooks": "2.5.1",
+    "husky": "7.0.1",
+    "lint-staged": "11.1.0",
     "stylelint": "13.13.1",
     "stylelint-config-recommended": "5.0.0",
     "typescript": "4.3.5"
   },
   "dependencies": {},
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged",
-    "preserveUnused": true
+  "lint-staged": {
+    "*.{ts,tsx,scss}": "npm run lint"
   }
 }
