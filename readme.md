@@ -24,4 +24,5 @@ For the [FrontEnd](./frontend) to work properly, you need to fill in the **`.env
 
 1. **`npm run install:all`** at the root
 2. Fill ENVs
-3. **`npm run start:dev`** at the root
+3. **`npx simple-git-hooks`** at the root
+4. **`npm run start:dev`** at the root
