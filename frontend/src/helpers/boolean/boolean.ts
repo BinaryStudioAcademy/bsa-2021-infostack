@@ -1,1 +1,1 @@
-export { checkIsOneOf } from 'infostack-shared/helpers/helpers';
+export { checkIsOneOf } from 'infostack-shared/helpers';

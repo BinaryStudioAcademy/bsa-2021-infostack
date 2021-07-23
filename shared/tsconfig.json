@@ -1,14 +1,14 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["src"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["./src/*"]
     },
     "outDir": "build",
     "declaration": true,
     "module": "commonjs"
-  }
+  },
 }

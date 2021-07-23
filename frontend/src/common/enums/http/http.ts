@@ -1,1 +1,1 @@
-export { HttpHeader, HttpMethod } from 'infostack-shared/common/enums/enums';
+export { HttpHeader, HttpMethod } from 'infostack-shared/common/enums';

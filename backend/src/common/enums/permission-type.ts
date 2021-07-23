@@ -1,5 +1,1 @@
-export enum RoleType {
-  Admin = 'Admin',
-  Write = 'Write',
-  Read = 'Read',
-}
+export { PermissionType } from 'infostack-shared/common/enums';

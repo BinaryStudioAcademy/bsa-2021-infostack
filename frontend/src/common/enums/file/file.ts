@@ -1,1 +1,1 @@
-export { ContentType } from 'infostack-shared/common/enums/enums';
+export { ContentType } from 'infostack-shared/common/enums';

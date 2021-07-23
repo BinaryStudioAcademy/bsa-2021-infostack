@@ -1,1 +1,1 @@
-export { HttpError } from 'infostack-shared/exceptions/exceptions';
+export { HttpError } from 'infostack-shared/exceptions';

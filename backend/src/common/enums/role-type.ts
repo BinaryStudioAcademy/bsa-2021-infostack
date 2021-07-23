@@ -1,4 +1,1 @@
-export enum RoleType {
-  Admin = 'Admin',
-  User = 'User',
-}
+export { RoleType } from 'infostack-shared/common/enums';
