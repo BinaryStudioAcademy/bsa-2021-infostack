@@ -1,3 +1,5 @@
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { useSelector, useDispatch, useState } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { RootState } from 'common/types/types';
@@ -36,38 +38,39 @@ const Counter: React.FC = () => {
   return (
     <div>
       <div className={styles.row}>
-        <button
+        <Button
+          variant="outline-primary"
           className={styles.button}
           aria-label="Increment value"
           onClick={handleIncrement}
         >
           +
-        </button>
+        </Button>
         <span className={styles.value}>{count}</span>
-        <button
+        <Button
+          variant="outline-primary"
           className={styles.button}
           aria-label="Decrement value"
           onClick={handleDecrement}
         >
           -
-        </button>
+        </Button>
       </div>
       <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={handleIncrementChange}
-        />
-        <button className={styles.button} onClick={handleIncrementByAmount}>
+        <Form.Group className={styles.textbox}>
+          <Form.Control value={incrementAmount}
+            onChange={handleIncrementChange} />
+        </Form.Group>
+        <Button variant="outline-primary" className={styles.button} onClick={handleIncrementByAmount}>
           Add Amount
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="outline-primary"
           className={getAllowedClasses(styles.asyncButton, styles.button)}
           onClick={handleIncrementAsync}
         >
           Add Async
-        </button>
+        </Button>
       </div>
     </div>
   );

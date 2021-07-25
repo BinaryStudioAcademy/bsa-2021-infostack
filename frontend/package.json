@@ -6,7 +6,7 @@
     "npm": ">=6 <7"
   },
   "scripts": {
-    "lint:js": "npx eslint \"src/**/*.{ts,tsx}\"",
+    "lint:js": "npx eslint src --ext ts,tsx",
     "lint:css": "npx stylelint \"src/**/*.scss\" --syntax scss",
     "lint": "npm run lint:css && npm run lint:js",
     "start": "BROWSER=none react-scripts start",
@@ -15,9 +15,11 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "1.6.0",
+    "bootstrap": "5.0.2",
     "clsx": "1.1.1",
     "infostack-shared": "file:../shared/build",
     "react": "17.0.2",
+    "react-bootstrap": "2.0.0-beta.4",
     "react-dom": "17.0.2",
     "react-redux": "7.2.4",
     "react-router-dom": "5.2.0",
