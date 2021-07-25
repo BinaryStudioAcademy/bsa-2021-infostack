@@ -8,6 +8,9 @@
 - NPM (6.x.x);
 - PostgreSQL (13.x);
 
+## Code quality
+Static analyzers are used for both frontend and backend projects to ensure basic code quality. Additionally, [quality criteria](https://github.com/BinaryStudioAcademy/quality-criteria/blob/production/source/javascript.md) rules are enforced during code review and audit.
+
 ## 🗂 Shared
 
 This [folder](./shared) contains all common (helpers, enums and etc.) stuff for other applications (backend, frontend and etc.).
