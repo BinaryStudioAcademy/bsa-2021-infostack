@@ -30,8 +30,6 @@
     "start:backend": "cd backend && npm run start:dev",
     "start:dev": "concurrently -k -p \"{name}\" -n \"FRONTEND,BACKEND\" -c \"green,blue\" \"npm:start:frontend\" \"npm:start:backend\"",
     "start": "cd build && npm run start",
-    "heroku-prebuild": "npm run install:all",
-    "heroku-postbuild": "npm run build && npm run move:deploy",
     "prepare": "husky install"
   },
   "devDependencies": {
