@@ -47,7 +47,10 @@
   },
   "dependencies": {},
   "lint-staged": {
-    "*.{ts,tsx}": "npm run lint:js",
-    "*.scss": "npm run lint:css"
+    "*": "npm run lint:editorconfig && npm run lint:fs",
+    "backend/**/*.{ts,tsx}": "npm run lint:backend",
+    "frontend/**/*.{ts,tsx}": "npm run lint:frontend:js",
+    "frontend/**/*.scss": "npm run lint:css",
+    "shared/**/*.{ts,tsx}": "npm run lint:shared"
   }
 }
