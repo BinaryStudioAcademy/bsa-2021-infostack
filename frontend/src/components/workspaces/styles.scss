@@ -1,0 +1,15 @@
+.workspaces {
+  background: #F7F9FC;
+  color: #4F5862;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+}
+
+.workspaces-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 1.5rem;
+}

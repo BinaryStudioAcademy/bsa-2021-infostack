@@ -1,3 +1,16 @@
-const Workspaces: React.FC = () => <h1>Workspace item</h1>;
+import Card from 'react-bootstrap/Card';
+import './styles.scss';
 
-export default Workspaces;
+interface IWorkspaceItemProps {
+  title: string;
+  description?: string;
+}
+
+const WorkspaceItem: React.FC<IWorkspaceItemProps> = ({ title }) =>
+  (<Card className="workspace-card border-0">
+    <Card.Body className="d-flex align-items-center justify-content-center">
+      <Card.Title>{ title }</Card.Title>
+    </Card.Body>
+  </Card>);
+
+export default WorkspaceItem;
