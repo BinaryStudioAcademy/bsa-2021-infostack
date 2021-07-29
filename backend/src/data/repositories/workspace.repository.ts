@@ -7,7 +7,6 @@
 //   getAll(): Promise<IWorkspace[]> {
 //     return this.find();
 //   }
-
 // }
 
 // export default WorkspaceRepository;

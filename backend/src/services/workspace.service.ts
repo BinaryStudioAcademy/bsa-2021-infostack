@@ -1,3 +1,5 @@
+// import { HttpCode } from 'infostack-shared/common/enums';
+// import { HttpError } from 'infostack-shared/exceptions';
 import { IWorkspace, IWorkspaceCreation } from 'infostack-shared/common/interfaces';
 const workspaces = [
   {
@@ -88,4 +90,13 @@ export const create = async(data: IWorkspaceCreation): Promise<IWorkspace> => Pr
   title: data.title,
   description: 'description',
 });
-// WorkspaceRepository.create(data);
+// const { title } = data;
+// const workspace = WorkspaceRepository.findOne({ title });
+// if (!workspace) {
+//   WorkspaceRepository.create(data);
+// } else {
+//   throw new HttpError({
+//     status: HttpCode.BAD_REQUEST,
+//     message: 'Workspace with such title already exists',
+//   });
+// }
