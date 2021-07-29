@@ -5,10 +5,12 @@ import { ActionType } from './common';
 
 type State = {
   workspaces: IWorkspace[] | null;
+  currentWorkspaceID: string;
 };
 
 const initialState: State = {
   workspaces: null,
+  currentWorkspaceID: '',
 };
 
 const { reducer, actions } = createSlice({
@@ -17,6 +19,9 @@ const { reducer, actions } = createSlice({
   reducers: {
     [ActionType.SetWorkspaces]: (state, action: PayloadAction<IWorkspace[]>) => {
       state.workspaces = action.payload;
+    },
+    [ActionType.SetCurrentWorkspaceID]: (state, action: PayloadAction<string>) => {
+      state.currentWorkspaceID = action.payload;
     },
   },
 });

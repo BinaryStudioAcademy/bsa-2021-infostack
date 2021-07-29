@@ -4,7 +4,7 @@ import './styles.scss';
 
 const WorkspaceItem: React.FC<IWorkspaceCreation> = ({ title }) =>
   (
-    <Card className="workspace-card border-0">
+    <Card className="workspace-card shadow-sm rounded bg-white border-0">
       <Card.Body className="d-flex align-items-center justify-content-center">
         <Card.Title>{ title }</Card.Title>
       </Card.Body>
