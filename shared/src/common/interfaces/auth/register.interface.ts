@@ -1,4 +1,4 @@
-import { ILogin } from './login';
+import { ILogin } from './login.interface';
 
 interface IRegister extends ILogin {
   fullName: string;
