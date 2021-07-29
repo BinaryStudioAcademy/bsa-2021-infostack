@@ -5,6 +5,7 @@ enum AppRoute {
   WORKSPACES = '/workspaces',
   PAGES = '/pages',
   SETTINGS_PROFILE = '/settings/profile',
+  WORKSPACE_SETTING = '/workspace/settings',
 }
 
 export { AppRoute };
