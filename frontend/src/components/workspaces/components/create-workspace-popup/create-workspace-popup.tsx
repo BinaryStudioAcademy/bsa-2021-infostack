@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import IButton from 'common/interfaces/components/button';
+import { IButton }from 'common/interfaces/components/button';
 
 interface IPopUpProps {
   query: string;

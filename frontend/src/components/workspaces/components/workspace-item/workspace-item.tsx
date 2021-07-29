@@ -1,12 +1,8 @@
+import { IWorkspaceCreation } from 'common/interfaces/workspace';
 import Card from 'react-bootstrap/Card';
 import './styles.scss';
 
-interface IWorkspaceItemProps {
-  title: string;
-  description?: string;
-}
-
-const WorkspaceItem: React.FC<IWorkspaceItemProps> = ({ title }) =>
+const WorkspaceItem: React.FC<IWorkspaceCreation> = ({ title }) =>
   (
     <Card className="workspace-card border-0">
       <Card.Body className="d-flex align-items-center justify-content-center">
