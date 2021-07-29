@@ -8,22 +8,26 @@ import {
 } from 'infostack-shared';
 import { generateAccessToken } from '../common/utils/generate-access-token.util';
 import UserRepository from '../data/repositories/user.repository';
+import { hash } from '../common/utils/hash.util';
 
 export const register = async (
   body: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, password } = body;
 
-  const isEmailUsed = await userRepository.findByEmail(email);
-  if (!isEmailUsed) {
+  const isEmailUsed = await userRepository.findByEmail(body.email);
+  if (isEmailUsed) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: 'User with such email already exists',
     });
   }
 
-  const user = await userRepository.save({ fullName, email, password });
+  const hashedPassword = await hash(body.password);
+  const user = await userRepository.save({
+    ...body,
+    password: hashedPassword,
+  });
   delete user.password;
 
   return { ...user, accessToken: generateAccessToken(user.id) };
@@ -33,13 +37,12 @@ export const login = async (
   body: ILogin,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { email } = body;
 
   /**
    * TODO: when ticket with entities will be merged replace
    * const [user] = await userRepository.find();
    * with
-   * const user = await userRepository.findByEmail(email);
+   * const user = await userRepository.findByEmail(body.email);
    */
   const [user] = await userRepository.find();
   if (!user) {
@@ -50,12 +53,17 @@ export const login = async (
   }
 
   // TODO: when ticket with entities will be merged uncomment code below
-  // if (user.password !== password) {
+  // const isPasswordCorrect = await verify(body.password, user.password);
+  // if (!isPasswordCorrect) {
   //   throw new HttpError({
   //     status: HttpCode.BAD_REQUEST,
   //     message: 'Invalid password',
   //   });
   // }
 
-  return { ...user, email, accessToken: generateAccessToken(user.id) };
+  return {
+    ...user,
+    email: body.email,
+    accessToken: generateAccessToken(user.id),
+  };
 };
