@@ -2,8 +2,6 @@ ls:
   .dir: regex:([.a-z]*)([-.][a-z]+)*
   .scss: regex:([.a-z]*)([-.][a-z]+)*
   .ts: regex:([.a-z]*)([-.][a-z]+)*
-  backend/src/data/migrations:
-    .ts: snake_case
 
 
 ignore:
@@ -17,3 +15,4 @@ ignore:
     - backend/node_modules
     - .git
     - .husky
+    - backend/src/data/migrations
