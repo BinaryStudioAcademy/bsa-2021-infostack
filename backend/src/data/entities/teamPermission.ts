@@ -5,13 +5,12 @@ import {
   OneToOne,
   RelationId,
 } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
 import { Team } from './team';
 import { Page } from './page';
 import { PermissionOption } from './enums/permissionOption';
 
 @Entity()
-export class TeamPermission extends AbstractEntity {
+export class TeamPermission {
   @RelationId((teamPermission: TeamPermission) => teamPermission.team)
   @PrimaryColumn()
   readonly teamId: string;

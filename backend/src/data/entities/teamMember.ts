@@ -4,12 +4,11 @@ import {
   OneToOne,
   RelationId,
 } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
 import { User } from './user';
 import { Team } from './team';
 
 @Entity()
-export class TeamMember extends AbstractEntity {
+export class TeamMember {
   @RelationId((teamMember: TeamMember) => teamMember.user)
   @PrimaryColumn()
   readonly userId: string;
