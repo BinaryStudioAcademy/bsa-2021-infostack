@@ -33,7 +33,7 @@ export class Page extends AbstractEntity {
   workspace: Workspace;
 
   @RelationId((page: Page) => page.parentPage)
-  @Column()
+  @Column({ nullable: true })
   readonly parentPageId: string;
 
   @ManyToOne(() => Page, page => page.childPages)
@@ -43,10 +43,10 @@ export class Page extends AbstractEntity {
   childPages: Page[];
 
   @OneToMany(() => UserPermission, userPermission => userPermission.page)
-  userPermissions!: UserPermission[];
+  userPermissions: UserPermission[];
 
   @OneToMany(() => TeamPermission, teamPermission => teamPermission.page)
-  teamPermissions!: TeamPermission[];
+  teamPermissions: TeamPermission[];
 
   @ManyToMany(() => Tag, tag => tag.pages)
   @JoinTable({ name: 'page_tag' })

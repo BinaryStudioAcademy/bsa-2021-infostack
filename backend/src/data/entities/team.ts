@@ -26,7 +26,7 @@ export class Team extends AbstractEntity {
   users: User[];
 
   @OneToMany(() => TeamPermission, teamPermission => teamPermission.team)
-  teamPermissions!: TeamPermission[];
+  teamPermissions: TeamPermission[];
 
   @Column({ length: 50 })
   name: string;
