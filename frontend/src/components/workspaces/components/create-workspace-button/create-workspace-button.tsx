@@ -6,8 +6,8 @@ interface ICreateWorkspaceButtonProps {
   onClick(): void;
 }
 
-const CreateWorkspaceButton: React.FC<ICreateWorkspaceButtonProps> = ({ onClick }) => {
-  return (
+const CreateWorkspaceButton: React.FC<ICreateWorkspaceButtonProps> = ({ onClick }) =>
+  (
     <Card className="create-workspace-card border-0">
       <Button
         variant="light"
@@ -17,6 +17,5 @@ const CreateWorkspaceButton: React.FC<ICreateWorkspaceButtonProps> = ({ onClick 
       </Button>
     </Card>
   );
-};
 
 export default CreateWorkspaceButton;
