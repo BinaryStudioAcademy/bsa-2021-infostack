@@ -1,6 +1,8 @@
 // import { HttpCode } from 'infostack-shared/common/enums';
 // import { HttpError } from 'infostack-shared/exceptions';
 import { IWorkspace, IWorkspaceCreation } from 'infostack-shared/common/interfaces';
+// import { UserRole } from './enums/userRole';
+
 const workspaces = [
   {
     id: '1',
@@ -83,20 +85,19 @@ const workspaces = [
 ];
 
 export const getAll = async(): Promise<IWorkspace[]> => Promise.resolve(workspaces);
-// WorkspaceRepository.getAll();
+// const workspacesId = await UserWorkspaceRepository.find({ userId });
+// const workspaces = [] as IWorkspace[]
+// for (workspaceId of workspacesId) {
+//   const workspace = await WorkspaceRepository.findOne({ workspaceId });
+//   workspaces.push(workspace)
+// }
+// return workspaces
 
 export const create = async(data: IWorkspaceCreation): Promise<IWorkspace> => Promise.resolve({
   id: '18',
   title: data.title,
   description: 'description',
 });
-// const { title } = data;
-// const workspace = WorkspaceRepository.findOne({ title });
-// if (!workspace) {
-//   WorkspaceRepository.create(data);
-// } else {
-//   throw new HttpError({
-//     status: HttpCode.BAD_REQUEST,
-//     message: 'Workspace with such title already exists',
-//   });
-// }
+// const workspace = WorkspaceRepository.create(data);
+// UserWorkspaceRepository.create({userId, workspaceId: workspace.id, role: UserRole.ADMIN});
+
