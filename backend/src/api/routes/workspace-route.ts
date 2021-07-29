@@ -5,7 +5,7 @@ import { getAll, create } from '../../services/workspace.service';
 const router: Router = Router();
 
 router
-  .get('/', run(() => getAll()))
-  .post('/', run(req => create(req.body)));
+  .get('/', run(req => getAll(req.headers.authorization.split(' ')[1])))
+  .post('/', run(req => create(req.headers.authorization.split(' ')[1], req.body)));
 
 export default router;

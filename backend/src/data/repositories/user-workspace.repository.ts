@@ -1,10 +1,9 @@
-// import { IWorkspace, IWorkspaceCreation } from 'infostack-shared/common/interfaces';
-// import { EntityRepository, Repository } from 'typeorm';
-// import { UserWorkspace } from '../entities/user';
+import { EntityRepository, Repository } from 'typeorm';
+import { UserWorkspace } from '../entities/user-workspace';
 
-// @EntityRepository(UserWorkspace)
-// class UserWorkspaceRepository extends Repository<UserWorkspace> {
+@EntityRepository(UserWorkspace)
+class UserWorkspaceRepository extends Repository<UserWorkspace> {
 
-// }
+}
 
-// export default UserWorkspaceRepository;
+export default UserWorkspaceRepository;
