@@ -22,11 +22,10 @@ export const register = async (
   }
 
   const hashedPassword = await hash(body.password);
-  const user = await userRepository.save({
+  const { password, ...user } = await userRepository.save({
     ...body,
     password: hashedPassword,
   });
-  delete user.password;
 
   return { ...user, accessToken: generateAccessToken(user.id) };
 };
