@@ -3,11 +3,11 @@ import {
   Column,
   RelationId,
   ManyToOne,
-  OneToOne,
+  ManyToMany,
 } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
+import { Page } from './page';
 import { Workspace } from './workspace';
-import { PageTag } from './pageTag';
 
 @Entity()
 export class Tag extends AbstractEntity {
@@ -21,6 +21,6 @@ export class Tag extends AbstractEntity {
   @Column()
   name: string;
 
-  @OneToOne(() => PageTag, PageTag => PageTag.tag)
-  pageTag: PageTag;
+  @ManyToMany(() => Page, page => page.tags)
+  pages: Page[];
 }

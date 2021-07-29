@@ -2,16 +2,16 @@ import {
   Entity,
   Column,
   OneToMany,
-  OneToOne,
+  ManyToMany,
 } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
-import { RefreshToken } from './refreshToken';
-import { UserWorkspace } from './userWorkspace';
-import { TeamMember } from './teamMember';
+import { RefreshToken } from './refresh-token';
+import { UserWorkspace } from './user-workspace';
 import { Page } from './page';
-import { UserPermission } from './userPermission';
-import { PageContent } from './pageContent';
+import { UserPermission } from './user-permission';
+import { PageContent } from './page-content';
 import { Comment } from './comment';
+import { Team } from './team';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -27,17 +27,17 @@ export class User extends AbstractEntity {
   @OneToMany(() => RefreshToken, RefreshToken => RefreshToken.user)
   refreshTokens: RefreshToken[];
 
-  @OneToOne(() => UserWorkspace, UserWorkspace => UserWorkspace.user)
-  userWorkspace: UserWorkspace;
+  @OneToMany(() => UserWorkspace, userWorkspace => userWorkspace.user)
+  userWorkspaces!: UserWorkspace[];
 
-  @OneToOne(() => TeamMember, TeamMember => TeamMember.user)
-  teamMember: TeamMember;
+  @ManyToMany(() => Team, team => team.users)
+  teams: Team[];
 
   @OneToMany(() => Page, Page => Page.author)
   pages: Page[];
 
-  @OneToOne(() => UserPermission, UserPermission => UserPermission.user)
-  userPermission: UserPermission;
+  @OneToMany(() => UserPermission, userPermission => userPermission.user)
+  userPermissions!: UserPermission[];
 
   @OneToMany(() => PageContent, PageContent => PageContent.author)
   pageContents: PageContent[];

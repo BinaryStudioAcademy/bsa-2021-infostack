@@ -2,13 +2,15 @@ import {
   Entity,
   Column,
   ManyToOne,
-  OneToOne,
   RelationId,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Workspace } from './workspace';
-import { TeamMember } from './teamMember';
-import { TeamPermission } from './teamPermission';
+import { TeamPermission } from './team-permission';
+import { User } from './user';
 
 @Entity()
 export class Team extends AbstractEntity {
@@ -19,11 +21,12 @@ export class Team extends AbstractEntity {
   @ManyToOne(() => Workspace, workspace => workspace.teams)
   workspace: Workspace;
 
-  @OneToOne(() => TeamMember, TeamMember => TeamMember.team)
-  teamMember: TeamMember;
+  @ManyToMany(() => User, user => user.teams)
+  @JoinTable({ name: 'team_member' })
+  users: User[];
 
-  @OneToOne(() => TeamPermission, TeamPermission => TeamPermission.team)
-  teamPermission: TeamPermission;
+  @OneToMany(() => TeamPermission, teamPermission => teamPermission.team)
+  teamPermissions!: TeamPermission[];
 
   @Column({ length: 50 })
   name: string;
