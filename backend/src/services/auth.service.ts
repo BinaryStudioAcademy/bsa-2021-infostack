@@ -1,11 +1,9 @@
 import { getCustomRepository } from 'typeorm';
-import {
-  HttpError,
-  HttpCode,
-  IRegister,
-  IUserWithTokens,
-  ILogin,
-} from 'infostack-shared';
+import { HttpError } from '../common/errors/http-error';
+import { HttpCode } from '../common/enums/http-code';
+import { IRegister } from '../common/interfaces/auth/register.interface';
+import { ILogin } from '../common/interfaces/auth/login.interface';
+import { IUserWithTokens } from '../common/interfaces/user/user-auth.interface';
 import { generateAccessToken } from '../common/utils/generate-access-token.util';
 import UserRepository from '../data/repositories/user.repository';
 import { hash } from '../common/utils/hash.util';
