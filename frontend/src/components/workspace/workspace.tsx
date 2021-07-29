@@ -1,10 +1,13 @@
 import { Tabs, Tab, TabPane } from 'react-bootstrap';
+import { useCookies } from 'react-cookie';
 import './styles.scss';
 
 const Workspace: React.FC = () => {
+  const [cookies] = useCookies(['workspaceName']);
+
   return (
     <div className="settings-container">
-      <h1 className="title">Workspace name Settings</h1>
+      <h1 className="title">{cookies.workspaceName} Settings</h1>
       <Tabs className="tabs" defaultActiveKey="users">
         <Tab eventKey="users" className="settings-tab" title="Users">
           <p className="content-header">Users</p>

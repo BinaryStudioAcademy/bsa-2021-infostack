@@ -45,7 +45,9 @@
     "stylelint-config-recommended": "5.0.0",
     "typescript": "4.3.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-cookie": "^4.0.3"
+  },
   "lint-staged": {
     "*": "npm run lint:editorconfig && npm run lint:fs",
     "backend/**/*.{ts,tsx}": "npm run lint:backend",
