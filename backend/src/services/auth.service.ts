@@ -7,6 +7,7 @@ import { IUserWithTokens } from '../common/interfaces/user/user-auth.interface';
 import { generateAccessToken } from '../common/utils/generate-access-token.util';
 import UserRepository from '../data/repositories/user.repository';
 import { hash, verify } from '../common/utils/hash.util';
+import { HttpErrorMessage } from '../common/enums/http-error-message';
 
 export const register = async (
   body: IRegister,
@@ -17,7 +18,7 @@ export const register = async (
   if (isEmailUsed) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
-      message: 'User with such email already exists',
+      message: HttpErrorMessage.EMAIL_ALREADY_EXISTS,
     });
   }
 
@@ -39,7 +40,7 @@ export const login = async (
   if (!user) {
     throw new HttpError({
       status: HttpCode.NOT_FOUND,
-      message: 'No user with such email',
+      message: HttpErrorMessage.NO_SUCH_EMAIL,
     });
   }
 
@@ -47,7 +48,7 @@ export const login = async (
   if (!isPasswordCorrect) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: 'Invalid password',
+      message: HttpErrorMessage.INVALID_PASSWORD,
     });
   }
 
