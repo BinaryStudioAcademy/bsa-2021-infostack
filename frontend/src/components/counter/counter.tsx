@@ -1,16 +1,16 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useSelector, useDispatch, useState } from 'hooks/hooks';
+import { useAppSelector, useAppDispatch, useState } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { RootState } from 'common/types/types';
 import { counterActions } from 'store/actions';
 import styles from './styles.module.scss';
 
 const Counter: React.FC = () => {
-  const { count } = useSelector(({ counter }: RootState) => ({
+  const { count } = useAppSelector(({ counter }: RootState) => ({
     count: counter.value,
   }));
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState<string>('2');
 
   const handleIncrementChange = (
@@ -58,10 +58,16 @@ const Counter: React.FC = () => {
       </div>
       <div className={styles.row}>
         <Form.Group className={styles.textbox}>
-          <Form.Control value={incrementAmount}
-            onChange={handleIncrementChange} />
+          <Form.Control
+            value={incrementAmount}
+            onChange={handleIncrementChange}
+          />
         </Form.Group>
-        <Button variant="outline-primary" className={styles.button} onClick={handleIncrementByAmount}>
+        <Button
+          variant="outline-primary"
+          className={styles.button}
+          onClick={handleIncrementByAmount}
+        >
           Add Amount
         </Button>
         <Button
