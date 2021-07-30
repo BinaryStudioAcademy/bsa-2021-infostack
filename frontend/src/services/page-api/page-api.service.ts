@@ -8,7 +8,7 @@ class PageApi {
   constructor ({ Http }: any ) {
     this._http = Http;
   }
-  
+
   public async createPage(payload: IPageRequest): Promise<IPage> {
     return this._http.load('/pages', {
       method: HttpMethod.POST,
@@ -16,7 +16,7 @@ class PageApi {
       payload: JSON.stringify(payload),
     });
   }
-  
+
   public async createVersionPage(payload: IPageRequest): Promise<IPage> {
     return this._http.load('/pages/:id/version', {
       method: HttpMethod.POST,
@@ -36,7 +36,7 @@ class PageApi {
       method: HttpMethod.GET,
     });
   }
-  
+
 }
 
 export { PageApi };
