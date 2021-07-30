@@ -2,13 +2,14 @@ import {
   Entity,
   Column,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 import { User } from './user';
 import { Workspace } from './workspace';
 import { UserRole } from './enums/user-role';
 
 @Entity()
-export class UserWorkspace {
+export class UserWorkspace extends BaseEntity {
   @ManyToOne(() => User, user => user.userWorkspaces, { primary: true })
   user: User;
 
