@@ -11,7 +11,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   // TODO: replace real data
   if(login === 'qwe' && password === 'qweqwe') {
     // TODO : replace real data
-    return jwt.sign({ email: 'bar@bar.com', permission: 'admin', name: 'den' }, process.env.SECRET_KEY, { expiresIn: expiresIn }, (err, token) => {
+    return jwt.sign({ userId: 'a1v2c3' }, process.env.SECRET_KEY, { expiresIn: expiresIn }, (err, token) => {
 
       if(err) {
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: 'Something wrong', error: err });

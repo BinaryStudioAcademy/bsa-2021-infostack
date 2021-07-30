@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import { IRequestWithUser } from '~/common/models/user/IRequestWithUser';
 import { HttpCode } from 'infostack-shared/common/enums';
 import jwt from 'jsonwebtoken';
 
-export const auth = (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const auth = (req: IRequestWithUser, res: Response, next: NextFunction): void => {
   try {
-    const decoded = jwt.verify(req.headers['x-auth-token'], process.env.SECRET_KEY);
+    const decoded = jwt.verify(req.headers['x-auth-token'] as string, process.env.SECRET_KEY) as string;
     req.userId = decoded;
     next();
   } catch (err) {
@@ -12,7 +13,7 @@ export const auth = (req: Request, res: Response, next: NextFunction): Promise<v
   }
 };
 
-export const checkWorkSpace = (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const checkWorkSpace = (req: Request, res: Response, next: NextFunction): void => {
   const { workspaceId } = req.cookies;
   // TODO: replace real data
   if(workspaceId === 'first') {
@@ -20,4 +21,16 @@ export const checkWorkSpace = (req: Request, res: Response, next: NextFunction):
   } else {
     res.status(HttpCode.NOT_FOUND).json({ msg: 'Workspace is not found' });
   }
+};
+
+export const permissions = (...permittedRoles: string[]) => {
+  return (req: IRequestWithUser, res: Response, next: NextFunction): void => {
+    const { userId, role } = req;
+
+    if (userId && permittedRoles.includes(role)) {
+      next();
+    } else {
+      res.status(HttpCode.NOT_FOUND).json({ message: 'Not Found' });
+    }
+  };
 };
