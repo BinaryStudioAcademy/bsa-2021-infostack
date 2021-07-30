@@ -18,14 +18,14 @@ export class Team extends AbstractEntity {
   @Column()
   readonly workspaceId: string;
 
-  @ManyToOne(() => Workspace, workspace => workspace.teams)
+  @ManyToOne(() => Workspace, (workspace) => workspace.teams)
   workspace: Workspace;
 
-  @ManyToMany(() => User, user => user.teams)
+  @ManyToMany(() => User, (user) => user.teams)
   @JoinTable({ name: 'team_member' })
   users: User[];
 
-  @OneToMany(() => TeamPermission, teamPermission => teamPermission.team)
+  @OneToMany(() => TeamPermission, (teamPermission) => teamPermission.team)
   teamPermissions!: TeamPermission[];
 
   @Column({ length: 50 })

@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  OneToMany,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { RefreshToken } from './refresh-token';
 import { UserWorkspace } from './user-workspace';
@@ -24,24 +19,27 @@ export class User extends AbstractEntity {
   @Column({ length: 100, nullable: true })
   password: string;
 
-  @OneToMany(() => RefreshToken, RefreshToken => RefreshToken.user)
+  @Column({ length: 100, nullable: true })
+  avatar: string;
+
+  @OneToMany(() => RefreshToken, (RefreshToken) => RefreshToken.user)
   refreshTokens: RefreshToken[];
 
-  @OneToMany(() => UserWorkspace, userWorkspace => userWorkspace.user)
+  @OneToMany(() => UserWorkspace, (userWorkspace) => userWorkspace.user)
   userWorkspaces!: UserWorkspace[];
 
-  @ManyToMany(() => Team, team => team.users)
+  @ManyToMany(() => Team, (team) => team.users)
   teams: Team[];
 
-  @OneToMany(() => Page, Page => Page.author)
+  @OneToMany(() => Page, (Page) => Page.author)
   pages: Page[];
 
-  @OneToMany(() => UserPermission, userPermission => userPermission.user)
+  @OneToMany(() => UserPermission, (userPermission) => userPermission.user)
   userPermissions!: UserPermission[];
 
-  @OneToMany(() => PageContent, PageContent => PageContent.author)
+  @OneToMany(() => PageContent, (PageContent) => PageContent.author)
   pageContents: PageContent[];
 
-  @OneToMany(() => Comment, Comment => Comment.author)
+  @OneToMany(() => Comment, (Comment) => Comment.author)
   comments: Comment[];
 }
