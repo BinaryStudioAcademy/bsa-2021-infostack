@@ -21,12 +21,12 @@ export class Team extends AbstractEntity {
   @ManyToOne(() => Workspace, workspace => workspace.teams)
   workspace: Workspace;
 
-  @ManyToMany(() => User, user => user.teams)
+  @ManyToMany(() => User, user => user.teams, { cascade: true })
   @JoinTable({ name: 'team_member' })
   users: User[];
 
   @OneToMany(() => TeamPermission, teamPermission => teamPermission.team)
-  teamPermissions!: TeamPermission[];
+  teamPermissions: TeamPermission[];
 
   @Column({ length: 50 })
   name: string;
