@@ -16,26 +16,30 @@ const Workspaces: React.FC = () => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
 
-  // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['workspaceID']);
+  const [cookies, setCookie, removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
 
   const history = useHistory();
 
   useEffect(() => {
     dispatch(workspacesActions.loadWorkspaces());
+    removeCookie(CookieVariable.WORKSPACE_ID);
   }, []);
 
   useEffect(() => {
     if (currentWorkspaceID) {
       setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID);
       history.push(AppRoute.PAGES);
-    } else {
+    } else if (cookies.workspaceID){
       removeCookie(CookieVariable.WORKSPACE_ID);
     }
   }, [currentWorkspaceID]);
 
-  const renderWorkspaceItem = ({ id, title, description }: IWorkspace): JSX.Element => {
-    return <WorkspaceItem key={id} title={title} description={description} />;
+  const renderWorkspaceItem = (workspace: IWorkspace): JSX.Element => {
+    return <WorkspaceItem key={workspace.id} workspace={workspace} onClick={ onWorkspaceItemClick }/>;
+  };
+
+  const onWorkspaceItemClick = (id: string): void => {
+    dispatch(workspacesActions.SetCurrentWorkspaceID(id));
   };
 
   const onCreateWorkspaceButtonClick = (): void => {

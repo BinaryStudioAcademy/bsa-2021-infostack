@@ -1,13 +1,24 @@
-import { IWorkspaceCreation } from 'common/interfaces/workspace';
+import { IWorkspace } from 'common/interfaces/workspace';
+import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './styles.scss';
 
-const WorkspaceItem: React.FC<IWorkspaceCreation> = ({ title }) =>
+interface IWorkspaceItemProps {
+  workspace: IWorkspace;
+  onClick( id: string ): void;
+}
+
+const WorkspaceItem: React.FC<IWorkspaceItemProps> = ({ workspace, onClick }) =>
   (
-    <Card className="workspace-card shadow-sm rounded bg-white border-0">
-      <Card.Body className="d-flex align-items-center justify-content-center">
-        <Card.Title>{ title }</Card.Title>
-      </Card.Body>
+    <Card className="workspace-card shadow-sm rounded border-0">
+      <Button
+        variant="light"
+        className="bg-white text-secondary h-100"
+        onClick={():void => onClick(workspace.id)}>
+        <Card.Body className="d-flex align-items-center justify-content-center">
+          <Card.Title>{ workspace.title }</Card.Title>
+        </Card.Body>
+      </Button>
     </Card>
   );
 
