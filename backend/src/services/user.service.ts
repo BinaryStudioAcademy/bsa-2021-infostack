@@ -6,7 +6,7 @@ import { EXPIRES_IN, EXPIRES_HOURS } from '../config/jwt-config';
 
 export const getSomething = <T>(data: T): Promise<T> => Promise.resolve(data);
 
-export const login = async (req: IRequestWithUser, res: Response): Promise<void> => {
+export const jwtLogin = async (req: IRequestWithUser, res: Response): Promise<void> => {
   const { login, password } = req.body;
   const { userId } = req;
 

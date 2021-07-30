@@ -8,6 +8,7 @@ const routes = (app: Express): void => {
   app.use(cookieParser());
   app.use('/api/users', auth, checkWorkspace, userRoute);
   app.use('/api/login', authRoute);
+
 };
 
 export default routes;
