@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken';
-import { createConnection } from "typeorm";
+import { Request } from 'express';
+import { createConnection } from 'typeorm';
 import { Page } from '../data/entities/page';
 
-export const createPage = async (req): Promise<any> => {
+export const createPage = async (req:Request):Promise<any> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   const userId = jwt.decode(token);
   const workspaceId = req.cookies['workspaceId'];
   const { title, content } = req.body;
-  
+
   return createConnection().then(async connection => {
 
     const page = new Page();
@@ -22,16 +23,16 @@ export const createPage = async (req): Promise<any> => {
 
     return newPage;
 
-  }).catch(error => {throw new Error(error)});
-}
+  }).catch(error => {throw new Error(error);});
+};
 
-export const createVersionPage = async (req): Promise<any> => {
+export const createVersionPage = async (req: Request): Promise<any> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   const userId = jwt.decode(token);
   const workspaceId = req.cookies['workspaceId'];
   const { title, content } = req.body;
-  
+
   return createConnection().then(async connection => {
 
     const page = new Page();
@@ -45,15 +46,15 @@ export const createVersionPage = async (req): Promise<any> => {
 
     return newPage;
 
-  }).catch(error => {throw new Error(error)});
-}
+  }).catch(error => {throw new Error(error);});
+};
 
-export const getPages = async (req): Promise<any> => {
+export const getPages = async (req: Request): Promise<any> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   const userId = jwt.decode(token);
   const workspaceId = req.cookies['workspaceId'];
-  
+
   return createConnection().then(async connection => {
     const pageRepository = connection.getRepository(Page);
 
@@ -61,16 +62,16 @@ export const getPages = async (req): Promise<any> => {
 
     return Pages;
 
-  }).catch(error => {throw new Error(error)});
-}
+  }).catch(error => {throw new Error(error);});
+};
 
-export const getPage = async (req): Promise<any> => {
+export const getPage = async (req: Request): Promise<any> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   const userId = jwt.decode(token);
   const workspaceId = req.cookies['workspaceId'];
   const pageId = req.params.id;
-  
+
   return createConnection().then(async connection => {
     const pageRepository = connection.getRepository(Page);
 
@@ -78,5 +79,5 @@ export const getPage = async (req): Promise<any> => {
 
     return Pages;
 
-  }).catch(error => {throw new Error(error)});
-}
+  }).catch(error => {throw new Error(error);});
+};

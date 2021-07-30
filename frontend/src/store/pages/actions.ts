@@ -25,7 +25,7 @@ const createVersionPage = createAsyncThunk(
 
 const getPages = createAsyncThunk(
   ActionType.GET_PAGES,
-  async (getPayload: Record<string, never>, { dispatch }) => {
+  async (getPayload: undefined, { dispatch }) => {
     const getPagesResponse = await new PageApi({ http }).getPages();
     dispatch(actions.getPages(getPagesResponse));
   },
