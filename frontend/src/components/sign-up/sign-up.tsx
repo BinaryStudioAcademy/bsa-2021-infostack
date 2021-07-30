@@ -17,7 +17,7 @@ const SignUp: React.FC = () => {
   const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
     e.preventDefault();
 
-    dispatch(authActions.register(formState));
+    await dispatch(authActions.register(formState));
     push(AppRoute.ROOT);
   };
 

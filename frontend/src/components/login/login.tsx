@@ -17,7 +17,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
     e.preventDefault();
 
-    dispatch(authActions.login(formState));
+    await dispatch(authActions.login(formState));
     push(AppRoute.ROOT);
   };
 
