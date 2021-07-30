@@ -1,4 +1,5 @@
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
 
 body {
   margin: 0;
@@ -62,9 +63,9 @@ code {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(10px)
+    transform: translateY(10px);
   }
   100% {
-    transform: translateY(0px)
+    transform: translateY(0px);
   }
 }
