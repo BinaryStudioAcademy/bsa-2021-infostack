@@ -4,11 +4,12 @@ import {
   PrimaryColumn,
   ManyToOne,
   RelationId,
+  BaseEntity,
 } from 'typeorm';
 import { User } from './user';
 
 @Entity()
-export class RefreshToken {
+export class RefreshToken extends BaseEntity {
   @PrimaryColumn()
   token: string;
 
