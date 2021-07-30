@@ -48,7 +48,7 @@ export class Page extends AbstractEntity {
   @OneToMany(() => TeamPermission, teamPermission => teamPermission.page)
   teamPermissions: TeamPermission[];
 
-  @ManyToMany(() => Tag, tag => tag.pages)
+  @ManyToMany(() => Tag, tag => tag.pages, { cascade: true })
   @JoinTable({ name: 'page_tag' })
   tags: Tag[];
 
