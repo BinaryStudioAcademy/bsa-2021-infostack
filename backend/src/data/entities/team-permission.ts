@@ -2,13 +2,14 @@ import {
   Entity,
   Column,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 import { Team } from './team';
 import { Page } from './page';
 import { PermissionOption } from './enums/permission-option';
 
 @Entity()
-export class TeamPermission {
+export class TeamPermission extends BaseEntity {
   @ManyToOne(() => Team, team => team.teamPermissions, { primary: true })
   team: Team;
 
