@@ -8,7 +8,7 @@ import logo from 'assets/img/logo.svg';
 import Workspaces from 'components/workspaces/workspaces';
 import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
-import ProtectedRoute from 'components/common/protectedRoute/protected-route';
+import ProtectedRoute from 'components/common/protected-route/protected-route';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
