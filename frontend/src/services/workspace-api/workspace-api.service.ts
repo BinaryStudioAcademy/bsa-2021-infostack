@@ -9,17 +9,15 @@ class WorkspaceApi {
     this._http = new Http;
   }
 
-  // TODO send token
-
   public async create(payload: IWorkspaceCreation): Promise<IWorkspace> {
-    return this._http.load('http://localhost:3000/api/workspaces', {
+    return this._http.load('/workspaces', {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
       contentType: ContentType.JSON,
     });
   }
   public async get(): Promise<IWorkspace[]> {
-    return this._http.load('http://localhost:3000/api/workspaces');
+    return this._http.load('/workspaces');
   }
 }
 
