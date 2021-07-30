@@ -3,8 +3,8 @@ import { Workspace } from '../entities/workspace';
 
 @EntityRepository(Workspace)
 class WorkspaceRepository extends Repository<Workspace> {
-  findById(id: string):Promise<Workspace> {
-    return this.findOne({ id });
+  public async findById(id: string):Promise<Workspace> {
+    return await this.findOne({ id });
   }
 }
 

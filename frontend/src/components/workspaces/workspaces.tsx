@@ -5,13 +5,13 @@ import WorkspaceItem from './components/workspace-item/workspace-item';
 import CreateWorkspaceButton from './components/create-workspace-button/create-workspace-button';
 import PopUp from './components/create-workspace-popup/create-workspace-popup';
 import { workspacesActions } from 'store/actions';
-import { useState, useEffect, useSelector, useDispatch, useCookies, useHistory } from 'hooks/hooks';
+import { useState, useEffect, useAppSelector, useAppDispatch, useCookies, useHistory } from 'hooks/hooks';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import './styles.scss';
 
 const Workspaces: React.FC = () => {
-  const { workspaces, currentWorkspaceID } = useSelector((state: RootState) => state.workspaces);
-  const dispatch = useDispatch();
+  const { workspaces, currentWorkspaceID } = useAppSelector((state: RootState) => state.workspaces);
+  const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');

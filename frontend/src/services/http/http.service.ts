@@ -1,5 +1,5 @@
 import { HttpError } from 'exceptions/exceptions';
-import { ContentType, HttpHeader, HttpMethod } from 'common/enums/enums';
+import { ContentType, HttpHeader, HttpMethod, LocalStorageVariable } from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
 
 class Http {
@@ -9,8 +9,7 @@ class Http {
   ): Promise<T> {
     try {
       const { method = HttpMethod.GET, payload = null, contentType } = options;
-      // replace to value from enum after merge with new/login-sign-up
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
       const headers = this.getHeaders(contentType, token);
 
       const response = await fetch(url, {

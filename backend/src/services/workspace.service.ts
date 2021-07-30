@@ -8,7 +8,7 @@ import { UserRole } from '../data/entities/enums/user-role';
 
 export const getAll = async (token: string): Promise<IWorkspace[]> => {
   const userWorkspaceRepository = new UserWorkspaceRepository();
-  const userId = jwt.decode(token) as string;
+  const { userId }: any = jwt.decode(token);
   const usersWorkspaces = await userWorkspaceRepository.findUserWorkspaces(userId);
   const workspaces = [] as IWorkspace[];
   for (const userWorkspace of usersWorkspaces) {
@@ -22,11 +22,11 @@ export const create = async (token: string, data: IWorkspaceCreation): Promise<I
   const workspaceRepository = new WorkspaceRepository();
   const userWorkspaceRepository = new UserWorkspaceRepository();
   const userRepository = new UserRepository();
-  const userId = jwt.decode(token) as string;
+  const { userId }: any = jwt.decode(token);
   const id = uuidv4();
   workspaceRepository.create({ id, name: data.title });
-  const workspace = await workspaceRepository.findOne({ id });
-  const user = await userRepository.findOne({ id: userId });
+  const workspace = await workspaceRepository.findById(id);
+  const user = await userRepository.findById(userId);
   userWorkspaceRepository.create({ user, workspace, role: UserRole.ADMIN });
   return { ...workspace, title: workspace.name };
 };

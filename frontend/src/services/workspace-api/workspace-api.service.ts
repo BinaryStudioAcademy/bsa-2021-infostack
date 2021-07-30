@@ -10,14 +10,14 @@ class WorkspaceApi {
   }
 
   public async create(payload: IWorkspaceCreation): Promise<IWorkspace> {
-    return this._http.load('/workspaces', {
+    return this._http.load('/api/workspaces', {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
       contentType: ContentType.JSON,
     });
   }
   public async get(): Promise<IWorkspace[]> {
-    return this._http.load('/workspaces');
+    return this._http.load('/api/workspaces');
   }
 }
 
