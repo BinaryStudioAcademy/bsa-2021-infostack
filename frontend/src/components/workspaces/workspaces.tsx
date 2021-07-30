@@ -6,7 +6,7 @@ import CreateWorkspaceButton from './components/create-workspace-button/create-w
 import PopUp from './components/create-workspace-popup/create-workspace-popup';
 import { workspacesActions } from 'store/actions';
 import { useState, useEffect, useSelector, useDispatch, useCookies, useHistory } from 'hooks/hooks';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute, CookieVariable } from 'common/enums/enums';
 import './styles.scss';
 
 const Workspaces: React.FC = () => {
@@ -16,24 +16,21 @@ const Workspaces: React.FC = () => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
 
+  // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['workspaceID']);
 
   const history = useHistory();
 
   useEffect(() => {
     dispatch(workspacesActions.loadWorkspaces());
-    const workspaceID = cookies.workspaceID;
-    if (workspaceID) {
-      dispatch(workspacesActions.SetCurrentWorkspaceID(workspaceID));
-    }
   }, []);
 
   useEffect(() => {
     if (currentWorkspaceID) {
-      setCookie('workspaceID', currentWorkspaceID);
+      setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID);
       history.push(AppRoute.PAGES);
     } else {
-      removeCookie('workspaceID');
+      removeCookie(CookieVariable.WORKSPACE_ID);
     }
   }, [currentWorkspaceID]);
 
