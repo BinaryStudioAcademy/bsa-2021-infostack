@@ -15,11 +15,11 @@ export const auth = (req: IRequestWithUser, res: Response, next: NextFunction): 
 
 export const checkWorkSpace = (req: Request, res: Response, next: NextFunction): void => {
   const { workspaceId } = req.cookies;
-  // TODO: replace real data
-  if(workspaceId === 'first') {
+  if(workspaceId) {
     next();
   } else {
     res.status(HttpCode.NOT_FOUND).json({ msg: 'Workspace is not found' });
+    throw new Error('Workspace is not found');
   }
 };
 

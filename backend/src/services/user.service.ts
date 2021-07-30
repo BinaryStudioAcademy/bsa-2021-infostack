@@ -1,17 +1,17 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { IRequestWithUser } from '~/common/models/user/IRequestWithUser';
 import { HttpCode } from 'infostack-shared/common/enums';
 import jwt from 'jsonwebtoken';
 import { expiresIn, expiresHours } from '../config/jwt-config';
 
 export const getSomething = <T>(data: T): Promise<T> => Promise.resolve(data);
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: IRequestWithUser, res: Response): Promise<void> => {
   const { login, password } = req.body;
+  const { userId } = req;
 
-  // TODO: replace real data
-  if(login === 'qwe' && password === 'qweqwe') {
-    // TODO : replace real data
-    return jwt.sign({ userId: 'a1v2c3' }, process.env.SECRET_KEY, { expiresIn: expiresIn }, (err, token) => {
+  if(login && password) {
+    return jwt.sign({ userId }, process.env.SECRET_KEY, { expiresIn: expiresIn }, (err, token) => {
 
       if(err) {
         res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: 'Something wrong', error: err });
