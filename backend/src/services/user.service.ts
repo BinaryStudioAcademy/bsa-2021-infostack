@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { HttpCode } from 'infostack-shared/common/enums';
 import jwt from 'jsonwebtoken';
 import { expiresIn, expiresHours } from '../config/jwt-config';
 
@@ -10,10 +11,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   // TODO: replace real data
   if(login === 'qwe' && password === 'qweqwe') {
     // TODO : replace real data
-    return jwt.sign({ email: 'bar@bar.com', permission: 'admin', name: 'den', workspaceId: 'first' }, process.env.SECRET_KEY, { expiresIn: expiresIn }, (err, token) => {
+    return jwt.sign({ email: 'bar@bar.com', permission: 'admin', name: 'den' }, process.env.SECRET_KEY, { expiresIn: expiresIn }, (err, token) => {
 
       if(err) {
-        res.status(500).json({ msg: 'Something wrong', error: err });
+        res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: 'Something wrong', error: err });
       }
 
       const currentDate = new Date();
@@ -22,5 +23,5 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
   }
 
-  res.status(401).json({ msg: 'Not found' });
+  res.status(HttpCode.NOT_FOUND).json({ msg: 'Not found' });
 };
