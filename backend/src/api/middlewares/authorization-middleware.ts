@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { IRequestWithUser } from '~/common/models/user/IRequestWithUser';
+import { IRequestWithUser } from '~/common/models/user/request-with-user.interface';
 import { HttpCode } from 'infostack-shared/common/enums';
 import jwt from 'jsonwebtoken';
 
@@ -13,7 +13,7 @@ export const auth = (req: IRequestWithUser, res: Response, next: NextFunction): 
   }
 };
 
-export const checkWorkSpace = (req: Request, res: Response, next: NextFunction): void => {
+export const checkWorkspace = (req: Request, res: Response, next: NextFunction): void => {
   const { workspaceId } = req.cookies;
   if(workspaceId) {
     next();
@@ -23,7 +23,7 @@ export const checkWorkSpace = (req: Request, res: Response, next: NextFunction):
   }
 };
 
-export const permissions = (...permittedRoles: string[]) => {
+export const permit = (...permittedRoles: string[]) => {
   return (req: IRequestWithUser, res: Response, next: NextFunction): void => {
     const { userId, role } = req;
 
