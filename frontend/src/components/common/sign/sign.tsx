@@ -1,12 +1,13 @@
 import { Form, Button } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
+import React from 'react';
 
 type Props = {
   header: string;
   secondaryText: string;
   children: JSX.Element | JSX.Element[];
-  onSubmit: () => void;
+  onSubmit: (e: React.SyntheticEvent) => void;
 };
 
 const Sign: React.FC<Props> = ({

@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { AppRoute } from 'common/enums/enums';
 import FormField from 'components/common/form-field/form-field';
 import Sign from 'components/common/sign/sign';
+import { useAppDispatch, useHistory } from 'hooks/hooks';
+import { authActions } from 'store/auth';
 import styles from './styles.module.scss';
 
 const Login: React.FC = () => {
@@ -8,6 +11,15 @@ const Login: React.FC = () => {
     email: '',
     password: '',
   });
+  const dispatch = useAppDispatch();
+  const { push } = useHistory();
+
+  const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
+    e.preventDefault();
+
+    dispatch(authActions.login(formState));
+    push(AppRoute.ROOT);
+  };
 
   const handleChange = ({
     target: { name, value },
@@ -20,9 +32,7 @@ const Login: React.FC = () => {
     <Sign
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
-      onSubmit={(): void => {
-        return;
-      }}
+      onSubmit={handleSubmit}
     >
       <FormField
         label="Email"
