@@ -3,7 +3,7 @@ import { RootState } from 'common/types/types';
 import { IWorkspace } from 'common/interfaces/workspace';
 import WorkspaceItem from './components/workspace-item/workspace-item';
 import CreateWorkspaceButton from './components/create-workspace-button/create-workspace-button';
-import PopUp from './components/create-workspace-button/create-workspace-popup/create-workspace-popup';
+import PopUp from './components/create-workspace-popup/create-workspace-popup';
 import { workspacesActions } from 'store/actions';
 import { useState, useEffect, useSelector, useDispatch, useCookies, useHistory } from 'hooks/hooks';
 import { AppRoute } from 'common/enums/enums';
@@ -23,7 +23,9 @@ const Workspaces: React.FC = () => {
   useEffect(() => {
     dispatch(workspacesActions.loadWorkspaces());
     const workspaceID = cookies.workspaceID;
-    if (workspaceID) dispatch(workspacesActions.SetCurrentWorkspaceID(workspaceID));
+    if (workspaceID) {
+      dispatch(workspacesActions.SetCurrentWorkspaceID(workspaceID));
+    }
   }, []);
 
   useEffect(() => {
