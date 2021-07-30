@@ -1,83 +1,48 @@
 import jwt from 'jsonwebtoken';
 import { Request } from 'express';
-import { createConnection } from 'typeorm';
-import { Page } from '../data/entities/page';
+import { getCustomRepository } from 'typeorm';
+import { PageRepository } from '../data/repositories/page.repository';
+import { Page } from '~/data/entities/page';
 
-export const createPage = async (req:Request):Promise<any> => {
+export const createPage = async (req:Request):Promise<Page> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  const userId = jwt.decode(token);
+  const userId = jwt.decode(token) as string;
   const workspaceId = req.cookies['workspaceId'];
-  const { title, content } = req.body;
+  const pageContents = req.body;
 
-  return createConnection().then(async connection => {
-
-    const page = new Page();
-    page.authorId = userId;
-    page.workspaceId = workspaceId;
-    page.parentPageId = null;
-    page.childPages = null;
-    page.name = title;
-    page.content = content;
-    const newPage = await connection.manager.save(page);
-
-    return newPage;
-
-  }).catch(error => {throw new Error(error);});
+  const pageRepository = getCustomRepository(PageRepository);
+  return pageRepository.createAndSave( userId, workspaceId, null, null, pageContents);
 };
 
-export const createVersionPage = async (req: Request): Promise<any> => {
+export const createVersionPage = async (req: Request): Promise<Page> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  const userId = jwt.decode(token);
+  const userId = jwt.decode(token) as string;
   const workspaceId = req.cookies['workspaceId'];
-  const { title, content } = req.body;
+  const pageContents = req.body;
 
-  return createConnection().then(async connection => {
-
-    const page = new Page();
-    page.authorId = userId;
-    page.workspaceId = workspaceId;
-    page.parentPageId = null;
-    page.childPages = null;
-    page.name = title;
-    page.content = content;
-    const newPage = await connection.manager.save(page);
-
-    return newPage;
-
-  }).catch(error => {throw new Error(error);});
+  const pageRepository = getCustomRepository(PageRepository);
+  return pageRepository.createAndSave( userId, workspaceId, null, null, pageContents);
 };
 
-export const getPages = async (req: Request): Promise<any> => {
+export const getPages = async (req: Request): Promise<Page[]> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  const userId = jwt.decode(token);
+  const userId = jwt.decode(token) as string;
   const workspaceId = req.cookies['workspaceId'];
 
-  return createConnection().then(async connection => {
-    const pageRepository = connection.getRepository(Page);
-
-    const Pages = await pageRepository.find({ where: { authorId: userId, workspaceId: workspaceId } });
-
-    return Pages;
-
-  }).catch(error => {throw new Error(error);});
+  const pageRepository = getCustomRepository(PageRepository);
+  return pageRepository.findPages( userId, workspaceId);
 };
 
-export const getPage = async (req: Request): Promise<any> => {
+export const getPage = async (req: Request): Promise<Page> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  const userId = jwt.decode(token);
+  const userId = jwt.decode(token) as string;
   const workspaceId = req.cookies['workspaceId'];
   const pageId = req.params.id;
 
-  return createConnection().then(async connection => {
-    const pageRepository = connection.getRepository(Page);
-
-    const Pages = await pageRepository.find({ where: { authorId: userId, workspaceId: workspaceId, id: pageId } });
-
-    return Pages;
-
-  }).catch(error => {throw new Error(error);});
+  const pageRepository = getCustomRepository(PageRepository);
+  return pageRepository.findOnePage( userId, workspaceId, pageId);
 };
