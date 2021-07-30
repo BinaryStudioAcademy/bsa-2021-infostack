@@ -6,28 +6,28 @@ import { createPage, createVersionPage, getPages, getPage } from '../../services
 const router: Router = Router();
 
 router
-  .post('/pages',
+  .post('/',
     run(req => {
       // authenticateToken(req.headers);
       return createPage(req);
     }));
 
 router
-  .post('/pages/:id/version',
+  .post('/:id/version',
     run(req => {
       // authenticateToken(req.headers);
       return createVersionPage(req);
     }));
 
 router
-  .get('/pages',
+  .get('/',
     run(req => {
       // authenticateToken(req.headers);
       return getPages(req);
     }));
 
 router
-  .get('/pages/:id',
+  .get('/:id',
     run(req => {
       // authenticateToken(req.headers);
       return getPage(req);

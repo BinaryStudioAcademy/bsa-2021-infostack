@@ -3,14 +3,11 @@ import { actions } from './slice';
 import { ActionType } from './common';
 import { PageApi } from 'services';
 import { IPageRequest } from 'common/interfaces/pages';
-import { Http } from '../../services/http/http.service';
-
-const http = new Http();
 
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
-    const createPageResponse = await new PageApi({ http }).createPage(createPayload);
+    const createPageResponse = await new PageApi().createPage(createPayload);
     dispatch(actions.createPage(createPageResponse));
   },
 );
@@ -18,7 +15,7 @@ const createPage = createAsyncThunk(
 const createVersionPage = createAsyncThunk(
   ActionType.CREATE_VERSION_PAGE,
   async (createVersionPayload: IPageRequest, { dispatch }) => {
-    const createVersionPageResponse = await new PageApi({ http }).createVersionPage(createVersionPayload);
+    const createVersionPageResponse = await new PageApi().createVersionPage(createVersionPayload);
     dispatch(actions.createVersionPage(createVersionPageResponse));
   },
 );
@@ -26,7 +23,7 @@ const createVersionPage = createAsyncThunk(
 const getPages = createAsyncThunk(
   ActionType.GET_PAGES,
   async (getPayload: undefined, { dispatch }) => {
-    const getPagesResponse = await new PageApi({ http }).getPages();
+    const getPagesResponse = await new PageApi().getPages();
     dispatch(actions.getPages(getPagesResponse));
   },
 );
@@ -34,7 +31,7 @@ const getPages = createAsyncThunk(
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string, { dispatch }) => {
-    const createPageResponse = await new PageApi({ http }).getPage(getPayload);
+    const createPageResponse = await new PageApi().getPage(getPayload);
     dispatch(actions.getPage(createPageResponse));
   },
 );

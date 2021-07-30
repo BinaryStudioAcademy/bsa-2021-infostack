@@ -1,16 +1,16 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { IPage, IPageRequest } from 'common/interfaces/pages';
+import { Http } from 'services';
 
 class PageApi {
-  // eslint-disable-next-line
-  public _http: any;
-  // eslint-disable-next-line
-  constructor ({ Http }: any ) {
-    this._http = Http;
+  public _http: Http;
+
+  constructor () {
+    this._http = new Http;
   }
 
   public async createPage(payload: IPageRequest): Promise<IPage> {
-    return this._http.load('/pages', {
+    return this._http.load('/api/pages', {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
@@ -18,7 +18,7 @@ class PageApi {
   }
 
   public async createVersionPage(payload: IPageRequest): Promise<IPage> {
-    return this._http.load('/pages/:id/version', {
+    return this._http.load('/api/pages/:id/version', {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
@@ -26,13 +26,13 @@ class PageApi {
   }
 
   public async getPages(): Promise<IPage[]> {
-    return this._http.load('/pages', {
+    return this._http.load('/api/pages', {
       method: HttpMethod.GET,
     });
   }
 
   public async getPage(id: string): Promise<IPage> {
-    return this._http.load(`/pages/${id}`, {
+    return this._http.load(`/api/pages/${id}`, {
       method: HttpMethod.GET,
     });
   }
