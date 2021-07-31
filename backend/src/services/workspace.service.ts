@@ -1,3 +1,4 @@
+import { getCustomRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { IWorkspace, IWorkspaceCreation } from 'infostack-shared/common/interfaces';
@@ -7,7 +8,7 @@ import UserWorkspaceRepository from '../data/repositories/user-workspace.reposit
 import { UserRole } from '../data/entities/enums/user-role';
 
 export const getAll = async (token: string): Promise<IWorkspace[]> => {
-  const userWorkspaceRepository = new UserWorkspaceRepository();
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
   const { userId }: any = jwt.decode(token);
   const usersWorkspaces = await userWorkspaceRepository.findUserWorkspaces(userId);
   const workspaces = [] as IWorkspace[];
@@ -19,15 +20,16 @@ export const getAll = async (token: string): Promise<IWorkspace[]> => {
 };
 
 export const create = async (token: string, data: IWorkspaceCreation): Promise<IWorkspace> => {
-  const workspaceRepository = new WorkspaceRepository();
-  const userWorkspaceRepository = new UserWorkspaceRepository();
-  const userRepository = new UserRepository();
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userRepository = getCustomRepository(UserRepository);
   const { userId }: any = jwt.decode(token);
-  const id = uuidv4();
-  workspaceRepository.create({ id, name: data.title });
-  const workspace = await workspaceRepository.findById(id);
   const user = await userRepository.findById(userId);
-  userWorkspaceRepository.create({ user, workspace, role: UserRole.ADMIN });
+  const id = uuidv4();
+  const workspace = workspaceRepository.create({ id, name: data.title });
+  await workspaceRepository.save(workspace);
+  const userWorkspace = userWorkspaceRepository.create({ user, workspace, role: UserRole.ADMIN });
+  await userWorkspaceRepository.save(userWorkspace);
   return { ...workspace, title: workspace.name };
 };
 
