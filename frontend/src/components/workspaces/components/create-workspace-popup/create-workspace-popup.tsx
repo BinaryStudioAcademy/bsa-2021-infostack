@@ -1,6 +1,8 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { IButton }from 'common/interfaces/components/button';
+import { useEffect, useRef } from 'hooks/hooks';
+import { focusOnInput } from 'helpers/dom/dom';
 
 interface IPopUpProps {
   query: string;
@@ -12,7 +14,15 @@ interface IPopUpProps {
 }
 
 const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton }) => {
-  const onInputChange = (e: React.FormEvent<HTMLInputElement>):void => {
+  const inputElement = useRef(null);
+
+  useEffect(() => {
+    if (isVisible) {
+      focusOnInput(inputElement.current);
+    }
+  }, [isVisible]);
+
+  const onInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
     setPopUpText(e.currentTarget.value);
   };
 
@@ -24,6 +34,7 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
           className="w-100 border-0 border-bottom border-secondary"
           value={inputValue}
           onChange={onInputChange}
+          ref={inputElement}
         />
       </Modal.Body>
       <Modal.Footer>
