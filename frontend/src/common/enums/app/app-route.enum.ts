@@ -4,6 +4,7 @@ enum AppRoute {
   SIGN_UP = '/signup',
   WORKSPACES = '/workspaces',
   PAGES = '/pages',
+  PROFILE = '/profile',
   SETTINGS_PROFILE = '/settings/profile',
 }
 

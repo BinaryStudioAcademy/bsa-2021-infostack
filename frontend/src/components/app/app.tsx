@@ -8,6 +8,7 @@ import logo from 'assets/img/logo.svg';
 import Workspaces from 'components/workspaces/workspaces';
 import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
+import Header from 'components/header/header';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
   return (
     <>
       <div className="App">
+        <Header />
         <div>
           <ul className="App-navigation-list">
             <li>
