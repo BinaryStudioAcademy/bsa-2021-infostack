@@ -7,9 +7,10 @@ import TeamSeeder from './seeders/team.seeder';
 import TeamMemberSeeder from './seeders/team-member.seeder';
 import TeamPermissionSeeder from './seeders/team-permission.seeder';
 import { logger } from '../common/utils/logger.util';
+import ormconfig from '../config/ormconfig';
 
 const seeders = async ():Promise<void> => {
-  await createConnection();
+  await createConnection(ormconfig);
   logger.info('Connection created');
   logger.info('Seeding users');
   await UserSeeder.execute();
