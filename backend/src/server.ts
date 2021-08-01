@@ -7,6 +7,7 @@ import { env } from './env';
 import routes from './api/routes';
 import { logger } from './common/utils/logger.util';
 import errorHandlerMiddleware from './api/middlewares/error-handler-middleware';
+import ormconfig from './config/ormconfig';
 
 const { port } = env.app;
 
@@ -23,7 +24,7 @@ app.use(errorHandlerMiddleware);
 
 app.listen(port, async () => {
   try {
-    await createConnection();
+    await createConnection(ormconfig);
   } catch (error) {
     logger.info(`'App started with error: ${error}`);
   }
