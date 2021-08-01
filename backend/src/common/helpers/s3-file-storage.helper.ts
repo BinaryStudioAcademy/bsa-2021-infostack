@@ -25,5 +25,4 @@ class S3FileStorage {
   }
 }
 
-const s3fileStorage = new S3FileStorage();
-export { s3fileStorage };
+export { S3FileStorage };

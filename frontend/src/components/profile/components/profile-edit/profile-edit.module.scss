@@ -68,9 +68,19 @@
     object-fit: cover;
   }
 
-  span {
+  .uploadLabel {
+    display: flex;
+    align-items: center;
+  }
+
+  .uploadText {
     display: inline-block;
     font-size: 1.2rem;
     line-height: 2.3rem;
+  }
+
+  .uploadIcon {
+    font-size: 1.75rem;
+    max-height: 100%;
   }
 }

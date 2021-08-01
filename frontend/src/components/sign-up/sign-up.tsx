@@ -10,6 +10,7 @@ const SignUp: React.FC = () => {
     fullName: '',
     email: '',
     password: '',
+    avatar: '',
   });
   const dispatch = useAppDispatch();
   const { push } = useHistory();

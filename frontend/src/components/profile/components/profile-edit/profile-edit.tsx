@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useEffect, useSelector, useDispatch } from 'hooks/hooks';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from 'hooks/hooks';
 import { Button, Form, Col, Image, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from '../../../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { RootState } from 'common/types/types';
-import { IUser } from 'common/interfaces/user';
 import { UserApi } from 'services/user-api/user-api.service';
 import styles from './profile-edit.module.scss';
 
 const ProfileEdit: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isUploading, setIsUploading] = useState(false);
   const [userFullName, setUserFullName] = useState('');
   const [selectedImgURL, setSelectedImgURL] = useState('');
@@ -17,27 +17,17 @@ const ProfileEdit: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const userApi = new UserApi();
 
-  // For test
-  const loadUserData = (): void => {
-    const user: IUser = {
-      id: 'a0729eff-5987-4096-bf88-92f29cbfc551',
-      fullName: 'Denis Klemeshov',
-      email: 'qwe@gmail.com',
-      avatar:
-        'https://bsa-infostack.s3.us-west-2.amazonaws.com/a0729eff-5987-4096-bf88-92f29cbfc551.jpg',
-    };
-
-    dispatch(authActions.setUser(user));
-    setUserFullName(user.fullName);
-  };
-
   useEffect(() => {
-    loadUserData();
+    if (user) {
+      setUserFullName(user.fullName);
+    }
   }, []);
 
-  const onSubmitHandler = async (): Promise<void> => {
+  const handleSaveChanges = async (): Promise<void> => {
     if (user) {
       if (userFullName !== user.fullName) {
+        setIsUploading(true);
+
         const updatedUser = await userApi
           .update(user.id, { ...user, fullName: userFullName })
           .then((data) => data);
@@ -67,6 +57,8 @@ const ProfileEdit: React.FC = () => {
             email: updatedUser.email,
           }),
         );
+
+        setSelectedFile(undefined);
       }
 
       setIsUploading(false);
@@ -139,17 +131,17 @@ const ProfileEdit: React.FC = () => {
               roundedCircle
               className={`${getAllowedClasses(styles.cardImage)} mb-3`}
             />
-            <label className={`${getAllowedClasses(styles.cardButton)} mb-3`}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                className="bi bi-cloud-arrow-up-fill"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-              </svg>
+            <label
+              className={`${getAllowedClasses(
+                styles.cardButton,
+                styles.uploadLabel,
+              )} mb-3`}
+            >
+              <i
+                className={`bi bi-cloud-arrow-up-fill ${getAllowedClasses(
+                  styles.uploadIcon,
+                )}`}
+              ></i>
               &nbsp; Upload
               <input
                 type="file"
@@ -158,7 +150,7 @@ const ProfileEdit: React.FC = () => {
                 hidden
               />
             </label>
-            <span>
+            <span className={getAllowedClasses(styles.uploadText)}>
               For best results use an image at least 128px in .jpg format
             </span>
           </Col>
@@ -167,7 +159,7 @@ const ProfileEdit: React.FC = () => {
           variant="primary"
           className={getAllowedClasses(styles.cardButton)}
           size="sm"
-          onClick={!isUploading ? onSubmitHandler : undefined}
+          onClick={!isUploading ? handleSaveChanges : undefined}
           disabled={isUploading}
         >
           {isUploading ? 'Uploading…' : 'Save changes'}

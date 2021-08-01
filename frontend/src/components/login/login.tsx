@@ -10,6 +10,7 @@ const Login: React.FC = () => {
   const [formState, setFormState] = React.useState({
     email: '',
     password: '',
+    avatar: '',
   });
   const dispatch = useAppDispatch();
   const { push } = useHistory();

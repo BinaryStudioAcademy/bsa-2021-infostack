@@ -1,45 +1,37 @@
 import { IUser } from 'common/interfaces/user';
+import { HttpMethod, ContentType } from 'common/enums/enums';
+import { Http } from 'services/http/http.service';
+
+const http = new Http();
 
 class UserApi {
-  async update(id: string, properties: IUser): Promise<IUser> {
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...properties }),
-    };
-    try {
-      const updatedUser = await fetch(
-        `http://localhost:3001/api/user/${id}/profile`,
-        requestOptions,
-      )
-        .then((response) => response.json())
-        .then((data) => data);
+  public async update(
+    id: string,
+    updatePayload: Partial<IUser>,
+  ): Promise<IUser> {
+    const updateResponse: IUser = await http.load(`/api/user/${id}/profile`, {
+      method: HttpMethod.PUT,
+      payload: JSON.stringify(updatePayload),
+      contentType: ContentType.JSON,
+    });
 
-      return updatedUser;
-    } catch (err) {
-      throw new Error(err.message);
-    }
+    return updateResponse;
   }
 
-  async uploadAvatar(id: string, file: File, fileName: string): Promise<IUser> {
+  public async uploadAvatar(
+    id: string,
+    file: File,
+    fileName: string,
+  ): Promise<IUser> {
     const fd = new FormData();
     fd.append('image', file, fileName);
-    const requestOptions = {
-      method: 'PUT',
-      body: fd,
-    };
-    try {
-      const updatedUser = await fetch(
-        `http://localhost:3001/api/user/${id}/avatar`,
-        requestOptions,
-      )
-        .then((response) => response.json())
-        .then((data) => data);
 
-      return updatedUser;
-    } catch (err) {
-      throw new Error(err.message);
-    }
+    const uploadResponse: IUser = await http.load(`/api/user/${id}/avatar`, {
+      method: HttpMethod.PUT,
+      payload: fd,
+    });
+
+    return uploadResponse;
   }
 }
 

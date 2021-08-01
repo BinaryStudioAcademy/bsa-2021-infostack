@@ -27,13 +27,16 @@ class Multer {
     file: Express.Multer.File,
     cb: (arg0: Error, arg1: boolean) => void,
   ): void {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    if (
+      file.mimetype === 'image/jpeg' ||
+      file.mimetype === 'image/png' ||
+      file.mimetype === 'image/gif'
+    ) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type, only jpeg and png allowed'), false);
+      cb(new Error('Invalid file type, only jpeg, png and gif allowed'), false);
     }
   }
 }
 
-const multerHelper = new Multer();
-export { multerHelper };
+export { Multer };
