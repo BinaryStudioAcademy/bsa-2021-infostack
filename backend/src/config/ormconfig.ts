@@ -1,6 +1,5 @@
 import { parse } from 'pg-connection-string';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { logger } from '../common/utils/logger.util';
 import { env } from '../env';
 
 const getDbConfig = (): PostgresConnectionOptions => {
@@ -33,12 +32,11 @@ const getDbConfig = (): PostgresConnectionOptions => {
   return {
     ...baseConfig,
     host: env.db.host,
-    port: Number(env.db.port),
+    port: env.db.port,
     username: env.db.username,
     name: env.db.name,
     password: env.db.password,
   };
 };
 
-logger.info(getDbConfig());
 export default getDbConfig();
