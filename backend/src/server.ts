@@ -6,6 +6,7 @@ import { createConnection } from 'typeorm';
 import { env } from './env';
 import routes from './api/routes';
 import { logger } from './common/utils/logger.util';
+import errorHandlerMiddleware from './api/middlewares/error-handler-middleware';
 
 const { port } = env.app;
 
@@ -17,6 +18,8 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 routes(app);
+
+app.use(errorHandlerMiddleware);
 
 app.listen(port, async () => {
   try {

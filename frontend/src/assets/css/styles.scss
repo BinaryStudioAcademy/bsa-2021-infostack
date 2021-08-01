@@ -1,8 +1,8 @@
 // Bootstrap variables
 $primary: #3f80ea;
-
 @import '~bootstrap/scss/bootstrap';
 
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
 html {
@@ -68,5 +68,17 @@ h6 {
 
   li:not(:last-child) {
     margin: 0 15px 0 0;
+  }
+}
+
+@keyframes App-logo-float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
