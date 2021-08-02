@@ -34,7 +34,7 @@ class Multer {
     ) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type, only jpeg, png and gif allowed'), false);
+      cb(new Error('Invalid file type, only jpg, png and gif allowed'), false);
     }
   }
 }
