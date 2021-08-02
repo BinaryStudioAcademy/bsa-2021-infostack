@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import express, { Express } from 'express';
 import { createConnection } from 'typeorm';
+import cookieParser from 'cookie-parser';
 import { env } from './env';
 import routes from './api/routes';
 import { logger } from './common/utils/logger.util';
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../../build', '/public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 routes(app);
 

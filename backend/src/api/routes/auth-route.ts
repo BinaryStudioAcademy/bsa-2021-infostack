@@ -1,12 +1,8 @@
 import { Router } from 'express';
-import { jwtLogin } from '../../services/user.service';
 import { run } from '../../common/helpers/route.helper';
 import { login, register } from '../../services/auth.service';
 
 const router: Router = Router();
-
-router
-  .post('/', jwtLogin);
 
 router.post(
   '/register',
