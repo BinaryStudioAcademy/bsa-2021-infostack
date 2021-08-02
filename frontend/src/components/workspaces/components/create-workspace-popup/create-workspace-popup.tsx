@@ -39,7 +39,7 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={cancelButton.onClick}>{cancelButton.text}</Button>
-        <Button variant="success" onClick={confirmButton.onClick}>{confirmButton.text}</Button>
+        <Button variant="primary" onClick={confirmButton.onClick}>{confirmButton.text}</Button>
       </Modal.Footer>
     </Modal>
   );
