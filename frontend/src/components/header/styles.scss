@@ -48,10 +48,6 @@
   border-radius: 50%;
 }
 
-// .app-header > .navbar img {
-//   margin-right: 5px;
-// }
-
 .app-header .dropdown > .dropdown-toggle,
 .app-header .dropdown > .dropdown-toggle:hover {
   color: var(--header-color);
@@ -91,10 +87,4 @@
 .bi-person {
   font-size: 18px;
   margin-right: 4px;
-}
-
-.bi-person-circle {
-  font-size: 40px;
-  margin-right: 4px;
-  vertical-align: middle;
 }

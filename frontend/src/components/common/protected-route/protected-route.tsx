@@ -1,10 +1,10 @@
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { useAppSelector } from 'hooks/hooks';
 
 const ProtectedRoute = ({ ...rest }: RouteProps): JSX.Element => {
-  const user = useAppSelector((state) => state.auth.user);
+  // TODO change to value from enum after merge PR #7
+  const token = localStorage.getItem('accessToken');
 
-  if (user) {
+  if (token) {
     return <Route {...rest} />;
   } else {
     return <Redirect to={{ pathname: '/login' }} />;

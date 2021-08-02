@@ -1,15 +1,27 @@
+import Avatar from 'react-avatar';
 import { AppRoute } from 'common/enums/enums';
 import { Link } from 'components/common/common';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
+import './styles.scss';
 
-const NavProfile: React.FC = () => {
-  const userName = 'Chris Wood';
+interface INavProfileProps {
+  userName: string;
+  userAvatar?: string;
+}
+
+const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
   return (
     <Dropdown as={NavItem} align="end">
       <Dropdown.Toggle as={NavLink} id="dropdown-profile-details">
-        <i className="bi bi-person-circle"></i>
+        <Avatar
+          size="40"
+          name={userName}
+          src={userAvatar}
+          round={true}
+          className="userAvatar"
+        />
         <span className="text-dark">{userName}</span>
       </Dropdown.Toggle>
 

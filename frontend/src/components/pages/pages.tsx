@@ -1,3 +1,5 @@
-const Pages: React.FC = () => <h1>List of Pages</h1>;
+import Header from 'components/header/header';
+
+const Pages: React.FC = () => <Header />;
 
 export default Pages;
