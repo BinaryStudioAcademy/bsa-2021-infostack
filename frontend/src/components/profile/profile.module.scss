@@ -1,0 +1,21 @@
+.main {
+  padding: 2.5rem 2.5rem 1.5rem;
+  width: 100%;
+}
+
+.tabPane {
+  .cardItem {
+    box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+    margin-bottom: 200px;
+    word-wrap: break-word;
+    background-clip: border-box;
+    background-color: #fff;
+    border: 0 solid transparent;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    min-height: 32.5rem;
+  }
+}

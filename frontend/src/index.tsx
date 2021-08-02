@@ -4,17 +4,17 @@ import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { store } from 'store/store';
-import App from 'components/app/app';
 import './assets/css/styles.scss';
+import App from 'components/app/app';
 
 render(
   <StrictMode>
     <Provider store={store}>
-      <CookiesProvider>
-        <Router>
+      <Router>
+        <CookiesProvider>
           <App />
-        </Router>
-      </CookiesProvider>
+        </CookiesProvider>
+      </Router>
     </Provider>
   </StrictMode>,
   document.getElementById('root'),

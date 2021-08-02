@@ -7,7 +7,7 @@ import { IUser } from 'common/interfaces/user';
 const login = createAsyncThunk(
   ActionType.SetUser,
   async (
-    loginPayload: Omit<IUser, 'id' | 'fullName'>,
+    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar'>,
     { dispatch },
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
@@ -17,7 +17,10 @@ const login = createAsyncThunk(
 
 const register = createAsyncThunk(
   ActionType.SetUser,
-  async (registerPayload: Omit<IUser, 'id'>, { dispatch }): Promise<void> => {
+  async (
+    registerPayload: Omit<IUser, 'id' | 'avatar'>,
+    { dispatch },
+  ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
     dispatch(actions.setUser(registerResponse));
   },
