@@ -5,8 +5,7 @@ import { getAll, create } from '../../services/workspace.service';
 const router: Router = Router();
 
 router
-  // eslint-disable-next-line no-console
-  .get('/', run(req => getAll(req.headers.authorization.split(' ')[1])))
-  .post('/', run(req => create(req.headers.authorization.split(' ')[1], req.body)));
+  .get('/', run(req => getAll(req.userId)))
+  .post('/', run(req => create(req.userId, req.body)));
 
 export default router;

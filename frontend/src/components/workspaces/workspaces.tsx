@@ -59,7 +59,7 @@ const Workspaces: React.FC = () => {
   return (
     <div
       className={
-        `workspaces text-secondary bg-light d-flex flex-column align-items-start p-4${!workspaces ? ' vh-100' : ''}`
+        `workspaces text-secondary bg-light d-flex flex-column align-items-start p-4${!workspaces ? ' vh-91' : ''}`
       }>
       <h1 className="pageTitle">Workspaces</h1>
       {
