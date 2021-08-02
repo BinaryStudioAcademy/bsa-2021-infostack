@@ -4,6 +4,7 @@ import Sign from 'components/common/sign/sign';
 import FormField from 'components/common/form-field/form-field';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
+import { containsNoEmptyStrings } from 'helpers/helpers';
 
 const SignUp: React.FC = () => {
   const [formState, setFormState] = React.useState({
@@ -16,6 +17,10 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
     e.preventDefault();
+
+    if (!containsNoEmptyStrings(Object.values(formState))) {
+      return;
+    }
 
     await dispatch(authActions.register(formState));
     push(AppRoute.ROOT);
@@ -40,6 +45,7 @@ const SignUp: React.FC = () => {
         type="text"
         placeholder="Enter your name"
         name="fullName"
+        controlId="signUpFullName"
         value={fullName}
         onChange={handleChange}
       />
@@ -48,6 +54,7 @@ const SignUp: React.FC = () => {
         type="email"
         placeholder="Enter your email"
         name="email"
+        controlId="signUpEmail"
         value={email}
         onChange={handleChange}
       />
@@ -56,6 +63,7 @@ const SignUp: React.FC = () => {
         type="password"
         placeholder="Enter password"
         name="password"
+        controlId="signUpPassword"
         value={password}
         onChange={handleChange}
       />

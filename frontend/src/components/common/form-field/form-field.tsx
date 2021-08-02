@@ -7,6 +7,7 @@ type Props = {
   type: string;
   placeholder: string;
   helper?: string | JSX.Element;
+  controlId?: string;
 
   name?: string;
   value?: string;
@@ -18,11 +19,12 @@ const FormField: React.FC<Props> = ({
   type,
   placeholder,
   helper,
+  controlId,
   name,
   value,
   onChange,
 }) => (
-  <Form.Group className="mb-3" controlId="fullName">
+  <Form.Group className="mb-3" controlId={controlId}>
     <Form.Label className={styles.label}>{label}</Form.Label>
     <Form.Control
       type={type}
