@@ -1,6 +1,5 @@
 import Avatar from 'react-avatar';
 import { AppRoute } from 'common/enums/enums';
-import { Link } from 'components/common/common';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
@@ -26,21 +25,21 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item>
-          <Link to={AppRoute.PROFILE}>
-            <i className="bi bi-person"></i>
-            Profile
-          </Link>
+        <Dropdown.Item href={ AppRoute.PROFILE }>
+          <i className="bi bi-person"></i>
+          Profile
         </Dropdown.Item>
 
         <Dropdown.Divider />
-        <Dropdown.Item>
-          <Link to={AppRoute.WORKSPACES}>Select Workspace</Link>
+        <Dropdown.Item href={ AppRoute.WORKSPACES }>
+          Select Workspace
         </Dropdown.Item>
-        <Dropdown.Item>
-          <Link to={AppRoute.SETTINGS_PROFILE}>Settings</Link>
+        <Dropdown.Item href={ AppRoute.SETTINGS_PROFILE }>
+          Settings
         </Dropdown.Item>
-        <Dropdown.Item className="dropdown-item-logout">Logout</Dropdown.Item>
+        <Dropdown.Item onClick={(): void => { alert('click'); }}>
+          Logout
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

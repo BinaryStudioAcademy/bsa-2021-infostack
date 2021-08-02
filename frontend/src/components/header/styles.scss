@@ -60,18 +60,16 @@
   padding: 0;
 }
 
-.dropdown-menu .dropdown-item-logout {
-  padding: 0.25rem 1rem;
-}
-
-.dropdown-item a {
+.dropdown-menu .dropdown-item,
+.dropdown-menu button {
   display: block;
   padding: 0.25rem 1rem;
   color: var(--header-color);
   text-decoration: none;
 }
 
-.dropdown-item a:hover {
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu button:hover {
   color: var(--header-color);
 }
 
