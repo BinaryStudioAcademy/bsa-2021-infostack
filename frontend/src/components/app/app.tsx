@@ -8,7 +8,6 @@ import { Link, Route, Switch } from 'components/common/common';
 import Workspaces from 'components/workspaces/workspaces';
 import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
-import Header from 'components/header/header';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import Workspace from 'components/workspace/workspace';
 
@@ -18,7 +17,6 @@ const App: React.FC = () => {
   return (
     <>
       <div className="App">
-        <Header />
         <div>
           <ul className="App-navigation-list">
             <li>
@@ -53,7 +51,7 @@ const App: React.FC = () => {
               component={Workspaces}
               exact
             />
-            <ProtectedRoute path={AppRoute.PAGES} component={Pages} exact />
+            <Route path={AppRoute.PAGES} component={Pages} exact />
             <ProtectedRoute
               path={AppRoute.SETTINGS_PROFILE}
               component={Profile}
