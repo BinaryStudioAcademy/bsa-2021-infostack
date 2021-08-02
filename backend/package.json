@@ -27,6 +27,7 @@
     "@types/cookie-parser": "1.4.2",
     "@types/cors": "2.8.12",
     "@types/cryptr": "4.0.1",
+    "@types/multer": "1.4.7",
     "@types/jsonwebtoken": "8.5.4",
     "eslint": "7.14.0",
     "eslint-config-airbnb-base": "14.2.1",
@@ -38,6 +39,7 @@
   },
   "dependencies": {
     "cookie-parser": "1.4.5",
+    "aws-sdk": "2.955.0",
     "cors": "2.8.5",
     "crypto-random-string": "3.3.0",
     "cryptr": "6.0.2",
@@ -45,6 +47,7 @@
     "express": "4.17.1",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "1.11.0",
+    "multer": "1.4.2",
     "pg": "8.5.1",
     "pg-connection-string": "2.5.0",
     "pino": "7.0.0-rc.1",
