@@ -5,18 +5,21 @@ import './page-content.scss';
 
 const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  // const { pageTitle, content } = currentPage?.pageContents[0];
+  const pageTitle = currentPage?.pageContents[0].title;
+  const content = currentPage?.pageContents[0].content;
 
   const Content: React.FC = () => {
     return (
       <div className="content">
         <div className="container-fluid p-0">
-          <h1 className="h3 mb-3">{currentPage ? currentPage.name : 'New Page'}</h1>
+          <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
           <div className="row">
             <div className="col-12">
 
               <div className="card">
                 <div className="card-header">
-                  <h5 className="card-title mb-0">{currentPage?.content ? currentPage.content : 'Empty page'}</h5>
+                  <h5 className="card-title mb-0">{content || 'Empty page'}</h5>
                 </div>
                 <div className="card-body">
                 </div>

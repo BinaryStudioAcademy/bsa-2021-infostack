@@ -5,8 +5,8 @@ import { createPage, createVersionPage, getPages, getPage } from '../../services
 const router: Router = Router();
 
 router
-  .post('/',
-    run(req => createPage(req)));
+  .post('/', authMiddleware, workspaceMiddleware,
+    run(req => createPage(req.userId, req.workspaceId, req.body)));
 
 router
   .post('/:id/version',
@@ -17,7 +17,7 @@ router
     run(req => getPages(req)));
 
 router
-  .get('/:id',
-    run(req => getPage(req)));
+  .get('/:id', authMiddleware, workspaceMiddleware,
+    run(req => getPage(req.workspaceId, req.params.id)));
 
 export default router;

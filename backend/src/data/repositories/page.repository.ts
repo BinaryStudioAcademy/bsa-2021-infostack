@@ -21,7 +21,7 @@ export class PageRepository extends AbstractRepository<Page> {
     return this.repository.find({ where: { authorId: authorId, workspaceId: workspaceId } });
   }
 
-  findOnePage(authorId: string, workspaceId: string, pageId: string): Promise<Page> {
-    return this.repository.findOne({ where: { authorId: authorId, workspaceId: workspaceId, id: pageId } });
+  findOnePage(workspaceId: string, pageId: string): Promise<Page> {
+    return this.repository.findOne({ where: { workspaceId: workspaceId, id: pageId } });
   }
 }
