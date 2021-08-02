@@ -7,6 +7,8 @@ import { Link, Route, Switch } from 'components/common/common';
 import Workspaces from 'components/workspaces/workspaces';
 import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
+import Header from 'components/header/header';
+import ProtectedRoute from 'components/common/protected-route/protected-route';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -14,6 +16,7 @@ const App: React.FC = () => {
   return (
     <>
       <div className="App">
+        <Header />
         <div>
           <ul className="App-navigation-list">
             <li>
@@ -39,12 +42,20 @@ const App: React.FC = () => {
         </div>
         <header className="App-header">
           <Switch>
-            <Route path={AppRoute.ROOT} component={Counter} exact />
+            <ProtectedRoute path={AppRoute.ROOT} component={Counter} exact />
             <Route path={AppRoute.LOGIN} component={Login} exact />
             <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
-            <Route path={AppRoute.WORKSPACES} component={Workspaces} exact />
-            <Route path={AppRoute.PAGES} component={Pages} exact />
-            <Route path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
+            <ProtectedRoute
+              path={AppRoute.WORKSPACES}
+              component={Workspaces}
+              exact
+            />
+            <ProtectedRoute path={AppRoute.PAGES} component={Pages} exact />
+            <ProtectedRoute
+              path={AppRoute.SETTINGS_PROFILE}
+              component={Profile}
+              exact
+            />
           </Switch>
         </header>
       </div>

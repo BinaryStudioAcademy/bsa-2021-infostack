@@ -6,7 +6,7 @@
     "main": "./src/server.ts",
     "scripts": {
         "start": "ts-node ./src/server.ts",
-        "start:dev": "node_modules/.bin/ts-node-dev ./src/server.ts",
+        "start:dev": "ts-node-dev ./src/server.ts",
         "start:fast": "ts-node-dev --respawn --type-check --notify=false --clear ./src/server.ts",
         "lint:start": "nodemon -r ./src/server.ts --exec \"npm run linter && ts-node\"",
         "lint": "npx eslint \"./src/**/*.ts\" --fix",
@@ -17,7 +17,7 @@
         "generate-seed": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:create -d ./src/data/seeders -n",
         "seed": "node_modules/.bin/ts-node ./src/data/seeders",
         "build:ts": "tsc && tscpaths -p tsconfig.json --src . --out build",
-        "build:copy": "copy -r public package.json package-lock.json build",
+        "build:copy": "cp -r public package.json package-lock.json build",
         "build": "npm run build:ts && npm run build:copy",
         "prod": "node --max-old-space-size=1024 -r ts-node/register ./src/server.ts"
     },
@@ -26,13 +26,14 @@
     "devDependencies": {
         "@types/cors": "2.8.12",
         "@types/cryptr": "4.0.1",
-        "nodemon": "2.0.6",
-        "ts-node-dev": "1.0.0",
-        "tscpaths": "0.0.9",
+        "@types/jsonwebtoken": "8.5.4",
         "eslint": "7.14.0",
         "eslint-config-airbnb-base": "14.2.1",
         "eslint-plugin-import": "2.22.1",
-        "infostack-shared": "file:../shared/build"
+        "infostack-shared": "file:../shared/build",
+        "nodemon": "2.0.6",
+        "ts-node-dev": "1.0.0",
+        "tscpaths": "0.0.9"
     },
     "dependencies": {
         "cors": "2.8.5",
