@@ -9,6 +9,7 @@ import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
 import Header from 'components/header/header';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
+import Workspace from 'components/workspace/workspace';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -54,6 +55,11 @@ const App: React.FC = () => {
             <ProtectedRoute
               path={AppRoute.SETTINGS_PROFILE}
               component={Profile}
+              exact
+            />
+            <ProtectedRoute
+              path={AppRoute.WORKSPACE_SETTING}
+              component={Workspace}
               exact
             />
           </Switch>

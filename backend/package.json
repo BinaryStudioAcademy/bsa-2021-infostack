@@ -5,7 +5,7 @@
   "private": true,
   "main": "./src/server.ts",
   "scripts": {
-    "start": "ts-node ./src/server.ts",
+    "start": "node ./server.js",
     "start:dev": "ts-node-dev ./src/server.ts",
     "start:fast": "ts-node-dev --respawn --type-check --notify=false --clear ./src/server.ts",
     "lint:start": "nodemon -r ./src/server.ts --exec \"npm run linter && ts-node\"",
@@ -47,6 +47,7 @@
     "jwks-rsa": "1.11.0",
     "multer": "1.4.2",
     "pg": "8.5.1",
+    "pg-connection-string": "2.5.0",
     "pino": "7.0.0-rc.1",
     "pino-pretty": "5.1.2",
     "reflect-metadata": "0.1.13",
