@@ -1,14 +1,8 @@
 import UserRepository from '../data/repositories/user.repository';
 import { getCustomRepository } from 'typeorm';
-// import { HttpError } from '../common/errors/http-error';
-// import { HttpCode } from '../common/enums/http-code';
-// import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { S3FileStorage } from '../common/helpers/s3-file-storage.helper';
-import { Multer } from '../common/helpers/multer.helper';
+import { uploadFile } from '../common/helpers/s3-file-storage.helper';
+import { unlinkFile } from '../common/helpers/multer.helper';
 import { IUser } from 'infostack-shared';
-
-const s3FileStorage = new S3FileStorage();
-const multerHelper = new Multer();
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
@@ -35,8 +29,8 @@ export const updateAvatar = async (
   file: Express.Multer.File,
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const uploadedFile = await s3FileStorage.uploadFile(file);
-  multerHelper.unlinkFile(file.path);
+  const uploadedFile = await uploadFile(file);
+  unlinkFile(file.path);
   const { Location } = uploadedFile;
   const userToUpdate = await userRepository.findById(id);
 

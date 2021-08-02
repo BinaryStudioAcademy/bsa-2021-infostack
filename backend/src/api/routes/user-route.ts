@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Multer } from '../../common/helpers/multer.helper';
+import { upload } from '../../common/helpers/multer.helper';
 import { run } from '../../common/helpers/route.helper';
 import {
   getUserById,
@@ -8,7 +8,6 @@ import {
 } from '../../services/user.service';
 
 const router: Router = Router();
-const multerHelper = new Multer();
 
 router.get(
   '/:id/profile',
@@ -22,7 +21,7 @@ router.put(
 
 router.put(
   '/:id/avatar',
-  multerHelper.upload().single('image'),
+  upload().single('image'),
   run((req) => updateAvatar(req.params.id, req.file)),
 );
 

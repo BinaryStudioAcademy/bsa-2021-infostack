@@ -9,7 +9,7 @@ class UserApi {
     id: string,
     updatePayload: Partial<IUser>,
   ): Promise<IUser> {
-    const updateResponse: IUser = await http.load(`/api/user/${id}/profile`, {
+    const updateResponse: IUser = await http.load(`/api/users/${id}/profile`, {
       method: HttpMethod.PUT,
       payload: JSON.stringify(updatePayload),
       contentType: ContentType.JSON,
@@ -26,7 +26,7 @@ class UserApi {
     const fd = new FormData();
     fd.append('image', file, fileName);
 
-    const uploadResponse: IUser = await http.load(`/api/user/${id}/avatar`, {
+    const uploadResponse: IUser = await http.load(`/api/users/${id}/avatar`, {
       method: HttpMethod.PUT,
       payload: fd,
     });

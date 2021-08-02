@@ -18,7 +18,7 @@ export class Team extends AbstractEntity {
   @Column()
   readonly workspaceId: string;
 
-  @ManyToOne(() => Workspace, (workspace) => workspace.teams)
+  @ManyToOne(() => Workspace, workspace => workspace.teams)
   workspace: Workspace;
 
   @ManyToMany(() => User, user => user.teams, { cascade: true })

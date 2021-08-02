@@ -1,28 +1,23 @@
 import fs from 'fs';
 import S3 from 'aws-sdk/clients/s3';
-import { getOsEnv } from './path.helper';
+import { env } from '../../env';
 
-class S3FileStorage {
-  _s3: S3;
+const accessKeyId = env.s3.accessKeyId;
+const secretAccessKey = env.s3.secretAccessKey;
+const bucketName = env.s3.bucketName;
 
-  constructor() {
-    const accessKeyId = getOsEnv('AWS_ACCESS_KEY');
-    const secretAccessKey = getOsEnv('AWS_SECRET_KEY');
-    this._s3 = new S3({ accessKeyId, secretAccessKey });
-  }
+const s3 = new S3({ accessKeyId, secretAccessKey });
 
-  uploadFile(file: Express.Multer.File): any {
-    const fileStream = fs.createReadStream(file.path);
-    const bucketName = getOsEnv('AWS_BUCKET_NAME');
-    const uploadParams = {
-      Bucket: bucketName,
-      Body: fileStream,
-      Key: file.filename,
-      ACL: 'public-read',
-    };
+export const uploadFile = (
+  file: Express.Multer.File,
+): Promise<S3.ManagedUpload.SendData> => {
+  const fileStream = fs.createReadStream(file.path);
+  const uploadParams = {
+    Bucket: bucketName,
+    Body: fileStream,
+    Key: file.filename,
+    ACL: 'public-read',
+  };
 
-    return this._s3.upload(uploadParams).promise();
-  }
-}
-
-export { S3FileStorage };
+  return s3.upload(uploadParams).promise();
+};
