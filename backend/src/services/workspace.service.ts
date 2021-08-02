@@ -3,7 +3,7 @@ import { IWorkspaceUser } from '../common/interfaces/workspace/workspace-user';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 
-export const getUsers = async (
+export const getWorkspaceUsers = async (
   workspaceId: string,
 ): Promise<IWorkspaceUser[]> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
