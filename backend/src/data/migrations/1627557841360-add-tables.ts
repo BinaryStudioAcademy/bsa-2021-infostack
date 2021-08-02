@@ -8,7 +8,7 @@ export class addTables1627557841360 implements MigrationInterface {
       'CREATE TABLE "refresh_token" ("token" character varying NOT NULL, "userId" uuid NOT NULL, CONSTRAINT "PK_c31d0a2f38e6e99110df62ab0af" PRIMARY KEY ("token"))',
     );
     await queryRunner.query(
-      "CREATE TYPE \"team_permission_option_enum\" AS ENUM('read', 'write', 'admin')",
+      'CREATE TYPE "team_permission_option_enum" AS ENUM(\'read\', \'write\', \'admin\')',
     );
     await queryRunner.query(
       'CREATE TABLE "team_permission" ("option" "team_permission_option_enum" NOT NULL DEFAULT \'read\', "teamId" uuid NOT NULL, "pageId" uuid NOT NULL, CONSTRAINT "PK_2228dc613c3b121533089d3fc47" PRIMARY KEY ("teamId", "pageId"))',
@@ -23,13 +23,13 @@ export class addTables1627557841360 implements MigrationInterface {
       'CREATE TABLE "workspace" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "name" character varying(50) NOT NULL, CONSTRAINT "PK_ca86b6f9b3be5fe26d307d09b49" PRIMARY KEY ("id"))',
     );
     await queryRunner.query(
-      "CREATE TYPE \"user_workspace_role_enum\" AS ENUM('admin', 'user')",
+      'CREATE TYPE "user_workspace_role_enum" AS ENUM(\'admin\', \'user\')',
     );
     await queryRunner.query(
       'CREATE TABLE "user_workspace" ("role" "user_workspace_role_enum" NOT NULL DEFAULT \'user\', "userId" uuid NOT NULL, "workspaceId" uuid NOT NULL, CONSTRAINT "PK_c395920dbb9ba8840eaa0278bf8" PRIMARY KEY ("userId", "workspaceId"))',
     );
     await queryRunner.query(
-      "CREATE TYPE \"user_permission_option_enum\" AS ENUM('read', 'write', 'admin')",
+      'CREATE TYPE "user_permission_option_enum" AS ENUM(\'read\', \'write\', \'admin\')',
     );
     await queryRunner.query(
       'CREATE TABLE "user_permission" ("option" "user_permission_option_enum" NOT NULL DEFAULT \'read\', "userId" uuid NOT NULL, "pageId" uuid NOT NULL, CONSTRAINT "PK_c0f3fe7d55775ca79ee3be65910" PRIMARY KEY ("userId", "pageId"))',

@@ -1,7 +1,7 @@
 ls:
   .dir: regex:([.a-z]*)([-.][a-z]+)*
   .scss: regex:([.a-z]*)([-.][a-z]+)*
-  .ts: regex:([.a-z\d])([-.][a-z\d]+)*
+  .ts: regex:([.a-z\d])([-.][a-z\d]+)
 
 ignore:
   - node_modules
