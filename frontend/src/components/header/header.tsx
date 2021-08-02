@@ -12,7 +12,7 @@ const Header: React.FC = () => {
       <Search />
       <Navbar>
         <NavNotification />
-        <NavProfile userName={user.fullName} /*userAvatar={user.avatar}*/ />
+        <NavProfile userName={user.fullName} userAvatar={user.avatar} />
       </Navbar>
     </header>
   );
