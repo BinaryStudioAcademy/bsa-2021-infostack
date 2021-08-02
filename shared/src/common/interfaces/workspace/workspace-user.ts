@@ -2,9 +2,9 @@ import { RoleType } from '../../enums';
 
 interface IWorkspaceUser {
   id: string;
-  name: string;
+  fullName: string;
   role: RoleType;
-  team?: string;
+  teams: string[];
 }
 
 export type { IWorkspaceUser };
