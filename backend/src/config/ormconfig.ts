@@ -34,8 +34,8 @@ const getDbConfig = (): PostgresConnectionOptions => {
     host: env.db.host,
     port: env.db.port,
     username: env.db.username,
-    name: env.db.name,
     password: env.db.password,
+    database: env.db.name,
   };
 };
 

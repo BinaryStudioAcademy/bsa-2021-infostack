@@ -13,7 +13,6 @@ export const register = async (
   body: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-
   const isEmailUsed = await userRepository.findByEmail(body.email);
   if (isEmailUsed) {
     throw new HttpError({

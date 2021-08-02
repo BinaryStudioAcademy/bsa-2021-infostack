@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  OneToMany,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { RefreshToken } from './refresh-token';
 import { UserWorkspace } from './user-workspace';
@@ -23,6 +18,9 @@ export class User extends AbstractEntity {
 
   @Column({ length: 200, nullable: true })
   password: string;
+
+  @Column({ nullable: true })
+  avatar: string;
 
   @OneToMany(() => RefreshToken, RefreshToken => RefreshToken.user)
   refreshTokens: RefreshToken[];
