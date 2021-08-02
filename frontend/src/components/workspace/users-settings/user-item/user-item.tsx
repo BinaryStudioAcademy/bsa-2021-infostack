@@ -1,6 +1,6 @@
-import { getAllowedClasses } from '../../../../helpers/dom/dom';
+import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from '../styles.module.scss';
-import { IWorkspaceUser } from '../../../../common/interfaces/workspace';
+import { IWorkspaceUser } from 'common/interfaces/workspace';
 import { AddTeam } from './add-team/add-team';
 import { Teams } from './teams/teams';
 
