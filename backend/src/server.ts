@@ -22,6 +22,10 @@ routes(app);
 
 app.use(errorHandlerMiddleware);
 
+app.use('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '/public/index.html'));
+});
+
 app.listen(port, async () => {
   try {
     await createConnection(ormconfig);
