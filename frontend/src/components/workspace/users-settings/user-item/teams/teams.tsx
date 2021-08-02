@@ -1,4 +1,4 @@
-import { IWorkspaceUser } from '../../../../../common/interfaces/workspace/index';
+import { IWorkspaceUser } from 'common/interfaces/workspace/index';
 
 interface ITeamsProps {
   teams: IWorkspaceUser['teams'];
