@@ -14,7 +14,7 @@ export const getAll = async (token: string): Promise<IWorkspace[]> => {
   const workspaces = [] as IWorkspace[];
   for (const userWorkspace of usersWorkspaces) {
     const workspace = userWorkspace.workspace;
-    workspaces.push({ ...workspace, title: workspace.name });
+    workspaces.push({ id: workspace.id, title: workspace.name });
   }
   return workspaces;
 };
@@ -30,6 +30,6 @@ export const create = async (token: string, data: IWorkspaceCreation): Promise<I
   await workspaceRepository.save(workspace);
   const userWorkspace = userWorkspaceRepository.create({ user, workspace, role: UserRole.ADMIN });
   await userWorkspaceRepository.save(userWorkspace);
-  return { ...workspace, title: workspace.name };
+  return { id: workspace.id, title: workspace.name };
 };
 
