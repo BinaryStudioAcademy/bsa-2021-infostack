@@ -33,15 +33,9 @@ const loadUser = createAsyncThunk(
   async (payload: undefined, { dispatch }): Promise<void> => {
     // TODO change to value from enum
     const token = localStorage.getItem('accessToken');
-    // eslint-disable-next-line no-console
-    console.log(token);
     if (token) {
       const { userId } = await new UserApi().getCurrentUserId();
-      // eslint-disable-next-line no-console
-      console.log({ userId });
       const user = await new UserApi().getInfo(userId);
-      // eslint-disable-next-line no-console
-      console.log(user);
       dispatch(actions.setUser(user));
     }
   },

@@ -24,8 +24,6 @@ const ProfileEdit: React.FC = () => {
   }, []);
 
   const handleSaveChanges = async (): Promise<void> => {
-    // eslint-disable-next-line no-console
-    console.log(user);
     if (user) {
       if (userFullName !== user.fullName) {
         setIsUploading(true);
