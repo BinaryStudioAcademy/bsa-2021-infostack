@@ -32,6 +32,7 @@ const Login: React.FC = () => {
     <Sign
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
+      submitText="Sign in"
       onSubmit={handleSubmit}
     >
       <FormField

@@ -32,6 +32,7 @@ const SignUp: React.FC = () => {
     <Sign
       header="Get Started"
       secondaryText="Start creating the best possible user experience"
+      submitText="Sign up"
       onSubmit={handleSubmit}
     >
       <FormField
