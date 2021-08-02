@@ -1,24 +1,13 @@
 .main {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - 65px);
   .toolbar {
     flex: 0 0 auto;
     min-height: 100%;
     box-shadow: 0px 4px 4px 2px;
     width: 300px;
   }
-  .container {
-    display: flex;
-    flex-direction: column;
+  .page-content {
     flex: 1 0 auto;
-    min-height: 100%;
-    .header {
-      flex: 0 0 auto;
-      height: 70px;
-      box-shadow: 0px 4px 4px 2px;
-    }
-    .page-content {
-      flex: 1 0 auto;
-    }
   }
 }

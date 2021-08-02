@@ -1,7 +1,6 @@
 import PageContent from './components/page-content/page-content';
 import Button from 'react-bootstrap/Button';
 import { pageActions } from 'store/actions';
-import Header from '../header/header';
 import './pages.scss';
 import { useAppDispatch } from 'hooks/hooks';
 import { useEffect } from 'react';
@@ -33,10 +32,7 @@ const Pages: React.FC = () => {
         <Button variant="primary" onClick={addPage}>Add page</Button>
         <Button variant="primary" onClick={(): Promise<void> => addSubPage(mockId)}>Add page</Button>
       </div>
-      <div className="container">
-        <Header />
-        <PageContent />
-      </div>
+      <PageContent />
     </main>
   );
 };

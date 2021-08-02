@@ -3,9 +3,9 @@ import { Request } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { PageRepository } from '../data/repositories/page.repository';
 import  UserRepository  from '../data/repositories/user.repository';
-import { Page } from '~/data/entities/page';
-import { UserPermissionRepository } from '~/data/repositories/user-permissions.repository';
-import { PermissionOption } from '~/data/entities/enums/permission-option';
+import { Page } from '../data/entities/page';
+import { UserPermissionRepository } from '../data/repositories/user-permissions.repository';
+import { PermissionOption } from '../data/entities/enums/permission-option';
 
 export const createPage = async (userId: string, workspaceId: string, body: any):Promise<Page> => {
   const { parentPageId, ...pageContents } = body;
