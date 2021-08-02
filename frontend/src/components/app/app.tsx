@@ -50,7 +50,7 @@ const App: React.FC = () => {
               component={Workspaces}
               exact
             />
-            <ProtectedRoute path={AppRoute.PAGES} component={Pages} exact />
+            <Route path={AppRoute.PAGES} component={Pages} exact /> {/* changed for dev purposes*/}
             <ProtectedRoute
               path={AppRoute.SETTINGS_PROFILE}
               component={Profile}
