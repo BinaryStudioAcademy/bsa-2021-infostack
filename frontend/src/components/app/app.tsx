@@ -12,7 +12,7 @@ import { useLocation } from 'hooks/hooks';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isHeaderRendered = pathname !== AppRoute.LOGIN && pathname !== AppRoute.SIGN_UP;
+  const isHeaderRendered = !([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
 
   return (
     <>
