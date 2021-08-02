@@ -14,6 +14,11 @@ router.get(
   run((req) => getUserById(req.params.id)),
 );
 
+router.get(
+  '/id',
+  run((req) => Promise.resolve({ userId: req.userId })),
+);
+
 router.put(
   '/:id/profile',
   run((req) => updateFullName(req.params.id, req.body)),

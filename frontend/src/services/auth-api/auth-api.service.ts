@@ -14,8 +14,6 @@ class AuthApi {
       contentType: ContentType.JSON,
     });
 
-    localStorage.setItem('accessToken', loginResponse.accessToken);
-
     return loginResponse;
   }
 
@@ -30,8 +28,6 @@ class AuthApi {
         contentType: ContentType.JSON,
       },
     );
-
-    localStorage.setItem('accessToken', registerResponse.accessToken);
 
     return registerResponse;
   }

@@ -8,11 +8,14 @@ import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
-import { useLocation } from 'hooks/hooks';
+import { useLocation, useAppDispatch } from 'hooks/hooks';
+import { authActions } from 'store/actions';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
   const isHeaderRendered = !([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const dispatch = useAppDispatch();
+  dispatch(authActions.loadUser());
 
   return (
     <>
