@@ -29,7 +29,7 @@ export class Comment extends AbstractEntity {
   page: Page;
 
   @RelationId((comment: Comment) => comment.parentComment)
-  @Column()
+  @Column({ nullable: true })
   readonly parentCommentId: string;
 
   @ManyToOne(() => Comment, comment => comment.childComments)
