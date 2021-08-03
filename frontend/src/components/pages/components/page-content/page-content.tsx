@@ -34,7 +34,7 @@ const PageContent: React.FC = () => {
 
   return (
     <>
-      {!currentPage ? <Content />
+      {currentPage ? <Content />
         : <Image src="https://infostack.io/wp-content/uploads/2019/08/Infostack-Logo-900px.png" fluid />}
     </>
   );
