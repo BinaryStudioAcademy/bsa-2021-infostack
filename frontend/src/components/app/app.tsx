@@ -13,13 +13,14 @@ import { authActions } from 'store/actions';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isHeaderRendered = !([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
   const dispatch = useAppDispatch();
-  dispatch(authActions.loadUser());
+  const action = isAuth ? authActions.logout : authActions.loadUser;
+  dispatch(action());
 
   return (
     <>
-      {isHeaderRendered && <Header />}
+      {!isAuth && <Header />}
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />

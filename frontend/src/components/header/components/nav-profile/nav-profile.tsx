@@ -3,6 +3,8 @@ import { AppRoute } from 'common/enums/enums';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
+import { useAppDispatch, useHistory } from 'hooks/hooks';
+import { authActions } from 'store/actions';
 import './styles.scss';
 
 interface INavProfileProps {
@@ -11,6 +13,13 @@ interface INavProfileProps {
 }
 
 const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
+  const onLogout = (): void => {
+    dispatch(authActions.logout());
+    history.push(AppRoute.LOGIN);
+  };
   return (
     <Dropdown as={NavItem} align="end">
       <Dropdown.Toggle as={NavLink} id="dropdown-profile-details">
@@ -37,7 +46,7 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
         <Dropdown.Item href={ AppRoute.SETTINGS_PROFILE }>
           Settings
         </Dropdown.Item>
-        <Dropdown.Item onClick={(): void => { alert('click'); }}>
+        <Dropdown.Item onClick={onLogout}>
           Logout
         </Dropdown.Item>
       </Dropdown.Menu>

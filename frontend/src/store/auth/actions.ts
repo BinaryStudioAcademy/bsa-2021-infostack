@@ -28,6 +28,14 @@ const register = createAsyncThunk(
   },
 );
 
+const logout = createAsyncThunk(
+  ActionType.RemoveUser,
+  async (payload: undefined, { dispatch }): Promise<void> => {
+    localStorage.removeItem('accessToken');
+    dispatch(actions.removeUser());
+  },
+);
+
 const loadUser = createAsyncThunk(
   ActionType.SetUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
@@ -45,6 +53,7 @@ const authActions = {
   ...actions,
   login,
   register,
+  logout,
   loadUser,
 };
 
