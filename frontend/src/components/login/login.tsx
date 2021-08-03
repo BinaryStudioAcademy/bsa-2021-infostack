@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     await dispatch(authActions.login(formState));
-    push(AppRoute.ROOT);
+    push(AppRoute.WORKSPACES);
   };
 
   const handleChange = ({

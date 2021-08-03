@@ -17,11 +17,11 @@ export const auth = (
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, env.app.secretKey) as string;
+    const decoded = jwt.verify(token, env.app.secretKey) as { userId: string };
     const { workspaceId } = req.cookies;
 
     req.workspaceId = workspaceId;
-    req.userId = decoded;
+    req.userId = decoded.userId;
     next();
   } catch (err) {
     res.status(HttpCode.UNAUTHORIZED).json({ msg: 'Unauthorized', error: err });
