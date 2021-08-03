@@ -17,6 +17,7 @@ import {
 } from 'hooks/hooks';
 import { authActions } from 'store/actions';
 import ResetPassword from '../reset-password/reset-password';
+import SetPassword from '../set-password/set-password';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -45,6 +46,7 @@ const App: React.FC = () => {
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
         <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
+        <Route path={AppRoute.SET_PASSWORD} component={SetPassword} exact />
         <ProtectedRoute
           path={AppRoute.ROOT}
           component={(): JSX.Element => <h2>Stub</h2>}
