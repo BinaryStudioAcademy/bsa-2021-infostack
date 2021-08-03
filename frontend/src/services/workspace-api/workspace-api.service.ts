@@ -1,18 +1,31 @@
-import { IWorkspaceUser } from 'common/interfaces/workspace';
-import { ContentType } from 'common/enums/enums';
+import {
+  IWorkspaceUser,
+  IWorkspace,
+  IWorkspaceCreation,
+} from 'common/interfaces/workspace';
+import { ContentType, HttpMethod } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
 
-const http = new Http();
-
 class WorkspaceApi {
-  private BASE = '/api/workspaces/';
+  private http = new Http();
+  private BASE = '/api/workspaces';
 
-  public async loadUsers(): Promise<IWorkspaceUser[]> {
-    const response: IWorkspaceUser[] = await http.load(`${this.BASE}/users`, {
+  public async create(payload: IWorkspaceCreation): Promise<IWorkspace> {
+    return this.http.load(this.BASE, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
       contentType: ContentType.JSON,
     });
+  }
 
-    return response;
+  public async get(): Promise<IWorkspace[]> {
+    return this.http.load(this.BASE);
+  }
+
+  public async loadUsers(): Promise<IWorkspaceUser[]> {
+    return this.http.load(`${this.BASE}/users`, {
+      contentType: ContentType.JSON,
+    });
   }
 }
 

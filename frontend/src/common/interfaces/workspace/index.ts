@@ -1,1 +1,5 @@
-export type { IWorkspaceUser } from 'infostack-shared/common/interfaces';
+export type {
+  IWorkspaceUser,
+  IWorkspace,
+  IWorkspaceCreation,
+} from 'infostack-shared/common/interfaces';
