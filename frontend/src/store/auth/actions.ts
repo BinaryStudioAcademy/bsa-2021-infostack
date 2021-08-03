@@ -40,7 +40,6 @@ const logout = createAsyncThunk(
 const loadUser = createAsyncThunk(
   ActionType.SetUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
-    // TODO change to value from enum
     const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
     if (token) {
       const user = await new UserApi().getCurrentUserInfo();
