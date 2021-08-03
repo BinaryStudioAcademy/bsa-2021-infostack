@@ -62,7 +62,9 @@ export const login = async (
   };
 };
 
-export const resetPassword = async (body: IResetPassword): Promise<void> => {
+export const resetPassword = async (
+  body: IResetPassword,
+): Promise<Record<string, never>> => {
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findByEmail(body.email);
   if (!user) {
@@ -77,9 +79,13 @@ export const resetPassword = async (body: IResetPassword): Promise<void> => {
   const url = `${app.url}/set-password?token=${token}`;
 
   await sendMail({ to: user.email, subject: 'Reset Password', text: url });
+
+  return {};
 };
 
-export const setPassword = async (body: ISetPassword): Promise<void> => {
+export const setPassword = async (
+  body: ISetPassword,
+): Promise<Record<string, never>> => {
   const userRepository = getCustomRepository(UserRepository);
   const { token, password } = body;
   if (!token) {
@@ -93,4 +99,6 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   const decoded = jwt.verify(token, app.secretKey) as { userId: string };
   const hashedPassword = await hash(password);
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
+
+  return {};
 };
