@@ -1,25 +1,20 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  BaseEntity,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, BaseEntity } from 'typeorm';
 import { User } from './user';
 import { Page } from './page';
-import { PermissionOption } from './enums/permission-option';
+import { PermissionType } from '../../common/enums/permission-type';
 
 @Entity()
 export class UserPermission extends BaseEntity {
-  @ManyToOne(() => User, user => user.userPermissions, { primary: true })
+  @ManyToOne(() => User, (user) => user.userPermissions, { primary: true })
   user: User;
 
-  @ManyToOne(() => Page, page => page.userPermissions, { primary: true })
+  @ManyToOne(() => Page, (page) => page.userPermissions, { primary: true })
   page: Page;
 
   @Column({
     type: 'enum',
-    enum: PermissionOption,
-    default: PermissionOption.READ,
+    enum: PermissionType,
+    default: PermissionType.READ,
   })
-  option: PermissionOption;
+  option: PermissionType;
 }

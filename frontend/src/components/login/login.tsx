@@ -5,6 +5,7 @@ import Sign from 'components/common/sign/sign';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
 import styles from './styles.module.scss';
+import { containsNoEmptyStrings } from 'helpers/helpers';
 
 const Login: React.FC = () => {
   const [formState, setFormState] = React.useState({
@@ -17,8 +18,12 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
     e.preventDefault();
 
+    if (!containsNoEmptyStrings(Object.values(formState))) {
+      return;
+    }
+
     await dispatch(authActions.login(formState));
-    push(AppRoute.ROOT);
+    push(AppRoute.WORKSPACES);
   };
 
   const handleChange = ({
@@ -32,6 +37,7 @@ const Login: React.FC = () => {
     <Sign
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
+      submitText="Sign in"
       onSubmit={handleSubmit}
     >
       <FormField
@@ -39,6 +45,7 @@ const Login: React.FC = () => {
         type="email"
         placeholder="Enter your email"
         name="email"
+        controlId="loginEmail"
         value={email}
         onChange={handleChange}
       />
@@ -52,6 +59,7 @@ const Login: React.FC = () => {
           </a>
         }
         name="password"
+        controlId="loginPassword"
         value={password}
         onChange={handleChange}
       />
