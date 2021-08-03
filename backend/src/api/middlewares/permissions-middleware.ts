@@ -2,15 +2,24 @@ import { Response, NextFunction } from 'express';
 import { HttpCode } from 'infostack-shared/common/enums';
 import { getCustomRepository } from 'typeorm';
 import UserWorkspaceRepository from '../../data/repositories/user-workspace-repository';
-import { UserRole } from '~/data/entities/enums/user-role';
+import { RoleType } from '~/common/enums/role-type';
 import { IRequestWithUser } from '~/common/models/user/request-with-user.interface';
 
-export const permit = (...permittedRoles: UserRole[]) => {
-  return async (req: IRequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+export const permit = (...permittedRoles: RoleType[]) => {
+  return async (
+    req: IRequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     const { userId, workspaceId } = req;
 
-    const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-    const { role } = await userWorkspaceRepository.findById(userId, workspaceId);
+    const userWorkspaceRepository = getCustomRepository(
+      UserWorkspaceRepository,
+    );
+    const { role } = await userWorkspaceRepository.findById(
+      userId,
+      workspaceId,
+    );
 
     if (userId && permittedRoles.includes(role)) {
       next();
