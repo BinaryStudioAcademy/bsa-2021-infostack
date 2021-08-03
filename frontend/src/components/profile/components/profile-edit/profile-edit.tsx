@@ -5,7 +5,7 @@ import { Button, Form, Col, Image, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from '../../../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { RootState } from 'common/types/types';
-import { UserApi } from 'services/user-api/user-api.service';
+import { UserApi } from 'services';
 import styles from './profile-edit.module.scss';
 
 const ProfileEdit: React.FC = () => {
