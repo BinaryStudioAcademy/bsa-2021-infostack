@@ -6,7 +6,7 @@ import Pages from 'components/pages/pages';
 import Header from 'components/header/header';
 import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
 import { useLocation, useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/actions';
@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const { user } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
 
   useEffect(() => {
     if (token) {

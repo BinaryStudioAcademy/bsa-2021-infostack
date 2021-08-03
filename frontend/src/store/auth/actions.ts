@@ -3,6 +3,7 @@ import { actions } from './slice';
 import { ActionType } from './common';
 import { AuthApi, UserApi } from 'services';
 import { IUser } from 'common/interfaces/user';
+import { LocalStorageVariable } from 'common/enums/enums';
 
 const login = createAsyncThunk(
   ActionType.SetUser,
@@ -11,7 +12,7 @@ const login = createAsyncThunk(
     { dispatch },
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
-    localStorage.setItem('accessToken', loginResponse.accessToken);
+    localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, loginResponse.accessToken);
     dispatch(actions.setUser(loginResponse));
   },
 );
@@ -23,7 +24,7 @@ const register = createAsyncThunk(
     { dispatch },
   ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
-    localStorage.setItem('accessToken', registerResponse.accessToken);
+    localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, registerResponse.accessToken);
     dispatch(actions.setUser(registerResponse));
   },
 );
@@ -31,7 +32,7 @@ const register = createAsyncThunk(
 const logout = createAsyncThunk(
   ActionType.RemoveUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
     dispatch(actions.removeUser());
   },
 );
@@ -40,7 +41,7 @@ const loadUser = createAsyncThunk(
   ActionType.SetUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
     // TODO change to value from enum
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
     if (token) {
       const user = await new UserApi().getCurrentUserInfo();
       dispatch(actions.setUser(user));
