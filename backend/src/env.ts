@@ -29,4 +29,11 @@ export const env = {
     secretAccessKey: getOsEnv('AWS_SECRET_KEY'),
     bucketName: getOsEnv('AWS_BUCKET_NAME'),
   },
+  mailer: {
+    service: getOsEnv('MAILER_SERVICE'),
+    auth: {
+      user: getOsEnv('MAILER_AUTH_USER'),
+      pass: getOsEnv('MAILER_AUTH_PASS'),
+    },
+  },
 } as const;
