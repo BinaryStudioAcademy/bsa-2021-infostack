@@ -8,15 +8,24 @@ import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
-import { useLocation, useAppDispatch } from 'hooks/hooks';
+import { useLocation, useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/actions';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
   const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const { user } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
-  const action = isAuth ? authActions.logout : authActions.loadUser;
-  dispatch(action());
+  const history = useHistory();
+  const token = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    if (isAuth && token) {
+      history.push(AppRoute.ROOT);
+    } else if (!isAuth && !user){
+      dispatch(authActions.loadUser());
+    }
+  }, []);
 
   return (
     <>
