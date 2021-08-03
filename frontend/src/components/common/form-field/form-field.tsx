@@ -8,11 +8,9 @@ type Props = {
   type: string;
   placeholder: string;
   helper?: string | JSX.Element;
-  name?: string;
-  value?: string;
+  controlId?: string;
   register?: UseFormRegisterReturn;
   errors?: FieldError | undefined;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const FormField: React.FC<Props> = ({
@@ -22,8 +20,9 @@ const FormField: React.FC<Props> = ({
   helper,
   register,
   errors,
+  controlId,
 }) => (
-  <Form.Group className="mb-3" controlId="fullName">
+  <Form.Group className="mb-3" controlId={controlId}>
     <Form.Label className={styles.label}>{label}</Form.Label>
     <Form.Control
       {...register}

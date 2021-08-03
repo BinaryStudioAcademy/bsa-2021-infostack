@@ -6,7 +6,6 @@ import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
-
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../validations/login-schema';
 
@@ -34,6 +33,7 @@ const Login: React.FC = () => {
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
       onSubmit={handleSubmit(handleSubmitForm)}
+      submitText="Sign in"
     >
       <FormField
         label="Email"
@@ -41,6 +41,7 @@ const Login: React.FC = () => {
         placeholder="Enter your email"
         register={register('email')}
         errors={errors.email}
+        controlId="loginEmail"
       />
       <FormField
         register={register('password')}
