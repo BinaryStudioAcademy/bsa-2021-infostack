@@ -3,11 +3,11 @@ import { User } from '../entities/user';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  public async findByEmail(email: string): Promise<User> {
+  public findByEmail(email: string): Promise<User> {
     return this.findOne({ email });
   }
 
-  findById(id: string):Promise<User> {
+  public findById(id: string):Promise<User> {
     return this.findOne({ id });
   }
 }

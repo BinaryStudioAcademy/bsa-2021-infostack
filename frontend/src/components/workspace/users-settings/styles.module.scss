@@ -1,0 +1,41 @@
+.userSettingsContainer {
+  width: 100%;
+
+  font-size: 1rem;
+  text-align: left;
+
+  .tableHead {
+    color: #737d85;
+    font-weight: 600;
+  }
+
+  & > .table > .tableHead > :nth-child(1) > * {
+    border-bottom-color: #889097;
+  }
+
+  tr {
+    td {
+      color: #737373;
+      font-size: 1.2rem;
+    }
+  }
+
+  i {
+    color: #737373;
+    font-size: 1.2rem;
+
+    cursor: pointer;
+  }
+
+  .trashIcon {
+    margin-left: 0.5rem;
+  }
+
+  .addUser {
+    cursor: pointer;
+  }
+
+  .addTeam {
+    cursor: pointer;
+  }
+}
