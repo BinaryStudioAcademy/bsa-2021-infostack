@@ -12,13 +12,6 @@ class Http {
       const token = localStorage.getItem('accessToken');
       const headers = this.getHeaders(contentType, token);
 
-      // eslint-disable-next-line no-console
-      console.log({
-        method,
-        headers,
-        body: payload,
-      });
-
       const response = await fetch(url, {
         method,
         headers,
