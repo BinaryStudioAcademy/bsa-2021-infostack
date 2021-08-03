@@ -19,7 +19,13 @@ const fileFilter = (
 export const upload = (): Multer => {
   const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
-      cb(null, 'uploads/');
+      const dirPath = './uploads/';
+
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath);
+      }
+
+      cb(null, dirPath);
     },
     filename: function (req, file, cb) {
       cb(null, req.params.id + path.extname(file.originalname));
