@@ -1,37 +1,47 @@
-// import jwt from 'jsonwebtoken';
 import { getCustomRepository } from 'typeorm';
 import PageRepository from '../data/repositories/page-repository';
-import { Request } from 'express';
-// import UserRepository from '../data/repositories/user.repository';
+import UserRepository from '../data/repositories/user.repository';
 import { Page } from '../data/entities/page';
-import TeamRepository from '../data/repositories/team.repository';
+import UserPermissionRepository from '../data/repositories/user-permission.repository';
+import TeamPermissionRepository from '../data/repositories/team-permission-repository';
+import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
 
-export const getPages = async (req: Request): Promise<Page[]> => {
-  const authHeader = req.headers['authorization'];
-  // eslint-disable-next-line no-console
-  console.log('authHeader', authHeader);
-  // const token = authHeader && authHeader.split(' ')[1];
+export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
+
+  const { userId = 'c5fa3b2f-c4de-4dda-84e7-714ee852627e' , workspaceId = 'b6e959fd-09b3-42cd-8a30-90c31054198a' } = req; // it will work after req will have userId and workspaceId
+
   const pageRepository = getCustomRepository(PageRepository);
-  // const pages = [] as Page[];
-  // const userRepository = getCustomRepository(UserRepository);
-  const teamRepository = getCustomRepository(TeamRepository);
-  // const userId: string = jwt.decode(token) as string;
-  // const workspaceId = req.cookies['workspaceId'];
-  // const user = await userRepository.findById(userId);
-  const userId = 'c5fa3b2f-c4de-4dda-84e7-714ee852627e';
-  // const userPages = await pageRepository.findPages(userId, workspaceId);
-  const workspaceId = 'b6e959fd-09b3-42cd-8a30-90c31054198a';
-  const allPages = await pageRepository.findPages(userId,  workspaceId);
-  // eslint-disable-next-line no-console
-  // console.log('allPages for workspaceId b6e959fd-09b3-42cd-8a30-90c31054198a', allPages);
+  const userRepository = getCustomRepository(UserRepository);
+  const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
+  const userPermissionRepository = getCustomRepository(UserPermissionRepository);
+
   // const teamId = '9e45c7d5-e608-44f0-b1e8-8ddf5e822902';
-  // const userTeamPermissions = await teamRepository.findUserTeamsPermissions(teamId);
-  const userTeamIds = await teamRepository.findUserTeam(userId);
-  // const userTeamPermissions = await teamRepository.findUserTeamsPermissions(teamId);
-  // eslint-disable-next-line no-console
-  console.log('userTeamIds', userTeamIds);
-  // eslint-disable-next-line no-console
-  // console.log('userTeamPermissions', userTeamPermissions);
-  return allPages;
-  // return pageRepository.findPages( userId, workspaceId );
+
+  const userTeamsIds = await userRepository.findUserTeams(userId);
+  const teamId = userTeamsIds.teams[0].id; //hardcode for first teamId. How to make permissions from many teams
+  const userTeamsPermissions = await teamPermissionRepository.findByTeamId(teamId);
+
+  const userPermissions = await userPermissionRepository.findById(userId);
+
+  const allPages = await pageRepository.findPages(workspaceId);
+
+  interface IPageWithChildren extends Page {
+    children?: Page[]
+  }
+
+  const permittedPages: IPageWithChildren[] = allPages.filter(page =>
+    userTeamsPermissions.some((perm) => perm.page.id === page.id) ||
+    userPermissions.some((perm) => perm.page.id === page.id));
+
+  const toBeDeleted = new Set<string>();
+  const finalPages = permittedPages.reduce((acc, cur, _index, array) => {
+    const children = array.filter((page) => page.parentPageId === cur.id);
+    cur.children = children;
+    children.forEach(child => toBeDeleted.add(child.id));
+    acc.push(cur);
+    return acc;
+  }, []);
+
+  const pagesToShow = finalPages.filter((page) => !toBeDeleted.has(page.id));
+  return pagesToShow;
 };

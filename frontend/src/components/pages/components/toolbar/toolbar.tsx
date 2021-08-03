@@ -1,8 +1,20 @@
+import { RootState } from 'common/types/types';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import { useAppDispatch, useAppSelector, useEffect } from 'hooks/hooks';
 import { Accordion, Nav, Navbar, Container } from 'react-bootstrap';
-import PlusButton from './plusButton';
+import { pagesActions } from 'store/pages';
+import PagesList from './components/pages-list/pages-list';
+import PlusButton from './components/plus-button/plus-button';
 import styles from './styles.module.scss';
 
 const Toolbar: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(pagesActions.getPagesAsync());
+  }, []);
+
+  const pages = useAppSelector((state: RootState) => state.pages);
 
   return (
     <>
@@ -18,67 +30,46 @@ const Toolbar: React.FC = () => {
             </Accordion.Item>
           </Accordion>
 
-          <Accordion.Item eventKey="1" className={styles.accordionItem}>
-            <Accordion.Header className={styles.accordionHeader}><Navbar.Brand className={styles.greyTextColor}>Pages</Navbar.Brand></Accordion.Header>
-            <Accordion.Body className={styles.accordionBody}>
+          <PagesList pages={pages.pages}/>
 
-              <Accordion flush>
-                <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                  <Nav.Link href="/tables" className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Tables<PlusButton/></Nav.Link>
-                </Accordion.Item>
-              </Accordion>
-              <Accordion className={styles.accordion} flush>
-                <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                  <Nav.Link className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Settings<PlusButton/></Nav.Link>
-                </Accordion.Item>
-              </Accordion>
-              <Accordion flush>
-                <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                  <Nav.Link className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Clients<PlusButton/></Nav.Link>
-                </Accordion.Item>
-              </Accordion>
+          <p>below hardcoded</p>
+          <Accordion className={styles.accordion} flush>
+            <Accordion.Item eventKey="0" className={getAllowedClasses('pl-4',styles.accordionItem, styles.accordionItemInsideSection)}>
+              <Nav.Link className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>Settings<PlusButton/></Nav.Link>
+            </Accordion.Item>
+          </Accordion>
 
-              <Accordion flush>
+          <Accordion flush>
+            <Accordion.Item eventKey="0" className={getAllowedClasses(styles.accordionItem, styles.accordionItemInsideSection)}>
+              <Nav.Link className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>Clients<PlusButton/></Nav.Link>
+            </Accordion.Item>
+          </Accordion>
 
-                <Accordion.Item eventKey="0" className={styles.accordionItem}>
-                  <Accordion.Header className={styles.accordionHeader}><Navbar.Brand className={styles.greyTextColor}>Projects</Navbar.Brand></Accordion.Header>
-                  <Accordion.Body className={styles.accordionBody}>
-                    <Navbar>
-                      <Nav className="flex-column" defaultActiveKey="project-1">
-                        <Nav.Link href="/project-1" className={styles.linkText} eventKey="project-1">project-1</Nav.Link>
-                        <Nav.Link href="/project-2" className={styles.linkText} eventKey="project-2">project-2</Nav.Link>
-                        <Nav.Link href="/project-3" className={styles.linkText} eventKey="project-3">project-3</Nav.Link>
-                      </Nav>
-                    </Navbar>
-                  </Accordion.Body>
-                </Accordion.Item>
+          <Accordion flush>
+            <Accordion.Item eventKey="0" className={getAllowedClasses(styles.accordionItem, styles.accordionItemInsideSection)}>
+              <Nav.Link className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>Pricing<PlusButton/></Nav.Link>
+            </Accordion.Item>
+          </Accordion>
 
-                <Accordion flush>
-                  <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                    <Nav.Link className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Pricing<PlusButton/></Nav.Link>
-                  </Accordion.Item>
-                </Accordion>
+          <Accordion flush>
+            <Accordion.Item eventKey="0" className={getAllowedClasses(styles.accordionItem, styles.accordionItemInsideSection)}>
+              <Nav.Link className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>Tasks<PlusButton/></Nav.Link>
+            </Accordion.Item>
+          </Accordion>
 
-                <Accordion flush>
-                  <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                    <Nav.Link className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Tasks<PlusButton/></Nav.Link>
-                  </Accordion.Item>
-                </Accordion>
+          <Accordion flush>
+            <Accordion.Item eventKey="0" className={getAllowedClasses(styles.accordionItem, styles.accordionItemInsideSection)}>
+              <Nav.Link className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>Chat<PlusButton/></Nav.Link>
+            </Accordion.Item>
+          </Accordion>
 
-                <Accordion flush>
-                  <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                    <Nav.Link className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Chat<PlusButton/></Nav.Link>
-                  </Accordion.Item>
-                </Accordion>
-
-                <Accordion flush>
-                  <Accordion.Item eventKey="0" className={`${styles.accordionItem} ${styles.accordionItemInsideSection}`}>
-                    <Nav.Link className={`${styles.navbarBrand} ${styles.navbarLinkInsideSection}`}>Blank Page<PlusButton/></Nav.Link>
-                  </Accordion.Item>
-                </Accordion>
-              </Accordion>
-            </Accordion.Body>
-          </Accordion.Item>
+          <Accordion flush>
+            <Accordion.Item eventKey="0" className={getAllowedClasses(styles.accordionItem, styles.accordionItemInsideSection)}>
+              <Nav.Link className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>Blank Page<PlusButton/></Nav.Link>
+            </Accordion.Item>
+          </Accordion>
+          {/* </Accordion.Body>
+          </Accordion.Item> */}
 
           <Accordion flush>
             <Accordion.Item eventKey="0" className={styles.accordionItem}>
@@ -129,6 +120,36 @@ const Toolbar: React.FC = () => {
 
         <p className={styles.sectionName}>{'Plugin & Addons'}</p>
 
+        <Accordion className={styles.accordion} flush>
+          <Accordion.Item eventKey="0" className={styles.accordionItem}>
+
+            <Nav.Link className={styles.navbarBrand}>Calendar</Nav.Link>
+          </Accordion.Item>
+        </Accordion>
+        <Accordion className={styles.accordion} flush>
+          <Accordion.Item eventKey="0" className={styles.accordionItem}>
+
+            <Nav.Link className={styles.navbarBrand}>Calendar</Nav.Link>
+          </Accordion.Item>
+        </Accordion>
+        <Accordion className={styles.accordion} flush>
+          <Accordion.Item eventKey="0" className={styles.accordionItem}>
+
+            <Nav.Link className={styles.navbarBrand}>Calendar</Nav.Link>
+          </Accordion.Item>
+        </Accordion>
+        <Accordion className={styles.accordion} flush>
+          <Accordion.Item eventKey="0" className={styles.accordionItem}>
+
+            <Nav.Link className={styles.navbarBrand}>Calendar</Nav.Link>
+          </Accordion.Item>
+        </Accordion>
+        <Accordion className={styles.accordion} flush>
+          <Accordion.Item eventKey="0" className={styles.accordionItem}>
+
+            <Nav.Link className={styles.navbarBrand}>Calendar</Nav.Link>
+          </Accordion.Item>
+        </Accordion>
         <Accordion className={styles.accordion} flush>
           <Accordion.Item eventKey="0" className={styles.accordionItem}>
 

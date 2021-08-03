@@ -1,11 +1,13 @@
+import { IContent } from './page-content.interface';
+
 interface IPage {
   id: string;
   authorId: string;
   workspaceId: string;
   parentPageId: string | null;
   title: string;
-  subPages: IPage[] | null;
-  content: string | null;
+  children: IPage[] | null;
+  pageContents: IContent[] | null;
 }
 
 export type { IPage };
