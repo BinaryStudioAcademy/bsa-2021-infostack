@@ -8,6 +8,9 @@ import { generateAccessToken } from '../common/utils/generate-access-token.util'
 import UserRepository from '../data/repositories/user.repository';
 import { hash, verify } from '../common/utils/hash.util';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
+import { sendMail } from '../common/utils/mailer.util';
+import { IResetPassword } from '../common/interfaces/auth/reset-password.interface';
+import { env } from '../env';
 
 export const register = async (
   body: IRegister,
@@ -55,4 +58,21 @@ export const login = async (
     ...user,
     accessToken: generateAccessToken(user.id),
   };
+};
+
+export const resetPassword = async (body: IResetPassword): Promise<void> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findByEmail(body.email);
+  if (!user) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_SUCH_EMAIL,
+    });
+  }
+
+  const token = generateAccessToken(user.id);
+  const { app } = env;
+  const url = `${app.url}/set-password?token=${token}`;
+
+  await sendMail({ to: user.email, subject: 'Reset Password', text: url });
 };
