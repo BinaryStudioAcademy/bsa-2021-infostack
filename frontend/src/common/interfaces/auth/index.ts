@@ -1,1 +1,4 @@
-export type { IResetPassword } from 'infostack-shared/common/interfaces';
+export type {
+  IResetPassword,
+  ISetPassword,
+} from 'infostack-shared/common/interfaces';
