@@ -18,7 +18,8 @@ export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
   // const teamId = '9e45c7d5-e608-44f0-b1e8-8ddf5e822902';
 
   const userTeamsIds = await userRepository.findUserTeams(userId);
-  const teamId = userTeamsIds.teams[0].id; //hardcode for first teamId. How to make permissions from many teams
+  const teamId = userTeamsIds.teams.length ? userTeamsIds.teams[0].id : null; //hardcode for first teamId. How to make permissions from many teams
+
   const userTeamsPermissions = await teamPermissionRepository.findByTeamId(teamId);
 
   const userPermissions = await userPermissionRepository.findById(userId);

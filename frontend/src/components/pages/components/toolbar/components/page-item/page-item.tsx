@@ -21,7 +21,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
             <>
               <Accordion.Header className={styles.accordionHeader}><Navbar.Brand className="d-flex w-100">{title}<PlusButton /></Navbar.Brand></Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
-                {childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
+                {childrenPages && childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
 
               </Accordion.Body>
             </> : <Nav.Link href="/tables" className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>{title}<PlusButton/></Nav.Link>}

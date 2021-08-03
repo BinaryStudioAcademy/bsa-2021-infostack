@@ -7,7 +7,7 @@ interface IPage {
   parentPageId: string | null;
   title: string;
   children: IPage[] | null;
-  pageContents: IContent[] | null;
+  pageContents: IContent[];
 }
 
 export type { IPage };
