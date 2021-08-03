@@ -31,6 +31,10 @@ const Login: React.FC = () => {
   }: React.ChangeEvent<HTMLInputElement>): void =>
     setFormState((prev) => ({ ...prev, [name]: value }));
 
+  const onForgotPassword = (): void => {
+    push(AppRoute.RESET_PASSWORD);
+  };
+
   const { email, password } = formState;
 
   return (
@@ -54,7 +58,7 @@ const Login: React.FC = () => {
         type="password"
         placeholder="Enter your password"
         helper={
-          <a href="#" className={styles.link}>
+          <a href="#" className={styles.link} onClick={onForgotPassword}>
             Forgot password?
           </a>
         }
