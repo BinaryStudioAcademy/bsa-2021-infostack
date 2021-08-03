@@ -1,100 +1,128 @@
 .app-header {
+  height: 9vh;
   display: flex;
   align-items: center;
-  padding: 14px 20px;
+  padding: 1.4rem 2rem;
   background: #fff;
   --header-color: #495057;
   --header-input-background: #f3f6fb;
-}
 
-.app-header .form-control,
-.app-header .btn-primary {
-  background: var(--header-input-background);
-  color: var(--header-color);
-  border: 0;
-  box-shadow: none;
-  height: calc(2.24375rem + 2px);
-  padding: 0.35rem 0.75rem;
-}
+  transition: all 0.3s ease;
 
-.app-header .form-control:focus {
-  background: var(--header-input-background);
-  color: var(--header-color);
-  box-shadow: none;
-}
+  .navbar {
+    margin-left: auto;
+    height: 3.7rem;
 
-.app-header .input-group .form-control {
-  width: 197px;
-  font-size: 0.825rem;
-  font-weight: 400;
-  line-height: 1.625;
-}
+    .profile-photo-thumbnail {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+    }
+  }
 
-.app-header .input-group > .btn-primary:hover,
-.app-header .input-group > .btn-primary:active,
-.app-header .input-group > .btn-primary:focus {
-  background: var(--header-input-background);
-  box-shadow: none;
-}
+  .form-control {
+    background: var(--header-input-background);
+    color: var(--header-color);
+    border: 0;
+    box-shadow: none;
+    height: calc(2.24375rem + 2px);
+    padding: 0.35rem 0.75rem;
+  }
 
-.app-header > .navbar {
-  margin-left: auto;
-  height: 37px;
-}
+  .btn-primary {
+    background: #f3f6fb;
+    border: 0;
+    box-shadow: none;
+    padding: 0.35rem 1.4rem;
+  }
 
-.app-header > .navbar .profile-photo-thumbnail {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
+  .input-group {
+    align-items: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    & > .btn-primary:hover,
+    & > .btn-primary:active,
+    & > .btn-primary:focus {
+      background: var(--header-input-background);
+      box-shadow: none;
+    }
 
-// .app-header > .navbar img {
-//   margin-right: 5px;
-// }
+    .form-control {
+      width: 20rem;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.625;
+      padding: 2rem;
+    }
+  }
 
-.app-header .dropdown > .dropdown-toggle,
-.app-header .dropdown > .dropdown-toggle:hover {
-  color: var(--header-color);
-  font-size: 0.825rem;
-  font-weight: 400;
-  line-height: 1.625;
-}
+  .form-control:focus {
+    background: var(--header-input-background);
+    color: var(--header-color);
+    box-shadow: none;
+  }
 
-.dropdown-menu .dropdown-item {
-  padding: 0;
-}
+  .dropdown {
+    & > .dropdown-toggle,
+    & > .dropdown-toggle:hover {
+      color: var(--header-color);
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.625;
+    }
 
-.dropdown-menu .dropdown-item-logout {
-  padding: 0.25rem 1rem;
-}
+    .dropdown-menu {
+      .dropdown-item {
+        padding: 0;
 
-.dropdown-item a {
-  display: block;
-  padding: 0.25rem 1rem;
-  color: var(--header-color);
-  text-decoration: none;
-}
+        a {
+          display: block;
+          padding: 0.25rem 1rem;
+          color: var(--header-color);
+          text-decoration: none;
 
-.dropdown-item a:hover {
-  color: var(--header-color);
-}
+          &:hover {
+            color: var(--header-color);
+          }
 
-.app-header .bi {
-  color: var(--header-color);
-}
+          &:active,
+          &:active > i {
+            color: #fff;
+          }
+        }
+      }
 
-.bi-search,
-.bi-bell-slash {
-  font-size: 20px;
-}
+      .dropdown-item-logout {
+        padding: 0.25rem 1rem;
+        color: var(--header-color);
+        &:active {
+          color: #fff;
+        }
+      }
+    }
+  }
 
-.bi-person {
-  font-size: 18px;
-  margin-right: 4px;
-}
+  .bi {
+    color: var(--header-color);
+  }
 
-.bi-person-circle {
-  font-size: 40px;
-  margin-right: 4px;
-  vertical-align: middle;
+  .bi-search {
+    font-size: 1.75rem;
+  }
+  .bi-bell-slash {
+    font-size: 2rem;
+  }
+
+  .bi-person {
+    font-size: 1.8rem;
+    margin-right: 0.4rem;
+  }
+
+  .bi-person-circle {
+    font-size: 4rem;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
 }
