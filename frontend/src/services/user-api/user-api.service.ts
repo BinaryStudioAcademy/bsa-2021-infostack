@@ -1,10 +1,14 @@
-import { IUser } from 'common/interfaces/user';
+import { IUser, IUserWithTokens } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
 
 const http = new Http();
 
 class UserApi {
+  public async getCurrentUserInfo(): Promise<IUserWithTokens> {
+    return await http.load('/api/users/me/profile');
+  }
+
   public async update(
     id: string,
     updatePayload: Partial<IUser>,

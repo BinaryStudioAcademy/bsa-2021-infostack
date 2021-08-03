@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { AuthApi } from 'services';
+import { AuthApi, UserApi } from 'services';
 import { IUser } from 'common/interfaces/user';
+import { LocalStorageVariable } from 'common/enums/enums';
 
 const login = createAsyncThunk(
   ActionType.SetUser,
@@ -11,6 +12,7 @@ const login = createAsyncThunk(
     { dispatch },
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
+    localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, loginResponse.accessToken);
     dispatch(actions.setUser(loginResponse));
   },
 );
@@ -22,7 +24,27 @@ const register = createAsyncThunk(
     { dispatch },
   ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
+    localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, registerResponse.accessToken);
     dispatch(actions.setUser(registerResponse));
+  },
+);
+
+const logout = createAsyncThunk(
+  ActionType.RemoveUser,
+  async (payload: undefined, { dispatch }): Promise<void> => {
+    localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
+    dispatch(actions.removeUser());
+  },
+);
+
+const loadUser = createAsyncThunk(
+  ActionType.SetUser,
+  async (payload: undefined, { dispatch }): Promise<void> => {
+    const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+    if (token) {
+      const user = await new UserApi().getCurrentUserInfo();
+      dispatch(actions.setUser(user));
+    }
   },
 );
 
@@ -30,6 +52,8 @@ const authActions = {
   ...actions,
   login,
   register,
+  logout,
+  loadUser,
 };
 
 export { authActions };
