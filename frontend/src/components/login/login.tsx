@@ -58,7 +58,7 @@ const Login: React.FC = () => {
         type="password"
         placeholder="Enter your password"
         helper={
-          <a href="#" className={styles.link} onClick={onForgotPassword}>
+          <a className={styles.link} onClick={onForgotPassword}>
             Forgot password?
           </a>
         }
