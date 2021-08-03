@@ -5,14 +5,8 @@ import { Http } from 'services/http/http.service';
 const http = new Http();
 
 class UserApi {
-  public async getCurrentUserId(): Promise<{ userId: string }> {
-    return await http.load('/api/users/id');
-  }
-
-  public async getInfo(
-    id: string,
-  ): Promise<IUserWithTokens> {
-    return await http.load(`/api/users/${id}/profile`);
+  public async getCurrentUserInfo(): Promise<IUserWithTokens> {
+    return await http.load('/api/users/me/profile');
   }
 
   public async update(

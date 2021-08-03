@@ -20,10 +20,12 @@ const App: React.FC = () => {
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    if (isAuth && token) {
-      history.push(AppRoute.ROOT);
-    } else if (!isAuth && !user){
-      dispatch(authActions.loadUser());
+    if (token) {
+      if (isAuth) {
+        history.push(AppRoute.ROOT);
+      } else if (!isAuth && !user){
+        dispatch(authActions.loadUser());
+      }
     }
   }, []);
 

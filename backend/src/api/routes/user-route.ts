@@ -15,8 +15,8 @@ router.get(
 );
 
 router.get(
-  '/id',
-  run((req) => Promise.resolve({ userId: req.userId })),
+  '/me/profile',
+  run((req) => getUserById(req.userId)),
 );
 
 router.put(

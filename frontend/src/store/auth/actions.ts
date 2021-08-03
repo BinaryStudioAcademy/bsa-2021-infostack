@@ -42,8 +42,7 @@ const loadUser = createAsyncThunk(
     // TODO change to value from enum
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const { userId } = await new UserApi().getCurrentUserId();
-      const user = await new UserApi().getInfo(userId);
+      const user = await new UserApi().getCurrentUserInfo();
       dispatch(actions.setUser(user));
     }
   },
