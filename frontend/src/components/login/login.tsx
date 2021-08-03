@@ -23,7 +23,7 @@ const Login: React.FC = () => {
     }
 
     await dispatch(authActions.login(formState));
-    push(AppRoute.ROOT);
+    push(AppRoute.WORKSPACES);
   };
 
   const handleChange = ({

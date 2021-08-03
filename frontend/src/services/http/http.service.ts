@@ -1,5 +1,5 @@
 import { HttpError } from 'exceptions/exceptions';
-import { ContentType, HttpHeader, HttpMethod } from 'common/enums/enums';
+import { ContentType, HttpHeader, HttpMethod, LocalStorageVariable } from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
 
 class Http {
@@ -9,7 +9,8 @@ class Http {
   ): Promise<T> {
     try {
       const { method = HttpMethod.GET, payload = null, contentType } = options;
-      const headers = this.getHeaders(contentType);
+      const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+      const headers = this.getHeaders(contentType, token);
 
       const response = await fetch(url, {
         method,
@@ -24,11 +25,15 @@ class Http {
     }
   }
 
-  private getHeaders(contentType?: ContentType): Headers {
+  private getHeaders(contentType?: ContentType, token?: string | null): Headers {
     const headers = new Headers();
 
     if (contentType) {
       headers.append(HttpHeader.CONTENT_TYPE, contentType);
+    }
+
+    if (token) {
+      headers.append(HttpHeader.AUTHORIZATION, `Bearer ${token}`);
     }
 
     return headers;
