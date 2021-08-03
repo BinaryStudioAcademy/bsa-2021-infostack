@@ -4,56 +4,55 @@ import FormField from 'components/common/form-field/form-field';
 import Sign from 'components/common/sign/sign';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
+import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '../../validations/login-schema';
+
 const Login: React.FC = () => {
-  const [formState, setFormState] = React.useState({
-    email: '',
-    password: '',
-  });
   const dispatch = useAppDispatch();
   const { push } = useHistory();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FromValues>({ resolver: yupResolver(loginSchema) });
 
-  const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
-    e.preventDefault();
-
-    await dispatch(authActions.login(formState));
+  const handleSubmitForm = async (data: FromValues): Promise<void> => {
+    await dispatch(authActions.login(data));
     push(AppRoute.WORKSPACES);
   };
 
-  const handleChange = ({
-    target: { name, value },
-  }: React.ChangeEvent<HTMLInputElement>): void =>
-    setFormState((prev) => ({ ...prev, [name]: value }));
-
-  const { email, password } = formState;
+  interface FromValues {
+    email: string;
+    password: string;
+  }
 
   return (
     <Sign
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       <FormField
         label="Email"
         type="email"
         placeholder="Enter your email"
-        name="email"
-        value={email}
-        onChange={handleChange}
+        register={register('email')}
+        errors={errors.email}
       />
       <FormField
+        register={register('password')}
         label="Password"
         type="password"
         placeholder="Enter your password"
+        errors={errors.password}
         helper={
           <a href="#" className={styles.link}>
             Forgot password?
           </a>
         }
-        name="password"
-        value={password}
-        onChange={handleChange}
       />
     </Sign>
   );

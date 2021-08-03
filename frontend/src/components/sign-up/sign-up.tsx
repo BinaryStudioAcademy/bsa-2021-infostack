@@ -5,58 +5,59 @@ import FormField from 'components/common/form-field/form-field';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
 
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { signUpSchema } from '../../validations/sign-up-schema';
+
 const SignUp: React.FC = () => {
-  const [formState, setFormState] = React.useState({
-    fullName: '',
-    email: '',
-    password: '',
-  });
   const dispatch = useAppDispatch();
   const { push } = useHistory();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FromValues>({ resolver: yupResolver(signUpSchema) });
 
-  const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
-    e.preventDefault();
-
-    await dispatch(authActions.register(formState));
+  const handleSubmitForm = async (data: FromValues): Promise<void> => {
+    await dispatch(authActions.register(data));
     push(AppRoute.ROOT);
   };
 
-  const handleChange = ({
-    target: { name, value },
-  }: React.ChangeEvent<HTMLInputElement>): void =>
-    setFormState((prev) => ({ ...prev, [name]: value }));
-
-  const { fullName, email, password } = formState;
+  interface FromValues {
+    fullName: string;
+    email: string;
+    password: string;
+  }
 
   return (
     <Sign
       header="Get Started"
       secondaryText="Start creating the best possible user experience"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       <FormField
         label="Full Name"
         type="text"
         placeholder="Enter your name"
         name="fullName"
-        value={fullName}
-        onChange={handleChange}
+        register={register('fullName')}
+        errors={errors.fullName}
       />
       <FormField
         label="Email"
         type="email"
         placeholder="Enter your email"
         name="email"
-        value={email}
-        onChange={handleChange}
+        register={register('email')}
+        errors={errors.email}
       />
       <FormField
         label="Password"
         type="password"
         placeholder="Enter password"
         name="password"
-        value={password}
-        onChange={handleChange}
+        register={register('password')}
+        errors={errors.password}
       />
     </Sign>
   );
