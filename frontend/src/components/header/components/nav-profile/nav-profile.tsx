@@ -33,20 +33,20 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
         <span className="text-dark">{userName}</span>
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
-        <Dropdown.Item href={ AppRoute.PROFILE }>
+      <Dropdown.Menu className="dropdown-menu">
+        <Dropdown.Item href={ AppRoute.PROFILE } className="dropdown-item">
           <i className="bi bi-person"></i>
           Profile
         </Dropdown.Item>
 
         <Dropdown.Divider />
-        <Dropdown.Item href={ AppRoute.WORKSPACES }>
+        <Dropdown.Item href={ AppRoute.WORKSPACES } className="dropdown-item">
           Select Workspace
         </Dropdown.Item>
-        <Dropdown.Item href={ AppRoute.SETTINGS_PROFILE }>
+        <Dropdown.Item href={ AppRoute.SETTINGS_PROFILE } className="dropdown-item">
           Settings
         </Dropdown.Item>
-        <Dropdown.Item onClick={onLogout}>
+        <Dropdown.Item onClick={onLogout} className="dropdown-item">
           Logout
         </Dropdown.Item>
       </Dropdown.Menu>
