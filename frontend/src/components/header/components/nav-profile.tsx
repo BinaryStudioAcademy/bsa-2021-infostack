@@ -14,12 +14,12 @@ const NavProfile: React.FC = () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <div className="dropdown-item">
+        <Dropdown.Item className="dropdown-item">
           <Link to={AppRoute.PROFILE}>
             <i className="bi bi-person"></i>
             Profile
           </Link>
-        </div>
+        </Dropdown.Item>
 
         <Dropdown.Divider />
 
