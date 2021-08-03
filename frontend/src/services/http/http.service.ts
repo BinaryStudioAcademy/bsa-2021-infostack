@@ -9,13 +9,15 @@ class Http {
   ): Promise<T> {
     try {
       const { method = HttpMethod.GET, payload = null, contentType } = options;
-      const headers = this.getHeaders(contentType);
+      const token = localStorage.getItem('accessToken');
+      const headers = this.getHeaders(contentType, token);
 
       const response = await fetch(url, {
         method,
         headers,
         body: payload,
       });
+
       await this.checkStatus(response);
 
       return this.parseJSON<T>(response);
@@ -24,11 +26,18 @@ class Http {
     }
   }
 
-  private getHeaders(contentType?: ContentType): Headers {
+  private getHeaders(
+    contentType?: ContentType,
+    token?: string | null,
+  ): Headers {
     const headers = new Headers();
 
     if (contentType) {
       headers.append(HttpHeader.CONTENT_TYPE, contentType);
+    }
+
+    if (token) {
+      headers.append('Authorization', `Bearer ${token}`);
     }
 
     return headers;
