@@ -6,6 +6,7 @@ import React from 'react';
 type Props = {
   header: string;
   secondaryText: string;
+  submitText: string;
   children: JSX.Element | JSX.Element[];
   onSubmit: (e: React.SyntheticEvent) => void;
 };
@@ -13,6 +14,7 @@ type Props = {
 const Sign: React.FC<Props> = ({
   header,
   secondaryText,
+  submitText,
   children,
   onSubmit,
 }) => (
@@ -29,7 +31,7 @@ const Sign: React.FC<Props> = ({
             type="submit"
             onClick={onSubmit}
           >
-            Sign up
+            {submitText}
           </Button>
         </div>
       </Form>
