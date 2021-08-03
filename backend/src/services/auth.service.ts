@@ -11,6 +11,8 @@ import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
 import { IResetPassword } from '../common/interfaces/auth/reset-password.interface';
 import { env } from '../env';
+import { ISetPassword } from '../common/interfaces/auth/set-password.interface';
+import jwt from 'jsonwebtoken';
 
 export const register = async (
   body: IRegister,
@@ -75,4 +77,20 @@ export const resetPassword = async (body: IResetPassword): Promise<void> => {
   const url = `${app.url}/set-password?token=${token}`;
 
   await sendMail({ to: user.email, subject: 'Reset Password', text: url });
+};
+
+export const setPassword = async (body: ISetPassword): Promise<void> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const { token, password } = body;
+  if (!token) {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.INVALID_TOKEN,
+    });
+  }
+
+  const { app } = env;
+  const decoded = jwt.verify(token, app.secretKey) as { userId: string };
+  const hashedPassword = await hash(password);
+  await userRepository.updatePasswordById(decoded.userId, hashedPassword);
 };
