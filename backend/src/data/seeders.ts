@@ -9,7 +9,7 @@ import TeamPermissionSeeder from './seeders/team-permission.seeder';
 import { logger } from '../common/utils/logger.util';
 import ormconfig from '../config/ormconfig';
 
-const seeders = async ():Promise<void> => {
+const seeders = async (): Promise<void> => {
   await createConnection(ormconfig);
   logger.info('Connection created');
   logger.info('Seeding users');
