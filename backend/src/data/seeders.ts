@@ -29,4 +29,4 @@ const seeders = async (): Promise<void> => {
   logger.info('Seeding finished');
 };
 
-seeders();
+seeders().then(() => process.exit());
