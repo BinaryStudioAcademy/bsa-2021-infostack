@@ -2,20 +2,22 @@ import Sign from 'components/common/sign/sign';
 import FormField from 'components/common/form-field/form-field';
 import { useState, useHistory } from 'hooks/hooks';
 import { containsNoEmptyStrings } from 'helpers/helpers';
-import { Alert } from 'react-bootstrap';
-import styles from './styles.module.scss';
-import { AuthApi } from '../../services';
-import { AppRoute } from '../../common/enums/enums';
+import { AuthApi } from 'services';
+import { AppRoute } from 'common/enums/enums';
+import { toast } from 'react-toastify';
+import ToastContent from './toast-content/toast-content';
 
 const SetPassword: React.FC = () => {
   const history = useHistory();
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
   const [isSavingPassword, setIsSavingPassword] = useState(false);
 
   const query = new URLSearchParams(history.location.search);
   const token = query.get('token') || '';
+
+  const isSubmitDisabled =
+    isSavingPassword || password !== passwordRepeat || !password;
 
   if (!token) {
     history.push(AppRoute.LOGIN);
@@ -35,7 +37,11 @@ const SetPassword: React.FC = () => {
       token,
     });
 
-    setShowAlert(true);
+    toast.info(<ToastContent />, {
+      closeOnClick: false,
+      pauseOnHover: true,
+    });
+
     setPassword('');
     setPasswordRepeat('');
     setIsSavingPassword(false);
@@ -53,21 +59,13 @@ const SetPassword: React.FC = () => {
     setPasswordRepeat(event.target.value);
   };
 
-  const onAlertClose = (): void => {
-    setShowAlert(false);
-  };
-
-  const onLoginClick = (): void => {
-    history.push(AppRoute.LOGIN);
-  };
-
   return (
     <Sign
       header="Set your new password"
       secondaryText="Enter your new password."
       submitText="Save"
       onSubmit={handleSubmit}
-      isSubmitDisabled={isSavingPassword}
+      isSubmitDisabled={isSubmitDisabled}
     >
       <FormField
         label="Password"
@@ -88,17 +86,6 @@ const SetPassword: React.FC = () => {
         value={passwordRepeat}
         onChange={onPasswordRepeatChange}
       />
-
-      <Alert
-        className={styles.alert}
-        variant={'primary'}
-        onClose={onAlertClose}
-        dismissible
-        show={showAlert}
-      >
-        New password saved successfully.{' '}
-        <Alert.Link onClick={onLoginClick}>Login</Alert.Link>
-      </Alert>
     </Sign>
   );
 };

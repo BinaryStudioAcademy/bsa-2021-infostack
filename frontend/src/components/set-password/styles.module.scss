@@ -1,5 +1,7 @@
-.alert {
-  position: absolute;
-  right: 5%;
-  top: 3%;
+.link {
+  color: white;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
 }
