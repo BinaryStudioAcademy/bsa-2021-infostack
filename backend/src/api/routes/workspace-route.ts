@@ -17,6 +17,10 @@ router
     '/',
     run((req) => getAll(req.userId)),
   )
+  .get(
+    '/:id',
+    run((req) => getAll(req.params.id)),
+  )
   .post(
     '/',
     run((req) => create(req.userId, req.body)),

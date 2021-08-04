@@ -3,12 +3,26 @@ import { getCustomRepository } from 'typeorm';
 import { uploadFile } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
 import { IUser } from 'infostack-shared';
+import { getAll } from './workspace.service';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const { fullName, email, avatar } = await userRepository.findById(id);
 
   return { id, fullName, email, avatar };
+};
+
+export const getUserByIdWithWorkspace = async (userId: string, workspaceId: string): Promise<IUser | null> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const { fullName, email, avatar } = await userRepository.findById(userId);
+  const workspaces = await getAll(userId);
+  let permission = false;
+  workspaces.map(workspace => workspace.id === workspaceId ? permission = true : null);
+  if (permission) {
+    return { id: userId, fullName, email, avatar };
+  } else {
+    return { id: '', fullName: '', email: '', avatar: '' };
+  }
 };
 
 export const updateFullName = async (

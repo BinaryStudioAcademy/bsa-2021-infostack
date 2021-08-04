@@ -11,13 +11,14 @@ import './styles.scss';
 interface INavProfileProps {
   userName: string;
   userAvatar?: string;
+  userId?: string;
 }
 
-const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
+const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar, userId }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const [, , removeCookie] = useCookies(['cookie-name']);
+  const [, , removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
 
   const onLogout = (): void => {
     dispatch(authActions.logout());
@@ -39,7 +40,7 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="dropdown-menu">
-        <Dropdown.Item as={Link} to={AppRoute.PROFILE}>
+        <Dropdown.Item as={Link} to={ AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId }>
           <i className="bi bi-person"></i>
           Profile
         </Dropdown.Item>
