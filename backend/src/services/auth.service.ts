@@ -5,6 +5,7 @@ import { IRegister } from '../common/interfaces/auth/register.interface';
 import { ILogin } from '../common/interfaces/auth/login.interface';
 import { IUserWithTokens, IUser } from '../common/interfaces/user/user-auth.interface';
 import { ITokens } from './../common/interfaces/auth/tokens.interface';
+import { IRefrashTokens } from './../common/interfaces/auth/refresh-tokens.interface';
 import { generateTokens, generateAccessToken } from '../common/utils/tokens.util';
 import UserRepository from '../data/repositories/user.repository';
 import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
@@ -105,4 +106,30 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   const decoded = jwt.verify(token, app.accessSecretKey) as { userId: string };
   const hashedPassword = await hash(password);
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
+};
+
+export const refreshTokens = async (body: IRefrashTokens): Promise<ITokens> => {
+  try {
+    const { refreshToken } = body;
+    const decoded = jwt.verify(refreshToken, env.app.refreshSecretKey) as { userId: string };
+    const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+    const userRefreshToken = await refreshTokenRepository.findByUserId(decoded.userId);
+    if (userRefreshToken.token) {
+      await refreshTokenRepository.remove(userRefreshToken);
+      const tokens = setTokens(userRefreshToken.user);
+      return tokens;
+    } else {
+      throw new Error();
+    }
+  } catch (err) {
+    if(err.name === 'TokenExpiredError')
+      throw new HttpError({
+        status: HttpCode.UNAUTHORIZED,
+        message: 'Refresh token expired',
+      });
+    else throw new HttpError({
+      status: HttpCode.UNAUTHORIZED,
+      message: 'Unauthorized',
+    });
+  }
 };

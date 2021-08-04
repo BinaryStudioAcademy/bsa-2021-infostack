@@ -5,4 +5,5 @@ export default [
   '/auth/register',
   '/auth/reset-password',
   '/auth/set-password',
+  '/auth/refresh',
 ];
