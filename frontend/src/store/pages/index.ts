@@ -1,4 +1,4 @@
-import { reducer as pageReducer } from './slice';
-import { pageActions } from './actions';
+import { reducer as pagesReducer } from './slice';
+import { pagesActions } from './actions';
 
-export { pageReducer, pageActions };
+export { pagesReducer, pagesActions };

@@ -1,1 +1,1 @@
-export { checkIsOneOf } from './boolean/boolean';
+export { checkIsOneOf, containsNoEmptyStrings } from './boolean/boolean';

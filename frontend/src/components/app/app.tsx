@@ -6,20 +6,32 @@ import Pages from 'components/pages/pages';
 import Header from 'components/header/header';
 import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
-import { useLocation } from 'hooks/hooks';
-import '../../assets/css/styles.scss';
+import { useLocation, useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
+import { authActions } from 'store/actions';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isHeaderRendered = !(
-    [AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]
-  ).includes(pathname);
+  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const { user } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+
+  useEffect(() => {
+    if (token) {
+      if (isAuth) {
+        history.push(AppRoute.ROOT);
+      } else if (!isAuth && !user){
+        dispatch(authActions.loadUser());
+      }
+    }
+  }, []);
 
   return (
     <>
-      {isHeaderRendered && <Header />}
+      {!isAuth && <Header />}
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />

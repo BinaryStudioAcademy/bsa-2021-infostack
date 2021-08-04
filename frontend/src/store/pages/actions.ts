@@ -20,11 +20,15 @@ const createVersionPage = createAsyncThunk(
   },
 );
 
-const getPages = createAsyncThunk(
-  ActionType.GET_PAGES,
-  async (getPayload: undefined, { dispatch }) => {
-    const getPagesResponse = await new PageApi().getPages();
-    dispatch(actions.getPages(getPagesResponse));
+const getPagesAsync = createAsyncThunk(
+  ActionType.setPages,
+  async (payload: undefined, { dispatch }) => {
+    try {
+      const response = await new PageApi().get();
+      dispatch(actions.setPages(response));
+    } catch (error) {
+      alert(error);
+    }
   },
 );
 
@@ -36,14 +40,14 @@ const getPage = createAsyncThunk(
   },
 );
 
-const pageActions = {
+const pagesActions = {
   ...actions,
   createPage,
   createVersionPage,
-  getPages,
+  getPagesAsync,
   getPage,
 };
 
 export {
-  pageActions,
+  pagesActions,
 };

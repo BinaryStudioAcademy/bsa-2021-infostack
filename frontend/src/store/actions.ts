@@ -1,3 +1,3 @@
 export { authActions } from './auth';
-export { pageActions } from './pages';
+export { pagesActions } from './pages';
 export { workspacesActions } from './workspaces';
