@@ -1,8 +1,8 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { Link, match } from 'react-router-dom';
-import { getAllowedClasses } from '../../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
-import { AppRoute } from '../../../common/enums/app/app-route.enum';
+import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
+import { AppRoute } from 'common/enums/enums';
 import styles from './menu.module.scss';
 
 type Props = {
