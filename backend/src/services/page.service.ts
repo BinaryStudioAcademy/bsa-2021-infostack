@@ -43,10 +43,8 @@ export const getPages = async (userId: string, workspaceId: string): Promise<Pag
   const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
   const userPermissionRepository = getCustomRepository(UserPermissionRepository);
 
-  // const teamId = '9e45c7d5-e608-44f0-b1e8-8ddf5e822902';
-
   const userTeamsIds = await userRepository.findUserTeams(userId);
-  const teamId = userTeamsIds.teams.length ? userTeamsIds.teams[0].id : null; //hardcode for first teamId. How to make permissions from many teams
+  const teamId = userTeamsIds.teams.length ? userTeamsIds.teams[0].id : null;
 
   const userTeamsPermissions = await teamPermissionRepository.findByTeamId(teamId);
 

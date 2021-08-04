@@ -7,6 +7,7 @@ import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
 import Workspace from 'components/workspace/workspace';
 import styles from './styles.module.scss';
+import Settings from 'components/settings/settings';
 
 const Main: React.FC = () =>
   <div className={styles.grid}>
@@ -19,6 +20,7 @@ const Main: React.FC = () =>
     <div className={styles.content}>
       <Switch>
         <ProtectedRoute path={AppRoute.PAGES} component={Pages} />
+        <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
         <ProtectedRoute path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
         <ProtectedRoute path={AppRoute.WORKSPACE_SETTING} component={Workspace} exact />
       </Switch>
