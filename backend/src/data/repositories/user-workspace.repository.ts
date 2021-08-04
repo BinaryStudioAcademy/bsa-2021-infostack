@@ -9,6 +9,7 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
       where: { user: { id: userId } },
     });
   }
+
   public findById(
     userId: string,
     workspaceId: string,
