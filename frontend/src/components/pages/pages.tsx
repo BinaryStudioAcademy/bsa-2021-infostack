@@ -1,10 +1,3 @@
-import Toolbar from './components/toolbar/toolbar';
-
-const Pages: React.FC = () => {
-
-  return (
-    <Toolbar />
-  );
-};
+const Pages: React.FC = () => <h2>Pages</h2>;
 
 export default Pages;

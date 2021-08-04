@@ -3,26 +3,63 @@
     background-color: #293042;
 }
 
-div .toolbarContainer {
-    margin-left: 0;
-    margin-top: -88px;
-    width: 250px;
-    height: 100vh;
-    background-color: #293042;
-    padding-left: 20px;
-    overflow: auto;
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-.linkText {
-    color: rgba(233, 236, 239, .5) !important;
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px #293042;
+    border-radius: 10px;
 }
 
-.linkText:hover {
-    color: rgba(233, 236, 239, .75) !important;
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #a9a9a9;
+    -webkit-box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
 }
+
+.pageItem {
+    color: rgba(233, 236, 239, .5);
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.pageItem a {
+    text-decoration: none;
+    color: rgba(233, 236, 239, .5)
+}
+
+.pageItem a:hover {
+  color: rgba(233, 236, 239, .75)
+}
+
+
+
+:global(.accordion-header),
+:global(.accordion-button),
+:global(.accordion-button:not(.collapsed)) {
+  background-color: transparent;
+}
+
+.plus :global(.bi) {
+  color: rgba(233, 236, 239, 0);
+  transition: color 0.2s;
+}
+
+.pageItem:hover :global(.bi) {
+  color: rgba(233, 236, 239, .5)
+}
+
+
+.plus:hover :global(.bi) {
+  color: rgba(233, 236, 239, .75);
+  cursor: pointer;
+}
+
 
 .greyTextColor {
-    background-color: #293042;
+  background-color: #293042;
     color: rgba(233, 236, 239, 0.5);
     margin-left: 0;
     padding: 0;
@@ -37,18 +74,16 @@ div .toolbarContainer {
 }
 
 .accordionItem .accordionHeader {
-    font-size: small !important;
-    padding-left: 4px;
+    font-size: small;
 }
 
 .accordionItem .accordionHeader button {
     font-size: small !important;
     background-color: #293042 !important;
-    color: #293042;
+    color: rgba(233, 236, 239, 0.5);
     border: none !important;
     padding-top: 0;
     padding-bottom: 0;
-    padding-left: 14px;
 }
 
 .plusButton svg {
@@ -60,29 +95,29 @@ div .toolbarContainer {
 }
 
 .accordionItem .accordionHeader button:hover span {
-    color: rgba(233, 236, 239, .75) !important;
+    color: rgba(233, 236, 239, .75);
     cursor: pointer;
 }
 
 .accordionItem .accordionHeader button:focus {
-    border: none !important;
-    box-shadow: none !important;
+    border: none;
+    box-shadow: none;
 }
 
 .accordionItem .accordionHeader button:focus span {
-    color: rgba(233, 236, 239, .75) !important;
+    color: rgba(233, 236, 239, .75);
 }
 
 .accordionItemInsideSection {
-    background-color: #293042 !important;
+    background-color: #293042;
 }
 
 .accordionItem .accordionBody {
     padding-left: 30px;
     padding-top: 0;
     padding-bottom: 0;
-    font-size: medium !important;
-    background-color: #293042 !important;
+    font-size: medium;
+    background-color: #293042;
 }
 
 .logoToolbar {
@@ -93,23 +128,8 @@ div .toolbarContainer {
 }
 
 .sectionName {
-    text-align: left;
-    margin-left: 10px;
-    margin-top: 25px;
-    font-size: 16px;
+    font-size: 1.3rem;
     color: #ced4da;
-}
-
-.navbarBrand {
-    padding: 0px;
-    margin-bottom: 0px;
-    background-color: #293042;
-    color: rgba(233, 236, 239, .5) !important;
-    font-size: medium !important;
-}
-
-.navbarBrand:hover {
-    color: rgba(233, 236, 239, .75) !important;
 }
 
 .navbarLinkInsideSection {
@@ -128,17 +148,4 @@ div .toolbarContainer {
     float: right;
 }
 
-::-webkit-scrollbar {
-    width: 8px;
-}
 
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px #293042;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: #a9a9a9;
-    -webkit-box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
-}
