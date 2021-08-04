@@ -4,7 +4,7 @@ import Workspaces from 'components/workspaces/workspaces';
 import Workspace from 'components/workspace/workspace';
 import Pages from 'components/pages/pages';
 import Header from 'components/header/header';
-import Profile from 'components/profile/profile';
+import Settings from 'components/settings/settings';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
@@ -58,11 +58,7 @@ const App: React.FC = () => {
           exact
         />
         <ProtectedRoute path={AppRoute.PAGES} component={Pages} exact />
-        <ProtectedRoute
-          path={AppRoute.SETTINGS_PROFILE}
-          component={Profile}
-          exact
-        />
+        <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
         <ProtectedRoute
           path={AppRoute.WORKSPACE_SETTING}
           component={Workspace}

@@ -45,7 +45,7 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
         <Dropdown.Item as={Link} to={AppRoute.WORKSPACES}>
           Select Workspace
         </Dropdown.Item>
-        <Dropdown.Item as={Link} to={AppRoute.SETTINGS_PROFILE}>
+        <Dropdown.Item as={Link} to={AppRoute.SETTINGS}>
           Setting
         </Dropdown.Item>
         <Dropdown.Item onClick={onLogout} className="dropdown-item">
