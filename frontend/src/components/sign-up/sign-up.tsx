@@ -7,6 +7,7 @@ import { authActions } from 'store/auth';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signUpSchema } from '../../validations/sign-up-schema';
+import { IRegister } from 'infostack-shared';
 
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -15,49 +16,43 @@ const SignUp: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FromValues>({ resolver: yupResolver(signUpSchema) });
+  } = useForm<IRegister>({ resolver: yupResolver(signUpSchema) });
 
-  const handleSubmitForm = async (data: FromValues): Promise<void> => {
+  const handleSubmitForm = async (data: IRegister): Promise<void> => {
     await dispatch(authActions.register(data));
     push(AppRoute.ROOT);
   };
-
-  interface FromValues {
-    fullName: string;
-    email: string;
-    password: string;
-  }
 
   return (
     <Sign
       header="Get Started"
       secondaryText="Start creating the best possible user experience"
-      onSubmit={handleSubmit(handleSubmitForm)}
       submitText="Sign up"
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       <FormField
         label="Full Name"
         type="text"
         placeholder="Enter your name"
+        controlId="signUpFullName"
         register={register('fullName')}
         errors={errors.fullName}
-        controlId="signUpFullName"
       />
       <FormField
         label="Email"
         type="email"
         placeholder="Enter your email"
+        controlId="signUpEmail"
         register={register('email')}
         errors={errors.email}
-        controlId="signUpEmail"
       />
       <FormField
         label="Password"
         type="password"
         placeholder="Enter password"
+        controlId="signUpPassword"
         register={register('password')}
         errors={errors.password}
-        controlId="signUpPassword"
       />
     </Sign>
   );

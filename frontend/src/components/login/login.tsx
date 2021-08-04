@@ -5,9 +5,10 @@ import Sign from 'components/common/sign/sign';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
 import { useForm } from 'react-hook-form';
-import styles from './styles.module.scss';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../validations/login-schema';
+import { ILogin } from 'infostack-shared';
+import styles from './styles.module.scss';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -16,17 +17,12 @@ const Login: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FromValues>({ resolver: yupResolver(loginSchema) });
+  } = useForm<ILogin>({ resolver: yupResolver(loginSchema) });
 
-  const handleSubmitForm = async (data: FromValues): Promise<void> => {
+  const handleSubmitForm = async (data: ILogin): Promise<void> => {
     await dispatch(authActions.login(data));
     push(AppRoute.WORKSPACES);
   };
-
-  interface FromValues {
-    email: string;
-    password: string;
-  }
 
   return (
     <Sign
