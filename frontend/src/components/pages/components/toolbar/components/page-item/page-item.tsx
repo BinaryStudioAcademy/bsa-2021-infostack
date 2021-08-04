@@ -24,7 +24,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
               <Accordion.Header className={styles.accordionHeader}>
                 <div className="d-flex justify-content-between aling-items-center">
                   <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', 'w-100')}>{title}</Link>
-                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></Link>
+                  <span className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></span>
                 </div>
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
@@ -33,7 +33,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
               </Accordion.Body>
             </> : <div className="d-flex justify-content-between aling-items-center">
               <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', 'w-100')}>{title}</Link>
-              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></Link>
+              <span className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></span>
             </div>}
         </Accordion.Item>
       </Accordion>
