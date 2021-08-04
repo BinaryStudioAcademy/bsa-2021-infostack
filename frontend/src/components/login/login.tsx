@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../validations/login-schema';
 import { ILogin } from 'infostack-shared';
 import styles from './styles.module.scss';
+import { Link } from 'components/common/common';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -46,9 +47,9 @@ const Login: React.FC = () => {
         placeholder="Enter your password"
         errors={errors.password}
         helper={
-          <a href="#" className={styles.link}>
+          <Link className={styles.link} to={AppRoute.RESET_PASSWORD}>
             Forgot password?
-          </a>
+          </Link>
         }
       />
     </Sign>
