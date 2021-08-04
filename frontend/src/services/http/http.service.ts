@@ -34,7 +34,7 @@ class Http {
     } catch (err) {
 
       if (err.name === 'TokenExpiredError') {
-        const response = await this.handleExpiredError(url, options, err);
+        const response = await this.handleAccessTokenExpiredError(url, options, err);
         return this.parseJSON<T>(response);
       } else {
         this.throwError(err);
@@ -78,29 +78,38 @@ class Http {
     throw err;
   }
 
-  private handleExpiredError = async (
+  private handleAccessTokenExpiredError = async (
     url: string,
     options: Partial<HttpOptions> = {},
     err: Error,
   ): Promise<Response> => {
     const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
     if (refreshToken) {
-      const res = await fetch('/api/auth/refresh', {
-        method: HttpMethod.POST,
-        body: JSON.stringify({ refreshToken }),
-        headers: this.getHeaders(ContentType.JSON),
-      });
-      const tokens = await res.json();
-      localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
-      localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, tokens.refreshToken);
-      const { method = HttpMethod.GET, payload = null, contentType } = options;
-      const headers = this.getHeaders(contentType, tokens.accessToken);
-      const response = await fetch(url, {
-        method,
-        headers,
-        body: payload,
-      });
-      return response;
+      try {
+        const res = await fetch('/api/auth/refresh', {
+          method: HttpMethod.POST,
+          body: JSON.stringify({ refreshToken }),
+          headers: this.getHeaders(ContentType.JSON),
+        });
+        const tokens = await res.json();
+        localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
+        localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, tokens.refreshToken);
+        const { method = HttpMethod.GET, payload = null, contentType } = options;
+        const headers = this.getHeaders(contentType, tokens.accessToken);
+        const response = await fetch(url, {
+          method,
+          headers,
+          body: payload,
+        });
+        return response;
+      } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+          localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
+          localStorage.removetem(LocalStorageVariable.REFRESH_TOKEN);
+          localStorage.setItem(LocalStorageVariable.IS_REFRESH_TOKEN_EXPIRED, 'true');
+        }
+        this.throwError(error);
+      }
     } else {
       this.throwError(err);
     }

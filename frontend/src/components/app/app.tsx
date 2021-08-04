@@ -28,6 +28,7 @@ const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+  const isRefreshTokenExpired = localStorage.getItem(LocalStorageVariable.IS_REFRESH_TOKEN_EXPIRED);
 
   useEffect(() => {
     if (token) {
@@ -36,6 +37,9 @@ const App: React.FC = () => {
       } else if (!isAuth && !user) {
         dispatch(authActions.loadUser());
       }
+    }
+    if (isRefreshTokenExpired) {
+      history.push(AppRoute.LOGIN);
     }
   }, []);
 
