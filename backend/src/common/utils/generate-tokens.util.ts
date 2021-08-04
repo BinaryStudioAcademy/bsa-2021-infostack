@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import jwt from 'jsonwebtoken';
 import { env } from '../../env';
 import { ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_EXPIRES_IN } from '../../config/jwt-config';
@@ -9,11 +10,13 @@ const generateAccessToken = (userId: string): string =>
   jwt.sign({ userId }, accessSecretKey, { expiresIn: ACCESS_TOKEN_EXPIRES_IN });
 
 const generateRefreshToken = (): string =>
-  jwt.sign(null, refreshSecretKey, { expiresIn: REFRESH_TOKEN_EXPIRES_IN });
+  jwt.sign({}, refreshSecretKey, { expiresIn: REFRESH_TOKEN_EXPIRES_IN });
 
-const generateTokens = (userId: string): ITokens => ({
-  accessToken: generateAccessToken(userId),
-  refreshToken: generateRefreshToken(),
-});
+const generateTokens = (userId: string): ITokens => {
+  return {
+    accessToken: generateAccessToken(userId),
+    refreshToken: generateRefreshToken(),
+  };
+};
 
 export { generateAccessToken, generateRefreshToken, generateTokens };
