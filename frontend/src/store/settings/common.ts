@@ -1,4 +1,5 @@
 enum ActionType {
+  SetUsers = 'setUsers',
   SetTeams = 'SetTeams',
   SetCurrentTeamID = 'SetCurrentTeamID',
 }

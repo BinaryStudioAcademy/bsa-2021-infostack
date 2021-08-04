@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { WorkspaceApi } from 'services';
+import { SettingsApi, WorkspaceApi } from 'services';
+import { ITeamCreation } from 'common/interfaces/team';
 
 const loadUsers = createAsyncThunk(
   ActionType.SetUsers,
@@ -14,15 +15,28 @@ const loadUsers = createAsyncThunk(
 const loadTeams = createAsyncThunk(
   ActionType.SetTeams,
   async (_, { dispatch }): Promise<void> => {
-    const response = await new WorkspaceApi().loadTeams();
+    const response = await new SettingsApi().loadTeams();
     dispatch(actions.SetTeams(response));
   },
 );
 
-const workspaceActions = {
+const createTeam = createAsyncThunk(
+  ActionType.SetCurrentTeamID,
+  async (payload: ITeamCreation, { dispatch }) => {
+    try {
+      const { id } = await new SettingsApi().createTeam(payload);
+      dispatch(actions.SetCurrentTeamID(id));
+    } catch (err) {
+      alert(err);
+    }
+  },
+);
+
+const settingsActions = {
   ...actions,
   loadUsers,
   loadTeams,
+  createTeam,
 };
 
-export { workspaceActions };
+export { settingsActions };

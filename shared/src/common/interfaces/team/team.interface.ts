@@ -1,9 +1,7 @@
-import { IUser } from '../user';
-
 interface ITeam {
   id: string;
+  workspaceId: string;
   name: string;
-  users: IUser[];
 }
 
 export type { ITeam };

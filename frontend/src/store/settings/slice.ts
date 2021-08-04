@@ -7,15 +7,17 @@ import { ActionType } from './common';
 type State = {
   users: IWorkspaceUser[];
   teams: ITeam[];
+  SetCurrentTeamID: string;
 };
 
 const initialState: State = {
   users: [],
   teams: [],
+  SetCurrentTeamID: '',
 };
 
 const { reducer, actions } = createSlice({
-  name: ReducerName.WORKSPACE,
+  name: ReducerName.SETTINGS,
   initialState,
   reducers: {
     [ActionType.SetUsers]: (state, action: PayloadAction<IWorkspaceUser[]>) => {
@@ -23,6 +25,9 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.SetTeams]: (state, action: PayloadAction<ITeam[]>) => {
       state.teams = action.payload;
+    },
+    [ActionType.SetCurrentTeamID]: (state, action: PayloadAction<string>) => {
+      state.SetCurrentTeamID = action.payload;
     },
   },
 });

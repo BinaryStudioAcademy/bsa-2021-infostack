@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { IWorkspaceUser } from '../common/interfaces/workspace/workspace-user';
-import { ITeam } from '../common/interfaces/team/team.interface';
+import { ITeam, ITeamCreation } from '../common/interfaces/team/team.interface';
 import {
   IWorkspace,
   IWorkspaceCreation,
@@ -11,6 +11,7 @@ import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { RoleType } from '../common/enums/role-type';
+import TeamRepository from '../data/repositories/team.repository';
 
 export const getWorkspaceTeams = async (
   workspaceId: string,
@@ -58,4 +59,23 @@ export const create = async (
   });
   await userWorkspaceRepository.save(userWorkspace);
   return { id: workspace.id, title: workspace.name };
+};
+
+export const createTeam = async (
+  workspaceId: string,
+  data: ITeamCreation,
+): Promise<ITeam> => {
+  const teamRepository = getCustomRepository(TeamRepository);
+  // const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  // const userRepository = getCustomRepository(UserRepository);
+  // const user = await userRepository.findById(userId);
+  const team = teamRepository.create({ name: data.name, workspaceId: workspaceId });
+  await teamRepository.save(team);
+  // const userWorkspace = userWorkspaceRepository.create({
+  //   user,
+  //   workspace,
+  //   role: RoleType.ADMIN,
+  // });
+  // await userWorkspaceRepository.save(userWorkspace);
+  return { id: team.id, name: team.name, workspaceId: team.workspaceId };
 };

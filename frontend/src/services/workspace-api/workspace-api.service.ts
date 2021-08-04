@@ -3,7 +3,6 @@ import {
   IWorkspace,
   IWorkspaceCreation,
 } from 'common/interfaces/workspace';
-import { ITeam } from 'common/interfaces/team';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
 
@@ -25,12 +24,6 @@ class WorkspaceApi {
 
   public async loadUsers(): Promise<IWorkspaceUser[]> {
     return this.http.load(`${this.BASE}/users`, {
-      contentType: ContentType.JSON,
-    });
-  }
-
-  public async loadTeams(): Promise<ITeam[]> {
-    return this.http.load(`${this.BASE}/teams`, {
       contentType: ContentType.JSON,
     });
   }

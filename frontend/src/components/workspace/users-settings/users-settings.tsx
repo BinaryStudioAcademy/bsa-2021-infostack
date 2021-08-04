@@ -7,16 +7,16 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../hooks/hooks';
-import { workspaceActions } from '../../../store/workspace';
+import { settingsActions } from '../../../store/settings';
 
 export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Actions'];
 
 const UsersSettings: React.FC = () => {
   const dispatch = useAppDispatch();
-  const users = useAppSelector((state) => state.workspace.users);
+  const users = useAppSelector((state) => state.settings.users);
 
   useEffect(() => {
-    dispatch(workspaceActions.loadUsers());
+    dispatch(settingsActions.loadUsers());
   }, []);
 
   return (

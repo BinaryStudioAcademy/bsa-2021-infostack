@@ -1,6 +1,6 @@
 import { Col, Container, Row, Tab } from 'react-bootstrap';
 import {
-  Redirect,
+  // Redirect,
   Switch,
   useHistory,
   useRouteMatch,
@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import { getAllowedClasses } from '../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import ProfileEdit from '../profile/components/profile-edit/profile-edit';
+import TeamSettings from '../workspace/team-settings/team-settings';
 import Menu from './components/menu';
 import { AppRoute } from '../../common/enums/app/app-route.enum';
 import styles from './settings.module.scss';
@@ -40,13 +41,18 @@ const Settings: React.FC = () => {
                     component={ProfileEdit}
                     exact
                   />
-                  <Route path={match.path}>
+                  <Route
+                    path={AppRoute.SETTINGS_TEAMS}
+                    component={TeamSettings}
+                    exact
+                  />
+                  {/* <Route path={match.path}>
                     <Redirect
                       from={AppRoute.SETTINGS}
                       to={AppRoute.SETTINGS_PROFILE}
                       push
                     />
-                  </Route>
+                  </Route> */}
                 </Switch>
               </Tab.Content>
             </Col>

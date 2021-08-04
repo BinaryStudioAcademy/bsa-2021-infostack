@@ -1,32 +1,44 @@
 import { ITeam } from 'common/interfaces/team';
 import Spinner from 'react-bootstrap/Spinner';
-import { useEffect, useAppSelector, useAppDispatch } from 'hooks/hooks';
-import { teamsActions } from 'store/actions';
-import { workspaceActions } from '../../../store/workspace';
+import { useState, useEffect, useAppSelector, useAppDispatch } from 'hooks/hooks';
+import { settingsActions } from 'store/settings';
 import TeamItem from './team-item/team-item';
 import CreateTeamButton from './create-team-button/create-team-button';
+import PopUp from './create-team-popup/create-team-popup';
 
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
   const dispatch = useAppDispatch();
-  const teams = useAppSelector((state) => state.workspace.teams);
+  const teams = useAppSelector((state) => state.settings.teams);
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [popUpText, setPopUpText] = useState('');
+
+  useEffect(() => {
+    dispatch(settingsActions.loadTeams());
+  }, []);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
     return <TeamItem key={team.id} team={team} onClick={ onTeamItemClick }/>;
   };
 
   const onTeamItemClick = (id: string): void => {
-    dispatch(teamsActions.SetCurrentTeamID(id));
+    dispatch(settingsActions.SetCurrentTeamID(id));
   };
 
   const onCreateTeamButtonClick = (): void => {
-    console.info();
+    setIsPopUpVisible(true);
   };
 
-  useEffect(() => {
-    dispatch(workspaceActions.loadTeams());
-  }, []);
+  const onCancelCreationTeam = (): void => {
+    setIsPopUpVisible(false);
+    setPopUpText('');
+  };
+
+  const onConfirmCreationTeam = (): void => {
+    onCancelCreationTeam();
+    dispatch(settingsActions.createTeam({ name: popUpText }));
+  };
 
   return (
     <div
@@ -47,6 +59,20 @@ const TeamSettings: React.FC = () => {
           {teams.map((team: ITeam) => renderTeamItem(team))}
         </div>
       }
+      <PopUp
+        query="Enter name of team:"
+        isVisible={isPopUpVisible}
+        inputValue={popUpText}
+        setPopUpText={setPopUpText}
+        cancelButton={{
+          text: 'Cancel',
+          onClick: onCancelCreationTeam,
+        }}
+        confirmButton={{
+          text: 'Save',
+          onClick: onConfirmCreationTeam,
+        }}
+      />
     </div>
   );
 };

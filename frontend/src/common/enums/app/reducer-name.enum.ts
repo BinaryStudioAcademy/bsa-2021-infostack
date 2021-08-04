@@ -3,7 +3,7 @@ enum ReducerName {
   AUTH = 'auth',
   WORKSPACE = 'workspace',
   WORKSPACES = 'workspaces',
-  TEAMS = 'teams',
+  SETTINGS = 'settings',
 }
 
 export { ReducerName };

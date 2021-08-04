@@ -10,6 +10,7 @@ enum AppRoute {
   SETTINGS = '/settings',
   SETTINGS_PROFILE = '/settings/profile',
   WORKSPACE_SETTING = '/workspace/settings',
+  SETTINGS_TEAMS = '/settings/teams',
 }
 
 export { AppRoute };
