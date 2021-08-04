@@ -22,18 +22,19 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
           {childrenPages && childrenPages.length ?
             <>
               <Accordion.Header className={styles.accordionHeader}>
-                <div className="d-flex justify-content-between aling-items-center">
-                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', 'w-100')}>{title}</Link>
-                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></Link>
+                <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
+                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+                  <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton/></span>
                 </div>
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
                 {childrenPages && childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
 
               </Accordion.Body>
-            </> : <div className="d-flex justify-content-between align-items-center">
-              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', 'w-100')}>{title}</Link>
-              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></Link>
+            </> :
+            <div className={getAllowedClasses('d-flex justify-content-between align-items-center', styles.pageItem)}>
+              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+              <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton/></span>
             </div>}
         </Accordion.Item>
       </Accordion>

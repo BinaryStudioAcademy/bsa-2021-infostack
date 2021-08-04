@@ -18,29 +18,48 @@
     -webkit-box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
 }
 
-.link {
-    text-decoration: none;
+.pageItem {
     color: rgba(233, 236, 239, .5);
     transition: color 0.2s;
     display: flex;
     align-items: center;
 }
 
-.link :global(.bi) {
-    color: rgba(233, 236, 239, 0);
-    transition: color 0.2s;
+.pageItem a {
+    text-decoration: none;
+    color: rgba(233, 236, 239, .5)
 }
 
-.link:hover {
-    color: rgba(233, 236, 239, .75)
+.pageItem a:hover {
+  color: rgba(233, 236, 239, .75)
 }
 
-.link:hover :global(.bi) {
-    color: rgba(233, 236, 239, .75)
+
+
+:global(.accordion-header),
+:global(.accordion-button),
+:global(.accordion-button:not(.collapsed)) {
+  background-color: transparent;
 }
+
+.plus :global(.bi) {
+  color: rgba(233, 236, 239, 0);
+  transition: color 0.2s;
+}
+
+.pageItem:hover :global(.bi) {
+  color: rgba(233, 236, 239, .5)
+}
+
+
+.plus:hover :global(.bi) {
+  color: rgba(233, 236, 239, .75);
+  cursor: pointer;
+}
+
 
 .greyTextColor {
-    background-color: #293042;
+  background-color: #293042;
     color: rgba(233, 236, 239, 0.5);
     margin-left: 0;
     padding: 0;
@@ -111,18 +130,6 @@
 .sectionName {
     font-size: 1.3rem;
     color: #ced4da;
-}
-
-.navbarBrand {
-    padding: 0px;
-    margin-bottom: 0px;
-    background-color: #293042;
-    color: rgba(233, 236, 239, .5) !important;
-    font-size: medium !important;
-}
-
-.navbarBrand:hover {
-    color: rgba(233, 236, 239, .75) !important;
 }
 
 .navbarLinkInsideSection {
