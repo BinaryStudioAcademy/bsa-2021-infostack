@@ -1,8 +1,10 @@
 import { getAllowedClasses } from 'helpers/dom/dom';
-import { Accordion, Nav, Navbar } from 'react-bootstrap';
+import { Accordion } from 'react-bootstrap';
 import PlusButton from '../plus-button/plus-button';
 import styles from '../../styles.module.scss';
 import { IPage } from 'common/interfaces/page';
+import Link from '../../../../../common/link/link';
+import { AppRoute } from 'common/enums/enums';
 
 type Props = {
   title: string | null;
@@ -19,12 +21,20 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
 
           {childrenPages && childrenPages.length ?
             <>
-              <Accordion.Header className={styles.accordionHeader}><Navbar.Brand className="d-flex w-100">{title}<PlusButton /></Navbar.Brand></Accordion.Header>
+              <Accordion.Header className={styles.accordionHeader}>
+                <div className="d-flex justify-content-between aling-items-center">
+                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', 'w-100')}>{title}</Link>
+                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></Link>
+                </div>
+              </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
                 {childrenPages && childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
 
               </Accordion.Body>
-            </> : <Nav.Link href="/tables" className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection)}>{title}<PlusButton/></Nav.Link>}
+            </> : <div className="d-flex justify-content-between aling-items-center">
+              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', 'w-100')}>{title}</Link>
+              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand)}><PlusButton/></Link>
+            </div>}
         </Accordion.Item>
       </Accordion>
     </>

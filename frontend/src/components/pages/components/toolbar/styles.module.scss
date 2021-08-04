@@ -37,18 +37,16 @@ div .toolbarContainer {
 }
 
 .accordionItem .accordionHeader {
-    font-size: small !important;
-    padding-left: 4px;
+    font-size: small;
 }
 
 .accordionItem .accordionHeader button {
     font-size: small !important;
     background-color: #293042 !important;
-    color: #293042;
+    color: rgba(233, 236, 239, 0.5);
     border: none !important;
     padding-top: 0;
     padding-bottom: 0;
-    padding-left: 14px;
 }
 
 .plusButton svg {
@@ -60,29 +58,29 @@ div .toolbarContainer {
 }
 
 .accordionItem .accordionHeader button:hover span {
-    color: rgba(233, 236, 239, .75) !important;
+    color: rgba(233, 236, 239, .75);
     cursor: pointer;
 }
 
 .accordionItem .accordionHeader button:focus {
-    border: none !important;
-    box-shadow: none !important;
+    border: none;
+    box-shadow: none;
 }
 
 .accordionItem .accordionHeader button:focus span {
-    color: rgba(233, 236, 239, .75) !important;
+    color: rgba(233, 236, 239, .75);
 }
 
 .accordionItemInsideSection {
-    background-color: #293042 !important;
+    background-color: #293042;
 }
 
 .accordionItem .accordionBody {
     padding-left: 30px;
     padding-top: 0;
     padding-bottom: 0;
-    font-size: medium !important;
-    background-color: #293042 !important;
+    font-size: medium;
+    background-color: #293042;
 }
 
 .logoToolbar {
