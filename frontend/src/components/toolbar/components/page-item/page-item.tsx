@@ -7,6 +7,8 @@ import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
 import { useAppDispatch } from 'hooks/hooks';
 import { pagesActions } from 'store/pages';
+import Button from 'react-bootstrap/Button';
+import { IPageRequest } from 'common/interfaces/pages';
 
 type Props = {
   title: string | null;
@@ -16,6 +18,14 @@ type Props = {
 
 const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => {
   const dispatch = useAppDispatch();
+
+  const addSubPage = async ( id: string | null ): Promise<void> => {
+    const payload: IPageRequest = { title: 'New Page', content: '', parentPageId: id };
+
+    await dispatch(pagesActions.createPage(payload));
+    await dispatch(pagesActions.getPagesAsync());
+  };
+
   const getPageById = async ( id: string | null ): Promise<void> => {
     const payload: string | null= id;
     await dispatch(pagesActions.getPage(payload));
@@ -31,10 +41,11 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
               <Accordion.Header className={styles.accordionHeader}>
                 <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
                   <Link onClick={(): Promise<void> => getPageById(id)} to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
-                  <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>
+                  {!childrenPages && <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>}
                 </div>
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
+                {childrenPages && <Button variant="primary" onClick={(): Promise<void> => addSubPage(id)} size="sm">Add page</Button>}
                 {childrenPages && childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
 
               </Accordion.Body>

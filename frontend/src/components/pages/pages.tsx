@@ -1,13 +1,7 @@
 import Header from 'components/header/header';
 import PageContent from './components/page-content/page-content';
 import Toolbar from '../toolbar/toolbar';
-// import Button from 'react-bootstrap/Button';
-// import { pagesActions } from 'store/actions';
-import './pages.scss';
-// import { useAppDispatch } from 'hooks/hooks';
-// import { useEffect } from 'react';
-// import { IPageRequest } from 'common/interfaces/pages';
-import styles from './styles.module.scss';
+import styles from './pages.module.scss';
 
 const Pages: React.FC = () => {
 

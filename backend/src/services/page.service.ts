@@ -1,5 +1,3 @@
-// import jwt from 'jsonwebtoken';
-// import { Request } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { PageRepository } from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
@@ -8,7 +6,6 @@ import { UserPermissionRepository } from '../data/repositories/user-permissions.
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission-repository';
-// import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
 
 export const createPage = async (userId: string, workspaceId: string, body: any):Promise<Page> => {
   const { parentPageId, ...pageContent } = body;

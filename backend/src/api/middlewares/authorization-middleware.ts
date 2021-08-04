@@ -18,10 +18,9 @@ export const auth = (
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     const decoded = jwt.verify(token, env.app.secretKey) as { userId: string };
-    // const { workspaceId } = req.cookies;
+    const { workspaceId } = req.cookies;
 
-    // req.workspaceId = workspaceId;
-    req.workspaceId = 'b6e959fd-09b3-42cd-8a30-90c31054198a';
+    req.workspaceId = workspaceId;
     req.userId = decoded.userId;
 
     next();

@@ -5,7 +5,6 @@ import './page-content.scss';
 
 const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  // const { pageTitle, content } = currentPage?.pageContents[0];
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
 
