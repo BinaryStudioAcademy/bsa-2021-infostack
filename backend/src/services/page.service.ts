@@ -7,20 +7,16 @@ import TeamPermissionRepository from '../data/repositories/team-permission-repos
 import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
 
 export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
-  // eslint-disable-next-line no-console
-  console.log('req.workspaceId',req.workspaceId);
 
-  const { userId, workspaceId = 'b6e959fd-09b3-42cd-8a30-90c31054198a' } = req; // it will work after req will have and workspaceId
+  const { userId, workspaceId } = req;
 
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
   const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
   const userPermissionRepository = getCustomRepository(UserPermissionRepository);
 
-  // const teamId = '9e45c7d5-e608-44f0-b1e8-8ddf5e822902';
-
   const userTeamsIds = await userRepository.findUserTeams(userId);
-  const teamId = userTeamsIds.teams.length ? userTeamsIds.teams[0].id : null; //hardcode for first teamId. How to make permissions from many teams
+  const teamId = userTeamsIds.teams.length ? userTeamsIds.teams[0].id : null;
 
   const userTeamsPermissions = await teamPermissionRepository.findByTeamId(teamId);
 
