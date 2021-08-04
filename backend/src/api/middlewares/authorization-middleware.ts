@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { HttpCode } from 'infostack-shared/common/enums';
 import jwt from 'jsonwebtoken';
 import whiteListRoutes from '../../config/white-list-routes-config';
-import { IRequestWithUser } from '~/common/models/user/request-with-user.interface';
+import { IRequestWithUser } from '../../common/models/user/request-with-user.interface';
 import { env } from '../../env';
 
 export const auth = (

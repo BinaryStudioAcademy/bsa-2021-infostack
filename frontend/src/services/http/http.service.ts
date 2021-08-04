@@ -32,7 +32,14 @@ class Http {
 
       return this.parseJSON<T>(response);
     } catch (err) {
-      this.throwError(err);
+
+      if (err.name === 'TokenExpiredError') {
+        const response = await this.handleExpiredError(url, options, err);
+        return this.parseJSON<T>(response);
+      } else {
+        this.throwError(err);
+      }
+
     }
   }
 
@@ -70,6 +77,34 @@ class Http {
   private throwError(err: Error): never {
     throw err;
   }
+
+  private handleExpiredError = async (
+    url: string,
+    options: Partial<HttpOptions> = {},
+    err: Error,
+  ): Promise<Response> => {
+    const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
+    if (refreshToken) {
+      const res = await fetch('/api/auth/refresh', {
+        method: HttpMethod.POST,
+        body: JSON.stringify({ refreshToken }),
+        headers: this.getHeaders(ContentType.JSON),
+      });
+      const tokens = await res.json();
+      localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
+      localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, tokens.refreshToken);
+      const { method = HttpMethod.GET, payload = null, contentType } = options;
+      const headers = this.getHeaders(contentType, tokens.accessToken);
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: payload,
+      });
+      return response;
+    } else {
+      this.throwError(err);
+    }
+  };
 }
 
 export { Http };

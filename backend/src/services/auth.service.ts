@@ -5,7 +5,7 @@ import { IRegister } from '../common/interfaces/auth/register.interface';
 import { ILogin } from '../common/interfaces/auth/login.interface';
 import { IUserWithTokens, IUser } from '../common/interfaces/user/user-auth.interface';
 import { ITokens } from './../common/interfaces/auth/tokens.interface';
-import { generateTokens, generateAccessToken } from '../common/utils/generate-tokens.util';
+import { generateTokens, generateAccessToken } from '../common/utils/tokens.util';
 import UserRepository from '../data/repositories/user.repository';
 import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
 import { hash, verify } from '../common/utils/hash.util';
