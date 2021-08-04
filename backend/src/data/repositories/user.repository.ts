@@ -7,8 +7,12 @@ class UserRepository extends Repository<User> {
     return this.findOne({ email });
   }
 
-  public findById(id: string):Promise<User> {
+  public findById(id: string): Promise<User> {
     return this.findOne({ id });
+  }
+
+  public updatePasswordById(id: string, password: string): Promise<User> {
+    return this.save({ id, password });
   }
 }
 

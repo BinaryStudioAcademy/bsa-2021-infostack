@@ -74,11 +74,7 @@ const Workspaces: React.FC = () => {
   };
 
   return (
-    <div
-      className={`workspaces text-secondary bg-light d-flex flex-column align-items-start p-4${
-        !workspaces ? ' vh-91' : ''
-      }`}
-    >
+    <div className="workspaces text-secondary bg-light d-flex flex-column align-items-start p-4 min-vh-100">
       <h1 className="pageTitle">Workspaces</h1>
       {!workspaces && (
         <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">

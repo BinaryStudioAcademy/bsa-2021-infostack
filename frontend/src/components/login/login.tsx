@@ -6,6 +6,7 @@ import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
 import styles from './styles.module.scss';
 import { containsNoEmptyStrings } from 'helpers/helpers';
+import { Link } from 'components/common/common';
 
 const Login: React.FC = () => {
   const [formState, setFormState] = React.useState({
@@ -54,9 +55,9 @@ const Login: React.FC = () => {
         type="password"
         placeholder="Enter your password"
         helper={
-          <a href="#" className={styles.link}>
+          <Link className={styles.link} to={AppRoute.RESET_PASSWORD}>
             Forgot password?
-          </a>
+          </Link>
         }
         name="password"
         controlId="loginPassword"
