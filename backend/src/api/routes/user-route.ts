@@ -5,6 +5,7 @@ import {
   getUserById,
   updateFullName,
   updateAvatar,
+  getUserByIdWithWorkspace,
 } from '../../services/user.service';
 
 const router: Router = Router();
@@ -16,7 +17,7 @@ router.get(
 
 router.get(
   '/:id/profile',
-  run((req) => getUserById(req.params.id)),
+  run((req) => getUserByIdWithWorkspace(req.params.id, req.workspaceId)),
 );
 
 router.put(

@@ -5,6 +5,7 @@ import Workspace from 'components/workspace/workspace';
 import Pages from 'components/pages/pages';
 import Header from 'components/header/header';
 import Settings from 'components/settings/settings';
+import ProfileInfo from 'components/profile-info/profile-info';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
@@ -62,6 +63,12 @@ const App: React.FC = () => {
         <ProtectedRoute
           path={AppRoute.WORKSPACE_SETTING}
           component={Workspace}
+          exact
+        />
+        <ProtectedRoute
+          path={AppRoute.PROFILE}
+          component={ProfileInfo}
+          key={Date.now()}
           exact
         />
       </Switch>
