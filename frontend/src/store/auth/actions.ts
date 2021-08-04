@@ -34,6 +34,7 @@ const register = createAsyncThunk(
 const logout = createAsyncThunk(
   ActionType.RemoveUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
+    await new AuthApi().logout();
     localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
     localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
     dispatch(actions.removeUser());

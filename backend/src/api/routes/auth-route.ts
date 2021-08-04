@@ -6,6 +6,7 @@ import {
   resetPassword,
   setPassword,
   refreshTokens,
+  logout,
 } from '../../services/auth.service';
 
 const router: Router = Router();
@@ -33,6 +34,11 @@ router.post(
 router.post(
   '/refresh',
   run((req) => refreshTokens(req.body)),
+);
+
+router.get(
+  '/logout',
+  run((req) => logout(req.userId)),
 );
 
 export default router;

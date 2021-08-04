@@ -133,3 +133,11 @@ export const refreshTokens = async (body: IRefrashTokens): Promise<ITokens> => {
     });
   }
 };
+
+export const logout = async (userId: string): Promise<void> => {
+  const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+  const userRefreshToken = await refreshTokenRepository.findByUserId(userId);
+  if (userRefreshToken.token) {
+    await refreshTokenRepository.remove(userRefreshToken);
+  }
+};

@@ -48,6 +48,10 @@ class AuthApi {
       contentType: ContentType.JSON,
     });
   }
+
+  public async logout(): Promise<void> {
+    return http.load('/api/auth/logout');
+  }
 }
 
 export { AuthApi };
