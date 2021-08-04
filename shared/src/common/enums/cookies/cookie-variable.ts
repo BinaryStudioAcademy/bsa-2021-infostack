@@ -1,5 +1,5 @@
 enum CookieVariable {
-  WORKSPACE_ID = 'workspaceID',
+  WORKSPACE_ID = 'workspaceId',
 }
 
 export { CookieVariable };
