@@ -5,6 +5,8 @@ import PlusButton from '../plus-button/plus-button';
 import { IPage } from 'common/interfaces/page';
 import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
+import { useAppDispatch } from 'hooks/hooks';
+import { pagesActions } from 'store/pages';
 
 type Props = {
   title: string | null;
@@ -13,6 +15,11 @@ type Props = {
 };
 
 const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => {
+  const dispatch = useAppDispatch();
+  const getPageById = async ( id: string | null ): Promise<void> => {
+    const payload: string | null= id;
+    await dispatch(pagesActions.getPage(payload));
+  };
 
   return (
     <>
@@ -23,7 +30,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
             <>
               <Accordion.Header className={styles.accordionHeader}>
                 <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
-                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+                  <Link onClick={(): Promise<void> => getPageById(id)} to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
                   <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>
                 </div>
               </Accordion.Header>
@@ -33,7 +40,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
               </Accordion.Body>
             </> :
             <div className={getAllowedClasses('d-flex justify-content-between align-items-center', styles.pageItem)}>
-              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+              <Link onClick={(): Promise<void> => getPageById(id)} to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
               <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>
             </div>}
         </Accordion.Item>
