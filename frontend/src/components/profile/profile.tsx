@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
             <Col xl={2} md={3}>
               <ListGroup variant="flush">
                 <ListGroup.Item action href="#settings">
-                  Settings
+                  Account
                 </ListGroup.Item>
                 <ListGroup.Item action href="#password">
                   Password
