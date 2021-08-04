@@ -14,6 +14,7 @@ import { authActions } from 'store/actions';
 const App: React.FC = () => {
   const { pathname } = useLocation();
   const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const isWorkspacesPage = pathname === AppRoute.WORKSPACES;
   const { user } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -31,7 +32,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {!isAuth && <Header />}
+      {!isAuth && !isWorkspacesPage && <Header />}
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
