@@ -28,7 +28,7 @@ const Workspaces: React.FC = () => {
   useEffect(() => {
     if (currentWorkspaceID) {
       setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID);
-      history.push(AppRoute.PAGES);
+      history.push(AppRoute.ROOT);
     } else if (cookies.workspaceID){
       removeCookie(CookieVariable.WORKSPACE_ID);
     }

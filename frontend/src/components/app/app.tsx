@@ -10,6 +10,7 @@ import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
 import { useLocation, useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/actions';
+// import Main from 'components/main/main';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -22,7 +23,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (token) {
       if (isAuth) {
-        history.push(AppRoute.ROOT);
+        history.push(AppRoute.WORKSPACES);
       } else if (!isAuth && !user){
         dispatch(authActions.loadUser());
       }
