@@ -18,6 +18,7 @@ import {
 import { authActions } from 'store/actions';
 import ResetPassword from '../reset-password/reset-password';
 import SetPassword from '../set-password/set-password';
+import { ToastContainer } from 'react-toastify';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -69,6 +70,7 @@ const App: React.FC = () => {
           exact
         />
       </Switch>
+      <ToastContainer />
     </>
   );
 };
