@@ -1,9 +1,9 @@
 import Avatar from 'react-avatar';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute, CookieVariable } from 'common/enums/enums';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
-import { useAppDispatch, useHistory } from 'hooks/hooks';
+import { useAppDispatch, useCookies, useHistory } from 'hooks/hooks';
 import { Link } from 'react-router-dom';
 import { authActions } from 'store/actions';
 import './styles.scss';
@@ -17,9 +17,13 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  const [, , removeCookie] = useCookies(['cookie-name']);
+
   const onLogout = (): void => {
     dispatch(authActions.logout());
+    removeCookie(CookieVariable.WORKSPACE_ID);
     history.push(AppRoute.LOGIN);
+    location.reload();
   };
   return (
     <Dropdown as={NavItem} align="end">
@@ -45,7 +49,7 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar }) => {
         <Dropdown.Item as={Link} to={AppRoute.WORKSPACES}>
           Select Workspace
         </Dropdown.Item>
-        <Dropdown.Item as={Link} to={AppRoute.SETTINGS_PROFILE}>
+        <Dropdown.Item as={Link} to={AppRoute.SETTINGS}>
           Setting
         </Dropdown.Item>
         <Dropdown.Item onClick={onLogout} className="dropdown-item">

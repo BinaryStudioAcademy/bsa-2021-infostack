@@ -23,7 +23,7 @@ const SignUp: React.FC = () => {
     }
 
     await dispatch(authActions.register(formState));
-    push(AppRoute.ROOT);
+    push(AppRoute.WORKSPACES);
   };
 
   const handleChange = ({

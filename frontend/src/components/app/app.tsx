@@ -4,7 +4,7 @@ import Workspaces from 'components/workspaces/workspaces';
 import Workspace from 'components/workspace/workspace';
 import Pages from 'components/pages/pages';
 import Header from 'components/header/header';
-import Profile from 'components/profile/profile';
+import Settings from 'components/settings/settings';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
@@ -22,10 +22,9 @@ import { ToastContainer } from 'react-toastify';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(
-    pathname,
-  );
-  const { user } = useAppSelector((state) => state.auth);
+  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const isWorkspacesPage = pathname === AppRoute.WORKSPACES;
+  const { user } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const history = useHistory();
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
@@ -42,7 +41,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {!isAuth && <Header />}
+      {!isAuth && !isWorkspacesPage && <Header />}
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
@@ -59,11 +58,7 @@ const App: React.FC = () => {
           exact
         />
         <ProtectedRoute path={AppRoute.PAGES} component={Pages} exact />
-        <ProtectedRoute
-          path={AppRoute.SETTINGS_PROFILE}
-          component={Profile}
-          exact
-        />
+        <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
         <ProtectedRoute
           path={AppRoute.WORKSPACE_SETTING}
           component={Workspace}

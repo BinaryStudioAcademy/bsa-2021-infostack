@@ -23,6 +23,7 @@ class Http {
         headers,
         body: payload,
       });
+
       this.checkStatus(response);
 
       if (response.status === HttpCode.NO_CONTENT) {
