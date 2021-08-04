@@ -6,10 +6,10 @@ import {
   useRouteMatch,
   Route,
 } from 'react-router-dom';
-import { getAllowedClasses } from '../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
+import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import ProfileEdit from '../profile/components/profile-edit/profile-edit';
 import Menu from './components/menu';
-import { AppRoute } from '../../common/enums/app/app-route.enum';
+import { AppRoute } from 'common/enums/enums';
 import styles from './settings.module.scss';
 
 const Settings: React.FC = () => {
