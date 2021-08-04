@@ -24,7 +24,7 @@ const getPagesAsync = createAsyncThunk(
   ActionType.setPages,
   async (payload: undefined, { dispatch }) => {
     try {
-      const response = await new PageApi().get();
+      const response = await new PageApi().getPages();
       dispatch(actions.setPages(response));
     } catch (error) {
       alert(error);
@@ -34,7 +34,7 @@ const getPagesAsync = createAsyncThunk(
 
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
-  async (getPayload: string, { dispatch }) => {
+  async (getPayload: string | null, { dispatch }) => {
     const createPageResponse = await new PageApi().getPage(getPayload);
     dispatch(actions.getPage(createPageResponse));
   },

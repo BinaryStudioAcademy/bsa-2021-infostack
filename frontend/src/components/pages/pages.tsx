@@ -1,3 +1,4 @@
+import Header from 'components/header/header';
 import PageContent from './components/page-content/page-content';
 import Toolbar from './components/toolbar/toolbar';
 // import Button from 'react-bootstrap/Button';
@@ -40,7 +41,10 @@ const Pages: React.FC = () => {
         <Button variant="primary" onClick={(): Promise<void> => addSubPage(mockId)}>Add SUBpage</Button>
         <Button variant="primary" onClick={(): Promise<void> => getPageById(mockId)}>GET page</Button>
       </div> */}
-      <PageContent />
+      <div className="container">
+        <Header/>
+        <PageContent />
+      </div>
     </main>
   );
 };

@@ -3,7 +3,7 @@ import SignUp from 'components/sign-up/sign-up';
 import Workspaces from 'components/workspaces/workspaces';
 import Workspace from 'components/workspace/workspace';
 import Pages from 'components/pages/pages';
-import Header from 'components/header/header';
+// import Header from 'components/header/header';
 import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
@@ -31,7 +31,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {!isAuth && <Header />}
+      {/* {!isAuth && <Header />} */}
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />

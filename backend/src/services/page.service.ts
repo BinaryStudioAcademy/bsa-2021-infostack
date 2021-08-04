@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import { Request } from 'express';
+// import jwt from 'jsonwebtoken';
+// import { Request } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { PageRepository } from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
@@ -8,13 +8,14 @@ import { UserPermissionRepository } from '../data/repositories/user-permissions.
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission-repository';
-import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
+// import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
 
 export const createPage = async (userId: string, workspaceId: string, body: any):Promise<Page> => {
-  const { parentPageId, title, content } = body;
+  const { parentPageId, ...pageContent } = body;
+  const { title, content } = pageContent;
 
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.createAndSave( userId, workspaceId, parentPageId, null);
+  const page = await pageRepository.createAndSave( userId, workspaceId, parentPageId, null, [pageContent]);
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
   const pageContentRepository = getCustomRepository(PageContentRepository);
@@ -25,19 +26,17 @@ export const createPage = async (userId: string, workspaceId: string, body: any)
   return page;
 };
 
-export const createVersionPage = async (req: Request): Promise<Page> => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  const userId = jwt.decode(token) as string;
-  const workspaceId = req.cookies['workspaceId'];
+// export const createVersionPage = async (req: Request): Promise<Page> => {
+//   const authHeader = req.headers['authorization'];
+//   const token = authHeader && authHeader.split(' ')[1];
+//   const userId = jwt.decode(token) as string;
+//   const workspaceId = req.cookies['workspaceId'];
 
-  const pageRepository = getCustomRepository(PageRepository);
-  return pageRepository.createAndSave( userId, workspaceId, null, null );
-};
+//   const pageRepository = getCustomRepository(PageRepository);
+//   return pageRepository.createAndSave( userId, workspaceId, null, null );
+// };
 
-export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
-
-  const { userId = 'c5fa3b2f-c4de-4dda-84e7-714ee852627e' , workspaceId = 'b6e959fd-09b3-42cd-8a30-90c31054198a' } = req; // it will work after req will have userId and workspaceId
+export const getPages = async (userId: string, workspaceId: string): Promise<Page[]> => {
 
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);

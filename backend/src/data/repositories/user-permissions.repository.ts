@@ -16,4 +16,13 @@ export class UserPermissionRepository extends AbstractRepository<UserPermission>
 
     return this.manager.save(userPermission);
   }
+
+  public async findById(
+    userId: string,
+  ): Promise<UserPermission[]> {
+    return this.repository.find({
+      relations: ['page'],
+      where: { user: userId },
+    });
+  }
 }

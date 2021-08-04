@@ -8,7 +8,6 @@ const rootReducer = {
   pages,
   workspace,
   workspaces,
-  pages,
 };
 
 export { rootReducer };

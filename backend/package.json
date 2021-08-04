@@ -5,8 +5,8 @@
   "private": true,
   "main": "./src/server.ts",
   "scripts": {
-    "start": "ts-node ./src/server.ts",
-    "start:dev": "node_modules/.bin/ts-node-dev ./src/server.ts",
+    "start": "node ./server.js",
+    "start:dev": "ts-node-dev ./src/server.ts",
     "start:fast": "ts-node-dev --respawn --type-check --notify=false --clear ./src/server.ts",
     "lint:start": "nodemon -r ./src/server.ts --exec \"npm run linter && ts-node\"",
     "lint": "npx eslint \"./src/**/*.ts\" --fix",
