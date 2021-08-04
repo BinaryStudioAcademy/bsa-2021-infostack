@@ -10,6 +10,10 @@ export const auth = (
   res: Response,
   next: NextFunction,
 ): void => {
+  // eslint-disable-next-line no-console
+  console.log(req.path);
+  // eslint-disable-next-line no-console
+  console.log(whiteListRoutes.includes(req.path));
   if (whiteListRoutes.includes(req.path)) {
     return next();
   }
@@ -24,6 +28,8 @@ export const auth = (
     req.userId = decoded.userId;
     next();
   } catch (err) {
-    res.status(HttpCode.UNAUTHORIZED).json({ msg: 'Unauthorized', error: err });
+    // eslint-disable-next-line no-console
+    console.log(err);
+    res.status(HttpCode.UNAUTHORIZED).json({ msg: 'Access token expired', error: err });
   }
 };

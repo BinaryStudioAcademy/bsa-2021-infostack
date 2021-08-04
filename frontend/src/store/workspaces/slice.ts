@@ -23,6 +23,9 @@ const { reducer, actions } = createSlice({
     [ActionType.SetCurrentWorkspaceID]: (state, action: PayloadAction<string>) => {
       state.currentWorkspaceID = action.payload;
     },
+    [ActionType.RemoveCurrentWorkspaceID]: (state) => {
+      state.currentWorkspaceID = '';
+    },
   },
 });
 

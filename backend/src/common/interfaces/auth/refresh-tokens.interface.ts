@@ -1,1 +1,1 @@
-export { IRefrashTokens } from 'infostack-shared';
+export { IRefrashToken } from 'infostack-shared';

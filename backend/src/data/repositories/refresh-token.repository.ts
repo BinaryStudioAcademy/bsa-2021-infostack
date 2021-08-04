@@ -13,6 +13,17 @@ class refreshTokenRepository extends Repository<RefreshToken> {
       },
     );
   }
+
+  public findByToken(token: string): Promise<RefreshToken> {
+    return this.findOne(
+      { token },
+      {
+        relations: [
+          'user',
+        ],
+      },
+    );
+  }
 }
 
 export default refreshTokenRepository;

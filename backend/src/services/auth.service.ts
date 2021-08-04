@@ -5,7 +5,7 @@ import { IRegister } from '../common/interfaces/auth/register.interface';
 import { ILogin } from '../common/interfaces/auth/login.interface';
 import { IUserWithTokens, IUser } from '../common/interfaces/user/user-auth.interface';
 import { ITokens } from './../common/interfaces/auth/tokens.interface';
-import { IRefrashTokens } from './../common/interfaces/auth/refresh-tokens.interface';
+import { IRefrashToken } from './../common/interfaces/auth/refresh-tokens.interface';
 import { generateTokens, generateAccessToken } from '../common/utils/tokens.util';
 import UserRepository from '../data/repositories/user.repository';
 import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
@@ -108,7 +108,7 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
 };
 
-export const refreshTokens = async (body: IRefrashTokens): Promise<ITokens> => {
+export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
   try {
     const { refreshToken } = body;
     const decoded = jwt.verify(refreshToken, env.app.refreshSecretKey) as { userId: string };
@@ -134,9 +134,10 @@ export const refreshTokens = async (body: IRefrashTokens): Promise<ITokens> => {
   }
 };
 
-export const logout = async (userId: string): Promise<void> => {
+export const logout = async (body: IRefrashToken): Promise<void> => {
+  const { refreshToken } = body;
   const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
-  const userRefreshToken = await refreshTokenRepository.findByUserId(userId);
+  const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
   if (userRefreshToken.token) {
     await refreshTokenRepository.remove(userRefreshToken);
   }

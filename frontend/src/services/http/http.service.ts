@@ -24,7 +24,7 @@ class Http {
         body: payload,
       });
 
-      this.checkStatus(response);
+      await this.checkStatus(response);
 
       if (response.status === HttpCode.NO_CONTENT) {
         return null as unknown as T;
@@ -33,7 +33,10 @@ class Http {
       return this.parseJSON<T>(response);
     } catch (err) {
 
-      if (err.name === 'TokenExpiredError') {
+      // eslint-disable-next-line no-console
+      console.log(err);
+
+      if (err.message === 'Access token expired') {
         const response = await this.handleAccessTokenExpiredError(url, options, err);
         return this.parseJSON<T>(response);
       } else {
@@ -60,10 +63,14 @@ class Http {
     return headers;
   }
 
-  private checkStatus(response: Response): Response {
+  private async checkStatus(response: Response): Promise<Response> {
     if (!response.ok) {
+      const error = await response.json();
+      // eslint-disable-next-line no-console
+      console.log(error);
       throw new HttpError({
         status: response.status,
+        message: error.msg,
       });
     }
 
@@ -103,7 +110,7 @@ class Http {
         });
         return response;
       } catch (error) {
-        if (error.name === 'TokenExpiredError') {
+        if (error.message === 'Refresh token expired') {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removetem(LocalStorageVariable.REFRESH_TOKEN);
           localStorage.setItem(LocalStorageVariable.IS_REFRESH_TOKEN_EXPIRED, 'true');

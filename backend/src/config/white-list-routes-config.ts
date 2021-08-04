@@ -6,4 +6,5 @@ export default [
   '/auth/reset-password',
   '/auth/set-password',
   '/auth/refresh',
+  '/auth/logout',
 ];

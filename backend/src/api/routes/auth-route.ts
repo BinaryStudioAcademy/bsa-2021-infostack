@@ -36,9 +36,9 @@ router.post(
   run((req) => refreshTokens(req.body)),
 );
 
-router.get(
+router.post(
   '/logout',
-  run((req) => logout(req.userId)),
+  run((req) => logout(req.body)),
 );
 
 export default router;

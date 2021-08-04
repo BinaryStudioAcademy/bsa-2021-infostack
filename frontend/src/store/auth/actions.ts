@@ -34,10 +34,11 @@ const register = createAsyncThunk(
 const logout = createAsyncThunk(
   ActionType.RemoveUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
-    await new AuthApi().logout();
+    const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
     localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
     localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
     dispatch(actions.removeUser());
+    if (refreshToken) await new AuthApi().logout({ refreshToken });
   },
 );
 
