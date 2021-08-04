@@ -31,7 +31,7 @@ const Toolbar: React.FC = () => {
   return (
     <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">
       <h1 className="h5 mt-5 text-light text-center">
-        Infostack{' '}<Button variant="primary" onClick={addPage}>Add ROOTpage</Button>
+        Infostack{' '}<Button variant="primary" onClick={addPage} size="sm">Add page</Button>
       </h1>
       <div className="pt-5">
         <SectionName name="Pages" />
