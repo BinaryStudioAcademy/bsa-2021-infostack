@@ -21,7 +21,7 @@ const ProfileEdit: React.FC = () => {
     if (user) {
       setUserFullName(user.fullName);
     }
-  }, []);
+  }, [user]);
 
   const handleSaveChanges = async (): Promise<void> => {
     if (user) {
