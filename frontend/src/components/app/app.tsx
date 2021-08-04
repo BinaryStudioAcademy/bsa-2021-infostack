@@ -4,17 +4,25 @@ import Workspaces from 'components/workspaces/workspaces';
 import Workspace from 'components/workspace/workspace';
 import Pages from 'components/pages/pages';
 import Header from 'components/header/header';
-import Profile from 'components/profile/profile';
+import Settings from 'components/settings/settings';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
-import { useLocation, useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
+import {
+  useLocation,
+  useAppDispatch,
+  useAppSelector,
+  useEffect,
+  useHistory,
+} from 'hooks/hooks';
 import { authActions } from 'store/actions';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
-  const { user } = useAppSelector(state => state.auth);
+  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(
+    pathname,
+  );
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const history = useHistory();
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
@@ -23,7 +31,7 @@ const App: React.FC = () => {
     if (token) {
       if (isAuth) {
         history.push(AppRoute.ROOT);
-      } else if (!isAuth && !user){
+      } else if (!isAuth && !user) {
         dispatch(authActions.loadUser());
       }
     }
@@ -46,11 +54,7 @@ const App: React.FC = () => {
           exact
         />
         <ProtectedRoute path={AppRoute.PAGES} component={Pages} exact />
-        <ProtectedRoute
-          path={AppRoute.SETTINGS_PROFILE}
-          component={Profile}
-          exact
-        />
+        <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
         <ProtectedRoute
           path={AppRoute.WORKSPACE_SETTING}
           component={Workspace}
