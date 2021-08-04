@@ -47,17 +47,17 @@ const SetPassword: React.FC = () => {
     setIsSavingPassword(false);
   };
 
-  const onPasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setPassword(event.target.value);
-  };
+  // const onPasswordChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  // ): void => {
+  //   setPassword(event.target.value);
+  // };
 
-  const onPasswordRepeatChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setPasswordRepeat(event.target.value);
-  };
+  // const onPasswordRepeatChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  // ): void => {
+  //   setPasswordRepeat(event.target.value);
+  // };
 
   return (
     <Sign
@@ -71,20 +71,20 @@ const SetPassword: React.FC = () => {
         label="Password"
         type="password"
         placeholder="Enter your new password"
-        name="password"
+        // name="password"
         controlId="setPassword"
-        value={password}
-        onChange={onPasswordChange}
+        // value={password}
+        // onChange={onPasswordChange}
       />
 
       <FormField
         label="Repeat password"
         type="password"
         placeholder="Repeat your new password"
-        name="passwordRepeat"
+        // name="passwordRepeat"
         controlId="setPasswordRepeat"
-        value={passwordRepeat}
-        onChange={onPasswordRepeatChange}
+        // value={passwordRepeat}
+        // onChange={onPasswordRepeatChange}
       />
     </Sign>
   );

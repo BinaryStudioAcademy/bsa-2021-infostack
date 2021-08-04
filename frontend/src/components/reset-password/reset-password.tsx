@@ -28,9 +28,9 @@ const ResetPassword: React.FC = () => {
     setIsSendingMail(false);
   };
 
-  const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setEmail(event.target.value);
-  };
+  // const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  //   setEmail(event.target.value);
+  // };
 
   return (
     <Sign
@@ -44,10 +44,10 @@ const ResetPassword: React.FC = () => {
         label="Email"
         type="email"
         placeholder="Enter your email"
-        name="email"
+        // name="email"
         controlId="resetPasswordEmail"
-        value={email}
-        onChange={onEmailChange}
+        // value={email}
+        // onChange={onEmailChange}
       />
     </Sign>
   );
