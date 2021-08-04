@@ -6,6 +6,7 @@ import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
 import styles from './styles.module.scss';
 import { containsNoEmptyStrings } from 'helpers/helpers';
+import { Link } from 'components/common/common';
 
 const Login: React.FC = () => {
   const [formState, setFormState] = React.useState({
@@ -31,10 +32,6 @@ const Login: React.FC = () => {
   }: React.ChangeEvent<HTMLInputElement>): void =>
     setFormState((prev) => ({ ...prev, [name]: value }));
 
-  const onForgotPassword = (): void => {
-    push(AppRoute.RESET_PASSWORD);
-  };
-
   const { email, password } = formState;
 
   return (
@@ -58,9 +55,9 @@ const Login: React.FC = () => {
         type="password"
         placeholder="Enter your password"
         helper={
-          <a className={styles.link} onClick={onForgotPassword}>
+          <Link className={styles.link} to={AppRoute.RESET_PASSWORD}>
             Forgot password?
-          </a>
+          </Link>
         }
         name="password"
         controlId="loginPassword"
