@@ -16,12 +16,12 @@ export const permit = (...permittedRoles: RoleType[]) => {
     const userWorkspaceRepository = getCustomRepository(
       UserWorkspaceRepository,
     );
-    const { role } = await userWorkspaceRepository.findById(
+    const userWorkspace = await userWorkspaceRepository.findById(
       userId,
       workspaceId,
     );
 
-    if (userId && permittedRoles.includes(role)) {
+    if (userId && permittedRoles.includes(userWorkspace?.role)) {
       next();
     } else {
       res.status(HttpCode.NOT_FOUND).json({ message: 'Not Found' });

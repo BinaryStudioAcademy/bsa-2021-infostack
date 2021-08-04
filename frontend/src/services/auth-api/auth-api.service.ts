@@ -1,6 +1,7 @@
 import { IUserWithTokens, IUser } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
+import { IResetPassword, ISetPassword } from 'common/interfaces/auth';
 
 const http = new Http();
 
@@ -30,6 +31,22 @@ class AuthApi {
     );
 
     return registerResponse;
+  }
+
+  public async resetPassword(payload: IResetPassword): Promise<void> {
+    return http.load('/api/auth/reset-password', {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
+  }
+
+  public async setPassword(payload: ISetPassword): Promise<void> {
+    return http.load('/api/auth/set-password', {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
   }
 }
 
