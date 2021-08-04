@@ -7,6 +7,8 @@ import TeamPermissionRepository from '../data/repositories/team-permission-repos
 import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
 
 export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
+  // eslint-disable-next-line no-console
+  console.log('req.workspaceId',req.workspaceId);
 
   const { userId = 'c5fa3b2f-c4de-4dda-84e7-714ee852627e' , workspaceId = 'b6e959fd-09b3-42cd-8a30-90c31054198a' } = req; // it will work after req will have userId and workspaceId
 
