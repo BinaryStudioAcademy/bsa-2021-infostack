@@ -1,21 +1,30 @@
 import { getCustomRepository } from 'typeorm';
 import { IWorkspaceUser } from '../common/interfaces/workspace/workspace-user';
+import { ITeam } from '../common/interfaces/team/team.interface';
 import {
   IWorkspace,
   IWorkspaceCreation,
 } from 'infostack-shared/common/interfaces';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
+import { mapWorkspaceToTeams } from '../common/mappers/team/map-workspace-to-teams';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { RoleType } from '../common/enums/role-type';
+
+export const getWorkspaceTeams = async (
+  workspaceId: string,
+): Promise<ITeam[]> => {
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const workspace = await workspaceRepository.findByIdWithTeams(workspaceId);
+  return mapWorkspaceToTeams(workspace);
+};
 
 export const getWorkspaceUsers = async (
   workspaceId: string,
 ): Promise<IWorkspaceUser[]> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findByIdWithUsers(workspaceId);
-
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 

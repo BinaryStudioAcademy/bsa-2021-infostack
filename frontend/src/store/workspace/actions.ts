@@ -11,9 +11,18 @@ const loadUsers = createAsyncThunk(
   },
 );
 
+const loadTeams = createAsyncThunk(
+  ActionType.SetTeams,
+  async (_, { dispatch }): Promise<void> => {
+    const response = await new WorkspaceApi().loadTeams();
+    dispatch(actions.SetTeams(response));
+  },
+);
+
 const workspaceActions = {
   ...actions,
   loadUsers,
+  loadTeams,
 };
 
 export { workspaceActions };

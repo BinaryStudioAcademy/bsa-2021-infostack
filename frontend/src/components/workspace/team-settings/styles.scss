@@ -1,0 +1,14 @@
+.pageTitle {
+  font-size: 1.5rem;
+}
+
+.teams-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 1.5rem;
+}
+
+.vh-91 {
+  height: 91vh;
+}

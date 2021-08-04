@@ -4,6 +4,7 @@ import { run } from '../../common/helpers/route.helper';
 import { IRequestWithUser } from '../../common/models/user/request-with-user.interface';
 import {
   getWorkspaceUsers,
+  getWorkspaceTeams,
   getAll,
   create,
 } from '../../services/workspace.service';
@@ -26,6 +27,10 @@ router
     auth,
     permit(RoleType.ADMIN),
     run((req: IRequestWithUser) => getWorkspaceUsers(req.workspaceId)),
+  )
+  .get(
+    '/teams',
+    run((req) => getWorkspaceTeams(req.workspaceId)),
   );
 
 export default router;
