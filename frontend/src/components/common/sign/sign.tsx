@@ -9,6 +9,7 @@ type Props = {
   submitText: string;
   children: JSX.Element | JSX.Element[];
   onSubmit: (e: React.SyntheticEvent) => void;
+  isSubmitDisabled?: boolean;
 };
 
 const Sign: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const Sign: React.FC<Props> = ({
   submitText,
   children,
   onSubmit,
+  isSubmitDisabled,
 }) => (
   <div className="vh-100 vw-100 d-flex justify-content-center align-items-center bg-light text-center">
     <div className={styles.container}>
@@ -30,6 +32,7 @@ const Sign: React.FC<Props> = ({
             variant="primary"
             type="submit"
             onClick={onSubmit}
+            disabled={isSubmitDisabled}
           >
             {submitText}
           </Button>

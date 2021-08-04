@@ -1,5 +1,11 @@
 import { HttpError } from 'exceptions/exceptions';
-import { ContentType, HttpHeader, HttpMethod, LocalStorageVariable } from 'common/enums/enums';
+import {
+  ContentType,
+  HttpHeader,
+  HttpMethod,
+  LocalStorageVariable,
+  HttpCode,
+} from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
 
 class Http {
@@ -17,7 +23,12 @@ class Http {
         headers,
         body: payload,
       });
-      await this.checkStatus(response);
+
+      this.checkStatus(response);
+
+      if (response.status === HttpCode.NO_CONTENT) {
+        return null as unknown as T;
+      }
 
       return this.parseJSON<T>(response);
     } catch (err) {
@@ -25,7 +36,10 @@ class Http {
     }
   }
 
-  private getHeaders(contentType?: ContentType, token?: string | null): Headers {
+  private getHeaders(
+    contentType?: ContentType,
+    token?: string | null,
+  ): Headers {
     const headers = new Headers();
 
     if (contentType) {
