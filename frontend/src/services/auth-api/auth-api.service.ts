@@ -6,7 +6,7 @@ const http = new Http();
 
 class AuthApi {
   public async loginUser(
-    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar'>,
+    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar' | 'title'>,
   ): Promise<IUserWithTokens> {
     const loginResponse: IUserWithTokens = await http.load('/api/auth/login', {
       method: HttpMethod.POST,
@@ -18,7 +18,7 @@ class AuthApi {
   }
 
   public async registerUser(
-    registerPayload: Omit<IUser, 'id' | 'avatar'>,
+    registerPayload: Omit<IUser, 'id' | 'avatar' | 'title'>,
   ): Promise<IUserWithTokens> {
     const registerResponse: IUserWithTokens = await http.load(
       '/api/auth/register',

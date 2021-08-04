@@ -8,7 +8,7 @@ import { LocalStorageVariable } from 'common/enums/enums';
 const login = createAsyncThunk(
   ActionType.SetUser,
   async (
-    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar'>,
+    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar' | 'title'>,
     { dispatch },
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
@@ -20,7 +20,7 @@ const login = createAsyncThunk(
 const register = createAsyncThunk(
   ActionType.SetUser,
   async (
-    registerPayload: Omit<IUser, 'id' | 'avatar'>,
+    registerPayload: Omit<IUser, 'id' | 'avatar' | 'title'>,
     { dispatch },
   ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);

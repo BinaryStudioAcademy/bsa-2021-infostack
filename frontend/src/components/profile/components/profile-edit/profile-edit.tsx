@@ -12,6 +12,7 @@ const ProfileEdit: React.FC = () => {
   const dispatch = useAppDispatch();
   const [isUploading, setIsUploading] = useState(false);
   const [userFullName, setUserFullName] = useState('');
+  const [userTitle, setUserTitle] = useState('');
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -20,16 +21,17 @@ const ProfileEdit: React.FC = () => {
   useEffect(() => {
     if (user) {
       setUserFullName(user.fullName);
+      setUserTitle(user.title);
     }
   }, []);
 
   const handleSaveChanges = async (): Promise<void> => {
     if (user) {
-      if (userFullName !== user.fullName) {
+      if (userFullName !== user.fullName || userTitle !== user.title) {
         setIsUploading(true);
 
         const updatedUser = await userApi
-          .update(user.id, { ...user, fullName: userFullName })
+          .update(user.id, { ...user, fullName: userFullName, title: userTitle })
           .then((data) => data);
         dispatch(
           authActions.setUser({
@@ -37,9 +39,11 @@ const ProfileEdit: React.FC = () => {
             fullName: updatedUser.fullName,
             avatar: updatedUser.avatar,
             email: updatedUser.email,
+            title: updatedUser.title,
           }),
         );
         setUserFullName(updatedUser.fullName);
+        setUserTitle(updatedUser.title);
       }
 
       if (selectedFile) {
@@ -55,6 +59,7 @@ const ProfileEdit: React.FC = () => {
             fullName: updatedUser.fullName,
             avatar: updatedUser.avatar,
             email: updatedUser.email,
+            title: updatedUser.title,
           }),
         );
 
@@ -118,6 +123,20 @@ const ProfileEdit: React.FC = () => {
                   placeholder="Full name"
                   value={userFullName}
                   onChange={(e): void => setUserFullName(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGroupTitle">
+                <Form.Label
+                  className={getAllowedClasses(styles.cardInputLabel)}
+                >
+                  Title
+                </Form.Label>
+                <Form.Control
+                  className={getAllowedClasses(styles.cardInput)}
+                  type="text"
+                  placeholder="Title"
+                  value={userTitle}
+                  onChange={(e): void => setUserTitle(e.target.value)}
                 />
               </Form.Group>
             </Form>

@@ -22,6 +22,9 @@ export class User extends AbstractEntity {
   @Column({ nullable: true })
   avatar: string;
 
+  @Column({ length: 200, nullable: true })
+  title: string;
+
   @OneToMany(() => RefreshToken, RefreshToken => RefreshToken.user)
   refreshTokens: RefreshToken[];
 

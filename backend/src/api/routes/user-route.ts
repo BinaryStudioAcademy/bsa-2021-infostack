@@ -3,7 +3,7 @@ import { upload } from '../../common/helpers/multer.helper';
 import { run } from '../../common/helpers/route.helper';
 import {
   getUserById,
-  updateFullName,
+  updateUserInfo,
   updateAvatar,
 } from '../../services/user.service';
 
@@ -21,7 +21,7 @@ router.get(
 
 router.put(
   '/:id/profile',
-  run((req) => updateFullName(req.params.id, req.body)),
+  run((req) => updateUserInfo(req.params.id, req.body)),
 );
 
 router.put(

@@ -6,22 +6,23 @@ import { IUser } from 'infostack-shared';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar } = await userRepository.findById(id);
+  const { fullName, email, avatar, title } = await userRepository.findById(id);
 
-  return { id, fullName, email, avatar };
+  return { id, fullName, email, avatar, title };
 };
 
-export const updateFullName = async (
+export const updateUserInfo = async (
   id: string,
-  body: { fullName: string },
+  body: { fullName: string, title: string },
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const userToUpdate = await userRepository.findById(id);
 
   userToUpdate.fullName = body.fullName || userToUpdate.fullName;
+  userToUpdate.title = body.title || userToUpdate.title;
 
-  const { fullName, email, avatar } = await userRepository.save(userToUpdate);
-  return { id, fullName, email, avatar };
+  const { fullName, email, avatar, title } = await userRepository.save(userToUpdate);
+  return { id, fullName, email, avatar, title };
 };
 
 export const updateAvatar = async (
@@ -36,6 +37,6 @@ export const updateAvatar = async (
 
   userToUpdate.avatar = Location || userToUpdate.avatar;
 
-  const { fullName, email, avatar } = await userRepository.save(userToUpdate);
-  return { id, fullName, email, avatar };
+  const { fullName, email, avatar, title } = await userRepository.save(userToUpdate);
+  return { id, fullName, email, avatar, title };
 };
