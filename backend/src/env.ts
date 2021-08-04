@@ -8,7 +8,8 @@ export const env = {
   app: {
     port: getOsEnv('PORT'),
     url: getOsEnv('APP_URL'),
-    secretKey: getOsEnv('APP_SECRET'),
+    accessSecretKey: getOsEnv('APP_SECRET_ACCESS'),
+    refreshSecretKey: getOsEnv('APP_SECRET_REFRESH'),
     nodeEnv: getOsEnv('NODE_ENV'),
   },
   db: {

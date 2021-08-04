@@ -3,9 +3,11 @@ import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { IRegister } from '../common/interfaces/auth/register.interface';
 import { ILogin } from '../common/interfaces/auth/login.interface';
-import { IUserWithTokens } from '../common/interfaces/user/user-auth.interface';
-import { generateAccessToken } from '../common/utils/generate-access-token.util';
+import { IUserWithTokens, IUser } from '../common/interfaces/user/user-auth.interface';
+import { ITokens } from './../common/interfaces/auth/tokens.interface';
+import { generateTokens, generateAccessToken } from '../common/utils/generate-tokens.util';
 import UserRepository from '../data/repositories/user.repository';
+import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
 import { hash, verify } from '../common/utils/hash.util';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
@@ -13,6 +15,15 @@ import { IResetPassword } from '../common/interfaces/auth/reset-password.interfa
 import { env } from '../env';
 import { ISetPassword } from '../common/interfaces/auth/set-password.interface';
 import jwt from 'jsonwebtoken';
+
+const setTokens = async (user: IUser): Promise<ITokens> => {
+  const tokens = generateTokens(user.id);
+  const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+  const refreshToken = refreshTokenRepository.create({ user, token: tokens.refreshToken });
+  await refreshTokenRepository.save(refreshToken);
+
+  return tokens;
+};
 
 export const register = async (
   body: IRegister,
@@ -32,7 +43,9 @@ export const register = async (
     password: hashedPassword,
   });
 
-  return { ...user, accessToken: generateAccessToken(user.id) };
+  const tokens = await setTokens(user);
+
+  return { ...user, ...tokens };
 };
 
 export const login = async (
@@ -56,10 +69,9 @@ export const login = async (
     });
   }
 
-  return {
-    ...user,
-    accessToken: generateAccessToken(user.id),
-  };
+  const tokens = await setTokens(user);
+
+  return { ...user, ...tokens };
 };
 
 export const resetPassword = async (body: IResetPassword): Promise<void> => {
@@ -90,7 +102,7 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   }
 
   const { app } = env;
-  const decoded = jwt.verify(token, app.secretKey) as { userId: string };
+  const decoded = jwt.verify(token, app.accessSecretKey) as { userId: string };
   const hashedPassword = await hash(password);
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
 };
