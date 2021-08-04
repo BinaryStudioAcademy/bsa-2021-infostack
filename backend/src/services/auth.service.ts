@@ -111,9 +111,9 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
 export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
   try {
     const { refreshToken } = body;
-    const decoded = jwt.verify(refreshToken, env.app.refreshSecretKey) as { userId: string };
+    jwt.verify(refreshToken, env.app.refreshSecretKey) as { userId: string };
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
-    const userRefreshToken = await refreshTokenRepository.findByUserId(decoded.userId);
+    const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
     if (userRefreshToken.token) {
       await refreshTokenRepository.remove(userRefreshToken);
       const tokens = setTokens(userRefreshToken.user);
@@ -122,6 +122,8 @@ export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
       throw new Error();
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
     if(err.name === 'TokenExpiredError')
       throw new HttpError({
         status: HttpCode.UNAUTHORIZED,

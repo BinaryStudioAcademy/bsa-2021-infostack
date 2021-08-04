@@ -1,3 +1,4 @@
+import { store } from 'store/store';
 import { HttpError } from 'exceptions/exceptions';
 import {
   ContentType,
@@ -7,6 +8,7 @@ import {
   HttpCode,
 } from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
+import { authActions } from 'store/auth';
 
 class Http {
   public async load<T = unknown>(
@@ -66,11 +68,9 @@ class Http {
   private async checkStatus(response: Response): Promise<Response> {
     if (!response.ok) {
       const error = await response.json();
-      // eslint-disable-next-line no-console
-      console.log(error);
       throw new HttpError({
         status: response.status,
-        message: error.msg,
+        message: error.msg || error.error,
       });
     }
 
@@ -98,6 +98,9 @@ class Http {
           body: JSON.stringify({ refreshToken }),
           headers: this.getHeaders(ContentType.JSON),
         });
+        // eslint-disable-next-line no-console
+        console.log(res);
+        await this.checkStatus(res);
         const tokens = await res.json();
         localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
         localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, tokens.refreshToken);
@@ -110,10 +113,12 @@ class Http {
         });
         return response;
       } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
         if (error.message === 'Refresh token expired') {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
-          localStorage.removetem(LocalStorageVariable.REFRESH_TOKEN);
-          localStorage.setItem(LocalStorageVariable.IS_REFRESH_TOKEN_EXPIRED, 'true');
+          localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
+          store.dispatch(authActions.ToggleIsRefreshTokenExpired());
         }
         this.throwError(error);
       }

@@ -25,10 +25,10 @@ const App: React.FC = () => {
   const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
   const isWorkspacesPage = pathname === AppRoute.WORKSPACES;
   const { user } = useAppSelector(state => state.auth);
+  const { isRefreshTokenExpired } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const history = useHistory();
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
-  const isRefreshTokenExpired = localStorage.getItem(LocalStorageVariable.IS_REFRESH_TOKEN_EXPIRED);
 
   useEffect(() => {
     if (token) {
@@ -38,10 +38,13 @@ const App: React.FC = () => {
         dispatch(authActions.loadUser());
       }
     }
+  }, []);
+
+  useEffect(() => {
     if (isRefreshTokenExpired) {
       history.push(AppRoute.LOGIN);
     }
-  }, []);
+  }, [isRefreshTokenExpired]);
 
   return (
     <>
