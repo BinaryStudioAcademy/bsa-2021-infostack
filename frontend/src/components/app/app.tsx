@@ -8,8 +8,17 @@ import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
-import { useLocation, useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
+import {
+  useLocation,
+  useAppDispatch,
+  useAppSelector,
+  useEffect,
+  useHistory,
+} from 'hooks/hooks';
 import { authActions } from 'store/actions';
+import ResetPassword from '../reset-password/reset-password';
+import SetPassword from '../set-password/set-password';
+import { ToastContainer } from 'react-toastify';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -24,7 +33,7 @@ const App: React.FC = () => {
     if (token) {
       if (isAuth) {
         history.push(AppRoute.ROOT);
-      } else if (!isAuth && !user){
+      } else if (!isAuth && !user) {
         dispatch(authActions.loadUser());
       }
     }
@@ -36,6 +45,8 @@ const App: React.FC = () => {
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
+        <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
+        <Route path={AppRoute.SET_PASSWORD} component={SetPassword} exact />
         <ProtectedRoute
           path={AppRoute.ROOT}
           component={(): JSX.Element => <h2>Stub</h2>}
@@ -58,6 +69,7 @@ const App: React.FC = () => {
           exact
         />
       </Switch>
+      <ToastContainer />
     </>
   );
 };

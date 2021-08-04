@@ -5,7 +5,7 @@ interface ITeamsProps {
 }
 
 const Teams: React.FC<ITeamsProps> = ({ teams }) => {
-  return <td>{teams.join(', ')}</td>;
+  return <td>{teams.length ? teams.join(', ') : 'No teams found'}</td>;
 };
 
 export { Teams };

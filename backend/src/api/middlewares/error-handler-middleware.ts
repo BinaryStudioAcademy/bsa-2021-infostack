@@ -10,6 +10,7 @@ const errorHandlerMiddleware = (
   res: Response,
   __: NextFunction,
 ): void => {
+  logger.error(err);
   let status = HttpCode.INTERNAL_SERVER_ERROR;
   let message: string = HttpErrorMessage.INTERNAL_SERVER_ERROR;
 
