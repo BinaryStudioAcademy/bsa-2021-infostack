@@ -1,6 +1,6 @@
 import Header from 'components/header/header';
 import PageContent from './components/page-content/page-content';
-import Toolbar from './components/toolbar/toolbar';
+import Toolbar from '../toolbar/toolbar';
 // import Button from 'react-bootstrap/Button';
 // import { pagesActions } from 'store/actions';
 import './pages.scss';

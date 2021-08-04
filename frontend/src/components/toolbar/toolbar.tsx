@@ -1,4 +1,5 @@
 import { RootState } from 'common/types/types';
+import { getAllowedClasses } from 'helpers/dom/dom';
 // import { getAllowedClasses } from 'helpers/dom/dom';
 import { useAppDispatch, useAppSelector, useEffect } from 'hooks/hooks';
 import { Accordion, Nav, Navbar } from 'react-bootstrap';
