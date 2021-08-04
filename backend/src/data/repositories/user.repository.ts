@@ -7,7 +7,7 @@ class UserRepository extends Repository<User> {
     return this.findOne({ email });
   }
 
-  public findById(id: string):Promise<User> {
+  public findById(id: string): Promise<User> {
     return this.findOne({ id });
   }
 
@@ -19,6 +19,9 @@ class UserRepository extends Repository<User> {
     return this.findOne({ relations: ['userPermissions'], where: { id: userId } });
   }
 
+  public updatePasswordById(id: string, password: string): Promise<User> {
+    return this.save({ id, password });
+  }
 }
 
 export default UserRepository;
