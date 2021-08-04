@@ -10,6 +10,11 @@ import {
 const router: Router = Router();
 
 router.get(
+  '/me/profile',
+  run((req) => getUserById(req.userId)),
+);
+
+router.get(
   '/:id/profile',
   run((req) => getUserById(req.params.id)),
 );

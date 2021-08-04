@@ -25,10 +25,18 @@ const Workspace: React.FC = () => {
         <Tab eventKey="/tags" className="settings-tab" title="Tags">
           <TagSettings />
         </Tab>
-        <Tab eventKey="/integrations" className="settings-tab" title="Integrations">
+        <Tab
+          eventKey="/integrations"
+          className="settings-tab"
+          title="Integrations"
+        >
           <IntegrationSettings />
         </Tab>
-        <Tab eventKey="/profile" className="settings-tab" title="Workspace profile">
+        <Tab
+          eventKey="/profile"
+          className="settings-tab"
+          title="Workspace profile"
+        >
           <WorkspaceProfileSettings />
         </Tab>
       </Tabs>
