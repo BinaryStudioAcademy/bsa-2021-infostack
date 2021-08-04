@@ -1,5 +1,4 @@
 import { Table } from 'react-bootstrap';
-import AddUser from './add-user/add-user';
 import styles from './styles.module.scss';
 import TableHead from './table-head/table-head';
 import UserItem from './user-item/user-item';
@@ -28,7 +27,6 @@ const UsersSettings: React.FC = () => {
           {users.map((user) => {
             return <UserItem key={user.id} {...user} />;
           })}
-          <AddUser />
         </tbody>
       </Table>
     </div>
