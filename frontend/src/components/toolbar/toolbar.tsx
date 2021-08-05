@@ -17,7 +17,7 @@ const Toolbar: React.FC = () => {
   }, []);
 
   const addPage = async(): Promise<void> => {
-    const payload: IPageRequest = { title: 'New Page', content: '', parentPageId: null };
+    const payload: IPageRequest = { title: 'New Page', content: '' };
     await dispatch(pagesActions.createPage(payload));
     await dispatch(pagesActions.getPagesAsync());
   };

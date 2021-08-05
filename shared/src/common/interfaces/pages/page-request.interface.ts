@@ -1,6 +1,6 @@
 interface IPageRequest {
   title: string;
   content: string;
-  parentPageId: string | null;
+  parentPageId?: string;
 }
 export type { IPageRequest };

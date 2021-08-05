@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { IPageRequest } from '~/common/interfaces/pages';
 import { Page } from '../entities/page';
-import { PageContent } from '../entities/page-content';
 
 @EntityRepository(Page)
 export class PageRepository extends Repository<Page> {
 
-  createAndSave(authorId: string, workspaceId: string, parentPageId: string | null, childPages: Page[] | null, pageContents: PageContent[]): Promise<Page> {
+  createAndSave(authorId: string, workspaceId: string, parentPageId: string | null, childPages: Page[] | null, pageContents: IPageRequest[]): Promise<Page> {
     const page = this.create({
       authorId: authorId,
       workspaceId: workspaceId,

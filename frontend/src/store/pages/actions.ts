@@ -34,7 +34,7 @@ const getPagesAsync = createAsyncThunk(
 
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
-  async (getPayload: string | null, { dispatch }) => {
+  async (getPayload: string | undefined, { dispatch }) => {
     const createPageResponse = await new PageApi().getPage(getPayload);
     dispatch(actions.getPage(createPageResponse));
   },

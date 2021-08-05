@@ -3,13 +3,13 @@ import { useAppDispatch } from 'hooks/hooks';
 import { pagesActions } from 'store/pages';
 
 type Props = {
-  id: string | null;
+  id?: string;
 };
 
 const PlusButton: React.FC<Props> = ({ id }) => {
   const dispatch = useAppDispatch();
 
-  const addSubPage = async ( id: string | null ): Promise<void> => {
+  const addSubPage = async ( id?: string ): Promise<void> => {
     const payload: IPageRequest = { title: 'New Page', content: '', parentPageId: id };
 
     await dispatch(pagesActions.createPage(payload));

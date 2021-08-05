@@ -4,8 +4,8 @@ interface IPage {
   id: string;
   authorId: string;
   workspaceId: string;
-  parentPageId: string | null;
-  children: IPage[] | null;
+  parentPageId?: string;
+  children?: IPage[];
   pageContents: IPageContent[];
 }
 

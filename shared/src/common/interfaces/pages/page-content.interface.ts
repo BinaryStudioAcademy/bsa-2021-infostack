@@ -3,9 +3,9 @@ interface IPageContent {
   authorId: string;
   pageId: string;
   title: string;
-  content: string | null;
+  content?: string;
   createdAt: string;
-  deletedAt: string | null;
-  updatedAt: string | null;
+  deletedAt?: string;
+  updatedAt?: string;
 }
 export type { IPageContent };

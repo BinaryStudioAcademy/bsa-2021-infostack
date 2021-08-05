@@ -31,7 +31,7 @@ class PageApi {
     });
   }
 
-  public async getPage(id: string | null): Promise<IPage> {
+  public async getPage(id?: string ): Promise<IPage> {
     return this._http.load(`/api/pages/${id}`, {
       method: HttpMethod.GET,
     });

@@ -11,23 +11,23 @@ import Button from 'react-bootstrap/Button';
 import { IPageRequest } from 'common/interfaces/pages';
 
 type Props = {
-  title: string | null;
-  id: string | null;
-  childrenPages: IPage[] | null;
+  title?: string;
+  id?: string;
+  childrenPages?: IPage[];
 };
 
 const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => {
   const dispatch = useAppDispatch();
 
-  const addSubPage = async ( id: string | null ): Promise<void> => {
+  const addSubPage = async ( id?: string ): Promise<void> => {
     const payload: IPageRequest = { title: 'New Page', content: '', parentPageId: id };
 
     await dispatch(pagesActions.createPage(payload));
     await dispatch(pagesActions.getPagesAsync());
   };
 
-  const getPageById = async ( id: string | null ): Promise<void> => {
-    const payload: string | null= id;
+  const getPageById = async ( id?: string ): Promise<void> => {
+    const payload: string | undefined = id;
     await dispatch(pagesActions.getPage(payload));
   };
 
