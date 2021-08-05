@@ -130,7 +130,7 @@ const ProfileInfo: React.FC = () => {
             </Card>
           </Col>
         </Row>
-      </> : null) : <h1>Permission denied</h1>}
+      </> : null) : <h1 className="d-flex justify-content-center">Permission denied</h1>}
     </Container>
   );
 };
