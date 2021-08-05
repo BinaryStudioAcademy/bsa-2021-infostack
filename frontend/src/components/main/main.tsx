@@ -18,11 +18,11 @@ const Main: React.FC = () => {
     (state: RootState) => state.workspaces.currentWorkspaceID,
   );
   const history = useHistory();
+  const [cookies] = useCookies([
+    CookieVariable.WORKSPACE_ID,
+  ]);
 
   if (!currentWorkspaceID) {
-    const [cookies] = useCookies([
-      CookieVariable.WORKSPACE_ID,
-    ]);
     if (cookies.workspaceId) {
       const dispatch = useAppDispatch();
       dispatch(workspacesActions.SetCurrentWorkspaceID(cookies.workspaceId));
