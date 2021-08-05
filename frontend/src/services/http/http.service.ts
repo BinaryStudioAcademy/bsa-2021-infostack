@@ -35,7 +35,7 @@ class Http {
       return this.parseJSON<T>(response);
     } catch (err) {
 
-      if (err.message === 'Access token expired') {
+      if (err.status === HttpCode.UNAUTHORIZED) {
         const response = await this.handleAccessTokenExpiredError(url, options, err);
         return this.parseJSON<T>(response);
       } else {
@@ -108,7 +108,7 @@ class Http {
         });
         return response;
       } catch (error) {
-        if (error.message === 'Refresh token expired') {
+        if (error.status === HttpCode.UNAUTHORIZED) {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
           store.dispatch(authActions.ToggleIsRefreshTokenExpired());

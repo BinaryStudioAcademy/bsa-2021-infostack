@@ -24,6 +24,6 @@ export const auth = (
     req.userId = decoded.userId;
     next();
   } catch (err) {
-    res.status(HttpCode.UNAUTHORIZED).json({ msg: 'Access token expired', error: err });
+    res.status(HttpCode.UNAUTHORIZED).json({ msg: 'Unauthorized', error: err });
   }
 };

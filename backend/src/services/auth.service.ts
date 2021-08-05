@@ -121,13 +121,8 @@ export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
     } else {
       throw new Error();
     }
-  } catch (err) {
-    if(err.name === 'TokenExpiredError')
-      throw new HttpError({
-        status: HttpCode.UNAUTHORIZED,
-        message: 'Refresh token expired',
-      });
-    else throw new HttpError({
+  } catch {
+    throw new HttpError({
       status: HttpCode.UNAUTHORIZED,
       message: 'Unauthorized',
     });
