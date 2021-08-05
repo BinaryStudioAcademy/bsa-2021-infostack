@@ -6,9 +6,8 @@ import workspaceRoute from './workspace-route';
 
 const routes = (app: Express): void => {
   app.use('/api/users', userRoute);
-  app.use('/api/auth', authRoute);
   app.use('/api/pages', pageRoute);
+  app.use('/api/auth', authRoute);
   app.use('/api/workspaces', workspaceRoute);
 };
-
 export default routes;

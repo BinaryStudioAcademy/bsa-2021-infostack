@@ -1,12 +1,12 @@
-import { IContent } from './page-content.interface';
+import { IPageContent } from './page-content.interface';
 
 interface IPage {
   id: string;
   authorId: string;
   workspaceId: string;
-  parentPageId: string | null;
-  childPages: IPage[] | null;
-  pageContents: IContent[];
+  parentPageId?: string;
+  childPages?: IPage[];
+  pageContents: IPageContent[];
 }
 
 export type { IPage };
