@@ -103,7 +103,7 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   }
 
   const { app } = env;
-  const decoded = jwt.verify(token, app.accessSecretKey) as { userId: string };
+  const decoded = jwt.verify(token, app.secretKey) as { userId: string };
   const hashedPassword = await hash(password);
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
 };
@@ -111,7 +111,7 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
 export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
   try {
     const { refreshToken } = body;
-    jwt.verify(refreshToken, env.app.refreshSecretKey) as { userId: string };
+    jwt.verify(refreshToken, env.app.secretKey) as { userId: string };
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
     const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
     if (userRefreshToken.token) {
