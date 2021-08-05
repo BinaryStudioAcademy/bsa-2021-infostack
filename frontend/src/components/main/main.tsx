@@ -5,6 +5,7 @@ import Header from 'components/header/header';
 import Toolbar from 'components/toolbar/toolbar';
 import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
+import ProfileInfo from 'components/profile-info/profile-info';
 import Workspace from 'components/workspace/workspace';
 import styles from './styles.module.scss';
 import Settings from 'components/settings/settings';
@@ -35,6 +36,7 @@ const Main: React.FC = () => {
           <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
           <ProtectedRoute path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
           <ProtectedRoute path={AppRoute.WORKSPACE_SETTING} component={Workspace} exact />
+          <ProtectedRoute path={AppRoute.PROFILE} component={ProfileInfo} key={Date.now()} exact />
         </Switch>
       </div>
     </div>
