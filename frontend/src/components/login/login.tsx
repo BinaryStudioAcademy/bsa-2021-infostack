@@ -8,8 +8,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../validations/login-schema';
 import { ILogin } from 'infostack-shared';
-import styles from './styles.module.scss';
 import { Link } from 'components/common/common';
+import styles from './styles.module.scss';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,16 +29,16 @@ const Login: React.FC = () => {
     <Sign
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
-      onSubmit={handleSubmit(handleSubmitForm)}
       submitText="Sign in"
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       <FormField
         label="Email"
         type="email"
         placeholder="Enter your email"
+        controlId="loginEmail"
         register={register('email')}
         errors={errors.email}
-        controlId="loginEmail"
       />
       <FormField
         register={register('password')}

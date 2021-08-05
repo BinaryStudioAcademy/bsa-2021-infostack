@@ -7,6 +7,7 @@ type Props = {
   label: string;
   type: string;
   placeholder: string;
+  name?: string;
   helper?: string | JSX.Element;
   controlId?: string;
   register?: UseFormRegisterReturn;
