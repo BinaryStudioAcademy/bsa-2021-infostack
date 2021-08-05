@@ -3,7 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import { Link, match } from 'react-router-dom';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { AppRoute } from 'common/enums/enums';
-import styles from './menu.module.scss';
+import styles from './styles.module.scss';
 
 type Props = {
   match: match;

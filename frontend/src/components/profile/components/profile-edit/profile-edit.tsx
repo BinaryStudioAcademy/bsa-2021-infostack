@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'hooks/hooks';
-import { Button, Form, Col, Image, Row, Card } from 'react-bootstrap';
+import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { RootState } from 'common/types/types';
 import { UserApi } from 'services';
-import styles from './profile-edit.module.scss';
+import Avatar from 'react-avatar';
+import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -126,10 +127,12 @@ const ProfileEdit: React.FC = () => {
             md={4}
             className="d-flex text-center flex-column align-items-center"
           >
-            <Image
-              src={user && !selectedImgURL ? user.avatar : selectedImgURL}
-              roundedCircle
+            <Avatar
               className={`${getAllowedClasses(styles.cardImage)} mb-3`}
+              name={user?.fullName}
+              src={selectedImgURL ? selectedImgURL : user?.avatar}
+              round={true}
+              size="12.8rem"
             />
             <label
               className={`${getAllowedClasses(
