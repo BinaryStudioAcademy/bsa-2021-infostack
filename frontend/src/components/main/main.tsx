@@ -37,7 +37,6 @@ const Main: React.FC = () => {
           <ProtectedRoute path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
           <ProtectedRoute path={AppRoute.WORKSPACE_SETTING} component={Workspace} exact />
           <ProtectedRoute path={AppRoute.PROFILE} component={ProfileInfo} key={Date.now()} exact />
-
         </Switch>
       </div>
     </div>
