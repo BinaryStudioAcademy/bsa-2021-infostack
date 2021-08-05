@@ -21,6 +21,15 @@ const Menu: React.FC<Props> = () => {
       >
         Account
       </ListGroup.Item>
+      <ListGroup.Item
+        action
+        as={Link}
+        to={AppRoute.SETTINGS_USERS}
+        eventKey="users"
+        className={getAllowedClasses(styles.menuItem)}
+      >
+        Users
+      </ListGroup.Item>
     </ListGroup>
   );
 };
