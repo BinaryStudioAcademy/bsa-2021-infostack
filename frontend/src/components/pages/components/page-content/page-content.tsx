@@ -2,6 +2,7 @@ import Image from 'react-bootstrap/Image';
 import { useAppSelector } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
+import { Card } from 'react-bootstrap';
 
 const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -16,13 +17,14 @@ const PageContent: React.FC = () => {
           <div className="row">
             <div className="col-12">
 
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="card-title mb-0">{content || 'Empty page'}</h5>
-                </div>
-                <div className="card-body">
-                </div>
-              </div>
+              <Card>
+                <Card.Header>{content || 'Empty page'}</Card.Header>
+                <Card.Title></Card.Title>
+                <Card.Body>
+                  <Card.Text>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
 
             </div>
           </div>

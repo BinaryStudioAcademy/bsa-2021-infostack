@@ -9,7 +9,7 @@ class PageRepository extends Repository<Page> {
   findPages(workspaceId: string): Promise<Page[]> {
     return this.find({
       relations: ['pageContents'],
-      where: { workspaceId: workspaceId },
+      where: { workspaceId },
       order: {
         createdAt: 'DESC',
       },

@@ -3,7 +3,7 @@ import { IPage, IPageRequest } from 'common/interfaces/pages';
 import { Http } from 'services';
 
 class PageApi {
-  public _http: Http;
+  private _http: Http;
 
   constructor () {
     this._http = new Http;

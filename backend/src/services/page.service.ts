@@ -6,8 +6,9 @@ import { UserPermissionRepository } from '../data/repositories/user-permissions.
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission-repository';
+import { IPageRequest } from '../common/interfaces/pages';
 
-export const createPage = async (userId: string, workspaceId: string, body: any):Promise<Page> => {
+export const createPage = async (userId: string, workspaceId: string, body: IPageRequest ):Promise<Page> => {
   const { parentPageId, ...pageContent } = body;
   const { title, content } = pageContent;
 
@@ -41,7 +42,7 @@ export const getPages = async (userId: string, workspaceId: string): Promise<Pag
   const userPermissionRepository = getCustomRepository(UserPermissionRepository);
 
   const userTeamsIds = await userRepository.findUserTeams(userId);
-  const teamId = userTeamsIds.teams.length ? userTeamsIds.teams[0].id : null;
+  const teamId = userTeamsIds.teams[0]?.id;
 
   const userTeamsPermissions = await teamPermissionRepository.findByTeamId(teamId);
 

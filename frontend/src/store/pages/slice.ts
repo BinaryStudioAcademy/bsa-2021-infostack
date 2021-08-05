@@ -31,7 +31,7 @@ const { reducer, actions } = createSlice({
         state.pages.push(action.payload);
       }
     },
-    [ActionType.setPages]: (state, action: PayloadAction<IPage[]>) => {
+    [ActionType.SET_PAGES]: (state, action: PayloadAction<IPage[]>) => {
       state.pages = action.payload;
     },
     [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {

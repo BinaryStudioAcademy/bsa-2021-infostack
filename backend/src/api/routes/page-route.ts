@@ -7,10 +7,6 @@ const router: Router = Router();
 router
   .post('/', run(req => createPage(req.userId, req.workspaceId, req.body)));
 
-// router
-// .post('/:id/version',
-// run(req => createVersionPage(req)));
-
 router
   .get('/',
     run(req => getPages(req.userId, req.workspaceId)));
