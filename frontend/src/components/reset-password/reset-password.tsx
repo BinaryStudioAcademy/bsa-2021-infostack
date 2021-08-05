@@ -1,11 +1,11 @@
 import Sign from 'components/common/sign/sign';
 import FormField from 'components/common/form-field/form-field';
 import { useState } from 'hooks/hooks';
-import { AuthApi } from '../../services';
+import { AuthApi } from 'services';
 import { toast } from 'react-toastify';
 import { resetPasswordSchema } from 'validations/reset-password-schema';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
 import { IResetPassword } from 'common/interfaces/auth';
 
 const ResetPassword: React.FC = () => {

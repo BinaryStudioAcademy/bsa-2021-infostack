@@ -6,8 +6,8 @@ import { AppRoute } from 'common/enums/enums';
 import { toast } from 'react-toastify';
 import ToastContent from './toast-content/toast-content';
 import { setPasswordSchema } from 'validations/set-password-schema';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
 import { ISetPasswordValidation } from 'common/interfaces/auth';
 
 const SetPassword: React.FC = () => {

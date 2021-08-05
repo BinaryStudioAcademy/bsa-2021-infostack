@@ -4,9 +4,9 @@ import Sign from 'components/common/sign/sign';
 import FormField from 'components/common/form-field/form-field';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { signUpSchema } from '../../validations/sign-up-schema';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
+import { signUpSchema } from 'validations/sign-up-schema';
 import { IRegister } from 'infostack-shared';
 
 const SignUp: React.FC = () => {
