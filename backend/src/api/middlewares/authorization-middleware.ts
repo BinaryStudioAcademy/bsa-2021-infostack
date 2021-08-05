@@ -22,6 +22,7 @@ export const auth = (
 
     req.workspaceId = workspaceId;
     req.userId = decoded.userId;
+
     next();
   } catch (err) {
     res.status(HttpCode.UNAUTHORIZED).json({ msg: 'Unauthorized', error: err });
