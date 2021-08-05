@@ -5,7 +5,7 @@ import { Page } from '../entities/page';
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
 
-  createAndSave(authorId: string, workspaceId: string, parentPageId: string | null, childPages: Page[] | null, pageContents: IPageRequest[]): Promise<Page> {
+  public createAndSave(authorId: string, workspaceId: string, parentPageId: string | null, childPages: Page[] | null, pageContents: IPageRequest[]): Promise<Page> {
     const page = this.create({
       authorId: authorId,
       workspaceId: workspaceId,
@@ -17,7 +17,7 @@ class PageRepository extends Repository<Page> {
     return this.save(page);
   }
 
-  findPages(workspaceId: string): Promise<Page[]> {
+  public findPages(workspaceId: string): Promise<Page[]> {
     return this.find({
       relations: ['pageContents'],
       where: { workspaceId: workspaceId },
@@ -27,9 +27,13 @@ class PageRepository extends Repository<Page> {
     });
   }
 
-  findOnePage(workspaceId: string, id: string): Promise<Page> {
+  public findOnePage(workspaceId: string, id: string): Promise<Page> {
     return this.findOne(
       { where: { workspaceId: workspaceId, id: id }, relations: ['pageContents'] });
+  }
+
+  public findById(id: string):Promise<Page> {
+    return this.findOne({ id });
   }
 }
 

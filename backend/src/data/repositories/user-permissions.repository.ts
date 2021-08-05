@@ -7,7 +7,7 @@ import { PermissionType } from '../../common/enums/permission-type';
 @EntityRepository(UserPermission)
 export class UserPermissionRepository extends Repository<UserPermission> {
 
-  createAndSave(user: User, page: Page, option: PermissionType): Promise<UserPermission> {
+  public createAndSave(user: User, page: Page, option: PermissionType): Promise<UserPermission> {
     const userPermission = this.create({
       user: user,
       page: page,

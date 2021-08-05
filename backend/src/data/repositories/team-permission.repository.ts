@@ -4,7 +4,7 @@ import { TeamPermission } from '../entities/team-permission';
 @EntityRepository(TeamPermission)
 class TeamPermissionRepository extends Repository<TeamPermission> {
 
-  public async findByTeamId(
+  public findByTeamId(
     teamId: string,
   ): Promise<TeamPermission[]> {
     return this.find({

@@ -4,7 +4,7 @@ import { UserPermission } from '../entities/user-permission';
 @EntityRepository(UserPermission)
 class UserPermissionRepository extends Repository<UserPermission> {
 
-  public async findById(
+  public findById(
     userId: string,
   ): Promise<UserPermission[]> {
     return this.find({
