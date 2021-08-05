@@ -30,7 +30,7 @@ const Settings: React.FC = () => {
         <Tab.Container id="list-group-tabs-example" activeKey={lastURL}>
           <Row>
             <Col xl={2} md={3}>
-              <Menu match={match} />
+              <Menu />
             </Col>
             <Col xl={10} md={9}>
               <Tab.Content>
