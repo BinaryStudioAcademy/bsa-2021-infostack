@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'hooks/hooks';
 import { Button, Form, Col, Image, Row, Card } from 'react-bootstrap';
-import { getAllowedClasses } from '../../../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
+import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { RootState } from 'common/types/types';
 import { UserApi } from 'services';

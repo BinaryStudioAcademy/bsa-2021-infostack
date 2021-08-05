@@ -1,0 +1,41 @@
+.profile-container {
+    font-size: 2.5rem;
+}
+
+.skill-badge {
+    font-size: 1.3rem;
+    margin: 2px;
+}
+
+.card-block-item {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.profile-image {
+    margin: 10px;
+}
+
+.profile-page-title {
+    margin-bottom: 10px;
+}
+
+.profile-card-title, .profile-user-title, .following-page {
+    font-size: 2.2rem;
+    text-decoration: none;
+    color: #495057;
+}
+
+.following-page i {
+    color: rgba(0, 0, 255, 0.582);
+}
+
+.profile-user-subtitle, .profile-skills-subtitle {
+    font-size: 1.7rem;
+}
+
+.following-page-container {
+    margin: 0;
+}

@@ -7,6 +7,7 @@ import { PageContentRepository } from '../data/repositories/page-content.reposit
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission-repository';
 import { IPageRequest } from '../common/interfaces/pages';
+// import { IPage } from 'infostack-shared';
 
 export const createPage = async (userId: string, workspaceId: string, body: IPageRequest ):Promise<Page> => {
   const { parentPageId, ...pageContent } = body;
@@ -24,16 +25,6 @@ export const createPage = async (userId: string, workspaceId: string, body: IPag
   return page;
 };
 
-// export const createVersionPage = async (req: Request): Promise<Page> => {
-//   const authHeader = req.headers['authorization'];
-//   const token = authHeader && authHeader.split(' ')[1];
-//   const userId = jwt.decode(token) as string;
-//   const workspaceId = req.cookies['workspaceId'];
-
-//   const pageRepository = getCustomRepository(PageRepository);
-//   return pageRepository.createAndSave( userId, workspaceId, null, null );
-// };
-
 export const getPages = async (userId: string, workspaceId: string): Promise<Page[]> => {
 
   const pageRepository = getCustomRepository(PageRepository);
@@ -50,19 +41,15 @@ export const getPages = async (userId: string, workspaceId: string): Promise<Pag
 
   const allPages = await pageRepository.findPages(workspaceId);
 
-  interface IPageWithChildren extends Page {
-    children?: Page[]
-  }
-
-  const permittedPages: IPageWithChildren[] = allPages.filter(page =>
+  const permittedPages: Page[] = allPages.filter(page =>
     userTeamsPermissions.some((perm) => perm.page.id === page.id) ||
     userPermissions.some((perm) => perm.page.id === page.id));
 
   const toBeDeleted = new Set<string>();
   const finalPages = permittedPages.reduce((acc, cur, _index, array) => {
-    const children = array.filter((page) => page.parentPageId === cur.id);
-    cur.children = children;
-    children.forEach(child => toBeDeleted.add(child.id));
+    const childPages = array.filter((page) => page.parentPageId === cur.id);
+    cur.childPages = childPages;
+    childPages.forEach(child => toBeDeleted.add(child.id));
     acc.push(cur);
     return acc;
   }, []);

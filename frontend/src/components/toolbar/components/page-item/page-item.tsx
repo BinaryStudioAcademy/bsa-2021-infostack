@@ -13,10 +13,10 @@ import { IPageRequest } from 'common/interfaces/pages';
 type Props = {
   title?: string;
   id?: string;
-  childrenPages?: IPage[];
+  childPages?: IPage[];
 };
 
-const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => {
+const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
   const dispatch = useAppDispatch();
 
   const addSubPage = async ( id?: string ): Promise<void> => {
@@ -36,17 +36,17 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
       <Accordion flush key={id}>
         <Accordion.Item eventKey="0" className="bg-transparent">
 
-          {childrenPages && childrenPages.length ?
+          {childPages && childPages.length ?
             <>
               <Accordion.Header className={styles.accordionHeader}>
                 <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
                   <Link onClick={(): Promise<void> => getPageById(id)} to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
-                  {!childrenPages && <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>}
+                  {!childPages && <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>}
                 </div>
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
-                {childrenPages && <Button variant="primary" onClick={(): Promise<void> => addSubPage(id)} size="sm">Add page</Button>}
-                {childrenPages && childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
+                {childPages && <Button variant="primary" onClick={(): Promise<void> => addSubPage(id)} size="sm">Add page</Button>}
+                {childPages && childPages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childPages={childPages} />)}
 
               </Accordion.Body>
             </> :

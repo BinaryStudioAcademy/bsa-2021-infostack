@@ -4,6 +4,7 @@ import Workspaces from 'components/workspaces/workspaces';
 import Workspace from 'components/workspace/workspace';
 import Pages from 'components/pages/pages';
 import Profile from 'components/profile/profile';
+import ProfileInfo from 'components/profile-info/profile-info';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
@@ -58,6 +59,7 @@ const App: React.FC = () => {
         />
         <ProtectedRoute path={AppRoute.WORKSPACES} component={Workspaces} exact />
         <ProtectedRoute path={AppRoute.ROOT} component={Main} />
+        <ProtectedRoute path={AppRoute.PROFILE} component={ProfileInfo} key={Date.now()} exact />
       </Switch>
       <ToastContainer />
     </>
