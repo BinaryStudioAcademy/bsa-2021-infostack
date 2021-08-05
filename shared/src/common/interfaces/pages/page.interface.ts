@@ -5,7 +5,7 @@ interface IPage {
   authorId: string;
   workspaceId: string;
   parentPageId?: string;
-  children?: IPage[];
+  childPages?: IPage[];
   pageContents: IPageContent[];
 }
 
