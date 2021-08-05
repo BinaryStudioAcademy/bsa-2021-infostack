@@ -124,7 +124,7 @@ export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
   } catch {
     throw new HttpError({
       status: HttpCode.UNAUTHORIZED,
-      message: 'Unauthorized',
+      message: HttpErrorMessage.UNAUTHORIZED,
     });
   }
 };
