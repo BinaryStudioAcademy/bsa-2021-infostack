@@ -5,9 +5,9 @@ import { workspacesReducer as workspaces } from './workspaces';
 
 const rootReducer = {
   auth,
+  pages,
   workspace,
   workspaces,
-  pages,
 };
 
 export { rootReducer };

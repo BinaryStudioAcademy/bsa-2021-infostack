@@ -17,3 +17,4 @@ export const run = <P extends Params = ParamsDictionary, ResBody = any, ReqBody 
 ): void => {
   method(req).then(result => (result ? res.send(result) : res.sendStatus(204))).catch(next);
 };
+
