@@ -1,4 +1,4 @@
-import Image from 'react-bootstrap/Image';
+import Spinner from 'react-bootstrap/Spinner';
 import { useAppSelector } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
@@ -36,7 +36,7 @@ const PageContent: React.FC = () => {
   return (
     <>
       {currentPage ? <Content />
-        : <Image src="https://infostack.io/wp-content/uploads/2019/08/Infostack-Logo-900px.png" fluid />}
+        : <Spinner animation="border" variant="secondary" />}
     </>
   );
 };

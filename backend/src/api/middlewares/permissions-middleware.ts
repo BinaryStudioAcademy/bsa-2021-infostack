@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { HttpCode } from 'infostack-shared/common/enums';
 import { getCustomRepository } from 'typeorm';
-import UserWorkspaceRepository from '../../data/repositories/user-workspace-repository';
+import UserWorkspaceRepository from '../../data/repositories/user-workspace.repository';
 import { RoleType } from '~/common/enums/role-type';
 import { IRequestWithUser } from '~/common/models/user/request-with-user.interface';
 
@@ -16,10 +16,11 @@ export const permit = (...permittedRoles: RoleType[]) => {
     const userWorkspaceRepository = getCustomRepository(
       UserWorkspaceRepository,
     );
-    const userWorkspace = await userWorkspaceRepository.findById(
-      userId,
-      workspaceId,
-    );
+    const userWorkspace =
+      await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+        userId,
+        workspaceId,
+      );
 
     if (userId && permittedRoles.includes(userWorkspace?.role)) {
       next();
