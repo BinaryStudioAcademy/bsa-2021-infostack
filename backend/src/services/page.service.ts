@@ -1,11 +1,11 @@
 import { getCustomRepository } from 'typeorm';
-import { PageRepository } from '../data/repositories/page.repository';
+import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { Page } from '../data/entities/page';
 import { UserPermissionRepository } from '../data/repositories/user-permissions.repository';
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
-import TeamPermissionRepository from '../data/repositories/team-permission-repository';
+import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { IPageRequest } from '../common/interfaces/pages';
 // import { IPage } from 'infostack-shared';
 

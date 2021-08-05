@@ -3,7 +3,7 @@ import { IPageRequest } from '~/common/interfaces/pages';
 import { Page } from '../entities/page';
 
 @EntityRepository(Page)
-export class PageRepository extends Repository<Page> {
+class PageRepository extends Repository<Page> {
 
   createAndSave(authorId: string, workspaceId: string, parentPageId: string | null, childPages: Page[] | null, pageContents: IPageRequest[]): Promise<Page> {
     const page = this.create({
@@ -32,3 +32,5 @@ export class PageRepository extends Repository<Page> {
       { where: { workspaceId: workspaceId, id: id }, relations: ['pageContents'] });
   }
 }
+
+export default PageRepository;
