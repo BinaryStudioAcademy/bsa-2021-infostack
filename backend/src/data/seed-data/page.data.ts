@@ -47,4 +47,16 @@ export const pages = [
     workspaceId: 'b6e959fd-09b3-42cd-8a30-90c31054198a',
     parentPageId: 'e0e4c236-c208-46b4-acf3-4973ad805bb7',
   },
+  {
+    id: '8f4b09c2-f2d4-4d6f-ac40-1c29028d52b1',
+    authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+    workspaceId: 'd516e49b-baa1-4eb4-8b10-ba5e66e5ca14',
+    parentPageId: null,
+  },
+  {
+    id: '974a2e90-3b88-4b4d-bbfd-d3801aa102d3',
+    authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+    workspaceId: 'd516e49b-baa1-4eb4-8b10-ba5e66e5ca14',
+    parentPageId: '8f4b09c2-f2d4-4d6f-ac40-1c29028d52b1',
+  },
 ];
