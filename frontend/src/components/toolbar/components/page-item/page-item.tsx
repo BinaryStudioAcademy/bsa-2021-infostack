@@ -46,7 +46,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
                 {childPages && <Button variant="primary" onClick={(): Promise<void> => addSubPage(id)} size="sm">Add page</Button>}
-                {childPages && childPages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childPages={childPages} />)}
+                {childPages && childPages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents?.[0]?.title} childPages={childPages} />)}
 
               </Accordion.Body>
             </> :
