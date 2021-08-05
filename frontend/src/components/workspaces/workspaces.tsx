@@ -38,10 +38,10 @@ const Workspaces: React.FC = () => {
 
   useEffect(() => {
     if (currentWorkspaceID) {
-      setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID);
+      setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
       history.push(AppRoute.ROOT);
-    } else if (cookies.workspaceID){
-      removeCookie(CookieVariable.WORKSPACE_ID);
+    } else if (cookies[CookieVariable.WORKSPACE_ID]) {
+      removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
     }
   }, [currentWorkspaceID]);
 
