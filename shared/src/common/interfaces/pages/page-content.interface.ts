@@ -1,9 +1,11 @@
-interface IContent {
+interface IPageContent {
   id: string;
   authorId: string;
   pageId: string;
   title: string;
-  content: string | null;
+  content?: string;
+  createdAt: string;
+  deletedAt?: string;
+  updatedAt?: string;
 }
-
-export type { IContent };
+export type { IPageContent };
