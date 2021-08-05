@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Page } from '../entities/page';
 
 @EntityRepository(Page)
-export class PageRepository extends Repository<Page> {
+class PageRepository extends Repository<Page> {
   public findById(id: string): Promise<Page> {
     return this.findOne({ id });
   }
@@ -24,3 +24,5 @@ export class PageRepository extends Repository<Page> {
     });
   }
 }
+
+export default PageRepository;
