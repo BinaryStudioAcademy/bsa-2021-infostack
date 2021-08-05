@@ -16,10 +16,11 @@ export const permit = (...permittedRoles: RoleType[]) => {
     const userWorkspaceRepository = getCustomRepository(
       UserWorkspaceRepository,
     );
-    const userWorkspace = await userWorkspaceRepository.findById(
-      userId,
-      workspaceId,
-    );
+    const userWorkspace =
+      await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+        userId,
+        workspaceId,
+      );
 
     if (userId && permittedRoles.includes(userWorkspace?.role)) {
       next();
