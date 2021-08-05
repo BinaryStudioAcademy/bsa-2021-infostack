@@ -11,6 +11,7 @@ import ProfileEdit from '../profile/components/profile-edit/profile-edit';
 import Menu from './components/menu';
 import { AppRoute } from 'common/enums/enums';
 import styles from './settings.module.scss';
+import UsersSettings from 'components/workspace/users-settings/users-settings';
 
 const Settings: React.FC = () => {
   const match = useRouteMatch();
@@ -32,12 +33,16 @@ const Settings: React.FC = () => {
               <Menu match={match} />
             </Col>
             <Col xl={10} md={9}>
-              {' '}
               <Tab.Content>
                 <Switch>
                   <Route
                     path={AppRoute.SETTINGS_PROFILE}
                     component={ProfileEdit}
+                    exact
+                  />
+                  <Route
+                    path={AppRoute.SETTINGS_USERS}
+                    component={UsersSettings}
                     exact
                   />
                   <Route path={match.path}>
