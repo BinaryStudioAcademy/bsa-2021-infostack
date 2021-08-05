@@ -4,6 +4,7 @@ enum HttpErrorMessage {
   INVALID_PASSWORD = 'Invalid password',
   INTERNAL_SERVER_ERROR = 'Internal Server Error',
   INVALID_TOKEN = 'Invalid token',
+  NO_SUCH_PARENT_COMMENT = 'No parent comment with such id',
 }
 
 export { HttpErrorMessage };
