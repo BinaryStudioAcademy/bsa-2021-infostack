@@ -9,17 +9,17 @@ import styles from '../../styles.module.scss';
 type Props = {
   title: string | null;
   id: string | null;
-  childrenPages: IPage[] | null;
+  childPages: IPage[] | null;
 };
 
-const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => {
+const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
 
   return (
     <>
       <Accordion flush key={id}>
         <Accordion.Item eventKey="0" className="bg-transparent">
 
-          {childrenPages && childrenPages.length ?
+          {childPages && childPages.length ?
             <>
               <Accordion.Header className={styles.accordionHeader}>
                 <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
@@ -28,7 +28,7 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childrenPages }) => 
                 </div>
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
-                {childrenPages && childrenPages.map(({ pageContents, id, children }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childrenPages={children} />)}
+                {childPages && childPages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childPages={childPages} />)}
 
               </Accordion.Body>
             </> :

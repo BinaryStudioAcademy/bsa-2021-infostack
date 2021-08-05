@@ -27,22 +27,18 @@
 
 .pageItem a {
     text-decoration: none;
-    color: rgba(233, 236, 239, .5)
+    color: rgba(233, 236, 239, .5);
 }
 
 .pageItem a:hover {
-    color: rgba(233, 236, 239, .75)
+    color: rgba(233, 236, 239, .75);
 }
 
 :global(.accordion-button) {
-    // font-size: small;
-    // background-color: #293042;
-    // color: rgba(233, 236, 239, 0.5);
-    // border: none;
-    padding-top: 7.5px;
+    padding-top: 5px;
     padding-left: 0;
     padding-right: 0;
-    padding-bottom: 7.5px;
+    padding-bottom: 5px;
 }
 
 :global(.accordion-body) {
@@ -79,7 +75,7 @@
 }
 
 .pageItem:hover :global(.bi) {
-    color: rgba(233, 236, 239, .5)
+    color: rgba(233, 236, 239, .5);
 }
 
 .plus:hover :global(.bi) {
@@ -96,10 +92,10 @@
 }
 
 .accordionItem {
-    font-size: medium !important;
-    background-color: #293042 !important;
-    border: none !important;
-    box-shadow: none !important;
+    font-size: medium;
+    background-color: #293042;
+    border: none;
+    box-shadow: none;
 }
 
 .accordionItem .accordionHeader {
@@ -128,10 +124,6 @@
     color: rgba(233, 236, 239, .75);
 }
 
-.accordionItemInsideSection {
-    background-color: #293042;
-}
-
 .pageItem .accordionItemInsideSection :global(.active) {
     color: rgb(35, 78, 169);
 }
@@ -149,7 +141,8 @@
 }
 
 .navbarLinkInsideSection {
-    padding: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
     margin-bottom: 0px;
     margin-left: 0px;
 }

@@ -4,11 +4,9 @@ import UserRepository from '../data/repositories/user.repository';
 import { Page } from '../data/entities/page';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission-repository';
-import { IRequestWithUser } from '../common/models/user/request-with-user.interface';
+import { IPage } from 'infostack-shared';
 
-export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
-
-  const { userId, workspaceId } = req;
+export const getPages = async (userId: string,  workspaceId: string): Promise<Page[]> => {
 
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
@@ -24,19 +22,15 @@ export const getPages = async (req: IRequestWithUser): Promise<Page[]> => {
 
   const allPages = await pageRepository.findPages(workspaceId);
 
-  interface IPageWithChildren extends Page {
-    children?: Page[]
-  }
-
-  const permittedPages: IPageWithChildren[] = allPages.filter(page =>
+  const permittedPages: IPage[] = allPages.filter(page =>
     userTeamsPermissions.some((perm) => perm.page.id === page.id) ||
     userPermissions.some((perm) => perm.page.id === page.id));
 
   const toBeDeleted = new Set<string>();
   const finalPages = permittedPages.reduce((acc, cur, _index, array) => {
-    const children = array.filter((page) => page.parentPageId === cur.id);
-    cur.children = children;
-    children.forEach(child => toBeDeleted.add(child.id));
+    const childPages = array.filter((page) => page.parentPageId === cur.id);
+    cur.childPages = childPages;
+    childPages.forEach(child => toBeDeleted.add(child.id));
     acc.push(cur);
     return acc;
   }, []);
