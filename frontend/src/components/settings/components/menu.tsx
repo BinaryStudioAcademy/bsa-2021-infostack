@@ -3,9 +3,9 @@ import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { AppRoute, CookieVariable, RoleType } from 'common/enums/enums';
-import styles from './menu.module.scss';
 import { useState, useCookies, useEffect, useAppSelector } from 'hooks/hooks';
 import { WorkspaceApi } from 'services';
+import styles from './styles.module.scss';
 
 const Menu: React.FC = () => {
   const [userRole, setUserRole] = useState<RoleType>();

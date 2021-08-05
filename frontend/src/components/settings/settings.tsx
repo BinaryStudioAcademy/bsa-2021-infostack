@@ -10,8 +10,8 @@ import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-c
 import ProfileEdit from '../profile/components/profile-edit/profile-edit';
 import Menu from './components/menu';
 import { AppRoute } from 'common/enums/enums';
-import styles from './settings.module.scss';
 import UsersSettings from 'components/workspace/users-settings/users-settings';
+import styles from './styles.module.scss';
 
 const Settings: React.FC = () => {
   const match = useRouteMatch();
