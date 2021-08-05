@@ -6,7 +6,10 @@ const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
 const bucketName = env.s3.bucketName;
 
-const s3 = new S3({ accessKeyId, secretAccessKey });
+const s3 = new S3({
+  accessKeyId,
+  secretAccessKey,
+});
 
 export const uploadFile = (
   file: Express.Multer.File,

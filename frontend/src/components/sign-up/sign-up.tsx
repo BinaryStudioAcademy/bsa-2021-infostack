@@ -12,6 +12,7 @@ import { IRegister } from 'infostack-shared';
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const { push } = useHistory();
+
   const {
     register,
     handleSubmit,
