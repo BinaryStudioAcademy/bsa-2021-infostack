@@ -3,7 +3,7 @@ import UserWorkspaceRepository from '../data/repositories/user-workspace.reposit
 import { getCustomRepository } from 'typeorm';
 import { uploadFile } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
-import { IUser, IWorkspace } from 'infostack-shared';
+import { IUser } from 'infostack-shared';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
@@ -20,11 +20,13 @@ export const getUserByIdWithWorkspace = async (userId: string, workspaceId: stri
   const usersWorkspaces = await userWorkspaceRepository.findUserWorkspaces(
     userId,
   );
-  const workspaces = [] as IWorkspace[];
-  for (const userWorkspace of usersWorkspaces) {
+  const workspaces = usersWorkspaces.map(userWorkspace => {
     const workspace = userWorkspace.workspace;
-    workspaces.push({ id: workspace.id, title: workspace.name });
-  }
+    return {
+      id: workspace.id,
+      title: workspace.name,
+    };
+  });
 
   let permission = false;
   workspaces.map(workspace => workspace.id === workspaceId ? permission = true : null);
