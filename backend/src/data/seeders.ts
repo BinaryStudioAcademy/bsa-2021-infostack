@@ -6,6 +6,7 @@ import PageSeeder from './seeders/page.seeder';
 import TeamSeeder from './seeders/team.seeder';
 import TeamMemberSeeder from './seeders/team-member.seeder';
 import TeamPermissionSeeder from './seeders/team-permission.seeder';
+import CommentSeeder from './seeders/comment.seeder';
 import { logger } from '../common/utils/logger.util';
 import ormconfig from '../config/ormconfig';
 
@@ -26,6 +27,8 @@ const seeders = async (): Promise<void> => {
   await TeamMemberSeeder.execute();
   logger.info('Seeding team_permissions');
   await TeamPermissionSeeder.execute();
+  logger.info('Seeding comments');
+  await CommentSeeder.execute();
   logger.info('Seeding finished');
 };
 
