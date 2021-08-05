@@ -1,14 +1,13 @@
+import Avatar from 'react-avatar';
 import { useState, useEffect, useParams } from '../../hooks/hooks';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { Link } from 'react-router-dom';
 import './profile-info.scss';
-import USER_DEFAULT_AVATAR from '../../assets/img/user.svg';
 import { UserApi } from 'services';
 
 const ProfileInfo: React.FC = () => {
@@ -61,7 +60,13 @@ const ProfileInfo: React.FC = () => {
                     <Card.Title className="d-flex justify-content-start profile-card-title">Profile details</Card.Title>
                     <ListGroup variant="flush">
                       <ListGroup.Item className="card-block-item align-items-center">
-                        <Image src={user?.avatar ? user.avatar : USER_DEFAULT_AVATAR} width={100} roundedCircle className="profile-image" />
+                        <Avatar
+                          size="100"
+                          name={user?.fullName}
+                          src={user?.avatar}
+                          round={true}
+                          className="user-avatar"
+                        />
                         <Card.Title className="profile-user-title">{user?.fullName}</Card.Title>
                         <Card.Subtitle className="profile-user-subtitle">Lead Developer</Card.Subtitle>
                       </ListGroup.Item>
