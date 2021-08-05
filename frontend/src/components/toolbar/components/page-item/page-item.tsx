@@ -1,0 +1,45 @@
+import{ Accordion } from 'react-bootstrap';
+import { Link } from 'components/common/common';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import PlusButton from '../plus-button/plus-button';
+import { IPage } from 'common/interfaces/page';
+import { AppRoute } from 'common/enums/enums';
+import styles from '../../styles.module.scss';
+
+type Props = {
+  title: string | null;
+  id: string | null;
+  childPages: IPage[] | null;
+};
+
+const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
+
+  return (
+    <>
+      <Accordion flush key={id}>
+        <Accordion.Item eventKey="0" className="bg-transparent">
+
+          {childPages && childPages.length ?
+            <>
+              <Accordion.Header className={styles.accordionHeader}>
+                <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
+                  <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+                  <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton/></span>
+                </div>
+              </Accordion.Header>
+              <Accordion.Body className={styles.accordionBody}>
+                {childPages && childPages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childPages={childPages} />)}
+
+              </Accordion.Body>
+            </> :
+            <div className={getAllowedClasses('d-flex justify-content-between align-items-center', styles.pageItem)}>
+              <Link to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+              <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton/></span>
+            </div>}
+        </Accordion.Item>
+      </Accordion>
+    </>
+  );
+};
+
+export default PageItem;
