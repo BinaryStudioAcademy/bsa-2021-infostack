@@ -1,9 +1,6 @@
 import Login from 'components/login/login';
 import SignUp from 'components/sign-up/sign-up';
 import Workspaces from 'components/workspaces/workspaces';
-import Workspace from 'components/workspace/workspace';
-import Pages from 'components/pages/pages';
-import Profile from 'components/profile/profile';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
@@ -45,17 +42,6 @@ const App: React.FC = () => {
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
         <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
         <Route path={AppRoute.SET_PASSWORD} component={SetPassword} exact />
-        <Route path={AppRoute.PAGES} component={Pages} exact />
-        <ProtectedRoute
-          path={AppRoute.SETTINGS_PROFILE}
-          component={Profile}
-          exact
-        />
-        <ProtectedRoute
-          path={AppRoute.WORKSPACE_SETTING}
-          component={Workspace}
-          exact
-        />
         <ProtectedRoute path={AppRoute.WORKSPACES} component={Workspaces} exact />
         <ProtectedRoute path={AppRoute.ROOT} component={Main} />
       </Switch>
