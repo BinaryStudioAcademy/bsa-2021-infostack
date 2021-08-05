@@ -2,6 +2,7 @@ import {
   IWorkspaceUser,
   IWorkspace,
   IWorkspaceCreation,
+  IWorkspaceUserRole,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
@@ -22,8 +23,17 @@ class WorkspaceApi {
     return this.http.load(this.BASE);
   }
 
-  public async loadUsers(): Promise<IWorkspaceUser[]> {
-    return this.http.load(`${this.BASE}/users`, {
+  public async loadUsers(id: string): Promise<IWorkspaceUser[]> {
+    return this.http.load(`${this.BASE}/${id}/users`, {
+      contentType: ContentType.JSON,
+    });
+  }
+
+  public async getUserRole(
+    workspaceId: string,
+    userId: string,
+  ): Promise<IWorkspaceUserRole> {
+    return this.http.load(`${this.BASE}/${workspaceId}/user/${userId}/role`, {
       contentType: ContentType.JSON,
     });
   }
