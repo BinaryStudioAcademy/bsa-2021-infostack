@@ -111,10 +111,10 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
 export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
   try {
     const { refreshToken } = body;
-    jwt.verify(refreshToken, env.app.secretKey) as { userId: string };
+    jwt.verify(refreshToken, env.app.secretKey);
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
     const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
-    if (userRefreshToken.token) {
+    if (userRefreshToken?.token) {
       await refreshTokenRepository.remove(userRefreshToken);
       const tokens = setTokens(userRefreshToken.user);
       return tokens;
