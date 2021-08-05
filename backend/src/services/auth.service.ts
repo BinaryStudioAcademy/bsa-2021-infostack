@@ -122,8 +122,6 @@ export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
       throw new Error();
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
     if(err.name === 'TokenExpiredError')
       throw new HttpError({
         status: HttpCode.UNAUTHORIZED,

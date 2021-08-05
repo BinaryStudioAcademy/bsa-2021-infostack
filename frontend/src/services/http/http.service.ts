@@ -35,9 +35,6 @@ class Http {
       return this.parseJSON<T>(response);
     } catch (err) {
 
-      // eslint-disable-next-line no-console
-      console.log(err);
-
       if (err.message === 'Access token expired') {
         const response = await this.handleAccessTokenExpiredError(url, options, err);
         return this.parseJSON<T>(response);
@@ -98,8 +95,6 @@ class Http {
           body: JSON.stringify({ refreshToken }),
           headers: this.getHeaders(ContentType.JSON),
         });
-        // eslint-disable-next-line no-console
-        console.log(res);
         await this.checkStatus(res);
         const tokens = await res.json();
         localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
@@ -113,8 +108,6 @@ class Http {
         });
         return response;
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
         if (error.message === 'Refresh token expired') {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
