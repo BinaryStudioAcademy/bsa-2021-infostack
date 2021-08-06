@@ -5,9 +5,7 @@ import { Accordion, Navbar } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import PagesList from './components/pages-list/pages-list';
 import styles from './styles.module.scss';
-// import Button from 'react-bootstrap/Button';
 import { IPageRequest } from 'common/interfaces/pages';
-// import PlusButton from './components/plus-button/plus-button';
 import PlusButtonRoot from './components/plus-button/plus-button-root';
 
 const Toolbar: React.FC = () => {

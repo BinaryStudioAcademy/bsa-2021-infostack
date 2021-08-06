@@ -19,8 +19,8 @@
 .pageItem {
     color: rgba(233, 236, 239, .5);
     transition: color 0.2s;
-    display: flex;
-    align-items: center;
+    font-size: 13px;
+    height: 30px;
 }
 
 .pageItem a {
@@ -33,7 +33,7 @@
 }
 
 :global(.accordion-button) {
-    padding-top: 5px;
+    padding-top: 0px;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0px;
@@ -58,6 +58,11 @@
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
+:global(.accordion-button:focus) {
+    border-color: transparent;
+    box-shadow: none;
+}
+
 :global(.accordion-button:not(.collapsed)) {
     background-color: transparent;
     box-shadow: none;
@@ -66,11 +71,13 @@
 .plus :global(.bi) {
     color: rgba(233, 236, 239, 0);
     transition: color 0.2s;
+    margin-right: -4px;
 }
 
 .plusRoot :global(.bi) {
-    color: rgba(233, 236, 239, .5);
+    color: rgba(233, 236, 239, .9);
     margin-top: -30px;
+    margin-right: -4px;
 }
 
 :global(.accordion-button:not(.collapsed)::after) {
@@ -86,13 +93,13 @@
     margin-top: -30px;
 }
 
-.plusRoot:hover {
+.plus:hover :global(.bi) {
     color: rgba(233, 236, 239, .75);
+    cursor: pointer;
 }
 
-.plus:hover :global(.bi),
 .plusRoot:hover :global(.bi) {
-    color: rgba(233, 236, 239, .75);
+    color: white;
     cursor: pointer;
 }
 
@@ -115,14 +122,6 @@
     font-size: small;
 }
 
-.plusButton svg {
-    margin-left: 50px;
-}
-
-.accordionItem .accordionHeader button span {
-    font-size: medium;
-}
-
 .accordionItem .accordionHeader button:hover span {
     color: rgba(233, 236, 239, .75);
     cursor: pointer;
@@ -135,10 +134,6 @@
 
 .accordionItem .accordionHeader button:focus span {
     color: rgba(233, 236, 239, .75);
-}
-
-.pageItem .accordionItemInsideSection :global(.active) {
-    color: rgb(35, 78, 169);
 }
 
 .logoToolbar {
@@ -155,18 +150,7 @@
 }
 
 .navbarLinkInsideSection {
-    padding-top: 5px;
-    padding-bottom: 2px;
+    padding: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
-}
-
-.navbarLinkInsideSection svg {
-    display: none;
-    float: right;
-}
-
-.navbarLinkInsideSection:hover svg {
-    display: flex;
-    float: right;
 }
