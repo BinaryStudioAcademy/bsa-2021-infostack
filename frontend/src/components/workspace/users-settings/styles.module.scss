@@ -1,0 +1,64 @@
+.card {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  margin-bottom: 200px;
+  word-wrap: break-word;
+  background-clip: border-box;
+  background-color: #fff;
+  border: 0 solid transparent;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  min-height: 32.5rem;
+
+  .header {
+    background-color: #fff;
+    border-bottom: 0 solid transparent;
+    margin-bottom: 0;
+    padding: 1.6rem 2rem;
+
+    .title {
+      font-size: 1.52rem;
+    }
+  }
+
+  .body {
+    flex: 1 1 auto;
+    padding: 2rem;
+
+    .tableHead {
+      color: #737d85;
+
+      font-weight: bold;
+    }
+
+    & > .table > .tableHead > :nth-child(1) > * {
+      border-bottom-color: #889097;
+    }
+
+    tr {
+      td {
+        color: #737373;
+      }
+    }
+
+    i {
+      color: #737373;
+
+      cursor: pointer;
+    }
+
+    .trashIcon {
+      margin-left: 1rem;
+    }
+
+    .addUser {
+      cursor: pointer;
+    }
+
+    .addTeam {
+      cursor: pointer;
+    }
+  }
+}

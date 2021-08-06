@@ -1,96 +1,58 @@
-import { useLocation } from 'hooks/hooks';
-import { AppRoute } from 'common/enums/enums';
-import Counter from 'components/counter/counter';
 import Login from 'components/login/login';
 import SignUp from 'components/sign-up/sign-up';
-import { Link, Route, Switch } from 'components/common/common';
-import logo from 'assets/img/logo.svg';
 import Workspaces from 'components/workspaces/workspaces';
-import Pages from 'components/pages/pages';
-import Profile from 'components/profile/profile';
+import ProtectedRoute from 'components/common/protected-route/protected-route';
+import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
+import { Route, Switch } from 'components/common/common';
+import {
+  useLocation,
+  useAppDispatch,
+  useAppSelector,
+  useEffect,
+  useHistory,
+} from 'hooks/hooks';
+import { authActions } from 'store/actions';
+import Main from 'components/main/main';
+import ResetPassword from '../reset-password/reset-password';
+import SetPassword from '../set-password/set-password';
+import { ToastContainer } from 'react-toastify';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
+  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
+  const { user } = useAppSelector(state => state.auth);
+  const { isRefreshTokenExpired } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+
+  useEffect(() => {
+    if (token) {
+      if (isAuth) {
+        history.push(AppRoute.WORKSPACES);
+      } else if (!isAuth && !user){
+        dispatch(authActions.loadUser());
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isRefreshTokenExpired) {
+      history.push(AppRoute.LOGIN);
+    }
+  }, [isRefreshTokenExpired]);
 
   return (
     <>
-      <div className="App">
-        <div>
-          <ul className="App-navigation-list">
-            <li>
-              <Link to={AppRoute.ROOT}>Root</Link>
-            </li>
-            <li>
-              <Link to={AppRoute.LOGIN}>Login</Link>
-            </li>
-            <li>
-              <Link to={AppRoute.SIGN_UP}>Sign up</Link>
-            </li>
-            <li>
-              <Link to={AppRoute.WORKSPACES}>Workspaces</Link>
-            </li>
-            <li>
-              <Link to={AppRoute.PAGES}>Pages</Link>
-            </li>
-            <li>
-              <Link to={AppRoute.SETTINGS_PROFILE}>Profile Settings</Link>
-            </li>
-          </ul>
-          <p>Current path: {pathname}</p>
-        </div>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <Switch>
-            <Route path={AppRoute.ROOT} component={Counter} exact />
-            <Route path={AppRoute.LOGIN} component={Login} exact />
-            <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
-            <Route path={AppRoute.WORKSPACES} component={Workspaces} exact />
-            <Route path={AppRoute.PAGES} component={Pages} exact />
-            <Route path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
-          </Switch>
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <span>
-            <span>Learn </span>
-            <a
-              className="App-link"
-              href="https://reactjs.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              React
-            </a>
-            <span>, </span>
-            <a
-              className="App-link"
-              href="https://redux.js.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Redux
-            </a>
-            <span>, </span>
-            <a
-              className="App-link"
-              href="https://redux-toolkit.js.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Redux Toolkit
-            </a>
-            ,<span> and </span>
-            <a
-              className="App-link"
-              href="https://react-redux.js.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              React Redux
-            </a>
-          </span>
-        </header>
-      </div>
+      <Switch>
+        <Route path={AppRoute.LOGIN} component={Login} exact />
+        <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
+        <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
+        <Route path={AppRoute.SET_PASSWORD} component={SetPassword} exact />
+        <ProtectedRoute path={AppRoute.WORKSPACES} component={Workspaces} exact />
+        <ProtectedRoute path={AppRoute.ROOT} component={Main} />
+      </Switch>
+      <ToastContainer />
     </>
   );
 };

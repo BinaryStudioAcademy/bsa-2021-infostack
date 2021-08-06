@@ -1,9 +1,13 @@
-import { counterReducer as counter } from './counter';
 import { authReducer as auth } from './auth';
+import { pagesReducer as pages } from './pages';
+import { workspaceReducer as workspace } from './workspace';
+import { workspacesReducer as workspaces } from './workspaces';
 
 const rootReducer = {
-  counter,
   auth,
+  pages,
+  workspace,
+  workspaces,
 };
 
 export { rootReducer };
