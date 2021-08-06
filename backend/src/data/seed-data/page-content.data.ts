@@ -10,4 +10,15 @@ export const pageContents = [
       Optional chaining cannot be used on a non-declared root object, but can be used with an undefined root object.`,
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
   },
+  {
+    id: '8b4127cd-700c-4e5b-896b-c0284f6a7ae6',
+    pageId: '974a2e90-3b88-4b4d-bbfd-d3801aa102d3',
+    createdAt: new Date(),
+    title: 'Nullish coalescing operator (??)',
+    content: `
+    The nullish coalescing operator (??) is a logical operator that returns its right-hand side operand when its left-hand side operand is null or undefined, and otherwise returns its left-hand side operand.
+    This can be contrasted with the logical OR (||) operator, which returns the right-hand side operand if the left operand is any falsy value, not only null or undefined. In other words, if you use || to provide some default value to another variable foo, you may encounter unexpected behaviors if you consider some falsy values as usable (e.g., '' or 0). See below for more examples.
+    The nullish coalescing operator has the fifth-lowest operator precedence, directly lower than || and directly higher than the conditional (ternary) operator.`,
+    authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+  },
 ];
