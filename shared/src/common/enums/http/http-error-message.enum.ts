@@ -5,6 +5,7 @@ enum HttpErrorMessage {
   INTERNAL_SERVER_ERROR = 'Internal Server Error',
   INVALID_TOKEN = 'Invalid token',
   UNAUTHORIZED = 'Unauthorized',
+  WORKSPACE_ALREADY_EXISTS = 'Workspace with such title already exists',
 }
 
 export { HttpErrorMessage };

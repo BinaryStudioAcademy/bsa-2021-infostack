@@ -7,6 +7,10 @@ class WorkspaceRepository extends Repository<Workspace> {
     return this.findOne({ id });
   }
 
+  public findByName(name: string): Promise<Workspace> {
+    return this.findOne({ name });
+  }
+
   public findByIdWithUsers(id: string): Promise<Workspace> {
     return this.findOne(
       { id },
