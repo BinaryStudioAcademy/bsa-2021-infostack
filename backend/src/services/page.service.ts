@@ -97,3 +97,11 @@ export const getPage = async (
   const pageRepository = getCustomRepository(PageRepository);
   return pageRepository.findOnePage(workspaceId, pageId);
 };
+
+export const getPagesFollowedByUser = async (
+  userId: string,
+): Promise<Page[]> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const { followingPages } = await userRepository.findById(userId);
+  return followingPages;
+};

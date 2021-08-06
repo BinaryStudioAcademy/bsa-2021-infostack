@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
-import { createPage, getPages, getPage } from '../../services/page.service';
+import { createPage, getPages, getPage, getPagesFollowedByUser } from '../../services/page.service';
 
 const router: Router = Router();
 
@@ -12,5 +12,8 @@ router
 
 router
   .get('/:id', run(req => getPage(req.workspaceId, req.params.id)));
+
+router
+  .get('/following/:id', run(req => getPagesFollowedByUser(req.params.id)));
 
 export default router;
