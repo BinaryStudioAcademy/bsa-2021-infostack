@@ -15,7 +15,7 @@ type Props = {
   childPages?: IPage[];
 };
 
-const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
+const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const dispatch = useAppDispatch();
 
   const addSubPage = async ( event: React.MouseEvent<HTMLElement>, id?: string ): Promise<void> => {
