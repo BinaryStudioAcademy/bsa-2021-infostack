@@ -66,6 +66,12 @@ export const pages = [
     parentPageId: null,
   },
   {
+    id: 'c47a4ae4-b0d5-4671-ab7f-25a3d7921d8f',
+    authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+    workspaceId: 'd516e49b-baa1-4eb4-8b10-ba5e66e5ca14',
+    parentPageId: '4fc7031e-96d4-4a02-8ec4-0e844718ce26',
+  },
+  {
     id: '70984130-e8a3-4f94-9a3e-f476e9346601',
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
     workspaceId: 'd516e49b-baa1-4eb4-8b10-ba5e66e5ca14',

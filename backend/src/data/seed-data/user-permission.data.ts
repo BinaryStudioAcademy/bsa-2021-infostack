@@ -16,6 +16,11 @@ export const userPermissions = [
   },
   {
     userId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+    pageId: 'c47a4ae4-b0d5-4671-ab7f-25a3d7921d8f',
+    option: 'admin',
+  },
+  {
+    userId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
     pageId: '70984130-e8a3-4f94-9a3e-f476e9346601',
     option: 'admin',
   },

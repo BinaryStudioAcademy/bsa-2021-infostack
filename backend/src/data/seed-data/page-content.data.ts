@@ -51,4 +51,12 @@ export const pageContents = [
     `,
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
   },
+  {
+    id: 'c87b0e16-3441-47ec-aac1-b21d6f79123e',
+    pageId: 'c47a4ae4-b0d5-4671-ab7f-25a3d7921d8f',
+    createdAt: new Date(),
+    title: 'Bitwise AND assignment (&=)',
+    content: 'The bitwise AND assignment operator (&=) uses the binary representation of both operands, does a bitwise AND operation on them and assigns the result to the variable.',
+    authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+  },
 ];
