@@ -20,7 +20,7 @@ const Menu: React.FC = () => {
         .getUserRole(workspaceId, user.id)
         .then(({ role }) => setUserRole(role));
     }
-  }, []);
+  }, [user]);
 
   return (
     <ListGroup variant="flush" className={getAllowedClasses(styles.menuCard)}>
