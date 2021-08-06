@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { IButton }from 'common/interfaces/components/button';
 import { useEffect, useRef } from 'hooks/hooks';
 import { focusOnInput } from 'helpers/dom/dom';
+import './styles.scss';
 
 interface IPopUpProps {
   query: string;
@@ -31,7 +32,7 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
       <Modal.Body>
         <p>{query}</p>
         <input
-          className="w-100 border-0 border-bottom border-secondary"
+          className="workspace-title-input w-100 border-0 border-bottom border-secondary"
           value={inputValue}
           onChange={onInputChange}
           ref={inputElement}

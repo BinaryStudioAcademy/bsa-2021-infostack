@@ -13,10 +13,10 @@ const WorkspaceItem: React.FC<IWorkspaceItemProps> = ({ workspace, onClick }) =>
     <Card className="workspace-card shadow-sm rounded border-0">
       <Button
         variant="light"
-        className="bg-white text-secondary h-100"
+        className="bg-white h-100"
         onClick={():void => onClick(workspace.id)}>
         <Card.Body className="d-flex align-items-center justify-content-center">
-          <Card.Title>{ workspace.title }</Card.Title>
+          <Card.Title className="text-secondary">{ workspace.title }</Card.Title>
         </Card.Body>
       </Button>
     </Card>
