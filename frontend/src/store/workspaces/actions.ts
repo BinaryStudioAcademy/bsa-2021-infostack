@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { WorkspaceApi } from 'services';
+import { HttpCode } from 'common/enums/enums';
 
 const loadWorkspaces = createAsyncThunk(
   ActionType.SetWorkspaces,
@@ -15,8 +16,15 @@ const loadWorkspaces = createAsyncThunk(
 const createWorkspace = createAsyncThunk(
   ActionType.SetCurrentWorkspaceID,
   async (payload: IWorkspaceCreation, { dispatch }) => {
-    const { id } = await new WorkspaceApi().create(payload);
-    dispatch(actions.SetCurrentWorkspaceID(id));
+    try {
+      const { id } = await new WorkspaceApi().create(payload);
+      dispatch(actions.SetCurrentWorkspaceID(id));
+      dispatch(actions.RemoveCreatingError());
+    } catch (err) {
+      if (err.status === HttpCode.CONFLICT) {
+        dispatch(actions.SetCreatingError(err.message));
+      }
+    }
   },
 );
 

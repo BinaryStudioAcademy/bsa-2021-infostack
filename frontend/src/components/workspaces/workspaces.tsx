@@ -17,7 +17,7 @@ import { AppRoute, CookieVariable } from 'common/enums/enums';
 import './styles.scss';
 
 const Workspaces: React.FC = () => {
-  const { workspaces, currentWorkspaceID } = useAppSelector(
+  const { workspaces, currentWorkspaceID, creatingError } = useAppSelector(
     (state: RootState) => state.workspaces,
   );
   const dispatch = useAppDispatch();
@@ -43,6 +43,7 @@ const Workspaces: React.FC = () => {
   useEffect(() => {
     if (isWorkspaceSelected) {
       if (currentWorkspaceID) {
+        onCancelCreationWorkspace();
         setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
         history.push(AppRoute.ROOT);
       } else if (cookies[CookieVariable.WORKSPACE_ID]) {
@@ -76,7 +77,6 @@ const Workspaces: React.FC = () => {
   };
 
   const onConfirmCreationWorkspace = (): void => {
-    onCancelCreationWorkspace();
     if (popUpText) {
       dispatch(workspacesActions.createWorkspace({ title: popUpText }));
       setIsWorkspaceSelected(true);
@@ -104,6 +104,7 @@ const Workspaces: React.FC = () => {
         isVisible={isPopUpVisible}
         inputValue={popUpText}
         setPopUpText={setPopUpText}
+        error={creatingError}
         cancelButton={{
           text: 'Cancel',
           onClick: onCancelCreationWorkspace,
