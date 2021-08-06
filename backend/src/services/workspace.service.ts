@@ -48,6 +48,14 @@ export const getAll = async (userId: string): Promise<IWorkspace[]> => {
   return workspaces;
 };
 
+export const getOne = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
+  const userWorkspace = await getCustomRepository(UserWorkspaceRepository)
+    .findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
+
+  const workspace = userWorkspace.workspace;
+  return { id: workspace.id, title: workspace.name };
+};
+
 export const create = async (
   userId: string,
   data: IWorkspaceCreation,

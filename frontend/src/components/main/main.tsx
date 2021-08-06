@@ -11,13 +11,10 @@ import styles from './styles.module.scss';
 import Settings from 'components/settings/settings';
 import { useAppSelector, useAppDispatch, useHistory, useCookies } from 'hooks/hooks';
 import { workspacesActions } from 'store/actions';
-import { RootState } from 'common/types/types';
 import { useEffect } from 'react';
 
 const Main: React.FC = () => {
-  const currentWorkspaceID = useAppSelector(
-    (state: RootState) => state.workspaces.currentWorkspaceID,
-  );
+  const { currentWorkspace } = useAppSelector((state) => state.workspaces);
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [cookies] = useCookies([
@@ -25,14 +22,14 @@ const Main: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (!currentWorkspaceID) {
+    if (!currentWorkspace) {
       if (cookies[CookieVariable.WORKSPACE_ID]) {
-        dispatch(workspacesActions.SetCurrentWorkspaceID(cookies[CookieVariable.WORKSPACE_ID]));
+        dispatch(workspacesActions.loadWorkspace(cookies[CookieVariable.WORKSPACE_ID]));
       } else {
         history.push(AppRoute.WORKSPACES);
       }
     }
-  }, [currentWorkspaceID]);
+  }, [currentWorkspace]);
 
   return (
     <div className={styles.grid}>
@@ -40,7 +37,7 @@ const Main: React.FC = () => {
         <Header  />
       </div>
       <div className={styles.toolbar}>
-        <Toolbar />
+        <Toolbar title={currentWorkspace?.title} />
       </div>
       <div className={styles.content}>
         <Switch>

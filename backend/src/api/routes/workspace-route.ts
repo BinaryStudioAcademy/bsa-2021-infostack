@@ -5,6 +5,7 @@ import { IRequestWithUser } from '../../common/models/user/request-with-user.int
 import {
   getWorkspaceUsers,
   getAll,
+  getOne,
   create,
   getWorkspaceUserRole,
 } from '../../services/workspace.service';
@@ -40,6 +41,7 @@ router
     verifyWorkspaceId,
     permit(RoleType.ADMIN),
     run((req: IRequestWithUser) => getWorkspaceUsers(req.workspaceId)),
-  );
+  )
+  .get('/workspace/:id', run((req) => getOne(req.params.id, req.userId)));
 
 export default router;
