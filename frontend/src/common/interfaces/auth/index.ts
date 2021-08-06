@@ -3,4 +3,5 @@ export type {
   ISetPassword,
   ITokens,
   IRefrashToken,
+  ISetPasswordValidation,
 } from 'infostack-shared/common/interfaces';
