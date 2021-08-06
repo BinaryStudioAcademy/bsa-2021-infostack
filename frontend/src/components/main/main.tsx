@@ -12,24 +12,27 @@ import Settings from 'components/settings/settings';
 import { useAppSelector, useAppDispatch, useHistory, useCookies } from 'hooks/hooks';
 import { workspacesActions } from 'store/actions';
 import { RootState } from 'common/types/types';
+import { useEffect } from 'react';
 
 const Main: React.FC = () => {
   const currentWorkspaceID = useAppSelector(
     (state: RootState) => state.workspaces.currentWorkspaceID,
   );
   const history = useHistory();
+  const dispatch = useAppDispatch();
   const [cookies] = useCookies([
     CookieVariable.WORKSPACE_ID,
   ]);
 
-  if (!currentWorkspaceID) {
-    if (cookies.workspaceId) {
-      const dispatch = useAppDispatch();
-      dispatch(workspacesActions.SetCurrentWorkspaceID(cookies.workspaceId));
-    } else {
-      history.push(AppRoute.WORKSPACES);
+  useEffect(() => {
+    if (!currentWorkspaceID) {
+      if (cookies[CookieVariable.WORKSPACE_ID]) {
+        dispatch(workspacesActions.SetCurrentWorkspaceID(cookies[CookieVariable.WORKSPACE_ID]));
+      } else {
+        history.push(AppRoute.WORKSPACES);
+      }
     }
-  }
+  }, [currentWorkspaceID]);
 
   return (
     <div className={styles.grid}>

@@ -24,6 +24,7 @@ const Workspaces: React.FC = () => {
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
+  const [isWorkspaceSelected, setIsWorkspaceSelected] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies([
     CookieVariable.WORKSPACE_ID,
@@ -32,17 +33,21 @@ const Workspaces: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(workspacesActions.loadWorkspaces());
-    removeCookie(CookieVariable.WORKSPACE_ID);
     dispatch(workspacesActions.RemoveCurrentWorkspaceID());
+    if (cookies[CookieVariable.WORKSPACE_ID]) {
+      removeCookie(CookieVariable.WORKSPACE_ID);
+    }
+    dispatch(workspacesActions.loadWorkspaces());
   }, []);
 
   useEffect(() => {
-    if (currentWorkspaceID) {
-      setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
-      history.push(AppRoute.ROOT);
-    } else if (cookies[CookieVariable.WORKSPACE_ID]) {
-      removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
+    if (isWorkspaceSelected) {
+      if (currentWorkspaceID) {
+        setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
+        history.push(AppRoute.ROOT);
+      } else if (cookies[CookieVariable.WORKSPACE_ID]) {
+        removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
+      }
     }
   }, [currentWorkspaceID]);
 
@@ -58,6 +63,7 @@ const Workspaces: React.FC = () => {
 
   const onWorkspaceItemClick = (id: string): void => {
     dispatch(workspacesActions.SetCurrentWorkspaceID(id));
+    setIsWorkspaceSelected(true);
   };
 
   const onCreateWorkspaceButtonClick = (): void => {
@@ -72,6 +78,7 @@ const Workspaces: React.FC = () => {
   const onConfirmCreationWorkspace = (): void => {
     onCancelCreationWorkspace();
     dispatch(workspacesActions.createWorkspace({ title: popUpText }));
+    setIsWorkspaceSelected(true);
   };
 
   return (
