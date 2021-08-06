@@ -1,20 +1,23 @@
 import Sign from 'components/common/sign/sign';
 import FormField from 'components/common/form-field/form-field';
 import { useState } from 'hooks/hooks';
-import { containsNoEmptyStrings } from 'helpers/helpers';
-import { AuthApi } from '../../services';
+import { AuthApi } from 'services';
 import { toast } from 'react-toastify';
+import { resetPasswordSchema } from 'validations/reset-password-schema';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
+import { IResetPassword } from 'common/interfaces/auth';
 
 const ResetPassword: React.FC = () => {
-  const [email, setEmail] = useState('');
   const [isSendingMail, setIsSendingMail] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IResetPassword>({ resolver: yupResolver(resetPasswordSchema) });
 
-  const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
-    e.preventDefault();
-
-    if (!containsNoEmptyStrings([email])) {
-      return;
-    }
+  const handleSubmitForm = async (data: IResetPassword): Promise<void> => {
+    const { email } = data;
 
     setIsSendingMail(true);
 
@@ -24,12 +27,7 @@ const ResetPassword: React.FC = () => {
       'We sent you an email to reset your password. Please check your mailbox.',
     );
 
-    setEmail('');
     setIsSendingMail(false);
-  };
-
-  const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setEmail(event.target.value);
   };
 
   return (
@@ -37,7 +35,7 @@ const ResetPassword: React.FC = () => {
       header="Reset password"
       secondaryText="Enter your email to reset your password."
       submitText="Reset password"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(handleSubmitForm)}
       isSubmitDisabled={isSendingMail}
     >
       <FormField
@@ -46,8 +44,8 @@ const ResetPassword: React.FC = () => {
         placeholder="Enter your email"
         name="email"
         controlId="resetPasswordEmail"
-        value={email}
-        onChange={onEmailChange}
+        register={register('email')}
+        errors={errors.email}
       />
     </Sign>
   );
