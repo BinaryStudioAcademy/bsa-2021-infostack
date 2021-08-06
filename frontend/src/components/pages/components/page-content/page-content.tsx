@@ -1,13 +1,35 @@
 import Spinner from 'react-bootstrap/Spinner';
-import { useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useEffect, useParams } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
 import { Card } from 'react-bootstrap';
+import { pagesActions } from 'store/pages';
+import isUUID from 'is-uuid';
+import { useHistory } from 'react-router';
+import { AppRoute } from 'common/enums/enums';
 
 const PageContent: React.FC = () => {
+  const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
+
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const paramsId = useParams<{ id: string }>().id;
+
+  const getPageById = async ( id?: string ): Promise<void> => {
+    const payload: string | undefined = id;
+    await dispatch(pagesActions.getPage(payload));
+  };
+
+  useEffect(() => {
+    if(paramsId && isUUID.anyNonNil(paramsId)) {
+      getPageById(paramsId);
+    } else {
+      history.push(AppRoute.ROOT);
+    }
+  }, []);
 
   const Content: React.FC = () => {
     return (
@@ -35,7 +57,7 @@ const PageContent: React.FC = () => {
 
   return (
     <>
-      {currentPage ? <Content />
+      {!isSpinner ? <Content />
         : <Spinner animation="border" variant="secondary" />}
     </>
   );

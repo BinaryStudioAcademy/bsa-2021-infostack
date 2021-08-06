@@ -6,11 +6,13 @@ import { ActionType } from './common';
 type State = {
   pages: IPage[] | null;
   currentPage: IPage | null;
+  isSpinner: boolean;
 };
 
 const initialState: State = {
   pages: null,
   currentPage: null,
+  isSpinner : false,
 };
 
 const { reducer, actions } = createSlice({
@@ -36,6 +38,9 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
+    },
+    [ActionType.TOGGLE_SPINNER]: (state) => {
+      state.isSpinner = !state.isSpinner;
     },
   },
 });

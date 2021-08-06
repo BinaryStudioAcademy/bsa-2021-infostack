@@ -5,10 +5,12 @@ import { ActionType } from './common';
 
 type State = {
   user: IUser | null;
+  isRefreshTokenExpired: boolean;
 };
 
 const initialState: State = {
   user: null,
+  isRefreshTokenExpired: false,
 };
 
 const { reducer, actions } = createSlice({
@@ -20,6 +22,9 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.RemoveUser]: (state) => {
       state.user = null;
+    },
+    [ActionType.ToggleIsRefreshTokenExpired]: (state) => {
+      state.isRefreshTokenExpired = !state.isRefreshTokenExpired;
     },
   },
 });
