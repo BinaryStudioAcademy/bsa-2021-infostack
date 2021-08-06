@@ -9,6 +9,10 @@ class UserApi {
     return await http.load('/api/users/me/profile');
   }
 
+  public async getUserInfo(id: string | undefined): Promise<IUserWithTokens> {
+    return await http.load(`/api/users/${id}/profile`);
+  }
+
   public async update(
     id: string,
     updatePayload: Partial<IUser>,

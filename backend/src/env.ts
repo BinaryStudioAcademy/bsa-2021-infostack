@@ -34,7 +34,9 @@ export const env = {
     service: getOsEnv('MAILER_SERVICE'),
     auth: {
       user: getOsEnv('MAILER_AUTH_USER'),
-      pass: getOsEnv('MAILER_AUTH_PASS'),
+      clientId: getOsEnv('MAILER_AUTH_CLIENT_ID'),
+      clientSecret: getOsEnv('MAILER_AUTH_CLIENT_SECRET'),
+      refreshToken: getOsEnv('MAILER_AUTH_REFRESH_TOKEN'),
     },
   },
 } as const;

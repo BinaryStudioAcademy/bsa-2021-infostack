@@ -1,0 +1,21 @@
+.content {
+  background-color: #f7f9fc;
+  direction: ltr;
+  flex: 1;
+  padding: 2.5rem 2.5rem 1.5rem;
+  text-align: start;
+  height: 100%;
+  .card {
+    box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+    margin-bottom: 24px;
+    .card-header {
+      background-color: white;
+      border: none;
+      .card-title {
+      color: #495057;
+      font-size: 2rem;
+      font-weight: 500;
+      }
+    }
+  }
+}

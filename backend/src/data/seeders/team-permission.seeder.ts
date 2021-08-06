@@ -3,7 +3,7 @@ import { TeamPermission } from '../entities/team-permission';
 import { asyncForEach } from '../../common/helpers/array.helper';
 import { getCustomRepository } from 'typeorm';
 import TeamRepository from '../repositories/team.repository';
-import PageRepository from '../repositories/page-repository';
+import PageRepository from '../repositories/page.repository';
 import { PermissionType } from '../../common/enums/permission-type';
 
 export default class TeamPermissionSeeder {
