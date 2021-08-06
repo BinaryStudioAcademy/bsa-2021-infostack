@@ -1,5 +1,4 @@
 import { Card, Button } from 'react-bootstrap';
-import './styles.scss';
 
 type Props = {
   onClick(): void;
