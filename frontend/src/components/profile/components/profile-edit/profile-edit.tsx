@@ -121,7 +121,6 @@ const ProfileEdit: React.FC = () => {
             <Avatar
               className={`${getAllowedClasses(styles.cardImage)} mb-3`}
               name={user?.fullName}
-              key={user?.avatar}
               src={selectedImgURL ? selectedImgURL : user?.avatar}
               round={true}
               size="12.8rem"
