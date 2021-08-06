@@ -6,8 +6,8 @@ class UserPermissionSeeder {
   public static async execute(): Promise<void> {
     await asyncForEach(async (userPermission) => {
       await Object.assign(new UserPermission(), {
-        user: userPermission.userId,
-        page: userPermission.pageId,
+        user: { id: userPermission.userId },
+        page: { id: userPermission.pageId },
         option: userPermission.option,
       }).save();
     }, userPermissions);
