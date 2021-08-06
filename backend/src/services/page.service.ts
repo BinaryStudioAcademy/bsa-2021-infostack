@@ -105,3 +105,31 @@ export const getPagesFollowedByUser = async (
   const { followingPages } = await userRepository.findById(userId);
   return followingPages;
 };
+
+export const followPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const page = await pageRepository.findById(pageId);
+  page.followingUsers.push(user);
+  user.followingPages.push(page);
+  await userRepository.save(user);
+  await pageRepository.save(page);
+};
+
+export const unfollowPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const page = await pageRepository.findById(pageId);
+  page.followingUsers.splice(page.followingUsers.indexOf(user), 1);
+  user.followingPages.splice(user.followingPages.indexOf(page), 1);
+  await userRepository.save(user);
+  await pageRepository.save(page);
+};

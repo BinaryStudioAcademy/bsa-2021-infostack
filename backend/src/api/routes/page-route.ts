@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
-import { createPage, getPages, getPage, getPagesFollowedByUser } from '../../services/page.service';
+import { createPage, getPages, getPage, getPagesFollowedByUser, followPage, unfollowPage } from '../../services/page.service';
 
 const router: Router = Router();
 
@@ -15,5 +15,11 @@ router
 
 router
   .get('/following/:id', run(req => getPagesFollowedByUser(req.params.id)));
+
+router
+  .post('/follow', run(req => followPage(req.userId, req.body.pageId)));
+
+router
+  .post('/unfollow', run(req => unfollowPage(req.userId, req.body.pageId)));
 
 export default router;
