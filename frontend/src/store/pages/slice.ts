@@ -22,8 +22,6 @@ const { reducer, actions } = createSlice({
     [ActionType.CREATE_PAGE]: (state, action: PayloadAction<IPage>) => {
       if(state.pages === null) {
         state.pages = [action.payload];
-      }else{
-        state.pages.push(action.payload);
       }
     },
     [ActionType.CREATE_VERSION_PAGE]: (state, action: PayloadAction<IPage>) => {
