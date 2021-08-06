@@ -35,8 +35,10 @@ const getPagesAsync = createAsyncThunk(
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
     const createPageResponse = await new PageApi().getPage(getPayload);
     dispatch(actions.getPage(createPageResponse));
+    dispatch(actions.toggleSpinner());
   },
 );
 
