@@ -4,65 +4,53 @@ import FormField from 'components/common/form-field/form-field';
 import Sign from 'components/common/sign/sign';
 import { useAppDispatch, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/auth';
-import styles from './styles.module.scss';
-import { containsNoEmptyStrings } from 'helpers/helpers';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
+import { loginSchema } from 'validations/login-schema';
+import { ILogin } from 'infostack-shared';
 import { Link } from 'components/common/common';
+import styles from './styles.module.scss';
 
 const Login: React.FC = () => {
-  const [formState, setFormState] = React.useState({
-    email: '',
-    password: '',
-  });
   const dispatch = useAppDispatch();
   const { push } = useHistory();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILogin>({ resolver: yupResolver(loginSchema) });
 
-  const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
-    e.preventDefault();
-
-    if (!containsNoEmptyStrings(Object.values(formState))) {
-      return;
-    }
-
-    await dispatch(authActions.login(formState));
+  const handleSubmitForm = async (data: ILogin): Promise<void> => {
+    await dispatch(authActions.login(data));
     push(AppRoute.WORKSPACES);
   };
-
-  const handleChange = ({
-    target: { name, value },
-  }: React.ChangeEvent<HTMLInputElement>): void =>
-    setFormState((prev) => ({ ...prev, [name]: value }));
-
-  const { email, password } = formState;
 
   return (
     <Sign
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
       submitText="Sign in"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       <FormField
         label="Email"
         type="email"
         placeholder="Enter your email"
-        name="email"
         controlId="loginEmail"
-        value={email}
-        onChange={handleChange}
+        register={register('email')}
+        errors={errors.email}
       />
       <FormField
+        register={register('password')}
         label="Password"
         type="password"
         placeholder="Enter your password"
+        errors={errors.password}
         helper={
           <Link className={styles.link} to={AppRoute.RESET_PASSWORD}>
             Forgot password?
           </Link>
         }
-        name="password"
-        controlId="loginPassword"
-        value={password}
-        onChange={handleChange}
       />
     </Sign>
   );
