@@ -40,7 +40,13 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
             <>
               <Accordion.Header className={styles.accordionHeader}>
                 <div className={getAllowedClasses('d-flex w-100 justify-content-between align-items-center', styles.pageItem)}>
-                  <Link onClick={(): Promise<void> => getPageById(id)} to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+                  <Link
+                    onClick={(): Promise<void> => getPageById(id)}
+                    to={ `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${id}` as AppRoute }
+                    className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}
+                  >
+                    {title}
+                  </Link>
                   {!childPages && <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>}
                 </div>
               </Accordion.Header>
@@ -51,7 +57,13 @@ const PageItem: React.FC<Props> = ({ title = 'default', id, childPages }) => {
               </Accordion.Body>
             </> :
             <div className={getAllowedClasses('d-flex justify-content-between align-items-center', styles.pageItem)}>
-              <Link onClick={(): Promise<void> => getPageById(id)} to={AppRoute.PAGES} className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}>{title}</Link>
+              <Link
+                onClick={(): Promise<void> => getPageById(id)}
+                to={ `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${id}` as AppRoute }
+                className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}
+              >
+                {title}
+              </Link>
               <span className={getAllowedClasses('px-2',styles.plus)}><PlusButton id={id}/></span>
             </div>}
         </Accordion.Item>

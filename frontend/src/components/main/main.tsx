@@ -41,7 +41,7 @@ const Main: React.FC = () => {
       </div>
       <div className={styles.content}>
         <Switch>
-          <ProtectedRoute path={AppRoute.PAGES} component={Pages} />
+          <ProtectedRoute path={AppRoute.PAGE} component={Pages} />
           <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
           <ProtectedRoute path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
           <ProtectedRoute path={AppRoute.WORKSPACE_SETTING} component={Workspace} exact />
