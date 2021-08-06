@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { asyncForEach } from '../../common/helpers/array.helper';
-import PageRepository from '../repositories/page-repository';
+import PageRepository from '../repositories/page.repository';
 import TagRepository from '../repositories/tag.repository';
 import { pageTags } from '../seed-data/page-tag.data';
 
