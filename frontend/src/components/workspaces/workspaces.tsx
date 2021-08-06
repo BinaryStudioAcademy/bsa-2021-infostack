@@ -77,8 +77,10 @@ const Workspaces: React.FC = () => {
 
   const onConfirmCreationWorkspace = (): void => {
     onCancelCreationWorkspace();
-    dispatch(workspacesActions.createWorkspace({ title: popUpText }));
-    setIsWorkspaceSelected(true);
+    if (popUpText) {
+      dispatch(workspacesActions.createWorkspace({ title: popUpText }));
+      setIsWorkspaceSelected(true);
+    }
   };
 
   return (
