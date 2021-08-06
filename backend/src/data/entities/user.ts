@@ -34,6 +34,9 @@ export class User extends AbstractEntity {
   @OneToMany(() => Page, Page => Page.author)
   pages: Page[];
 
+  @ManyToMany(() => Page, page => page.followingUsers)
+  followingPages: Page[];
+
   @OneToMany(() => UserPermission, userPermission => userPermission.user)
   userPermissions!: UserPermission[];
 

@@ -52,6 +52,10 @@ export class Page extends AbstractEntity {
   @JoinTable({ name: 'page_tag' })
   tags: Tag[];
 
+  @ManyToMany(() => User, user => user.followingPages, { cascade: true })
+  @JoinTable({ name: 'user_followedPages' })
+  followingUsers: User[];
+
   @OneToMany(() => PageContent, PageContent => PageContent.page)
   pageContents: PageContent[];
 
