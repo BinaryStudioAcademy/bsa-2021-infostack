@@ -14,7 +14,11 @@ interface INavProfileProps {
   userId?: string;
 }
 
-const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar, userId }) => {
+const NavProfile: React.FC<INavProfileProps> = ({
+  userName,
+  userAvatar,
+  userId,
+}) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -40,7 +44,10 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar, userId }
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="dropdown-menu">
-        <Dropdown.Item as={Link} to={ AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId }>
+        <Dropdown.Item
+          as={Link}
+          to={AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId}
+        >
           <i className="bi bi-person"></i>
           Profile
         </Dropdown.Item>
@@ -51,7 +58,7 @@ const NavProfile: React.FC<INavProfileProps> = ({ userName, userAvatar, userId }
           Select Workspace
         </Dropdown.Item>
         <Dropdown.Item as={Link} to={AppRoute.SETTINGS}>
-          Setting
+          Settings
         </Dropdown.Item>
         <Dropdown.Item onClick={onLogout} className="dropdown-item">
           Logout

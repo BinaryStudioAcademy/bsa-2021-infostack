@@ -1,4 +1,4 @@
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { Switch } from 'components/common/common';
 import ProtectedRoute from 'components/common/protected-route/protected-route';
 import Header from 'components/header/header';
@@ -9,7 +9,8 @@ import ProfileInfo from 'components/profile-info/profile-info';
 import Workspace from 'components/workspace/workspace';
 import styles from './styles.module.scss';
 import Settings from 'components/settings/settings';
-import { useAppSelector, useHistory } from 'hooks/hooks';
+import { useAppSelector, useAppDispatch, useHistory, useCookies } from 'hooks/hooks';
+import { workspacesActions } from 'store/actions';
 import { RootState } from 'common/types/types';
 
 const Main: React.FC = () => {
@@ -17,9 +18,17 @@ const Main: React.FC = () => {
     (state: RootState) => state.workspaces.currentWorkspaceID,
   );
   const history = useHistory();
+  const [cookies] = useCookies([
+    CookieVariable.WORKSPACE_ID,
+  ]);
 
   if (!currentWorkspaceID) {
-    history.push(AppRoute.WORKSPACES);
+    if (cookies.workspaceId) {
+      const dispatch = useAppDispatch();
+      dispatch(workspacesActions.SetCurrentWorkspaceID(cookies.workspaceId));
+    } else {
+      history.push(AppRoute.WORKSPACES);
+    }
   }
 
   return (

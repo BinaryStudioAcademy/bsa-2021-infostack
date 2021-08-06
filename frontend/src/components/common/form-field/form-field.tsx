@@ -1,17 +1,17 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import styles from './styles.module.scss';
 
 type Props = {
   label: string;
   type: string;
   placeholder: string;
+  name?: string;
   helper?: string | JSX.Element;
   controlId?: string;
-
-  name?: string;
-  value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  register?: UseFormRegisterReturn;
+  errors?: FieldError | undefined;
 };
 
 const FormField: React.FC<Props> = ({
@@ -19,20 +19,23 @@ const FormField: React.FC<Props> = ({
   type,
   placeholder,
   helper,
+  register,
+  errors,
   controlId,
-  name,
-  value,
-  onChange,
 }) => (
   <Form.Group className="mb-3" controlId={controlId}>
     <Form.Label className={styles.label}>{label}</Form.Label>
     <Form.Control
+      {...register}
       type={type}
       placeholder={placeholder}
-      name={name}
-      value={value}
-      onChange={onChange}
+      isInvalid={!!errors}
     />
+    {errors && (
+      <Form.Control.Feedback type="invalid">
+        {errors?.message}
+      </Form.Control.Feedback>
+    )}
     {helper && <Form.Text className={styles.helper}>{helper}</Form.Text>}
   </Form.Group>
 );
