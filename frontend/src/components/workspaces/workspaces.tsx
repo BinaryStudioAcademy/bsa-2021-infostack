@@ -17,7 +17,7 @@ import { AppRoute, CookieVariable } from 'common/enums/enums';
 import './styles.scss';
 
 const Workspaces: React.FC = () => {
-  const { workspaces } = useAppSelector(
+  const { workspaces, currentWorkspaceID } = useAppSelector(
     (state: RootState) => state.workspaces,
   );
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ const Workspaces: React.FC = () => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
 
-  const [, setCookie, removeCookie] = useCookies([
+  const [cookies, setCookie, removeCookie] = useCookies([
     CookieVariable.WORKSPACE_ID,
   ]);
 
@@ -36,6 +36,15 @@ const Workspaces: React.FC = () => {
     removeCookie(CookieVariable.WORKSPACE_ID);
     dispatch(workspacesActions.RemoveCurrentWorkspaceID());
   }, []);
+
+  useEffect(() => {
+    if (currentWorkspaceID) {
+      setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
+      history.push(AppRoute.ROOT);
+    } else if (cookies[CookieVariable.WORKSPACE_ID]) {
+      removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
+    }
+  }, [currentWorkspaceID]);
 
   const renderWorkspaceItem = (workspace: IWorkspace): JSX.Element => {
     return (
@@ -49,8 +58,6 @@ const Workspaces: React.FC = () => {
 
   const onWorkspaceItemClick = (id: string): void => {
     dispatch(workspacesActions.SetCurrentWorkspaceID(id));
-    setCookie(CookieVariable.WORKSPACE_ID, id, { path: '/' });
-    history.push(AppRoute.PAGE);
   };
 
   const onCreateWorkspaceButtonClick = (): void => {
