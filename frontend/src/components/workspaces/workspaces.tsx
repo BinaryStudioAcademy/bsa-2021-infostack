@@ -12,26 +12,28 @@ import {
 } from 'hooks/hooks';
 
 const Workspaces: React.FC = () => {
-  const { workspaces } = useAppSelector((state) => state.workspaces);
+  const { workspaces, currentWorkspaceID, creatingError } = useAppSelector((state) => state.workspaces);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
+  const [isWorkspaceSelected, setIsWorkspaceSelected] = useState(false);
 
-  const [, setCookie, removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
+  const [cookies, setCookie, removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
 
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(workspacesActions.loadWorkspaces());
-    removeCookie(CookieVariable.WORKSPACE_ID);
     dispatch(workspacesActions.RemoveCurrentWorkspaceID());
+    if (cookies[CookieVariable.WORKSPACE_ID]) {
+      removeCookie(CookieVariable.WORKSPACE_ID);
+    }
+    dispatch(workspacesActions.loadWorkspaces());
   }, []);
 
   const handleItemClick = (id: string): void => {
     dispatch(workspacesActions.SetCurrentWorkspaceID(id));
-    setCookie(CookieVariable.WORKSPACE_ID, id, { path: '/' });
-    history.push(AppRoute.PAGE);
+    setIsWorkspaceSelected(true);
   };
 
   const handleCreate = (): void =>
@@ -42,9 +44,23 @@ const Workspaces: React.FC = () => {
     setPopUpText('');
   };
 
+  useEffect(() => {
+    if (isWorkspaceSelected) {
+      if (currentWorkspaceID) {
+        handleCreationCancel();
+        setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
+        history.push(AppRoute.ROOT);
+      } else if (cookies[CookieVariable.WORKSPACE_ID]) {
+        removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
+      }
+    }
+  }, [currentWorkspaceID]);
+
   const handleCreationConfirm = (): void => {
-    handleCreationCancel();
-    dispatch(workspacesActions.createWorkspace({ title: popUpText }));
+    if (popUpText) {
+      dispatch(workspacesActions.createWorkspace({ title: popUpText }));
+      setIsWorkspaceSelected(true);
+    }
   };
 
   return (
@@ -64,6 +80,7 @@ const Workspaces: React.FC = () => {
           isVisible={isPopUpVisible}
           inputValue={popUpText}
           setPopUpText={setPopUpText}
+          error={creatingError}
           cancelButton={{
             text: 'Cancel',
             onClick: handleCreationCancel,

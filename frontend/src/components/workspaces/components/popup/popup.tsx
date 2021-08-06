@@ -3,16 +3,17 @@ import { IButton }from 'common/interfaces/components/button';
 import { useEffect, useRef } from 'hooks/hooks';
 import { focusOnInput } from 'helpers/dom/dom';
 
-interface IPopUpProps {
+type Props = {
   query: string;
   isVisible: boolean;
   inputValue: string;
   setPopUpText(value: string): void;
   confirmButton: IButton;
   cancelButton: IButton;
-}
+  error: string;
+};
 
-export const Popup: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton }) => {
+export const Popup: React.FC<Props> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton, error }) => {
   const inputElement = useRef(null);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export const Popup: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, set
   return (
     <Modal show={isVisible} onHide={cancelButton.onClick}>
       <Modal.Header>
-        <Modal.Title className="h5">{query}</Modal.Title>
+        <Modal.Title className="h5 text-secondary">{query}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <InputGroup>
@@ -36,6 +37,7 @@ export const Popup: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, set
             onChange={onInputChange}
           />
         </InputGroup>
+        {error && <span className="text-danger small">{error}</span>}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={cancelButton.onClick}>{cancelButton.text}</Button>
