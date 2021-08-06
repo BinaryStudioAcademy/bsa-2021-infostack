@@ -1,5 +1,4 @@
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import { Modal, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { IButton }from 'common/interfaces/components/button';
 import { useEffect, useRef } from 'hooks/hooks';
 import { focusOnInput } from 'helpers/dom/dom';
@@ -13,7 +12,7 @@ interface IPopUpProps {
   cancelButton: IButton;
 }
 
-const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton }) => {
+export const Popup: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton }) => {
   const inputElement = useRef(null);
 
   useEffect(() => {
@@ -22,20 +21,21 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
     }
   }, [isVisible]);
 
-  const onInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    setPopUpText(e.currentTarget.value);
-  };
+  const onInputChange = ({ target }: React.ChangeEvent<HTMLInputElement>): void =>
+    setPopUpText(target.value);
 
   return (
-    <Modal show={isVisible}>
+    <Modal show={isVisible} onHide={cancelButton.onClick}>
+      <Modal.Header>
+        <Modal.Title className="h5">{query}</Modal.Title>
+      </Modal.Header>
       <Modal.Body>
-        <p>{query}</p>
-        <input
-          className="w-100 border-0 border-bottom border-secondary"
-          value={inputValue}
-          onChange={onInputChange}
-          ref={inputElement}
-        />
+        <InputGroup>
+          <FormControl
+            value={inputValue}
+            onChange={onInputChange}
+          />
+        </InputGroup>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={cancelButton.onClick}>{cancelButton.text}</Button>
@@ -44,5 +44,3 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
     </Modal>
   );
 };
-
-export default PopUp;

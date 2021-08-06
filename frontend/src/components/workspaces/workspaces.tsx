@@ -1,9 +1,6 @@
-import Spinner from 'react-bootstrap/Spinner';
-import { RootState } from 'common/types/types';
-import { IWorkspace } from 'common/interfaces/workspace';
-import WorkspaceItem from './components/workspace-item/workspace-item';
-import CreateWorkspaceButton from './components/create-workspace-button/create-workspace-button';
-import PopUp from './components/create-workspace-popup/create-workspace-popup';
+import { Container as BootstrapContainer } from 'react-bootstrap';
+import { Container, Popup, Spinner } from './components';
+import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { workspacesActions } from 'store/actions';
 import {
   useState,
@@ -13,21 +10,15 @@ import {
   useCookies,
   useHistory,
 } from 'hooks/hooks';
-import { AppRoute, CookieVariable } from 'common/enums/enums';
-import './styles.scss';
 
 const Workspaces: React.FC = () => {
-  const { workspaces } = useAppSelector(
-    (state: RootState) => state.workspaces,
-  );
+  const { workspaces } = useAppSelector((state) => state.workspaces);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
 
-  const [, setCookie, removeCookie] = useCookies([
-    CookieVariable.WORKSPACE_ID,
-  ]);
+  const [, setCookie, removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
 
   const history = useHistory();
 
@@ -37,66 +28,52 @@ const Workspaces: React.FC = () => {
     dispatch(workspacesActions.RemoveCurrentWorkspaceID());
   }, []);
 
-  const renderWorkspaceItem = (workspace: IWorkspace): JSX.Element => {
-    return (
-      <WorkspaceItem
-        key={workspace.id}
-        workspace={workspace}
-        onClick={onWorkspaceItemClick}
-      />
-    );
-  };
-
-  const onWorkspaceItemClick = (id: string): void => {
+  const handleItemClick = (id: string): void => {
     dispatch(workspacesActions.SetCurrentWorkspaceID(id));
     setCookie(CookieVariable.WORKSPACE_ID, id, { path: '/' });
     history.push(AppRoute.PAGES);
   };
 
-  const onCreateWorkspaceButtonClick = (): void => {
+  const handleCreate = (): void =>
     setIsPopUpVisible(true);
-  };
 
-  const onCancelCreationWorkspace = (): void => {
+  const handleCreationCancel = (): void => {
     setIsPopUpVisible(false);
     setPopUpText('');
   };
 
-  const onConfirmCreationWorkspace = (): void => {
-    onCancelCreationWorkspace();
+  const handleCreationConfirm = (): void => {
+    handleCreationCancel();
     dispatch(workspacesActions.createWorkspace({ title: popUpText }));
   };
 
   return (
-    <div className="workspaces text-secondary bg-light d-flex flex-column align-items-start p-4 min-vh-100">
-      <h1 className="pageTitle">Workspaces</h1>
-      {!workspaces && (
-        <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
-          <Spinner animation="border" variant="secondary" />
-        </div>
-      )}
-      {workspaces && (
-        <div className="workspaces-container py-2 w-100">
-          {workspaces.map((workspace: IWorkspace) =>
-            renderWorkspaceItem(workspace),
-          )}
-          <CreateWorkspaceButton onClick={onCreateWorkspaceButtonClick} />
-        </div>
-      )}
-      <PopUp
-        query="Enter name of workspace:"
-        isVisible={isPopUpVisible}
-        inputValue={popUpText}
-        setPopUpText={setPopUpText}
-        cancelButton={{
-          text: 'Cancel',
-          onClick: onCancelCreationWorkspace,
-        }}
-        confirmButton={{
-          text: 'Save',
-          onClick: onConfirmCreationWorkspace,
-        }}
-      />
+    <div className="bg-light">
+      <BootstrapContainer className="position-relative pt-5 vh-100">
+        <h1 className="h3">Select the workspace</h1>
+        {workspaces
+          ? <Container
+            workspaces={workspaces}
+            onItemClick={handleItemClick}
+            onCreate={handleCreate}
+          />
+          : <Spinner />
+        }
+        <Popup
+          query="Enter name of workspace:"
+          isVisible={isPopUpVisible}
+          inputValue={popUpText}
+          setPopUpText={setPopUpText}
+          cancelButton={{
+            text: 'Cancel',
+            onClick: handleCreationCancel,
+          }}
+          confirmButton={{
+            text: 'Save',
+            onClick: handleCreationConfirm,
+          }}
+        />
+      </BootstrapContainer>
     </div>
   );
 };
