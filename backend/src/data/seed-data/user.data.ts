@@ -15,4 +15,11 @@ export const users = [
     avatar: '',
     password,
   },
+  {
+    id: '3541af71-9d5b-4ca5-a74a-f629aea76735',
+    fullName: 'User3',
+    email: 'example3.email@example.com',
+    avatar: '',
+    password,
+  },
 ];
