@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'hooks/hooks';
+import { useState, useEffect } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
-import { RootState } from 'common/types/types';
 import { UserApi } from 'services';
 import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
@@ -15,7 +13,7 @@ const ProfileEdit: React.FC = () => {
   const [userFullName, setUserFullName] = useState('');
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector(state => state.auth);
   const userApi = new UserApi();
 
   useEffect(() => {
@@ -32,14 +30,7 @@ const ProfileEdit: React.FC = () => {
         const updatedUser = await userApi
           .update(user.id, { ...user, fullName: userFullName })
           .then((data) => data);
-        dispatch(
-          authActions.setUser({
-            id: updatedUser.id,
-            fullName: updatedUser.fullName,
-            avatar: updatedUser.avatar,
-            email: updatedUser.email,
-          }),
-        );
+        dispatch(authActions.setUser({ ...updatedUser, avatar: user.avatar }));
         setUserFullName(updatedUser.fullName);
       }
 
@@ -54,7 +45,7 @@ const ProfileEdit: React.FC = () => {
           authActions.setUser({
             id: updatedUser.id,
             fullName: updatedUser.fullName,
-            avatar: updatedUser.avatar,
+            avatar: updatedUser.avatar + `?${performance.now()}`,
             email: updatedUser.email,
           }),
         );
@@ -130,6 +121,7 @@ const ProfileEdit: React.FC = () => {
             <Avatar
               className={`${getAllowedClasses(styles.cardImage)} mb-3`}
               name={user?.fullName}
+              key={user?.avatar}
               src={selectedImgURL ? selectedImgURL : user?.avatar}
               round={true}
               size="12.8rem"
