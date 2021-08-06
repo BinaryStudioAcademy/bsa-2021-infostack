@@ -50,7 +50,7 @@ const Workspaces: React.FC = () => {
   const onWorkspaceItemClick = (id: string): void => {
     dispatch(workspacesActions.SetCurrentWorkspaceID(id));
     setCookie(CookieVariable.WORKSPACE_ID, id, { path: '/' });
-    history.push(AppRoute.PAGES);
+    history.push(AppRoute.PAGE);
   };
 
   const onCreateWorkspaceButtonClick = (): void => {
