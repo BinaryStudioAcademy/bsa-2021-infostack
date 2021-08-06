@@ -1,3 +1,4 @@
+import { IRefreshToken } from 'common/interfaces/auth';
 import { IUserWithTokens, IUser } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
@@ -43,6 +44,14 @@ class AuthApi {
 
   public async setPassword(payload: ISetPassword): Promise<void> {
     return http.load('/api/auth/set-password', {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
+  }
+
+  public async logout(payload: IRefreshToken): Promise<void> {
+    return http.load('/api/auth/logout', {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
       contentType: ContentType.JSON,

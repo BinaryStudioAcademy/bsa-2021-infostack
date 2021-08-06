@@ -4,6 +4,7 @@ enum HttpErrorMessage {
   INVALID_PASSWORD = 'Invalid password',
   INTERNAL_SERVER_ERROR = 'Internal Server Error',
   INVALID_TOKEN = 'Invalid token',
+  UNAUTHORIZED = 'Unauthorized',
 }
 
 export { HttpErrorMessage };
