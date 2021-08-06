@@ -6,9 +6,11 @@ import {
   getWorkspaceUsers,
   getAll,
   create,
+  getWorkspaceUserRole,
 } from '../../services/workspace.service';
-import { auth } from '../middlewares/authorization-middleware';
 import { permit } from '../middlewares/permissions-middleware';
+import { verifyUserId } from '../middlewares/verify-user-id';
+import { verifyWorkspaceId } from '../middlewares/verify-workspace-id';
 
 const router: Router = Router();
 
@@ -17,17 +19,25 @@ router
     '/',
     run((req) => getAll(req.userId)),
   )
-  .get(
-    '/:id',
-    run((req) => getAll(req.params.id)),
-  )
   .post(
     '/',
     run((req) => create(req.userId, req.body)),
   )
   .get(
-    '/users',
-    auth,
+    '/:id/user/:userId/role',
+    verifyWorkspaceId,
+    verifyUserId,
+    run((req: IRequestWithUser) =>
+      getWorkspaceUserRole(req.userId, req.workspaceId),
+    ),
+  )
+  .get(
+    '/:id',
+    run((req) => getAll(req.params.id)),
+  )
+  .get(
+    '/:id/users',
+    verifyWorkspaceId,
     permit(RoleType.ADMIN),
     run((req: IRequestWithUser) => getWorkspaceUsers(req.workspaceId)),
   );

@@ -9,6 +9,7 @@ enum AppRoute {
   PROFILE = '/users/profile/:id',
   SETTINGS = '/settings',
   SETTINGS_PROFILE = '/settings/profile',
+  SETTINGS_USERS = '/settings/users',
   WORKSPACE_SETTING = '/workspace/settings',
 }
 

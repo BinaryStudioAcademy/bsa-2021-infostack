@@ -9,7 +9,7 @@ const PagesList: React.FC<Props> = ({ pages }) => {
 
   return (
     <>
-      {pages && pages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents[0]?.title} childPages={childPages} />)}
+      {pages && pages.map(({ pageContents, id, childPages }) => <PageItem id={id} key={id} title={pageContents?.[0]?.title} childPages={childPages} />)}
     </>
   );
 };
