@@ -45,7 +45,7 @@ const ProfileEdit: React.FC = () => {
           authActions.setUser({
             id: updatedUser.id,
             fullName: updatedUser.fullName,
-            avatar: updatedUser.avatar + `?${performance.now()}`,
+            avatar: updatedUser.avatar,
             email: updatedUser.email,
           }),
         );
