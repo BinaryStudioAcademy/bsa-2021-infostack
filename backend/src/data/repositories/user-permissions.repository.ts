@@ -9,9 +9,9 @@ export class UserPermissionRepository extends Repository<UserPermission> {
 
   public createAndSave(user: User, page: Page, option: PermissionType): Promise<UserPermission> {
     const userPermission = this.create({
-      user: user,
-      page: page,
-      option: option,
+      user,
+      page,
+      option,
     });
 
     return this.manager.save(userPermission);

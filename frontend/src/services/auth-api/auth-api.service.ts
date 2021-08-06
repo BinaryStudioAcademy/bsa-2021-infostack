@@ -1,4 +1,4 @@
-import { IRefrashToken } from './../../../../shared/build/common/interfaces/auth/refresh-tokens.interface.d';
+import { IRefreshToken } from 'common/interfaces/auth';
 import { IUserWithTokens, IUser } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
@@ -50,7 +50,7 @@ class AuthApi {
     });
   }
 
-  public async logout(payload: IRefrashToken): Promise<void> {
+  public async logout(payload: IRefreshToken): Promise<void> {
     return http.load('/api/auth/logout', {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),

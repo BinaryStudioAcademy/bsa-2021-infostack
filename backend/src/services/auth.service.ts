@@ -5,7 +5,7 @@ import { IRegister } from '../common/interfaces/auth/register.interface';
 import { ILogin } from '../common/interfaces/auth/login.interface';
 import { IUserWithTokens, IUser } from '../common/interfaces/user/user-auth.interface';
 import { ITokens } from './../common/interfaces/auth/tokens.interface';
-import { IRefrashToken } from './../common/interfaces/auth/refresh-tokens.interface';
+import { IRefreshToken } from './../common/interfaces/auth/refresh-tokens.interface';
 import { generateTokens, generateAccessToken } from '../common/utils/tokens.util';
 import UserRepository from '../data/repositories/user.repository';
 import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
@@ -108,19 +108,18 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
 };
 
-export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
+export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
   try {
     const { refreshToken } = body;
     jwt.verify(refreshToken, env.app.secretKey);
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
     const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
-    if (userRefreshToken?.token) {
-      await refreshTokenRepository.remove(userRefreshToken);
-      const tokens = setTokens(userRefreshToken.user);
-      return tokens;
-    } else {
+    if (!userRefreshToken?.token) {
       throw new Error();
     }
+    await refreshTokenRepository.remove(userRefreshToken);
+    const tokens = setTokens(userRefreshToken.user);
+    return tokens;
   } catch {
     throw new HttpError({
       status: HttpCode.UNAUTHORIZED,
@@ -129,11 +128,11 @@ export const refreshTokens = async (body: IRefrashToken): Promise<ITokens> => {
   }
 };
 
-export const logout = async (body: IRefrashToken): Promise<void> => {
+export const logout = async (body: IRefreshToken): Promise<void> => {
   const { refreshToken } = body;
   const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
   const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
-  if (userRefreshToken.token) {
+  if (userRefreshToken?.token) {
     await refreshTokenRepository.remove(userRefreshToken);
   }
 };

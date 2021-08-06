@@ -1,1 +1,1 @@
-export interface IRefrashToken { refreshToken: string }
+export interface IRefreshToken { refreshToken: string }
