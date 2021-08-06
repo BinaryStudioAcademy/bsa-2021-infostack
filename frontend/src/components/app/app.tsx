@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const { pathname } = useLocation();
   const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
   const { user } = useAppSelector(state => state.auth);
+  const { isRefreshTokenExpired } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const history = useHistory();
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
@@ -34,6 +35,12 @@ const App: React.FC = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (isRefreshTokenExpired) {
+      history.push(AppRoute.LOGIN);
+    }
+  }, [isRefreshTokenExpired]);
 
   return (
     <>
