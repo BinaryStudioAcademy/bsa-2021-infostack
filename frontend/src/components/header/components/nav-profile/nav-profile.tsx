@@ -22,14 +22,19 @@ const NavProfile: React.FC<INavProfileProps> = ({
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const [, , removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
+  const [cookies, , removeCookie] = useCookies([
+    CookieVariable.WORKSPACE_ID,
+  ]);
 
   const onLogout = (): void => {
     dispatch(authActions.logout());
-    removeCookie(CookieVariable.WORKSPACE_ID);
+    if (cookies[CookieVariable.WORKSPACE_ID]) {
+      removeCookie(CookieVariable.WORKSPACE_ID);
+    }
     history.push(AppRoute.LOGIN);
     location.reload();
   };
+
   return (
     <Dropdown as={NavItem} align="end">
       <Dropdown.Toggle as={NavLink} id="dropdown-profile-details">
