@@ -1,5 +1,7 @@
 import { IWorkspace } from 'common/interfaces/workspace';
 import { Button, Card } from 'react-bootstrap';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import styles from './styles.module.scss';
 
 type Props = {
   workspace: IWorkspace;
@@ -13,7 +15,7 @@ export const Item: React.FC<Props> = ({ workspace, onClick }) =>
       className="bg-white text-secondary h-100"
       onClick={(): void => onClick(workspace.id)}>
       <Card.Body className="d-flex align-items-center justify-content-center">
-        <Card.Title>{ workspace.title }</Card.Title>
+        <Card.Title className={getAllowedClasses(styles.workspaceTitle)}>{ workspace.title }</Card.Title>
       </Card.Body>
     </Button>
   </Card>;

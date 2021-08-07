@@ -45,7 +45,7 @@ const NavProfile: React.FC<INavProfileProps> = ({
           round={true}
           className="userAvatar"
         />
-        <span className="text-dark">{userName}</span>
+        <span className="text-dark userName">{userName}</span>
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="dropdown-menu">
