@@ -10,7 +10,7 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
     });
   }
 
-  public async findByUserIdAndWorkspaceId(
+  public findByUserIdAndWorkspaceId(
     userId: string,
     workspaceId: string,
   ): Promise<UserWorkspace> {

@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { IButton }from 'common/interfaces/components/button';
 import { useEffect, useRef } from 'hooks/hooks';
 import { focusOnInput } from 'helpers/dom/dom';
+import './styles.scss';
 
 interface IPopUpProps {
   query: string;
@@ -11,9 +12,10 @@ interface IPopUpProps {
   setPopUpText(value: string): void;
   confirmButton: IButton;
   cancelButton: IButton;
+  error: string;
 }
 
-const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton }) => {
+const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton, error }) => {
   const inputElement = useRef(null);
 
   useEffect(() => {
@@ -29,13 +31,14 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
   return (
     <Modal show={isVisible}>
       <Modal.Body>
-        <p>{query}</p>
+        <h6 className="text-secondary">{query}</h6>
         <input
-          className="w-100 border-0 border-bottom border-secondary"
+          className="workspace-title-input text-secondary w-100 border-0 p-0 mt-2 border-bottom border-secondary"
           value={inputValue}
           onChange={onInputChange}
           ref={inputElement}
         />
+        { error && <span className="text-danger small">{error}</span> }
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={cancelButton.onClick}>{cancelButton.text}</Button>
