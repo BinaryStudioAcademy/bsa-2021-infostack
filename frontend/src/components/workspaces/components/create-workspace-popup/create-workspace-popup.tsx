@@ -41,8 +41,19 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
         { error && <span className="text-danger small">{error}</span> }
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={cancelButton.onClick}>{cancelButton.text}</Button>
-        <Button variant="primary" onClick={confirmButton.onClick}>{confirmButton.text}</Button>
+        <Button
+          variant="outline-secondary"
+          onClick={cancelButton.onClick}
+        >
+          {cancelButton.text}
+        </Button>
+        <Button
+          variant="primary"
+          onClick={confirmButton.onClick}
+          disabled={confirmButton.disabled}
+        >
+          {confirmButton.text}
+        </Button>
       </Modal.Footer>
     </Modal>
   );

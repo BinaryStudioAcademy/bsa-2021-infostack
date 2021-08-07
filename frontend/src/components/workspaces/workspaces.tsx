@@ -80,8 +80,6 @@ const Workspaces: React.FC = () => {
     if (popUpText) {
       dispatch(workspacesActions.createWorkspace({ title: popUpText }));
       setIsWorkspaceSelected(true);
-    } else {
-      dispatch(workspacesActions.SetCreatingError('Enter name of workspace'));
     }
   };
 
@@ -114,6 +112,7 @@ const Workspaces: React.FC = () => {
         confirmButton={{
           text: 'Save',
           onClick: onConfirmCreationWorkspace,
+          disabled: !popUpText,
         }}
       />
     </div>
