@@ -29,6 +29,20 @@ const { reducer, actions } = createSlice({
     [ActionType.SetCurrentTeamID]: (state, action: PayloadAction<string>) => {
       state.SetCurrentTeamID = action.payload;
     },
+    [ActionType.AddTeam]: (state, action: PayloadAction<ITeam>) => {
+      state.teams.push(action.payload);
+    },
+    [ActionType.updateTeam]: (state, action: PayloadAction<ITeam>) => {
+      const id = action.payload.id;
+      state.teams = state.teams.map((team: ITeam) =>
+        team.id === id ? action.payload : team,
+      );
+    },
+    [ActionType.deleteTeam]: (state, action: PayloadAction<string>) => {
+      state.teams = state.teams.filter(
+        (team: ITeam) => team.id !== action.payload,
+      );
+    },
   },
 });
 

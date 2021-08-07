@@ -1,4 +1,4 @@
-import { ITeam, ITeamCreation } from 'common/interfaces/team';
+import { ITeam, ITeamCreation, ITeamEditing } from 'common/interfaces/team';
 import { Http } from 'services/http/http.service';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 
@@ -17,6 +17,20 @@ class SettingsApi {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
       contentType: ContentType.JSON,
+    });
+  }
+
+  public async updateTeam(payload: ITeamEditing): Promise<ITeam> {
+    return this.http.load(`${this.BASE}/teams/${payload.id}`, {
+      method: HttpMethod.PUT,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
+  }
+
+  public async deleteTeam(payload: string): Promise<ITeam> {
+    return this.http.load(`${this.BASE}/teams/${payload}`, {
+      method: HttpMethod.DELETE,
     });
   }
 }

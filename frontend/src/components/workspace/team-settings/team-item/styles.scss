@@ -1,3 +1,15 @@
 .team-card {
   height: 12rem;
 }
+
+.team-name {
+  padding: 10px;
+  margin: 0 !important;
+}
+
+.avatars-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto;
+  gap: 1rem;
+}

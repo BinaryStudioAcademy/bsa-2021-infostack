@@ -9,6 +9,12 @@
   gap: 1.5rem;
 }
 
+.teams-container-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .vh-91 {
   height: 91vh;
 }

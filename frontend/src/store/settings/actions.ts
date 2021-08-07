@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { SettingsApi, WorkspaceApi } from 'services';
-import { ITeamCreation } from 'common/interfaces/team';
+import { ITeamCreation, ITeamEditing } from 'common/interfaces/team';
 
 const loadUsers = createAsyncThunk(
   ActionType.SetUsers,
@@ -24,8 +24,33 @@ const createTeam = createAsyncThunk(
   ActionType.SetCurrentTeamID,
   async (payload: ITeamCreation, { dispatch }) => {
     try {
-      const { id } = await new SettingsApi().createTeam(payload);
-      dispatch(actions.SetCurrentTeamID(id));
+      const team = await new SettingsApi().createTeam(payload);
+      dispatch(actions.SetCurrentTeamID(team.id));
+      dispatch(actions.AddTeam(team));
+    } catch (err) {
+      alert(err);
+    }
+  },
+);
+
+const updateTeam = createAsyncThunk(
+  ActionType.updateTeam,
+  async (payload: ITeamEditing, { dispatch }) => {
+    try {
+      const team = await new SettingsApi().updateTeam(payload);
+      dispatch(actions.updateTeam(team));
+    } catch (err) {
+      alert(err);
+    }
+  },
+);
+
+const deleteTeam = createAsyncThunk(
+  ActionType.deleteTeam,
+  async (payload: string, { dispatch }) => {
+    try {
+      await new SettingsApi().deleteTeam(payload);
+      dispatch(actions.deleteTeam(payload));
     } catch (err) {
       alert(err);
     }
@@ -37,6 +62,8 @@ const settingsActions = {
   loadUsers,
   loadTeams,
   createTeam,
+  updateTeam,
+  deleteTeam,
 };
 
 export { settingsActions };

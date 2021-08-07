@@ -71,11 +71,34 @@ export const createTeam = async (
   // const user = await userRepository.findById(userId);
   const team = teamRepository.create({ name: data.name, workspaceId: workspaceId });
   await teamRepository.save(team);
-  // const userWorkspace = userWorkspaceRepository.create({
+  // const teamMember = userRepository.create({
   //   user,
   //   workspace,
   //   role: RoleType.ADMIN,
   // });
   // await userWorkspaceRepository.save(userWorkspace);
-  return { id: team.id, name: team.name, workspaceId: team.workspaceId };
+  const users = team.users.map(({ id, fullName, avatar }) => ({ id, fullName, avatar }));
+  return { id: team.id, name: team.name, workspaceId: team.workspaceId, users: users };
+};
+
+export const updateTeam = async (
+  id: string,
+  body: { name: string },
+): Promise<ITeam> => {
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teamToUpdate = await teamRepository.findById(id);
+  teamToUpdate.name = body.name || teamToUpdate.name;
+  const { name, workspaceId, users } = await teamRepository.save(teamToUpdate);
+  const teamUsers = users.map(({ id, fullName, avatar }) => ({ id, fullName, avatar }));
+  return { id, name, workspaceId, users: teamUsers };
+};
+
+export const deleteTeam = async (
+  id: string,
+): Promise<ITeam> => {
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teamToRemove = await teamRepository.findById(id);
+  const { name, workspaceId, users } = await teamRepository.remove(teamToRemove);
+  const teamUsers = users.map(({ id, fullName, avatar }) => ({ id, fullName, avatar }));
+  return { id, workspaceId, name, users: teamUsers };
 };
