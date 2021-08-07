@@ -28,7 +28,7 @@ const Settings: React.FC = () => {
       >
         <h3 className={getAllowedClasses(styles.menuHeading)}>Settings</h3>
         <Tab.Container id="list-group-tabs-example" activeKey={lastURL}>
-          <Row>
+          <Row className="gx-0">
             <Col xl={2} md={3} className={getAllowedClasses(styles.row)}>
               <Menu />
             </Col>
