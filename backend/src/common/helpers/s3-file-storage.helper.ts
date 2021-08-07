@@ -1,8 +1,8 @@
 import fs from 'fs';
 import S3 from 'aws-sdk/clients/s3';
-import { env } from '../../env';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/error';
+import { env } from '../../env';
 
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
