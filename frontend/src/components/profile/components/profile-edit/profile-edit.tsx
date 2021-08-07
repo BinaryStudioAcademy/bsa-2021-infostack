@@ -82,7 +82,7 @@ const ProfileEdit: React.FC = () => {
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <Row>
-          <Col md={8}>
+          <Col md={8} className="ps-0">
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label
@@ -129,7 +129,7 @@ const ProfileEdit: React.FC = () => {
               className={`${getAllowedClasses(
                 styles.cardButton,
                 styles.uploadLabel,
-              )} mb-3`}
+              )}`}
             >
               <i
                 className={`bi bi-cloud-arrow-up-fill ${getAllowedClasses(
