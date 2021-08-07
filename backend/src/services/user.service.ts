@@ -1,6 +1,6 @@
+import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import { getCustomRepository } from 'typeorm';
 import {
   deleteFile,
   isFileExists,

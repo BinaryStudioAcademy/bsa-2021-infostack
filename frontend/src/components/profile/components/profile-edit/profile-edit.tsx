@@ -1,10 +1,10 @@
+import Avatar from 'react-avatar';
 import { useState, useEffect } from 'hooks/hooks';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { UserApi } from 'services';
-import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
