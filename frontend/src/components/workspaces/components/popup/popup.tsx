@@ -1,11 +1,11 @@
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import { Modal, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { IButton }from 'common/interfaces/components/button';
 import { useEffect, useRef } from 'hooks/hooks';
 import { focusOnInput } from 'helpers/dom/dom';
-import './styles.scss';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import styles from './styles.module.scss';
 
-interface IPopUpProps {
+type Props = {
   query: string;
   isVisible: boolean;
   inputValue: string;
@@ -13,9 +13,9 @@ interface IPopUpProps {
   confirmButton: IButton;
   cancelButton: IButton;
   error: string;
-}
+};
 
-const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton, error }) => {
+export const Popup: React.FC<Props> = ({ query, isVisible, inputValue, setPopUpText, confirmButton, cancelButton, error }) => {
   const inputElement = useRef(null);
 
   useEffect(() => {
@@ -24,21 +24,24 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
     }
   }, [isVisible]);
 
-  const onInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    setPopUpText(e.currentTarget.value);
-  };
+  const onInputChange = ({ target }: React.ChangeEvent<HTMLInputElement>): void =>
+    setPopUpText(target.value);
 
   return (
-    <Modal show={isVisible}>
+    <Modal show={isVisible} onHide={cancelButton.onClick}>
+      <Modal.Header>
+        <Modal.Title className="h6">{query}</Modal.Title>
+      </Modal.Header>
       <Modal.Body>
-        <h6>{query}</h6>
-        <input
-          className="workspace-title-input w-100 border-0 p-0 mt-2 border-bottom border-secondary"
-          value={inputValue}
-          onChange={onInputChange}
-          ref={inputElement}
-        />
-        { error && <span className="text-danger small">{error}</span> }
+        <InputGroup>
+          <FormControl
+            value={inputValue}
+            onChange={onInputChange}
+            ref={inputElement}
+            className={getAllowedClasses(styles.workspaceTitleInput)}
+          />
+        </InputGroup>
+        {error && <span className="text-danger small">{error}</span>}
       </Modal.Body>
       <Modal.Footer>
         <Button
@@ -58,5 +61,3 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
     </Modal>
   );
 };
-
-export default PopUp;
