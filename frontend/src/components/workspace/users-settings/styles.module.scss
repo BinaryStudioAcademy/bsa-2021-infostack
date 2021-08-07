@@ -19,7 +19,7 @@
     padding: 1.6rem 2rem;
 
     .title {
-      font-size: 1.52rem;
+      font-size: 1.75rem;
     }
   }
 
@@ -27,20 +27,24 @@
     flex: 1 1 auto;
     padding: 2rem;
 
+    tr {
+      font-size: 1.2rem;
+
+      td {
+        color: #737373;
+      }
+    }
+
     .tableHead {
       color: #737d85;
 
-      font-weight: bold;
+      tr {
+        font-size: 1.32rem;
+      }
     }
 
     & > .table > .tableHead > :nth-child(1) > * {
       border-bottom-color: #889097;
-    }
-
-    tr {
-      td {
-        color: #737373;
-      }
     }
 
     i {
