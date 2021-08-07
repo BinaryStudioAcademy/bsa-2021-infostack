@@ -31,9 +31,9 @@ const PopUp: React.FC<IPopUpProps> = ({ query, isVisible, inputValue, setPopUpTe
   return (
     <Modal show={isVisible}>
       <Modal.Body>
-        <h6 className="text-secondary">{query}</h6>
+        <h6>{query}</h6>
         <input
-          className="workspace-title-input text-secondary w-100 border-0 p-0 mt-2 border-bottom border-secondary"
+          className="workspace-title-input w-100 border-0 p-0 mt-2 border-bottom border-secondary"
           value={inputValue}
           onChange={onInputChange}
           ref={inputElement}

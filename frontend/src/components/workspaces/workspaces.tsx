@@ -87,7 +87,7 @@ const Workspaces: React.FC = () => {
 
   return (
     <div className="workspaces d-flex align-items-center bg-light d-flex flex-column align-items-start p-4 min-vh-100">
-      <h3 className="mt-2 mb-5 text-secondary">Select workspace</h3>
+      <h3 className="mt-2 mb-5">Select workspace</h3>
       {!workspaces && (
         <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
           <Spinner animation="border" variant="secondary" />
