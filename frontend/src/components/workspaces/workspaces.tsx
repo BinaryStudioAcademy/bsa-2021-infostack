@@ -80,6 +80,8 @@ const Workspaces: React.FC = () => {
     if (popUpText) {
       dispatch(workspacesActions.createWorkspace({ title: popUpText }));
       setIsWorkspaceSelected(true);
+    } else {
+      dispatch(workspacesActions.SetCreatingError('Enter name of workspace'));
     }
   };
 
