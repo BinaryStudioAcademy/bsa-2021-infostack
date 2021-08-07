@@ -12,7 +12,7 @@ export const Item: React.FC<Props> = ({ workspace, onClick }) =>
   <Card className="shadow-sm rounded border-0">
     <Button
       variant="light"
-      className="bg-white text-secondary h-100"
+      className="bg-white h-100"
       onClick={(): void => onClick(workspace.id)}>
       <Card.Body className="d-flex align-items-center justify-content-center">
         <Card.Title className={getAllowedClasses(styles.workspaceTitle)}>{ workspace.title }</Card.Title>

@@ -65,8 +65,8 @@ const Workspaces: React.FC = () => {
 
   return (
     <div className="bg-light">
-      <BootstrapContainer className="position-relative pt-5 vh-100">
-        <h1 className="h3">Select the workspace</h1>
+      <BootstrapContainer className="position-relative d-flex flex-column align-items-center pt-5 vh-100">
+        <h1 className="h3 mb-5">Select the workspace</h1>
         {workspaces
           ? <Container
             workspaces={workspaces}
@@ -88,6 +88,7 @@ const Workspaces: React.FC = () => {
           confirmButton={{
             text: 'Save',
             onClick: handleCreationConfirm,
+            disabled: !popUpText,
           }}
         />
       </BootstrapContainer>
