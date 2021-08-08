@@ -29,8 +29,6 @@ const ProfileInfo: React.FC = () => {
         .then((user) => {
           if (user.id.length > 0) {
             if (mounted) {
-              // eslint-disable-next-line no-console
-              console.log(user.avatar);
               setPermission(true);
               setUser(user);
             }
