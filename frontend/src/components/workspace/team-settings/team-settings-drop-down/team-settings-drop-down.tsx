@@ -1,10 +1,13 @@
 import { ITeam } from 'common/interfaces/team';
-import Dropdown from 'react-bootstrap/Dropdown';
-import NavItem from 'react-bootstrap/NavItem';
-import NavLink from 'react-bootstrap/NavLink';
-import { useState, useAppDispatch, useEffect } from 'hooks/hooks';
-import EditTeamPopUp from '../edit-team-popup/edit-team-popup';
-import { settingsActions } from 'store/settings';
+import { Dropdown, NavItem, NavLink }  from 'react-bootstrap';
+import { Popup } from '../../../common/popup/popup';
+import { teamsActions } from 'store/teams';
+import {
+  useState,
+  useAppDispatch,
+  useEffect,
+  useAppSelector,
+} from 'hooks/hooks';
 import './styles.scss';
 
 interface IDropDownProps {
@@ -12,6 +15,7 @@ interface IDropDownProps {
 }
 
 const TeamSettingsDropDown: React.FC<IDropDownProps> = ({ team }) => {
+  const { editingError } = useAppSelector((state) => state.teamSettings);
   const dispatch = useAppDispatch();
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
@@ -26,17 +30,18 @@ const TeamSettingsDropDown: React.FC<IDropDownProps> = ({ team }) => {
     setIsPopUpVisible(true);
   };
 
-  const onCancelEditing = (): void => {
+  const handleEditingCancel = (): void => {
     setIsPopUpVisible(false);
   };
 
-  const onConfirmEditing = (): void => {
-    onCancelEditing();
-    dispatch(settingsActions.updateTeam({ ...team, name: popUpText }));
+  const handleEditingConfirm = (): void => {
+    if (popUpText) {
+      dispatch(teamsActions.updateTeam({ ...team, name: popUpText }));
+    }
   };
 
   const onDeleteTeamButtonClick = (): void  => {
-    dispatch(settingsActions.deleteTeam(team.id));
+    dispatch(teamsActions.deleteTeam(team.id));
   };
 
   return (
@@ -57,18 +62,20 @@ const TeamSettingsDropDown: React.FC<IDropDownProps> = ({ team }) => {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <EditTeamPopUp
+      <Popup
         query="Edit name of team:"
         isVisible={isPopUpVisible}
         inputValue={popUpText}
+        error={editingError}
         setPopUpText={setPopUpText}
         cancelButton={{
           text: 'Cancel',
-          onClick: onCancelEditing,
+          onClick: handleEditingCancel,
         }}
         confirmButton={{
           text: 'Save',
-          onClick: onConfirmEditing,
+          onClick: handleEditingConfirm,
+          disabled: !popUpText,
         }}
       />
     </div>

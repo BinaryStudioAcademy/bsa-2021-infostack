@@ -1,34 +1,30 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { SettingsApi, WorkspaceApi } from 'services';
+import { TeamApi } from 'services';
 import { ITeamCreation, ITeamEditing } from 'common/interfaces/team';
-
-const loadUsers = createAsyncThunk(
-  ActionType.SetUsers,
-  async (_, { dispatch }): Promise<void> => {
-    const response = await new WorkspaceApi().loadUsers();
-    dispatch(actions.setUsers(response));
-  },
-);
+import { HttpCode } from 'common/enums/enums';
 
 const loadTeams = createAsyncThunk(
-  ActionType.SetTeams,
+  ActionType.setTeams,
   async (_, { dispatch }): Promise<void> => {
-    const response = await new SettingsApi().loadTeams();
-    dispatch(actions.SetTeams(response));
+    const response = await new TeamApi().loadTeams();
+    dispatch(actions.setTeams(response));
   },
 );
 
 const createTeam = createAsyncThunk(
-  ActionType.SetCurrentTeamID,
+  ActionType.setCurrentTeamID,
   async (payload: ITeamCreation, { dispatch }) => {
     try {
-      const team = await new SettingsApi().createTeam(payload);
-      dispatch(actions.SetCurrentTeamID(team.id));
-      dispatch(actions.AddTeam(team));
+      const team = await new TeamApi().createTeam(payload);
+      dispatch(actions.setCurrentTeamID(team.id));
+      dispatch(actions.addTeam(team));
+      dispatch(actions.removeCreatingError());
     } catch (err) {
-      alert(err);
+      if (err.status === HttpCode.CONFLICT) {
+        dispatch(actions.setCreatingError(err.message));
+      }
     }
   },
 );
@@ -37,10 +33,13 @@ const updateTeam = createAsyncThunk(
   ActionType.updateTeam,
   async (payload: ITeamEditing, { dispatch }) => {
     try {
-      const team = await new SettingsApi().updateTeam(payload);
+      const team = await new TeamApi().updateTeam(payload);
       dispatch(actions.updateTeam(team));
+      dispatch(actions.removeEditingError());
     } catch (err) {
-      alert(err);
+      if (err.status === HttpCode.CONFLICT) {
+        dispatch(actions.setEditingError(err.message));
+      }
     }
   },
 );
@@ -49,7 +48,7 @@ const deleteTeam = createAsyncThunk(
   ActionType.deleteTeam,
   async (payload: string, { dispatch }) => {
     try {
-      await new SettingsApi().deleteTeam(payload);
+      await new TeamApi().deleteTeam(payload);
       dispatch(actions.deleteTeam(payload));
     } catch (err) {
       alert(err);
@@ -57,13 +56,12 @@ const deleteTeam = createAsyncThunk(
   },
 );
 
-const settingsActions = {
+const teamsActions = {
   ...actions,
-  loadUsers,
   loadTeams,
   createTeam,
   updateTeam,
   deleteTeam,
 };
 
-export { settingsActions };
+export { teamsActions };

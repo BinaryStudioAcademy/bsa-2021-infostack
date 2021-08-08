@@ -17,7 +17,7 @@ export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Actions'];
 const UsersSettings: React.FC = () => {
   const [cookies] = useCookies();
   const dispatch = useAppDispatch();
-  const users = useAppSelector((state) => state.settings.users);
+  const users = useAppSelector((state) => state.workspace.users);
 
   useEffect(() => {
     const workspaceId = cookies[CookieVariable.WORKSPACE_ID];

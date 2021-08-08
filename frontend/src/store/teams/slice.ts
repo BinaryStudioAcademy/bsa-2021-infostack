@@ -8,28 +8,29 @@ type State = {
   users: IWorkspaceUser[];
   teams: ITeam[];
   SetCurrentTeamID: string;
+  editingError: string;
+  creatingError: string;
 };
 
 const initialState: State = {
   users: [],
   teams: [],
   SetCurrentTeamID: '',
+  editingError: '',
+  creatingError: '',
 };
 
 const { reducer, actions } = createSlice({
-  name: ReducerName.SETTINGS,
+  name: ReducerName.TEAMS,
   initialState,
   reducers: {
-    [ActionType.SetUsers]: (state, action: PayloadAction<IWorkspaceUser[]>) => {
-      state.users = action.payload;
-    },
-    [ActionType.SetTeams]: (state, action: PayloadAction<ITeam[]>) => {
+    [ActionType.setTeams]: (state, action: PayloadAction<ITeam[]>) => {
       state.teams = action.payload;
     },
-    [ActionType.SetCurrentTeamID]: (state, action: PayloadAction<string>) => {
+    [ActionType.setCurrentTeamID]: (state, action: PayloadAction<string>) => {
       state.SetCurrentTeamID = action.payload;
     },
-    [ActionType.AddTeam]: (state, action: PayloadAction<ITeam>) => {
+    [ActionType.addTeam]: (state, action: PayloadAction<ITeam>) => {
       state.teams.push(action.payload);
     },
     [ActionType.updateTeam]: (state, action: PayloadAction<ITeam>) => {
@@ -42,6 +43,18 @@ const { reducer, actions } = createSlice({
       state.teams = state.teams.filter(
         (team: ITeam) => team.id !== action.payload,
       );
+    },
+    [ActionType.setCreatingError]: (state, action: PayloadAction<string>) => {
+      state.creatingError = action.payload;
+    },
+    [ActionType.removeCreatingError]: (state) => {
+      state.creatingError = '';
+    },
+    [ActionType.setEditingError]: (state, action: PayloadAction<string>) => {
+      state.editingError = action.payload;
+    },
+    [ActionType.removeEditingError]: (state) => {
+      state.editingError = '';
     },
   },
 });

@@ -2,7 +2,7 @@ import { ITeam, ITeamCreation, ITeamEditing } from 'common/interfaces/team';
 import { Http } from 'services/http/http.service';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 
-class SettingsApi {
+class TeamApi {
   private http = new Http();
   private BASE = '/api/settings';
 
@@ -35,4 +35,4 @@ class SettingsApi {
   }
 }
 
-export { SettingsApi };
+export { TeamApi };

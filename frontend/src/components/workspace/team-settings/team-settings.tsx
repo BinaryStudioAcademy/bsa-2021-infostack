@@ -1,21 +1,27 @@
 import { ITeam } from 'common/interfaces/team';
 import Spinner from 'react-bootstrap/Spinner';
-import { useState, useEffect, useAppSelector, useAppDispatch } from 'hooks/hooks';
-import { settingsActions } from 'store/settings';
+import { teamsActions } from 'store/teams';
 import TeamItem from './team-item/team-item';
 import CreateTeamButton from './create-team-button/create-team-button';
-import PopUp from './create-team-popup/create-team-popup';
+import { Popup } from '../../common/popup/popup';
+import {
+  useState,
+  useEffect,
+  useAppSelector,
+  useAppDispatch,
+} from 'hooks/hooks';
 
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
+  const { teams, creatingError } = useAppSelector((state) => state.teamSettings);
   const dispatch = useAppDispatch();
-  const teams = useAppSelector((state) => state.settings.teams);
+
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
 
   useEffect(() => {
-    dispatch(settingsActions.loadTeams());
+    dispatch(teamsActions.loadTeams());
   }, []);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
@@ -23,21 +29,22 @@ const TeamSettings: React.FC = () => {
   };
 
   const onTeamItemClick = (id: string): void => {
-    dispatch(settingsActions.SetCurrentTeamID(id));
+    dispatch(teamsActions.setCurrentTeamID(id));
   };
 
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
   };
 
-  const onCancelCreationTeam = (): void => {
+  const handleCreationCancel = (): void => {
     setIsPopUpVisible(false);
     setPopUpText('');
   };
 
-  const onConfirmCreationTeam = (): void => {
-    onCancelCreationTeam();
-    dispatch(settingsActions.createTeam({ name: popUpText }));
+  const handleCreationConfirm = (): void => {
+    if (popUpText) {
+      dispatch(teamsActions.createTeam({ name: popUpText }));
+    }
   };
 
   return (
@@ -59,18 +66,20 @@ const TeamSettings: React.FC = () => {
           {teams.map((team: ITeam) => renderTeamItem(team))}
         </div>
       }
-      <PopUp
+      <Popup
         query="Enter name of team:"
         isVisible={isPopUpVisible}
         inputValue={popUpText}
         setPopUpText={setPopUpText}
+        error={creatingError}
         cancelButton={{
           text: 'Cancel',
-          onClick: onCancelCreationTeam,
+          onClick: handleCreationCancel,
         }}
         confirmButton={{
           text: 'Save',
-          onClick: onConfirmCreationTeam,
+          onClick: handleCreationConfirm,
+          disabled: !popUpText,
         }}
       />
     </div>

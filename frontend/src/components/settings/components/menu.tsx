@@ -56,7 +56,7 @@ const Menu: React.FC = () => {
             eventKey="teams"
             className={getAllowedClasses(styles.menuItem)}
           >
-            Users
+            Teams
           </ListGroup.Item>
         )}
       </ListGroup>

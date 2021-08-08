@@ -1,26 +1,19 @@
 import { getCustomRepository } from 'typeorm';
-import { IWorkspaceUser } from '../common/interfaces/workspace/workspace-user';
-import { ITeam, ITeamCreation } from '../common/interfaces/team/team.interface';
 import {
   IWorkspace,
+  IWorkspaceUserRole,
+  IWorkspaceUser,
   IWorkspaceCreation,
 } from 'infostack-shared/common/interfaces';
+import { ITeam, ITeamCreation } from 'infostack-shared/common/interfaces';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import { mapWorkspaceToTeams } from '../common/mappers/team/map-workspace-to-teams';
+import { mapUsersToTeamUsers } from '../common/mappers/team/map-users-to-team-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { RoleType } from '../common/enums/role-type';
 import TeamRepository from '../data/repositories/team.repository';
-
-export const getWorkspaceTeams = async (
-  workspaceId: string,
-): Promise<ITeam[]> => {
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findByIdWithTeams(workspaceId);
-  return mapWorkspaceToTeams(workspace);
-};
-import { IWorkspaceUserRole } from '../common/interfaces/workspace/workspace-user-role';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -43,7 +36,6 @@ export const getWorkspaceUserRole = async (
       userId,
       workspaceId,
     );
-
   return { role: userWorkspace.role };
 };
 
@@ -87,12 +79,27 @@ export const create = async (
   return { id: workspace.id, title: workspace.name };
 };
 
+export const getWorkspaceTeams = async (
+  workspaceId: string,
+): Promise<ITeam[]> => {
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const workspace = await workspaceRepository.findByIdWithTeams(workspaceId);
+  return mapWorkspaceToTeams(workspace);
+};
+
 export const createTeam = async (
   userId: string,
   workspaceId: string,
   data: ITeamCreation,
 ): Promise<ITeam> => {
   const teamRepository = getCustomRepository(TeamRepository);
+  const isNameUsed = await teamRepository.findByName(data.name);
+  if (isNameUsed) {
+    throw new HttpError({
+      status: HttpCode.CONFLICT,
+      message: HttpErrorMessage.TEAM_NAME_ALREADY_EXISTS,
+    });
+  }
   const userRepository = getCustomRepository(UserRepository);
   const team = teamRepository.create({ name: data.name, workspaceId });
   await teamRepository.save(team);
@@ -108,10 +115,17 @@ export const updateTeam = async (
   body: { name: string },
 ): Promise<ITeam> => {
   const teamRepository = getCustomRepository(TeamRepository);
+  const isNameUsed = await teamRepository.findByName(body.name);
+  if (isNameUsed) {
+    throw new HttpError({
+      status: HttpCode.CONFLICT,
+      message: HttpErrorMessage.TEAM_NAME_ALREADY_EXISTS,
+    });
+  }
   const teamToUpdate = await teamRepository.findByWithUsers(teamId);
   teamToUpdate.name = body.name || teamToUpdate.name;
   const { id, name, workspaceId, users } = await teamRepository.save(teamToUpdate);
-  const teamUsers = users.map(({ id, fullName, avatar }) => ({ id, fullName, avatar }));
+  const teamUsers = mapUsersToTeamUsers(users);
   return { id, name, workspaceId, users: teamUsers };
 };
 
@@ -121,6 +135,6 @@ export const deleteTeam = async (
   const teamRepository = getCustomRepository(TeamRepository);
   const teamToRemove = await teamRepository.findByWithUsers(id);
   const { name, workspaceId, users } = await teamRepository.remove(teamToRemove);
-  const teamUsers = users.map(({ id, fullName, avatar }) => ({ id, fullName, avatar }));
+  const teamUsers = mapUsersToTeamUsers(users);
   return { id, workspaceId, name, users: teamUsers };
 };

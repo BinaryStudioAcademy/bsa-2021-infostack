@@ -1,1 +1,1 @@
-export { ITeam, ITeamCreation } from 'infostack-shared';
+export { ITeam, ITeamCreation, ITeamUser } from 'infostack-shared';

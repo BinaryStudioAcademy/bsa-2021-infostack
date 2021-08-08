@@ -17,6 +17,10 @@ class TeamRepository extends Repository<Team> {
       },
     );
   }
+
+  public findByName(name: string): Promise<Team> {
+    return this.findOne({ name });
+  }
 }
 
 export default TeamRepository;
