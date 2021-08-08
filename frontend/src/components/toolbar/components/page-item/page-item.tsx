@@ -4,11 +4,12 @@ import { getAllowedClasses } from 'helpers/dom/dom';
 import { IPage } from 'common/interfaces/page';
 import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
-import { useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { pagesActions } from 'store/pages';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from '../plus-button/plus-button-root';
 import { RootState } from 'common/types/types';
+import { useState } from 'react';
 
 type Props = {
   title?: string;
@@ -18,8 +19,8 @@ type Props = {
 
 const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const [activeKey, setActiveKey] = useState<undefined | string>(undefined);
 
   const addSubPage = async ( event: React.MouseEvent<HTMLElement>, id?: string ): Promise<void> => {
     event.stopPropagation();
@@ -27,16 +28,16 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
     await dispatch(pagesActions.createPage(payload));
     await dispatch(pagesActions.getPagesAsync());
+    setActiveKey(id);
   };
 
   const getPageById = async ( id?: string ): Promise<void> => {
     const payload: string | undefined = id;
-    await dispatch(pagesActions.getPage(payload));
+    if(id !== currentPage?.id) {
+      await dispatch(pagesActions.getPage(payload));
+    }
+    return;
   };
-
-  useEffect(() => {
-    history.push(`${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${currentPage?.id}`);
-  },[currentPage]);
 
   type LinkProps = {
     id?: string;
@@ -58,8 +59,8 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
   return (
     <>
-      <Accordion flush key={id}>
-        <Accordion.Item eventKey="0" className="bg-transparent">
+      <Accordion flush key={id} activeKey={activeKey} onSelect={():void => setActiveKey(undefined)}>
+        <Accordion.Item eventKey={id as string} className="bg-transparent">
 
           {childPages && childPages.length ?
             <>
