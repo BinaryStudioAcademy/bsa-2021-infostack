@@ -1,0 +1,156 @@
+.accordion {
+    text-align: left;
+    background-color: #293042;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #a9a9a9;
+}
+
+.pageItem {
+    color: rgba(233, 236, 239, .5);
+    transition: color 0.2s;
+    font-size: 13px;
+    height: 30px;
+}
+
+.pageItem a {
+    text-decoration: none;
+    color: rgba(233, 236, 239, .5);
+}
+
+.pageItem a:hover {
+    color: rgba(233, 236, 239, .75);
+}
+
+:global(.accordion-button) {
+    padding-top: 0px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0px;
+}
+
+:global(.accordion-body) {
+    padding-left: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: medium;
+    background-color: #293042;
+    padding-right: 0;
+}
+
+:global(.accordion-header),
+:global(.accordion-button) {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+:global(.accordion-button::after) {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+:global(.accordion-button:focus) {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+:global(.accordion-button:not(.collapsed)) {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.plus :global(.bi) {
+    color: rgba(233, 236, 239, 0);
+    transition: color 0.2s;
+    margin-right: -4px;
+}
+
+.plusRoot :global(.bi) {
+    color: rgba(233, 236, 239, .9);
+    margin-top: -30px;
+    margin-right: -4px;
+}
+
+:global(.accordion-button:not(.collapsed)::after) {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+:global(.accordion-header:hover) :global(.bi) {
+    color: rgba(233, 236, 239, .5);
+}
+
+.pageItem:hover :global(.bi) {
+    color: rgba(233, 236, 239, .5);
+    margin-top: -30px;
+}
+
+.plus:hover :global(.bi) {
+    color: rgba(233, 236, 239, .75);
+    cursor: pointer;
+}
+
+.plusRoot:hover :global(.bi) {
+    color: white;
+    cursor: pointer;
+}
+
+.greyTextColor {
+    background-color: #293042;
+    color: rgba(233, 236, 239, 0.5);
+    margin-left: 0;
+    padding: 0;
+    font-size: small;
+}
+
+.accordionItem {
+    font-size: medium;
+    background-color: #293042;
+    border: none;
+    box-shadow: none;
+}
+
+.accordionItem .accordionHeader {
+    font-size: small;
+}
+
+.accordionItem .accordionHeader button:hover span {
+    color: rgba(233, 236, 239, .75);
+    cursor: pointer;
+}
+
+.accordionItem .accordionHeader button:focus {
+    border: none;
+    box-shadow: none;
+}
+
+.accordionItem .accordionHeader button:focus span {
+    color: rgba(233, 236, 239, .75);
+}
+
+.logoToolbar {
+    color: white;
+    margin: 50px;
+    margin-top: 80px;
+    font-size: 20px;
+}
+
+.sectionName {
+    font-size: 1.6rem;
+    color: #ced4da;
+    display: inline-block;
+}
+
+.navbarLinkInsideSection {
+    padding: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}

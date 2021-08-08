@@ -1,41 +1,69 @@
-.userSettingsContainer {
-  width: 100%;
+.card {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  margin-bottom: 200px;
+  word-wrap: break-word;
+  background-clip: border-box;
+  background-color: #fff;
+  border: 0 solid transparent;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  min-height: 32.5rem;
 
-  font-size: 1.6rem;
-  text-align: left;
+  .header {
+    background-color: #fff;
+    border-bottom: 0 solid transparent;
+    margin-bottom: 0;
+    padding: 1.6rem 2rem;
 
-  .tableHead {
-    color: #737d85;
-
-    font-size: 1.6rem;
-    font-weight: bold;
-  }
-
-  & > .table > .tableHead > :nth-child(1) > * {
-    border-bottom-color: #889097;
-  }
-
-  tr {
-    td {
-      color: #737373;
+    .title {
+      font-size: 1.52rem;
+      margin-bottom: 0;
     }
   }
 
-  i {
-    color: #737373;
+  .body {
+    flex: 1 1 auto;
+    padding: 2rem;
 
-    cursor: pointer;
-  }
+    tr {
+      font-size: 1.2rem;
 
-  .trashIcon {
-    margin-left: 1rem;
-  }
+      td {
+        color: #737373;
+      }
+    }
 
-  .addUser {
-    cursor: pointer;
-  }
+    .tableHead {
+      color: #737d85;
 
-  .addTeam {
-    cursor: pointer;
+      tr {
+        font-size: 1.32rem;
+      }
+    }
+
+    & > .table > .tableHead > :nth-child(1) > * {
+      border-bottom-color: #889097;
+    }
+
+    i {
+      color: #737373;
+
+      cursor: pointer;
+    }
+
+    .trashIcon {
+      margin-left: 1rem;
+    }
+
+    .addUser {
+      cursor: pointer;
+    }
+
+    .addTeam {
+      cursor: pointer;
+    }
   }
 }

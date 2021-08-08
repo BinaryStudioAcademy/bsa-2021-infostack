@@ -20,6 +20,10 @@ export const getWorkspaceTeams = async (
   const workspace = await workspaceRepository.findByIdWithTeams(workspaceId);
   return mapWorkspaceToTeams(workspace);
 };
+import { IWorkspaceUserRole } from '../common/interfaces/workspace/workspace-user-role';
+import { HttpError } from '../common/errors/http-error';
+import { HttpCode } from '../common/enums/http-code';
+import { HttpErrorMessage } from '../common/enums/http-error-message';
 
 export const getWorkspaceUsers = async (
   workspaceId: string,
@@ -27,6 +31,20 @@ export const getWorkspaceUsers = async (
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findByIdWithUsers(workspaceId);
   return mapWorkspaceToWorkspaceUsers(workspace);
+};
+
+export const getWorkspaceUserRole = async (
+  userId: string,
+  workspaceId: string,
+): Promise<IWorkspaceUserRole> => {
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
+
+  return { role: userWorkspace.role };
 };
 
 export const getAll = async (userId: string): Promise<IWorkspace[]> => {
@@ -49,6 +67,14 @@ export const create = async (
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
   const userRepository = getCustomRepository(UserRepository);
+  const isTitleUsed = await workspaceRepository.findByName(data.title);
+  if (isTitleUsed) {
+    throw new HttpError({
+      status: HttpCode.CONFLICT,
+      message: HttpErrorMessage.WORKSPACE_ALREADY_EXISTS,
+    });
+  }
+
   const user = await userRepository.findById(userId);
   const workspace = workspaceRepository.create({ name: data.title });
   await workspaceRepository.save(workspace);
@@ -70,7 +96,7 @@ export const createTeam = async (
   const userRepository = getCustomRepository(UserRepository);
   const team = teamRepository.create({ name: data.name, workspaceId });
   await teamRepository.save(team);
-  const user = await userRepository.findByIdWithTeams(userId);
+  const user = await userRepository.findUserTeams(userId);
   user.teams.push(team);
   userRepository.save(user);
   const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
