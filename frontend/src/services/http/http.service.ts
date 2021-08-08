@@ -57,6 +57,14 @@ class Http {
       const token = accessToken || localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
       const headers = this.getHeaders(contentType, token);
 
+      // eslint-disable-next-line no-console
+      console.log({
+        url,
+        method,
+        headers,
+        body: payload,
+      });
+
       const response = await fetch(url, {
         method,
         headers,
@@ -156,4 +164,6 @@ class Http {
   };
 }
 
-export { Http };
+const http = new Http();
+
+export { http, Http };
