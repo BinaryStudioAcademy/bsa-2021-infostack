@@ -7,8 +7,10 @@ import { IPageRequest } from 'common/interfaces/pages';
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
     const createPageResponse = await new PageApi().createPage(createPayload);
     dispatch(actions.createPage(createPageResponse));
+    dispatch(actions.toggleSpinner());
   },
 );
 

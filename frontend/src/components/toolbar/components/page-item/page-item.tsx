@@ -4,10 +4,11 @@ import { getAllowedClasses } from 'helpers/dom/dom';
 import { IPage } from 'common/interfaces/page';
 import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
 import { pagesActions } from 'store/pages';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from '../plus-button/plus-button-root';
+import { RootState } from 'common/types/types';
 
 type Props = {
   title?: string;
@@ -17,6 +18,8 @@ type Props = {
 
 const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const dispatch = useAppDispatch();
+  const history = useHistory();
+  const { currentPage } = useAppSelector((state: RootState) => state.pages);
 
   const addSubPage = async ( event: React.MouseEvent<HTMLElement>, id?: string ): Promise<void> => {
     event.stopPropagation();
@@ -31,16 +34,23 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
     await dispatch(pagesActions.getPage(payload));
   };
 
+  useEffect(() => {
+    history.push(`${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${currentPage?.id}`);
+  },[currentPage]);
+
   type LinkProps = {
     id?: string;
   };
 
+  const isSelected = id === currentPage?.id ? styles.selectedPage : '';
+
   const LinkWithTitle: React.FC<LinkProps> = ({ id }) => {
+
     return (
       <Link
         onClick={(): Promise<void> => getPageById(id)}
         to={ `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${id}` as AppRoute }
-        className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex')}
+        className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', `${isSelected}` )}
       >{title}
       </Link>
     );
