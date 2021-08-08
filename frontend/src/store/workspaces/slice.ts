@@ -6,11 +6,13 @@ import { ActionType } from './common';
 type State = {
   workspaces: IWorkspace[] | null;
   currentWorkspaceID: string;
+  creatingError: string;
 };
 
 const initialState: State = {
   workspaces: null,
   currentWorkspaceID: '',
+  creatingError: '',
 };
 
 const { reducer, actions } = createSlice({
@@ -25,6 +27,12 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.RemoveCurrentWorkspaceID]: (state) => {
       state.currentWorkspaceID = '';
+    },
+    [ActionType.SetCreatingError]: (state, action: PayloadAction<string>) => {
+      state.creatingError = action.payload;
+    },
+    [ActionType.RemoveCreatingError]: (state) => {
+      state.creatingError = '';
     },
   },
 });
