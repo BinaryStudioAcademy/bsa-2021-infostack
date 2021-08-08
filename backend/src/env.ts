@@ -7,6 +7,7 @@ dotenv.config();
 export const env = {
   app: {
     port: getOsEnv('PORT'),
+    url: getOsEnv('APP_URL'),
     secretKey: getOsEnv('APP_SECRET'),
     nodeEnv: getOsEnv('NODE_ENV'),
   },
@@ -28,5 +29,14 @@ export const env = {
     accessKeyId: getOsEnv('AWS_ACCESS_KEY'),
     secretAccessKey: getOsEnv('AWS_SECRET_KEY'),
     bucketName: getOsEnv('AWS_BUCKET_NAME'),
+  },
+  mailer: {
+    service: getOsEnv('MAILER_SERVICE'),
+    auth: {
+      user: getOsEnv('MAILER_AUTH_USER'),
+      clientId: getOsEnv('MAILER_AUTH_CLIENT_ID'),
+      clientSecret: getOsEnv('MAILER_AUTH_CLIENT_SECRET'),
+      refreshToken: getOsEnv('MAILER_AUTH_REFRESH_TOKEN'),
+    },
   },
 } as const;

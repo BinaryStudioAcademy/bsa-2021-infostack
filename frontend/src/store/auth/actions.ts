@@ -13,6 +13,7 @@ const login = createAsyncThunk(
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
     localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, loginResponse.accessToken);
+    localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, loginResponse.refreshToken);
     dispatch(actions.setUser(loginResponse));
   },
 );
@@ -25,6 +26,7 @@ const register = createAsyncThunk(
   ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
     localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, registerResponse.accessToken);
+    localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, registerResponse.refreshToken);
     dispatch(actions.setUser(registerResponse));
   },
 );
@@ -32,8 +34,11 @@ const register = createAsyncThunk(
 const logout = createAsyncThunk(
   ActionType.RemoveUser,
   async (payload: undefined, { dispatch }): Promise<void> => {
+    const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
     localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
+    localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
     dispatch(actions.removeUser());
+    if (refreshToken) await new AuthApi().logout({ refreshToken });
   },
 );
 

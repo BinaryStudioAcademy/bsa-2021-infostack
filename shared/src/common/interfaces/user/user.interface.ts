@@ -4,7 +4,7 @@ interface IUser {
   id: string;
   fullName: string;
   email: string;
-  title: string;
+  title?: string;
   skills?: ISkill[];
   avatar: string;
 }
