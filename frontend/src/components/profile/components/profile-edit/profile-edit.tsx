@@ -5,7 +5,9 @@ import { Button, Form, Col, Image, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from '../../../../helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { RootState } from 'common/types/types';
-import { UserApi } from 'services';
+import { UserApi, SkillApi } from 'services';
+import { ISkill } from 'common/interfaces/skill';
+import CreatableSelect from 'react-select/creatable';
 import styles from './profile-edit.module.scss';
 
 const ProfileEdit: React.FC = () => {
@@ -13,38 +15,70 @@ const ProfileEdit: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [userFullName, setUserFullName] = useState('');
   const [userTitle, setUserTitle] = useState('');
+  const [allSkills, setAllSkills] = useState<ISkill[]>([]);
+  const [userSkills, setUserSkills] = useState<ISkill[]>([]);
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
   const { user } = useSelector((state: RootState) => state.auth);
   const userApi = new UserApi();
+  const skillApi = new SkillApi();
 
   useEffect(() => {
     if (user) {
       setUserFullName(user.fullName);
       setUserTitle(user.title);
+      const skills = user.skills?.map(({ id, name }) => ({ value:id, label: name } as ISkill));
+      setUserSkills(skills ?? []);
     }
+  }, [user]);
+
+  useEffect(() => {
+    skillApi.getAllSkills().then((response) => {
+      const skills = response.map((skill) => {
+        const { id, name } = skill;
+        return { value: id, label: name } as ISkill;
+      });
+
+      setAllSkills(skills);
+    });
   }, []);
 
   const handleSaveChanges = async (): Promise<void> => {
     if (user) {
-      if (userFullName !== user.fullName || userTitle !== user.title) {
-        setIsUploading(true);
+      setIsUploading(true);
+      const skills = userSkills.map(({ value }) => value) as ISkill[];
 
-        const updatedUser = await userApi
-          .update(user.id, { ...user, fullName: userFullName, title: userTitle })
-          .then((data) => data);
-        dispatch(
-          authActions.setUser({
-            id: updatedUser.id,
-            fullName: updatedUser.fullName,
-            avatar: updatedUser.avatar,
-            email: updatedUser.email,
-            title: updatedUser.title,
-          }),
-        );
-        setUserFullName(updatedUser.fullName);
-        setUserTitle(updatedUser.title);
-      }
+      const updatedUser = await userApi
+        .update(user.id, { ...user, fullName: userFullName, title: userTitle, skills })
+        .then((data) => data);
+      dispatch(
+        authActions.setUser({
+          id: updatedUser.id,
+          fullName: updatedUser.fullName,
+          avatar: updatedUser.avatar,
+          email: updatedUser.email,
+          title: updatedUser.title,
+          skills: updatedUser.skills,
+        }),
+      );
+
+      setUserFullName(updatedUser.fullName);
+      setUserTitle(updatedUser.title);
+
+      const sortedSkills = (): ISkill[] => {
+        const result = [] as ISkill[];
+        updatedUser.skills?.forEach((item) => {
+          skills.forEach((skill, i) => {
+            if(item.id === skill) {
+              result[i] = item;
+            }
+          });
+        });
+
+        return result.map(({ id, name }) => ({ value: id, label: name }));
+      };
+
+      setUserSkills(sortedSkills());
 
       if (selectedFile) {
         setIsUploading(true);
@@ -60,6 +94,7 @@ const ProfileEdit: React.FC = () => {
             avatar: updatedUser.avatar,
             email: updatedUser.email,
             title: updatedUser.title,
+            skills: updatedUser.skills,
           }),
         );
 
@@ -82,6 +117,32 @@ const ProfileEdit: React.FC = () => {
       reader.readAsDataURL(selectedFile);
       setSelectedFile(selectedFile);
     }
+  };
+
+  const handleInputChange = (inputValue: any): void => {
+    const lastSkill = inputValue[inputValue.length - 1];
+    if(lastSkill.__isNew__) {
+      skillApi.createSkill(lastSkill.value).then((response: any) => {
+
+        setAllSkills((oldSkills) => {
+          const newSkills = [...oldSkills];
+          inputValue[inputValue.length - 1].value = response.id;
+          const addedSkill = { value:  response.id, label: response.name } as ISkill;
+          newSkills[newSkills.length] = addedSkill;
+
+          return newSkills;
+        });
+      });
+    }
+
+    const result = inputValue.map((item: ISkill) => {
+      if(item.__isNew__) {
+        item.value = lastSkill;
+      }
+
+      return item;
+    });
+    setUserSkills(result);
   };
 
   return (
@@ -138,6 +199,19 @@ const ProfileEdit: React.FC = () => {
                   value={userTitle}
                   onChange={(e): void => setUserTitle(e.target.value)}
                 />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGroupSelect">
+                <Form.Label
+                  className={getAllowedClasses(styles.cardInputLabel)}
+                >
+                  Skills
+                </Form.Label>
+                {<CreatableSelect
+                  isMulti
+                  onChange={handleInputChange}
+                  value={userSkills}
+                  options={allSkills}
+                />}
               </Form.Group>
             </Form>
           </Col>

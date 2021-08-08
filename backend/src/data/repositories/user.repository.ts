@@ -8,7 +8,7 @@ class UserRepository extends Repository<User> {
   }
 
   public findById(id: string):Promise<User> {
-    return this.findOne({ id });
+    return this.findOne({ id }, { relations: ['skills'] });
   }
 }
 
