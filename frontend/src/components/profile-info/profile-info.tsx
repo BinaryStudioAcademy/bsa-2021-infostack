@@ -1,6 +1,5 @@
-/* eslint-disable*/
 import Avatar from 'react-avatar';
-import { useAppSelector } from '../../hooks/hooks';
+import { useState, useEffect, useParams } from '../../hooks/hooks';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,13 +8,48 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { Link } from 'react-router-dom';
 import './profile-info.scss';
+import { UserApi } from 'services';
 
 const ProfileInfo: React.FC = () => {
-  const { user } = useAppSelector(state => state.auth);
+  const [user, setUser] = useState({
+    id: '',
+    avatar: '',
+    fullName: '',
+    email: '',
+  });
+  const [permission, setPermission] = useState(true);
+  const userApi = new UserApi();
+  const { id } = useParams<{ id?: string }>();
+
+  useEffect(() => {
+    let mounted = true;
+    const getUser = async ():Promise<void> => {
+      await userApi
+        .getUserInfo(id)
+        .then((user) => {
+          if (user.id.length > 0) {
+            if (mounted) {
+              // eslint-disable-next-line no-console
+              console.log(user.avatar);
+              setPermission(true);
+              setUser(user);
+            }
+          } else {
+            if (mounted) {
+              setPermission(false);
+            }
+          }
+        });
+    };
+
+    getUser();
+
+    return ():void => { mounted = false; };
+  }, []);
 
   return (
     <Container className="profile-container" fluid>
-      {user ? (user.id.length > 0 ? <>
+      {permission ? (user.id.length > 0 ? <>
         <Row>
           <Col className="d-flex justify-content-start profile-page-title">Profile</Col>
         </Row>
@@ -30,12 +64,17 @@ const ProfileInfo: React.FC = () => {
                       <ListGroup.Item className="card-block-item align-items-center">
                         <Avatar
                           size="100"
-                          name={user.fullName}
-                          src={user.avatar}
+                          name={user?.fullName}
+                          src={user?.avatar
+                            ? user?.avatar.length > user?.id.length
+                              ? user?.avatar
+                              : user?.avatar + `?${performance.now()}`
+                            : ''
+                          }
                           round={true}
                           className="user-avatar"
                         />
-                        <Card.Title className="profile-user-title">{user.fullName}</Card.Title>
+                        <Card.Title className="profile-user-title">{user?.fullName}</Card.Title>
                         <Card.Subtitle className="profile-user-subtitle">Lead Developer</Card.Subtitle>
                       </ListGroup.Item>
                       <ListGroup.Item className="card-block-item">
