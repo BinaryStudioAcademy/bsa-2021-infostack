@@ -11,6 +11,17 @@ class UserRepository extends Repository<User> {
     return this.findOne({ id });
   }
 
+  public findByIdWithTeams(id: string): Promise<User> {
+    return this.findOne(
+      { id },
+      {
+        relations: [
+          'teams',
+        ],
+      },
+    );
+  }
+
   public updatePasswordById(id: string, password: string): Promise<User> {
     return this.save({ id, password });
   }

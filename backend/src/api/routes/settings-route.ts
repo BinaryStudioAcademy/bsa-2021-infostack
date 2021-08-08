@@ -12,12 +12,12 @@ router
 
   .post(
     '/teams',
-    run((req) => createTeam(req.workspaceId, req.body)),
+    run((req) => createTeam(req.userId, req.workspaceId, req.body)),
   )
 
   .put(
     '/teams/:id',
-    run((req) => updateTeam(req.params.id, req.body)),
+    run((req) =>  updateTeam(req.params.id, req.body)),
   )
 
   .delete(

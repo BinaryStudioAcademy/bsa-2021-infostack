@@ -6,6 +6,17 @@ class TeamRepository extends Repository<Team> {
   public findById(id: string):Promise<Team> {
     return this.findOne({ id });
   }
+
+  public findByWithUsers(id: string):Promise<Team> {
+    return this.findOne(
+      { id },
+      {
+        relations: [
+          'users',
+        ],
+      },
+    );
+  }
 }
 
 export default TeamRepository;
