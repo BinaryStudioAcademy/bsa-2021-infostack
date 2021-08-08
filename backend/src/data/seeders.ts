@@ -9,6 +9,10 @@ import TeamPermissionSeeder from './seeders/team-permission.seeder';
 import CommentSeeder from './seeders/comment.seeder';
 import { logger } from '../common/utils/logger.util';
 import ormconfig from '../config/ormconfig';
+import TagSeeder from './seeders/tag.seeder';
+import PageTagSeeder from './seeders/page-tag.seeder';
+import PageContentSeeder from './seeders/page-content.seeder';
+import UserPermissionSeeder from './seeders/user-permission.seeder';
 
 const seeders = async (): Promise<void> => {
   await createConnection(ormconfig);
@@ -21,12 +25,20 @@ const seeders = async (): Promise<void> => {
   await UserWorkspaceSeeder.execute();
   logger.info('Seeding pages');
   await PageSeeder.execute();
+  logger.info('Seeding page_content');
+  await PageContentSeeder.execute();
+  logger.info('Seeding user_permissions');
+  await UserPermissionSeeder.execute();
   logger.info('Seeding teams');
   await TeamSeeder.execute();
   logger.info('Seeding team_members');
   await TeamMemberSeeder.execute();
   logger.info('Seeding team_permissions');
   await TeamPermissionSeeder.execute();
+  logger.info('Seeding tags');
+  await TagSeeder.execute();
+  logger.info('Seeding page_tags');
+  await PageTagSeeder.execute();
   logger.info('Seeding comments');
   await CommentSeeder.execute();
   logger.info('Seeding finished');
