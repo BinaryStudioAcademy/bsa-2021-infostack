@@ -1,3 +1,4 @@
+/* eslint-disable */
 import EventEmitter from 'events';
 import { store } from 'store/store';
 import { HttpError } from 'exceptions/exceptions';
@@ -26,12 +27,11 @@ class Http {
     options: Partial<HttpOptions> = {},
   ): Promise<T> {
     try {
-
-      return this.sendRequest(url, options);
-
+      return await this.sendRequest(url, options);
     } catch (err) {
-
+      console.log(err);
       if (err.status === HttpCode.UNAUTHORIZED) {
+        console.log(this.areTokensRefreshing);
         if (this.areTokensRefreshing) {
           return await this.sendRequestAfterGetToken(url, options);
         } else {
@@ -57,7 +57,6 @@ class Http {
       const token = accessToken || localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
       const headers = this.getHeaders(contentType, token);
 
-      // eslint-disable-next-line no-console
       console.log({
         url,
         method,
@@ -80,7 +79,9 @@ class Http {
       return this.parseJSON<T>(response);
 
     } catch (err) {
+
       this.throwError(err);
+
     }
   }
 

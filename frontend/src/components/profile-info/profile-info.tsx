@@ -65,12 +65,7 @@ const ProfileInfo: React.FC = () => {
                         <Avatar
                           size="100"
                           name={user?.fullName}
-                          src={user?.avatar
-                            ? user?.avatar.length > user?.id.length
-                              ? user?.avatar
-                              : user?.avatar + `?${performance.now()}`
-                            : ''
-                          }
+                          src={user?.avatar ? user?.avatar + `?${performance.now()}` : ''}
                           round={true}
                           className="user-avatar"
                         />
