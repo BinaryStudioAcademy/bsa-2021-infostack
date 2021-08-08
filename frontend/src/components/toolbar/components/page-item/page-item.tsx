@@ -33,11 +33,6 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
     await dispatch(pagesActions.getPagesAsync());
   };
 
-  const getPageById = async (id?: string): Promise<void> => {
-    const payload: string | undefined = id;
-    await dispatch(pagesActions.getPage(payload));
-  };
-
   type LinkProps = {
     id?: string;
   };
@@ -45,7 +40,6 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const LinkWithTitle: React.FC<LinkProps> = ({ id }) => {
     return (
       <Link
-        onClick={(): Promise<void> => getPageById(id)}
         to={
           `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${id}` as AppRoute
         }
