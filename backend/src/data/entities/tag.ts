@@ -6,8 +6,8 @@ import { Workspace } from './workspace';
 @Entity()
 export class Tag extends AbstractEntity {
   @RelationId((tag: Tag) => tag.workspace)
-  @Column({ update: false })
-  workspaceId: string;
+  @Column()
+  readonly workspaceId: string;
 
   @ManyToOne(() => Workspace, (workspace) => workspace.tags)
   workspace: Workspace;
