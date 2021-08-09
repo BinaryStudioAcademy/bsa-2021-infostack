@@ -2,6 +2,14 @@ import { Form, Button } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 import React from 'react';
+import { Link } from 'components/common/common';
+import { AppRoute } from 'common/enums/enums';
+
+type AlternativeRoute = {
+  question: string;
+  linkText: string;
+  route: AppRoute;
+};
 
 type Props = {
   header: string;
@@ -10,6 +18,7 @@ type Props = {
   children: JSX.Element | JSX.Element[];
   onSubmit: (e: React.SyntheticEvent) => void;
   isSubmitDisabled?: boolean;
+  altRoute?: AlternativeRoute;
 };
 
 const Sign: React.FC<Props> = ({
@@ -19,6 +28,7 @@ const Sign: React.FC<Props> = ({
   children,
   onSubmit,
   isSubmitDisabled,
+  altRoute,
 }) => (
   <div className="vh-100 vw-100 d-flex justify-content-center align-items-center bg-light text-center">
     <div className={styles.container}>
@@ -36,6 +46,14 @@ const Sign: React.FC<Props> = ({
           >
             {submitText}
           </Button>
+          {altRoute && (
+            <div className="text-secondary mt-3">
+              {altRoute.question}
+              <Link className="text-decoration-none mx-2" to={altRoute.route}>
+                {altRoute.linkText}
+              </Link>
+            </div>
+          )}
         </div>
       </Form>
     </div>
