@@ -12,7 +12,7 @@ import {
 } from 'hooks/hooks';
 
 const Workspaces: React.FC = () => {
-  const { workspaces, currentWorkspaceID, creatingError } = useAppSelector((state) => state.workspaces);
+  const { workspaces, currentWorkspace, creatingError } = useAppSelector((state) => state.workspaces);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -24,7 +24,7 @@ const Workspaces: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(workspacesActions.RemoveCurrentWorkspaceID());
+    dispatch(workspacesActions.RemoveCurrentWorkspace());
     if (cookies[CookieVariable.WORKSPACE_ID]) {
       removeCookie(CookieVariable.WORKSPACE_ID);
     }
@@ -32,7 +32,7 @@ const Workspaces: React.FC = () => {
   }, []);
 
   const handleItemClick = (id: string): void => {
-    dispatch(workspacesActions.SetCurrentWorkspaceID(id));
+    dispatch(workspacesActions.loadWorkspace(id));
     setIsWorkspaceSelected(true);
   };
 
@@ -46,15 +46,15 @@ const Workspaces: React.FC = () => {
 
   useEffect(() => {
     if (isWorkspaceSelected) {
-      if (currentWorkspaceID) {
+      if (currentWorkspace) {
         handleCreationCancel();
-        setCookie(CookieVariable.WORKSPACE_ID, currentWorkspaceID, { path: '/' });
+        setCookie(CookieVariable.WORKSPACE_ID, currentWorkspace.id, { path: '/' });
         history.push(AppRoute.ROOT);
       } else if (cookies[CookieVariable.WORKSPACE_ID]) {
         removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
       }
     }
-  }, [currentWorkspaceID]);
+  }, [currentWorkspace]);
 
   const handleCreationConfirm = (): void => {
     if (popUpText) {

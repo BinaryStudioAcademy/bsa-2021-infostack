@@ -5,10 +5,10 @@ import {
   IWorkspaceUserRole,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { Http } from 'services/http/http.service';
+import { http } from 'services/http/http.service';
 
 class WorkspaceApi {
-  private http = new Http();
+  private http = http;
   private BASE = '/api/workspaces';
 
   public async create(payload: IWorkspaceCreation): Promise<IWorkspace> {
@@ -21,6 +21,10 @@ class WorkspaceApi {
 
   public async get(): Promise<IWorkspace[]> {
     return this.http.load(this.BASE);
+  }
+
+  public async getById(id: string): Promise<IWorkspace> {
+    return this.http.load(`${this.BASE}/${id}`);
   }
 
   public async loadUsers(id: string): Promise<IWorkspaceUser[]> {
