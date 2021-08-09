@@ -6,6 +6,7 @@ import { authActions } from 'store/actions';
 import { UserApi, SkillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
 import CreatableSelect from 'react-select/creatable';
+import { OptionsType } from 'react-select';
 import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
 
@@ -109,11 +110,12 @@ const ProfileEdit: React.FC = () => {
     }
   };
 
-  const handleInputChange = (inputValue: any): void => {
+  const handleInputChange = (inputValue: OptionsType<ISkill>): void => {
     const lastSkill = inputValue[inputValue.length - 1];
-    if(lastSkill.__isNew__) {
-      skillApi.createSkill(lastSkill.value).then((response: any) => {
+    const lastSkillName = lastSkill.value ?? '';
 
+    if(lastSkill.__isNew__) {
+      skillApi.createSkill(lastSkillName).then((response: ISkill) => {
         setAllSkills((oldSkills) => {
           const newSkills = [...oldSkills];
           inputValue[inputValue.length - 1].value = response.id;
@@ -127,7 +129,7 @@ const ProfileEdit: React.FC = () => {
 
     const result = inputValue.map((item: ISkill) => {
       if(item.__isNew__) {
-        item.value = lastSkill;
+        item.value = lastSkill.value;
       }
 
       return item;

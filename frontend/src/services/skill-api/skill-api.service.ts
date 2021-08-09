@@ -10,14 +10,12 @@ class SkillApi {
     return this.http.load(this.BASE);
   }
 
-  public async createSkill(name: string): Promise<ISkill[]> {
-    const skillResponse: ISkill[] = await this.http.load(this.BASE, {
+  public async createSkill(name: string): Promise<ISkill> {
+    return this.http.load(this.BASE, {
       method: HttpMethod.POST,
       payload: JSON.stringify({ name }),
       contentType: ContentType.JSON,
     });
-
-    return skillResponse;
   }
 }
 
