@@ -21,7 +21,6 @@ const { reducer, actions } = createSlice({
   reducers: {
     [ActionType.SetTags]: (state, action: PayloadAction<ITag[]>) => {
       state.tags = action.payload;
-      // state.tagToEdit = null;
     },
     [ActionType.SetTagToEdit]: (
       state,

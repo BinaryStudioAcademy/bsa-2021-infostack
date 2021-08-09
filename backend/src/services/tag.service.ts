@@ -15,7 +15,7 @@ export const getAllByWorkspaceId = async (
 
 export const create = async (newTag: ITagCreation): Promise<ITag> => {
   const tagRepository = getCustomRepository(TagRepository);
-  if (newTag.name.length === 0) {
+  if (!newTag.name) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
       message: HttpErrorMessage.TAG_EMPTY_STRING,
@@ -49,7 +49,7 @@ export const updateNameById = async (
   name: string,
 ): Promise<{ id: string; name: string }> => {
   const tagRepository = getCustomRepository(TagRepository);
-  if (name.length === 0) {
+  if (!name) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
       message: HttpErrorMessage.TAG_EMPTY_STRING,
