@@ -40,7 +40,7 @@ const DropDown: React.FC<IDropDownProps> = ({ team }) => {
     }
   };
 
-  const onDeleteTeamButtonClick = (): void  => {
+  const handleDeleting = (): void  => {
     dispatch(teamsActions.deleteTeam(team.id));
   };
 
@@ -57,7 +57,7 @@ const DropDown: React.FC<IDropDownProps> = ({ team }) => {
           <Dropdown.Item className="dropdown-item">
             Invite user
           </Dropdown.Item>
-          <Dropdown.Item className="dropdown-item" onClick={onDeleteTeamButtonClick}>
+          <Dropdown.Item className="dropdown-item" onClick={handleDeleting}>
             Delete
           </Dropdown.Item>
         </Dropdown.Menu>
