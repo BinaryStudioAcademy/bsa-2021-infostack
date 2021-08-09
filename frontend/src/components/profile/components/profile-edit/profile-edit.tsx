@@ -13,7 +13,7 @@ const ProfileEdit: React.FC = () => {
   const [userFullName, setUserFullName] = useState('');
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
-  const { user } = useAppSelector(state => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const userApi = new UserApi();
 
   useEffect(() => {
@@ -77,12 +77,12 @@ const ProfileEdit: React.FC = () => {
     >
       <Card.Header className={getAllowedClasses(styles.cardHeader)}>
         <Card.Title as="h5" className={getAllowedClasses(styles.cardTitle)}>
-          Info
+          Public info
         </Card.Title>
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <Row>
-          <Col md={8}>
+          <Col md={8} className="ps-0">
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label
@@ -129,7 +129,7 @@ const ProfileEdit: React.FC = () => {
               className={`${getAllowedClasses(
                 styles.cardButton,
                 styles.uploadLabel,
-              )} mb-3`}
+              )}`}
             >
               <i
                 className={`bi bi-cloud-arrow-up-fill ${getAllowedClasses(

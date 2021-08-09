@@ -11,12 +11,12 @@
     margin: 0 0.75rem 0.75rem 0;
 }
 
-.row {
+.profile-container .row {
     padding-left: calc(var(--bs-gutter-x) * .5);
     padding-right: calc(var(--bs-gutter-x) * .5);
 }
 
-.card {
+.profile-container .card {
     box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
     border: 0 solid transparent;
 }
@@ -31,6 +31,7 @@
     padding: 1rem 1.25rem;
     font-weight: 500;
     margin-bottom: 0rem;
+    color: #495057
 }
 
 .profile-card-title {
@@ -45,9 +46,16 @@
     display: flex;
     flex-direction: column;
 }
+
+.following-pages-container a{
+    display: flex;
+    align-items: center;
+}
+
+
 .following-page {
     padding: 0rem 1.25rem 0.75rem 1.25rem;
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     text-decoration: none;
     font-weight: 500;
     color: #495057;
@@ -62,7 +70,9 @@
 }
 
 .following-page i {
-    color: rgba(0, 0, 255, 0.582);
+    margin-right: 1rem;
+    font-size: 1.8rem;
+    color: #3f80ea;
 }
 
 .profile-user-subtitle{

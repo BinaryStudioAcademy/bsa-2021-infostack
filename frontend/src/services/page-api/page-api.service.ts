@@ -1,16 +1,13 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { IPage, IPageRequest } from 'common/interfaces/pages';
-import { Http } from 'services';
+import { http } from 'services/http/http.service';
 
 class PageApi {
-  private _http: Http;
-
-  constructor() {
-    this._http = new Http();
-  }
+  private http = http;
+  private BASE = '/api/pages';
 
   public async createPage(payload: IPageRequest): Promise<IPage> {
-    return this._http.load('/api/pages', {
+    return this.http.load(this.BASE, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
@@ -18,7 +15,7 @@ class PageApi {
   }
 
   public async createVersionPage(payload: IPageRequest): Promise<IPage> {
-    return this._http.load('/api/pages/:id/version', {
+    return this.http.load(`${this.BASE}/:id/version`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
@@ -26,19 +23,19 @@ class PageApi {
   }
 
   public async getPages(): Promise<IPage[]> {
-    return this._http.load('/api/pages', {
+    return this.http.load(this.BASE, {
       method: HttpMethod.GET,
     });
   }
 
-  public async getPagesFollowedByUser(userId: string): Promise<IPage[]> {
-    return this._http.load(`/api/pages/following/${userId}`, {
+  public async getPage(id?: string ): Promise<IPage> {
+    return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
     });
   }
 
   public async followPage(pageId: string): Promise<IPage[]> {
-    return this._http.load('/api/pages/follow', {
+    return this.http.load('/api/pages/follow', {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify({
@@ -48,7 +45,7 @@ class PageApi {
   }
 
   public async unfollowPage(pageId: string): Promise<IPage[]> {
-    return this._http.load('/api/pages/unfollow', {
+    return this.http.load('/api/pages/unfollow', {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify({
@@ -57,11 +54,11 @@ class PageApi {
     });
   }
 
-  public async getPage(id?: string): Promise<IPage> {
-    return this._http.load(`/api/pages/${id}`, {
-      method: HttpMethod.GET,
-    });
-  }
+  // public async getPage(id?: string): Promise<IPage> {
+  //   return this._http.load(`/api/pages/${id}`, {
+  //     method: HttpMethod.GET,
+  //   });
+  // }
 }
 
 export { PageApi };
