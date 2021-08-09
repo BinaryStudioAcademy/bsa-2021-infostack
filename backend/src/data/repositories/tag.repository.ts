@@ -6,6 +6,9 @@ class TagRepository extends Repository<Tag> {
   public findById(id: string): Promise<Tag> {
     return this.findOne({ id });
   }
+  public findAllByWorkspaceId(workspaceId: string): Promise<Tag[]> {
+    return this.find({ workspaceId });
+  }
 }
 
 export default TagRepository;

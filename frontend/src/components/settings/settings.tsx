@@ -11,6 +11,7 @@ import ProfileEdit from '../profile/components/profile-edit/profile-edit';
 import Menu from './components/menu';
 import { AppRoute } from 'common/enums/enums';
 import UsersSettings from 'components/workspace/users-settings/users-settings';
+import TagsSettings from 'components/workspace/tag-settings/tag-settings';
 import styles from './styles.module.scss';
 
 const Settings: React.FC = () => {
@@ -43,6 +44,11 @@ const Settings: React.FC = () => {
                   <Route
                     path={AppRoute.SETTINGS_USERS}
                     component={UsersSettings}
+                    exact
+                  />
+                  <Route
+                    path={AppRoute.SETTINGS_TAGS}
+                    component={TagsSettings}
                     exact
                   />
                   <Route path={match.path}>

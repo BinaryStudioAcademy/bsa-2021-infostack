@@ -10,6 +10,7 @@ enum AppRoute {
   SETTINGS = '/settings',
   SETTINGS_PROFILE = '/settings/profile',
   SETTINGS_USERS = '/settings/users',
+  SETTINGS_TAGS = '/settings/tags',
   WORKSPACE_SETTING = '/workspace/settings',
 }
 
