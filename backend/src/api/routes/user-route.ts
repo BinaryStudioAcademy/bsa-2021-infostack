@@ -6,6 +6,7 @@ import {
   updateFullName,
   updateAvatar,
   getUserByIdWithWorkspace,
+  deleteAvatar,
 } from '../../services/user.service';
 
 const router: Router = Router();
@@ -15,5 +16,10 @@ router
   .get('/:id/profile', run((req) => getUserByIdWithWorkspace(req.params.id, req.workspaceId)))
   .put('/:id/profile', run((req) => updateFullName(req.params.id, req.body)))
   .put('/:id/avatar', upload().single('image'), run((req) => updateAvatar(req.params.id, req.file)));
+
+router.delete(
+  '/:id/avatar',
+  run((req) => deleteAvatar(req.userId)),
+);
 
 export default router;
