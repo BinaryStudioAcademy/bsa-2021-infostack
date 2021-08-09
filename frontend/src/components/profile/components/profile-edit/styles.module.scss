@@ -94,4 +94,39 @@
     font-size: 1.75rem;
     max-height: 100%;
   }
+
+  .avatarControlButton {
+    width: 9.5rem;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.32rem;
+    padding: 0.4rem 1.12rem;
+    border-radius: 0.2rem;
+
+    &:hover {
+      background-color: #366dc7;
+      border-color: #3266bb;
+      color: #fff;
+    }
+
+    &:disabled {
+      color: #fff;
+    }
+
+    &:focus {
+      color: #fff;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .spaceBetween {
+    justify-content: space-between;
+  }
 }
