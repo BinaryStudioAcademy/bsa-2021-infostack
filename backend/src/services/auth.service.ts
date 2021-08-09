@@ -45,9 +45,9 @@ export const register = async (
   });
 
   const tokens = await setTokens(user);
-  const { id, fullName, email, avatar } = user;
+  const { id, fullName, email, avatar, title, skills } = user;
 
-  return { id, fullName, email, avatar, ...tokens };
+  return { id, fullName, email, avatar, title, skills, ...tokens };
 };
 
 export const login = async (
@@ -72,9 +72,9 @@ export const login = async (
   }
 
   const tokens = await setTokens(user);
-  const { id, fullName, email, avatar } = user;
+  const { id, fullName, email, avatar, title, skills } = user;
 
-  return { id, fullName, email, avatar, ...tokens };
+  return { id, fullName, email, avatar, title, skills, ...tokens };
 };
 
 export const resetPassword = async (body: IResetPassword): Promise<void> => {
