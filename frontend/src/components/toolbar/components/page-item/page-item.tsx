@@ -4,10 +4,12 @@ import { getAllowedClasses } from 'helpers/dom/dom';
 import { IPage } from 'common/interfaces/page';
 import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { pagesActions } from 'store/pages';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from '../plus-button/plus-button-root';
+import { RootState } from 'common/types/types';
+import { useState } from 'react';
 
 type Props = {
   title?: string;
@@ -17,6 +19,8 @@ type Props = {
 
 const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const dispatch = useAppDispatch();
+  const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const [activeKey, setActiveKey] = useState<undefined | string>(undefined);
 
   const addSubPage = async (
     event: React.MouseEvent<HTMLElement>,
@@ -31,13 +35,17 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
     await dispatch(pagesActions.createPage(payload));
     await dispatch(pagesActions.getPagesAsync());
+    setActiveKey(id);
   };
 
   type LinkProps = {
     id?: string;
   };
 
+  const isSelected = id === currentPage?.id ? styles.selectedPage : '';
+
   const LinkWithTitle: React.FC<LinkProps> = ({ id }) => {
+
     return (
       <Link
         to={
@@ -47,6 +55,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
           styles.navbarBrand,
           styles.navbarLinkInsideSection,
           'd-flex',
+          `${isSelected}`,
         )}
       >
         {title}
@@ -56,8 +65,9 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
   return (
     <>
-      <Accordion flush key={id}>
-        <Accordion.Item eventKey="0" className="bg-transparent">
+      <Accordion flush key={id} activeKey={activeKey} onSelect={():void => setActiveKey(undefined)}>
+        <Accordion.Item eventKey={id as string} className="bg-transparent">
+
           {childPages && childPages.length ? (
             <>
               <Accordion.Header className={styles.accordionHeader}>
