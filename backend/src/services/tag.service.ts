@@ -9,8 +9,7 @@ export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITag[]> => {
   const tagRepository = getCustomRepository(TagRepository);
-  const tags = await tagRepository.findAllByWorkspaceId(workspaceId);
-  return tags.map(({ id, workspaceId, name }) => ({ id, workspaceId, name }));
+  return await tagRepository.findAllByWorkspaceId(workspaceId);
 };
 
 export const create = async (newTag: ITagCreation): Promise<ITag> => {
@@ -22,7 +21,7 @@ export const create = async (newTag: ITagCreation): Promise<ITag> => {
     });
   }
   const tagsInDB = await tagRepository.find(newTag);
-  if (tagsInDB.length > 0) {
+  if (tagsInDB.length) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: HttpErrorMessage.TAG_IN_WORKSPACE_ALREADY_EXISTS,
@@ -35,13 +34,12 @@ export const create = async (newTag: ITagCreation): Promise<ITag> => {
 export const deleteById = async (id: string): Promise<void> => {
   const tagRepository = getCustomRepository(TagRepository);
   const result = await tagRepository.softDelete(id);
-  if (result.affected === 0) {
+  if (!result.affected) {
     throw new HttpError({
       status: HttpCode.NOT_FOUND,
       message: HttpErrorMessage.TAG_IN_WORKSPACE_NOT_FOUND,
     });
   }
-  return;
 };
 
 export const updateNameById = async (
@@ -56,7 +54,7 @@ export const updateNameById = async (
     });
   }
   const result = await tagRepository.update(id, { name });
-  if (result.affected === 0) {
+  if (!result.affected) {
     throw new HttpError({
       status: HttpCode.NOT_FOUND,
       message: HttpErrorMessage.TAG_IN_WORKSPACE_NOT_FOUND,
