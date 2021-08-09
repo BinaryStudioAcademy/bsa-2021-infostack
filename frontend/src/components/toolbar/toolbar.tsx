@@ -9,7 +9,11 @@ import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from './components/plus-button/plus-button-root';
 import { AppRoute } from 'common/enums/enums';
 
-const Toolbar: React.FC = () => {
+type Props = {
+  title?: string;
+};
+
+const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -36,7 +40,7 @@ const Toolbar: React.FC = () => {
   return (
     <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">
       <h1 className="h5 mt-5 mb-5 text-light text-center">
-        Infostack
+        {title}
       </h1>
       <div className="pt-3 w-100">
         <div className="pt-3 w-100 pt-3 w-100 d-flex justify-content-between align-items-center">
