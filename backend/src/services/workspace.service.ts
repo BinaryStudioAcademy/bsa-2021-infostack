@@ -7,7 +7,6 @@ import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { RoleType } from '../common/enums/role-type';
-import { IWorkspaceUserRole } from '../common/interfaces/workspace/workspace-user-role';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -21,26 +20,17 @@ export const getWorkspaceUsers = async (
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
-export const getWorkspaceUserRole = async (
-  userId: string,
-  workspaceId: string,
-): Promise<IWorkspaceUserRole> => {
-  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspace =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
-      userId,
-      workspaceId,
-    );
-
-  return { role: userWorkspace.role };
-};
-
-export const getOne = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
+export const getWorkspace = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
   const userWorkspace = await getCustomRepository(UserWorkspaceRepository)
     .findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
+  const { workspace } = userWorkspace;
 
-  const workspace = userWorkspace.workspace;
-  return { id: workspace.id, title: workspace.name };
+  if (userWorkspace.role === RoleType.ADMIN) {
+    const users = await getWorkspaceUsers(workspaceId);
+    return { id: workspace.id, title: workspace.name, role: userWorkspace.role, users };
+  }
+
+  return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
 };
 
 export const getUserWorkspaces = async (userId: string): Promise<IWorkspace[]> => {
@@ -56,7 +46,7 @@ export const getUserWorkspaces = async (userId: string): Promise<IWorkspace[]> =
   return workspaces;
 };
 
-export const create = async (
+export const createWorkspace = async (
   userId: string,
   data: IWorkspaceCreation,
 ): Promise<IWorkspace> => {
