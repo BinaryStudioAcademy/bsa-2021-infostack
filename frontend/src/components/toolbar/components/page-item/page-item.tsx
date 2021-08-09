@@ -31,14 +31,6 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
     setActiveKey(id);
   };
 
-  const getPageById = async ( id?: string ): Promise<void> => {
-    const payload: string | undefined = id;
-    if(id !== currentPage?.id) {
-      await dispatch(pagesActions.getPage(payload));
-    }
-    return;
-  };
-
   type LinkProps = {
     id?: string;
   };
@@ -49,7 +41,6 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
     return (
       <Link
-        onClick={(): Promise<void> => getPageById(id)}
         to={ `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${id}` as AppRoute }
         className={getAllowedClasses(styles.navbarBrand, styles.navbarLinkInsideSection, 'd-flex', `${isSelected}` )}
       >{title}

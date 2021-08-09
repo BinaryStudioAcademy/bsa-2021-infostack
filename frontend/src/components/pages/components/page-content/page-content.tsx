@@ -29,7 +29,7 @@ const PageContent: React.FC = () => {
     } else {
       history.push(AppRoute.ROOT);
     }
-  }, []);
+  }, [paramsId]);
 
   const Content: React.FC = () => {
     return (
