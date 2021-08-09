@@ -33,6 +33,10 @@
 
       td {
         color: #737373;
+        max-width: 7vw;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
 
