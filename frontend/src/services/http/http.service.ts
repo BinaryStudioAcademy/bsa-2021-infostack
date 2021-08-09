@@ -1,3 +1,4 @@
+import EventEmitter from 'events';
 import { store } from 'store/store';
 import { HttpError } from 'exceptions/exceptions';
 import {
@@ -6,18 +7,51 @@ import {
   HttpMethod,
   LocalStorageVariable,
   HttpCode,
+  EmitterEvents,
 } from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
 import { authActions } from 'store/auth';
 
 class Http {
+  private areTokensRefreshing;
+  private emitter;
+
+  constructor() {
+    this.areTokensRefreshing = false;
+    this.emitter = new EventEmitter();
+  }
+
   public async load<T = unknown>(
     url: string,
     options: Partial<HttpOptions> = {},
   ): Promise<T> {
     try {
+      return await this.sendRequest(url, options);
+    } catch (err) {
+      if (err.status === HttpCode.UNAUTHORIZED) {
+        if (this.areTokensRefreshing) {
+          return await this.sendRequestAfterGetToken(url, options);
+        } else {
+          this.areTokensRefreshing = true;
+          const accessToken = await this.refreshTokens(err);
+          return await this.sendRequest(url, options, accessToken);
+        }
+      } else {
+        this.throwError(err);
+      }
+
+    }
+  }
+
+  public async sendRequest<T = unknown>(
+    url: string,
+    options: Partial<HttpOptions> = {},
+    accessToken?: string,
+  ): Promise<T> {
+    try {
+
       const { method = HttpMethod.GET, payload = null, contentType } = options;
-      const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+      const token = accessToken || localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
       const headers = this.getHeaders(contentType, token);
 
       const response = await fetch(url, {
@@ -33,14 +67,10 @@ class Http {
       }
 
       return this.parseJSON<T>(response);
+
     } catch (err) {
 
-      if (err.status === HttpCode.UNAUTHORIZED) {
-        const response = await this.handleAccessTokenExpiredError(url, options, err);
-        return this.parseJSON<T>(response);
-      } else {
-        this.throwError(err);
-      }
+      this.throwError(err);
 
     }
   }
@@ -82,31 +112,35 @@ class Http {
     throw err;
   }
 
-  private handleAccessTokenExpiredError = async (
+  public async sendRequestAfterGetToken<T = unknown>(
     url: string,
     options: Partial<HttpOptions> = {},
+  ): Promise<T> {
+    return new Promise((resolve) => {
+      this.emitter.on(EmitterEvents.GET_ACCESS_TOKEN, async (AccessToken) => {
+        resolve(await this.sendRequest(url, options, AccessToken));
+      });
+    });
+  }
+
+  private refreshTokens = async (
     err: Error,
-  ): Promise<Response> => {
+  ): Promise<string> => {
     const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
     if (refreshToken) {
       try {
-        const res = await fetch('/api/auth/refresh', {
+        const response = await fetch('/api/auth/refresh', {
           method: HttpMethod.POST,
           body: JSON.stringify({ refreshToken }),
           headers: this.getHeaders(ContentType.JSON),
         });
-        await this.checkStatus(res);
-        const tokens = await res.json();
+        await this.checkStatus(response);
+        const tokens = await response.json();
+        this.emitter.emit(EmitterEvents.GET_ACCESS_TOKEN, tokens.accessToken);
+        this.areTokensRefreshing = false;
         localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
         localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, tokens.refreshToken);
-        const { method = HttpMethod.GET, payload = null, contentType } = options;
-        const headers = this.getHeaders(contentType, tokens.accessToken);
-        const response = await fetch(url, {
-          method,
-          headers,
-          body: payload,
-        });
-        return response;
+        return tokens.accessToken;
       } catch (error) {
         if (error.status === HttpCode.UNAUTHORIZED) {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
@@ -121,4 +155,6 @@ class Http {
   };
 }
 
-export { Http };
+const http = new Http();
+
+export { http, Http };
