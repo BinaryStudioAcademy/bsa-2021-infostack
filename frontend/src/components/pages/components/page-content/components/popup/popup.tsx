@@ -23,18 +23,12 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
 
   return (
     <Modal show={isVisible} onHide={cancelButton.onClick}>
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title className="h6">{query}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="outline-secondary"
-          onClick={cancelButton.onClick}
-        >
-          {cancelButton.text}
-        </Button>
         <Button
           variant="primary"
           onClick={confirmButton.onClick}

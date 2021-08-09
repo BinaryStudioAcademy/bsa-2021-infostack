@@ -57,11 +57,13 @@ const PageContent: React.FC = () => {
     return (
       <div className={getAllowedClasses(styles.content)}>
         <div className="container-fluid p-0">
-          <div className="d-flex align-items-center justify-content-between">
-            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <h1 className="h3">{pageTitle || 'New Page'}</h1>
             <Button
               variant="outline-secondary"
               onClick={onAssign}
+              size="sm"
+              className={getAllowedClasses(styles.assignButton, 'border-0')}
             >
               Assign permissions
             </Button>
@@ -79,7 +81,7 @@ const PageContent: React.FC = () => {
           </div>
         </div>
         <Popup
-          query="Enter name of workspace:"
+          query="Assign page permissions to a user or a team"
           isVisible={isPopUpVisible}
           cancelButton={{
             text: 'Cancel',
