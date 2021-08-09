@@ -1,5 +1,10 @@
-import { useState, useEffect } from 'hooks/hooks';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import {
+  useState,
+  useEffect,
+  useAppDispatch,
+  useAppSelector,
+  useRef,
+} from 'hooks/hooks';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
@@ -9,7 +14,9 @@ import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
   const dispatch = useAppDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [userFullName, setUserFullName] = useState('');
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -21,6 +28,24 @@ const ProfileEdit: React.FC = () => {
       setUserFullName(user.fullName);
     }
   }, [user]);
+
+  const handleRemove = (): void => {
+    if (user) {
+      setIsDeleting(true);
+
+      userApi
+        .deleteAvatar(user.id)
+        .then(() => dispatch(authActions.updateUser({ avatar: '' })))
+        .finally(() => {
+          setIsDeleting(false);
+          setSelectedImgURL('');
+        });
+    }
+  };
+
+  const handleUpload = (): void => {
+    inputRef.current?.click();
+  };
 
   const handleSaveChanges = async (): Promise<void> => {
     if (user) {
@@ -82,7 +107,7 @@ const ProfileEdit: React.FC = () => {
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <Row>
-          <Col md={8}>
+          <Col md={8} className="ps-0">
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label
@@ -125,30 +150,50 @@ const ProfileEdit: React.FC = () => {
               round={true}
               size="12.8rem"
             />
-            <label
-              className={`${getAllowedClasses(
-                styles.cardButton,
-                styles.uploadLabel,
-              )} mb-3`}
+
+            {user?.avatar && (
+              <Button
+                variant="primary"
+                className={getAllowedClasses(
+                  styles.avatarControlButton,
+                  'mb-3',
+                )}
+                onClick={handleRemove}
+                disabled={isDeleting}
+              >
+                Remove
+              </Button>
+            )}
+
+            <input
+              ref={inputRef}
+              type="file"
+              onChange={handleFileSelected}
+              name="image"
+              hidden
+            />
+            <Button
+              variant="primary"
+              className={getAllowedClasses(
+                styles.avatarControlButton,
+                styles.spaceBetween,
+                'mb-3',
+              )}
+              onClick={handleUpload}
             >
               <i
                 className={`bi bi-cloud-arrow-up-fill ${getAllowedClasses(
                   styles.uploadIcon,
                 )}`}
-              ></i>
-              &nbsp; Upload
-              <input
-                type="file"
-                onChange={handleFileSelected}
-                name="image"
-                hidden
               />
-            </label>
+              Upload
+            </Button>
+
             <span className={getAllowedClasses(styles.uploadText)}>
               For best results use an image at least 128px in .jpg format
             </span>
           </Col>
-        </Row>{' '}
+        </Row>
         <Button
           variant="primary"
           className={getAllowedClasses(styles.cardButton)}

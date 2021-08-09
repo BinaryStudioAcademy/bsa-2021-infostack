@@ -63,7 +63,7 @@ const ProfileInfo: React.FC = () => {
                         <Avatar
                           size="100"
                           name={user?.fullName}
-                          src={user?.avatar + `?${performance.now()}`}
+                          src={user?.avatar ? user?.avatar + `?${performance.now()}` : ''}
                           round={true}
                           className="user-avatar"
                         />
@@ -97,11 +97,11 @@ const ProfileInfo: React.FC = () => {
               <Card.Body>
                 <Card.Title className="d-flex justify-content-start profile-card-title">Followings</Card.Title>
                 <div className="following-pages-container">
-                  <Link to={'#'} className="following-page"><i className="bi bi-card-text"></i>Page 1</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-card-text"></i>Page 2</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-card-text"></i>Page 3</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-card-text"></i>Page 4</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-card-text"></i>Page 5</Link>
+                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 1</Link>
+                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 2</Link>
+                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 3</Link>
+                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 4</Link>
+                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 5</Link>
                 </div>
               </Card.Body>
             </Card>
