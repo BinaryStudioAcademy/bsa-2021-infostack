@@ -136,6 +136,19 @@ const ProfileEdit: React.FC = () => {
               size="12.8rem"
             />
 
+            {user?.avatar && (
+              <Button
+                variant="primary"
+                className={getAllowedClasses(
+                  styles.avatarControlButton,
+                  'mb-3',
+                )}
+                onClick={handleUpload}
+              >
+                Remove
+              </Button>
+            )}
+
             <input
               ref={inputRef}
               type="file"
