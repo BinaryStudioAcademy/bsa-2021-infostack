@@ -55,6 +55,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
           styles.navbarBrand,
           styles.navbarLinkInsideSection,
           'd-flex',
+          `${isSelected}`,
         )}
       >
         {title}
@@ -66,7 +67,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
     <>
       <Accordion flush key={id} activeKey={activeKey} onSelect={():void => setActiveKey(undefined)}>
         <Accordion.Item eventKey={id as string} className="bg-transparent">
-          
+
           {childPages && childPages.length ? (
             <>
               <Accordion.Header className={styles.accordionHeader}>
