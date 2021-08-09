@@ -16,6 +16,7 @@ const ProfileEdit: React.FC = () => {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [userFullName, setUserFullName] = useState('');
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -30,9 +31,15 @@ const ProfileEdit: React.FC = () => {
 
   const handleRemove = (): void => {
     if (user) {
+      setIsDeleting(true);
+
       userApi
         .deleteAvatar(user.id)
-        .then(() => dispatch(authActions.updateUser({ ...user, avatar: '' })));
+        .then(() => dispatch(authActions.updateUser({ avatar: '' })))
+        .finally(() => {
+          setIsDeleting(false);
+          setSelectedImgURL('');
+        });
     }
   };
 
@@ -152,6 +159,7 @@ const ProfileEdit: React.FC = () => {
                   'mb-3',
                 )}
                 onClick={handleRemove}
+                disabled={isDeleting}
               >
                 Remove
               </Button>
