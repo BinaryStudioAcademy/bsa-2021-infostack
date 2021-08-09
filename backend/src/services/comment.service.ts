@@ -1,18 +1,21 @@
-import { getRepository } from 'typeorm';
-import { Comment } from '../data/entities/comment';
-import { ICommentRequest, ICommentResponse } from '../common/interfaces/comment/comment.interface';
+import { getCustomRepository } from 'typeorm';
+import { ICommentRequest, IComment } from '../common/interfaces/comment/comment.interface';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { HttpError } from '../common/errors/http-error';
+import { CommentRepository } from '../data/repositories/comment.repository';
+import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 
-export const getComments = async (pageId: string): Promise<Comment[]> =>
-  await getRepository(Comment)
-    .find({ where: { pageId } });
+export const getComments = async (pageId: string): Promise<IComment[]> => {
+  const comments = await getCustomRepository(CommentRepository)
+    .findByPageId(pageId);
+  return mapChildToParent(comments);
+};
 
 export const addComment = async (
   userId: string, pageId: string, { text, parentCommentId }: ICommentRequest,
-): Promise<ICommentResponse> => {
-  const commentRepository = getRepository(Comment);
+): Promise<IComment> => {
+  const commentRepository = getCustomRepository(CommentRepository);
 
   if (parentCommentId) {
     const isParentCommentIdGenuine = await commentRepository.findOne({
@@ -27,10 +30,12 @@ export const addComment = async (
     }
   }
 
-  return await commentRepository.save({
+  const { id } = await commentRepository.save({
     authorId: userId,
     pageId,
     text,
     parentCommentId,
   });
+
+  return await commentRepository.findOneById(id);
 };

@@ -1,1 +1,1 @@
-export { ICommentRequest, ICommentResponse } from 'infostack-shared';
+export { ICommentRequest, IComment } from 'infostack-shared';
