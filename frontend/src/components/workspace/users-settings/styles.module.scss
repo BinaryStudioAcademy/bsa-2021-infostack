@@ -20,6 +20,7 @@
 
     .title {
       font-size: 1.52rem;
+      margin-bottom: 0;
     }
   }
 
@@ -27,20 +28,28 @@
     flex: 1 1 auto;
     padding: 2rem;
 
+    tr {
+      font-size: 1.2rem;
+
+      td {
+        color: #737373;
+        max-width: 7vw;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
     .tableHead {
       color: #737d85;
 
-      font-weight: bold;
+      tr {
+        font-size: 1.32rem;
+      }
     }
 
     & > .table > .tableHead > :nth-child(1) > * {
       border-bottom-color: #889097;
-    }
-
-    tr {
-      td {
-        color: #737373;
-      }
     }
 
     i {
