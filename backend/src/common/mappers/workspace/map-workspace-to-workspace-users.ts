@@ -4,7 +4,7 @@ import { Workspace } from '../../../data/entities/workspace';
 export const mapWorkspaceToWorkspaceUsers = (
   workspace: Workspace,
 ): IWorkspaceUser[] => {
-  return workspace.userWorkspaces.map(({ user, role }) => {
+  return workspace.userWorkspaces.map(({ user, role, status }) => {
     const { id, fullName, teams } = user;
 
     return {
@@ -12,6 +12,7 @@ export const mapWorkspaceToWorkspaceUsers = (
       fullName,
       role,
       teams: teams.map((team) => team.name),
+      status,
     };
   });
 };

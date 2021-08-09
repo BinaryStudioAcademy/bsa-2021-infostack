@@ -1,64 +1,74 @@
+:global(.btn-primary) {
+    font-size: 1.32rem;
+}
+
+:global(.btn-secondary) {
+    font-size: 1.32rem;
+}
+
 .card {
-  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
-  margin-bottom: 200px;
-  word-wrap: break-word;
-  background-clip: border-box;
-  background-color: #fff;
-  border: 0 solid transparent;
-  border-radius: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  position: relative;
-  min-height: 32.5rem;
-
-  .header {
+    box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+    margin-bottom: 200px;
+    word-wrap: break-word;
+    background-clip: border-box;
     background-color: #fff;
-    border-bottom: 0 solid transparent;
-    margin-bottom: 0;
-    padding: 1.6rem 2rem;
+    border: 0 solid transparent;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    min-height: 32.5rem;
 
-    .title {
-      font-size: 1.52rem;
-    }
-  }
+    .header {
+        background-color: #fff;
+        border-bottom: 0 solid transparent;
+        margin-bottom: 0;
+        padding: 1.6rem 2rem;
 
-  .body {
-    flex: 1 1 auto;
-    padding: 2rem;
-
-    .tableHead {
-      color: #737d85;
-
-      font-weight: bold;
-    }
-
-    & > .table > .tableHead > :nth-child(1) > * {
-      border-bottom-color: #889097;
+        .title {
+            font-size: 1.52rem;
+        }
     }
 
-    tr {
-      td {
-        color: #737373;
-      }
-    }
+    .body {
+        flex: 1 1 auto;
+        padding: 2rem;
 
-    i {
-      color: #737373;
+        .tableHead {
+            color: #737d85;
+            font-weight: bold;
+        }
 
-      cursor: pointer;
-    }
+        & > .table > .tableHead > :nth-child(1) > * {
+            border-bottom-color: #889097;
+        }
 
-    .trashIcon {
-      margin-left: 1rem;
-    }
+        tr {
+            td {
+                color: #737373;
+            }
+        }
 
-    .addUser {
-      cursor: pointer;
-    }
+        i {
+            color: #737373;
+            cursor: pointer;
+        }
 
-    .addTeam {
-      cursor: pointer;
+        .trashIcon {
+            margin-left: 1rem;
+        }
+
+        .addUser {
+            cursor: pointer;
+        }
+
+        .addTeam {
+            cursor: pointer;
+        }
+
+        .inviteButton {
+            font-size: 1.32rem;
+        }
     }
-  }
 }

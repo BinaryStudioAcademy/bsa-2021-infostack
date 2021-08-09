@@ -1,4 +1,4 @@
-import { Card, Table } from 'react-bootstrap';
+import { Button, Card, Table } from 'react-bootstrap';
 import styles from './styles.module.scss';
 import TableHead from './table-head/table-head';
 import UserItem from './user-item/user-item';
@@ -11,8 +11,10 @@ import {
 import { workspaceActions } from 'store/workspace';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { CookieVariable } from 'common/enums/cookies/cookies';
+import { useState } from 'react';
+import ModalComponent from 'components/modal/modal';
 
-export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Actions'];
+export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Status', 'Actions'];
 
 const UsersSettings: React.FC = () => {
   const [cookies] = useCookies();
@@ -24,14 +26,23 @@ const UsersSettings: React.FC = () => {
     dispatch(workspaceActions.loadUsers(workspaceId));
   }, []);
 
-  return (
+  const [isModalShowed, setModalShowed] = useState(false);
+
+  const closeModal = ():void => {
+
+    setModalShowed(false);
+  };
+
+  return (<>
+    <ModalComponent  onModalClose={closeModal} title={'Invite to Workspace'} showModal={isModalShowed}/>
     <Card
       className={`${getAllowedClasses(styles.card)} justify-content-center`}
     >
-      <Card.Header className={getAllowedClasses(styles.header)}>
+      <Card.Header className={getAllowedClasses('d-flex justify-content-between',styles.header)}>
         <Card.Title as="h5" className={getAllowedClasses(styles.title)}>
           Users
         </Card.Title>
+        <Button onClick={():void => setModalShowed(true)}>Invite</Button>
       </Card.Header>
 
       <Card.Body className={getAllowedClasses(styles.body)}>
@@ -45,6 +56,7 @@ const UsersSettings: React.FC = () => {
         </Table>
       </Card.Body>
     </Card>
+  </>
   );
 };
 

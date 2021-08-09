@@ -3,4 +3,5 @@ export type {
   IWorkspace,
   IWorkspaceCreation,
   IWorkspaceUserRole,
+  IWorkspaceInvite,
 } from 'infostack-shared/common/interfaces';

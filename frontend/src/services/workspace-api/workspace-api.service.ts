@@ -3,6 +3,7 @@ import {
   IWorkspace,
   IWorkspaceCreation,
   IWorkspaceUserRole,
+  IWorkspaceInvite,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { Http } from 'services/http/http.service';
@@ -37,6 +38,18 @@ class WorkspaceApi {
       contentType: ContentType.JSON,
     });
   }
-}
 
+  public async inviteToWorkspace(payload: IWorkspaceInvite): Promise<IWorkspace> {
+
+    // const { workspaceId, userId } = payload;
+    // eslint-disable-next-line no-console
+    console.log('inviteToWorkspace payload ',payload);
+
+    return this.http.load(`${this.BASE}/invite`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
+  }
+}
 export { WorkspaceApi };

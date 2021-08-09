@@ -18,7 +18,8 @@ const createTransport = async (): Promise<nodemailer.Transporter> => {
   const { token } = await oauth2Client.getAccessToken();
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    // service: 'gmail',
+    host: 'smtp.gmail.com',
     auth: {
       type: 'OAuth2',
       ...mailer.auth,
@@ -31,6 +32,7 @@ const sendMail = async (
   options: Pick<Mail.Options, 'to' | 'text' | 'subject'>,
 ): Promise<void> => {
   const transporter = await createTransport();
+
   await transporter.sendMail(options);
 };
 
