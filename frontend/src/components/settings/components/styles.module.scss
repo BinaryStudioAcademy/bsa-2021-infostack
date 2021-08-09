@@ -1,7 +1,22 @@
 .menuCard {
-  box-shadow: 0 0 1.6rem 0 rgb(41 48 66 / 5%);
-}
-.menuItem {
-  padding: 1.2rem 2rem;
-  font-size: 1.32rem;
+  border: 0;
+  box-shadow: 0 0 0.875rem 0 rgba(41, 48, 66, 0.05);
+
+  .menuItem {
+    padding: 1.2rem 2rem;
+    font-size: 1.32rem;
+  }
+  .cardHeader {
+    background-color: #fff;
+    border-bottom: 0 solid transparent;
+    margin-bottom: 0;
+    padding: 1.6rem 2rem;
+    border-radius: 0.4rem 0.4rem 0 0;
+    .cardTitle {
+      color: #495057;
+      font-size: 1.52rem;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+  }
 }
