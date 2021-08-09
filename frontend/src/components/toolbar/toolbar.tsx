@@ -1,15 +1,18 @@
 import { RootState } from 'common/types/types';
 import { getAllowedClasses } from 'helpers/dom/dom';
-import { useAppDispatch, useAppSelector, useEffect } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks/hooks';
 import { Accordion, Navbar } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import PagesList from './components/pages-list/pages-list';
 import styles from './styles.module.scss';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from './components/plus-button/plus-button-root';
+import { AppRoute } from 'common/enums/enums';
 
 const Toolbar: React.FC = () => {
   const dispatch = useAppDispatch();
+  const history = useHistory();
+  const { currentPage } = useAppSelector((state: RootState) => state.pages);
 
   useEffect(() => {
     dispatch(pagesActions.getPagesAsync());
@@ -21,6 +24,10 @@ const Toolbar: React.FC = () => {
     await dispatch(pagesActions.getPagesAsync());
   };
 
+  useEffect(() => {
+    history.push(`${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${currentPage?.id}`);
+  },[currentPage]);
+
   const pages = useAppSelector((state: RootState) => state.pages);
 
   const SectionName: React.FC<{ name: string }> = ({ name }) =>
@@ -29,7 +36,7 @@ const Toolbar: React.FC = () => {
   return (
     <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">
       <h1 className="h5 mt-5 mb-5 text-light text-center">
-        Infostack{' '}
+        Infostack
       </h1>
       <div className="pt-3 w-100">
         <div className="pt-3 w-100 pt-3 w-100 d-flex justify-content-between align-items-center">
