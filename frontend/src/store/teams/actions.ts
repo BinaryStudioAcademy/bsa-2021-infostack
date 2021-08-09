@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { TeamApi } from 'services';
-import { ITeamCreation, ITeamEditing } from 'common/interfaces/team';
+import { ITeamEditing } from 'common/interfaces/team';
 import { HttpCode } from 'common/enums/enums';
 
 const loadTeams = createAsyncThunk(
@@ -15,7 +15,7 @@ const loadTeams = createAsyncThunk(
 
 const createTeam = createAsyncThunk(
   ActionType.setCurrentTeamID,
-  async (payload: ITeamCreation, { dispatch }) => {
+  async (payload: string, { dispatch }) => {
     try {
       const team = await new TeamApi().createTeam(payload);
       dispatch(actions.setCurrentTeamID(team.id));

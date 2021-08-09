@@ -1,7 +1,7 @@
-import { ITeam } from 'common/interfaces/team';
 import { Dropdown, NavItem, NavLink }  from 'react-bootstrap';
-import { Popup } from '../../../common/popup/popup';
-import { teamsActions } from 'store/teams';
+import { ITeam } from 'common/interfaces/team';
+import { Popup } from 'components/common/popup/popup';
+import { teamsActions } from 'store/actions';
 import {
   useState,
   useAppDispatch,
@@ -10,12 +10,12 @@ import {
 } from 'hooks/hooks';
 import './styles.scss';
 
-interface IDropDownProps {
+interface Props {
   team: ITeam;
 }
 
-const DropDown: React.FC<IDropDownProps> = ({ team }) => {
-  const { editingError } = useAppSelector((state) => state.teamSettings);
+const DropDown: React.FC<Props> = ({ team }) => {
+  const { editingError } = useAppSelector((state) => state.teams);
   const dispatch = useAppDispatch();
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
@@ -47,7 +47,7 @@ const DropDown: React.FC<IDropDownProps> = ({ team }) => {
   return (
     <div>
       <Dropdown as={NavItem} align="end" className="team-settings-dropdown">
-        <Dropdown.Toggle as={NavLink} id="dropdown-team-details">
+        <Dropdown.Toggle as={NavLink} className="dropdown-team-details p-0">
           <p className="p-0 m-0">...</p>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu">

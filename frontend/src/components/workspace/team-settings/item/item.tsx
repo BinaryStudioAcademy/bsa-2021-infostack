@@ -1,17 +1,15 @@
 import Avatar from 'react-avatar';
-import { ITeam } from 'common/interfaces/team';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import { Button, Card } from 'react-bootstrap';
+import { ITeam, ITeamUser } from 'common/interfaces/team';
 import DropDown from '../drop-down/drop-down';
 import './styles.scss';
-import { ITeamUser } from 'infostack-shared/common/interfaces/team/team-user.interface';
 
-interface ITeamItemProps {
+interface Props {
   team: ITeam;
   onClick(id: string): void;
 }
 
-const TeamItem: React.FC<ITeamItemProps> = ({ team, onClick }) => {
+const TeamItem: React.FC<Props> = ({ team, onClick }) => {
   const renderUserAvatar = (user: ITeamUser): JSX.Element => {
     return <Avatar
       key={user.id}

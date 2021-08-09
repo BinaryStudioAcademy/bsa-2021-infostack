@@ -1,11 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import './styles.scss';
 
-interface ICreateButtonProps {
+interface Props {
   onClick(): void;
 }
 
-const CreateButton: React.FC<ICreateButtonProps> = ({ onClick }) =>
+const CreateButton: React.FC<Props> = ({ onClick }) =>
   (
     <Button
       variant="primary"

@@ -1,10 +1,10 @@
 import { ITeam } from '../../interfaces/team/team.interface';
-import { Workspace } from '../../../data/entities/workspace';
+import { Team } from '../../../data/entities/team';
 
-export const mapWorkspaceToTeams = (
-  workspace: Workspace,
+export const mapTeams = (
+  teams: Team[],
 ): ITeam[] => {
-  return workspace.teams.map(({ id, name, workspaceId, users }) => ({
+  return teams.map(({ id, name, workspaceId, users }) => ({
     id,
     name,
     workspaceId,

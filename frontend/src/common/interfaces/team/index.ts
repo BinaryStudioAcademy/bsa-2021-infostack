@@ -1,1 +1,1 @@
-export type { ITeam, ITeamCreation, ITeamEditing } from 'infostack-shared/common/interfaces';
+export type { ITeam, ITeamCreation, ITeamEditing, ITeamUser } from 'infostack-shared/common/interfaces';

@@ -7,6 +7,7 @@ enum HttpErrorMessage {
   UNAUTHORIZED = 'Unauthorized',
   WORKSPACE_ALREADY_EXISTS = 'Workspace with such title already exists',
   TEAM_NAME_ALREADY_EXISTS = 'Team with such name already exists',
+  TEAM_EMPTY_STRING = 'Team with empty string is not allowed',
 }
 
 export { HttpErrorMessage };

@@ -14,7 +14,7 @@ import {
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
-  const { teams, creatingError } = useAppSelector((state) => state.teamSettings);
+  const { teams, creatingError } = useAppSelector((state) => state.teams);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -43,7 +43,7 @@ const TeamSettings: React.FC = () => {
 
   const handleCreationConfirm = (): void => {
     if (popUpText) {
-      dispatch(teamsActions.createTeam({ name: popUpText }));
+      dispatch(teamsActions.createTeam(popUpText));
     }
   };
 
