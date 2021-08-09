@@ -1,1 +1,1 @@
-export type { IPage } from 'infostack-shared/common/interfaces';
+export type { IPage, IPageFollowed } from 'infostack-shared/common/interfaces';

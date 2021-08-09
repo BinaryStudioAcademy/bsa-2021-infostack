@@ -11,8 +11,12 @@ export default class UserFollowingPagesSeeder {
     await asyncForEach(async userFollowingPage => {
       const user = await userRepository.findById(userFollowingPage.userId);
       const page = await pageRepository.findById(userFollowingPage.pageId);
-      page.followingUsers = [];
-      user.followingPages = [];
+      if(!page.followingUsers) {
+        page.followingUsers = [];
+      }
+      if(!user.followingPages) {
+        user.followingPages = [];
+      }
       page.followingUsers.push(user);
       user.followingPages.push(page);
       await userRepository.save(user);

@@ -6,7 +6,7 @@ import UserPermissionRepository from '../data/repositories/user-permission.repos
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { IPageRequest } from '../common/interfaces/pages';
+import { IPageRequest, IPageFollowed } from '../common/interfaces/pages';
 
 export const createPage = async (
   userId: string,
@@ -100,10 +100,23 @@ export const getPage = async (
 
 export const getPagesFollowedByUser = async (
   userId: string,
-): Promise<Page[]> => {
+): Promise<IPageFollowed[]> => {
   const userRepository = getCustomRepository(UserRepository);
+  const pageContentRepository = getCustomRepository(PageContentRepository);
   const { followingPages } = await userRepository.findById(userId);
-  return followingPages;
+  if (followingPages.length > 0) {
+    const pages = await Promise.all(followingPages.map(async page => {
+      const content = await pageContentRepository.findByPageId(page.id);
+      return {
+        id: page.id,
+        title: content.title,
+      };
+    }));
+
+    return pages;
+  } else {
+    return [];
+  }
 };
 
 export const followPage = async (

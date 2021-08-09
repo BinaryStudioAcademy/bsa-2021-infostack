@@ -1,5 +1,5 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { IPage, IPageRequest } from 'common/interfaces/pages';
+import { IPage, IPageRequest, IPageFollowed } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
 
 class PageApi {
@@ -34,8 +34,14 @@ class PageApi {
     });
   }
 
+  public async getPagesFollowedByUser(userId: string | undefined): Promise<IPageFollowed[]> {
+    return this.http.load(`${this.BASE}/following/${userId}`, {
+      method: HttpMethod.GET,
+    });
+  }
+
   public async followPage(pageId: string): Promise<IPage[]> {
-    return this.http.load('/api/pages/follow', {
+    return this.http.load(`${this.BASE}/follow`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify({
@@ -45,7 +51,7 @@ class PageApi {
   }
 
   public async unfollowPage(pageId: string): Promise<IPage[]> {
-    return this.http.load('/api/pages/unfollow', {
+    return this.http.load(`${this.BASE}/unfollow`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify({
