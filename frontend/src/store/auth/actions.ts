@@ -8,7 +8,7 @@ import { LocalStorageVariable } from 'common/enums/enums';
 const login = createAsyncThunk(
   ActionType.SetUser,
   async (
-    loginPayload: Omit<ILogin, 'id' | 'fullName' | 'avatar' | 'title' | 'skills'>,
+    loginPayload: ILogin
     { dispatch },
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
