@@ -40,7 +40,7 @@ class PageApi {
     });
   }
 
-  public async followPage(pageId: string): Promise<IPage[]> {
+  public async followPage(pageId: string | undefined): Promise<IPage[]> {
     return this.http.load(`${this.BASE}/follow`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -50,7 +50,7 @@ class PageApi {
     });
   }
 
-  public async unfollowPage(pageId: string): Promise<IPage[]> {
+  public async unfollowPage(pageId: string | undefined): Promise<IPage[]> {
     return this.http.load(`${this.BASE}/unfollow`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -59,12 +59,6 @@ class PageApi {
       }),
     });
   }
-
-  // public async getPage(id?: string): Promise<IPage> {
-  //   return this._http.load(`/api/pages/${id}`, {
-  //     method: HttpMethod.GET,
-  //   });
-  // }
 }
 
 export { PageApi };
