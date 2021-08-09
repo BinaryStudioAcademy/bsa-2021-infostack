@@ -28,6 +28,14 @@ const ProfileEdit: React.FC = () => {
     }
   }, [user]);
 
+  const handleRemove = (): void => {
+    if (user) {
+      userApi
+        .deleteAvatar(user.id)
+        .then(() => dispatch(authActions.updateUser({ ...user, avatar: '' })));
+    }
+  };
+
   const handleUpload = (): void => {
     inputRef.current?.click();
   };
@@ -143,7 +151,7 @@ const ProfileEdit: React.FC = () => {
                   styles.avatarControlButton,
                   'mb-3',
                 )}
-                onClick={handleUpload}
+                onClick={handleRemove}
               >
                 Remove
               </Button>
