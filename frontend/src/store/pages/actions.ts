@@ -23,12 +23,8 @@ const createVersionPage = createAsyncThunk(
 const getPagesAsync = createAsyncThunk(
   ActionType.SET_PAGES,
   async (payload: undefined, { dispatch }) => {
-    try {
-      const response = await new PageApi().getPages();
-      dispatch(actions.setPages(response));
-    } catch (error) {
-      alert(error);
-    }
+    const response = await new PageApi().getPages();
+    dispatch(actions.setPages(response));
   },
 );
 
