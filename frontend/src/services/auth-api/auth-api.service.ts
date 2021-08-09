@@ -9,7 +9,7 @@ const http = new Http();
 
 class AuthApi {
   public async loginUser(
-    loginPayload: Omit<ILogin, 'id' | 'fullName' | 'avatar' | 'title' | 'skills'>,
+    loginPayload: ILogin
   ): Promise<IUserWithTokens> {
     const loginResponse: IUserWithTokens = await http.load('/api/auth/login', {
       method: HttpMethod.POST,
