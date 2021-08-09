@@ -15,7 +15,7 @@ export const mapPageToIPage = (
   const mappedChildren = childPages?.map(mapPageToIPage);
   const mappedpageContents = pageContents?.map((content) => ({
     ...content,
-    createdAt: content.createdAt.toISOString(),
+    createdAt: content.createdAt?.toISOString(),
     updatedAt: content.updatedAt?.toISOString(),
     deletedAt: content.deletedAt?.toISOString(),
   }));
