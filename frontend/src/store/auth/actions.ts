@@ -2,13 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { AuthApi, UserApi } from 'services';
-import { ILogin, IRegister } from '../../../../shared/build';
+import { ILogin, IRegister } from 'common/interfaces/auth';
 import { LocalStorageVariable } from 'common/enums/enums';
 
 const login = createAsyncThunk(
   ActionType.SetUser,
   async (
-    loginPayload: Omit<ILogin, 'id' | 'fullName' | 'avatar' | 'title' | 'skills'>,
+    loginPayload: ILogin,
     { dispatch },
   ): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
@@ -21,7 +21,7 @@ const login = createAsyncThunk(
 const register = createAsyncThunk(
   ActionType.SetUser,
   async (
-    registerPayload: Omit<IRegister, 'id' | 'avatar' | 'title' | 'skills'>,
+    registerPayload: IRegister,
     { dispatch },
   ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
