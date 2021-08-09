@@ -1,8 +1,8 @@
 enum ReducerName {
-  COUNTER = 'counter',
   AUTH = 'auth',
   PAGE = 'page',
   PAGES = 'pages',
+  COMMENTS = 'comments',
   WORKSPACE = 'workspace',
   WORKSPACES = 'workspaces',
 }
