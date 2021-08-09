@@ -17,35 +17,30 @@ import Settings from 'components/settings/settings';
 import NotFound from 'components/not-found/not-found';
 
 const Main: React.FC = () => {
-  const currentWorkspaceID = useAppSelector(
-    (state: RootState) => state.workspaces.currentWorkspaceID,
-  );
+  const { currentWorkspace } = useAppSelector((state) => state.workspaces);
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);
 
   useEffect(() => {
-    if (!currentWorkspaceID) {
+    if (!currentWorkspace) {
       if (cookies[CookieVariable.WORKSPACE_ID]) {
-        dispatch(
-          workspacesActions.SetCurrentWorkspaceID(
-            cookies[CookieVariable.WORKSPACE_ID],
-          ),
-        );
+        dispatch(workspacesActions.loadWorkspace(cookies[CookieVariable.WORKSPACE_ID]));
       } else {
         history.push(AppRoute.WORKSPACES);
       }
     }
-  }, [currentWorkspaceID]);
+  }, [currentWorkspace]);
 
   return (
     <Switch>
-      <Route path={AppRoute.PAGE} component={withHeader(Pages)} />
+      <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
       <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
-      <Route path={AppRoute.PROFILE} component={withHeader(ProfileInfo)} />
+      <Route path={AppRoute.PROFILE} component={withHeader(ProfileInfo)} key={Date.now() />
       <Route
         path={AppRoute.WORKSPACE_SETTING}
         component={withHeader(Workspace)}
+        exact
       />
       <Route path="/" component={withHeader(Pages)} exact />
       <Route path="*" component={NotFound} />

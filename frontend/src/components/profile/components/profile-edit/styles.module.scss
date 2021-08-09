@@ -29,8 +29,10 @@
     color: #fff;
     font-size: 1.32rem;
     padding: 0.4rem 1.12rem;
-    border-radius: 0.2rem;
+    border-radius: 0.32rem;
+    font-weight: 400;
     cursor: pointer;
+    height: 3rem;
 
     &:hover {
       background-color: #366dc7;
@@ -67,10 +69,10 @@
     border-radius: 0.2rem;
     color: #6c757d;
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.32rem;
     font-weight: 400;
     line-height: 1.625;
-    padding: 0.25rem 0.7rem;
+    padding: 0.4rem 1.12rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     width: 100%;
   }
@@ -91,7 +93,42 @@
   }
 
   .uploadIcon {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     max-height: 100%;
+  }
+
+  .avatarControlButton {
+    width: 9.5rem;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.32rem;
+    padding: 0.4rem 1.12rem;
+    border-radius: 0.2rem;
+
+    &:hover {
+      background-color: #366dc7;
+      border-color: #3266bb;
+      color: #fff;
+    }
+
+    &:disabled {
+      color: #fff;
+    }
+
+    &:focus {
+      color: #fff;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .spaceBetween {
+    justify-content: space-between;
   }
 }

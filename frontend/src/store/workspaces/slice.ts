@@ -5,13 +5,13 @@ import { ActionType } from './common';
 
 type State = {
   workspaces: IWorkspace[] | null;
-  currentWorkspaceID: string;
+  currentWorkspace: IWorkspace | null;
   creatingError: string;
 };
 
 const initialState: State = {
   workspaces: null,
-  currentWorkspaceID: '',
+  currentWorkspace: null,
   creatingError: '',
 };
 
@@ -22,11 +22,11 @@ const { reducer, actions } = createSlice({
     [ActionType.SetWorkspaces]: (state, action: PayloadAction<IWorkspace[]>) => {
       state.workspaces = action.payload;
     },
-    [ActionType.SetCurrentWorkspaceID]: (state, action: PayloadAction<string>) => {
-      state.currentWorkspaceID = action.payload;
+    [ActionType.SetCurrentWorkspace]: (state, action: PayloadAction<IWorkspace>) => {
+      state.currentWorkspace = action.payload;
     },
-    [ActionType.RemoveCurrentWorkspaceID]: (state) => {
-      state.currentWorkspaceID = '';
+    [ActionType.RemoveCurrentWorkspace]: (state) => {
+      state.currentWorkspace = null;
     },
     [ActionType.SetCreatingError]: (state, action: PayloadAction<string>) => {
       state.creatingError = action.payload;
