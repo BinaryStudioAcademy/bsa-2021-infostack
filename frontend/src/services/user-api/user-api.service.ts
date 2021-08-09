@@ -42,6 +42,12 @@ class UserApi {
 
     return uploadResponse;
   }
+
+  public async deleteAvatar(id: string): Promise<void> {
+    return http.load(`/api/users/${id}/avatar`, {
+      method: HttpMethod.DELETE,
+    });
+  }
 }
 
 export { UserApi };

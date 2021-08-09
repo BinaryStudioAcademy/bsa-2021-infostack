@@ -1,5 +1,5 @@
-import { IRefreshToken } from 'common/interfaces/auth';
-import { IUserWithTokens, IUser } from 'common/interfaces/user';
+import { IRefreshToken, ILogin, IRegister } from 'common/interfaces/auth';
+import { IUserWithTokens } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import { IResetPassword, ISetPassword } from 'common/interfaces/auth';
 import { http } from 'services/http/http.service';
@@ -9,7 +9,7 @@ class AuthApi {
   private BASE = '/api/auth';
 
   public async loginUser(
-    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar'>,
+    loginPayload: ILogin,
   ): Promise<IUserWithTokens> {
     const loginResponse: IUserWithTokens = await this.http.load(`${this.BASE}/login`, {
       method: HttpMethod.POST,
@@ -21,7 +21,7 @@ class AuthApi {
   }
 
   public async registerUser(
-    registerPayload: Omit<IUser, 'id' | 'avatar'>,
+    registerPayload: IRegister,
   ): Promise<IUserWithTokens> {
     const registerResponse: IUserWithTokens = await this.http.load(
       `${this.BASE}/register`,
