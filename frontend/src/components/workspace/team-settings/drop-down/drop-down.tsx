@@ -14,7 +14,7 @@ interface IDropDownProps {
   team: ITeam;
 }
 
-const TeamSettingsDropDown: React.FC<IDropDownProps> = ({ team }) => {
+const DropDown: React.FC<IDropDownProps> = ({ team }) => {
   const { editingError } = useAppSelector((state) => state.teamSettings);
   const dispatch = useAppDispatch();
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -81,4 +81,4 @@ const TeamSettingsDropDown: React.FC<IDropDownProps> = ({ team }) => {
     </div>
   );
 };
-export default TeamSettingsDropDown;
+export default DropDown;

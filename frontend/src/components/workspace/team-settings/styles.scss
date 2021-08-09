@@ -1,5 +1,30 @@
-.pageTitle {
-  font-size: 1.5rem;
+.cardItem {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  margin-bottom: 200px;
+  word-wrap: break-word;
+  background-clip: border-box;
+  background-color: #fff;
+  border: 0 solid transparent;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  min-height: 32.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  border-bottom: 0 solid transparent;
+  margin-bottom: 0;
+  padding: 1.6rem 2rem;
+}
+
+.cardTitle {
+  font-size: 1.52rem;
+  margin-bottom: 0;
 }
 
 .teams-container {
@@ -7,12 +32,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   gap: 1.5rem;
-}
-
-.teams-container-header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  background-color: #fff;
 }
 
 .vh-91 {

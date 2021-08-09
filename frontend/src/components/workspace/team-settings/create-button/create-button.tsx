@@ -1,11 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import './styles.scss';
 
-interface ICreateTeamButtonProps {
+interface ICreateButtonProps {
   onClick(): void;
 }
 
-const CreateTeamButton: React.FC<ICreateTeamButtonProps> = ({ onClick }) =>
+const CreateButton: React.FC<ICreateButtonProps> = ({ onClick }) =>
   (
     <Button
       variant="primary"
@@ -15,4 +15,4 @@ const CreateTeamButton: React.FC<ICreateTeamButtonProps> = ({ onClick }) =>
     </Button>
   );
 
-export default CreateTeamButton;
+export default CreateButton;

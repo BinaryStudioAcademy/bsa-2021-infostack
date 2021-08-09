@@ -1,8 +1,8 @@
+import { Spinner, Card } from 'react-bootstrap';
 import { ITeam } from 'common/interfaces/team';
-import Spinner from 'react-bootstrap/Spinner';
 import { teamsActions } from 'store/teams';
-import TeamItem from './team-item/team-item';
-import CreateTeamButton from './create-team-button/create-team-button';
+import Item from './item/item';
+import CreateButton from './create-button/create-button';
 import { Popup } from '../../common/popup/popup';
 import {
   useState,
@@ -25,10 +25,10 @@ const TeamSettings: React.FC = () => {
   }, []);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
-    return <TeamItem key={team.id} team={team} onClick={ onTeamItemClick }/>;
+    return <Item key={team.id} team={team} onClick={onItemClick} />;
   };
 
-  const onTeamItemClick = (id: string): void => {
+  const onItemClick = (id: string): void => {
     dispatch(teamsActions.setCurrentTeamID(id));
   };
 
@@ -48,41 +48,47 @@ const TeamSettings: React.FC = () => {
   };
 
   return (
-    <div
-      className={
-        `teams text-secondary bg-light d-flex flex-column align-items-start p-4${!teams ? ' vh-91' : ''}`
-      }>
-      <div className="teams-container-header">
-        <h1 className="pageTitle">Teams</h1>
-        <CreateTeamButton onClick={onCreateTeamButtonClick}/>
-      </div>
-      {
-        !teams && <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
-          <Spinner animation="border" variant="secondary" />
+    <Card className="cardItem">
+      <Card.Header className="cardHeader d-flex justify-content-between">
+        <Card.Title as="h5" className="cardTitle">
+          Teams
+        </Card.Title>
+        <CreateButton onClick={onCreateTeamButtonClick} />
+      </Card.Header>
+      <Card.Body className="cardBody">
+        <div
+          className={
+            `teams text-secondary d-flex flex-column align-items-start p-4${!teams ? ' vh-91' : ''}`
+          }
+        >
+          {!teams && <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
+            <Spinner animation="border" variant="secondary" />
+          </div>
+          }
+          {
+            teams && <div className="teams-container py-2 w-100">
+              {teams.map((team: ITeam) => renderTeamItem(team))}
+            </div>
+          }
+          <Popup
+            query="Enter name of team:"
+            isVisible={isPopUpVisible}
+            inputValue={popUpText}
+            setPopUpText={setPopUpText}
+            error={creatingError}
+            cancelButton={{
+              text: 'Cancel',
+              onClick: handleCreationCancel,
+            }}
+            confirmButton={{
+              text: 'Save',
+              onClick: handleCreationConfirm,
+              disabled: !popUpText,
+            }}
+          />
         </div>
-      }
-      {
-        teams && <div className="teams-container py-2 w-100">
-          {teams.map((team: ITeam) => renderTeamItem(team))}
-        </div>
-      }
-      <Popup
-        query="Enter name of team:"
-        isVisible={isPopUpVisible}
-        inputValue={popUpText}
-        setPopUpText={setPopUpText}
-        error={creatingError}
-        cancelButton={{
-          text: 'Cancel',
-          onClick: handleCreationCancel,
-        }}
-        confirmButton={{
-          text: 'Save',
-          onClick: handleCreationConfirm,
-          disabled: !popUpText,
-        }}
-      />
-    </div>
+      </Card.Body>
+    </Card>
   );
 };
 

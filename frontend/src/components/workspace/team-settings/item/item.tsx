@@ -2,7 +2,7 @@ import Avatar from 'react-avatar';
 import { ITeam } from 'common/interfaces/team';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import TeamSettingsDropDown from '../team-settings-drop-down/team-settings-drop-down';
+import DropDown from '../drop-down/drop-down';
 import './styles.scss';
 import { ITeamUser } from 'infostack-shared/common/interfaces/team/team-user.interface';
 
@@ -24,14 +24,14 @@ const TeamItem: React.FC<ITeamItemProps> = ({ team, onClick }) => {
   };
 
   return (
-    <Card className="team-card shadow-sm rounded border-0 p-2">
+    <Card className="team-card shadow rounded border-0 p-2">
       <Button
         variant="light"
         className="bg-white text-secondary h-100"
         onClick={(): void => onClick(team.id)}>
         <Card.Title className="team-name d-flex justify-content-between">
           {team.name}
-          <TeamSettingsDropDown team={team} />
+          <DropDown team={team} />
         </Card.Title>
         <Card.Body className="d-flex justify-content-between card-body">
           {
