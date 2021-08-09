@@ -21,7 +21,7 @@ class AuthApi {
   }
 
   public async registerUser(
-    registerPayload: Omit<IRegister, 'id' | 'avatar' | 'title' | 'skills'>,
+    registerPayload: IRegister
   ): Promise<IUserWithTokens> {
     const registerResponse: IUserWithTokens = await http.load(
       '/api/auth/register',
