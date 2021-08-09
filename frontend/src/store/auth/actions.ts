@@ -21,7 +21,7 @@ const login = createAsyncThunk(
 const register = createAsyncThunk(
   ActionType.SetUser,
   async (
-    registerPayload: Omit<IRegister, 'id' | 'avatar' | 'title' | 'skills'>,
+    registerPayload: IRegister
     { dispatch },
   ): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
