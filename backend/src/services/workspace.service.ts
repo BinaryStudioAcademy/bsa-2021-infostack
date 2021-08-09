@@ -78,7 +78,15 @@ export const getWorkspaceUserRole = async (
   return { role: userWorkspace.role };
 };
 
-export const getAll = async (userId: string): Promise<IWorkspace[]> => {
+export const getOne = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
+  const userWorkspace = await getCustomRepository(UserWorkspaceRepository)
+    .findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
+
+  const workspace = userWorkspace.workspace;
+  return { id: workspace.id, title: workspace.name };
+};
+
+export const getUserWorkspaces = async (userId: string): Promise<IWorkspace[]> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
   const usersWorkspaces = await userWorkspaceRepository.findUserWorkspaces(
     userId,

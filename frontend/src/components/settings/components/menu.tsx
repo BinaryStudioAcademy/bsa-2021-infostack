@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { AppRoute, CookieVariable, RoleType } from 'common/enums/enums';
@@ -23,28 +23,33 @@ const Menu: React.FC = () => {
   }, [user]);
 
   return (
-    <ListGroup variant="flush" className={getAllowedClasses(styles.menuCard)}>
-      <ListGroup.Item
-        action
-        as={Link}
-        to={AppRoute.SETTINGS_PROFILE}
-        eventKey="profile"
-        className={getAllowedClasses(styles.menuItem)}
-      >
-        Account
-      </ListGroup.Item>
-      {userRole === RoleType.ADMIN && (
+    <Card className={getAllowedClasses(styles.menuCard)}>
+      <Card.Header className={getAllowedClasses(styles.cardHeader)}>
+        <h5 className={getAllowedClasses(styles.cardTitle)}>Profile Settings</h5>
+      </Card.Header>
+      <ListGroup variant="flush" className={getAllowedClasses(styles.menuLsit)}>
         <ListGroup.Item
           action
           as={Link}
-          to={AppRoute.SETTINGS_USERS}
-          eventKey="users"
+          to={AppRoute.SETTINGS_PROFILE}
+          eventKey="profile"
           className={getAllowedClasses(styles.menuItem)}
         >
-          Users
+          Account
         </ListGroup.Item>
-      )}
-    </ListGroup>
+        {userRole === RoleType.ADMIN && (
+          <ListGroup.Item
+            action
+            as={Link}
+            to={AppRoute.SETTINGS_USERS}
+            eventKey="users"
+            className={getAllowedClasses(styles.menuItem)}
+          >
+            Users
+          </ListGroup.Item>
+        )}
+      </ListGroup>
+    </Card>
   );
 };
 

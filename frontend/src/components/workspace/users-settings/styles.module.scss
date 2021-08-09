@@ -19,54 +19,51 @@
     min-width: 0;
     position: relative;
     min-height: 32.5rem;
-
     .header {
         background-color: #fff;
         border-bottom: 0 solid transparent;
         margin-bottom: 0;
         padding: 1.6rem 2rem;
-
         .title {
             font-size: 1.52rem;
+            margin-bottom: 0;
         }
     }
-
     .body {
         flex: 1 1 auto;
         padding: 2rem;
-
-        .tableHead {
-            color: #737d85;
-            font-weight: bold;
-        }
-
-        & > .table > .tableHead > :nth-child(1) > * {
-            border-bottom-color: #889097;
-        }
-
         tr {
+            font-size: 1.2rem;
             td {
                 color: #737373;
+                max-width: 7vw;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
         }
-
+        .tableHead {
+            color: #737d85;
+            tr {
+                font-size: 1.32rem;
+            }
+        }
+        &>.table>.tableHead> :nth-child(1)>* {
+            border-bottom-color: #889097;
+        }
         i {
             color: #737373;
             cursor: pointer;
         }
-
         .trashIcon {
             margin-left: 1rem;
         }
-
         .addUser {
             cursor: pointer;
         }
-
         .addTeam {
             cursor: pointer;
         }
-
         .inviteButton {
             font-size: 1.32rem;
         }
