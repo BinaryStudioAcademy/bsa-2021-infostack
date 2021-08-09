@@ -19,6 +19,16 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
       where: { user: userId, workspace: workspaceId },
     });
   }
+
+  public findByUserIdAndWorkspaceIdDetailed(
+    userId: string,
+    workspaceId: string,
+  ): Promise<UserWorkspace> {
+    return this.findOne({
+      relations: ['workspace', 'user'],
+      where: { user: userId, workspace: workspaceId },
+    });
+  }
 }
 
 export default UserWorkspaceRepository;
