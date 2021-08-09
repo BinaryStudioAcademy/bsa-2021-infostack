@@ -1,7 +1,7 @@
 enum ActionType {
   SetWorkspaces = 'SetWorkspaces',
-  SetCurrentWorkspaceID = 'SetCurrentWorkspaceID',
-  RemoveCurrentWorkspaceID = 'RemoveCurrentWorkspaceID',
+  SetCurrentWorkspace = 'SetCurrentWorkspace',
+  RemoveCurrentWorkspace = 'RemoveCurrentWorkspace',
   SetCreatingError = 'SetCreatingError',
   RemoveCreatingError = 'RemoveCreatingError',
 }
