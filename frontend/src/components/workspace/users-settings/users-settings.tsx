@@ -2,27 +2,13 @@ import { Card, Table } from 'react-bootstrap';
 import styles from './styles.module.scss';
 import TableHead from './table-head/table-head';
 import UserItem from './user-item/user-item';
-import {
-  useEffect,
-  useAppDispatch,
-  useAppSelector,
-  useCookies,
-} from 'hooks/hooks';
-import { workspaceActions } from 'store/workspace';
+import { useAppSelector } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
-import { CookieVariable } from 'common/enums/cookies/cookies';
 
 export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Actions'];
 
 const UsersSettings: React.FC = () => {
-  const [cookies] = useCookies();
-  const dispatch = useAppDispatch();
-  const users = useAppSelector((state) => state.workspace.users);
-
-  useEffect(() => {
-    const workspaceId = cookies[CookieVariable.WORKSPACE_ID];
-    dispatch(workspaceActions.loadUsers(workspaceId));
-  }, []);
+  const users = useAppSelector((state) => state.workspaces.currentWorkspace?.users);
 
   return (
     <Card
@@ -38,7 +24,7 @@ const UsersSettings: React.FC = () => {
         <Table hover>
           <TableHead headers={TABLE_HEADERS} />
           <tbody>
-            {users.map((user) => {
+            {users?.map((user) => {
               return <UserItem key={user.id} {...user} />;
             })}
           </tbody>
