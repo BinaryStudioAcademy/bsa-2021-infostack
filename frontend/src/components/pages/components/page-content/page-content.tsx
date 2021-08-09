@@ -1,5 +1,10 @@
 import Spinner from 'react-bootstrap/Spinner';
-import { useAppDispatch, useAppSelector, useEffect, useParams } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useEffect,
+  useParams,
+} from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
 import { Card } from 'react-bootstrap';
@@ -18,13 +23,13 @@ const PageContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
 
-  const getPageById = async ( id?: string ): Promise<void> => {
+  const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
     await dispatch(pagesActions.getPage(payload));
   };
 
   useEffect(() => {
-    if(paramsId && isUUID.anyNonNil(paramsId)) {
+    if (paramsId && isUUID.anyNonNil(paramsId)) {
       getPageById(paramsId);
     } else {
       history.push(AppRoute.ROOT);
@@ -38,16 +43,13 @@ const PageContent: React.FC = () => {
           <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
           <div className="row">
             <div className="col-12">
-
               <Card>
                 <Card.Header>{content || 'Empty page'}</Card.Header>
                 <Card.Title></Card.Title>
                 <Card.Body>
-                  <Card.Text>
-                  </Card.Text>
+                  <Card.Text></Card.Text>
                 </Card.Body>
               </Card>
-
             </div>
           </div>
         </div>
@@ -57,8 +59,11 @@ const PageContent: React.FC = () => {
 
   return (
     <>
-      {!isSpinner ? <Content />
-        : <Spinner animation="border" variant="secondary" />}
+      {!isSpinner ? (
+        <Content />
+      ) : (
+        <Spinner animation="border" variant="secondary" />
+      )}
     </>
   );
 };
