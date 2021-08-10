@@ -6,6 +6,9 @@ enum HttpErrorMessage {
   INVALID_TOKEN = 'Invalid token',
   UNAUTHORIZED = 'Unauthorized',
   WORKSPACE_ALREADY_EXISTS = 'Workspace with such title already exists',
+  TAG_EMPTY_STRING = 'Tag with empty string is not allowed',
+  TAG_IN_WORKSPACE_ALREADY_EXISTS = 'Tag with such name already exists in this workspace',
+  TAG_IN_WORKSPACE_NOT_FOUND = 'Tag not found in workspace',
   TEAM_NAME_ALREADY_EXISTS = 'Team with such name already exists',
   TEAM_EMPTY_STRING = 'Team with empty string is not allowed',
 }
