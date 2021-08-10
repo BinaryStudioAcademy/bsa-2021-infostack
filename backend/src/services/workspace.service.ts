@@ -1,7 +1,9 @@
 import { getCustomRepository } from 'typeorm';
-import { IWorkspaceUser } from '../common/interfaces/workspace/workspace-user';
-import { IWorkspace } from '../common/interfaces/workspace/workspace';
-import { IWorkspaceCreation } from '../common/interfaces/workspace/workspace-creation';
+import {
+  IWorkspace,
+  IWorkspaceUser,
+  IWorkspaceCreation,
+} from '../common/interfaces/workspace/workspace';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
@@ -16,7 +18,6 @@ export const getWorkspaceUsers = async (
 ): Promise<IWorkspaceUser[]> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findByIdWithUsers(workspaceId);
-
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
