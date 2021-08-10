@@ -1,0 +1,21 @@
+.btn-tag .btn {
+  background-color: #3f80ea;
+  color: #fff;
+  font-size: 1.32rem;
+  padding: 0.4rem 1.12rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+
+.btn-tag .dropdown-menu {
+  font-size: 1.32rem;
+}
+
+.btn-tag .dropdown-menu .dropdown-item:last-child {
+  color: red;
+}
+
+.btn-tag .dropdown-menu .dropdown-item .bi-pencil,
+.btn-tag .dropdown-menu .dropdown-item .bi-trash-fill {
+  margin-right: 0.5rem;
+}
