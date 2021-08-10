@@ -14,6 +14,6 @@ router
   .get('/:id', run(req => getPage(req.params.id)));
 
 router
-  .post('/:id/version', run(req => updateContent(req.workspaceId, req.body)));
+  .post('/:id/version', run(req => updateContent(req.body)));
 
 export default router;

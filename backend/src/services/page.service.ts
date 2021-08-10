@@ -101,12 +101,11 @@ export const getPage = async (
 };
 
 export const updateContent = async (
-  workspaceId: string,
   body: IEditPageContent,
 ): Promise<Page> => {
   const pageId = body.pageId;
   const pageRepository = getCustomRepository(PageRepository);
-  const pageToUpdate = await pageRepository.findOnePage(workspaceId, pageId);
+  const pageToUpdate = await pageRepository.findByIdWithContents(pageId);
 
   const contentPageId = pageToUpdate.pageContents[0].id;
   const contentRepository = getCustomRepository(PageContentRepository);
@@ -117,6 +116,6 @@ export const updateContent = async (
 
   await contentRepository.update(contentPageId, { title: contentToUpdate.title, content: contentToUpdate.content });
 
-  const page = await pageRepository.findOnePage(workspaceId, pageId);
+  const page = await pageRepository.findByIdWithContents(pageId);
   return page;
 };
