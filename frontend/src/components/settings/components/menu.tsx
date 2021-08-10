@@ -2,25 +2,12 @@ import React from 'react';
 import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
-import { AppRoute, CookieVariable, RoleType } from 'common/enums/enums';
-import { useState, useCookies, useEffect, useAppSelector } from 'hooks/hooks';
-import { WorkspaceApi } from 'services';
+import { AppRoute, RoleType } from 'common/enums/enums';
+import { useAppSelector } from 'hooks/hooks';
 import styles from './styles.module.scss';
 
 const Menu: React.FC = () => {
-  const [userRole, setUserRole] = useState<RoleType>();
-  const user = useAppSelector((state) => state.auth.user);
-  const [cookies] = useCookies();
-
-  useEffect(() => {
-    const workspaceId = cookies[CookieVariable.WORKSPACE_ID];
-
-    if (user?.id && workspaceId) {
-      new WorkspaceApi()
-        .getUserRole(workspaceId, user.id)
-        .then(({ role }) => setUserRole(role));
-    }
-  }, [user]);
+  const role = useAppSelector((state) => state.workspaces.currentWorkspace?.role);
 
   return (
     <Card className={getAllowedClasses(styles.menuCard)}>
@@ -39,7 +26,7 @@ const Menu: React.FC = () => {
         >
           Account
         </ListGroup.Item>
-        {userRole === RoleType.ADMIN && (
+        {role === RoleType.ADMIN && (
           <>
             <ListGroup.Item
               action
@@ -53,6 +40,15 @@ const Menu: React.FC = () => {
             <ListGroup.Item
               action
               as={Link}
+              to={AppRoute.SETTINGS_TEAMS}
+              eventKey="teams"
+              className={getAllowedClasses(styles.menuItem)}
+            >
+              Teams
+            </ListGroup.Item>
+            <ListGroup.Item
+              action
+              as={Link}
               to={AppRoute.SETTINGS_TAGS}
               eventKey="tags"
               className={getAllowedClasses(styles.menuItem)}
@@ -60,17 +56,6 @@ const Menu: React.FC = () => {
               Tags
             </ListGroup.Item>
           </>
-        )}
-        {userRole === RoleType.ADMIN && (
-          <ListGroup.Item
-            action
-            as={Link}
-            to={AppRoute.SETTINGS_TEAMS}
-            eventKey="teams"
-            className={getAllowedClasses(styles.menuItem)}
-          >
-            Teams
-          </ListGroup.Item>
         )}
       </ListGroup>
     </Card>

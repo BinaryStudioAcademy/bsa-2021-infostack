@@ -1,5 +1,4 @@
 interface ITagCreation {
-  workspaceId: string;
   name: string;
 }
 

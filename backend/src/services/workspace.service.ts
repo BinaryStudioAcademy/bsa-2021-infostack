@@ -1,7 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import {
   IWorkspace,
-  IWorkspaceUserRole,
   IWorkspaceUser,
   IWorkspaceCreation,
 } from '../common/interfaces/workspace/workspace';
@@ -22,25 +21,12 @@ export const getWorkspaceUsers = async (
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
-export const getWorkspaceUserRole = async (
-  userId: string,
-  workspaceId: string,
-): Promise<IWorkspaceUserRole> => {
+export const getWorkspace = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspace =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
-      userId,
-      workspaceId,
-    );
-  return { role: userWorkspace.role };
-};
+  const userWorkspace = await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
+  const { workspace } = userWorkspace;
 
-export const getOne = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
-  const userWorkspace = await getCustomRepository(UserWorkspaceRepository)
-    .findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
-
-  const workspace = userWorkspace.workspace;
-  return { id: workspace.id, title: workspace.name };
+  return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
 };
 
 export const getUserWorkspaces = async (userId: string): Promise<IWorkspace[]> => {

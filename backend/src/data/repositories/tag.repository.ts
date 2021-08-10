@@ -10,12 +10,12 @@ class TagRepository extends Repository<Tag> {
   public findAllByWorkspaceId(workspaceId: string): Promise<Tag[]> {
     return this.createQueryBuilder('tag')
       .select('tag.id')
-      .addSelect('tag.workspaceId')
       .addSelect('tag.name')
       .where('tag.workspaceId= :workspaceId', { workspaceId })
       .orderBy('tag.name', 'ASC')
       .getMany();
   }
+
 }
 
 export default TagRepository;

@@ -6,19 +6,19 @@ import { ITeamEditing } from 'common/interfaces/team';
 import { HttpCode } from 'common/enums/enums';
 
 const loadTeams = createAsyncThunk(
-  ActionType.setTeams,
+  ActionType.SET_TEAMS,
   async (_, { dispatch }): Promise<void> => {
-    const response = await new TeamApi().loadTeams();
+    const response = await new TeamApi().getTeams();
     dispatch(actions.setTeams(response));
   },
 );
 
 const createTeam = createAsyncThunk(
-  ActionType.setCurrentTeamID,
+  ActionType.SET_CURRENT_TEAM,
   async (payload: string, { dispatch }) => {
     try {
       const team = await new TeamApi().createTeam(payload);
-      dispatch(actions.setCurrentTeamID(team.id));
+      dispatch(actions.setCurrentTeam(team));
       dispatch(actions.addTeam(team));
       dispatch(actions.removeCreatingError());
     } catch (err) {
@@ -30,7 +30,7 @@ const createTeam = createAsyncThunk(
 );
 
 const updateTeam = createAsyncThunk(
-  ActionType.updateTeam,
+  ActionType.UPDATE_TEAM,
   async (payload: ITeamEditing, { dispatch }) => {
     try {
       const team = await new TeamApi().updateTeam(payload);
@@ -45,7 +45,7 @@ const updateTeam = createAsyncThunk(
 );
 
 const deleteTeam = createAsyncThunk(
-  ActionType.deleteTeam,
+  ActionType.DELETE_TEAM,
   async (payload: string, { dispatch }) => {
     try {
       await new TeamApi().deleteTeam(payload);
@@ -56,12 +56,21 @@ const deleteTeam = createAsyncThunk(
   },
 );
 
+const loadTeam = createAsyncThunk(
+  ActionType.SET_CURRENT_TEAM,
+  async (id: string, { dispatch }) => {
+    const workspace = await new TeamApi().getTeam(id);
+    dispatch(actions.setCurrentTeam(workspace));
+  },
+);
+
 const teamsActions = {
   ...actions,
   loadTeams,
   createTeam,
   updateTeam,
   deleteTeam,
+  loadTeam,
 };
 
 export { teamsActions };
