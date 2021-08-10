@@ -2,13 +2,27 @@ import { Card, Table } from 'react-bootstrap';
 import styles from './styles.module.scss';
 import TableHead from './table-head/table-head';
 import UserItem from './user-item/user-item';
-import { useAppSelector } from 'hooks/hooks';
+import {
+  useEffect,
+  useAppDispatch,
+  useAppSelector,
+  useCookies,
+} from 'hooks/hooks';
+import { usersActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/dom/dom';
+import { CookieVariable } from 'common/enums/cookies/cookies';
 
 export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Actions'];
 
 const UsersSettings: React.FC = () => {
-  const users = useAppSelector((state) => state.workspaces.currentWorkspace?.users);
+  const [cookies] = useCookies();
+  const dispatch = useAppDispatch();
+  const { users } = useAppSelector((state) => state.users);
+
+  useEffect(() => {
+    const workspaceId = cookies[CookieVariable.WORKSPACE_ID];
+    dispatch(usersActions.loadUsers(workspaceId));
+  }, []);
 
   return (
     <Card

@@ -25,11 +25,6 @@ export const getWorkspace = async (workspaceId: string, userId: string): Promise
     .findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
   const { workspace } = userWorkspace;
 
-  if (userWorkspace.role === RoleType.ADMIN) {
-    const users = await getWorkspaceUsers(workspaceId);
-    return { id: workspace.id, title: workspace.name, role: userWorkspace.role, users };
-  }
-
   return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
 };
 

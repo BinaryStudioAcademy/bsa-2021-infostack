@@ -1,6 +1,7 @@
 import {
   IWorkspace,
   IWorkspaceCreation,
+  IWorkspaceUser,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { http } from 'services/http/http.service';
@@ -23,6 +24,12 @@ class WorkspaceApi {
 
   public async getById(id: string): Promise<IWorkspace> {
     return this.http.load(`${this.BASE}/${id}`);
+  }
+
+  public async getUsers(id: string): Promise<IWorkspaceUser[]> {
+    return this.http.load(`${this.BASE}/${id}/users`, {
+      contentType: ContentType.JSON,
+    });
   }
 }
 
