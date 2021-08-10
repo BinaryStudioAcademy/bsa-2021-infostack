@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
       onSubmit={handleSubmit(handleSubmitForm)}
       altRoute={{
         question: 'Already have an account?',
-        linkText: 'Log in',
+        linkText: 'Sign in',
         route: AppRoute.LOGIN,
       }}
     >
