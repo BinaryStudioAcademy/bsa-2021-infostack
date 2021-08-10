@@ -1,5 +1,5 @@
 import { Page } from 'src/data/entities/page';
-import { IPage } from '~/common/interfaces/page';
+import { IPage } from '~/common/interfaces/pages';
 
 export const mapPageToIPage = (
   page: Page,

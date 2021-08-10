@@ -6,7 +6,7 @@ import { ILogin, IRegister } from 'common/interfaces/auth';
 import { LocalStorageVariable } from 'common/enums/enums';
 
 const login = createAsyncThunk(
-  ActionType.SetUser,
+  ActionType.SET_USER,
   async (
     loginPayload: ILogin,
     { dispatch },
@@ -19,7 +19,7 @@ const login = createAsyncThunk(
 );
 
 const register = createAsyncThunk(
-  ActionType.SetUser,
+  ActionType.SET_USER,
   async (
     registerPayload: IRegister,
     { dispatch },
@@ -32,7 +32,7 @@ const register = createAsyncThunk(
 );
 
 const logout = createAsyncThunk(
-  ActionType.RemoveUser,
+  ActionType.REMOVE_USER,
   async (payload: undefined, { dispatch }): Promise<void> => {
     const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
     localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
@@ -43,7 +43,7 @@ const logout = createAsyncThunk(
 );
 
 const loadUser = createAsyncThunk(
-  ActionType.SetUser,
+  ActionType.SET_USER,
   async (payload: undefined, { dispatch }): Promise<void> => {
     const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
     if (token) {

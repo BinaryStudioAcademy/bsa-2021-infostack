@@ -19,24 +19,24 @@ const { reducer, actions } = createSlice({
   name: ReducerName.TAGS,
   initialState,
   reducers: {
-    [ActionType.SetTags]: (state, action: PayloadAction<ITag[]>) => {
+    [ActionType.SET_TAGS]: (state, action: PayloadAction<ITag[]>) => {
       state.tags = action.payload;
     },
-    [ActionType.ResetTags]: (state, _action: PayloadAction<void>) => {
+    [ActionType.RESET_TAGS]: (state, _action: PayloadAction<void>) => {
       state.tags = null;
       state.tagToEditId = null;
       state.isOpenNewTagForm = false;
     },
-    [ActionType.SetTagToEdit]: (
+    [ActionType.SET_TAG_TO_EDIT]: (
       state,
       action: PayloadAction<string | null>,
     ) => {
       state.tagToEditId = action.payload;
     },
-    [ActionType.AddTag]: (state, action: PayloadAction<ITag>) => {
+    [ActionType.ADD_TAG]: (state, action: PayloadAction<ITag>) => {
       state.tags?.push(action.payload);
     },
-    [ActionType.DeleteTag]: (state, action: PayloadAction<{ id: string }>) => {
+    [ActionType.DELETE_TAG]: (state, action: PayloadAction<{ id: string }>) => {
       if (state.tags) {
         if (state.tags.length === 1) {
           state.tags = [];
@@ -48,7 +48,7 @@ const { reducer, actions } = createSlice({
         }
       }
     },
-    [ActionType.UpdateTag]: (
+    [ActionType.UPDATE_TAG]: (
       state,
       action: PayloadAction<{ id: string; updatedName: string }>,
     ) => {
@@ -60,7 +60,7 @@ const { reducer, actions } = createSlice({
       }
       state.tagToEditId = null;
     },
-    [ActionType.SetNewTagForm]: (
+    [ActionType.SET_NEW_TAG_FORM]: (
       state,
       action: PayloadAction<{ isOpen: boolean }>,
     ) => {
