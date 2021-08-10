@@ -23,6 +23,12 @@ class PageRepository extends Repository<Page> {
       relations: ['pageContents'],
     });
   }
+
+  public findByIdWithAuthorAndContent(id: string): Promise<Page> {
+    return this.findOne(id, {
+      relations: ['author', 'pageContents', 'pageContents.author'],
+    });
+  }
 }
 
 export default PageRepository;
