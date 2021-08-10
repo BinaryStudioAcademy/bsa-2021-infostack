@@ -10,8 +10,12 @@ import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-c
 import { authActions } from 'store/actions';
 import { UserApi, SkillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
+import { IUserAccount } from 'common/interfaces/user';
 import CreatableSelect from 'react-select/creatable';
 import { OptionsType } from 'react-select';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
+import { accountInfoSchema } from 'validations/account-info-schema';
 import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
 
@@ -49,6 +53,17 @@ const ProfileEdit: React.FC = () => {
       setAllSkills(skills);
     });
   }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUserAccount>({
+    resolver: yupResolver(accountInfoSchema),
+    defaultValues: {
+      fullName: user?.fullName,
+      title: user?.title },
+  });
 
   const handleRemove = (): void => {
     if (user) {
@@ -196,12 +211,18 @@ const ProfileEdit: React.FC = () => {
                   Full name
                 </Form.Label>
                 <Form.Control
+                  {...register('fullName')}
                   className={getAllowedClasses(styles.cardInput)}
                   type="text"
                   placeholder="Full name"
-                  value={userFullName}
                   onChange={(e): void => setUserFullName(e.target.value)}
+                  isInvalid={!!errors.fullName}
                 />
+                {errors.fullName && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors?.fullName.message}
+                  </Form.Control.Feedback>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupTitle">
                 <Form.Label
@@ -210,12 +231,18 @@ const ProfileEdit: React.FC = () => {
                   Title
                 </Form.Label>
                 <Form.Control
+                  {...register('title')}
                   className={getAllowedClasses(styles.cardInput)}
                   type="text"
                   placeholder="Title"
-                  value={userTitle}
                   onChange={(e): void => setUserTitle(e.target.value)}
+                  isInvalid={!!errors.title}
                 />
+                {errors.title && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors?.title.message}
+                  </Form.Control.Feedback>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupSelect">
                 <Form.Label
@@ -291,7 +318,7 @@ const ProfileEdit: React.FC = () => {
           variant="primary"
           className={getAllowedClasses(styles.cardButton)}
           size="sm"
-          onClick={!isUploading ? handleSaveChanges : undefined}
+          onClick={!isUploading ? handleSubmit(handleSaveChanges) : undefined}
           disabled={isUploading}
         >
           {isUploading ? 'Uploading…' : 'Save changes'}
