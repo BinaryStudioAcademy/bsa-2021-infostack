@@ -17,9 +17,9 @@ router
   .get('/following/:id', run(req => getPagesFollowedByUser(req.params.id)));
 
 router
-  .post('/follow', run(req => followPage(req.userId, req.body.pageId)));
+  .post('/follow/:id', run(req => followPage(req.userId, req.params.id)));
 
 router
-  .post('/unfollow', run(req => unfollowPage(req.userId, req.body.pageId)));
+  .post('/unfollow/:id', run(req => unfollowPage(req.userId, req.params.id)));
 
 export default router;

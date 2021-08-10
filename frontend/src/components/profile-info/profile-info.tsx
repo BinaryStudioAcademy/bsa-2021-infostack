@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
-import { Link } from 'react-router-dom';
+import { Link } from 'components/common/common';
 import './profile-info.scss';
 import { UserApi, PageApi } from 'services';
 import { IPageFollowed } from 'common/interfaces/page';
@@ -102,7 +102,7 @@ const ProfileInfo: React.FC = () => {
               <Card.Body>
                 <Card.Title className="d-flex justify-content-start profile-card-title">Followings</Card.Title>
                 <div className="following-pages-container">
-                  {pages.length > 0 ? pages.map(page => <Link to={`${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${page.id}`} key={page.id} className="following-page"><i className="bi bi-file-text-fill"></i>{page.title}</Link>)
+                  {pages.length > 0 ? pages.map(page => <Link to={`${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${page.id}` as AppRoute} key={page.id} className="following-page"><i className="bi bi-file-text-fill"></i>{page.title}</Link>)
                     : null}
                 </div>
               </Card.Body>

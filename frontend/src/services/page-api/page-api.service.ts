@@ -41,22 +41,14 @@ class PageApi {
   }
 
   public async followPage(pageId: string | undefined): Promise<IPage[]> {
-    return this.http.load(`${this.BASE}/follow`, {
+    return this.http.load(`${this.BASE}/follow/${pageId}`, {
       method: HttpMethod.POST,
-      contentType: ContentType.JSON,
-      payload: JSON.stringify({
-        pageId,
-      }),
     });
   }
 
   public async unfollowPage(pageId: string | undefined): Promise<IPage[]> {
-    return this.http.load(`${this.BASE}/unfollow`, {
+    return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
       method: HttpMethod.POST,
-      contentType: ContentType.JSON,
-      payload: JSON.stringify({
-        pageId,
-      }),
     });
   }
 }

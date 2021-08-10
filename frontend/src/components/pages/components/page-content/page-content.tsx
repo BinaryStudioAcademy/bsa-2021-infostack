@@ -76,7 +76,7 @@ const PageContent: React.FC = () => {
             <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
             <Button
               className="mb-3"
-              onClick={isFollowed ? ():Promise<void> => onPageUnfollow(currentPage?.id) : ():Promise<void> => onPageFollow(currentPage?.id)}
+              onClick={isFollowed ? ():Promise<void> => onPageUnfollow(paramsId) : ():Promise<void> => onPageFollow(paramsId)}
             >
               {isFollowed ? 'Unfollow' : 'Follow'}
             </Button>
