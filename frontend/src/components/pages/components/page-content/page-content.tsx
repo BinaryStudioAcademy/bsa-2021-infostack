@@ -9,7 +9,7 @@ import {
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
-import { Card } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import isUUID from 'is-uuid';
 import { useHistory } from 'react-router';
@@ -54,11 +54,13 @@ const PageContent: React.FC = () => {
     return (
       <div className="content">
         <div className="container-fluid p-0">
-          <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-          <PageContributors contributors={contributors} />
+          <Row>
+            <Col lg={3}>
+              <PageContributors contributors={contributors} />
+            </Col>
 
-          <div className="row">
-            <div className="col-12">
+            <Col>
+              <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
               <Card>
                 <Card.Header>{content || 'Empty page'}</Card.Header>
                 <Card.Title></Card.Title>
@@ -66,8 +68,8 @@ const PageContent: React.FC = () => {
                   <Card.Text></Card.Text>
                 </Card.Body>
               </Card>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
       </div>
     );
