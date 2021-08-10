@@ -1,5 +1,5 @@
 import Avatar from 'react-avatar';
-import { useState, useEffect, useParams, useAppSelector } from '../../hooks/hooks';
+import { useState, useEffect, useParams, useAppSelector } from '../../../../hooks/hooks';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

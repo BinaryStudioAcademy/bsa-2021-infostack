@@ -2,7 +2,7 @@ import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums/enu
 import { Route, Switch } from 'components/common/common';
 import withHeader from 'components/common/with-header/with-header';
 import Pages from 'components/pages/pages';
-import ProfileInfo from 'components/profile-info/profile-info';
+import ProfileInfo from 'components/profile/components/profile-info/profile-info';
 import Workspace from 'components/workspace/workspace';
 import Settings from 'components/settings/settings';
 import {

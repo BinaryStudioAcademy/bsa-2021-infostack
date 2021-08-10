@@ -82,14 +82,14 @@ const PageContent: React.FC = () => {
           </div>
         </div>
         <Popup
-          query="Assign page permissions to a user or a team"
+          query="Users & Teams"
           isVisible={isPopUpVisible}
           cancelButton={{
             text: 'Cancel',
             onClick: handleAssignCancel,
           }}
           confirmButton={{
-            text: 'Save',
+            text: 'Add user',
             onClick: handleAssignConfirm,
           }}
         />

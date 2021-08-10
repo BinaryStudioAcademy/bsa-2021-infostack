@@ -1,0 +1,28 @@
+tr {
+  font-size: 1.2rem;
+
+  td {
+    color: #737373;
+    max-width: 7vw;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.tableHead {
+  color: #737d85;
+
+  tr {
+    font-size: 1.32rem;
+  }
+}
+
+i {
+  color: #737373;
+  cursor: pointer;
+}
+
+.trashIcon {
+  margin-left: 1rem;
+}
