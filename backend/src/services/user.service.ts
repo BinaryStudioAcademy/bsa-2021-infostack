@@ -65,11 +65,13 @@ export const updateAvatar = async (
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const userToUpdate = await userRepository.findById(id);
-  const fileName = userToUpdate.avatar.split('/').pop();
-  const isExistsAvatar = await isFileExists(fileName);
 
-  if (isExistsAvatar) {
-    deleteFile(userToUpdate.avatar);
+  if (userToUpdate.avatar) {
+    const fileName = userToUpdate.avatar.split('/').pop();
+    const isExistsAvatar = await isFileExists(fileName);
+    if (isExistsAvatar) {
+      deleteFile(userToUpdate.avatar);
+    }
   }
 
   const uploadedFile = await uploadFile(file);

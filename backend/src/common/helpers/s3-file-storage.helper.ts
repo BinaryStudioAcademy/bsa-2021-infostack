@@ -17,22 +17,14 @@ export const isFileExists = async (
   fileName: string,
 ): Promise<PromiseResult<S3.HeadObjectOutput, AWSError>> => {
   const params = { Bucket: bucketName, Key: fileName };
-  try {
-    return await s3.headObject(params).promise();
-  } catch (err) {
-    throw new Error(err);
-  }
+  return s3.headObject(params).promise();
 };
 
 export const deleteFile = async (
   fileName: string,
 ): Promise<PromiseResult<S3.DeleteObjectOutput, AWSError>> => {
   const params = { Bucket: bucketName, Key: fileName };
-  try {
-    return await s3.deleteObject(params).promise();
-  } catch (err) {
-    throw new Error(err);
-  }
+  return s3.deleteObject(params).promise();
 };
 
 export const uploadFile = (
@@ -45,6 +37,5 @@ export const uploadFile = (
     Key: file.filename,
     ACL: 'public-read',
   };
-
   return s3.upload(uploadParams).promise();
 };
