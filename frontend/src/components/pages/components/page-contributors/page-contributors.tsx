@@ -2,7 +2,7 @@ import { Card, Badge } from 'react-bootstrap';
 import Avatar from 'react-avatar';
 import { IPageContributor } from 'common/interfaces/page';
 import { useHistory } from 'react-router-dom';
-import { AppRoute } from '../../../../common/enums/enums';
+import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
 
 interface IPageContributorsProps {
