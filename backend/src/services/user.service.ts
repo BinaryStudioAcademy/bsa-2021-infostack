@@ -12,7 +12,8 @@ import SkillRepository from '../data/repositories/skill.repository';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar, title, skills } = await userRepository.findById(id);
+  const { fullName, email, avatar, title, skills } =
+    await userRepository.findById(id);
 
   return { id, fullName, email, avatar, title, skills };
 };
@@ -49,7 +50,7 @@ export const getUserByIdWithWorkspace = async (
 
 export const updateUserInfo = async (
   id: string,
-  body: { fullName: string, title: string, skills: string[] },
+  body: { fullName: string; title: string; skills: string[] },
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const userToUpdate = await userRepository.findById(id);
@@ -61,7 +62,9 @@ export const updateUserInfo = async (
   const foundSkills = await skillRepository.getSkillsById(body.skills);
   userToUpdate.skills = foundSkills;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(userToUpdate);
+  const { fullName, email, avatar, title, skills } = await userRepository.save(
+    userToUpdate,
+  );
 
   return { id, fullName, email, avatar, title, skills };
 };
@@ -87,7 +90,9 @@ export const updateAvatar = async (
 
   userToUpdate.avatar = Location || userToUpdate.avatar;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(userToUpdate);
+  const { fullName, email, avatar, title, skills } = await userRepository.save(
+    userToUpdate,
+  );
 
   return { id, fullName, email, avatar, title, skills };
 };

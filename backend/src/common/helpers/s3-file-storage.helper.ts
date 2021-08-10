@@ -3,8 +3,6 @@ import S3 from 'aws-sdk/clients/s3';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/error';
 import { env } from '../../env';
-import { PromiseResult } from 'aws-sdk/lib/request';
-import { AWSError } from 'aws-sdk/lib/error';
 
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
@@ -40,11 +38,4 @@ export const uploadFile = (
     ACL: 'public-read',
   };
   return s3.upload(uploadParams).promise();
-};
-
-export const deleteFile = (
-  filename: string,
-): Promise<PromiseResult<S3.DeleteObjectOutput, AWSError>> => {
-  const params = { Bucket: bucketName, Key: filename };
-  return s3.deleteObject(params).promise();
 };
