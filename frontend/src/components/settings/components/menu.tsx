@@ -48,6 +48,17 @@ const Menu: React.FC = () => {
             Users
           </ListGroup.Item>
         )}
+        {userRole === RoleType.ADMIN && (
+          <ListGroup.Item
+            action
+            as={Link}
+            to={AppRoute.SETTINGS_TEAMS}
+            eventKey="teams"
+            className={getAllowedClasses(styles.menuItem)}
+          >
+            Teams
+          </ListGroup.Item>
+        )}
       </ListGroup>
     </Card>
   );
