@@ -1,9 +1,11 @@
-import { useAppDispatch, useAppSelector, useEffect, useState } from 'hooks/hooks';
 import { Button, FormControl, InputGroup, ListGroup } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector, useContext, useEffect, useState } from 'hooks/hooks';
+import { SocketContext } from 'context/socket';
 import { commentsActions } from 'store/comments';
 import { Comment } from '../comment/comment';
 import { Response } from '../response/response';
 import styles from './styles.module.scss';
+import { IComment } from 'common/interfaces/comment';
 
 type Props = {
   pageId: string;
@@ -13,10 +15,30 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
   const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const comments = useAppSelector(state => state.comments.comments);
+  const user = useAppSelector(state => state.auth.user);
   const dispatch = useAppDispatch();
+  const socket = useContext(SocketContext);
+
+  const onComment = (comment: IComment): void => {
+    if (comment.author.id === user?.id) {
+      return;
+    }
+
+    if (comment.parentCommentId) {
+      dispatch(commentsActions.addResponse(comment));
+    } else {
+      dispatch(commentsActions.addComment(comment));
+    }
+  };
 
   useEffect(() => {
     dispatch(commentsActions.loadComments(pageId));
+    socket.emit('page/join', pageId);
+    socket.on('page/newComment', onComment);
+
+    return (): void => {
+      socket.off('page/newComment', onComment);
+    };
   }, []);
 
   const handleChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>): void =>
@@ -24,12 +46,12 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
 
   const handleSubmit = async (): Promise<void> => {
     setIsLoading(true);
-    await dispatch(commentsActions.addComment({ pageId, payload: { text } }));
+    await dispatch(commentsActions.createComment({ pageId, payload: { text } }));
     setIsLoading(false);
   };
 
   const handleResponse = (commentId: string, text: string): void => {
-    dispatch(commentsActions.addResponse({
+    dispatch(commentsActions.createResponse({
       pageId,
       payload: { text, parentCommentId: commentId } },
     ));

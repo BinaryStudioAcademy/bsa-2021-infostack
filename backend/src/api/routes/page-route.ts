@@ -10,6 +10,6 @@ router
   .get('/:id', run(req => getPage(req.workspaceId, req.params.id)))
   .post('/', run(req => createPage(req.userId, req.workspaceId, req.body)))
   .get('/:id/comments', run(req => getComments(req.params.id)))
-  .post('/:id/comments', run(req => addComment(req.userId, req.params.id, req.body)));
+  .post('/:id/comments', run(req => addComment(req.userId, req.params.id, req.body, req.io)));
 
 export default router;
