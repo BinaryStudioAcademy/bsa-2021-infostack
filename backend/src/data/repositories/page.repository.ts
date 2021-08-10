@@ -21,9 +21,7 @@ class PageRepository extends Repository<Page> {
     return this.findOne(
       { id },
       {
-        relations: [
-          'pageContents',
-        ],
+        relations: ['pageContents'],
       },
     );
   }
