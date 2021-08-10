@@ -6,33 +6,33 @@ import { WorkspaceApi } from 'services';
 import { HttpCode } from 'common/enums/enums';
 
 const loadWorkspaces = createAsyncThunk(
-  ActionType.SetWorkspaces,
+  ActionType.SET_WORKSPACES,
   async (payload: undefined, { dispatch }) => {
-    const getResponse = await new WorkspaceApi().get();
-    dispatch(actions.SetWorkspaces(getResponse));
+    const getResponse = await new WorkspaceApi().getWorkspaces();
+    dispatch(actions.setWorkspaces(getResponse));
   },
 );
 
 const createWorkspace = createAsyncThunk(
-  ActionType.SetCurrentWorkspace,
+  ActionType.SET_CURRENT_WORKSPACE,
   async (payload: IWorkspaceCreation, { dispatch }) => {
     try {
       const workspace = await new WorkspaceApi().create(payload);
-      dispatch(actions.SetCurrentWorkspace(workspace));
-      dispatch(actions.RemoveCreatingError());
+      dispatch(actions.setCurrentWorkspace(workspace));
+      dispatch(actions.removeCreatingError());
     } catch (err) {
       if (err.status === HttpCode.CONFLICT) {
-        dispatch(actions.SetCreatingError(err.message));
+        dispatch(actions.setCreatingError(err.message));
       }
     }
   },
 );
 
 const loadWorkspace = createAsyncThunk(
-  ActionType.SetCurrentWorkspace,
+  ActionType.SET_CURRENT_WORKSPACE,
   async (id: string, { dispatch }) => {
-    const workspace = await new WorkspaceApi().getById(id);
-    dispatch(actions.SetCurrentWorkspace(workspace));
+    const workspace = await new WorkspaceApi().getWorkspace(id);
+    dispatch(actions.setCurrentWorkspace(workspace));
   },
 );
 

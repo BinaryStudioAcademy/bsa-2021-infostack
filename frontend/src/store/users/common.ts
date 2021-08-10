@@ -1,5 +1,5 @@
 enum ActionType {
-  SetUsers = 'setUsers',
+  SET_USERS = 'setUsers',
 }
 
 export { ActionType };

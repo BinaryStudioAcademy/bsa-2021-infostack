@@ -20,13 +20,13 @@ router.get(
 );
 
 router.get(
-  '/:id',
-  run((req) => getPage(req.workspaceId, req.params.id)),
+  '/:id/contributors',
+  run((req) => getContributors(req.params.id)),
 );
 
 router.get(
-  '/:id/contributors',
-  run((req) => getContributors(req.params.id)),
+  '/:id',
+  run((req) => getPage(req.params.id)),
 );
 
 export default router;

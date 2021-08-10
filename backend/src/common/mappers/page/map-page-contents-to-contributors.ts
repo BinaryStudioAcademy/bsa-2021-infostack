@@ -1,5 +1,5 @@
 import { Page } from '../../../data/entities/page';
-import { IPageContributor } from '../../interfaces/pages';
+import { IPageContributor } from '../../interfaces/page';
 
 export const mapPageToContributors = ({
   pageContents,

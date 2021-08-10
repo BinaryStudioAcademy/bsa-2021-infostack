@@ -16,7 +16,7 @@ import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
-import { IPageContributor } from 'common/interfaces/page';
+import { IPageContributor } from 'common/interfaces/pages';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
