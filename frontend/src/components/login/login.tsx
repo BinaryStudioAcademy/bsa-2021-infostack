@@ -33,7 +33,7 @@ const Login: React.FC = () => {
       onSubmit={handleSubmit(handleSubmitForm)}
       altRoute={{
         // prettier-ignore
-        question: 'Do no\'t have an account?',
+        question: 'Don\'t have an account?',
         linkText: 'Sign up',
         route: AppRoute.SIGN_UP,
       }}
