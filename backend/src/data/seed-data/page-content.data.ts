@@ -52,11 +52,20 @@ export const pageContents = [
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
   },
   {
+    id: 'd7fe5fb3-58a9-40d5-b2f0-11be41b0880e',
+    pageId: 'bc4ee38b-56dc-4202-a1e2-48ae5e7affda',
+    createdAt: new Date(),
+    title: 'Bitwise AND (&)',
+    content: 'The bitwise AND operator (&) returns a 1 in each bit position for which the corresponding bits of both operands are 1s. Syntax: a & b',
+    authorId: 'bf873638-9388-4298-94b0-3d1a11ef8688',
+  },
+  {
     id: 'c87b0e16-3441-47ec-aac1-b21d6f79123e',
     pageId: 'c47a4ae4-b0d5-4671-ab7f-25a3d7921d8f',
     createdAt: new Date(),
     title: 'Bitwise AND assignment (&=)',
-    content: 'The bitwise AND assignment operator (&=) uses the binary representation of both operands, does a bitwise AND operation on them and assigns the result to the variable.',
+    content:
+      'The bitwise AND assignment operator (&=) uses the binary representation of both operands, does a bitwise AND operation on them and assigns the result to the variable.',
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
   },
 ];
