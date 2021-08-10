@@ -4,13 +4,12 @@ import TagRepository from '../data/repositories/tag.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { mapTagToITag } from '../common/mappers/tag/map-tag-to-itag';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITag[]> => {
   const tags = await getCustomRepository(TagRepository).findAllByWorkspaceId(workspaceId);
-  return tags.map(mapTagToITag);
+  return tags;
 };
 
 export const create = async (workspaceId: string, newTag: ITagCreation): Promise<ITag> => {
@@ -21,7 +20,7 @@ export const create = async (workspaceId: string, newTag: ITagCreation): Promise
       message: HttpErrorMessage.TAG_EMPTY_STRING,
     });
   }
-  const tagsInDB = await tagRepository.findByNameAndWorkspaceId(workspaceId, newTag.name);
+  const tagsInDB = await tagRepository.find({ workspaceId, name: newTag.name });
   if (tagsInDB.length) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
