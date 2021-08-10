@@ -30,6 +30,11 @@ const SignUp: React.FC = () => {
       secondaryText="Start creating the best possible user experience"
       submitText="Sign up"
       onSubmit={handleSubmit(handleSubmitForm)}
+      altRoute={{
+        question: 'Already have an account?',
+        linkText: 'Sign in',
+        route: AppRoute.LOGIN,
+      }}
     >
       <FormField
         label="Full Name"

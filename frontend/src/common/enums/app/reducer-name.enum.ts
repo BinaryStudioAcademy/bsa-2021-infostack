@@ -6,6 +6,7 @@ enum ReducerName {
   WORKSPACE = 'workspace',
   WORKSPACES = 'workspaces',
   TAGS = 'tags',
+  TEAMS = 'teams',
 }
 
 export { ReducerName };
