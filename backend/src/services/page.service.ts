@@ -5,7 +5,7 @@ import UserPermissionRepository from '../data/repositories/user-permission.repos
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { IPageRequest, IPageNav, IPage } from '../common/interfaces/pages';
+import { IPageRequest, IPageNav, IPage } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { Page } from '../data/entities/page';
