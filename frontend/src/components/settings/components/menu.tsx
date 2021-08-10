@@ -40,20 +40,20 @@ const Menu: React.FC = () => {
             <ListGroup.Item
               action
               as={Link}
-              to={AppRoute.SETTINGS_TAGS}
-              eventKey="tags"
-              className={getAllowedClasses(styles.menuItem)}
-            >
-              Tags
-            </ListGroup.Item>
-            <ListGroup.Item
-              action
-              as={Link}
               to={AppRoute.SETTINGS_TEAMS}
               eventKey="teams"
               className={getAllowedClasses(styles.menuItem)}
             >
               Teams
+            </ListGroup.Item>
+            <ListGroup.Item
+              action
+              as={Link}
+              to={AppRoute.SETTINGS_TAGS}
+              eventKey="tags"
+              className={getAllowedClasses(styles.menuItem)}
+            >
+              Tags
             </ListGroup.Item>
           </>
         )}
