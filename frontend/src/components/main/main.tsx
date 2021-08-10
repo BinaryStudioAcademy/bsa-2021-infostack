@@ -34,7 +34,6 @@ const Main: React.FC = () => {
 
   return (
     <Switch>
-      <Route path={AppRoute.CONTENT_SETTING} component={PageContentEditor} exact />
       <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
       <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
       <Route path={AppRoute.PROFILE} component={withHeader(ProfileInfo)} key={Date.now()} />
@@ -43,6 +42,7 @@ const Main: React.FC = () => {
         component={withHeader(Workspace)}
         exact
       />
+      <Route path={AppRoute.CONTENT_SETTING} component={withHeader(PageContentEditor)} exact />
       <Route path="/" component={withHeader(Pages)} exact />
       <Route path="*" component={NotFound} />
     </Switch>
