@@ -32,6 +32,7 @@ const PageContent: React.FC = () => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
       getPageById(paramsId);
     } else {
+      dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
     }
   }, [paramsId]);
