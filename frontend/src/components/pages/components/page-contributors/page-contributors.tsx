@@ -1,71 +1,60 @@
+import { Card, Badge } from 'react-bootstrap';
+import Avatar from 'react-avatar';
 import { IPageContributor } from 'common/interfaces/page';
-import StackedAvatars from './stacked-avatars';
+import { useHistory } from 'react-router-dom';
+import { AppRoute } from '../../../../common/enums/enums';
 import styles from './styles.module.scss';
 
 interface IPageContributorsProps {
   contributors: IPageContributor[];
+  avatarSize?: number;
 }
+
+const DEFAULT_AVATAR_SIZE = 40;
 
 const PageContributors: React.FC<IPageContributorsProps> = ({
   contributors,
+  avatarSize = DEFAULT_AVATAR_SIZE,
 }) => {
-  const formatDate = (timestamp: number): string => {
-    const MONTH_NAMES = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+  const history = useHistory();
 
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const day = date.getDate();
-    const month = date.getMonth();
-
-    return `${MONTH_NAMES[month]} ${day}, ${year}`;
+  const avatarStyles: React.CSSProperties = {
+    boxSizing: 'content-box',
+    border: '4px solid white',
+    marginLeft: -(+avatarSize / 2.2) + 'px',
+    cursor: 'pointer',
   };
 
-  const findAuthor = (): IPageContributor | undefined => {
-    return contributors.find((contributor) => contributor.isAuthor);
+  const handleAvatarClick = (userId: string): void => {
+    history.push(
+      AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId,
+    );
   };
-
-  const findLastContributor = (): IPageContributor | undefined => {
-    return contributors.sort(
-      (a, b) => b.contributedAtTimestamp - a.contributedAtTimestamp,
-    )[0];
-  };
-
-  const authorName = findAuthor()?.fullName || 'Unknown';
-  const lastContributor = findLastContributor();
-  const lastUpdatedAt = formatDate(
-    lastContributor?.contributedAtTimestamp || Date.now(),
-  );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.stackedAvatars}>
-        <StackedAvatars
-          round={true}
-          size={'40'}
-          avatars={contributors.map((user) => {
-            return { name: user.fullName };
-          })}
-        />
-      </div>
-
-      <div>
-        <p>Author: {authorName}</p>
-        <p>Last updated on {lastUpdatedAt}</p>
-      </div>
-    </div>
+    <Card>
+      <Card.Header>
+        Contributors
+        <Badge className={styles.badge} pill={true}>
+          {contributors.length}
+        </Badge>
+      </Card.Header>
+      <Card.Body>
+        <div style={{ marginLeft: +avatarSize / 2 }}>
+          {contributors.map(({ id, fullName, avatar }) => (
+            <Avatar
+              style={avatarStyles}
+              key={id}
+              name={fullName}
+              src={avatar}
+              round={true}
+              size={avatarSize.toString()}
+              onClick={handleAvatarClick.bind(null, id)}
+            />
+          ))}
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 
