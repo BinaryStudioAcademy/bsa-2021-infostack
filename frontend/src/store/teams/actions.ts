@@ -6,7 +6,7 @@ import { ITeamEditing } from 'common/interfaces/team';
 import { HttpCode } from 'common/enums/enums';
 
 const loadTeams = createAsyncThunk(
-  ActionType.SetTeams,
+  ActionType.SET_TEAMS,
   async (_, { dispatch }): Promise<void> => {
     const response = await new TeamApi().getTeams();
     dispatch(actions.setTeams(response));
@@ -14,7 +14,7 @@ const loadTeams = createAsyncThunk(
 );
 
 const createTeam = createAsyncThunk(
-  ActionType.SetCurrentTeam,
+  ActionType.SET_CURRENT_TEAM,
   async (payload: string, { dispatch }) => {
     try {
       const team = await new TeamApi().createTeam(payload);
@@ -30,7 +30,7 @@ const createTeam = createAsyncThunk(
 );
 
 const updateTeam = createAsyncThunk(
-  ActionType.UpdateTeam,
+  ActionType.UPDATE_TEAM,
   async (payload: ITeamEditing, { dispatch }) => {
     try {
       const team = await new TeamApi().updateTeam(payload);
@@ -45,7 +45,7 @@ const updateTeam = createAsyncThunk(
 );
 
 const deleteTeam = createAsyncThunk(
-  ActionType.DeleteTeam,
+  ActionType.DELETE_TEAM,
   async (payload: string, { dispatch }) => {
     try {
       await new TeamApi().deleteTeam(payload);
@@ -57,7 +57,7 @@ const deleteTeam = createAsyncThunk(
 );
 
 const loadTeam = createAsyncThunk(
-  ActionType.SetCurrentTeam,
+  ActionType.SET_CURRENT_TEAM,
   async (id: string, { dispatch }) => {
     const workspace = await new TeamApi().getTeam(id);
     dispatch(actions.setCurrentTeam(workspace));

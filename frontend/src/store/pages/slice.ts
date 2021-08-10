@@ -19,23 +19,23 @@ const { reducer, actions } = createSlice({
   name: ReducerName.PAGE,
   initialState,
   reducers: {
-    [ActionType.CreatePage]: (state, action: PayloadAction<IPage>) => {
+    [ActionType.CREATE_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
     },
-    [ActionType.CreateVersionPage]: (state, action: PayloadAction<IPageNav>) => {
+    [ActionType.CREATE_VERSION_PAGE]: (state, action: PayloadAction<IPageNav>) => {
       if(state.pages === null) {
         state.pages = [action.payload];
       }else{
         state.pages.push(action.payload);
       }
     },
-    [ActionType.SetPages]: (state, action: PayloadAction<IPageNav[]>) => {
+    [ActionType.SET_PAGES]: (state, action: PayloadAction<IPageNav[]>) => {
       state.pages = action.payload;
     },
-    [ActionType.GetPage]: (state, action: PayloadAction<IPage>) => {
+    [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
     },
-    [ActionType.ToggleSpinner]: (state) => {
+    [ActionType.TOGGLE_SPINER]: (state) => {
       state.isSpinner = !state.isSpinner;
     },
   },

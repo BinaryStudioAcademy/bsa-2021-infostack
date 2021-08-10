@@ -4,7 +4,7 @@ import { ActionType } from './common';
 import { TagApi } from 'services';
 
 const loadTags = createAsyncThunk(
-  ActionType.SetTags,
+  ActionType.SET_TAGS,
   async (_, { dispatch }): Promise<void> => {
     const response = await new TagApi().getAll();
     dispatch(actions.setTags(response));
@@ -12,7 +12,7 @@ const loadTags = createAsyncThunk(
 );
 
 const requestUpdate = createAsyncThunk(
-  ActionType.UpdateTag,
+  ActionType.UPDATE_TAG,
   async (tag: { id: string; name: string }, { dispatch }): Promise<void> => {
     await new TagApi().update(tag.id, tag.name);
     dispatch(actions.updateTag({ id: tag.id, updatedName: tag.name }));
@@ -20,7 +20,7 @@ const requestUpdate = createAsyncThunk(
 );
 
 const requestAdd = createAsyncThunk(
-  ActionType.AddTag,
+  ActionType.ADD_TAG,
   async (name: string, { dispatch }): Promise<void> => {
     const response = await new TagApi().add(name);
     dispatch(actions.addTag(response));
@@ -28,7 +28,7 @@ const requestAdd = createAsyncThunk(
 );
 
 const requestDelete = createAsyncThunk(
-  ActionType.DeleteTag,
+  ActionType.DELETE_TAG,
   async (id: string, { dispatch }): Promise<void> => {
     await new TagApi().delete(id);
     dispatch(actions.deleteTag({ id }));
