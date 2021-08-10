@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import cors from 'cors';
 import path from 'path';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 import express, { Express } from 'express';
 import { createConnection } from 'typeorm';
 import cookieParser from 'cookie-parser';
@@ -10,10 +12,15 @@ import { logger } from './common/utils/logger.util';
 import errorHandlerMiddleware from './api/middlewares/error-handler-middleware';
 import { auth as authorizationMiddleware } from './api/middlewares/authorization-middleware';
 import ormconfig from './config/ormconfig';
+import { handlers as socketHandlers } from './socket/handlers';
 
-const { port } = env.app;
+const { port, socketPort } = env.app;
 
 const app: Express = express();
+const socketServer = createServer(app);
+const io = new Server(socketServer);
+
+io.on('connections', socketHandlers);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, './public')));
@@ -39,5 +46,7 @@ app.listen(port, async () => {
   }
   logger.info(`Server is running at ${port}.`);
 });
+
+socketServer.listen(socketPort);
 
 export default app;

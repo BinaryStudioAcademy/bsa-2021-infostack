@@ -41,13 +41,13 @@ export const Comment: React.FC<Props> = ({ name, avatar, text, handleResponse, c
         </button>
         {isFieldVisible && (
           <InputGroup>
-            <Button onClick={handleClick} className={styles.text}>Send</Button>
             <FormControl
               value={responseText}
               onChange={handleChange}
               className={styles.text}
               as="textarea"
             />
+            <Button onClick={handleClick} className={styles.text}>Send</Button>
           </InputGroup>
         )}
         {children && (

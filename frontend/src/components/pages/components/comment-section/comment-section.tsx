@@ -38,13 +38,13 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
   return (
     <>
       <InputGroup className="mb-5">
-        <Button disabled={isLoading} onClick={handleSubmit} className={styles.text}>Send</Button>
         <FormControl
           value={text}
           onChange={handleChange}
           className={styles.text}
           as="textarea"
         />
+        <Button disabled={isLoading} onClick={handleSubmit} className={styles.text}>Send</Button>
       </InputGroup>
       <ListGroup variant="flush">
         {comments.map(({ id, text, author: { fullName, avatar }, children }) => (

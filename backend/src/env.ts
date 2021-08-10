@@ -7,6 +7,7 @@ dotenv.config();
 export const env = {
   app: {
     port: getOsEnv('PORT'),
+    socketPort: getOsEnv('SOCKET_PORT'),
     url: getOsEnv('APP_URL'),
     secretKey: getOsEnv('APP_SECRET'),
     nodeEnv: getOsEnv('NODE_ENV'),
