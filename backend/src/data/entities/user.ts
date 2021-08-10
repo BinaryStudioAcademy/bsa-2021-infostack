@@ -7,6 +7,7 @@ import { UserPermission } from './user-permission';
 import { PageContent } from './page-content';
 import { Comment } from './comment';
 import { Team } from './team';
+import { Skill } from './skill';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -22,6 +23,9 @@ export class User extends AbstractEntity {
   @Column({ nullable: true })
   avatar: string;
 
+  @Column({ length: 200, nullable: true })
+  title: string;
+
   @OneToMany(() => RefreshToken, RefreshToken => RefreshToken.user)
   refreshTokens: RefreshToken[];
 
@@ -30,6 +34,9 @@ export class User extends AbstractEntity {
 
   @ManyToMany(() => Team, team => team.users)
   teams: Team[];
+
+  @ManyToMany(() => Skill, skill => skill.users)
+  skills: Skill[];
 
   @OneToMany(() => Page, Page => Page.author)
   pages: Page[];

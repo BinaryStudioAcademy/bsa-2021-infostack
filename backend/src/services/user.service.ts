@@ -1,18 +1,21 @@
+import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import { getCustomRepository } from 'typeorm';
 import {
   deleteFile,
+  isFileExists,
   uploadFile,
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
 import { IUser } from 'infostack-shared';
+import SkillRepository from '../data/repositories/skill.repository';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar } = await userRepository.findById(id);
+  const { fullName, email, avatar, title, skills } =
+    await userRepository.findById(id);
 
-  return { id, fullName, email, avatar };
+  return { id, fullName, email, avatar, title, skills };
 };
 
 export const getUserByIdWithWorkspace = async (
@@ -45,17 +48,25 @@ export const getUserByIdWithWorkspace = async (
   }
 };
 
-export const updateFullName = async (
+export const updateUserInfo = async (
   id: string,
-  body: { fullName: string },
+  body: { fullName: string; title: string; skills: string[] },
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const userToUpdate = await userRepository.findById(id);
 
   userToUpdate.fullName = body.fullName || userToUpdate.fullName;
+  userToUpdate.title = body.title || userToUpdate.title;
 
-  const { fullName, email, avatar } = await userRepository.save(userToUpdate);
-  return { id, fullName, email, avatar };
+  const skillRepository = getCustomRepository(SkillRepository);
+  const foundSkills = await skillRepository.getSkillsById(body.skills);
+  userToUpdate.skills = foundSkills;
+
+  const { fullName, email, avatar, title, skills } = await userRepository.save(
+    userToUpdate,
+  );
+
+  return { id, fullName, email, avatar, title, skills };
 };
 
 export const updateAvatar = async (
@@ -63,15 +74,27 @@ export const updateAvatar = async (
   file: Express.Multer.File,
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
+  const userToUpdate = await userRepository.findById(id);
+
+  if (userToUpdate.avatar) {
+    const fileName = userToUpdate.avatar.split('/').pop();
+    const isExistsAvatar = await isFileExists(fileName);
+    if (isExistsAvatar) {
+      await deleteFile(userToUpdate.avatar);
+    }
+  }
+
   const uploadedFile = await uploadFile(file);
   unlinkFile(file.path);
   const { Location } = uploadedFile;
-  const userToUpdate = await userRepository.findById(id);
 
   userToUpdate.avatar = Location || userToUpdate.avatar;
 
-  const { fullName, email, avatar } = await userRepository.save(userToUpdate);
-  return { id, fullName, email, avatar };
+  const { fullName, email, avatar, title, skills } = await userRepository.save(
+    userToUpdate,
+  );
+
+  return { id, fullName, email, avatar, title, skills };
 };
 
 export const deleteAvatar = async (id: string): Promise<void> => {
