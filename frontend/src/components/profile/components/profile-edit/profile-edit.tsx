@@ -1,3 +1,7 @@
+import Avatar from 'react-avatar';
+import CreatableSelect from 'react-select/creatable';
+import { OptionsType } from 'react-select';
+import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import {
   useState,
   useEffect,
@@ -5,14 +9,10 @@ import {
   useAppSelector,
   useRef,
 } from 'hooks/hooks';
-import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
 import { UserApi, SkillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
-import CreatableSelect from 'react-select/creatable';
-import { OptionsType } from 'react-select';
-import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
@@ -34,7 +34,9 @@ const ProfileEdit: React.FC = () => {
     if (user) {
       setUserFullName(user.fullName);
       setUserTitle(user.title ?? '');
-      const skills = user.skills?.map(({ id, name }) => ({ value:id, label: name } as ISkill));
+      const skills = user.skills?.map(
+        ({ id, name }) => ({ value: id, label: name } as ISkill),
+      );
       setUserSkills(skills ?? []);
     }
   }, [user]);
@@ -74,7 +76,12 @@ const ProfileEdit: React.FC = () => {
       const skills = userSkills.map(({ value }) => value) as ISkill[];
 
       const updatedUser = await userApi
-        .update(user.id, { ...user, fullName: userFullName, title: userTitle, skills })
+        .update(user.id, {
+          ...user,
+          fullName: userFullName,
+          title: userTitle,
+          skills,
+        })
         .then((data) => data);
       dispatch(authActions.setUser({ ...updatedUser, avatar: user.avatar }));
 
@@ -85,7 +92,7 @@ const ProfileEdit: React.FC = () => {
         const result = [] as ISkill[];
         updatedUser.skills?.forEach((item) => {
           skills.forEach((skill, i) => {
-            if(item.id === skill) {
+            if (item.id === skill) {
               result[i] = item;
             }
           });
@@ -107,7 +114,7 @@ const ProfileEdit: React.FC = () => {
           authActions.setUser({
             id: updatedUser.id,
             fullName: updatedUser.fullName,
-            avatar: updatedUser.avatar + `?${performance.now()}`,
+            avatar: updatedUser.avatar,
             email: updatedUser.email,
             title: updatedUser.title,
             skills: updatedUser.skills,
@@ -139,12 +146,15 @@ const ProfileEdit: React.FC = () => {
     const lastSkill = inputValue[inputValue.length - 1];
     const lastSkillName = lastSkill.value ?? '';
 
-    if(lastSkill.__isNew__) {
+    if (lastSkill.__isNew__) {
       skillApi.createSkill(lastSkillName).then((response: ISkill) => {
         setAllSkills((oldSkills) => {
           const newSkills = [...oldSkills];
           inputValue[inputValue.length - 1].value = response.id;
-          const addedSkill = { value:  response.id, label: response.name } as ISkill;
+          const addedSkill = {
+            value: response.id,
+            label: response.name,
+          } as ISkill;
           newSkills[newSkills.length] = addedSkill;
 
           return newSkills;
@@ -153,7 +163,7 @@ const ProfileEdit: React.FC = () => {
     }
 
     const result = inputValue.map((item: ISkill) => {
-      if(item.__isNew__) {
+      if (item.__isNew__) {
         item.value = lastSkill.value;
       }
 
@@ -172,7 +182,7 @@ const ProfileEdit: React.FC = () => {
         </Card.Title>
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
-        <Row>
+        <Row className="m-0">
           <Col md={8} className="ps-0">
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
@@ -223,12 +233,14 @@ const ProfileEdit: React.FC = () => {
                 >
                   Skills
                 </Form.Label>
-                {<CreatableSelect
-                  isMulti
-                  onChange={handleInputChange}
-                  value={userSkills}
-                  options={allSkills}
-                />}
+                {
+                  <CreatableSelect
+                    isMulti
+                    onChange={handleInputChange}
+                    value={userSkills}
+                    options={allSkills}
+                  />
+                }
               </Form.Group>
             </Form>
           </Col>
