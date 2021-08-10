@@ -141,8 +141,10 @@ export const unfollowPage = async (
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
   const page = await pageRepository.findById(pageId);
-  page.followingUsers.splice(page.followingUsers.indexOf(user), 1);
-  user.followingPages.splice(user.followingPages.indexOf(page), 1);
+  const newFollowingUsers = page.followingUsers.filter(user => user.id !== userId);
+  const newFollowingPages = user.followingPages.filter(page => page.id !== pageId);
+  page.followingUsers = newFollowingUsers;
+  user.followingPages = newFollowingPages;
   await userRepository.save(user);
   await pageRepository.save(page);
 };
