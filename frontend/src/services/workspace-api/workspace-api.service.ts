@@ -26,8 +26,8 @@ class WorkspaceApi {
     return this.http.load(`${this.BASE}/${id}`);
   }
 
-  public async getUsers(id: string): Promise<IWorkspaceUser[]> {
-    return this.http.load(`${this.BASE}/${id}/users`, {
+  public async getUsers(): Promise<IWorkspaceUser[]> {
+    return this.http.load(`${this.BASE}/current/users`, {
       contentType: ContentType.JSON,
     });
   }

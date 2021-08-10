@@ -1,11 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { IWorkspaceUser } from 'common/interfaces/workspace';
 import { ITeam } from 'common/interfaces/team';
 import { ActionType } from './common';
 
 type State = {
-  users: IWorkspaceUser[];
   teams: ITeam[];
   SetCurrentTeamID: string;
   editingError: string;
@@ -13,7 +11,6 @@ type State = {
 };
 
 const initialState: State = {
-  users: [],
   teams: [],
   SetCurrentTeamID: '',
   editingError: '',
