@@ -21,7 +21,7 @@ export const createPage = async (
     authorId: userId,
     workspaceId,
     parentPageId,
-    pageContent: [pageContent],
+    pageContents: [pageContent],
   });
 
   const userRepository = getCustomRepository(UserRepository);

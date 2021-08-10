@@ -4,21 +4,17 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
 import { useAppDispatch, useCookies, useHistory } from 'hooks/hooks';
-import { Link } from 'react-router-dom';
 import { authActions } from 'store/actions';
+import { ProfileItem } from './components/profile-item/profile-item';
 import './styles.scss';
 
-interface INavProfileProps {
+type Props = {
   userName: string;
   userAvatar?: string;
   userId?: string;
-}
+};
 
-const NavProfile: React.FC<INavProfileProps> = ({
-  userName,
-  userAvatar,
-  userId,
-}) => {
+const NavProfile: React.FC<Props> = ({ userName, userAvatar, userId }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -48,26 +44,21 @@ const NavProfile: React.FC<INavProfileProps> = ({
         <span className="text-dark userName">{userName}</span>
       </Dropdown.Toggle>
 
-      <Dropdown.Menu className="dropdown-menu">
-        <Dropdown.Item
-          as={Link}
-          to={AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId}
-        >
+      <Dropdown.Menu>
+        <ProfileItem to={AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId}>
           <i className="bi bi-person"></i>
           Profile
-        </Dropdown.Item>
-
+        </ProfileItem>
         <Dropdown.Divider />
-
-        <Dropdown.Item as={Link} to={AppRoute.WORKSPACES}>
+        <ProfileItem to={AppRoute.WORKSPACES}>
           Select Workspace
-        </Dropdown.Item>
-        <Dropdown.Item as={Link} to={AppRoute.SETTINGS}>
+        </ProfileItem>
+        <ProfileItem to={AppRoute.SETTINGS}>
           Settings
-        </Dropdown.Item>
-        <Dropdown.Item onClick={onLogout} className="dropdown-item">
-          Logout
-        </Dropdown.Item>
+        </ProfileItem>
+        <ProfileItem onClick={onLogout}>
+          Sign out
+        </ProfileItem>
       </Dropdown.Menu>
     </Dropdown>
   );

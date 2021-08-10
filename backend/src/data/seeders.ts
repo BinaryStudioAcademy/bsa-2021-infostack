@@ -4,6 +4,7 @@ import WorkspaceSeeder from './seeders/workspace.seeder';
 import UserWorkspaceSeeder from './seeders/user-workspace.seeder';
 import PageSeeder from './seeders/page.seeder';
 import TeamSeeder from './seeders/team.seeder';
+import SkillSeeder from './seeders/skills.seeder';
 import TeamMemberSeeder from './seeders/team-member.seeder';
 import TeamPermissionSeeder from './seeders/team-permission.seeder';
 import UserFollowingPagesSeeder from './seeders/user-following-pages.seeder';
@@ -36,6 +37,8 @@ const seeders = async (): Promise<void> => {
   await TeamMemberSeeder.execute();
   logger.info('Seeding team_permissions');
   await TeamPermissionSeeder.execute();
+  logger.info('Seeding skill');
+  await SkillSeeder.execute();
   logger.info('Seeding tags');
   await TagSeeder.execute();
   logger.info('Seeding page_tags');

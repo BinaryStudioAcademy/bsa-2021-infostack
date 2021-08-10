@@ -1,5 +1,5 @@
 import Avatar from 'react-avatar';
-import { useState, useEffect, useParams } from '../../hooks/hooks';
+import { useState, useEffect, useParams, useAppSelector } from '../../hooks/hooks';
 import { AppRoute } from 'common/enums/enums';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -13,17 +13,12 @@ import { UserApi, PageApi } from 'services';
 import { IPageFollowed } from 'common/interfaces/page';
 
 const ProfileInfo: React.FC = () => {
-  const [user, setUser] = useState({
-    id: '',
-    avatar: '',
-    fullName: '',
-    email: '',
-  });
   const [pages, setPages] = useState<IPageFollowed[]>([]);
   const [permission, setPermission] = useState(true);
   const userApi = new UserApi();
   const pageApi = new PageApi();
   const { id } = useParams<{ id?: string }>();
+  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     let mounted = true;
@@ -34,7 +29,6 @@ const ProfileInfo: React.FC = () => {
           if (user.id.length > 0) {
             if (mounted) {
               setPermission(true);
-              setUser(user);
             }
           } else {
             if (mounted) {
@@ -62,7 +56,7 @@ const ProfileInfo: React.FC = () => {
 
   return (
     <Container className="profile-container" fluid>
-      {permission ? (user.id.length > 0 ? <>
+      {permission ? (user && user.id.length > 0 ? <>
         <Row>
           <Col className="d-flex justify-content-start profile-page-title">Profile</Col>
         </Row>
@@ -83,22 +77,18 @@ const ProfileInfo: React.FC = () => {
                           className="user-avatar"
                         />
                         <Card.Title className="profile-user-title">{user?.fullName}</Card.Title>
-                        <Card.Subtitle className="profile-user-subtitle">Lead Developer</Card.Subtitle>
+                        <Card.Subtitle className="profile-user-subtitle">{user?.title}</Card.Subtitle>
                       </ListGroup.Item>
                       <ListGroup.Item className="card-block-item">
                         <Card.Title className="d-flex justify-content-start profile-skills-title">
                         Skills
                         </Card.Title>
                         <div className="d-flex align-items-start flex-wrap">
-                          <Badge bg="primary" className="skill-badge">HTML</Badge>
-                          <Badge bg="primary" className="skill-badge">Javascript</Badge>
-                          <Badge bg="primary" className="skill-badge">React</Badge>
-                          <Badge bg="primary" className="skill-badge">Angular</Badge>
-                          <Badge bg="primary" className="skill-badge">Vue</Badge>
-                          <Badge bg="primary" className="skill-badge">SASS</Badge>
-                          <Badge bg="primary" className="skill-badge">Redux</Badge>
-                          <Badge bg="primary" className="skill-badge">UI</Badge>
-                          <Badge bg="primary" className="skill-badge">UX</Badge>
+                          {user.skills?.length &&
+                            user.skills.map(({ id, name }) => (
+                              <Badge bg="primary" className="skill-badge" key={id}>{name}</Badge>
+                            ))
+                          }
                         </div>
                       </ListGroup.Item>
                     </ListGroup>
