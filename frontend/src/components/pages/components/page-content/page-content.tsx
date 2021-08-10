@@ -46,6 +46,7 @@ const PageContent: React.FC = () => {
 
       getPageById(paramsId);
     } else {
+      dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
     }
   }, [paramsId]);

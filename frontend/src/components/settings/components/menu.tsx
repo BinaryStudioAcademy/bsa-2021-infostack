@@ -25,7 +25,9 @@ const Menu: React.FC = () => {
   return (
     <Card className={getAllowedClasses(styles.menuCard)}>
       <Card.Header className={getAllowedClasses(styles.cardHeader)}>
-        <h5 className={getAllowedClasses(styles.cardTitle)}>Profile Settings</h5>
+        <h5 className={getAllowedClasses(styles.cardTitle)}>
+          Profile Settings
+        </h5>
       </Card.Header>
       <ListGroup variant="flush" className={getAllowedClasses(styles.menuLsit)}>
         <ListGroup.Item
@@ -38,14 +40,36 @@ const Menu: React.FC = () => {
           Account
         </ListGroup.Item>
         {userRole === RoleType.ADMIN && (
+          <>
+            <ListGroup.Item
+              action
+              as={Link}
+              to={AppRoute.SETTINGS_USERS}
+              eventKey="users"
+              className={getAllowedClasses(styles.menuItem)}
+            >
+              Users
+            </ListGroup.Item>
+            <ListGroup.Item
+              action
+              as={Link}
+              to={AppRoute.SETTINGS_TAGS}
+              eventKey="tags"
+              className={getAllowedClasses(styles.menuItem)}
+            >
+              Tags
+            </ListGroup.Item>
+          </>
+        )}
+        {userRole === RoleType.ADMIN && (
           <ListGroup.Item
             action
             as={Link}
-            to={AppRoute.SETTINGS_USERS}
-            eventKey="users"
+            to={AppRoute.SETTINGS_TEAMS}
+            eventKey="teams"
             className={getAllowedClasses(styles.menuItem)}
           >
-            Users
+            Teams
           </ListGroup.Item>
         )}
       </ListGroup>

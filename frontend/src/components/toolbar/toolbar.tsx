@@ -4,7 +4,8 @@ import {
   useAppDispatch,
   useAppSelector,
   useEffect,
-  useHistory,
+  useLocation,
+  useParams,
 } from 'hooks/hooks';
 import { Accordion, Navbar } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
@@ -12,7 +13,6 @@ import PagesList from './components/pages-list/pages-list';
 import styles from './styles.module.scss';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from './components/plus-button/plus-button-root';
-import { AppRoute } from 'common/enums/enums';
 
 type Props = {
   title?: string;
@@ -20,8 +20,9 @@ type Props = {
 
 const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const paramsId = useParams();
+  const url = useLocation().pathname;
 
   useEffect(() => {
     dispatch(pagesActions.getPagesAsync());
@@ -34,12 +35,10 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   };
 
   useEffect(() => {
-    if (currentPage?.id) {
-      history.push(
-        `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${currentPage?.id}`,
-      );
+    if (currentPage && !url.includes(currentPage.id)) {
+      dispatch(pagesActions.clearCurrentPage());
     }
-  }, [currentPage?.id]);
+  }, [paramsId]);
 
   const pages = useAppSelector((state: RootState) => state.pages);
 
