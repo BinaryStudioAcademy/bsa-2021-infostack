@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
-  getWorkspaceUsers,
   getUserWorkspaces,
+  getWorkspaceUsers,
   getWorkspace,
   create,
 } from '../../services/workspace.service';
@@ -13,9 +13,7 @@ const router: Router = Router();
 
 router
   .get('/', run(req => getUserWorkspaces(req.userId)))
-  .get(
-    '/:id',
-    run(req => getWorkspace(req.params.id, req.userId)))
+  .get('/:id', run(req => getWorkspace(req.params.id, req.userId)))
   .get(
     '/current/users',
     permit(RoleType.ADMIN),
