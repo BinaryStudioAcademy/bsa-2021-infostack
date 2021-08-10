@@ -13,6 +13,7 @@ class TagRepository extends Repository<Tag> {
       .addSelect('tag.workspaceId')
       .addSelect('tag.name')
       .where('tag.workspaceId= :workspaceId', { workspaceId })
+      .orderBy('tag.name', 'ASC')
       .getMany();
   }
 }

@@ -8,8 +8,7 @@ import { HttpErrorMessage } from '../common/enums/http-error-message';
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITag[]> => {
-  const tagRepository = getCustomRepository(TagRepository);
-  return await tagRepository.findAllByWorkspaceId(workspaceId);
+  return getCustomRepository(TagRepository).findAllByWorkspaceId(workspaceId);
 };
 
 export const create = async (newTag: ITagCreation): Promise<ITag> => {

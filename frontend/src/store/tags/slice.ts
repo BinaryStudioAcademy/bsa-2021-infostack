@@ -22,6 +22,11 @@ const { reducer, actions } = createSlice({
     [ActionType.SetTags]: (state, action: PayloadAction<ITag[]>) => {
       state.tags = action.payload;
     },
+    [ActionType.ResetTags]: (state, _action: PayloadAction<void>) => {
+      state.tags = null;
+      state.tagToEditId = null;
+      state.isOpenNewTagForm = false;
+    },
     [ActionType.SetTagToEdit]: (
       state,
       action: PayloadAction<string | null>,

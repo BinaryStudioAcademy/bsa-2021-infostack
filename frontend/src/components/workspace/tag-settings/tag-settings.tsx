@@ -15,7 +15,9 @@ const TagSettings: React.FC = () => {
 
   useEffect(() => {
     dispatch(tagActions.loadTags());
-    dispatch(tagActions.setNewTagForm({ isOpen: false }));
+    return (): void => {
+      dispatch(tagActions.resetTags());
+    };
   }, []);
 
   const handleNewTagFormOpen = (): void => {
