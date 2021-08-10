@@ -33,6 +33,7 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
       dispatch(pagesActions.clearCurrentPage());
     }
   }, [paramsId]);
+
   const pages = useAppSelector((state: RootState) => state.pages);
 
   const SectionName: React.FC<{ name: string }> = ({ name }) =>

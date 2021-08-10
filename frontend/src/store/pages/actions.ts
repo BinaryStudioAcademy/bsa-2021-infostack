@@ -40,12 +40,10 @@ const getPage = createAsyncThunk(
   },
 );
 
-const clearCurrentPage = createAsyncThunk(
-  ActionType.CLEAR_CURRENT_PAGE,
-  async (payload: undefined, { dispatch }) => {
-    dispatch(actions.clearCurrentPage());
-  },
-);
+// const clearCurrentPage = createAction(
+//   ActionType.CLEAR_CURRENT_PAGE,
+//   // actions.clearCurrentPage();
+// );
 
 const pagesActions = {
   ...actions,
@@ -53,7 +51,6 @@ const pagesActions = {
   createVersionPage,
   getPagesAsync,
   getPage,
-  clearCurrentPage,
 };
 
 export {
