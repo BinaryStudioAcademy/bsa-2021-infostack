@@ -40,11 +40,6 @@ const getPage = createAsyncThunk(
   },
 );
 
-// const clearCurrentPage = createAction(
-//   ActionType.CLEAR_CURRENT_PAGE,
-//   // actions.clearCurrentPage();
-// );
-
 const pagesActions = {
   ...actions,
   createPage,
