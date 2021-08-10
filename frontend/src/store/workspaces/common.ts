@@ -4,7 +4,7 @@ enum ActionType {
   RemoveCurrentWorkspace = 'RemoveCurrentWorkspace',
   SetCreatingError = 'SetCreatingError',
   RemoveCreatingError = 'RemoveCreatingError',
-  SetUsers = 'setUsers',
+  SetUsers = 'SetUsers',
 }
 
 export { ActionType };

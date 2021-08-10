@@ -8,7 +8,7 @@ import { HttpCode } from 'common/enums/enums';
 const loadWorkspaces = createAsyncThunk(
   ActionType.SetWorkspaces,
   async (payload: undefined, { dispatch }) => {
-    const getResponse = await new WorkspaceApi().get();
+    const getResponse = await new WorkspaceApi().getWorkspaces();
     dispatch(actions.SetWorkspaces(getResponse));
   },
 );
@@ -31,7 +31,7 @@ const createWorkspace = createAsyncThunk(
 const loadWorkspace = createAsyncThunk(
   ActionType.SetCurrentWorkspace,
   async (id: string, { dispatch }) => {
-    const workspace = await new WorkspaceApi().getById(id);
+    const workspace = await new WorkspaceApi().getWorkspace(id);
     dispatch(actions.SetCurrentWorkspace(workspace));
   },
 );

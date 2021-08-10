@@ -6,22 +6,18 @@ import {
   useEffect,
   useAppDispatch,
   useAppSelector,
-  useCookies,
 } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/dom/dom';
-import { CookieVariable } from 'common/enums/cookies/cookies';
 
 export const TABLE_HEADERS = ['Name', 'Workspace Role', 'Team', 'Actions'];
 
 const UsersSettings: React.FC = () => {
-  const [cookies] = useCookies();
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state) => state.users);
 
   useEffect(() => {
-    const workspaceId = cookies[CookieVariable.WORKSPACE_ID];
-    dispatch(usersActions.loadUsers(workspaceId));
+    dispatch(usersActions.loadUsers());
   }, []);
 
   return (

@@ -5,8 +5,8 @@ import { WorkspaceApi } from 'services';
 
 const loadUsers = createAsyncThunk(
   ActionType.SetUsers,
-  async (workspaceId: string, { dispatch }): Promise<void> => {
-    const response = await new WorkspaceApi().getUsers(workspaceId);
+  async (_, { dispatch }): Promise<void> => {
+    const response = await new WorkspaceApi().getUsers();
     dispatch(actions.setUsers(response));
   },
 );
