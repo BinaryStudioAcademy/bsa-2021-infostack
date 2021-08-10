@@ -9,7 +9,7 @@ import ProfileInfo from 'components/profile-info/profile-info';
 import Workspace from 'components/workspace/workspace';
 import styles from './styles.module.scss';
 import Settings from 'components/settings/settings';
-import ContentEditor from 'components/pages/components/editor/editor';
+import PageContentEditor from 'components/pages/components/content-editor/content-editor';
 import { useAppSelector, useAppDispatch, useHistory, useCookies } from 'hooks/hooks';
 import { workspacesActions } from 'store/actions';
 import { useEffect } from 'react';
@@ -42,7 +42,7 @@ const Main: React.FC = () => {
       </div>
       <div className={styles.content}>
         <Switch>
-          <ProtectedRoute path={AppRoute.CONTENT_SETTING} component={ContentEditor} exact />
+          <ProtectedRoute path={AppRoute.CONTENT_SETTING} component={PageContentEditor} exact />
           <ProtectedRoute path={AppRoute.PAGE} component={Pages} />
           <ProtectedRoute path={AppRoute.SETTINGS} component={Settings} />
           <ProtectedRoute path={AppRoute.SETTINGS_PROFILE} component={Profile} exact />
