@@ -19,7 +19,7 @@ router
   .post(
     '/',
     permit(RoleType.ADMIN),
-    run((req) => create({ workspaceId: req.workspaceId, name: req.body.name })),
+    run((req) => create(req.workspaceId, { name: req.body.name })),
   )
   .put(
     '/:id',

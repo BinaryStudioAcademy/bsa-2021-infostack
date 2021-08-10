@@ -7,6 +7,10 @@ class TagRepository extends Repository<Tag> {
     return this.findOne({ id });
   }
 
+  public findByNameAndWorkspaceId(workspaceId: string, name: string): Promise<Tag[]> {
+    return this.find({ workspaceId, name });
+  }
+
   public findAllByWorkspaceId(workspaceId: string): Promise<Tag[]> {
     return this.createQueryBuilder('tag')
       .select('tag.id')
