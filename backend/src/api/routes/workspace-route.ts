@@ -4,7 +4,7 @@ import {
   getWorkspaceUsers,
   getUserWorkspaces,
   getWorkspace,
-  createWorkspace,
+  create,
 } from '../../services/workspace.service';
 import { permit } from '../middlewares/permissions-middleware';
 import { RoleType } from '../../common/enums/role-type';
@@ -21,6 +21,6 @@ router
     permit(RoleType.ADMIN),
     run((req) => getWorkspaceUsers(req.workspaceId)),
   )
-  .post('/', run((req) => createWorkspace(req.userId, req.body)));
+  .post('/', run((req) => create(req.userId, req.body)));
 
 export default router;

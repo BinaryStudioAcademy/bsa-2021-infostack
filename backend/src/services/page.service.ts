@@ -6,8 +6,8 @@ import { PageContentRepository } from '../data/repositories/page-content.reposit
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { IPageRequest, IPageNav, IPage } from '../common/interfaces/pages';
-import { mapPagesToPagesNav } from '../common/mappers/pages/map-pages-to-pages-nav';
-import { mapPageToIPage } from '../common/mappers/pages/map-page-to-ipage';
+import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
+import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { Page } from '../data/entities/page';
 
 export const createPage = async (
@@ -93,10 +93,9 @@ export const getPages = async (
 };
 
 export const getPage = async (
-  workspaceId: string,
   pageId: string,
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.findOnePage(workspaceId, pageId);
+  const page = await pageRepository.findByIdWithContents(pageId);
   return mapPageToIPage(page);
 };

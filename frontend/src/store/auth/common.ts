@@ -2,7 +2,7 @@ enum ActionType {
   SetUser = 'setUser',
   UpdateUser = 'updateUser',
   RemoveUser = 'removeUser',
-  ToggleIsRefreshTokenExpired = 'ToggleIsRefreshTokenExpired',
+  ToggleIsRefreshTokenExpired = 'toggleIsRefreshTokenExpired',
 }
 
 export { ActionType };

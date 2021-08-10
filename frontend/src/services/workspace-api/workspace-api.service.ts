@@ -18,11 +18,11 @@ class WorkspaceApi {
     });
   }
 
-  public async get(): Promise<IWorkspace[]> {
+  public async getWorkspaces(): Promise<IWorkspace[]> {
     return this.http.load(this.BASE);
   }
 
-  public async getById(id: string): Promise<IWorkspace> {
+  public async getWorkspace(id: string): Promise<IWorkspace> {
     return this.http.load(`${this.BASE}/${id}`);
   }
 

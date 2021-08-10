@@ -1,13 +1,13 @@
 enum ActionType {
-  setTeams = 'setTeams',
-  setCurrentTeamID = 'setCurrentTeamID',
-  addTeam = 'addTeam',
-  updateTeam = 'updateTeam',
-  deleteTeam = 'deleteTeam',
-  setCreatingError = 'setCreatingError',
-  removeCreatingError = 'removeCreatingError',
-  setEditingError = 'setEditingError',
-  removeEditingError = 'removeEditingError',
+  SetTeams = 'setTeams',
+  SetCurrentTeam = 'setCurrentTeam',
+  AddTeam = 'addTeam',
+  UpdateTeam = 'updateTeam',
+  DeleteTeam = 'deleteTeam',
+  SetCreatingError = 'setCreatingError',
+  RemoveCreatingError = 'removeCreatingError',
+  SetEditingError = 'setEditingError',
+  RemoveEditingError = 'removeEditingError',
 }
 
 export { ActionType };
