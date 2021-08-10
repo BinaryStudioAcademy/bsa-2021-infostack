@@ -38,6 +38,9 @@ const { reducer, actions } = createSlice({
     [ActionType.TOGGLE_SPINNER]: (state) => {
       state.isSpinner = !state.isSpinner;
     },
+    [ActionType.CLEAR_CURRENT_PAGE]: (state) => {
+      state.currentPage = null;
+    },
   },
 });
 

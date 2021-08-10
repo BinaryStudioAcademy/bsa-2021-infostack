@@ -3,8 +3,8 @@
   grid-template-columns: 250px 1fr;
   grid-template-rows: 9vh 1fr;
   grid-template-areas:
-    "t h"
-    "t c";
+    't h'
+    't c';
 }
 
 .header {
@@ -18,5 +18,3 @@
 .content {
   grid-area: c;
 }
-
-
