@@ -7,8 +7,4 @@ export const handlers = (socket: Socket): void => {
   socket.on('page/join', (pageId: string) => {
     socket.join(pageId);
   });
-
-  // socket.on('page/comment', (pageId, payload) => {
-  //   socket.to(pageId).emit()
-  // })
 };
