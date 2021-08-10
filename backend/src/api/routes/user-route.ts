@@ -3,32 +3,23 @@ import { upload } from '../../common/helpers/multer.helper';
 import { run } from '../../common/helpers/route.helper';
 import {
   getUserById,
-  updateFullName,
+  updateUserInfo,
   updateAvatar,
   getUserByIdWithWorkspace,
+  deleteAvatar,
 } from '../../services/user.service';
 
 const router: Router = Router();
 
-router.get(
-  '/me/profile',
-  run((req) => getUserById(req.userId)),
-);
+router
+  .get('/me/profile', run((req) => getUserById(req.userId)))
+  .get('/:id/profile', run((req) => getUserByIdWithWorkspace(req.params.id, req.workspaceId)))
+  .put('/:id/profile', run((req) => updateUserInfo(req.params.id, req.body)))
+  .put('/:id/avatar', upload().single('image'), run((req) => updateAvatar(req.params.id, req.file)));
 
-router.get(
-  '/:id/profile',
-  run((req) => getUserByIdWithWorkspace(req.params.id, req.workspaceId)),
-);
-
-router.put(
-  '/:id/profile',
-  run((req) => updateFullName(req.params.id, req.body)),
-);
-
-router.put(
+router.delete(
   '/:id/avatar',
-  upload().single('image'),
-  run((req) => updateAvatar(req.params.id, req.file)),
+  run((req) => deleteAvatar(req.userId)),
 );
 
 export default router;

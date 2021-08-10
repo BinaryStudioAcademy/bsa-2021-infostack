@@ -14,11 +14,11 @@ const loadWorkspaces = createAsyncThunk(
 );
 
 const createWorkspace = createAsyncThunk(
-  ActionType.SetCurrentWorkspaceID,
+  ActionType.SetCurrentWorkspace,
   async (payload: IWorkspaceCreation, { dispatch }) => {
     try {
-      const { id } = await new WorkspaceApi().create(payload);
-      dispatch(actions.SetCurrentWorkspaceID(id));
+      const workspace = await new WorkspaceApi().create(payload);
+      dispatch(actions.SetCurrentWorkspace(workspace));
       dispatch(actions.RemoveCreatingError());
     } catch (err) {
       if (err.status === HttpCode.CONFLICT) {
@@ -28,9 +28,18 @@ const createWorkspace = createAsyncThunk(
   },
 );
 
+const loadWorkspace = createAsyncThunk(
+  ActionType.SetCurrentWorkspace,
+  async (id: string, { dispatch }) => {
+    const workspace = await new WorkspaceApi().getById(id);
+    dispatch(actions.SetCurrentWorkspace(workspace));
+  },
+);
+
 const workspacesActions = {
   ...actions,
   loadWorkspaces,
+  loadWorkspace,
   createWorkspace,
 };
 

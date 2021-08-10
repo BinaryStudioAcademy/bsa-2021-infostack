@@ -1,13 +1,15 @@
 import { getCustomRepository } from 'typeorm';
-import { IWorkspaceUser } from '../common/interfaces/workspace/workspace-user';
-import { IWorkspace } from '../common/interfaces/workspace/workspace';
-import { IWorkspaceCreation } from '../common/interfaces/workspace/workspace-creation';
+import {
+  IWorkspace,
+  IWorkspaceUserRole,
+  IWorkspaceUser,
+  IWorkspaceCreation,
+} from '../common/interfaces/workspace/workspace';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { RoleType } from '../common/enums/role-type';
-import { IWorkspaceUserRole } from '../common/interfaces/workspace/workspace-user-role';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -17,7 +19,6 @@ export const getWorkspaceUsers = async (
 ): Promise<IWorkspaceUser[]> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findByIdWithUsers(workspaceId);
-
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
@@ -31,11 +32,18 @@ export const getWorkspaceUserRole = async (
       userId,
       workspaceId,
     );
-
   return { role: userWorkspace.role };
 };
 
-export const getAll = async (userId: string): Promise<IWorkspace[]> => {
+export const getOne = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
+  const userWorkspace = await getCustomRepository(UserWorkspaceRepository)
+    .findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
+
+  const workspace = userWorkspace.workspace;
+  return { id: workspace.id, title: workspace.name };
+};
+
+export const getUserWorkspaces = async (userId: string): Promise<IWorkspace[]> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
   const usersWorkspaces = await userWorkspaceRepository.findUserWorkspaces(
     userId,
