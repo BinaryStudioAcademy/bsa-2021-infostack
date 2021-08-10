@@ -6,7 +6,8 @@ import UserPermissionRepository from '../data/repositories/user-permission.repos
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { IPageRequest } from '../common/interfaces/pages';
+import { IPageContributor, IPageRequest } from '../common/interfaces/pages';
+import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
 
 export const createPage = async (
   userId: string,
@@ -96,4 +97,13 @@ export const getPage = async (
 ): Promise<Page> => {
   const pageRepository = getCustomRepository(PageRepository);
   return pageRepository.findOnePage(workspaceId, pageId);
+};
+
+export const getContributors = async (
+  pageId: string,
+): Promise<IPageContributor[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
+
+  return mapPageToContributors(page);
 };
