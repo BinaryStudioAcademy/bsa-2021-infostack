@@ -182,7 +182,7 @@ const ProfileEdit: React.FC = () => {
         </Card.Title>
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
-        <Row>
+        <Row className="m-0">
           <Col md={8} className="ps-0">
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
