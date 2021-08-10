@@ -1,6 +1,6 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
-import { Container, Popup } from './components';
-import { Spinner } from '../common/spinner/spinner';
+import { Container } from './components';
+import { Spinner, Popup } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { workspacesActions } from 'store/actions';
 import {
