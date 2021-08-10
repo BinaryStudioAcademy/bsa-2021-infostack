@@ -4,6 +4,7 @@ import { IPageContributor } from 'common/interfaces/page';
 import { useHistory } from 'react-router-dom';
 import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
+import { replaceIdParam } from 'helpers/helpers';
 
 interface IPageContributorsProps {
   contributors: IPageContributor[];
@@ -26,9 +27,7 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
   };
 
   const handleAvatarClick = (userId: string): void => {
-    history.push(
-      AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId,
-    );
+    history.push(replaceIdParam(AppRoute.PROFILE, userId));
   };
 
   return (
