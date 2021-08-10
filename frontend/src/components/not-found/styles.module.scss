@@ -1,0 +1,29 @@
+.notFoundWrapper {
+  color: #495057;
+
+  .notFoundCode {
+    font-weight: 500;
+    font-size: 8rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .notFoundTitle {
+    font-size: 2.64rem;
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  .notFoundText {
+    font-size: 2.31rem;
+    line-height: 1.2;
+    margin-top: 1.6rem;
+    margin-bottom: 2.4rem;
+  }
+
+  .notFoundButton {
+    font-size: 1.52rem;
+    padding: 0.56rem 1.6rem;
+    border-radius: 0.48rem;
+  }
+}

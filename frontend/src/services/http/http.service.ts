@@ -39,7 +39,6 @@ class Http {
       } else {
         this.throwError(err);
       }
-
     }
   }
 
@@ -49,9 +48,9 @@ class Http {
     accessToken?: string,
   ): Promise<T> {
     try {
-
       const { method = HttpMethod.GET, payload = null, contentType } = options;
-      const token = accessToken || localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
+      const token =
+        accessToken || localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
       const headers = this.getHeaders(contentType, token);
 
       const response = await fetch(url, {
@@ -67,11 +66,8 @@ class Http {
       }
 
       return this.parseJSON<T>(response);
-
     } catch (err) {
-
       this.throwError(err);
-
     }
   }
 
@@ -123,10 +119,10 @@ class Http {
     });
   }
 
-  private refreshTokens = async (
-    err: Error,
-  ): Promise<string> => {
-    const refreshToken = localStorage.getItem(LocalStorageVariable.REFRESH_TOKEN);
+  private refreshTokens = async (err: Error): Promise<string> => {
+    const refreshToken = localStorage.getItem(
+      LocalStorageVariable.REFRESH_TOKEN,
+    );
     if (refreshToken) {
       try {
         const response = await fetch('/api/auth/refresh', {
@@ -138,8 +134,14 @@ class Http {
         const tokens = await response.json();
         this.emitter.emit(EmitterEvents.GET_ACCESS_TOKEN, tokens.accessToken);
         this.areTokensRefreshing = false;
-        localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, tokens.accessToken);
-        localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, tokens.refreshToken);
+        localStorage.setItem(
+          LocalStorageVariable.ACCESS_TOKEN,
+          tokens.accessToken,
+        );
+        localStorage.setItem(
+          LocalStorageVariable.REFRESH_TOKEN,
+          tokens.refreshToken,
+        );
         return tokens.accessToken;
       } catch (error) {
         if (error.status === HttpCode.UNAUTHORIZED) {

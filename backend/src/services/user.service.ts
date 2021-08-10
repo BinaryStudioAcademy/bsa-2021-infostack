@@ -1,8 +1,9 @@
+import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import { getCustomRepository } from 'typeorm';
 import {
   deleteFile,
+  isFileExists,
   uploadFile,
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
@@ -11,7 +12,8 @@ import SkillRepository from '../data/repositories/skill.repository';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar, title, skills } = await userRepository.findById(id);
+  const { fullName, email, avatar, title, skills } =
+    await userRepository.findById(id);
 
   return { id, fullName, email, avatar, title, skills };
 };
@@ -48,7 +50,7 @@ export const getUserByIdWithWorkspace = async (
 
 export const updateUserInfo = async (
   id: string,
-  body: { fullName: string, title: string, skills: string[] },
+  body: { fullName: string; title: string; skills: string[] },
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const userToUpdate = await userRepository.findById(id);
@@ -60,7 +62,9 @@ export const updateUserInfo = async (
   const foundSkills = await skillRepository.getSkillsById(body.skills);
   userToUpdate.skills = foundSkills;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(userToUpdate);
+  const { fullName, email, avatar, title, skills } = await userRepository.save(
+    userToUpdate,
+  );
 
   return { id, fullName, email, avatar, title, skills };
 };
@@ -70,14 +74,25 @@ export const updateAvatar = async (
   file: Express.Multer.File,
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
+  const userToUpdate = await userRepository.findById(id);
+
+  if (userToUpdate.avatar) {
+    const fileName = userToUpdate.avatar.split('/').pop();
+    const isExistsAvatar = await isFileExists(fileName);
+    if (isExistsAvatar) {
+      await deleteFile(userToUpdate.avatar);
+    }
+  }
+
   const uploadedFile = await uploadFile(file);
   unlinkFile(file.path);
   const { Location } = uploadedFile;
-  const userToUpdate = await userRepository.findById(id);
 
   userToUpdate.avatar = Location || userToUpdate.avatar;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(userToUpdate);
+  const { fullName, email, avatar, title, skills } = await userRepository.save(
+    userToUpdate,
+  );
 
   return { id, fullName, email, avatar, title, skills };
 };

@@ -4,4 +4,6 @@ export { PageApi } from './page-api/page-api.service';
 export { commentApi } from './comment-api/comment-api.service';
 export { UserApi } from './user-api/user-api.service';
 export { WorkspaceApi } from './workspace-api/workspace-api.service';
+export { TagApi } from './tag-api/tag-api.service';
+export { TeamApi } from './team-api/team-api.service';
 export { SkillApi } from './skill-api/skill-api.service';
