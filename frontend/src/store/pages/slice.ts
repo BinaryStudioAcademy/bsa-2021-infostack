@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { IPage, IPageNav } from 'common/interfaces/pages';
+import { IPageNav, IPage } from 'common/interfaces/pages';
 import { ActionType } from './common';
 
 type State = {
@@ -35,8 +35,11 @@ const { reducer, actions } = createSlice({
     [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
     },
-    [ActionType.TOGGLE_SPINER]: (state) => {
+    [ActionType.TOGGLE_SPINNER]: (state) => {
       state.isSpinner = !state.isSpinner;
+    },
+    [ActionType.CLEAR_CURRENT_PAGE]: (state) => {
+      state.currentPage = null;
     },
   },
 });
