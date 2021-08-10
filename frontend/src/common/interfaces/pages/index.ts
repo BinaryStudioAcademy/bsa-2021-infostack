@@ -1,1 +1,1 @@
-export type { IPage, IPageRequest } from 'infostack-shared/common/interfaces';
+export type { IPage, IPageRequest, IEditPageContent } from 'infostack-shared/common/interfaces';

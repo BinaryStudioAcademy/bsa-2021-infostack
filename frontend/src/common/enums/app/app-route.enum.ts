@@ -11,6 +11,7 @@ enum AppRoute {
   SETTINGS_PROFILE = '/settings/profile',
   SETTINGS_USERS = '/settings/users',
   WORKSPACE_SETTING = '/workspace/settings',
+  CONTENT_SETTING = '/page/:id/editor',
 }
 
 export { AppRoute };

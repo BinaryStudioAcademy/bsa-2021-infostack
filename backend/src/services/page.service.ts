@@ -3,10 +3,10 @@ import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import { Page } from '../data/entities/page';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
-import { PageContentRepository } from '../data/repositories/page-content.repository';
+import PageContentRepository from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { IPageRequest } from '../common/interfaces/pages';
+import { IPageRequest, IEditPageContent } from '../common/interfaces/pages';
 
 export const createPage = async (
   userId: string,
@@ -96,4 +96,25 @@ export const getPage = async (
 ): Promise<Page> => {
   const pageRepository = getCustomRepository(PageRepository);
   return pageRepository.findOnePage(workspaceId, pageId);
+};
+
+export const updateContent = async (
+  workspaceId: string,
+  body: IEditPageContent,
+): Promise<Page> => {
+  const pageId = body.pageId;
+  const pageRepository = getCustomRepository(PageRepository);
+  const pageToUpdate = await pageRepository.findOnePage(workspaceId, pageId);
+
+  const contentPageId = pageToUpdate.pageContents[0].id;
+  const contentRepository = getCustomRepository(PageContentRepository);
+  const contentToUpdate = await contentRepository.findById(contentPageId);
+
+  contentToUpdate.content = body.content || pageToUpdate.pageContents[0].content;
+  contentToUpdate.title = body.title || pageToUpdate.pageContents[0].title;
+
+  await contentRepository.update(contentPageId, { title: contentToUpdate.title, content: contentToUpdate.content });
+
+  const page = await pageRepository.findOnePage(workspaceId, pageId);
+  return page;
 };

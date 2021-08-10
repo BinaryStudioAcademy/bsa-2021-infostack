@@ -4,6 +4,7 @@ enum ActionType {
   GET_PAGE = 'getPage',
   SET_PAGES = 'setPages',
   TOGGLE_SPINNER ='toggleSpinner',
+  EDIT_PAGE_CONTENT = 'editPageContent',
 }
 
 export { ActionType };

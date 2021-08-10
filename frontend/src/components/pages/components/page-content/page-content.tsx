@@ -1,4 +1,4 @@
-import Spinner from 'react-bootstrap/Spinner';
+import ReactMarkdown from 'react-markdown';
 import {
   useAppDispatch,
   useAppSelector,
@@ -7,11 +7,12 @@ import {
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
-import { Card } from 'react-bootstrap';
+import { Card, Spinner } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import isUUID from 'is-uuid';
 import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
+import EditButton from '../edit-button/edit-button';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -36,15 +37,24 @@ const PageContent: React.FC = () => {
     }
   }, [paramsId]);
 
+  const handleEditing = (): void => {
+    history.push(AppRoute.CONTENT_SETTING.replace(':id', paramsId));
+  };
+
   const Content: React.FC = () => {
     return (
       <div className="content">
         <div className="container-fluid p-0">
-          <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+          <div className="d-flex justify-content-between mb-4">
+            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+            <EditButton onClick={handleEditing} />
+          </div>
           <div className="row">
             <div className="col-12">
               <Card>
-                <Card.Header>{content || 'Empty page'}</Card.Header>
+                <Card.Header>
+                  <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
+                </Card.Header>
                 <Card.Title></Card.Title>
                 <Card.Body>
                   <Card.Text></Card.Text>
