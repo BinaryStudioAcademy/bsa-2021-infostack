@@ -29,7 +29,7 @@ const TeamSettings: React.FC = () => {
   };
 
   const onItemClick = (id: string): void => {
-    dispatch(teamsActions.setCurrentTeamID(id));
+    dispatch(teamsActions.loadTeam(id));
   };
 
   const onCreateTeamButtonClick = (): void => {

@@ -1,7 +1,7 @@
 import { Accordion } from 'react-bootstrap';
 import { Link } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/dom/dom';
-import { IPage } from 'common/interfaces/page';
+import { IPageNav } from 'common/interfaces/pages';
 import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
@@ -14,7 +14,7 @@ import { useState } from 'react';
 type Props = {
   title?: string;
   id?: string;
-  childPages?: IPage[];
+  childPages?: IPageNav[];
 };
 
 const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
@@ -65,7 +65,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
   return (
     <>
-      <Accordion flush key={id} activeKey={activeKey} onSelect={():void => setActiveKey(undefined)}>
+      <Accordion flush key={id} activeKey={activeKey} onSelect={(): void => setActiveKey(undefined)}>
         <Accordion.Item eventKey={id as string} className="bg-transparent">
 
           {childPages && childPages.length ? (
@@ -96,11 +96,11 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
               </Accordion.Header>
               <Accordion.Body className={styles.accordionBody}>
                 {childPages &&
-                  childPages.map(({ pageContents, id, childPages }) => (
+                  childPages.map(({ title, id, childPages }) => (
                     <PageItem
                       id={id}
                       key={id}
-                      title={pageContents[0]?.title}
+                      title={title}
                       childPages={childPages}
                     />
                   ))}

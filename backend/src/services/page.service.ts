@@ -1,18 +1,20 @@
 import { getCustomRepository } from 'typeorm';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
-import { Page } from '../data/entities/page';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import PageContentRepository from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { IPageRequest, IEditPageContent } from '../common/interfaces/pages';
+import { IPageRequest, IPageNav, IPage, IEditPageContent } from '../common/interfaces/page';
+import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
+import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
+import { Page } from '../data/entities/page';
 
 export const createPage = async (
   userId: string,
   workspaceId: string,
   body: IPageRequest,
-): Promise<Page> => {
+): Promise<IPage> => {
   const { parentPageId, ...pageContent } = body;
   const { title, content } = pageContent;
 
@@ -44,13 +46,13 @@ export const createPage = async (
     option: PermissionType.ADMIN,
   });
 
-  return page;
+  return mapPageToIPage(page);
 };
 
 export const getPages = async (
   userId: string,
   workspaceId: string,
-): Promise<Page[]> => {
+): Promise<IPageNav[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
   const teamPermissionRepository = getCustomRepository(
@@ -87,15 +89,15 @@ export const getPages = async (
   }, []);
 
   const pagesToShow = finalPages.filter((page) => !toBeDeleted.has(page.id));
-  return pagesToShow;
+  return mapPagesToPagesNav(pagesToShow);
 };
 
 export const getPage = async (
-  workspaceId: string,
   pageId: string,
-): Promise<Page> => {
+): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
-  return pageRepository.findOnePage(workspaceId, pageId);
+  const page = await pageRepository.findByIdWithContents(pageId);
+  return mapPageToIPage(page);
 };
 
 export const updateContent = async (

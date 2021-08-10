@@ -24,7 +24,7 @@ const Workspaces: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(workspacesActions.RemoveCurrentWorkspace());
+    dispatch(workspacesActions.removeCurrentWorkspace());
     if (cookies[CookieVariable.WORKSPACE_ID]) {
       removeCookie(CookieVariable.WORKSPACE_ID);
     }

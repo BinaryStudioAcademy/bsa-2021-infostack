@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
-import { getAllByWorkspaceId, create, updateNameById, deleteById } from '../../services/team.service';
+import { getAllByWorkspaceId, getTeam, create, updateNameById, deleteById } from '../../services/team.service';
 
 const router: Router = Router();
 
@@ -10,9 +10,14 @@ router
     run((req) => getAllByWorkspaceId(req.workspaceId)),
   )
 
+  .get(
+    '/:id',
+    run((req => getTeam(req.params.id))),
+  )
+
   .post(
     '/',
-    run((req) => create(req.userId, { workspaceId: req.workspaceId, name: req.body.name })),
+    run((req) => create(req.userId, { name: req.body.name })),
   )
 
   .put(
