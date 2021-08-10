@@ -46,7 +46,7 @@ const Settings: React.FC = () => {
                     path={AppRoute.SETTINGS_USERS}
                     component={UsersSettings}
                     exact
-                  />                  
+                  />
                   <Route
                     path={AppRoute.SETTINGS_TEAMS}
                     component={TeamSettings}
