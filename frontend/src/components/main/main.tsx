@@ -6,7 +6,6 @@ import {
   useCookies,
 } from 'hooks/hooks';
 import { workspacesActions } from 'store/actions';
-import { RootState } from 'common/types/types';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
 import withHeader from 'components/common/with-header/with-header';
@@ -36,7 +35,7 @@ const Main: React.FC = () => {
     <Switch>
       <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
       <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
-      <Route path={AppRoute.PROFILE} component={withHeader(ProfileInfo)} key={Date.now() />
+      <Route path={AppRoute.PROFILE} component={withHeader(ProfileInfo)} key={Date.now()} />
       <Route
         path={AppRoute.WORKSPACE_SETTING}
         component={withHeader(Workspace)}
