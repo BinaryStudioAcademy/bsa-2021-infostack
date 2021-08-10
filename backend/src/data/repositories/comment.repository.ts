@@ -19,6 +19,7 @@ export class CommentRepository extends Repository<Comment> {
       .where('comment.pageId = :pageId', { pageId })
       .innerJoinAndSelect('comment.author', 'author')
       .select(this.SELECTION)
+      .orderBy('comment.createdAt', 'DESC')
       .getMany();
   }
 
