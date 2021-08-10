@@ -18,5 +18,14 @@ export const { reducer, actions } = createSlice({
     [ActionType.SET_COMMENTS]: (state, action: PayloadAction<IComment[]>) => {
       state.comments = action.payload;
     },
+    [ActionType.ADD_COMMENT]: (state, action: PayloadAction<IComment>) => {
+      state.comments.unshift(action.payload);
+    },
+    [ActionType.ADD_RESPONSE]: (state, action: PayloadAction<IComment>) => {
+      const { payload: { parentCommentId } } = action;
+      const parent = state.comments.find(c => c.id === parentCommentId) as IComment;
+      parent.children?.unshift(action.payload);
+      state.comments =  state.comments.map(c => c.id === parentCommentId ? parent : c);
+    },
   },
 });

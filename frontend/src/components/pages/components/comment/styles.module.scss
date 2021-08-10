@@ -1,6 +1,6 @@
 .comment {
   margin-top: 1.6rem;
-  padding-bottom: 1.6rem;
+  padding: 0 0 1.6rem;
 }
 
 .comment:first-child {
@@ -14,4 +14,16 @@
 
 .text {
   font-size: 1.32rem;
+}
+
+.respond {
+  font-size: 1.2rem;
+  background: transparent;
+  display: inline;
+  border: none;
+  padding: 0;
+}
+
+.respond:hover {
+  text-decoration: underline;
 }
