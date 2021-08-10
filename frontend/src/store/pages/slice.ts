@@ -12,7 +12,7 @@ type State = {
 const initialState: State = {
   pages: null,
   currentPage: null,
-  isSpinner : false,
+  isSpinner: false,
 };
 
 const { reducer, actions } = createSlice({

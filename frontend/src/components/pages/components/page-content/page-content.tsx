@@ -43,20 +43,17 @@ const PageContent: React.FC = () => {
 
   const Content: React.FC = () => {
     const [isFollowed, setIsFollowed] = useState<boolean>(false);
-    const isPageFollowed = (): boolean => {
+
+    const isPageFollowed = (): void => {
       if (currentPage?.followingUsers) {
-        let isFollowed = false;
         currentPage.followingUsers.map(follower => {
           if (follower.id === user?.id) {
-            isFollowed = true;
             setIsFollowed(true);
           }
         });
-        return isFollowed;
-      } else {
-        return false;
       }
     };
+
     const onPageFollow = async (pageId: string | undefined):Promise<void> => {
       await pageApi.followPage(pageId);
       setIsFollowed(!isFollowed);
