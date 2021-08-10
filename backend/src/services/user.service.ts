@@ -70,7 +70,7 @@ export const updateAvatar = async (
     const fileName = userToUpdate.avatar.split('/').pop();
     const isExistsAvatar = await isFileExists(fileName);
     if (isExistsAvatar) {
-      deleteFile(userToUpdate.avatar);
+      await deleteFile(userToUpdate.avatar);
     }
   }
 
