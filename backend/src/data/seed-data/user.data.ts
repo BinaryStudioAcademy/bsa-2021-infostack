@@ -25,7 +25,7 @@ export const users = [
   {
     id: 'bf873638-9388-4298-94b0-3d1a11ef8688',
     fullName: 'User 4',
-    email: 'example3.email@example.com',
+    email: 'example4.email@example.com',
     avatar: '',
     password,
   },
