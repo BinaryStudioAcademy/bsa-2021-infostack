@@ -6,7 +6,7 @@ export const mapPagesToPagesNav = (pages: Page[]): IPageNav[] => {
     const mappedChildren = mapPagesToPagesNav(childPages);
     return {
       id,
-      title: pageContents[0].title,
+      title: pageContents[0]?.title,
       childPages: mappedChildren,
     };
   });

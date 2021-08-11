@@ -5,6 +5,10 @@ import {
   getPages,
   getPage,
   getContributors,
+  getPagesFollowedByUser,
+  followPage,
+  unfollowPage,
+  updateContent,
 } from '../../services/page.service';
 import { getComments, addComment } from '../../services/comment.service';
 
@@ -34,6 +38,27 @@ router
   .post(
     '/:id/comments',
     run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
+  )
+  .get(
+    '/following/:id',
+    run((req) => getPagesFollowedByUser(req.params.id)),
+  )
+  .post(
+    '/follow/:id',
+    run((req) => followPage(req.userId, req.params.id)),
+  )
+  .post(
+    '/unfollow/:id',
+    run((req) => unfollowPage(req.userId, req.params.id)),
+  )
+  .post(
+    '/:id/version',
+    run((req) => updateContent(req.body)),
   );
+
+router.post(
+  '/:id/version',
+  run((req) => updateContent(req.body)),
+);
 
 export default router;
