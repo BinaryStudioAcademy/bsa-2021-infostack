@@ -17,10 +17,18 @@ class PageRepository extends Repository<Page> {
     });
   }
 
-  public findOnePage(workspaceId: string, id: string): Promise<Page> {
-    return this.findOne({
-      where: { workspaceId: workspaceId, id: id },
-      relations: ['pageContents'],
+  public findByIdWithContents(id: string): Promise<Page> {
+    return this.findOne(
+      { id },
+      {
+        relations: ['pageContents'],
+      },
+    );
+  }
+
+  public findByIdWithAuthorAndContent(id: string): Promise<Page> {
+    return this.findOne(id, {
+      relations: ['author', 'pageContents', 'pageContents.author'],
     });
   }
 }

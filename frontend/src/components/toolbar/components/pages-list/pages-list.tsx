@@ -1,21 +1,16 @@
 import PageItem from '../page-item/page-item';
-import { IPage } from 'common/interfaces/page';
+import { IPageNav } from 'common/interfaces/pages';
 
 type Props = {
-  pages: IPage[] | null;
+  pages: IPageNav[] | null;
 };
 
 const PagesList: React.FC<Props> = ({ pages }) => {
   return (
     <>
       {pages &&
-        pages.map(({ pageContents, id, childPages }) => (
-          <PageItem
-            id={id}
-            key={id}
-            title={pageContents?.[0]?.title}
-            childPages={childPages}
-          />
+        pages.map(({ title, id, childPages }) => (
+          <PageItem id={id} key={id} title={title} childPages={childPages} />
         ))}
     </>
   );

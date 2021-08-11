@@ -29,7 +29,7 @@ const TeamSettings: React.FC = () => {
   };
 
   const onItemClick = (id: string): void => {
-    dispatch(teamsActions.setCurrentTeamID(id));
+    dispatch(teamsActions.loadTeam(id));
   };
 
   const onCreateTeamButtonClick = (): void => {
@@ -57,19 +57,20 @@ const TeamSettings: React.FC = () => {
       </Card.Header>
       <Card.Body className="cardBody">
         <div
-          className={
-            `teams text-secondary d-flex flex-column align-items-start p-4${!teams ? ' vh-91' : ''}`
-          }
+          className={`teams text-secondary d-flex flex-column align-items-start p-4${
+            !teams ? ' vh-91' : ''
+          }`}
         >
-          {!teams && <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
-            <Spinner animation="border" variant="secondary" />
-          </div>
-          }
-          {
-            teams && <div className="teams-container py-2 w-100">
+          {!teams && (
+            <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
+              <Spinner animation="border" variant="secondary" />
+            </div>
+          )}
+          {teams && (
+            <div className="teams-container py-2 w-100">
               {teams.map((team: ITeam) => renderTeamItem(team))}
             </div>
-          }
+          )}
           <Popup
             query="Enter name of team:"
             isVisible={isPopUpVisible}

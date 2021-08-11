@@ -7,6 +7,7 @@ import { useAppDispatch, useCookies, useHistory } from 'hooks/hooks';
 import { authActions } from 'store/actions';
 import { ProfileItem } from './components/profile-item/profile-item';
 import './styles.scss';
+import { replaceIdParam } from 'helpers/helpers';
 
 type Props = {
   userName: string;
@@ -18,9 +19,7 @@ const NavProfile: React.FC<Props> = ({ userName, userAvatar, userId }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const [cookies, , removeCookie] = useCookies([
-    CookieVariable.WORKSPACE_ID,
-  ]);
+  const [cookies, , removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
 
   const onLogout = (): void => {
     dispatch(authActions.logout());
@@ -45,20 +44,14 @@ const NavProfile: React.FC<Props> = ({ userName, userAvatar, userId }) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <ProfileItem to={AppRoute.PROFILE.slice(0, AppRoute.PROFILE.length - 3) + userId}>
+        <ProfileItem to={replaceIdParam(AppRoute.PROFILE, userId || '')}>
           <i className="bi bi-person"></i>
           Profile
         </ProfileItem>
         <Dropdown.Divider />
-        <ProfileItem to={AppRoute.WORKSPACES}>
-          Select Workspace
-        </ProfileItem>
-        <ProfileItem to={AppRoute.SETTINGS}>
-          Settings
-        </ProfileItem>
-        <ProfileItem onClick={onLogout}>
-          Sign out
-        </ProfileItem>
+        <ProfileItem to={AppRoute.WORKSPACES}>Select Workspace</ProfileItem>
+        <ProfileItem to={AppRoute.SETTINGS}>Settings</ProfileItem>
+        <ProfileItem onClick={onLogout}>Sign out</ProfileItem>
       </Dropdown.Menu>
     </Dropdown>
   );
