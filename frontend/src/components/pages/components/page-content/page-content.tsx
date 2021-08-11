@@ -1,3 +1,5 @@
+import React from 'react';
+import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
 import { Card, Col, Row } from 'react-bootstrap';
 import isUUID from 'is-uuid';
@@ -24,8 +26,10 @@ import { replaceIdParam } from 'helpers/helpers';
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  const pageTitle = currentPage?.pageContents[0].title;
-  const content = currentPage?.pageContents[0].content;
+  const { user } = useAppSelector((state) => state.auth);
+  const pageApi = new PageApi();
+  const pageTitle = currentPage?.pageContents[0]?.title;
+  const content = currentPage?.pageContents[0]?.content;
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -59,6 +63,36 @@ const PageContent: React.FC = () => {
   };
 
   const Content: React.FC = () => {
+    const { isCurrentPageFollowed } = useAppSelector(
+      (state: RootState) => state.pages,
+    );
+
+    const isPageFollowed = async (): Promise<void> => {
+      if (currentPage?.followingUsers) {
+        currentPage.followingUsers.map((follower) => {
+          if (follower.id === user?.id) {
+            dispatch(pagesActions.setCurrentPageFollowed(true));
+          }
+        });
+      }
+    };
+
+    const onPageFollow = async (pageId: string | undefined): Promise<void> => {
+      await pageApi.followPage(pageId);
+      await dispatch(pagesActions.setPage(pageId));
+    };
+
+    const onPageUnfollow = async (
+      pageId: string | undefined,
+    ): Promise<void> => {
+      await pageApi.unfollowPage(pageId);
+      await dispatch(pagesActions.setPage(pageId));
+    };
+
+    useEffect(() => {
+      isPageFollowed();
+    }, []);
+
     return (
       <div className="p-4">
         <Row>
@@ -69,7 +103,19 @@ const PageContent: React.FC = () => {
             <Row>
               <Col className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-                <EditButton onClick={handleEditing} />
+                <div>
+                  <EditButton onClick={handleEditing} />
+                  <Button
+                    className="ms-3"
+                    onClick={
+                      isCurrentPageFollowed
+                        ? (): Promise<void> => onPageUnfollow(paramsId)
+                        : (): Promise<void> => onPageFollow(paramsId)
+                    }
+                  >
+                    {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
+                  </Button>
+                </div>
               </Col>
             </Row>
             <Row className="mb-4">

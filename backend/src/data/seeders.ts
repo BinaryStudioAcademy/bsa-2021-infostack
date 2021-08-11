@@ -7,6 +7,7 @@ import TeamSeeder from './seeders/team.seeder';
 import SkillSeeder from './seeders/skills.seeder';
 import TeamMemberSeeder from './seeders/team-member.seeder';
 import TeamPermissionSeeder from './seeders/team-permission.seeder';
+import UserFollowingPagesSeeder from './seeders/user-following-pages.seeder';
 import CommentSeeder from './seeders/comment.seeder';
 import { logger } from '../common/utils/logger.util';
 import ormconfig from '../config/ormconfig';
@@ -44,6 +45,8 @@ const seeders = async (): Promise<void> => {
   await PageTagSeeder.execute();
   logger.info('Seeding comments');
   await CommentSeeder.execute();
+  logger.info('Seeding user_followedPages');
+  await UserFollowingPagesSeeder.execute();
   logger.info('Seeding finished');
 };
 

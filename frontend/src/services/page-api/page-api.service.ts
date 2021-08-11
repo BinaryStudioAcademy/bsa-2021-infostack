@@ -2,6 +2,7 @@ import { ContentType, HttpMethod } from 'common/enums/enums';
 import {
   IPage,
   IPageRequest,
+  IPageFollowed,
   IEditPageContent,
   IPageNav,
 } from 'common/interfaces/pages';
@@ -37,6 +38,26 @@ class PageApi {
   public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
+    });
+  }
+
+  public async getPagesFollowedByUser(
+    userId: string | undefined,
+  ): Promise<IPageFollowed[]> {
+    return this.http.load(`${this.BASE}/following/${userId}`, {
+      method: HttpMethod.GET,
+    });
+  }
+
+  public async followPage(pageId: string | undefined): Promise<IPage[]> {
+    return this.http.load(`${this.BASE}/follow/${pageId}`, {
+      method: HttpMethod.POST,
+    });
+  }
+
+  public async unfollowPage(pageId: string | undefined): Promise<IPage[]> {
+    return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
+      method: HttpMethod.POST,
     });
   }
 

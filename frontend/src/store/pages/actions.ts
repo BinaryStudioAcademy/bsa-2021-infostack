@@ -4,6 +4,11 @@ import { ActionType } from './common';
 import { PageApi } from 'services';
 import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
 
+interface PageAction {
+  type: string;
+  payload: boolean;
+}
+
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
@@ -42,6 +47,19 @@ const getPage = createAsyncThunk(
   },
 );
 
+const setPage = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (getPayload: string | undefined, { dispatch }) => {
+    const pageResponse = await new PageApi().getPage(getPayload);
+    dispatch(actions.getPage(pageResponse));
+  },
+);
+
+const setCurrentPageFollowed = (payload: boolean): PageAction => ({
+  type: ActionType.SET_CURRENT_PAGE_FOLLOWED,
+  payload,
+});
+
 const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
@@ -61,6 +79,8 @@ const pagesActions = {
   createVersionPage,
   getPagesAsync,
   getPage,
+  setPage,
+  setCurrentPageFollowed,
   editPageContent,
 };
 

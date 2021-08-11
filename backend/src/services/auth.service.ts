@@ -22,6 +22,7 @@ import { IResetPassword } from '../common/interfaces/auth/reset-password.interfa
 import { env } from '../env';
 import { ISetPassword } from '../common/interfaces/auth/set-password.interface';
 import jwt from 'jsonwebtoken';
+import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 
 const setTokens = async (user: IUser): Promise<ITokens> => {
   const tokens = generateTokens(user.id);
@@ -52,11 +53,24 @@ export const register = async (
     ...body,
     password: hashedPassword,
   });
+  const newFollowingPages = user.followingPages?.map((page) =>
+    mapPageToIPage(page),
+  );
+  const userWithMappedPages = { ...user, followingPages: newFollowingPages };
+  const tokens = await setTokens(userWithMappedPages);
+  const { id, fullName, email, avatar, title, skills, followingPages } =
+    userWithMappedPages;
 
-  const tokens = await setTokens(user);
-  const { id, fullName, email, avatar, title, skills } = user;
-
-  return { id, fullName, email, avatar, title, skills, ...tokens };
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages,
+    ...tokens,
+  };
 };
 
 export const login = async (
@@ -79,11 +93,24 @@ export const login = async (
       message: HttpErrorMessage.INVALID_PASSWORD,
     });
   }
+  const newFollowingPages = user.followingPages?.map((page) =>
+    mapPageToIPage(page),
+  );
+  const userWithMappedPages = { ...user, followingPages: newFollowingPages };
+  const tokens = await setTokens(userWithMappedPages);
+  const { id, fullName, email, avatar, title, skills, followingPages } =
+    userWithMappedPages;
 
-  const tokens = await setTokens(user);
-  const { id, fullName, email, avatar, title, skills } = user;
-
-  return { id, fullName, email, avatar, title, skills, ...tokens };
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages,
+    ...tokens,
+  };
 };
 
 export const resetPassword = async (body: IResetPassword): Promise<void> => {
@@ -131,7 +158,14 @@ export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
       throw new Error();
     }
     await refreshTokenRepository.remove(userRefreshToken);
-    const tokens = setTokens(userRefreshToken.user);
+    const newFollowingPages = userRefreshToken.user.followingPages?.map(
+      (page) => mapPageToIPage(page),
+    );
+    const userWithMappedPages = {
+      ...userRefreshToken.user,
+      followingPages: newFollowingPages,
+    };
+    const tokens = await setTokens(userWithMappedPages);
     return tokens;
   } catch {
     throw new HttpError({

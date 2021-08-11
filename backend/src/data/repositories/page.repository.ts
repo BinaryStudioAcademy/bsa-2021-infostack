@@ -5,7 +5,7 @@ import { PageContent } from '../entities/page-content';
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
   public findById(id: string): Promise<Page> {
-    return this.findOne({ id });
+    return this.findOne({ relations: ['followingUsers'], where: { id } });
   }
 
   public findPages(workspaceId: string): Promise<Page[]> {
@@ -44,7 +44,7 @@ class PageRepository extends Repository<Page> {
     return this.findOne(
       { id },
       {
-        relations: ['pageContents'],
+        relations: ['pageContents', 'followingUsers'],
       },
     );
   }
@@ -66,7 +66,9 @@ class PageRepository extends Repository<Page> {
         'pageContents',
         '"pageContents"."createdAt" = "last_version"."created_at"',
       )
+      .leftJoinAndSelect('page.followingUsers', 'followingUsers')
       .where('page.id = :id', { id: id })
+      .andWhere('page.id =  :id', { id: id })
       .getOne();
   }
 
