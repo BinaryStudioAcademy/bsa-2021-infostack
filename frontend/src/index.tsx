@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { CookiesProvider } from 'react-cookie';
+import { Provider as SocketProvider, socket } from './context/socket';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { store } from 'store/store';
 import './assets/css/styles.scss';
@@ -12,7 +13,9 @@ render(
     <Provider store={store}>
       <Router>
         <CookiesProvider>
-          <App />
+          <SocketProvider value={socket}>
+            <App />
+          </SocketProvider>
         </CookiesProvider>
       </Router>
     </Provider>

@@ -1,0 +1,34 @@
+.comment {
+  margin-top: 1.6rem;
+  padding: 0 0 1.6rem;
+}
+
+.comment:first-child {
+  margin-top: 0;
+}
+
+.userName,
+.text {
+  font-size: 1.32rem;
+  line-height: 1.2;
+}
+
+.userName {
+  font-weight: 500;
+}
+
+.respond {
+  font-size: 1.2rem;
+  background: transparent;
+  display: inline;
+  border: none;
+  padding: 0;
+}
+
+.respond:hover {
+  text-decoration: underline;
+}
+
+.avatar {
+  cursor: pointer;
+}

@@ -1,1 +1,5 @@
-export { IWorkspace, IWorkspaceUser, IWorkspaceCreation } from 'infostack-shared';
+export {
+  IWorkspace,
+  IWorkspaceUser,
+  IWorkspaceCreation,
+} from 'infostack-shared';

@@ -1,23 +1,24 @@
 import ReactMarkdown from 'react-markdown';
-import React from 'react';
+import { Card, Col, Row } from 'react-bootstrap';
+import isUUID from 'is-uuid';
 import {
   useAppDispatch,
   useAppSelector,
   useEffect,
   useState,
   useParams,
+  useHistory,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
-import './page-content.scss';
-import { Spinner, Card, Col, Row } from 'react-bootstrap';
-import { pagesActions } from 'store/pages';
-import isUUID from 'is-uuid';
-import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
-import EditButton from '../edit-button/edit-button';
+import { pagesActions } from 'store/pages';
+import { CommentSection } from '../comment-section/comment-section';
+import { Spinner } from 'components/common/spinner/spinner';
+import styles from './styles.module.scss';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
 import { IPageContributor } from 'common/interfaces/pages';
+import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
 
 const PageContent: React.FC = () => {
@@ -59,44 +60,42 @@ const PageContent: React.FC = () => {
 
   const Content: React.FC = () => {
     return (
-      <div className="content">
-        <div className="container-fluid p-0">
-          <Row>
-            <Col lg={3}>
-              <PageContributors contributors={contributors} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <div className="d-flex justify-content-between mb-4">
-                <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-                <EditButton onClick={handleEditing} />
-              </div>
-              <Card>
-                <Card.Header>
-                  <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
-                </Card.Header>
-                <Card.Title></Card.Title>
-                <Card.Body>
-                  <Card.Text></Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+      <div className="p-4">
+        <Row>
+          <Col className="d-flex justify-content-between mb-4">
+            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+            <EditButton onClick={handleEditing} />
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <PageContributors contributors={contributors} />
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <Card border="light" className={styles.card}>
+              <Card.Body>
+                <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Card border="light" className={styles.card}>
+              <Card.Header>Comments</Card.Header>
+              <Card.Body>
+                <CommentSection pageId={paramsId} />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   };
 
-  return (
-    <>
-      {!isSpinner && !isContributorsLoading ? (
-        <Content />
-      ) : (
-        <Spinner animation="border" variant="secondary" />
-      )}
-    </>
-  );
+  return !isSpinner && !isContributorsLoading ? <Content /> : <Spinner />;
 };
 
 export default PageContent;

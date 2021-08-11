@@ -4,7 +4,7 @@ import { HttpError } from '../../common/errors/http-error';
 import { logger } from '../../common/utils/logger.util';
 import { HttpErrorMessage } from '../../common/enums/http-error-message';
 
-const errorHandlerMiddleware = (
+export const errorHandlerMiddleware = (
   err: HttpError,
   _: Request,
   res: Response,
@@ -23,5 +23,3 @@ const errorHandlerMiddleware = (
 
   res.status(status).send({ error: message });
 };
-
-export default errorHandlerMiddleware;
