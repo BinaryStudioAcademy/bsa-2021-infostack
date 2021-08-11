@@ -65,33 +65,18 @@ const PageContent: React.FC = () => {
           <Col xs={2}>
             <PageContributors contributors={contributors} />
           </Col>
-          <Col className="d-flex justify-content-between mb-4">
-            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-            <EditButton onClick={handleEditing} />
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
-            <Card border="light" className={styles.card}>
-              <Card.Body>
-                <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
           <Col>
             <Row>
-              <Col>
+              <Col className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+                <EditButton onClick={handleEditing} />
               </Col>
             </Row>
-            <Row className="mb-4"></Row>
             <Row className="mb-4">
               <Col>
                 <Card border="light" className={styles.card}>
                   <Card.Body>
-                    <Card.Text>{content || 'Empty page'}</Card.Text>
+                    <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
                   </Card.Body>
                 </Card>
               </Col>
