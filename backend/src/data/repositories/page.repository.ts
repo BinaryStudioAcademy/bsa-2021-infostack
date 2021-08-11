@@ -4,7 +4,7 @@ import { Page } from '../entities/page';
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
   public findById(id: string): Promise<Page> {
-    return this.findOne({ relations: ['followingUsers'], where: { id: id } });
+    return this.findOne({ relations: ['followingUsers'], where: { id } });
   }
 
   public findPages(workspaceId: string): Promise<Page[]> {
