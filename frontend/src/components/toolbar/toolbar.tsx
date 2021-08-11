@@ -21,12 +21,14 @@ type Props = {
 const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  const paramsId = useParams();
+  const paramsId = useParams<{ id: string }>().id;
   const url = useLocation().pathname;
 
+  const pages = useAppSelector((state: RootState) => state.pages);
+
   useEffect(() => {
-    dispatch(pagesActions.getPagesAsync());
-  }, []);
+    if (!pages?.pages) dispatch(pagesActions.getPagesAsync());
+  }, [pages?.pages]);
 
   const addPage = async (): Promise<void> => {
     const payload: IPageRequest = { title: 'New Page', content: '' };
@@ -35,16 +37,16 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   };
 
   useEffect(() => {
-    if (currentPage && !url.includes(currentPage.id)) {
+    if (currentPage && !url.includes('/page/')) {
       dispatch(pagesActions.clearCurrentPage());
     }
   }, [paramsId]);
 
-  const pages = useAppSelector((state: RootState) => state.pages);
-
   const SectionName: React.FC<{ name: string }> = ({ name }) => (
     <h2 className={getAllowedClasses(styles.sectionName)}>{name}</h2>
   );
+
+  console.log('Render TOOLBAR');
 
   return (
     <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">

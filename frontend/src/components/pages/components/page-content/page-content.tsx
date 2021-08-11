@@ -33,7 +33,13 @@ const PageContent: React.FC = () => {
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
-    await dispatch(pagesActions.getPage(payload));
+    if (currentPage && id !== currentPage.id) {
+      await dispatch(pagesActions.getPage(payload));
+    }
+    if (!currentPage) {
+      await dispatch(pagesActions.getPage(payload));
+    }
+    return;
   };
 
   useEffect(() => {
@@ -47,6 +53,7 @@ const PageContent: React.FC = () => {
       getPageById(paramsId);
     } else {
       dispatch(pagesActions.clearCurrentPage());
+      console.log('DELETE currentPAge in CONTENT');
       history.push(AppRoute.ROOT);
     }
   }, [paramsId]);

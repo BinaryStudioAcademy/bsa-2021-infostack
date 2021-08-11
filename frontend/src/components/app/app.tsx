@@ -18,22 +18,27 @@ import { ToastContainer } from 'react-toastify';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(pathname);
-  const { isRefreshTokenExpired } = useAppSelector(state => state.auth);
+  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(
+    pathname,
+  );
+  const { isRefreshTokenExpired } = useAppSelector((state) => state.auth);
   const history = useHistory();
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
 
   useEffect(() => {
     if (token && isAuth) {
       history.push(AppRoute.WORKSPACES);
+      console.log('APP First');
     }
   }, []);
 
   useEffect(() => {
     if (isRefreshTokenExpired) {
       history.push(AppRoute.LOGIN);
+      console.log('APP Second');
     }
   }, [isRefreshTokenExpired]);
+  console.log('Render APP');
 
   return (
     <>

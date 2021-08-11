@@ -17,12 +17,12 @@ rules:
     - max: 1
   no-var:
     - error
-  no-console:
-    - error
-    - allow:
-        - warn
-        - error
-        - info
+  # no-console:
+  #   - error
+  #   - allow:
+  #       - warn
+  #       - error
+  #       - info
   '@typescript-eslint/explicit-function-return-type':
     - error
     - allowTypedFunctionExpressions: true

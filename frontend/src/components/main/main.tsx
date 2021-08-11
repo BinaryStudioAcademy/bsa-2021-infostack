@@ -1,4 +1,8 @@
-import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums/enums';
+import {
+  AppRoute,
+  CookieVariable,
+  LocalStorageVariable,
+} from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
 import withHeader from 'components/common/with-header/with-header';
 import Pages from 'components/pages/pages';
@@ -18,35 +22,44 @@ import NotFound from 'components/not-found/not-found';
 
 const Main: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
-  const { user } = useAppSelector(state => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const [cookies] = useCookies([
-    CookieVariable.WORKSPACE_ID,
-  ]);
+  const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
 
   useEffect(() => {
-    if (token && !user){
+    if (token && !user) {
       dispatch(authActions.loadUser());
+      console.log('MAIN First');
     }
   }, []);
 
   useEffect(() => {
     if (!currentWorkspace) {
       if (cookies[CookieVariable.WORKSPACE_ID]) {
-        dispatch(workspacesActions.loadWorkspace(cookies[CookieVariable.WORKSPACE_ID]));
+        dispatch(
+          workspacesActions.loadWorkspace(cookies[CookieVariable.WORKSPACE_ID]),
+        );
+        console.log('MAIN Second');
       } else {
         history.push(AppRoute.WORKSPACES);
+        console.log('MAIN Third');
       }
     }
   }, [currentWorkspace]);
+
+  console.log('Render MAIN');
 
   return (
     <Switch>
       <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
       <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
-      <Route path={AppRoute.PROFILE} component={withHeader(ProfileInfo)} key={Date.now()} />
+      <Route
+        path={AppRoute.PROFILE}
+        component={withHeader(ProfileInfo)}
+        key={Date.now()}
+      />
       <Route
         path={AppRoute.WORKSPACE_SETTING}
         component={withHeader(Workspace)}
