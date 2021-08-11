@@ -31,7 +31,7 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
   };
 
   return (
-    <Card>
+    <Card border="light" className={styles.card}>
       <Card.Header>
         Contributors
         <Badge className={styles.badge} pill={true}>

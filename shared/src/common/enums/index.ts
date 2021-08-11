@@ -5,3 +5,4 @@ export { PermissionType } from './permissions';
 export { RoleType } from './roles';
 export { CookieVariable } from './cookies';
 export { LocalStorageVariable } from './local-storage';
+export * from './socket';
