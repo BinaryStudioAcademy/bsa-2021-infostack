@@ -1,8 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import { ITeam, ITeamCreation } from '../common/interfaces/team/team.interface';
-import { mapUsersToTeamUsers } from '../common/mappers/team/map-users-to-team-users';
-import { mapTeams } from '../common/mappers/team/map-teams';
+import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import TeamRepository from '../data/repositories/team.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
@@ -13,7 +12,15 @@ export const getAllByWorkspaceId = async (
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
-  return mapTeams(teams);
+  return teams.map(mapTeamToITeam);
+};
+
+export const getTeam = async (
+  pageId: string,
+): Promise<ITeam> => {
+  const pageRepository = getCustomRepository(TeamRepository);
+  const page = await pageRepository.findByIdWithUsers(pageId);
+  return mapTeamToITeam(page);
 };
 
 export const create = async (
@@ -41,7 +48,7 @@ export const create = async (
   user.teams.push(team);
   userRepository.save(user);
   const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
-  return { id: team.id, name: team.name, workspaceId: team.workspaceId, users };
+  return { id: team.id, name: team.name, users };
 };
 
 export const updateNameById = async (
@@ -64,9 +71,8 @@ export const updateNameById = async (
   }
   const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
   teamToUpdate.name = newName || teamToUpdate.name;
-  const { id, name, workspaceId, users } = await teamRepository.save(teamToUpdate);
-  const teamUsers = mapUsersToTeamUsers(users);
-  return { id, name, workspaceId, users: teamUsers };
+  const team = await teamRepository.save(teamToUpdate);
+  return mapTeamToITeam(team);
 };
 
 export const deleteById = async (
@@ -74,7 +80,6 @@ export const deleteById = async (
 ): Promise<ITeam> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const teamToRemove = await teamRepository.findByIdWithUsers(id);
-  const { name, workspaceId, users } = await teamRepository.remove(teamToRemove);
-  const teamUsers = mapUsersToTeamUsers(users);
-  return { id, workspaceId, name, users: teamUsers };
+  const team = await teamRepository.remove(teamToRemove);
+  return mapTeamToITeam(team);
 };

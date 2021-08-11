@@ -11,6 +11,6 @@ router
   .get('/', run(req => getPages(req.userId, req.workspaceId)));
 
 router
-  .get('/:id', run(req => getPage(req.workspaceId, req.params.id)));
+  .get('/:id', run(req => getPage(req.params.id)));
 
 export default router;
