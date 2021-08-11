@@ -1,19 +1,23 @@
+import { IParticipant } from 'common/interfaces/participant';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from '../styles.module.scss';
 
 type Props = {
-  fullName: string;
-  role: string;
+  participant: IParticipant;
+  onDelete(id: string): void;
 };
 
-const Item: React.FC<Props> = ({ fullName, role }) => {
+const Item: React.FC<Props> = ({ participant, onDelete }) => {
   return (
     <tr>
-      <td>{fullName}</td>
-      <td>User</td>
-      <td>{role}</td>
+      <td>{participant.name}</td>
+      <td>{participant.type}</td>
+      <td>role</td>
       <td>
-        <i className={getAllowedClasses('bi-trash', styles.trashIcon)} />
+        <i
+          className={getAllowedClasses('bi-trash', styles.trashIcon)}
+          onClick={():void => onDelete(participant.id)}
+        />
       </td>
     </tr>
   );
