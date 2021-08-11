@@ -18,6 +18,7 @@ import EditButton from '../edit-button/edit-button';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
 import { IPageContributor } from 'common/interfaces/pages';
+import { replaceIdParam } from 'helpers/helpers';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -53,7 +54,7 @@ const PageContent: React.FC = () => {
   }, [paramsId]);
 
   const handleEditing = (): void => {
-    history.push(AppRoute.CONTENT_SETTING.replace(':id', paramsId));
+    history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
   };
 
   const Content: React.FC = () => {
@@ -64,6 +65,8 @@ const PageContent: React.FC = () => {
             <Col lg={3}>
               <PageContributors contributors={contributors} />
             </Col>
+          </Row>
+          <Row>
             <Col>
               <div className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
