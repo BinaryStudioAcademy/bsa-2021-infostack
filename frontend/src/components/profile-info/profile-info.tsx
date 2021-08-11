@@ -90,7 +90,7 @@ const ProfileInfo: React.FC = () => {
                               Skills
                             </Card.Title>
                             <div className="d-flex align-items-start flex-wrap">
-                              {user.skills?.length &&
+                              {!!user.skills?.length &&
                                 user.skills.map(({ id, name }) => (
                                   <Badge
                                     bg="primary"
