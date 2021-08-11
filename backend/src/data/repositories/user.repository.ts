@@ -4,7 +4,7 @@ import { User } from '../entities/user';
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
   public findByEmail(email: string): Promise<User> {
-    return this.findOne({ email }, { relations: ['skills'] });
+    return this.findOne({ email }, { relations: ['skills', 'followingPages'] });
   }
 
   public findById(id: string): Promise<User> {

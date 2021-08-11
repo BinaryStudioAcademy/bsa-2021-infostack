@@ -24,8 +24,8 @@ const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const { user } = useAppSelector((state) => state.auth);
   const pageApi = new PageApi();
-  const pageTitle = currentPage?.pageContents[0].title;
-  const content = currentPage?.pageContents[0].content;
+  const pageTitle = currentPage?.pageContents[0]?.title;
+  const content = currentPage?.pageContents[0]?.content;
 
   const history = useHistory();
   const dispatch = useAppDispatch();
