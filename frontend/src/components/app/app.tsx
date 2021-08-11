@@ -15,6 +15,7 @@ import ResetPassword from 'components/reset-password/reset-password';
 import SetPassword from 'components/set-password/set-password';
 import NotFound from 'components/not-found/not-found';
 import { ToastContainer } from 'react-toastify';
+import SignUpInvite from 'components/sign-up-invite/sign-up-invite';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -42,6 +43,7 @@ const App: React.FC = () => {
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
+        <Route path={AppRoute.INVITE} component={SignUpInvite} exact />
         <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
         <Route path={AppRoute.SET_PASSWORD} component={SetPassword} exact />
         <ProtectedRoute
