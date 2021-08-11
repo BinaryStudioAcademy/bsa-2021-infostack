@@ -8,13 +8,13 @@ export default class UserFollowingPagesSeeder {
   public static async execute(): Promise<void> {
     const userRepository = getCustomRepository(UserRepository);
     const pageRepository = getCustomRepository(PageRepository);
-    await asyncForEach(async userFollowingPage => {
+    await asyncForEach(async (userFollowingPage) => {
       const user = await userRepository.findById(userFollowingPage.userId);
       const page = await pageRepository.findById(userFollowingPage.pageId);
-      if(!page.followingUsers) {
+      if (!page.followingUsers) {
         page.followingUsers = [];
       }
-      if(!user.followingPages) {
+      if (!user.followingPages) {
         user.followingPages = [];
       }
       page.followingUsers.push(user);
