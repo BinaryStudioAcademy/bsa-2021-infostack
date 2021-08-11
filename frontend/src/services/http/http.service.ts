@@ -147,7 +147,7 @@ class Http {
         if (error.status === HttpCode.UNAUTHORIZED) {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
-          store.dispatch(authActions.ToggleIsRefreshTokenExpired());
+          store.dispatch(authActions.toggleIsRefreshTokenExpired());
         }
         this.throwError(error);
       }

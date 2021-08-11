@@ -17,16 +17,16 @@ const { reducer, actions } = createSlice({
   name: ReducerName.AUTH,
   initialState,
   reducers: {
-    [ActionType.SetUser]: (state, action: PayloadAction<IUser>) => {
+    [ActionType.SET_USER]: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
     },
-    [ActionType.UpdateUser]: (state, action: PayloadAction<Partial<IUser>>) => {
+    [ActionType.UPDATE_USER]: (state, action: PayloadAction<Partial<IUser>>) => {
       Object.assign(state.user, action.payload);
     },
-    [ActionType.RemoveUser]: (state) => {
+    [ActionType.REMOVE_USER]: (state) => {
       state.user = null;
     },
-    [ActionType.ToggleIsRefreshTokenExpired]: (state) => {
+    [ActionType.TOGGLE_REFRESH_TOKEN_EXPIRED]: (state) => {
       state.isRefreshTokenExpired = !state.isRefreshTokenExpired;
     },
   },
