@@ -1,5 +1,10 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { IPage, IPageRequest, IPageNav } from 'common/interfaces/pages';
+import {
+  IPage,
+  IPageRequest,
+  IEditPageContent,
+  IPageNav,
+} from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
 import { IPageContributor } from 'common/interfaces/pages';
 
@@ -32,6 +37,14 @@ class PageApi {
   public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
+    });
+  }
+
+  public async editPageContent(payload: IEditPageContent): Promise<IPage> {
+    return this.http.load(`${this.BASE}/${payload.pageId}/version`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
     });
   }
 

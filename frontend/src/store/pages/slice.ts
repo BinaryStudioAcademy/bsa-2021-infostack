@@ -12,7 +12,7 @@ type State = {
 const initialState: State = {
   pages: null,
   currentPage: null,
-  isSpinner : false,
+  isSpinner: false,
 };
 
 const { reducer, actions } = createSlice({
@@ -22,10 +22,13 @@ const { reducer, actions } = createSlice({
     [ActionType.CREATE_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
     },
-    [ActionType.CREATE_VERSION_PAGE]: (state, action: PayloadAction<IPageNav>) => {
-      if(state.pages === null) {
+    [ActionType.CREATE_VERSION_PAGE]: (
+      state,
+      action: PayloadAction<IPageNav>,
+    ) => {
+      if (state.pages === null) {
         state.pages = [action.payload];
-      }else{
+      } else {
         state.pages.push(action.payload);
       }
     },

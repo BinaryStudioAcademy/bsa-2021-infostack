@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
-import { getAllByWorkspaceId, getTeam, create, updateNameById, deleteById } from '../../services/team.service';
+import {
+  getAllByWorkspaceId,
+  getTeam,
+  create,
+  updateNameById,
+  deleteById,
+} from '../../services/team.service';
 
 const router: Router = Router();
 
@@ -12,7 +18,7 @@ router
 
   .get(
     '/:id',
-    run((req => getTeam(req.params.id))),
+    run((req) => getTeam(req.params.id)),
   )
 
   .post(
@@ -22,7 +28,7 @@ router
 
   .put(
     '/:id',
-    run((req) =>  updateNameById(req.params.id, req.body.name)),
+    run((req) => updateNameById(req.params.id, req.body.name)),
   )
 
   .delete(

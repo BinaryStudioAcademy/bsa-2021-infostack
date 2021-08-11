@@ -64,7 +64,8 @@ const ProfileEdit: React.FC = () => {
     resolver: yupResolver(accountInfoSchema),
     defaultValues: {
       fullName: user?.fullName,
-      title: user?.title },
+      title: user?.title,
+    },
   });
 
   const handleRemove = (): void => {
@@ -159,32 +160,38 @@ const ProfileEdit: React.FC = () => {
 
   const handleInputChange = (inputValue: OptionsType<ISkill>): void => {
     const lastSkill = inputValue[inputValue.length - 1];
-    const lastSkillName = lastSkill.value ?? '';
 
-    if (lastSkill.__isNew__) {
-      skillApi.createSkill(lastSkillName).then((response: ISkill) => {
-        setAllSkills((oldSkills) => {
-          const newSkills = [...oldSkills];
-          inputValue[inputValue.length - 1].value = response.id;
-          const addedSkill = {
-            value: response.id,
-            label: response.name,
-          } as ISkill;
-          newSkills[newSkills.length] = addedSkill;
+    if(lastSkill) {
+      const lastSkillName = lastSkill.value ?? '';
 
-          return newSkills;
+      if (lastSkill.__isNew__) {
+        skillApi.createSkill(lastSkillName).then((response: ISkill) => {
+          setAllSkills((oldSkills) => {
+            const newSkills = [...oldSkills];
+            inputValue[inputValue.length - 1].value = response.id;
+            const addedSkill = {
+              value: response.id,
+              label: response.name,
+            } as ISkill;
+            newSkills[newSkills.length] = addedSkill;
+
+            return newSkills;
+          });
         });
-      });
-    }
-
-    const result = inputValue.map((item: ISkill) => {
-      if (item.__isNew__) {
-        item.value = lastSkill.value;
       }
 
-      return item;
-    });
-    setUserSkills(result);
+      const result = inputValue.map((item: ISkill) => {
+        if (item.__isNew__) {
+          item.value = lastSkill.value;
+        }
+
+        return item;
+      });
+
+      setUserSkills(result);
+    } else {
+      setUserSkills([]);
+    }
   };
 
   return (

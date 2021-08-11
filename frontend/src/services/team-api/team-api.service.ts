@@ -34,7 +34,7 @@ class TeamApi {
     });
   }
 
-  public async getTeam(id?: string ): Promise<ITeam> {
+  public async getTeam(id?: string): Promise<ITeam> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
     });

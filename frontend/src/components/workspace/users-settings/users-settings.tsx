@@ -2,11 +2,7 @@ import { Card, Table } from 'react-bootstrap';
 import styles from './styles.module.scss';
 import TableHead from './table-head/table-head';
 import UserItem from './user-item/user-item';
-import {
-  useEffect,
-  useAppDispatch,
-  useAppSelector,
-} from 'hooks/hooks';
+import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/dom/dom';
 
