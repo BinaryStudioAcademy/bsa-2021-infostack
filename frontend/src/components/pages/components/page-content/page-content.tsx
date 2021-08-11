@@ -1,17 +1,22 @@
+import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import {
   useAppDispatch,
   useAppSelector,
   useEffect,
+  useState,
   useParams,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
-import { Card } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import isUUID from 'is-uuid';
 import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
+import PageContributors from '../page-contributors/page-contributors';
+import { PageApi } from 'services';
+import { IPageContributor } from 'common/interfaces/pages';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -23,6 +28,9 @@ const PageContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
 
+  const [isContributorsLoading, setIsContributorsLoading] = useState(false);
+  const [contributors, setContributors] = useState<IPageContributor[]>([]);
+
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
     await dispatch(pagesActions.getPage(payload));
@@ -30,6 +38,12 @@ const PageContent: React.FC = () => {
 
   useEffect(() => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
+      setIsContributorsLoading(true);
+      new PageApi()
+        .getPageContributors(paramsId)
+        .then((contributors) => setContributors(contributors))
+        .finally(() => setIsContributorsLoading(false));
+
       getPageById(paramsId);
     } else {
       dispatch(pagesActions.clearCurrentPage());
@@ -41,9 +55,13 @@ const PageContent: React.FC = () => {
     return (
       <div className="content">
         <div className="container-fluid p-0">
-          <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-          <div className="row">
-            <div className="col-12">
+          <Row>
+            <Col lg={3}>
+              <PageContributors contributors={contributors} />
+            </Col>
+
+            <Col>
+              <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
               <Card>
                 <Card.Header>{content || 'Empty page'}</Card.Header>
                 <Card.Title></Card.Title>
@@ -51,8 +69,8 @@ const PageContent: React.FC = () => {
                   <Card.Text></Card.Text>
                 </Card.Body>
               </Card>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
       </div>
     );
@@ -60,7 +78,7 @@ const PageContent: React.FC = () => {
 
   return (
     <>
-      {!isSpinner ? (
+      {!isSpinner && !isContributorsLoading ? (
         <Content />
       ) : (
         <Spinner animation="border" variant="secondary" />

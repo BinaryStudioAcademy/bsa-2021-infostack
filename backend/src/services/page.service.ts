@@ -5,10 +5,16 @@ import UserPermissionRepository from '../data/repositories/user-permission.repos
 import { PageContentRepository } from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { IPageRequest, IPageNav, IPage } from '../common/interfaces/page';
+import {
+  IPageRequest,
+  IPageNav,
+  IPage,
+  IPageContributor,
+} from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { Page } from '../data/entities/page';
+import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
 
 export const createPage = async (
   userId: string,
@@ -92,10 +98,17 @@ export const getPages = async (
   return mapPagesToPagesNav(pagesToShow);
 };
 
-export const getPage = async (
-  pageId: string,
-): Promise<IPage> => {
+export const getPage = async (pageId: string): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
   return mapPageToIPage(page);
+};
+
+export const getContributors = async (
+  pageId: string,
+): Promise<IPageContributor[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
+
+  return mapPageToContributors(page);
 };

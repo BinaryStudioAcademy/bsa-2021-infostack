@@ -1,6 +1,7 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { IPage, IPageRequest, IPageNav } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
+import { IPageContributor } from 'common/interfaces/pages';
 
 class PageApi {
   private http = http;
@@ -28,12 +29,15 @@ class PageApi {
     });
   }
 
-  public async getPage(id?: string ): Promise<IPage> {
+  public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
     });
   }
 
+  public async getPageContributors(id: string): Promise<IPageContributor[]> {
+    return this.http.load(`${this.BASE}/${id}/contributors`);
+  }
 }
 
 export { PageApi };

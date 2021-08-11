@@ -21,11 +21,15 @@ class PageRepository extends Repository<Page> {
     return this.findOne(
       { id },
       {
-        relations: [
-          'pageContents',
-        ],
+        relations: ['pageContents'],
       },
     );
+  }
+
+  public findByIdWithAuthorAndContent(id: string): Promise<Page> {
+    return this.findOne(id, {
+      relations: ['author', 'pageContents', 'pageContents.author'],
+    });
   }
 }
 
