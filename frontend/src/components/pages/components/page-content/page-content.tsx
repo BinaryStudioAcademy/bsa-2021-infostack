@@ -1,19 +1,19 @@
-import React from 'react';
-import Spinner from 'react-bootstrap/Spinner';
+import { Card, Col, Row } from 'react-bootstrap';
+import isUUID from 'is-uuid';
 import {
   useAppDispatch,
   useAppSelector,
   useEffect,
   useState,
   useParams,
+  useHistory,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
-import './page-content.scss';
-import { Card, Col, Row } from 'react-bootstrap';
-import { pagesActions } from 'store/pages';
-import isUUID from 'is-uuid';
-import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
+import { pagesActions } from 'store/pages';
+import { CommentSection } from '../comment-section/comment-section';
+import { Spinner } from 'components/common/spinner/spinner';
+import styles from './styles.module.scss';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
 import { IPageContributor } from 'common/interfaces/pages';
@@ -53,38 +53,41 @@ const PageContent: React.FC = () => {
 
   const Content: React.FC = () => {
     return (
-      <div className="content">
-        <div className="container-fluid p-0">
-          <Row>
-            <Col lg={3}>
-              <PageContributors contributors={contributors} />
-            </Col>
-
-            <Col>
-              <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-              <Card>
-                <Card.Header>{content || 'Empty page'}</Card.Header>
-                <Card.Title></Card.Title>
-                <Card.Body>
-                  <Card.Text></Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+      <div className="p-4">
+        <Row>
+          <Col>
+            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <PageContributors contributors={contributors} />
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <Card border="light" className={styles.card}>
+              <Card.Body>
+                <Card.Text>{content || 'Empty page'}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Card border="light" className={styles.card}>
+              <Card.Header>Comments</Card.Header>
+              <Card.Body>
+                <CommentSection pageId={paramsId} />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   };
 
-  return (
-    <>
-      {!isSpinner && !isContributorsLoading ? (
-        <Content />
-      ) : (
-        <Spinner animation="border" variant="secondary" />
-      )}
-    </>
-  );
+  return !isSpinner && !isContributorsLoading ? <Content /> : <Spinner />;
 };
 
 export default PageContent;

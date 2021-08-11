@@ -8,3 +8,4 @@ export { LocalStorageVariable } from './local-storage';
 export { InviteStatus } from './status';
 export { DefaultUserName } from './default-username';
 export { DefaultPassword } from './default-password';
+export * from './socket';

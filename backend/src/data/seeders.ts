@@ -7,12 +7,12 @@ import TeamSeeder from './seeders/team.seeder';
 import SkillSeeder from './seeders/skills.seeder';
 import TeamMemberSeeder from './seeders/team-member.seeder';
 import TeamPermissionSeeder from './seeders/team-permission.seeder';
+import CommentSeeder from './seeders/comment.seeder';
 import { logger } from '../common/utils/logger.util';
 import ormconfig from '../config/ormconfig';
 import TagSeeder from './seeders/tag.seeder';
 import PageTagSeeder from './seeders/page-tag.seeder';
 import PageContentSeeder from './seeders/page-content.seeder';
-import CommentSeeder from './seeders/comment.seeder';
 import UserPermissionSeeder from './seeders/user-permission.seeder';
 
 const seeders = async (): Promise<void> => {
