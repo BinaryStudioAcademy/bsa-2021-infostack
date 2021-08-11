@@ -1,8 +1,8 @@
 import fs from 'fs';
 import S3 from 'aws-sdk/clients/s3';
-import { env } from '../../env';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/error';
+import { env } from '../../env';
 
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
@@ -12,6 +12,20 @@ const s3 = new S3({
   accessKeyId,
   secretAccessKey,
 });
+
+export const isFileExists = async (
+  fileName: string,
+): Promise<PromiseResult<S3.HeadObjectOutput, AWSError>> => {
+  const params = { Bucket: bucketName, Key: fileName };
+  return s3.headObject(params).promise();
+};
+
+export const deleteFile = async (
+  fileName: string,
+): Promise<PromiseResult<S3.DeleteObjectOutput, AWSError>> => {
+  const params = { Bucket: bucketName, Key: fileName };
+  return s3.deleteObject(params).promise();
+};
 
 export const uploadFile = (
   file: Express.Multer.File,
@@ -23,13 +37,5 @@ export const uploadFile = (
     Key: file.filename,
     ACL: 'public-read',
   };
-
   return s3.upload(uploadParams).promise();
-};
-
-export const deleteFile = (
-  filename: string,
-): Promise<PromiseResult<S3.DeleteObjectOutput, AWSError>> => {
-  const params = { Bucket: bucketName, Key: filename };
-  return s3.deleteObject(params).promise();
 };

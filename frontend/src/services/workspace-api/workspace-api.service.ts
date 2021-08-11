@@ -1,9 +1,8 @@
 import {
-  IWorkspaceUser,
   IWorkspace,
   IWorkspaceCreation,
-  IWorkspaceUserRole,
   IWorkspaceInvite,
+  IWorkspaceUser,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { http } from 'services/http/http.service';
@@ -20,30 +19,23 @@ class WorkspaceApi {
     });
   }
 
-  public async get(): Promise<IWorkspace[]> {
+  public async getWorkspaces(): Promise<IWorkspace[]> {
     return this.http.load(this.BASE);
   }
 
-  public async getById(id: string): Promise<IWorkspace> {
+  public async getWorkspace(id: string): Promise<IWorkspace> {
     return this.http.load(`${this.BASE}/${id}`);
   }
 
-  public async loadUsers(id: string): Promise<IWorkspaceUser[]> {
-    return this.http.load(`${this.BASE}/${id}/users`, {
+  public async getUsers(): Promise<IWorkspaceUser[]> {
+    return this.http.load(`${this.BASE}/current/users`, {
       contentType: ContentType.JSON,
     });
   }
 
-  public async getUserRole(
-    workspaceId: string,
-    userId: string,
-  ): Promise<IWorkspaceUserRole> {
-    return this.http.load(`${this.BASE}/${workspaceId}/user/${userId}/role`, {
-      contentType: ContentType.JSON,
-    });
-  }
-
-  public async inviteToWorkspace(payload: IWorkspaceInvite): Promise<IWorkspace> {
+  public async inviteToWorkspace(
+    payload: IWorkspaceInvite,
+  ): Promise<IWorkspace> {
     return this.http.load(`${this.BASE}/invite`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
@@ -51,22 +43,24 @@ class WorkspaceApi {
     });
   }
 
-  public async updateInviteStatusAccepted(
-    id: string,
-  ): Promise<IWorkspace> {
-    const updateResponse: IWorkspace = await this.http.load(`${this.BASE}/${id}/accept-invite-status`, {
-      method: HttpMethod.PUT,
-    });
+  public async updateInviteStatusAccepted(id: string): Promise<IWorkspace> {
+    const updateResponse: IWorkspace = await this.http.load(
+      `${this.BASE}/${id}/accept-invite-status`,
+      {
+        method: HttpMethod.PUT,
+      },
+    );
 
     return updateResponse;
   }
 
-  public async updateInviteStatusDeclined(
-    id: string,
-  ): Promise<IWorkspace> {
-    const updateResponse: IWorkspace = await this.http.load(`${this.BASE}/${id}/decline-invite-status`, {
-      method: HttpMethod.PUT,
-    });
+  public async updateInviteStatusDeclined(id: string): Promise<IWorkspace> {
+    const updateResponse: IWorkspace = await this.http.load(
+      `${this.BASE}/${id}/decline-invite-status`,
+      {
+        method: HttpMethod.PUT,
+      },
+    );
 
     return updateResponse;
   }

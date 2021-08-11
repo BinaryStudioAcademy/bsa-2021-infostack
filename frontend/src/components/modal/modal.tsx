@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector, useForm, useState } from 'hooks/hooks';
+import { useAppDispatch, useForm, useState } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'validations/reset-password-schema';
@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { Button, Modal } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { IRegister } from 'infostack-shared';
-import { workspaceActions } from 'store/workspace';
+import { usersActions } from 'store/users';
 
 type Props = {
   title: string;
@@ -17,13 +17,15 @@ type Props = {
   onModalClose: () => void;
 };
 
-const ModalComponent: React.FC<Props> = ({ onModalClose, title, showModal }) => {
+const ModalComponent: React.FC<Props> = ({
+  onModalClose,
+  title,
+  showModal,
+}) => {
   const dispatch = useAppDispatch();
-  const { currentWorkspace } = useAppSelector((state) => state.workspaces);
-
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
 
-  const handleClose = ():void => {
+  const handleClose = (): void => {
     onModalClose();
   };
 
@@ -34,24 +36,24 @@ const ModalComponent: React.FC<Props> = ({ onModalClose, title, showModal }) => 
   } = useForm<IWorkspaceInvite>({ resolver: yupResolver(resetPasswordSchema) });
 
   const handleSubmitForm = async (data: IRegister): Promise<void> => {
-
     setSubmitDisabled(true);
 
     await new WorkspaceApi().inviteToWorkspace(data);
 
     onModalClose();
-    toast.info(
-      'Email with an invitation is sent',
-    );
+    toast.info('Email with an invitation is sent');
 
     setSubmitDisabled(false);
-    if(currentWorkspace) dispatch(workspaceActions.loadUsers(currentWorkspace.id));
-
+    dispatch(usersActions.loadUsers());
   };
 
   return (
     <>
-      <Modal className={getAllowedClasses('d-flex align-items-center', styles.modalContent)}
+      <Modal
+        className={getAllowedClasses(
+          'd-flex align-items-center',
+          styles.modalContent,
+        )}
         show={showModal}
         onHide={handleClose}
         backdrop="static"
@@ -73,10 +75,20 @@ const ModalComponent: React.FC<Props> = ({ onModalClose, title, showModal }) => 
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} disabled={isSubmitDisabled}>
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+            disabled={isSubmitDisabled}
+          >
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit(handleSubmitForm)} disabled={isSubmitDisabled}>Send invite</Button>
+          <Button
+            variant="primary"
+            onClick={handleSubmit(handleSubmitForm)}
+            disabled={isSubmitDisabled}
+          >
+            Send invite
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

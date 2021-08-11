@@ -1,6 +1,5 @@
 import React from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
-import { useCookies } from 'react-cookie';
 import './styles.scss';
 
 import UsersSettings from './users-settings/users-settings';
@@ -10,11 +9,9 @@ import IntegrationSettings from './integration-settings/integration-settings';
 import WorkspaceProfileSettings from './profile-settings/profile-settings';
 
 const Workspace: React.FC = () => {
-  const [cookies] = useCookies(['workspaceName']);
-
   return (
     <div className="settings-container">
-      <h1 className="title">{cookies.workspaceName} Settings</h1>
+      <h1 className="title">Settings</h1>
       <Tabs className="tabs">
         <Tab eventKey="/users" className="settings-tab" title="Users">
           <UsersSettings />

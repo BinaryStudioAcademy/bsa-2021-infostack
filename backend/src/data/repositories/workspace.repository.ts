@@ -23,6 +23,15 @@ class WorkspaceRepository extends Repository<Workspace> {
       },
     );
   }
+
+  public findByIdWithTeams(id: string): Promise<Workspace> {
+    return this.findOne(
+      { id },
+      {
+        relations: ['teams', 'teams.users'],
+      },
+    );
+  }
 }
 
 export default WorkspaceRepository;

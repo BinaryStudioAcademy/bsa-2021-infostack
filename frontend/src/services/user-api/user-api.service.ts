@@ -14,20 +14,26 @@ class UserApi {
     return await this.http.load(`${this.BASE}/${id}/profile`);
   }
 
-  public async checkIfUserRegisteredOnInvite(token: string | undefined): Promise<string> {
-    return await this.http.load(`${this.BASE}/check-user-registration?token=${token}`);
+  public async checkIfUserRegisteredOnInvite(
+    token: string | undefined,
+  ): Promise<string> {
+    return await this.http.load(
+      `${this.BASE}/check-user-registration?token=${token}`,
+    );
   }
 
   public async update(
     id: string,
     updatePayload: Partial<IUser>,
   ): Promise<IUser> {
-
-    const updateResponse: IUser = await this.http.load(`${this.BASE}/${id}/profile`, {
-      method: HttpMethod.PUT,
-      payload: JSON.stringify(updatePayload),
-      contentType: ContentType.JSON,
-    });
+    const updateResponse: IUser = await this.http.load(
+      `${this.BASE}/${id}/profile`,
+      {
+        method: HttpMethod.PUT,
+        payload: JSON.stringify(updatePayload),
+        contentType: ContentType.JSON,
+      },
+    );
 
     return updateResponse;
   }
@@ -40,10 +46,13 @@ class UserApi {
     const fd = new FormData();
     fd.append('image', file, fileName);
 
-    const uploadResponse: IUser = await this.http.load(`/api/users/${id}/avatar`, {
-      method: HttpMethod.PUT,
-      payload: fd,
-    });
+    const uploadResponse: IUser = await this.http.load(
+      `/api/users/${id}/avatar`,
+      {
+        method: HttpMethod.PUT,
+        payload: fd,
+      },
+    );
 
     return uploadResponse;
   }

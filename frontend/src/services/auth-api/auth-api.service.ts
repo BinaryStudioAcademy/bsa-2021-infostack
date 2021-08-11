@@ -1,27 +1,32 @@
-import { IRefreshToken } from 'common/interfaces/auth';
-import { IUserWithTokens, IUser } from 'common/interfaces/user';
+import { IRefreshToken, ILogin, IRegister } from 'common/interfaces/auth';
+import { IUserWithTokens } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { IResetPassword, ISetPassword, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
+import {
+  IResetPassword,
+  ISetPassword,
+  IUpdatePasswordAndFullName,
+} from 'common/interfaces/auth';
 import { http } from 'services/http/http.service';
 
 class AuthApi {
   private http = http;
   private BASE = '/api/auth';
 
-  public async loginUser(
-    loginPayload: Omit<IUser, 'id' | 'fullName' | 'avatar'>,
-  ): Promise<IUserWithTokens> {
-    const loginResponse: IUserWithTokens = await this.http.load(`${this.BASE}/login`, {
-      method: HttpMethod.POST,
-      payload: JSON.stringify(loginPayload),
-      contentType: ContentType.JSON,
-    });
+  public async loginUser(loginPayload: ILogin): Promise<IUserWithTokens> {
+    const loginResponse: IUserWithTokens = await this.http.load(
+      `${this.BASE}/login`,
+      {
+        method: HttpMethod.POST,
+        payload: JSON.stringify(loginPayload),
+        contentType: ContentType.JSON,
+      },
+    );
 
     return loginResponse;
   }
 
   public async registerUser(
-    registerPayload: Omit<IUser, 'id' | 'avatar'>,
+    registerPayload: IRegister,
   ): Promise<IUserWithTokens> {
     const registerResponse: IUserWithTokens = await this.http.load(
       `${this.BASE}/register`,
@@ -51,7 +56,9 @@ class AuthApi {
     });
   }
 
-  public async updatePasswordAndFullName(payload: IUpdatePasswordAndFullName ): Promise<string> {
+  public async updatePasswordAndFullName(
+    payload: IUpdatePasswordAndFullName,
+  ): Promise<string> {
     return this.http.load(`${this.BASE}/update-password-and-fullname`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),

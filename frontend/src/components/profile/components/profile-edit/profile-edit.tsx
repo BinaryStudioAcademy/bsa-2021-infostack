@@ -1,3 +1,7 @@
+import Avatar from 'react-avatar';
+import CreatableSelect from 'react-select/creatable';
+import { OptionsType } from 'react-select';
+import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import {
   useState,
   useEffect,
@@ -5,11 +9,14 @@ import {
   useAppSelector,
   useRef,
 } from 'hooks/hooks';
-import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
 import { authActions } from 'store/actions';
-import { UserApi } from 'services';
-import Avatar from 'react-avatar';
+import { UserApi, SkillApi } from 'services';
+import { ISkill } from 'common/interfaces/skill';
+import { IUserAccount } from 'common/interfaces/user';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
+import { accountInfoSchema } from 'validations/account-info-schema';
 import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
@@ -18,16 +25,48 @@ const ProfileEdit: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [userFullName, setUserFullName] = useState('');
+  const [userTitle, setUserTitle] = useState('');
+  const [allSkills, setAllSkills] = useState<ISkill[]>([]);
+  const [userSkills, setUserSkills] = useState<ISkill[]>([]);
   const [selectedImgURL, setSelectedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
   const { user } = useAppSelector((state) => state.auth);
   const userApi = new UserApi();
+  const skillApi = new SkillApi();
 
   useEffect(() => {
     if (user) {
       setUserFullName(user.fullName);
+      setUserTitle(user.title ?? '');
+      const skills = user.skills?.map(
+        ({ id, name }) => ({ value: id, label: name } as ISkill),
+      );
+      setUserSkills(skills ?? []);
     }
   }, [user]);
+
+  useEffect(() => {
+    skillApi.getAllSkills().then((response) => {
+      const skills = response.map((skill) => {
+        const { id, name } = skill;
+        return { value: id, label: name } as ISkill;
+      });
+
+      setAllSkills(skills);
+    });
+  }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUserAccount>({
+    resolver: yupResolver(accountInfoSchema),
+    defaultValues: {
+      fullName: user?.fullName,
+      title: user?.title,
+    },
+  });
 
   const handleRemove = (): void => {
     if (user) {
@@ -49,15 +88,36 @@ const ProfileEdit: React.FC = () => {
 
   const handleSaveChanges = async (): Promise<void> => {
     if (user) {
-      if (userFullName !== user.fullName) {
-        setIsUploading(true);
+      setIsUploading(true);
+      const skills = userSkills.map(({ value }) => value) as ISkill[];
 
-        const updatedUser = await userApi
-          .update(user.id, { ...user, fullName: userFullName })
-          .then((data) => data);
-        dispatch(authActions.setUser({ ...updatedUser, avatar: user.avatar }));
-        setUserFullName(updatedUser.fullName);
-      }
+      const updatedUser = await userApi
+        .update(user.id, {
+          ...user,
+          fullName: userFullName,
+          title: userTitle,
+          skills,
+        })
+        .then((data) => data);
+      dispatch(authActions.setUser({ ...updatedUser, avatar: user.avatar }));
+
+      setUserFullName(updatedUser.fullName);
+      setUserTitle(updatedUser.title ?? '');
+
+      const sortedSkills = (): ISkill[] => {
+        const result = [] as ISkill[];
+        updatedUser.skills?.forEach((item) => {
+          skills.forEach((skill, i) => {
+            if (item.id === skill) {
+              result[i] = item;
+            }
+          });
+        });
+
+        return result.map(({ id, name }) => ({ value: id, label: name }));
+      };
+
+      setUserSkills(sortedSkills());
 
       if (selectedFile) {
         setIsUploading(true);
@@ -70,8 +130,10 @@ const ProfileEdit: React.FC = () => {
           authActions.setUser({
             id: updatedUser.id,
             fullName: updatedUser.fullName,
-            avatar: updatedUser.avatar + `?${performance.now()}`,
+            avatar: updatedUser.avatar,
             email: updatedUser.email,
+            title: updatedUser.title,
+            skills: updatedUser.skills,
           }),
         );
 
@@ -96,6 +158,36 @@ const ProfileEdit: React.FC = () => {
     }
   };
 
+  const handleInputChange = (inputValue: OptionsType<ISkill>): void => {
+    const lastSkill = inputValue[inputValue.length - 1];
+    const lastSkillName = lastSkill.value ?? '';
+
+    if (lastSkill.__isNew__) {
+      skillApi.createSkill(lastSkillName).then((response: ISkill) => {
+        setAllSkills((oldSkills) => {
+          const newSkills = [...oldSkills];
+          inputValue[inputValue.length - 1].value = response.id;
+          const addedSkill = {
+            value: response.id,
+            label: response.name,
+          } as ISkill;
+          newSkills[newSkills.length] = addedSkill;
+
+          return newSkills;
+        });
+      });
+    }
+
+    const result = inputValue.map((item: ISkill) => {
+      if (item.__isNew__) {
+        item.value = lastSkill.value;
+      }
+
+      return item;
+    });
+    setUserSkills(result);
+  };
+
   return (
     <Card
       className={`${getAllowedClasses(styles.cardItem)} justify-content-center`}
@@ -106,7 +198,7 @@ const ProfileEdit: React.FC = () => {
         </Card.Title>
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
-        <Row>
+        <Row className="m-0">
           <Col md={8} className="ps-0">
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
@@ -130,12 +222,53 @@ const ProfileEdit: React.FC = () => {
                   Full name
                 </Form.Label>
                 <Form.Control
+                  {...register('fullName')}
                   className={getAllowedClasses(styles.cardInput)}
                   type="text"
                   placeholder="Full name"
-                  value={userFullName}
                   onChange={(e): void => setUserFullName(e.target.value)}
+                  isInvalid={!!errors.fullName}
                 />
+                {errors.fullName && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors?.fullName.message}
+                  </Form.Control.Feedback>
+                )}
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGroupTitle">
+                <Form.Label
+                  className={getAllowedClasses(styles.cardInputLabel)}
+                >
+                  Title
+                </Form.Label>
+                <Form.Control
+                  {...register('title')}
+                  className={getAllowedClasses(styles.cardInput)}
+                  type="text"
+                  placeholder="Title"
+                  onChange={(e): void => setUserTitle(e.target.value)}
+                  isInvalid={!!errors.title}
+                />
+                {errors.title && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors?.title.message}
+                  </Form.Control.Feedback>
+                )}
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGroupSelect">
+                <Form.Label
+                  className={getAllowedClasses(styles.cardInputLabel)}
+                >
+                  Skills
+                </Form.Label>
+                {
+                  <CreatableSelect
+                    isMulti
+                    onChange={handleInputChange}
+                    value={userSkills}
+                    options={allSkills}
+                  />
+                }
               </Form.Group>
             </Form>
           </Col>
@@ -198,7 +331,7 @@ const ProfileEdit: React.FC = () => {
           variant="primary"
           className={getAllowedClasses(styles.cardButton)}
           size="sm"
-          onClick={!isUploading ? handleSaveChanges : undefined}
+          onClick={!isUploading ? handleSubmit(handleSaveChanges) : undefined}
           disabled={isUploading}
         >
           {isUploading ? 'Uploading…' : 'Save changes'}

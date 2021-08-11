@@ -31,6 +31,12 @@ const Login: React.FC = () => {
       secondaryText="Sign in to your account to continue"
       submitText="Sign in"
       onSubmit={handleSubmit(handleSubmitForm)}
+      altRoute={{
+        // prettier-ignore
+        question: 'Don\'t have an account?',
+        linkText: 'Sign up',
+        route: AppRoute.SIGN_UP,
+      }}
     >
       <FormField
         label="Email"

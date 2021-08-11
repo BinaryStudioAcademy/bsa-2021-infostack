@@ -1,5 +1,60 @@
 export const pageContents = [
   {
+    pageId: 'f8cd8ff3-d1de-47a5-820e-73a58368b22e',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Promise',
+    content:
+      'The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.',
+  },
+  {
+    pageId: '76e9d529-a303-41c5-86e4-e2c54985b373',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Map',
+    content:
+      'he Map object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and primitive values) may be used as either a key or a value.',
+  },
+  {
+    pageId: 'c204715d-1164-46d7-aadd-bf15721bbda8',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Error',
+    content:
+      'Error objects are thrown when runtime errors occur. The Error object can also be used as a base object for user-defined exceptions. See below for standard built-in error types.',
+  },
+  {
+    pageId: 'a0807840-946f-424d-b67b-8026bb14067a',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'RegExp',
+    content: 'The RegExp object is used for matching text with a pattern.',
+  },
+  {
+    pageId: '9a62a0c1-9ddc-4d82-8983-d3057ec5cb91',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Array',
+    content:
+      'The JavaScript Array class is a global object that is used in the construction of arrays; which are high-level, list-like objects.',
+  },
+  {
+    pageId: '2a62f642-e499-4779-b415-7297fe716578',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Set',
+    content:
+      'The Set object lets you store unique values of any type, whether primitive values or object references.',
+  },
+  {
+    pageId: 'e0e4c236-c208-46b4-acf3-4973ad805bb7',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Generator',
+    content:
+      'The Generator object is returned by a generator function and it conforms to both the iterable protocol and the iterator protocol.',
+  },
+  {
+    pageId: '22c9bbd0-20a7-4e22-9f0c-f74df23c39ed',
+    authorId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
+    title: 'Proxy',
+    content:
+      'The Proxy object enables you to create a proxy for another object, which can intercept and redefine fundamental operations for that object.',
+  },
+  {
     id: '4b389ba3-c689-4595-888c-7233f7e7e7a4',
     pageId: '8f4b09c2-f2d4-4d6f-ac40-1c29028d52b1',
     createdAt: new Date(),
@@ -52,11 +107,20 @@ export const pageContents = [
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
   },
   {
+    id: 'd7fe5fb3-58a9-40d5-b2f0-11be41b0880e',
+    pageId: 'bc4ee38b-56dc-4202-a1e2-48ae5e7affda',
+    title: 'Bitwise AND (&)',
+    content:
+      'The bitwise AND operator (&) returns a 1 in each bit position for which the corresponding bits of both operands are 1s. Syntax: a & b',
+    authorId: 'bf873638-9388-4298-94b0-3d1a11ef8688',
+  },
+  {
     id: 'c87b0e16-3441-47ec-aac1-b21d6f79123e',
     pageId: 'c47a4ae4-b0d5-4671-ab7f-25a3d7921d8f',
     createdAt: new Date(),
     title: 'Bitwise AND assignment (&=)',
-    content: 'The bitwise AND assignment operator (&=) uses the binary representation of both operands, does a bitwise AND operation on them and assigns the result to the variable.',
+    content:
+      'The bitwise AND assignment operator (&=) uses the binary representation of both operands, does a bitwise AND operation on them and assigns the result to the variable.',
     authorId: '3541af71-9d5b-4ca5-a74a-f629aea76735',
   },
 ];

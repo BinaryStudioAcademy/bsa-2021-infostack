@@ -11,8 +11,10 @@ export const mapWorkspaceToWorkspaceUsers = (
       id,
       fullName,
       role,
-      teams: teams.map((team) => team.name),
       status,
+      teams: teams
+        .filter((team) => team.workspaceId === workspace.id)
+        .map((team) => team.name),
     };
   });
 };

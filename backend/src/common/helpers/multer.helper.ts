@@ -28,7 +28,9 @@ export const upload = (): Multer => {
       cb(null, dirPath);
     },
     filename: function (req, file, cb) {
-      cb(null, req.params.id + path.extname(file.originalname));
+      const fileName =
+        req.params.id + '.' + Date.now() + path.extname(file.originalname);
+      cb(null, fileName);
     },
   });
   return multer({ fileFilter, storage });
