@@ -1,25 +1,28 @@
+import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import {
   useAppDispatch,
   useAppSelector,
   useEffect,
-  useParams,
   useState,
+  useParams,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
-import { Card } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import isUUID from 'is-uuid';
 import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
+import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
+import { IPageContributor } from 'common/interfaces/pages';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  const { user } = useAppSelector(state => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const pageApi = new PageApi();
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
@@ -28,6 +31,9 @@ const PageContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
 
+  const [isContributorsLoading, setIsContributorsLoading] = useState(false);
+  const [contributors, setContributors] = useState<IPageContributor[]>([]);
+
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
     await dispatch(pagesActions.getPage(payload));
@@ -35,6 +41,12 @@ const PageContent: React.FC = () => {
 
   useEffect(() => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
+      setIsContributorsLoading(true);
+      new PageApi()
+        .getPageContributors(paramsId)
+        .then((contributors) => setContributors(contributors))
+        .finally(() => setIsContributorsLoading(false));
+
       getPageById(paramsId);
     } else {
       dispatch(pagesActions.clearCurrentPage());
@@ -47,7 +59,7 @@ const PageContent: React.FC = () => {
 
     const isPageFollowed = (): void => {
       if (currentPage?.followingUsers) {
-        currentPage.followingUsers.map(follower => {
+        currentPage.followingUsers.map((follower) => {
           if (follower.id === user?.id) {
             setIsFollowed(true);
           }
@@ -55,12 +67,14 @@ const PageContent: React.FC = () => {
       }
     };
 
-    const onPageFollow = async (pageId: string | undefined):Promise<void> => {
+    const onPageFollow = async (pageId: string | undefined): Promise<void> => {
       await pageApi.followPage(pageId);
       setIsFollowed(!isFollowed);
     };
 
-    const onPageUnfollow = async (pageId: string | undefined):Promise<void> => {
+    const onPageUnfollow = async (
+      pageId: string | undefined,
+    ): Promise<void> => {
       await pageApi.unfollowPage(pageId);
       setIsFollowed(!isFollowed);
     };
@@ -72,17 +86,25 @@ const PageContent: React.FC = () => {
     return (
       <div className="content">
         <div className="container-fluid p-0">
-          <div className="d-flex flex-row justify-content-between">
-            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-            <Button
-              className="mb-3"
-              onClick={isFollowed ? ():Promise<void> => onPageUnfollow(paramsId) : ():Promise<void> => onPageFollow(paramsId)}
-            >
-              {isFollowed ? 'Unfollow' : 'Follow'}
-            </Button>
-          </div>
-          <div className="row">
-            <div className="col-12">
+          <Row>
+            <Col lg={3}>
+              <PageContributors contributors={contributors} />
+            </Col>
+
+            <Col>
+              <div className="d-flex flex-row justify-content-between">
+                <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+                <Button
+                  className="mb-3"
+                  onClick={
+                    isFollowed
+                      ? (): Promise<void> => onPageUnfollow(paramsId)
+                      : (): Promise<void> => onPageFollow(paramsId)
+                  }
+                >
+                  {isFollowed ? 'Unfollow' : 'Follow'}
+                </Button>
+              </div>
               <Card>
                 <Card.Header>{content || 'Empty page'}</Card.Header>
                 <Card.Title></Card.Title>
@@ -90,8 +112,8 @@ const PageContent: React.FC = () => {
                   <Card.Text></Card.Text>
                 </Card.Body>
               </Card>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
       </div>
     );
@@ -99,7 +121,7 @@ const PageContent: React.FC = () => {
 
   return (
     <>
-      {!isSpinner ? (
+      {!isSpinner && !isContributorsLoading ? (
         <Content />
       ) : (
         <Spinner animation="border" variant="secondary" />

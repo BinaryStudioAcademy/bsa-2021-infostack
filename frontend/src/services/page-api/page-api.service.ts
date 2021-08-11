@@ -1,6 +1,12 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { IPage, IPageRequest, IPageFollowed } from 'common/interfaces/pages';
+import {
+  IPage,
+  IPageRequest,
+  IPageNav,
+  IPageFollowed,
+} from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
+import { IPageContributor } from 'common/interfaces/pages';
 
 class PageApi {
   private http = http;
@@ -14,7 +20,7 @@ class PageApi {
     });
   }
 
-  public async createVersionPage(payload: IPageRequest): Promise<IPage> {
+  public async createVersionPage(payload: IPageRequest): Promise<IPageNav> {
     return this.http.load(`${this.BASE}/:id/version`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -22,19 +28,21 @@ class PageApi {
     });
   }
 
-  public async getPages(): Promise<IPage[]> {
+  public async getPages(): Promise<IPageNav[]> {
     return this.http.load(this.BASE, {
       method: HttpMethod.GET,
     });
   }
 
-  public async getPage(id?: string ): Promise<IPage> {
+  public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
     });
   }
 
-  public async getPagesFollowedByUser(userId: string | undefined): Promise<IPageFollowed[]> {
+  public async getPagesFollowedByUser(
+    userId: string | undefined,
+  ): Promise<IPageFollowed[]> {
     return this.http.load(`${this.BASE}/following/${userId}`, {
       method: HttpMethod.GET,
     });
@@ -50,6 +58,10 @@ class PageApi {
     return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
       method: HttpMethod.POST,
     });
+  }
+
+  public async getPageContributors(id: string): Promise<IPageContributor[]> {
+    return this.http.load(`${this.BASE}/${id}/contributors`);
   }
 }
 

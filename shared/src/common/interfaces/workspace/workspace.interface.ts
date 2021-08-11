@@ -1,6 +1,7 @@
 interface IWorkspace {
   id: string;
   title: string;
+  role?: string;
   description?: string;
 }
 

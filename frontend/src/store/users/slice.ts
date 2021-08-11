@@ -15,7 +15,10 @@ const { reducer, actions } = createSlice({
   name: ReducerName.WORKSPACE,
   initialState,
   reducers: {
-    [ActionType.SetUsers]: (state, action: PayloadAction<IWorkspaceUser[]>) => {
+    [ActionType.SET_USERS]: (
+      state,
+      action: PayloadAction<IWorkspaceUser[]>,
+    ) => {
       state.users = action.payload;
     },
   },

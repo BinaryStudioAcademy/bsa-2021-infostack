@@ -14,4 +14,9 @@ export const userWorkspaces = [
     workspaceId: 'd516e49b-baa1-4eb4-8b10-ba5e66e5ca14',
     role: 'admin',
   },
+  {
+    userId: 'bf873638-9388-4298-94b0-3d1a11ef8688',
+    workspaceId: 'd516e49b-baa1-4eb4-8b10-ba5e66e5ca14',
+    role: 'admin',
+  },
 ];

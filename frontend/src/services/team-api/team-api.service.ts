@@ -6,7 +6,7 @@ class TeamApi {
   private http = new Http();
   private BASE = '/api/teams';
 
-  public async loadTeams(): Promise<ITeam[]> {
+  public async getTeams(): Promise<ITeam[]> {
     return this.http.load(this.BASE, {
       contentType: ContentType.JSON,
     });
@@ -31,6 +31,12 @@ class TeamApi {
   public async deleteTeam(payload: string): Promise<ITeam> {
     return this.http.load(`${this.BASE}/${payload}`, {
       method: HttpMethod.DELETE,
+    });
+  }
+
+  public async getTeam(id?: string): Promise<ITeam> {
+    return this.http.load(`${this.BASE}/${id}`, {
+      method: HttpMethod.GET,
     });
   }
 }
