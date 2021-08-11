@@ -1,6 +1,12 @@
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { IPage, IPageRequest, IEditPageContent, IPageNav } from 'common/interfaces/pages';
+import {
+  IPage,
+  IPageRequest,
+  IEditPageContent,
+  IPageNav,
+} from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
+import { IPageContributor } from 'common/interfaces/pages';
 
 class PageApi {
   private http = http;
@@ -40,6 +46,10 @@ class PageApi {
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
     });
+  }
+
+  public async getPageContributors(id: string): Promise<IPageContributor[]> {
+    return this.http.load(`${this.BASE}/${id}/contributors`);
   }
 }
 

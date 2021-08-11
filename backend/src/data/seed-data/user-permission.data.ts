@@ -109,4 +109,9 @@ export const userPermissions = [
     pageId: 'bc4ee38b-56dc-4202-a1e2-48ae5e7affda',
     option: 'write',
   },
+  {
+    userId: 'bf873638-9388-4298-94b0-3d1a11ef8688',
+    pageId: 'bc4ee38b-56dc-4202-a1e2-48ae5e7affda',
+    option: 'admin',
+  },
 ];

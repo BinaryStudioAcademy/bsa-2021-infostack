@@ -1,5 +1,10 @@
 import Avatar from 'react-avatar';
-import { useState, useEffect, useParams, useAppSelector } from '../../hooks/hooks';
+import {
+  useState,
+  useEffect,
+  useParams,
+  useAppSelector,
+} from '../../hooks/hooks';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -18,86 +23,117 @@ const ProfileInfo: React.FC = () => {
 
   useEffect(() => {
     let mounted = true;
-    const getUser = async ():Promise<void> => {
-      await userApi
-        .getUserInfo(id)
-        .then((user) => {
-          if (user.id.length > 0) {
-            if (mounted) {
-              setPermission(true);
-            }
-          } else {
-            if (mounted) {
-              setPermission(false);
-            }
+    const getUser = async (): Promise<void> => {
+      await userApi.getUserInfo(id).then((user) => {
+        if (user.id.length > 0) {
+          if (mounted) {
+            setPermission(true);
           }
-        });
+        } else {
+          if (mounted) {
+            setPermission(false);
+          }
+        }
+      });
     };
 
     getUser();
 
-    return ():void => { mounted = false; };
+    return (): void => {
+      mounted = false;
+    };
   }, []);
 
   return (
     <Container className="profile-container" fluid>
-      {permission ? (user && user.id.length > 0 ? <>
-        <Row>
-          <Col className="d-flex justify-content-start profile-page-title">Profile</Col>
-        </Row>
-        <Row>
-          <Col sm={3}>
+      {permission ? (
+        user && user.id.length > 0 ? (
+          <>
             <Row>
-              <Col>
+              <Col className="d-flex justify-content-start profile-page-title">
+                Profile
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={3}>
+                <Row>
+                  <Col>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="d-flex justify-content-start profile-card-title">
+                          Profile Details
+                        </Card.Title>
+                        <ListGroup variant="flush">
+                          <ListGroup.Item className="card-block-item align-items-center">
+                            <Avatar
+                              size="100"
+                              name={user?.fullName}
+                              src={user?.avatar}
+                              round={true}
+                              className="user-avatar"
+                            />
+                            <Card.Title className="profile-user-title">
+                              {user?.fullName}
+                            </Card.Title>
+                            <Card.Subtitle className="profile-user-subtitle">
+                              {user?.title}
+                            </Card.Subtitle>
+                          </ListGroup.Item>
+                          <ListGroup.Item className="card-block-item">
+                            <Card.Title className="d-flex justify-content-start profile-skills-title">
+                              Skills
+                            </Card.Title>
+                            <div className="d-flex align-items-start flex-wrap">
+                              {!!user.skills?.length &&
+                                user.skills.map(({ id, name }) => (
+                                  <Badge
+                                    bg="primary"
+                                    className="skill-badge"
+                                    key={id}
+                                  >
+                                    {name}
+                                  </Badge>
+                                ))}
+                            </div>
+                          </ListGroup.Item>
+                        </ListGroup>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+              </Col>
+              <Col sm={9}>
                 <Card>
                   <Card.Body>
-                    <Card.Title className="d-flex justify-content-start profile-card-title">Profile Details</Card.Title>
-                    <ListGroup variant="flush">
-                      <ListGroup.Item className="card-block-item align-items-center">
-                        <Avatar
-                          size="100"
-                          name={user?.fullName}
-                          src={user?.avatar}
-                          round={true}
-                          className="user-avatar"
-                        />
-                        <Card.Title className="profile-user-title">{user?.fullName}</Card.Title>
-                        <Card.Subtitle className="profile-user-subtitle">{user?.title}</Card.Subtitle>
-                      </ListGroup.Item>
-                      <ListGroup.Item className="card-block-item">
-                        <Card.Title className="d-flex justify-content-start profile-skills-title">
-                        Skills
-                        </Card.Title>
-                        <div className="d-flex align-items-start flex-wrap">
-                          {user.skills?.length &&
-                            user.skills.map(({ id, name }) => (
-                              <Badge bg="primary" className="skill-badge" key={id}>{name}</Badge>
-                            ))
-                          }
-                        </div>
-                      </ListGroup.Item>
-                    </ListGroup>
+                    <Card.Title className="d-flex justify-content-start profile-card-title">
+                      Followings
+                    </Card.Title>
+                    <div className="following-pages-container">
+                      <Link to={'#'} className="following-page">
+                        <i className="bi bi-file-text-fill"></i>Page 1
+                      </Link>
+                      <Link to={'#'} className="following-page">
+                        <i className="bi bi-file-text-fill"></i>Page 2
+                      </Link>
+                      <Link to={'#'} className="following-page">
+                        <i className="bi bi-file-text-fill"></i>Page 3
+                      </Link>
+                      <Link to={'#'} className="following-page">
+                        <i className="bi bi-file-text-fill"></i>Page 4
+                      </Link>
+                      <Link to={'#'} className="following-page">
+                        <i className="bi bi-file-text-fill"></i>Page 5
+                      </Link>
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
             </Row>
-          </Col>
-          <Col sm={9}>
-            <Card>
-              <Card.Body>
-                <Card.Title className="d-flex justify-content-start profile-card-title">Followings</Card.Title>
-                <div className="following-pages-container">
-                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 1</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 2</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 3</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 4</Link>
-                  <Link to={'#'} className="following-page"><i className="bi bi-file-text-fill"></i>Page 5</Link>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </> : null) : <h1 className="d-flex justify-content-center">Permission denied</h1>}
+          </>
+        ) : null
+      ) : (
+        <h1 className="d-flex justify-content-center">Permission denied</h1>
+      )}
     </Container>
   );
 };
