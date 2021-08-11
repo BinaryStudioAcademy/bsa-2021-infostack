@@ -1,6 +1,9 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
-import { ICommentRequest, IComment } from '../common/interfaces/comment/comment.interface';
+import {
+  ICommentRequest,
+  IComment,
+} from '../common/interfaces/comment/comment.interface';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { HttpError } from '../common/errors/http-error';
@@ -8,13 +11,17 @@ import { CommentRepository } from '../data/repositories/comment.repository';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 
 export const getComments = async (pageId: string): Promise<IComment[]> => {
-  const comments = await getCustomRepository(CommentRepository)
-    .findByPageId(pageId);
+  const comments = await getCustomRepository(CommentRepository).findByPageId(
+    pageId,
+  );
   return mapChildToParent(comments);
 };
 
 export const addComment = async (
-  userId: string, pageId: string, { text, parentCommentId }: ICommentRequest, io: Server,
+  userId: string,
+  pageId: string,
+  { text, parentCommentId }: ICommentRequest,
+  io: Server,
 ): Promise<IComment> => {
   const commentRepository = getCustomRepository(CommentRepository);
 

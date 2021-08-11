@@ -1,4 +1,4 @@
 export interface ICommentRequest {
-  text: string,
-  parentCommentId?: string,
+  text: string;
+  parentCommentId?: string;
 }

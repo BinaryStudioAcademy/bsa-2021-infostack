@@ -10,7 +10,10 @@ class CommentApi {
     return this._httpService.load(`${this.BASE}/${pageId}/comments`);
   }
 
-  public async addComment(pageId: string, payload: ICommentRequest): Promise<IComment> {
+  public async addComment(
+    pageId: string,
+    payload: ICommentRequest,
+  ): Promise<IComment> {
     return this._httpService.load(`${this.BASE}/${pageId}/comments`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,

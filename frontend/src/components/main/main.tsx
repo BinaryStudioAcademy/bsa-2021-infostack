@@ -9,6 +9,7 @@ import Pages from 'components/pages/pages';
 import ProfileInfo from 'components/profile-info/profile-info';
 import Workspace from 'components/workspace/workspace';
 import Settings from 'components/settings/settings';
+import PageContentEditor from 'components/pages/components/content-editor/content-editor';
 import {
   useAppDispatch,
   useAppSelector,
@@ -58,6 +59,11 @@ const Main: React.FC = () => {
       <Route
         path={AppRoute.WORKSPACE_SETTING}
         component={withHeader(Workspace)}
+        exact
+      />
+      <Route
+        path={AppRoute.CONTENT_SETTING}
+        component={withHeader(PageContentEditor)}
         exact
       />
       <Route path="/" component={withHeader(Pages)} exact />

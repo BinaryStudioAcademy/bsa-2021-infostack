@@ -1,1 +1,4 @@
-export type { IComment, ICommentRequest } from 'infostack-shared/common/interfaces';
+export type {
+  IComment,
+  ICommentRequest,
+} from 'infostack-shared/common/interfaces';
