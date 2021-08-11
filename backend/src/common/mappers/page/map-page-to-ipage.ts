@@ -18,6 +18,14 @@ export const mapPageToIPage = (page: Page): IPage => {
     updatedAt: content.updatedAt?.toISOString(),
     deletedAt: content.deletedAt?.toISOString(),
   }));
+  const mappedFollowingUsers = followingUsers?.map((user) => {
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      avatar: user.avatar,
+    };
+  });
 
   return {
     id,
@@ -25,6 +33,6 @@ export const mapPageToIPage = (page: Page): IPage => {
     parentPageId,
     childPages: mappedChildren,
     pageContents: mappedpageContents,
-    followingUsers,
+    followingUsers: mappedFollowingUsers,
   };
 };

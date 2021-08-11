@@ -1,10 +1,5 @@
 import Avatar from 'react-avatar';
-import {
-  useState,
-  useEffect,
-  useParams,
-  useAppSelector,
-} from '../../hooks/hooks';
+import { useState, useEffect, useParams } from '../../hooks/hooks';
 import { AppRoute } from 'common/enums/enums';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,16 +9,22 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { Link } from 'components/common/common';
 import './profile-info.scss';
-import { UserApi, PageApi } from 'services';
-import { IPageFollowed } from 'common/interfaces/pages';
+import { UserApi } from 'services';
+import { IUser } from 'common/interfaces/user';
 
 const ProfileInfo: React.FC = () => {
-  const [pages, setPages] = useState<IPageFollowed[]>([]);
+  const [user, setUser] = useState<IUser>({
+    id: '',
+    avatar: '',
+    fullName: '',
+    email: '',
+    title: '',
+    skills: [],
+    followingPages: [],
+  });
   const [permission, setPermission] = useState(true);
   const userApi = new UserApi();
-  const pageApi = new PageApi();
   const { id } = useParams<{ id?: string }>();
-  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     let mounted = true;
@@ -32,6 +33,7 @@ const ProfileInfo: React.FC = () => {
         if (user.id.length > 0) {
           if (mounted) {
             setPermission(true);
+            setUser(user);
           }
         } else {
           if (mounted) {
@@ -41,16 +43,7 @@ const ProfileInfo: React.FC = () => {
       });
     };
 
-    const getFollowedPages = async (): Promise<void> => {
-      await pageApi.getPagesFollowedByUser(id).then((pages) => {
-        if (mounted) {
-          setPages(pages);
-        }
-      });
-    };
-
     getUser();
-    getFollowedPages();
 
     return (): void => {
       mounted = false;
@@ -122,8 +115,10 @@ const ProfileInfo: React.FC = () => {
                       Followings
                     </Card.Title>
                     <div className="following-pages-container">
-                      {pages.length > 0
-                        ? pages.map((page) => (
+                      {user &&
+                      user.followingPages &&
+                      user?.followingPages?.length > 0
+                        ? user?.followingPages?.map((page) => (
                             <Link
                               to={
                                 `${AppRoute.PAGE.slice(
@@ -135,7 +130,7 @@ const ProfileInfo: React.FC = () => {
                               className="following-page"
                             >
                               <i className="bi bi-file-text-fill"></i>
-                              {page.title}
+                              {page.pageContents[0].title}
                             </Link>
                           ))
                         : null}
