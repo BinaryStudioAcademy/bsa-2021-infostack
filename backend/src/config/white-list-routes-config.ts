@@ -7,4 +7,6 @@ export default [
   '/auth/set-password',
   '/auth/refresh',
   '/auth/logout',
+  '/auth/update-password-and-fullname',
+  '/users/check-user-registration',
 ];
