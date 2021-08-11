@@ -1,5 +1,12 @@
 import 'react-markdown-editor-lite/lib/index.css';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import {
+  InputGroup,
+  FormControl,
+  Button,
+  Card,
+  Col,
+  Row,
+} from 'react-bootstrap';
 import Editor from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
 import { useHistory } from 'react-router';
@@ -48,25 +55,33 @@ const PageContentEditor: React.FC = () => {
   };
 
   return (
-    <div className="content">
-      <div className="container-fluid p-0">
-        <div className="d-flex justify-content-between mb-4">
+    <div className="p-4">
+      <Row className="mb-4">
+        <Col className="d-flex justify-content-between">
           <InputGroup>
             <FormControl value={titleInputValue} onChange={onInputChange} />
           </InputGroup>
-        </div>
-        <Editor
-          value={markDownContent}
-          onChange={({ text }): void => setMarkDownContent(text)}
-          renderHTML={(text): JSX.Element => (
-            <ReactMarkdown>{text}</ReactMarkdown>
-          )}
-          ref={editorRef}
-        />
-      </div>
-      <Button className="mt-4" onClick={handleSaveConfirm}>
-        Save
-      </Button>
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <Card border="light" className="card">
+            <Editor
+              value={markDownContent}
+              onChange={({ text }): void => setMarkDownContent(text)}
+              renderHTML={(text): JSX.Element => (
+                <ReactMarkdown>{text}</ReactMarkdown>
+              )}
+              ref={editorRef}
+            />
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <Button onClick={handleSaveConfirm}>Save</Button>
+        </Col>
+      </Row>
     </div>
   );
 };
