@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
-import { PageContentRepository } from '../data/repositories/page-content.repository';
+import PageContentRepository from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import {
@@ -11,6 +11,7 @@ import {
   IPage,
   IPageContributor,
   IPageFollowed,
+  IEditPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
@@ -78,7 +79,7 @@ export const getPages = async (
 
   const userPermissions = await userPermissionRepository.findById(userId);
 
-  const allPages = await pageRepository.findPages(workspaceId);
+  const allPages = await pageRepository.findPagesWithLastContent(workspaceId);
 
   const permittedPages: Page[] = allPages.filter(
     (page) =>
@@ -101,7 +102,33 @@ export const getPages = async (
 
 export const getPage = async (pageId: string): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.findByIdWithContents(pageId);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  return mapPageToIPage(page);
+};
+
+export const updateContent = async (body: IEditPageContent): Promise<IPage> => {
+  const pageId = body.pageId;
+  const pageRepository = getCustomRepository(PageRepository);
+  const pageToUpdate = await pageRepository.findByIdWithLastContent(pageId);
+
+  const contentPageId = pageToUpdate.pageContents[0].id;
+  const pageContentRepository = getCustomRepository(PageContentRepository);
+  const contentToUpdate = await pageContentRepository.findById(contentPageId);
+
+  const oldContent = pageToUpdate.pageContents[0].content;
+  const oldTitle = pageToUpdate.pageContents[0].title;
+
+  contentToUpdate.content = body.content || oldContent;
+  contentToUpdate.title = body.title || oldTitle;
+
+  await pageContentRepository.save({
+    title: contentToUpdate.title,
+    content: contentToUpdate.content,
+    authorId: contentToUpdate.authorId,
+    pageId: pageId,
+  });
+
+  const page = await pageRepository.findByIdWithLastContent(pageId);
   return mapPageToIPage(page);
 };
 

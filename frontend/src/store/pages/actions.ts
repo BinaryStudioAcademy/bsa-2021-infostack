@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { PageApi } from 'services';
-import { IPageRequest } from 'common/interfaces/pages';
+import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
 
 interface PageAction {
   type: string;
@@ -60,6 +60,19 @@ const setCurrentPageFollowed = (payload: boolean): PageAction => ({
   payload,
 });
 
+const editPageContent = createAsyncThunk(
+  ActionType.EDIT_PAGE_CONTENT,
+  async (getPayload: IEditPageContent, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    const editContentResponse = await new PageApi().editPageContent(getPayload);
+    dispatch(actions.getPage(editContentResponse));
+    dispatch(actions.toggleSpinner());
+
+    const response = await new PageApi().getPages();
+    dispatch(actions.setPages(response));
+  },
+);
+
 const pagesActions = {
   ...actions,
   createPage,
@@ -68,6 +81,7 @@ const pagesActions = {
   getPage,
   setPage,
   setCurrentPageFollowed,
+  editPageContent,
 };
 
 export { pagesActions };

@@ -4,4 +4,5 @@ export type {
   IPageNav,
   IPageContributor,
   IPageFollowed,
+  IEditPageContent,
 } from 'infostack-shared/common/interfaces';
