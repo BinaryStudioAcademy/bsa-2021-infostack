@@ -7,7 +7,7 @@ import {
   setPassword,
   refreshTokens,
   logout,
-  updatePasswordAndFullNameAndReturnEmail,
+  updatePasswordAndFullName,
 } from '../../services/auth.service';
 
 const router: Router = Router();
@@ -33,7 +33,7 @@ router.post(
 );
 router.post(
   '/update-password-and-fullname',
-  run((req) => updatePasswordAndFullNameAndReturnEmail(req.body)),
+  run((req) => updatePasswordAndFullName(req.body)),
 );
 
 router.post(

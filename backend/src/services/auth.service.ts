@@ -124,9 +124,9 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
 };
 
-export const updatePasswordAndFullNameAndReturnEmail = async (
+export const updatePasswordAndFullName = async (
   body: IUpdatePasswordAndFullName,
-): Promise<string> => {
+): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
 
   const { token, password, fullName } = body;
@@ -145,12 +145,9 @@ export const updatePasswordAndFullNameAndReturnEmail = async (
   const hashedPassword = await hash(password);
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
   const userToUpdate = await userRepository.findById(decoded.userId);
-  const { email } = userToUpdate;
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
   userToUpdate.fullName = fullName || userToUpdate.fullName;
   await userRepository.save(userToUpdate);
-
-  return JSON.stringify(email);
 };
 
 export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
