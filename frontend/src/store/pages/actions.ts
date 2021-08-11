@@ -47,6 +47,9 @@ const editPageContent = createAsyncThunk(
     const editContentResponse = await new PageApi().editPageContent(getPayload);
     dispatch(actions.getPage(editContentResponse));
     dispatch(actions.toggleSpinner());
+
+    const response = await new PageApi().getPages();
+    dispatch(actions.setPages(response));
   },
 );
 
