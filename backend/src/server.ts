@@ -16,6 +16,7 @@ import {
   auth as authorizationMiddleware,
   socketInjector as socketMiddleware,
 } from './api/middlewares';
+import { SocketEvents } from './common/enums/socket';
 
 const { port, socketPort } = env.app;
 
@@ -29,7 +30,7 @@ const io = new Server(socketServer, {
   },
 });
 
-io.on('connection', socketHandlers);
+io.on(SocketEvents.CONNECTION, socketHandlers);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, './public')));

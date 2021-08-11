@@ -1,10 +1,8 @@
 import { Socket } from 'socket.io';
-import { logger } from '../common/utils/logger.util';
+import { SocketEvents } from '../common/enums/socket';
 
 export const handlers = (socket: Socket): void => {
-  logger.info(`Socket connected ${socket.id}`);
-
-  socket.on('page/join', (pageId: string) => {
+  socket.on(SocketEvents.PAGE_JOIN, (pageId: string) => {
     socket.join(pageId);
   });
 };

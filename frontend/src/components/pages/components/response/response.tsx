@@ -12,7 +12,7 @@ type Props = {
 export const Response: React.FC<Props> = ({ name, avatar, text }) =>
   <ListGroup.Item className="d-flex border-0 p-0 mt-3">
     <div className="pe-2">
-      <Avatar size="36" name={name} src={avatar} round className="me-2" />
+      <Avatar size="30" name={name} src={avatar} round className="me-2" />
     </div>
     <div>
       <p className={getAllowedClasses(' text-secondary', styles.text)}>

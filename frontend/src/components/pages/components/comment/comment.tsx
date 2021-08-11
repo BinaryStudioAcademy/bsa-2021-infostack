@@ -1,7 +1,8 @@
 import Avatar from 'react-avatar';
-import { ListGroup, InputGroup, Button, FormControl } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { useState } from 'hooks/hooks';
+import { CommentForm } from '../comment-form/comment-form';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -13,23 +14,19 @@ type Props = {
 };
 
 export const Comment: React.FC<Props> = ({ name, avatar, text, handleResponse, children }) => {
-  const [responseText, setResponseText] = useState('');
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
 
   const toggleField = (): void =>
     setIsFieldVisible(prev => !prev);
 
-  const handleChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>): void =>
-    setResponseText(value);
-
-  const handleClick = (): void => {
-    handleResponse(responseText);
+  const handleSubmit = (text: string): void => {
+    handleResponse(text);
     toggleField();
   };
 
   return (
     <ListGroup.Item className={getAllowedClasses('d-flex', styles.comment)}>
-      <Avatar size="56" name={name} src={avatar} round className="me-3" />
+      <Avatar size="40" name={name} src={avatar} round className="me-3" />
       <div className="w-100">
         <p className={getAllowedClasses('mb-2', styles.userName)}>{name}</p>
         <p className={getAllowedClasses('text-secondary mb-0', styles.text)}>{text}</p>
@@ -37,18 +34,15 @@ export const Comment: React.FC<Props> = ({ name, avatar, text, handleResponse, c
           className={getAllowedClasses('text-secondary', styles.respond)}
           onClick={toggleField}
         >
-          respond
+          {isFieldVisible ? 'cancel' : 'respond'}
         </button>
         {isFieldVisible && (
-          <InputGroup>
-            <FormControl
-              value={responseText}
-              onChange={handleChange}
-              className={styles.text}
-              as="textarea"
-            />
-            <Button onClick={handleClick} className={styles.text}>Send</Button>
-          </InputGroup>
+          <CommentForm
+            className="mt-2"
+            placeholder="Add a response"
+            avatarSize="30"
+            onSubmit={handleSubmit}
+          />
         )}
         {children && (
           <ListGroup variant="flush">
