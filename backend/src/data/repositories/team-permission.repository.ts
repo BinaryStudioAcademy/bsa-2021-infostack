@@ -38,8 +38,8 @@ class TeamPermissionRepository extends Repository<TeamPermission> {
   public findByTeamAndPageId(
     teamId: string,
     pageId: string,
-  ): Promise<TeamPermission[]> {
-    return this.find({
+  ): Promise<TeamPermission> {
+    return this.findOne({
       relations: ['team', 'page'],
       where: { team: teamId, page: pageId },
     });

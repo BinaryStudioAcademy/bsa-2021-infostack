@@ -38,8 +38,8 @@ class UserPermissionRepository extends Repository<UserPermission> {
   public findByUserAndPageId(
     userId: string,
     pageId: string,
-  ): Promise<UserPermission[]> {
-    return this.find({
+  ): Promise<UserPermission> {
+    return this.findOne({
       relations: ['user', 'page'],
       where: { user: userId, page: pageId },
     });

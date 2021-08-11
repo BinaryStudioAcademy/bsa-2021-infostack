@@ -11,14 +11,15 @@ import {
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/pages';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute, PermissionType } from 'common/enums/enums';
 import { Popup } from './components/popup/popup';
+import { IPageNav } from 'common/interfaces/pages';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
-  const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const { currentPage, pages } = useAppSelector((state: RootState) => state.pages);
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
 
@@ -27,6 +28,9 @@ const PageContent: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
+
+  const { permission } = pages?.find(page => page.id === paramsId) as IPageNav;
+  const isPageAdmin = permission === PermissionType.ADMIN;
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
@@ -60,14 +64,14 @@ const PageContent: React.FC = () => {
         <div className="container-fluid p-0">
           <div className="d-flex align-items-center justify-content-between mb-3">
             <h1 className="h3">{pageTitle || 'New Page'}</h1>
-            <Button
+            {isPageAdmin && <Button
               variant="outline-secondary"
               onClick={onAssign}
               size="sm"
               className={getAllowedClasses(styles.assignButton, 'border-0')}
             >
               Assign permissions
-            </Button>
+            </Button>}
           </div>
           <div className="row">
             <div className="col-12">

@@ -5,7 +5,7 @@ import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import PageContentRepository from '../data/repositories/page-content.repository';
-import { PermissionType } from '../common/enums/permission-type';
+import { PermissionType } from 'infostack-shared/common/enums';
 import { ParticipantType } from '../common/enums/participant-type';
 import { IPageRequest, IPageNav, IPage } from '../common/interfaces/page';
 import { IParticipant } from '../common/interfaces/participant';
@@ -84,7 +84,7 @@ export const getPages = async (
   );
 
   const toBeDeleted = new Set<string>();
-  const finalPages = permittedPages.reduce((acc, cur, _index, array) => {
+  const pagesWihtChildren = permittedPages.reduce((acc, cur, _index, array) => {
     const childPages = array.filter((page) => page.parentPageId === cur.id);
     cur.childPages = childPages;
     childPages.forEach((child) => toBeDeleted.add(child.id));
@@ -92,8 +92,22 @@ export const getPages = async (
     return acc;
   }, []);
 
-  const pagesToShow = finalPages.filter((page) => !toBeDeleted.has(page.id));
-  return mapPagesToPagesNav(pagesToShow);
+  const pagesToShow = mapPagesToPagesNav(pagesWihtChildren.filter((page) => !toBeDeleted.has(page.id)));
+
+  const finalPages = [] as IPageNav[];
+  for (const page of pagesToShow) {
+    const userPermission = await userPermissionRepository.findByUserAndPageId(userId, page.id);
+    if (userPermission) {
+      finalPages.push({ ...page, permission: userPermission.option });
+      continue;
+    }
+    const teamPermission = await teamPermissionRepository.findByTeamAndPageId(teamId, page.id);
+    if (teamPermission) {
+      finalPages.push({ ...page, permission: teamPermission.option });
+    }
+  }
+
+  return finalPages;
 };
 
 export const getPage = async (

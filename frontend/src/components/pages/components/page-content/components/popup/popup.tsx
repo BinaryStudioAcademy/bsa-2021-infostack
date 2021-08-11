@@ -35,6 +35,7 @@ const OPTIONS = [
 
 export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancelButton }) => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { users } = useAppSelector((state) => state.users);
   const { teams } = useAppSelector((state) => state.teams);
   const { currentPage } = useAppSelector((state) => state.pages);
@@ -69,15 +70,19 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
   };
 
   const handleRoleChange = (id: string, role: string): void => {
+    if (id === user?.id) {
+      return;
+    }
     const participantToUpdate = participants.find(participant => participant.id === id);
-    if (participantToUpdate?.id && participantToUpdate.name && participantToUpdate.type) {
-      const participant = { ...participantToUpdate, role };
-      if (currentPage?.id) {
-        dispatch(participantsActions.chageRole({
-          pageId: currentPage?.id,
-          participant,
-        }));
-      }
+    if (!participantToUpdate?.id || !participantToUpdate.name || !participantToUpdate.type) {
+      return;
+    }
+    const participant = { ...participantToUpdate, role };
+    if (currentPage?.id) {
+      dispatch(participantsActions.chageRole({
+        pageId: currentPage?.id,
+        participant,
+      }));
     }
   };
 
