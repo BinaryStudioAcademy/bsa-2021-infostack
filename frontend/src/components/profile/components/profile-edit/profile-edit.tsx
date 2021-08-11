@@ -161,7 +161,7 @@ const ProfileEdit: React.FC = () => {
   const handleInputChange = (inputValue: OptionsType<ISkill>): void => {
     const lastSkill = inputValue[inputValue.length - 1];
 
-    if(lastSkill) {
+    if (lastSkill) {
       const lastSkillName = lastSkill.value ?? '';
 
       if (lastSkill.__isNew__) {

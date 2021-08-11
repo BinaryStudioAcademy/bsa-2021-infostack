@@ -10,6 +10,7 @@ import {
   IPageNav,
   IPage,
   IPageContributor,
+  IPageFollowed,
   IEditPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
@@ -138,4 +139,57 @@ export const getContributors = async (
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
   return mapPageToContributors(page);
+};
+
+export const getPagesFollowedByUser = async (
+  userId: string,
+): Promise<IPageFollowed[]> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const { followingPages } = await userRepository.findById(userId);
+  if (followingPages.length > 0) {
+    const pages = followingPages.map((page) => {
+      return {
+        id: page.id,
+        title: page.pageContents[0].title,
+      };
+    });
+
+    return pages;
+  } else {
+    return [];
+  }
+};
+
+export const followPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const page = await pageRepository.findById(pageId);
+  page.followingUsers.push(user);
+  user.followingPages.push(page);
+  await userRepository.save(user);
+  await pageRepository.save(page);
+};
+
+export const unfollowPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const page = await pageRepository.findById(pageId);
+  const newFollowingUsers = page.followingUsers.filter(
+    (user) => user.id !== userId,
+  );
+  const newFollowingPages = user.followingPages.filter(
+    (page) => page.id !== pageId,
+  );
+  page.followingUsers = newFollowingUsers;
+  user.followingPages = newFollowingPages;
+  await userRepository.save(user);
+  await pageRepository.save(page);
 };
