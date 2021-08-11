@@ -56,4 +56,9 @@ router
     run((req) => updateContent(req.body)),
   );
 
+router.post(
+  '/:id/version',
+  run((req) => updateContent(req.body)),
+);
+
 export default router;
