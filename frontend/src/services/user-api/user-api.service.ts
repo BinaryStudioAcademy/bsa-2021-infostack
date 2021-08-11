@@ -14,6 +14,14 @@ class UserApi {
     return await this.http.load(`${this.BASE}/${id}/profile`);
   }
 
+  public checkIfUserRegisteredOnInvite(
+    token: string | undefined,
+  ): Promise<string> {
+    return this.http.load(
+      `${this.BASE}/check-user-registration?token=${token}`,
+    );
+  }
+
   public async update(
     id: string,
     updatePayload: Partial<IUser>,
