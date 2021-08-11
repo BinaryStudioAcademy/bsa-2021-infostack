@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Modal, Button, Table } from 'react-bootstrap';
 import Select from 'react-select';
 import { IButton } from 'common/interfaces/components/button';
@@ -8,13 +7,14 @@ import {
   useEffect,
   useAppDispatch,
   useAppSelector,
-  useState,
 } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
-import { teamsActions } from 'store/teams';
+import { teamsActions } from 'store/actions';
+import { participantsActions } from 'store/actions';
 import TableHead from './components/table-head/table-head';
 import Item from './components/item/item';
-import { ParticipantsType, PermissionType } from 'common/enums/enums';
+import { ParticipantType, PermissionType } from 'common/enums/enums';
+import selectParticipantStyles from './select-participant-styles';
 
 type Props = {
   query: string;
@@ -25,45 +25,60 @@ type Props = {
 
 type participantOption = IOption & IParticipant;
 
-export const TABLE_HEADERS = ['Name', 'User or Team', 'Acces', ''];
+const TABLE_HEADERS = ['Name', 'User or Team', 'Acces', ''];
+
+const OPTIONS = [
+  { label: PermissionType.ADMIN, value: PermissionType.ADMIN },
+  { label: PermissionType.WRITE, value: PermissionType.WRITE },
+  { label: PermissionType.READ, value: PermissionType.READ },
+];
 
 export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancelButton }) => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
   const { users } = useAppSelector((state) => state.users);
   const { teams } = useAppSelector((state) => state.teams);
-  const [participants, setParticipants] = useState<IParticipant[]>([{
-    id: user?.id || '',
-    name: user?.fullName || '',
-    type: ParticipantsType.USER,
-    role: PermissionType.ADMIN,
-  }]);
+  const { currentPage } = useAppSelector((state) => state.pages);
+  const { participants } = useAppSelector((state) => state.participants);
 
   useEffect(() => {
     dispatch(usersActions.loadUsers());
     dispatch(teamsActions.loadTeams());
+    if (currentPage?.id) {
+      dispatch(participantsActions.loadParticipants(currentPage?.id));
+    }
   }, []);
 
   const handleSelectChange = (selectedOption: participantOption | null): void => {
     if (selectedOption && !participants.find(participant => participant.id === selectedOption.id)) {
       const { id, name, type, role } = selectedOption;
-      setParticipants([...participants, { id, name, type, role }]);
+      const participant = { id, name, type, role };
+      if (currentPage?.id) {
+        dispatch(participantsActions.createParticipant({ pageId: currentPage?.id, participant }));
+      }
     }
   };
 
-  const handleDeleteItem = (id: string): void => {
-    const filteredParticipants = participants.filter(participant => participant.id !== id);
-    setParticipants(filteredParticipants);
+  const handleDeleteItem = (id: string, type: string): void => {
+    if (currentPage?.id) {
+      dispatch(participantsActions.deleteParticipant({
+        pageId: currentPage?.id,
+        participantType: type,
+        participantId: id,
+      }));
+    }
   };
 
   const handleRoleChange = (id: string, role: string): void => {
-    const updatedParticipants = participants.map(participant => {
-      if (participant.id === id) {
-        return { ...participant, role };
+    const participantToUpdate = participants.find(participant => participant.id === id);
+    if (participantToUpdate?.id && participantToUpdate.name && participantToUpdate.type) {
+      const participant = { ...participantToUpdate, role };
+      if (currentPage?.id) {
+        dispatch(participantsActions.chageRole({
+          pageId: currentPage?.id,
+          participant,
+        }));
       }
-      return participant;
-    }) as IParticipant[];
-    setParticipants(updatedParticipants);
+    }
   };
 
   const getOptions = (): participantOption[] => {
@@ -73,7 +88,7 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
       label: user.fullName,
       name: user.fullName,
       role: PermissionType.READ,
-      type: ParticipantsType.USER,
+      type: ParticipantType.USER,
     }));
     const mappedTeams = teams.map(team => ({
       id: team.id,
@@ -81,7 +96,7 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
       label: team.name,
       name: team.name,
       role: PermissionType.READ,
-      type: ParticipantsType.TEAM,
+      type: ParticipantType.TEAM,
     }));
     return [...mappedUsers, ...mappedTeams];
   };
@@ -110,24 +125,25 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
           </Button>
         </div>
       </Modal.Header>
-      <Modal.Body className="p-5 pt-3">
+      <Modal.Body className="p-5 pt-3 mb-5">
         <Select
           className="mt-4 mb-5"
           onChange={handleSelectChange}
           value={getValue()}
           options={getOptions()}
+          styles={selectParticipantStyles}
           isClearable
           isSearchabl
           autoFocus
         />
-        <Table hover>
+        <Table>
           <TableHead headers={TABLE_HEADERS} />
           <tbody>
-            {console.log(participants)}
             {participants?.map((participant) => {
               return <Item
                 key={participant.id}
                 participant={participant}
+                options={OPTIONS}
                 onDelete={handleDeleteItem}
                 onChange={handleRoleChange}
               />;

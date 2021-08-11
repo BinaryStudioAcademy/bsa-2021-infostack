@@ -1,46 +1,44 @@
-import Select from 'react-dropdown-select';
+import Select from 'react-select';
 import { IParticipant } from 'common/interfaces/participant';
 import { IOption } from 'common/interfaces/components/select';
-import { PermissionType } from 'common/enums/enums';
 import { getAllowedClasses } from 'helpers/dom/dom';
+import { useRef } from 'hooks/hooks';
+import selectRoleStyles from './select-role-styles';
 import styles from '../styles.module.scss';
 
 type Props = {
   participant: IParticipant;
-  onDelete(id: string): void;
+  options: IOption[];
+  onDelete(id: string, type: string): void;
   onChange(id: string, role: string): void;
 };
 
-const Item: React.FC<Props> = ({ participant, onDelete, onChange }) => {
-  const options = [
-    { label: PermissionType.ADMIN, value: PermissionType.ADMIN },
-    { label: PermissionType.WRITE, value: PermissionType.WRITE },
-    { label: PermissionType.READ, value: PermissionType.READ },
-  ];
+const Item: React.FC<Props> = ({ participant, options, onDelete, onChange }) => {
+  const selectField = useRef(null);
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const onRoleChange = (selectedOption: {}[]): void => {
-    if (selectedOption.length) {
-      const participantRole: string = (selectedOption[0] as IOption).value;
+  const onRoleChange = (selectedOption: IOption | null): void => {
+    if (selectedOption) {
+      const participantRole: string = selectedOption.value;
       onChange(participant.id, participantRole);
     }
   };
 
-  const onParticipantDelete = (): void => onDelete(participant.id);
+  const onParticipantDelete = (): void => onDelete(participant.id, participant.type);
 
   return (
     <tr>
       <td>{participant.name}</td>
       <td>{participant.type}</td>
-      <td>
+      <td ref={selectField}>
         <Select
           closeOnSelect
-          className="zindex-dropdown w-25"
-          searchable={false}
-          dropdownHeight="200px"
+          className={getAllowedClasses(styles.roleSelect)}
+          styles={selectRoleStyles}
+          isSearchable={false}
           onChange={onRoleChange}
-          values={[{ label: participant.role, value: participant.role }]}
+          value={{ label: participant.role, value: participant.role }}
           options={options}
+          menuPortalTarget={selectField.current}
         />
       </td>
       <td>

@@ -4,6 +4,7 @@ import { pagesReducer as pages } from './pages';
 import { usersReducer as users } from './users';
 import { workspacesReducer as workspaces } from './workspaces';
 import { tagReducer as tags } from './tags';
+import { participantsReducer as participants } from './participants';
 
 const rootReducer = {
   auth,
@@ -12,6 +13,7 @@ const rootReducer = {
   users,
   workspaces,
   tags,
+  participants,
 };
 
 export { rootReducer };
