@@ -13,15 +13,9 @@ import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
-import {
-  InviteStatus,
-  IRegister,
-  DefaultUserName,
-  DefaultPassword,
-} from 'infostack-shared';
+import { InviteStatus, IRegister, DefaultUserName } from 'infostack-shared';
 import { generateInviteToken } from '../common/utils/tokens.util';
 import { env } from '../env';
-import { hash } from '../common/utils/hash.util';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -32,12 +26,13 @@ export const inviteToWorkspace = async (
   const { app } = env;
 
   if (!user) {
-    body.password = DefaultPassword.PASSWORD;
-    body.fullName = DefaultUserName.WAITING_FOR_JOIN;
-    const hashedPassword = await hash(body.password);
+    const newUser = {
+      email: body.email,
+      fullName: DefaultUserName.WAITING_FOR_JOIN,
+    };
+
     const { password, ...user } = await userRepository.save({
-      ...body,
-      password: hashedPassword,
+      ...newUser,
     });
 
     addUserToWorkspace(user.id, workspaceId);
