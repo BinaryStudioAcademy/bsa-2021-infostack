@@ -118,18 +118,14 @@ export const getPagesFollowedByUser = async (
   userId: string,
 ): Promise<IPageFollowed[]> => {
   const userRepository = getCustomRepository(UserRepository);
-  const pageContentRepository = getCustomRepository(PageContentRepository);
   const { followingPages } = await userRepository.findById(userId);
   if (followingPages.length > 0) {
-    const pages = await Promise.all(
-      followingPages.map(async (page) => {
-        const content = await pageContentRepository.findByPageId(page.id);
-        return {
-          id: page.id,
-          title: content.title,
-        };
-      }),
-    );
+    const pages = followingPages.map((page) => {
+      return {
+        id: page.id,
+        title: page.pageContents[0].title,
+      };
+    });
 
     return pages;
   } else {
