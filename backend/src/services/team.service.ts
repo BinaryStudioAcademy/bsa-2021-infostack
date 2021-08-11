@@ -23,6 +23,7 @@ export const getTeam = async (pageId: string): Promise<ITeam> => {
 
 export const create = async (
   userId: string,
+  workspaceId: string,
   newTeam: ITeamCreation,
 ): Promise<ITeam> => {
   if (!newTeam.name) {
@@ -40,7 +41,7 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  await teamRepository.save(team);
+  await teamRepository.save({ workspaceId, name: team.name });
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findUserTeams(userId);
   user.teams.push(team);
