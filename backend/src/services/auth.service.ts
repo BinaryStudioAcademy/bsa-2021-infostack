@@ -3,10 +3,16 @@ import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { IRegister } from '../common/interfaces/auth/register.interface';
 import { ILogin } from '../common/interfaces/auth/login.interface';
-import { IUserWithTokens, IUser } from '../common/interfaces/user/user-auth.interface';
+import {
+  IUserWithTokens,
+  IUser,
+} from '../common/interfaces/user/user-auth.interface';
 import { ITokens } from './../common/interfaces/auth/tokens.interface';
 import { IRefreshToken } from './../common/interfaces/auth/refresh-tokens.interface';
-import { generateTokens, generateAccessToken } from '../common/utils/tokens.util';
+import {
+  generateTokens,
+  generateAccessToken,
+} from '../common/utils/tokens.util';
 import UserRepository from '../data/repositories/user.repository';
 import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
 import { hash, verify } from '../common/utils/hash.util';
@@ -20,7 +26,10 @@ import jwt from 'jsonwebtoken';
 const setTokens = async (user: IUser): Promise<ITokens> => {
   const tokens = generateTokens(user.id);
   const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
-  const refreshToken = refreshTokenRepository.create({ user, token: tokens.refreshToken });
+  const refreshToken = refreshTokenRepository.create({
+    user,
+    token: tokens.refreshToken,
+  });
   await refreshTokenRepository.save(refreshToken);
 
   return tokens;
@@ -115,7 +124,9 @@ export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
     const { refreshToken } = body;
     jwt.verify(refreshToken, env.app.secretKey);
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
-    const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
+    const userRefreshToken = await refreshTokenRepository.findByToken(
+      refreshToken,
+    );
     if (!userRefreshToken?.token) {
       throw new Error();
     }
@@ -133,7 +144,9 @@ export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
 export const logout = async (body: IRefreshToken): Promise<void> => {
   const { refreshToken } = body;
   const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
-  const userRefreshToken = await refreshTokenRepository.findByToken(refreshToken);
+  const userRefreshToken = await refreshTokenRepository.findByToken(
+    refreshToken,
+  );
   if (userRefreshToken?.token) {
     await refreshTokenRepository.remove(userRefreshToken);
   }
