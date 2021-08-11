@@ -44,16 +44,31 @@ class WorkspaceApi {
   }
 
   public async inviteToWorkspace(payload: IWorkspaceInvite): Promise<IWorkspace> {
-
-    // const { workspaceId, userId } = payload;
-    // eslint-disable-next-line no-console
-    console.log('inviteToWorkspace payload ',payload);
-
     return this.http.load(`${this.BASE}/invite`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
       contentType: ContentType.JSON,
     });
+  }
+
+  public async updateInviteStatusAccepted(
+    id: string,
+  ): Promise<IWorkspace> {
+    const updateResponse: IWorkspace = await this.http.load(`${this.BASE}/${id}/accept-invite-status`, {
+      method: HttpMethod.PUT,
+    });
+
+    return updateResponse;
+  }
+
+  public async updateInviteStatusDeclined(
+    id: string,
+  ): Promise<IWorkspace> {
+    const updateResponse: IWorkspace = await this.http.load(`${this.BASE}/${id}/decline-invite-status`, {
+      method: HttpMethod.PUT,
+    });
+
+    return updateResponse;
   }
 }
 export { WorkspaceApi };

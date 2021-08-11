@@ -16,6 +16,7 @@ import { IResetPassword } from '../common/interfaces/auth/reset-password.interfa
 import { env } from '../env';
 import { ISetPassword } from '../common/interfaces/auth/set-password.interface';
 import jwt from 'jsonwebtoken';
+import { IUpdatePasswordAndFullName } from 'infostack-shared';
 
 const setTokens = async (user: IUser): Promise<ITokens> => {
   const tokens = generateTokens(user.id);
@@ -103,9 +104,34 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
   }
 
   const { app } = env;
-  const decoded = jwt.verify(token, app.secretKey) as { userId: string };
+  const decoded = jwt.verify(token, app.secretKey) as { userId: string, workspaceId: string };
+
   const hashedPassword = await hash(password);
   await userRepository.updatePasswordById(decoded.userId, hashedPassword);
+};
+
+export const updatePasswordAndFullNameAndReturnEmail = async (body: IUpdatePasswordAndFullName): Promise<string> => {
+  const userRepository = getCustomRepository(UserRepository);
+
+  const { token, password, fullName } = body;
+  if (!token) {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.INVALID_TOKEN,
+    });
+  }
+
+  const { app } = env;
+  const decoded = jwt.verify(token, app.secretKey) as { userId: string, workspaceId: string };
+  const hashedPassword = await hash(password);
+  await userRepository.updatePasswordById(decoded.userId, hashedPassword);
+  const userToUpdate = await userRepository.findById(decoded.userId);
+  const { email } = userToUpdate;
+  await userRepository.updatePasswordById(decoded.userId, hashedPassword);
+  userToUpdate.fullName = fullName || userToUpdate.fullName;
+  await userRepository.save(userToUpdate);
+
+  return JSON.stringify(email);
 };
 
 export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {

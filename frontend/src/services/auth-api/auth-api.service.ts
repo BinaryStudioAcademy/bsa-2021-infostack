@@ -1,7 +1,7 @@
 import { IRefreshToken } from 'common/interfaces/auth';
 import { IUserWithTokens, IUser } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { IResetPassword, ISetPassword } from 'common/interfaces/auth';
+import { IResetPassword, ISetPassword, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
 import { http } from 'services/http/http.service';
 
 class AuthApi {
@@ -45,6 +45,14 @@ class AuthApi {
 
   public async setPassword(payload: ISetPassword): Promise<void> {
     return this.http.load(`${this.BASE}/set-password`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
+  }
+
+  public async updatePasswordAndFullName(payload: IUpdatePasswordAndFullName ): Promise<string> {
+    return this.http.load(`${this.BASE}/update-password-and-fullname`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
       contentType: ContentType.JSON,

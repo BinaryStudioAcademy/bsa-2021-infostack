@@ -10,6 +10,7 @@ import {
   useCookies,
   useHistory,
 } from 'hooks/hooks';
+import { WorkspaceApi } from 'services';
 
 const Workspaces: React.FC = () => {
   const { workspaces, currentWorkspace, creatingError } = useAppSelector((state) => state.workspaces);
@@ -34,6 +35,15 @@ const Workspaces: React.FC = () => {
   const handleItemClick = (id: string): void => {
     dispatch(workspacesActions.loadWorkspace(id));
     setIsWorkspaceSelected(true);
+  };
+  const handleInviteAccepted = async (id: string): Promise<void> => {
+    await new WorkspaceApi().updateInviteStatusAccepted(id);
+    dispatch(workspacesActions.loadWorkspace(id));
+    setIsWorkspaceSelected(true);
+  };
+  const handleInviteDeclined = async (id: string): Promise<void> => {
+    await new WorkspaceApi().updateInviteStatusDeclined(id);
+    dispatch(workspacesActions.loadWorkspaces());
   };
 
   const handleCreate = (): void =>
@@ -72,6 +82,8 @@ const Workspaces: React.FC = () => {
             workspaces={workspaces}
             onItemClick={handleItemClick}
             onCreate={handleCreate}
+            onClickAccept={handleInviteAccepted}
+            onClickDecline={handleInviteDeclined}
           />
           : <Spinner />
         }

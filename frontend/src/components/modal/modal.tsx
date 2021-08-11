@@ -1,4 +1,4 @@
-import { useForm, useState } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useForm, useState } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'validations/reset-password-schema';
@@ -6,10 +6,10 @@ import FormField from 'components/common/form-field/form-field';
 import styles from './styles.module.scss';
 import { WorkspaceApi } from 'services';
 import { toast } from 'react-toastify';
-
 import { Button, Modal } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { IRegister } from 'infostack-shared';
+import { workspaceActions } from 'store/workspace';
 
 type Props = {
   title: string;
@@ -18,6 +18,8 @@ type Props = {
 };
 
 const ModalComponent: React.FC<Props> = ({ onModalClose, title, showModal }) => {
+  const dispatch = useAppDispatch();
+  const { currentWorkspace } = useAppSelector((state) => state.workspaces);
 
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
 
@@ -43,6 +45,8 @@ const ModalComponent: React.FC<Props> = ({ onModalClose, title, showModal }) => 
     );
 
     setSubmitDisabled(false);
+    if(currentWorkspace) dispatch(workspaceActions.loadUsers(currentWorkspace.id));
+
   };
 
   return (

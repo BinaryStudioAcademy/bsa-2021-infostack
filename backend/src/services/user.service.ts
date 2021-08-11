@@ -7,12 +7,24 @@ import {
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
 import { IUser } from 'infostack-shared';
+import { env } from '../env';
+import jwt from 'jsonwebtoken';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const { fullName, email, avatar } = await userRepository.findById(id);
 
   return { id, fullName, email, avatar };
+};
+
+export const getInviteUserById = async (token: string): Promise<string> => {
+  const userRepository = getCustomRepository(UserRepository);
+
+  const { app } = env;
+  const decoded = jwt.verify(token, app.secretKey) as { userId: string, workspaceId: string };
+  const { fullName } = await userRepository.findById(decoded.userId);
+
+  return JSON.stringify(fullName);
 };
 
 export const getUserByIdWithWorkspace = async (
