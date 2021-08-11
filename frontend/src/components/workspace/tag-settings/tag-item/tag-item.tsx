@@ -23,15 +23,9 @@ const TagItem: React.FC<{ id: string; name: string }> = ({ id, name }) => {
       title={name}
       className={`${getAllowedClasses(styles.button, styles.item)} btn-tag`}
     >
-      <Dropdown.Item onClick={handleUpdate}>
-        <i className="bi-pencil" />
-        Edit
-      </Dropdown.Item>
+      <Dropdown.Item onClick={handleUpdate}>Edit</Dropdown.Item>
       <Dropdown.Divider />
-      <Dropdown.Item onClick={handleDelete}>
-        <i className="bi-trash-fill" />
-        Delete
-      </Dropdown.Item>
+      <Dropdown.Item onClick={handleDelete}>Delete</Dropdown.Item>
     </DropdownButton>
   );
 };
