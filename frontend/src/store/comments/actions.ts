@@ -14,7 +14,10 @@ const loadComments = createAsyncThunk(
 
 const createComment = createAsyncThunk(
   ActionType.ADD_COMMENT,
-  async ({ pageId, payload }: { pageId: string, payload: ICommentRequest }, { dispatch }) => {
+  async (
+    { pageId, payload }: { pageId: string; payload: ICommentRequest },
+    { dispatch },
+  ) => {
     const comment = await commentApi.addComment(pageId, payload);
     dispatch(actions.addComment(comment));
   },
@@ -22,7 +25,10 @@ const createComment = createAsyncThunk(
 
 const createResponse = createAsyncThunk(
   ActionType.ADD_RESPONSE,
-  async ({ pageId, payload }: { pageId: string, payload: ICommentRequest }, { dispatch }) => {
+  async (
+    { pageId, payload }: { pageId: string; payload: ICommentRequest },
+    { dispatch },
+  ) => {
     const response = await commentApi.addComment(pageId, payload);
     dispatch(actions.addResponse(response));
   },
@@ -35,6 +41,4 @@ const commentsActions = {
   createResponse,
 };
 
-export {
-  commentsActions,
-};
+export { commentsActions };

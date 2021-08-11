@@ -3,4 +3,5 @@ export type {
   IPageRequest,
   IPageNav,
   IPageContributor,
+  IEditPageContent,
 } from 'infostack-shared/common/interfaces';

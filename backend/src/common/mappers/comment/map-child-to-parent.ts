@@ -11,5 +11,5 @@ export const mapChildToParent = (comments: IComment[]): IComment[] => {
     }
   });
 
-  return comments.filter(c => c.parentCommentId === null);
+  return comments.filter((c) => c.parentCommentId === null);
 };

@@ -4,7 +4,7 @@ import { IComment } from 'common/interfaces/comment';
 import { ActionType } from './common';
 
 type State = {
-  comments: IComment[]
+  comments: IComment[];
 };
 
 const initialState: State = {
@@ -22,10 +22,16 @@ export const { reducer, actions } = createSlice({
       state.comments.unshift(action.payload);
     },
     [ActionType.ADD_RESPONSE]: (state, action: PayloadAction<IComment>) => {
-      const { payload: { parentCommentId } } = action;
-      const parent = state.comments.find(c => c.id === parentCommentId) as IComment;
+      const {
+        payload: { parentCommentId },
+      } = action;
+      const parent = state.comments.find(
+        (c) => c.id === parentCommentId,
+      ) as IComment;
       parent.children?.unshift(action.payload);
-      state.comments =  state.comments.map(c => c.id === parentCommentId ? parent : c);
+      state.comments = state.comments.map((c) =>
+        c.id === parentCommentId ? parent : c,
+      );
     },
   },
 });

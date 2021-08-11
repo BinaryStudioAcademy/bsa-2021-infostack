@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import { Card, Col, Row } from 'react-bootstrap';
 import isUUID from 'is-uuid';
 import {
@@ -17,6 +18,8 @@ import styles from './styles.module.scss';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
 import { IPageContributor } from 'common/interfaces/pages';
+import EditButton from '../edit-button/edit-button';
+import { replaceIdParam } from 'helpers/helpers';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -51,12 +54,17 @@ const PageContent: React.FC = () => {
     }
   }, [paramsId]);
 
+  const handleEditing = (): void => {
+    history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
+  };
+
   const Content: React.FC = () => {
     return (
       <div className="p-4">
         <Row>
-          <Col>
+          <Col className="d-flex justify-content-between mb-4">
             <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+            <EditButton onClick={handleEditing} />
           </Col>
         </Row>
         <Row className="mb-4">
@@ -68,7 +76,7 @@ const PageContent: React.FC = () => {
           <Col>
             <Card border="light" className={styles.card}>
               <Card.Body>
-                <Card.Text>{content || 'Empty page'}</Card.Text>
+                <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
               </Card.Body>
             </Card>
           </Col>
