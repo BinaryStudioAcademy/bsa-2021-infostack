@@ -1,5 +1,5 @@
 interface IEditPageContent {
-  pageId: string,
+  pageId: string;
   title?: string;
   content?: string;
 }

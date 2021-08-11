@@ -3,7 +3,7 @@ enum ActionType {
   CREATE_VERSION_PAGE = 'createVersionPage',
   GET_PAGE = 'getPage',
   SET_PAGES = 'setPages',
-  TOGGLE_SPINNER ='toggleSpinner',
+  TOGGLE_SPINNER = 'toggleSpinner',
   EDIT_PAGE_CONTENT = 'editPageContent',
   CLEAR_CURRENT_PAGE = 'clearCurrentPage',
 }

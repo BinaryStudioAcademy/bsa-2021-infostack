@@ -62,33 +62,35 @@ const PageContent: React.FC = () => {
     return (
       <div className="p-4">
         <Row>
-          <Col className="d-flex justify-content-between mb-4">
-            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-            <EditButton onClick={handleEditing} />
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
+          <Col xs={2}>
             <PageContributors contributors={contributors} />
           </Col>
-        </Row>
-        <Row className="mb-4">
           <Col>
-            <Card border="light" className={styles.card}>
-              <Card.Body>
-                <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Card border="light" className={styles.card}>
-              <Card.Header>Comments</Card.Header>
-              <Card.Body>
-                <CommentSection pageId={paramsId} />
-              </Card.Body>
-            </Card>
+            <Row>
+              <Col className="d-flex justify-content-between mb-4">
+                <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+                <EditButton onClick={handleEditing} />
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col>
+                <Card border="light" className={styles.card}>
+                  <Card.Body>
+                    <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Card border="light" className={styles.card}>
+                  <Card.Header>Comments</Card.Header>
+                  <Card.Body>
+                    <CommentSection pageId={paramsId} />
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div>

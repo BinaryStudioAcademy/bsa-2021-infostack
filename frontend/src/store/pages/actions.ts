@@ -17,7 +17,9 @@ const createPage = createAsyncThunk(
 const createVersionPage = createAsyncThunk(
   ActionType.CREATE_VERSION_PAGE,
   async (createVersionPayload: IPageRequest, { dispatch }) => {
-    const createVersionPageResponse = await new PageApi().createVersionPage(createVersionPayload);
+    const createVersionPageResponse = await new PageApi().createVersionPage(
+      createVersionPayload,
+    );
     dispatch(actions.createVersionPage(createVersionPageResponse));
   },
 );
@@ -62,6 +64,4 @@ const pagesActions = {
   editPageContent,
 };
 
-export {
-  pagesActions,
-};
+export { pagesActions };
