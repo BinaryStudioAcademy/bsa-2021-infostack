@@ -1,5 +1,11 @@
 import { ListGroup } from 'react-bootstrap';
-import { useAppDispatch, useAppSelector, useContext, useEffect, useState } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useContext,
+  useEffect,
+  useState,
+} from 'hooks/hooks';
 import { SocketContext } from 'context/socket';
 import { commentsActions } from 'store/comments';
 import { IComment } from 'common/interfaces/comment';
@@ -14,8 +20,8 @@ type Props = {
 
 export const CommentSection: React.FC<Props> = ({ pageId }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const comments = useAppSelector(state => state.comments.comments);
-  const user = useAppSelector(state => state.auth.user);
+  const comments = useAppSelector((state) => state.comments.comments);
+  const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
 
@@ -43,15 +49,19 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
 
   const handleSubmit = async (text: string): Promise<void> => {
     setIsLoading(true);
-    await dispatch(commentsActions.createComment({ pageId, payload: { text } }));
+    await dispatch(
+      commentsActions.createComment({ pageId, payload: { text } }),
+    );
     setIsLoading(false);
   };
 
   const handleResponse = (commentId: string, text: string): void => {
-    dispatch(commentsActions.createResponse({
-      pageId,
-      payload: { text, parentCommentId: commentId } },
-    ));
+    dispatch(
+      commentsActions.createResponse({
+        pageId,
+        payload: { text, parentCommentId: commentId },
+      }),
+    );
   };
 
   return (
@@ -63,19 +73,36 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
         onSubmit={handleSubmit}
       />
       <ListGroup variant="flush">
-        {comments.map(({ id, text, author: { fullName, avatar }, children }) => (
-          <Comment
-            key={id}
-            name={fullName}
-            avatar={avatar}
-            text={text}
-            handleResponse={(text: string): void => handleResponse(id, text)}
-          >
-            {children && children.map(({ id, text, author: { fullName, avatar } }) => (
-              <Response key={id} name={fullName} avatar={avatar} text={text} />
-            ))}
-          </Comment>
-        ))}
+        {comments.map(
+          ({
+            id,
+            text,
+            author: { id: userId, fullName, avatar },
+            children,
+          }) => (
+            <Comment
+              key={id}
+              userId={userId}
+              name={fullName}
+              avatar={avatar}
+              text={text}
+              handleResponse={(text: string): void => handleResponse(id, text)}
+            >
+              {children &&
+                children.map(
+                  ({ id, text, author: { id: userId, fullName, avatar } }) => (
+                    <Response
+                      key={id}
+                      userId={userId}
+                      name={fullName}
+                      avatar={avatar}
+                      text={text}
+                    />
+                  ),
+                )}
+            </Comment>
+          ),
+        )}
       </ListGroup>
     </>
   );

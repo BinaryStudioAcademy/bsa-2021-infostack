@@ -54,9 +54,15 @@ const PageContent: React.FC = () => {
   const Content: React.FC = () => {
     return (
       <div className="p-4">
-        <PageContributors contributors={contributors} />
         <Row>
-          <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+          <Col>
+            <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <PageContributors contributors={contributors} />
+          </Col>
         </Row>
         <Row className="mb-4">
           <Col>
@@ -70,9 +76,7 @@ const PageContent: React.FC = () => {
         <Row>
           <Col>
             <Card border="light" className={styles.card}>
-              <Card.Header className="bg-white border-0 pb-2 text-body">
-                <h2 className="h6">Comments</h2>
-              </Card.Header>
+              <Card.Header>Comments</Card.Header>
               <Card.Body>
                 <CommentSection pageId={paramsId} />
               </Card.Body>
