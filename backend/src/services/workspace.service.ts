@@ -21,15 +21,24 @@ export const getWorkspaceUsers = async (
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
-export const getWorkspace = async (workspaceId: string, userId: string): Promise<IWorkspace> => {
+export const getWorkspace = async (
+  workspaceId: string,
+  userId: string,
+): Promise<IWorkspace> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspace = await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+      userId,
+      workspaceId,
+    );
   const { workspace } = userWorkspace;
 
   return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
 };
 
-export const getUserWorkspaces = async (userId: string): Promise<IWorkspace[]> => {
+export const getUserWorkspaces = async (
+  userId: string,
+): Promise<IWorkspace[]> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
   const usersWorkspaces = await userWorkspaceRepository.findUserWorkspaces(
     userId,

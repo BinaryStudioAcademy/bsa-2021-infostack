@@ -64,7 +64,8 @@ const ProfileEdit: React.FC = () => {
     resolver: yupResolver(accountInfoSchema),
     defaultValues: {
       fullName: user?.fullName,
-      title: user?.title },
+      title: user?.title,
+    },
   });
 
   const handleRemove = (): void => {

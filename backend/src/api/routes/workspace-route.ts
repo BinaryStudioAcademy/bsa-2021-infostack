@@ -12,13 +12,22 @@ import { RoleType } from '../../common/enums/role-type';
 const router: Router = Router();
 
 router
-  .get('/', run(req => getUserWorkspaces(req.userId)))
-  .get('/:id', run(req => getWorkspace(req.params.id, req.userId)))
+  .get(
+    '/',
+    run((req) => getUserWorkspaces(req.userId)),
+  )
+  .get(
+    '/:id',
+    run((req) => getWorkspace(req.params.id, req.userId)),
+  )
   .get(
     '/current/users',
     permit(RoleType.ADMIN),
     run((req) => getWorkspaceUsers(req.workspaceId)),
   )
-  .post('/', run((req) => create(req.userId, req.body)));
+  .post(
+    '/',
+    run((req) => create(req.userId, req.body)),
+  );
 
 export default router;

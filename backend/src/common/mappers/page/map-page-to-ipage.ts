@@ -1,16 +1,8 @@
 import { Page } from 'src/data/entities/page';
 import { IPage } from 'src/common/interfaces/page';
 
-export const mapPageToIPage = (
-  page: Page,
-): IPage => {
-  const {
-    id,
-    authorId,
-    parentPageId,
-    childPages,
-    pageContents,
-  } = page;
+export const mapPageToIPage = (page: Page): IPage => {
+  const { id, authorId, parentPageId, childPages, pageContents } = page;
 
   const mappedChildren = childPages?.map(mapPageToIPage);
   const mappedpageContents = pageContents?.map((content) => ({

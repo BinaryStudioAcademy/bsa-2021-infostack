@@ -20,7 +20,10 @@ const { reducer, actions } = createSlice({
     [ActionType.SET_USER]: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
     },
-    [ActionType.UPDATE_USER]: (state, action: PayloadAction<Partial<IUser>>) => {
+    [ActionType.UPDATE_USER]: (
+      state,
+      action: PayloadAction<Partial<IUser>>,
+    ) => {
       Object.assign(state.user, action.payload);
     },
     [ActionType.REMOVE_USER]: (state) => {

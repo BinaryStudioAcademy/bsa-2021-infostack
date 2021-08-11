@@ -7,7 +7,9 @@ import { useAppSelector } from 'hooks/hooks';
 import styles from './styles.module.scss';
 
 const Menu: React.FC = () => {
-  const role = useAppSelector((state) => state.workspaces.currentWorkspace?.role);
+  const role = useAppSelector(
+    (state) => state.workspaces.currentWorkspace?.role,
+  );
 
   return (
     <Card className={getAllowedClasses(styles.menuCard)}>
