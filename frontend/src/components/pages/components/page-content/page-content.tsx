@@ -55,13 +55,15 @@ const PageContent: React.FC = () => {
   }, [paramsId]);
 
   const Content: React.FC = () => {
-    const [isFollowed, setIsFollowed] = useState<boolean>(false);
+    const { isCurrentPageFollowed } = useAppSelector(
+      (state: RootState) => state.pages,
+    );
 
-    const isPageFollowed = (): void => {
+    const isPageFollowed = async (): Promise<void> => {
       if (currentPage?.followingUsers) {
-        currentPage.followingUsers.map((follower) => {
+        currentPage.followingUsers.map(async (follower) => {
           if (follower.id === user?.id) {
-            setIsFollowed(true);
+            await dispatch(pagesActions.setCurrentPageFollowed(true));
           }
         });
       }
@@ -69,19 +71,19 @@ const PageContent: React.FC = () => {
 
     const onPageFollow = async (pageId: string | undefined): Promise<void> => {
       await pageApi.followPage(pageId);
-      setIsFollowed(!isFollowed);
+      await dispatch(pagesActions.setPage(pageId));
     };
 
     const onPageUnfollow = async (
       pageId: string | undefined,
     ): Promise<void> => {
       await pageApi.unfollowPage(pageId);
-      setIsFollowed(!isFollowed);
+      await dispatch(pagesActions.setPage(pageId));
     };
 
     useEffect(() => {
       isPageFollowed();
-    }, [currentPage]);
+    }, []);
 
     return (
       <div className="content">
@@ -97,12 +99,12 @@ const PageContent: React.FC = () => {
                 <Button
                   className="mb-3"
                   onClick={
-                    isFollowed
+                    isCurrentPageFollowed
                       ? (): Promise<void> => onPageUnfollow(paramsId)
                       : (): Promise<void> => onPageFollow(paramsId)
                   }
                 >
-                  {isFollowed ? 'Unfollow' : 'Follow'}
+                  {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                 </Button>
               </div>
               <Card>

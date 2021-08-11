@@ -7,12 +7,14 @@ type State = {
   pages: IPageNav[] | null;
   currentPage: IPage | null;
   isSpinner: boolean;
+  isCurrentPageFollowed: boolean;
 };
 
 const initialState: State = {
   pages: null,
   currentPage: null,
   isSpinner: false,
+  isCurrentPageFollowed: false,
 };
 
 const { reducer, actions } = createSlice({
@@ -37,12 +39,20 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
+      state.isCurrentPageFollowed = false;
     },
     [ActionType.TOGGLE_SPINNER]: (state) => {
       state.isSpinner = !state.isSpinner;
     },
     [ActionType.CLEAR_CURRENT_PAGE]: (state) => {
       state.currentPage = null;
+      state.isCurrentPageFollowed = false;
+    },
+    [ActionType.SET_CURRENT_PAGE_FOLLOWED]: (
+      state,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.isCurrentPageFollowed = action.payload;
     },
   },
 });

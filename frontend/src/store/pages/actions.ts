@@ -17,7 +17,9 @@ const createPage = createAsyncThunk(
 const createVersionPage = createAsyncThunk(
   ActionType.CREATE_VERSION_PAGE,
   async (createVersionPayload: IPageRequest, { dispatch }) => {
-    const createVersionPageResponse = await new PageApi().createVersionPage(createVersionPayload);
+    const createVersionPageResponse = await new PageApi().createVersionPage(
+      createVersionPayload,
+    );
     dispatch(actions.createVersionPage(createVersionPageResponse));
   },
 );
@@ -40,14 +42,29 @@ const getPage = createAsyncThunk(
   },
 );
 
+const setPage = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (getPayload: string | undefined, { dispatch }) => {
+    const pageResponse = await new PageApi().getPage(getPayload);
+    dispatch(actions.getPage(pageResponse));
+  },
+);
+
+const setCurrentPageFollowed = createAsyncThunk(
+  ActionType.SET_CURRENT_PAGE_FOLLOWED,
+  async (payload: boolean, { dispatch }) => {
+    dispatch(actions.setCurrentPageFollowed(payload));
+  },
+);
+
 const pagesActions = {
   ...actions,
   createPage,
   createVersionPage,
   getPagesAsync,
   getPage,
+  setPage,
+  setCurrentPageFollowed,
 };
 
-export {
-  pagesActions,
-};
+export { pagesActions };
