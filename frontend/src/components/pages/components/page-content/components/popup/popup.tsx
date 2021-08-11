@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 import { Modal, Button, Table } from 'react-bootstrap';
 import Select from 'react-select';
 import { IButton } from 'common/interfaces/components/button';
 import { IParticipant } from 'common/interfaces/participant';
+import { IOption } from 'common/interfaces/components/select';
 import {
   useEffect,
   useAppDispatch,
@@ -12,7 +14,7 @@ import { usersActions } from 'store/actions';
 import { teamsActions } from 'store/teams';
 import TableHead from './components/table-head/table-head';
 import Item from './components/item/item';
-import { ParticipantsType } from 'common/enums/enums';
+import { ParticipantsType, PermissionType } from 'common/enums/enums';
 
 type Props = {
   query: string;
@@ -21,12 +23,7 @@ type Props = {
   cancelButton: IButton;
 };
 
-type Option = {
-  value: string;
-  label: string;
-};
-
-type participantOption = Option & IParticipant;
+type participantOption = IOption & IParticipant;
 
 export const TABLE_HEADERS = ['Name', 'User or Team', 'Acces', ''];
 
@@ -39,6 +36,7 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
     id: user?.id || '',
     name: user?.fullName || '',
     type: ParticipantsType.USER,
+    role: PermissionType.ADMIN,
   }]);
 
   useEffect(() => {
@@ -48,8 +46,8 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
 
   const handleSelectChange = (selectedOption: participantOption | null): void => {
     if (selectedOption && !participants.find(participant => participant.id === selectedOption.id)) {
-      const { id, name, type } = selectedOption;
-      setParticipants([...participants, { id, name, type }]);
+      const { id, name, type, role } = selectedOption;
+      setParticipants([...participants, { id, name, type, role }]);
     }
   };
 
@@ -58,12 +56,23 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
     setParticipants(filteredParticipants);
   };
 
+  const handleRoleChange = (id: string, role: string): void => {
+    const updatedParticipants = participants.map(participant => {
+      if (participant.id === id) {
+        return { ...participant, role };
+      }
+      return participant;
+    }) as IParticipant[];
+    setParticipants(updatedParticipants);
+  };
+
   const getOptions = (): participantOption[] => {
     const mappedUsers = users.map(user => ({
       id: user.id,
       value: user.fullName,
       label: user.fullName,
       name: user.fullName,
+      role: PermissionType.READ,
       type: ParticipantsType.USER,
     }));
     const mappedTeams = teams.map(team => ({
@@ -71,6 +80,7 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
       value: team.name,
       label: team.name,
       name: team.name,
+      role: PermissionType.READ,
       type: ParticipantsType.TEAM,
     }));
     return [...mappedUsers, ...mappedTeams];
@@ -82,6 +92,7 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
     label: '',
     name: '',
     type: '',
+    role: '',
   });
 
   return (
@@ -112,8 +123,14 @@ export const Popup: React.FC<Props> = ({ query, isVisible, confirmButton, cancel
         <Table hover>
           <TableHead headers={TABLE_HEADERS} />
           <tbody>
+            {console.log(participants)}
             {participants?.map((participant) => {
-              return <Item key={participant.id} participant={participant} onDelete={handleDeleteItem}/>;
+              return <Item
+                key={participant.id}
+                participant={participant}
+                onDelete={handleDeleteItem}
+                onChange={handleRoleChange}
+              />;
             })}
           </tbody>
         </Table>

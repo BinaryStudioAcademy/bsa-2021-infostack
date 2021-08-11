@@ -1,5 +1,21 @@
+.select {
+
+
+  div {
+    border: none;
+  }
+}
+
 tr {
   font-size: 1.2rem;
+  height: 20vh;
+
+  & :hover {
+    .select {
+      color: #212529;
+      background: rgba(0, 0, 0, 0.075);
+    }
+  }
 
   td {
     color: #737373;
