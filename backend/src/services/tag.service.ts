@@ -32,7 +32,8 @@ export const create = async (
       message: HttpErrorMessage.TAG_IN_WORKSPACE_ALREADY_EXISTS,
     });
   }
-  const { id, name } = await tagRepository.save(newTag);
+  const tag = { name: newTag.name, workspaceId };
+  const { id, name } = await tagRepository.save(tag);
   return { id, name };
 };
 
