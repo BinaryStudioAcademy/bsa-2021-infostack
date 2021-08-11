@@ -4,6 +4,11 @@ import { ActionType } from './common';
 import { PageApi } from 'services';
 import { IPageRequest } from 'common/interfaces/pages';
 
+interface PageAction {
+  type: string;
+  payload: boolean;
+}
+
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
@@ -50,12 +55,10 @@ const setPage = createAsyncThunk(
   },
 );
 
-const setCurrentPageFollowed = createAsyncThunk(
-  ActionType.SET_CURRENT_PAGE_FOLLOWED,
-  async (payload: boolean, { dispatch }) => {
-    dispatch(actions.setCurrentPageFollowed(payload));
-  },
-);
+const setCurrentPageFollowed = (payload: boolean): PageAction => ({
+  type: ActionType.SET_CURRENT_PAGE_FOLLOWED,
+  payload,
+});
 
 const pagesActions = {
   ...actions,

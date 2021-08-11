@@ -62,9 +62,9 @@ const PageContent: React.FC = () => {
 
     const isPageFollowed = async (): Promise<void> => {
       if (currentPage?.followingUsers) {
-        currentPage.followingUsers.map(async (follower) => {
+        currentPage.followingUsers.map((follower) => {
           if (follower.id === user?.id) {
-            await dispatch(pagesActions.setCurrentPageFollowed(true));
+            dispatch(pagesActions.setCurrentPageFollowed(true));
           }
         });
       }
