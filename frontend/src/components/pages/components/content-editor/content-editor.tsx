@@ -33,6 +33,10 @@ const PageContentEditor: React.FC = () => {
   const dispatch = useAppDispatch();
   const editorRef = useRef(null);
 
+  if (!currentPage) {
+    history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
+  }
+
   const [titleInputValue, setTitleInputValue] = useState(pageTitle);
   const [markDownContent, setMarkDownContent] = useState(content);
 
