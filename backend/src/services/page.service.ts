@@ -286,29 +286,76 @@ export const setPermission = async (
   return participant;
 };
 
+const deleteUserPermission = async (
+  pageId: string,
+  participantId: string,
+): Promise<void> => {
+  const userPermissionRepository = getCustomRepository(
+    UserPermissionRepository,
+  );
+  const userPermission = await userPermissionRepository.findByUserAndPageId(
+    participantId,
+    pageId,
+  );
+  await userPermissionRepository.remove(userPermission);
+};
+
+const deleteTeamPermission = async (
+  pageId: string,
+  participantId: string,
+): Promise<void> => {
+  const teamPermissionRepository = getCustomRepository(
+    TeamPermissionRepository,
+  );
+  const teamPermission = await teamPermissionRepository.findByTeamAndPageId(
+    participantId,
+    pageId,
+  );
+  await teamPermissionRepository.remove(teamPermission);
+};
+
+const deletePermissionForChildren = async (
+  allPages: Page[],
+  pageId: string,
+  participantId: string,
+  remove: (page: string, participant: string) => Promise<void>,
+): Promise<void> => {
+  const children = allPages.filter((page) => page.parentPageId === pageId);
+  for (const child of children) {
+    await remove(child.id, participantId);
+    await deletePermissionForChildren(
+      allPages,
+      child.id,
+      participantId,
+      remove,
+    );
+  }
+};
+
 export const deletePermission = async (
   pageId: string,
   participantType: string,
   participantId: string,
+  workspaceId: string,
 ): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const allPages = await pageRepository.findPages(workspaceId);
   if (participantType === ParticipantType.USER) {
-    const userPermissionRepository = getCustomRepository(
-      UserPermissionRepository,
-    );
-    const userPermission = await userPermissionRepository.findByUserAndPageId(
-      participantId,
+    deleteUserPermission(pageId, participantId);
+    deletePermissionForChildren(
+      allPages,
       pageId,
+      participantId,
+      deleteUserPermission,
     );
-    await userPermissionRepository.remove(userPermission);
   } else if (participantType === ParticipantType.TEAM) {
-    const teamPermissionRepository = getCustomRepository(
-      TeamPermissionRepository,
-    );
-    const teamPermission = await teamPermissionRepository.findByTeamAndPageId(
-      participantId,
+    deleteTeamPermission(pageId, participantId);
+    deletePermissionForChildren(
+      allPages,
       pageId,
+      participantId,
+      deleteTeamPermission,
     );
-    await teamPermissionRepository.remove(teamPermission);
   }
 };
 

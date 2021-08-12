@@ -49,6 +49,7 @@ router.delete(
       req.params.id,
       req.params.participantType,
       req.params.participiantId,
+      req.workspaceId,
     ),
   ),
 );
