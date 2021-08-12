@@ -134,7 +134,7 @@ export const getPage = async (
   const page = await pageRepository.findByIdWithContents(pageId);
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map(team => team.id);
-  const pageWithPermission = addPermissionField<IPage>(userId, teamsIds, mapPageToIPage(page));
+  const pageWithPermission = await addPermissionField<IPage>(userId, teamsIds, mapPageToIPage(page));
   return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
 
@@ -152,13 +152,13 @@ const setUserPermission = async (
   page: Page,
   participant: IParticipant,
 ): Promise<void> => {
-  const userRepository = getCustomRepository(UserRepository);
   const userPermissionRepository = getCustomRepository(UserPermissionRepository);
-  const user = await userRepository.findById(participant.id);
-  const userPermission = await userPermissionRepository.findOne({ user, page });
+  const userPermission = await userPermissionRepository.findByUserAndPageId(participant.id, page.id);
   if (userPermission) {
     await userPermissionRepository.update(userPermission, { option: participant.role as PermissionType });
   } else {
+    const userRepository = getCustomRepository(UserRepository);
+    const user = await userRepository.findById(participant.id);
     await userPermissionRepository.createAndSave(user, page, participant.role as PermissionType);
   }
 };
@@ -167,13 +167,13 @@ const setTeamPermission = async (
   page: Page,
   participant: IParticipant,
 ): Promise<void> => {
-  const teamRepository = getCustomRepository(TeamRepository);
   const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
-  const team = await teamRepository.findById(participant.id);
-  const teamPermission = await teamPermissionRepository.findOne({ team, page });
+  const teamPermission = await teamPermissionRepository.findByTeamAndPageId(participant.id, page.id);
   if (teamPermission) {
     await teamPermissionRepository.update(teamPermission, { option: participant.role as PermissionType });
   } else {
+    const teamRepository = getCustomRepository(TeamRepository);
+    const team = await teamRepository.findById(participant.id);
     await teamPermissionRepository.createAndSave(team, page, participant.role as PermissionType);
   }
 };
