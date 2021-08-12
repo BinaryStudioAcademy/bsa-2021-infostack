@@ -7,9 +7,17 @@ const permissions = {
 };
 
 export const maximum = (array: PermissionType[]): PermissionType | void => {
-  const nums = array.map(item => permissions[item]);
+  const nums = array.map((item) => permissions[item]);
   const maxValue = Math.max.apply(null, nums);
-  if (maxValue === permissions[PermissionType.ADMIN]) return PermissionType.ADMIN;
-  if (maxValue === permissions[PermissionType.WRITE]) return PermissionType.WRITE;
-  if (maxValue === permissions[PermissionType.READ]) return PermissionType.READ;
+  switch (maxValue) {
+    case permissions[PermissionType.ADMIN]: {
+      return PermissionType.ADMIN;
+    }
+    case permissions[PermissionType.WRITE]: {
+      return PermissionType.WRITE;
+    }
+    case permissions[PermissionType.READ]: {
+      return PermissionType.READ;
+    }
+  }
 };
