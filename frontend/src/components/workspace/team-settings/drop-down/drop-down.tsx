@@ -1,13 +1,8 @@
 import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
-import { ITeam } from 'common/interfaces/team';
-import { Popup } from 'components/common/popup/popup';
+import { ITeam, ITeamCreation } from 'common/interfaces/team';
+import { Popup } from '../popup/popup';
 import { teamsActions } from 'store/actions';
-import {
-  useState,
-  useAppDispatch,
-  useEffect,
-  useAppSelector,
-} from 'hooks/hooks';
+import { useState, useAppDispatch, useEffect } from 'hooks/hooks';
 import './styles.scss';
 
 interface Props {
@@ -15,7 +10,6 @@ interface Props {
 }
 
 const DropDown: React.FC<Props> = ({ team }) => {
-  const { editingError } = useAppSelector((state) => state.teams);
   const dispatch = useAppDispatch();
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
@@ -34,10 +28,8 @@ const DropDown: React.FC<Props> = ({ team }) => {
     setIsPopUpVisible(false);
   };
 
-  const handleEditingConfirm = (): void => {
-    if (popUpText) {
-      dispatch(teamsActions.updateTeam({ ...team, name: popUpText }));
-    }
+  const handleEditing = async (data: ITeamCreation): Promise<void> => {
+    dispatch(teamsActions.updateTeam({ ...team, name: data.name }));
   };
 
   const handleDeleting = (): void => {
@@ -64,20 +56,11 @@ const DropDown: React.FC<Props> = ({ team }) => {
         </Dropdown.Menu>
       </Dropdown>
       <Popup
-        query="Edit name of team:"
-        isVisible={isPopUpVisible}
+        title="Enter new name of team:"
+        showPopup={isPopUpVisible}
+        handleFunction={handleEditing}
+        onPopupClose={handleEditingCancel}
         inputValue={popUpText}
-        error={editingError}
-        setPopUpText={setPopUpText}
-        cancelButton={{
-          text: 'Cancel',
-          onClick: handleEditingCancel,
-        }}
-        confirmButton={{
-          text: 'Save',
-          onClick: handleEditingConfirm,
-          disabled: !popUpText,
-        }}
       />
     </div>
   );
