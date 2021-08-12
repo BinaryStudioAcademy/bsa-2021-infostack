@@ -21,6 +21,7 @@ import {
   useRef,
 } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 const PageContentEditor: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -65,7 +66,7 @@ const PageContentEditor: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Card border="light" className="card">
+          <Card border="light" className={styles.content}>
             <Editor
               value={markDownContent}
               onChange={({ text }): void => setMarkDownContent(text)}
