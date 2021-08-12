@@ -5,14 +5,12 @@ import { ActionType } from './common';
 
 type State = {
   teams: ITeam[];
-  currentTeam: ITeam | null;
   editingError: string;
   creatingError: string;
 };
 
 const initialState: State = {
   teams: [],
-  currentTeam: null,
   editingError: '',
   creatingError: '',
 };
@@ -23,9 +21,6 @@ const { reducer, actions } = createSlice({
   reducers: {
     [ActionType.SET_TEAMS]: (state, action: PayloadAction<ITeam[]>) => {
       state.teams = action.payload;
-    },
-    [ActionType.SET_CURRENT_TEAM]: (state, action: PayloadAction<ITeam>) => {
-      state.currentTeam = action.payload;
     },
     [ActionType.ADD_TEAM]: (state, action: PayloadAction<ITeam>) => {
       state.teams.push(action.payload);

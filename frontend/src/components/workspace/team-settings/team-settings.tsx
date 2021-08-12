@@ -24,11 +24,7 @@ const TeamSettings: React.FC = () => {
   }, []);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
-    return <Item key={team.id} team={team} onClick={onItemClick} />;
-  };
-
-  const onItemClick = (id: string): void => {
-    dispatch(teamsActions.loadTeam(id));
+    return <Item key={team.id} team={team} />;
   };
 
   const onCreateTeamButtonClick = (): void => {

@@ -14,11 +14,10 @@ const loadTeams = createAsyncThunk(
 );
 
 const createTeam = createAsyncThunk(
-  ActionType.SET_CURRENT_TEAM,
+  ActionType.ADD_TEAM,
   async (payload: string, { dispatch }) => {
     try {
       const team = await new TeamApi().createTeam(payload);
-      dispatch(actions.setCurrentTeam(team));
       dispatch(actions.addTeam(team));
       dispatch(actions.removeCreatingError());
     } catch (err) {
@@ -56,21 +55,12 @@ const deleteTeam = createAsyncThunk(
   },
 );
 
-const loadTeam = createAsyncThunk(
-  ActionType.SET_CURRENT_TEAM,
-  async (id: string, { dispatch }) => {
-    const workspace = await new TeamApi().getTeam(id);
-    dispatch(actions.setCurrentTeam(workspace));
-  },
-);
-
 const teamsActions = {
   ...actions,
   loadTeams,
   createTeam,
   updateTeam,
   deleteTeam,
-  loadTeam,
 };
 
 export { teamsActions };

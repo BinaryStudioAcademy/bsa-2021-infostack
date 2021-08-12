@@ -1,6 +1,5 @@
 enum ActionType {
   SET_TEAMS = 'setTeams',
-  SET_CURRENT_TEAM = 'setCurrentTeam',
   ADD_TEAM = 'addTeam',
   UPDATE_TEAM = 'updateTeam',
   DELETE_TEAM = 'deleteTeam',
