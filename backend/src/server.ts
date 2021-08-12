@@ -25,7 +25,7 @@ const socketServer = createServer(app);
 
 const io = new Server(socketServer, {
   cors: {
-    origin: nodeEnv === 'production' ? 'http://localhost:3000' : url,
+    origin: nodeEnv === 'production' ? url : 'http://localhost:3000',
     methods: ['GET', 'POST'],
   },
 });
