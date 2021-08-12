@@ -15,10 +15,10 @@ export const getAllByWorkspaceId = async (
   return teams.map(mapTeamToITeam);
 };
 
-export const getTeam = async (pageId: string): Promise<ITeam> => {
+export const getTeam = async (teamId: string): Promise<ITeam> => {
   const pageRepository = getCustomRepository(TeamRepository);
-  const page = await pageRepository.findByIdWithUsers(pageId);
-  return mapTeamToITeam(page);
+  const team = await pageRepository.findByIdWithUsers(teamId);
+  return mapTeamToITeam(team);
 };
 
 export const create = async (

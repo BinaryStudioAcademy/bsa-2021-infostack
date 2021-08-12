@@ -14,21 +14,26 @@ type Props = {
   onCreate: () => void;
 };
 
-export const Container: React.FC<Props> = ({ workspaces, onItemClick, onCreate, onClickAccept, onClickDecline }) =>
+export const Container: React.FC<Props> = ({
+  workspaces,
+  onItemClick,
+  onCreate,
+  onClickAccept,
+  onClickDecline,
+}) => (
   <div className={getAllowedClasses(styles.workspacesContainer, 'py-2 w-100')}>
-    {workspaces.map((workspace: IWorkspace) => (
-      workspace.status === InviteStatus.PENDING ?
+    {workspaces.map((workspace: IWorkspace) =>
+      workspace.status === InviteStatus.PENDING ? (
         <InviteItem
           key={workspace.id}
           workspace={workspace}
           onClickAccept={onClickAccept}
           onClickDecline={onClickDecline}
-        /> :
-        <Item
-          key={workspace.id}
-          workspace={workspace}
-          onClick={onItemClick}
         />
-    ))}
+      ) : (
+        <Item key={workspace.id} workspace={workspace} onClick={onItemClick} />
+      ),
+    )}
     <CreateButton onClick={onCreate} />
-  </div>;
+  </div>
+);

@@ -1,0 +1,92 @@
+.profile-container {
+  font-size: 2.2rem;
+  padding: 2.5rem 2.5rem 1.5rem;
+  background-color: #f7f9fc;
+  height: 91vh;
+}
+
+.skill-badge {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0.75rem 0.75rem 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-container .row {
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+}
+
+.profile-container .card {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  border: 0 solid transparent;
+}
+
+.card-block-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+}
+
+.profile-page-title {
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0rem;
+  color: #495057;
+}
+
+.profile-card-title {
+  padding: 1rem 1.25rem 0.25rem 1.25rem;
+  font-size: 1.6rem;
+  text-decoration: none;
+  color: #495057;
+}
+
+.following-pages-container {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.following-pages-container a {
+  display: flex;
+  align-items: center;
+}
+
+.following-page {
+  padding: 0rem 1.25rem 0.75rem 1.25rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  font-weight: 500;
+  color: #495057;
+}
+.profile-user-title {
+  font-size: 1.6rem;
+}
+.profile-skills-title {
+  font-size: 1.6rem;
+  margin-top: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.following-page i {
+  margin-right: 1rem;
+  font-size: 1.8rem;
+  color: #3f80ea;
+}
+
+.profile-user-subtitle {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.following-page-container {
+  margin: 0;
+}
+
+.user-avatar {
+  margin-bottom: 1rem;
+  object-fit: cover;
+}

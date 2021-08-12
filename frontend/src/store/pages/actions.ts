@@ -16,6 +16,7 @@ const createPage = createAsyncThunk(
     const createPageResponse = await new PageApi().createPage(createPayload);
     dispatch(actions.createPage(createPageResponse));
     dispatch(actions.toggleSpinner());
+    return createPageResponse;
   },
 );
 
