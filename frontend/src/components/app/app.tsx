@@ -28,17 +28,14 @@ const App: React.FC = () => {
   useEffect(() => {
     if (token && isAuth) {
       history.push(AppRoute.WORKSPACES);
-      console.log('APP First');
     }
   }, []);
 
   useEffect(() => {
     if (isRefreshTokenExpired) {
       history.push(AppRoute.LOGIN);
-      console.log('APP Second');
     }
   }, [isRefreshTokenExpired]);
-  console.log('Render APP');
 
   return (
     <>

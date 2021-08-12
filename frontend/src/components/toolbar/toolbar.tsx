@@ -4,6 +4,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useEffect,
+  useHistory,
   useLocation,
   useParams,
 } from 'hooks/hooks';
@@ -13,6 +14,8 @@ import PagesList from './components/pages-list/pages-list';
 import styles from './styles.module.scss';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from './components/plus-button/plus-button-root';
+import { replaceIdParam } from 'helpers/helpers';
+import { AppRoute } from 'common/enums/enums';
 
 type Props = {
   title?: string;
@@ -23,16 +26,22 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const paramsId = useParams<{ id: string }>().id;
   const url = useLocation().pathname;
+  const history = useHistory();
 
   const pages = useAppSelector((state: RootState) => state.pages);
 
   useEffect(() => {
-    if (!pages?.pages) dispatch(pagesActions.getPagesAsync());
-  }, [pages?.pages]);
+    dispatch(pagesActions.getPagesAsync());
+  }, []);
 
   const addPage = async (): Promise<void> => {
     const payload: IPageRequest = { title: 'New Page', content: '' };
-    await dispatch(pagesActions.createPage(payload));
+    await dispatch(pagesActions.createPage(payload))
+      .unwrap()
+      .then((res) =>
+        history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute),
+      );
+
     await dispatch(pagesActions.getPagesAsync());
   };
 
@@ -45,8 +54,6 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   const SectionName: React.FC<{ name: string }> = ({ name }) => (
     <h2 className={getAllowedClasses(styles.sectionName)}>{name}</h2>
   );
-
-  console.log('Render TOOLBAR');
 
   return (
     <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">

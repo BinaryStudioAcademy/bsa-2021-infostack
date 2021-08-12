@@ -31,7 +31,6 @@ const Main: React.FC = () => {
   useEffect(() => {
     if (token && !user) {
       dispatch(authActions.loadUser());
-      console.log('MAIN First');
     }
   }, []);
 
@@ -41,15 +40,11 @@ const Main: React.FC = () => {
         dispatch(
           workspacesActions.loadWorkspace(cookies[CookieVariable.WORKSPACE_ID]),
         );
-        console.log('MAIN Second');
       } else {
         history.push(AppRoute.WORKSPACES);
-        console.log('MAIN Third');
       }
     }
   }, [currentWorkspace]);
-
-  console.log('Render MAIN');
 
   return (
     <Switch>

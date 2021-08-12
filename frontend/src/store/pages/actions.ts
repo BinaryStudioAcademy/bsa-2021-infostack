@@ -11,6 +11,7 @@ const createPage = createAsyncThunk(
     const createPageResponse = await new PageApi().createPage(createPayload);
     dispatch(actions.createPage(createPageResponse));
     dispatch(actions.toggleSpinner());
+    return createPageResponse;
   },
 );
 
@@ -35,10 +36,10 @@ const getPagesAsync = createAsyncThunk(
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
-    // dispatch(actions.toggleSpinner());
+    dispatch(actions.toggleSpinner());
     const createPageResponse = await new PageApi().getPage(getPayload);
     dispatch(actions.getPage(createPageResponse));
-    // dispatch(actions.toggleSpinner());
+    dispatch(actions.toggleSpinner());
   },
 );
 

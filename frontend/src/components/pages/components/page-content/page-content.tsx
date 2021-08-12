@@ -53,7 +53,6 @@ const PageContent: React.FC = () => {
       getPageById(paramsId);
     } else {
       dispatch(pagesActions.clearCurrentPage());
-      console.log('DELETE currentPAge in CONTENT');
       history.push(AppRoute.ROOT);
     }
   }, [paramsId]);
