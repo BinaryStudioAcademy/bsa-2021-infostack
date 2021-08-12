@@ -18,7 +18,7 @@ import styles from './styles.module.scss';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
-  const { currentPage, pages } = useAppSelector((state: RootState) => state.pages);
+  const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
 
@@ -28,8 +28,7 @@ const PageContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
 
-  const сurrentNavPage = pages?.find(page => page.id === paramsId);
-  const isPageAdmin = сurrentNavPage?.permission === PermissionType.ADMIN;
+  const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;

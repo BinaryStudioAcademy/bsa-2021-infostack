@@ -23,7 +23,7 @@ router.get(
 
 router.get(
   '/:id',
-  run(req => getPage(req.params.id)),
+  run(req => getPage(req.params.id, req.userId)),
 );
 
 router.get(

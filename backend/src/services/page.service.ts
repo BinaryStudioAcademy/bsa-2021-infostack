@@ -12,6 +12,7 @@ import { IParticipant } from '../common/interfaces/participant';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { mapPermissionstoParticipants } from '../common/mappers/page/map-permissions-to-participants';
+import { maximum } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 
 export const createPage = async (
@@ -50,37 +51,41 @@ export const createPage = async (
     option: PermissionType.ADMIN,
   });
 
-  return mapPageToIPage(page);
+  return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
 };
 
-const addPermissionField = async (
+const addPermissionField = async <T extends { id?: string }>(
   userId: string,
-  teamId: string,
-  page: IPageNav,
-): Promise<IPageNav> => {
+  teamsIds: string[],
+  page: T,
+): Promise<T> => {
   const userPermissionRepository = getCustomRepository(UserPermissionRepository);
   const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
   const userPermission = await userPermissionRepository.findByUserAndPageId(userId, page.id);
   if (userPermission) {
     return { ...page, permission: userPermission.option };
   }
-  const teamPermission = await teamPermissionRepository.findByTeamAndPageId(teamId, page.id);
-  if (teamPermission) {
-    return { ...page, permission: teamPermission.option };
+  const teamPermissions = [] as PermissionType[];
+  for (const teamId of teamsIds) {
+    const teamPermission = await teamPermissionRepository.findByTeamAndPageId(teamId, page.id);
+    teamPermissions.push(teamPermission.option);
+  }
+  if (teamPermissions.length) {
+    return { ...page, permission: maximum(teamPermissions) };
   }
   return page;
 };
 
 const addPermissions = async (
   userId: string,
-  teamId: string,
+  teamsIds: string[],
   page: IPageNav,
 ): Promise<IPageNav> => {
-  const pageWithPermissions = await addPermissionField(userId, teamId, page);
+  const pageWithPermissions = await addPermissionField<IPageNav>(userId, teamsIds, page);
   const children = page.childPages;
   const childrenWithPermissions = [] as IPageNav[];
   for (const child of children) {
-    const childWithPermissions = await addPermissions(userId, teamId, child);
+    const childWithPermissions = await addPermissions(userId, teamsIds, child);
     childrenWithPermissions.push(childWithPermissions);
   }
   return { ...pageWithPermissions, childPages: childrenWithPermissions };
@@ -92,32 +97,14 @@ export const getPages = async (
 ): Promise<IPageNav[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
-  const teamPermissionRepository = getCustomRepository(
-    TeamPermissionRepository,
-  );
-  const userPermissionRepository = getCustomRepository(
-    UserPermissionRepository,
-  );
 
-  const userTeamsIds = await userRepository.findUserTeams(userId);
-  const teamId = userTeamsIds.teams[0]?.id;
-
-  const userTeamsPermissions = await teamPermissionRepository.findByTeamId(
-    teamId,
-  );
-
-  const userPermissions = await userPermissionRepository.findByUserId(userId);
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map(team => team.id);
 
   const allPages = await pageRepository.findPages(workspaceId);
 
-  const permittedPages: Page[] = allPages.filter(
-    (page) =>
-      userTeamsPermissions.some((perm) => perm.page.id === page.id) ||
-      userPermissions.some((perm) => perm.page.id === page.id),
-  );
-
   const toBeDeleted = new Set<string>();
-  const pagesWihtChildren = permittedPages.reduce((acc, cur, _, array) => {
+  const pagesWihtChildren = allPages.reduce((acc, cur, _, array) => {
     const childPages = array.filter((page) => page.parentPageId === cur.id);
     cur.childPages = childPages;
     childPages.forEach((child) => toBeDeleted.add(child.id));
@@ -127,21 +114,28 @@ export const getPages = async (
 
   const pagesToShow = mapPagesToPagesNav(pagesWihtChildren.filter((page) => !toBeDeleted.has(page.id)));
 
-  const finalPages = [] as IPageNav[];
+  const pagesWithPermissions = [] as IPageNav[];
   for (const page of pagesToShow) {
-    const pageWithPermissions = await addPermissions(userId, teamId, page);
-    finalPages.push(pageWithPermissions);
+    const pageWithPermissions = await addPermissions(userId, teamsIds, page);
+    pagesWithPermissions.push(pageWithPermissions);
   }
+
+  const finalPages = pagesWithPermissions.filter(page => page.permission);
 
   return finalPages;
 };
 
 export const getPage = async (
   pageId: string,
+  userId: string,
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
-  return mapPageToIPage(page);
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map(team => team.id);
+  const pageWithPermission = addPermissionField<IPage>(userId, teamsIds, mapPageToIPage(page));
+  return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
 
 export const getPermissions = async (
