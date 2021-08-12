@@ -41,15 +41,18 @@ export const createPage = async (
     pageId: page.id,
   });
 
-  const userPermissionRepository = getCustomRepository(
-    UserPermissionRepository,
-  );
+  const userPermissionRepository = getCustomRepository(UserPermissionRepository);
+  await userPermissionRepository.createAndSave(user, page, PermissionType.ADMIN);
+  const usersPermissions = await userPermissionRepository.findByPageId(parentPageId);
+  for (const userPermission of usersPermissions) {
+    await userPermissionRepository.createAndSave(userPermission.user, page, userPermission.option);
+  }
 
-  await userPermissionRepository.save({
-    user,
-    page,
-    option: PermissionType.ADMIN,
-  });
+  const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
+  const teamsPermissions = await teamPermissionRepository.findByPageId(parentPageId);
+  for (const teamPermission of teamsPermissions) {
+    await teamPermissionRepository.createAndSave(teamPermission.team, page, teamPermission.option);
+  }
 
   return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
 };
