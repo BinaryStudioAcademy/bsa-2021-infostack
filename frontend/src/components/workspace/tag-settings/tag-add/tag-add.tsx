@@ -41,7 +41,7 @@ const TagAdd: React.FC = () => {
             onClick={handleAddNewTag}
             className={getAllowedClasses(styles.button)}
           >
-            <i className="bi bi-plus-lg"></i>
+            <i className="bi bi-plus-lg text-white"></i>
           </Button>
         </InputGroup>
       </Form.Group>

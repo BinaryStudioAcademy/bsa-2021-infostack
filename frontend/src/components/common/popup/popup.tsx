@@ -1,41 +1,26 @@
 import { Modal, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { IButton } from 'common/interfaces/components/button';
-import { useEffect, useRef } from 'hooks/hooks';
-import { focusOnInput } from 'helpers/dom/dom';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
+import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 type Props = {
   query: string;
   isVisible: boolean;
-  inputValue: string;
-  setPopUpText(value: string): void;
   confirmButton: IButton;
   cancelButton: IButton;
-  error: string;
+  register: UseFormRegisterReturn;
+  errors?: FieldError | undefined;
 };
 
 export const Popup: React.FC<Props> = ({
   query,
   isVisible,
-  inputValue,
-  setPopUpText,
   confirmButton,
   cancelButton,
-  error,
+  register,
+  errors,
 }) => {
-  const inputElement = useRef(null);
-
-  useEffect(() => {
-    if (isVisible) {
-      focusOnInput(inputElement.current);
-    }
-  }, [isVisible]);
-
-  const onInputChange = ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>): void => setPopUpText(target.value);
-
   return (
     <Modal show={isVisible} onHide={cancelButton.onClick}>
       <Modal.Header>
@@ -44,22 +29,24 @@ export const Popup: React.FC<Props> = ({
       <Modal.Body>
         <InputGroup>
           <FormControl
-            value={inputValue}
-            onChange={onInputChange}
-            ref={inputElement}
+            {...register}
             className={getAllowedClasses(styles.workspaceTitleInput)}
           />
         </InputGroup>
-        {error && <span className="text-danger small">{error}</span>}
+        {errors && <span className="text-danger small">{errors.message}</span>}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={cancelButton.onClick}>
+        <Button
+          variant="outline-secondary"
+          className={getAllowedClasses(styles.popupButton)}
+          onClick={cancelButton.onClick}
+        >
           {cancelButton.text}
         </Button>
         <Button
           variant="primary"
+          className={getAllowedClasses(styles.popupButton)}
           onClick={confirmButton.onClick}
-          disabled={confirmButton.disabled}
         >
           {confirmButton.text}
         </Button>
