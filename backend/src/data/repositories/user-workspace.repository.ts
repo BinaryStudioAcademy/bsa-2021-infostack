@@ -9,7 +9,9 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
       .leftJoinAndSelect('userWorkspace.workspace', 'workspace')
       .leftJoinAndSelect('userWorkspace.user', 'user')
       .where('user.id = :userId', { userId })
-      .andWhere('userWorkspace.status != :status', { status: InviteStatus.DECLINED })
+      .andWhere('userWorkspace.status != :status', {
+        status: InviteStatus.DECLINED,
+      })
       .getMany();
   }
 

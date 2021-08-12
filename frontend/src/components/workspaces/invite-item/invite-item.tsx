@@ -9,13 +9,27 @@ type Props = {
   onClickDecline(id: string): void;
 };
 
-export const InviteItem: React.FC<Props> = ({ workspace, onClickAccept, onClickDecline }) =>
+export const InviteItem: React.FC<Props> = ({
+  workspace,
+  onClickAccept,
+  onClickDecline,
+}) => (
   <Card className="d-flex shadow-sm rounded border-0">
     <Card.Body className="d-flex align-items-center justify-content-around flex-column">
-      <Card.Title className={getAllowedClasses(styles.workspaceInviteTitle)}>{ workspace.title }</Card.Title>
+      <Card.Title className={getAllowedClasses(styles.workspaceInviteTitle)}>
+        {workspace.title}
+      </Card.Title>
       <div className="d-flex w-100 mt-5 align-items-center justify-content-around">
-        <Button onClick={(): void => onClickAccept(workspace.id)}>Accept</Button>
-        <Button onClick={(): void => onClickDecline(workspace.id)} className="btn-secondary">Decline</Button>
+        <Button onClick={(): void => onClickAccept(workspace.id)}>
+          Accept
+        </Button>
+        <Button
+          onClick={(): void => onClickDecline(workspace.id)}
+          className="btn-secondary"
+        >
+          Decline
+        </Button>
       </div>
     </Card.Body>
-  </Card>;
+  </Card>
+);

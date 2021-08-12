@@ -1,3 +1,4 @@
+import { IParticipant } from 'common/interfaces/participant';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import {
   IPage,
@@ -41,12 +42,42 @@ class PageApi {
     });
   }
 
+  public async getPermissions(id: string): Promise<IParticipant[]> {
+    return this.http.load(`${this.BASE}/${id}/permissions`, {
+      method: HttpMethod.GET,
+    });
+  }
+
   public async getPagesFollowedByUser(
     userId: string | undefined,
   ): Promise<IPageFollowed[]> {
     return this.http.load(`${this.BASE}/following/${userId}`, {
       method: HttpMethod.GET,
     });
+  }
+
+  public async setPermission(
+    id: string,
+    payload: IParticipant,
+  ): Promise<IParticipant> {
+    return this.http.load(`${this.BASE}/${id}/permissions`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  public async deletePermission(
+    id: string,
+    participantType: string,
+    participantId: string,
+  ): Promise<void> {
+    return this.http.load(
+      `${this.BASE}/${id}/permissions/${participantType}/${participantId}`,
+      {
+        method: HttpMethod.DELETE,
+      },
+    );
   }
 
   public async followPage(pageId: string | undefined): Promise<IPage[]> {

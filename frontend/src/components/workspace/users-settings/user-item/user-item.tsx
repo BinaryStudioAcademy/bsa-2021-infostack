@@ -5,7 +5,12 @@ import { Teams } from './teams/teams';
 
 interface IUserItemProps extends IWorkspaceUser {}
 
-const UserItem: React.FC<IUserItemProps> = ({ fullName, role, teams, status }) => {
+const UserItem: React.FC<IUserItemProps> = ({
+  fullName,
+  role,
+  teams,
+  status,
+}) => {
   return (
     <tr>
       <td>{fullName}</td>
