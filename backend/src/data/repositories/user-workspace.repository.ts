@@ -1,13 +1,16 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { InviteStatus } from 'infostack-shared';
 import { UserWorkspace } from '../entities/user-workspace';
 
 @EntityRepository(UserWorkspace)
 class UserWorkspaceRepository extends Repository<UserWorkspace> {
   public findUserWorkspaces(userId: string): Promise<UserWorkspace[]> {
-    return this.find({
-      relations: ['workspace', 'user'],
-      where: { user: { id: userId } },
-    });
+    return this.createQueryBuilder('userWorkspace')
+      .leftJoinAndSelect('userWorkspace.workspace', 'workspace')
+      .leftJoinAndSelect('userWorkspace.user', 'user')
+      .where('user.id = :userId', { userId })
+      .andWhere('userWorkspace.status != :status', { status: InviteStatus.DECLINED })
+      .getMany();
   }
 
   public findByUserIdAndWorkspaceId(

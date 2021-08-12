@@ -10,12 +10,7 @@ const PagesList: React.FC<Props> = ({ pages }) => {
     <>
       {pages &&
         pages.map(({ title, id, childPages }) => (
-          <PageItem
-            id={id}
-            key={id}
-            title={title}
-            childPages={childPages}
-          />
+          <PageItem id={id} key={id} title={title} childPages={childPages} />
         ))}
     </>
   );

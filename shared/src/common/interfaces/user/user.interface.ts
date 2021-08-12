@@ -1,3 +1,4 @@
+import { IPage } from '../pages/page.interface';
 import { ISkill } from '../skill/skill.interface';
 
 interface IUser {
@@ -7,6 +8,7 @@ interface IUser {
   title?: string;
   skills?: ISkill[];
   avatar: string;
+  followingPages?: IPage[];
 }
 
 export type { IUser };

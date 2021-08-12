@@ -22,39 +22,43 @@ export class Page extends AbstractEntity {
   @Column()
   readonly authorId: string;
 
-  @ManyToOne(() => User, user => user.pages)
+  @ManyToOne(() => User, (user) => user.pages)
   author: User;
 
   @RelationId((page: Page) => page.workspace)
   @Column()
   readonly workspaceId: string;
 
-  @ManyToOne(() => Workspace, workspace => workspace.pages)
+  @ManyToOne(() => Workspace, (workspace) => workspace.pages)
   workspace: Workspace;
 
   @RelationId((page: Page) => page.parentPage)
   @Column({ nullable: true })
   readonly parentPageId: string;
 
-  @ManyToOne(() => Page, page => page.childPages)
+  @ManyToOne(() => Page, (page) => page.childPages)
   parentPage: Page;
 
-  @OneToMany(() => Page, page => page.parentPage)
+  @OneToMany(() => Page, (page) => page.parentPage)
   childPages: Page[];
 
-  @OneToMany(() => UserPermission, userPermission => userPermission.page)
+  @OneToMany(() => UserPermission, (userPermission) => userPermission.page)
   userPermissions: UserPermission[];
 
-  @OneToMany(() => TeamPermission, teamPermission => teamPermission.page)
+  @OneToMany(() => TeamPermission, (teamPermission) => teamPermission.page)
   teamPermissions: TeamPermission[];
 
-  @ManyToMany(() => Tag, tag => tag.pages, { cascade: true })
+  @ManyToMany(() => Tag, (tag) => tag.pages, { cascade: true })
   @JoinTable({ name: 'page_tag' })
   tags: Tag[];
 
-  @OneToMany(() => PageContent, PageContent => PageContent.page)
+  @ManyToMany(() => User, (user) => user.followingPages, { cascade: true })
+  @JoinTable({ name: 'user_followedPages' })
+  followingUsers: User[];
+
+  @OneToMany(() => PageContent, (PageContent) => PageContent.page)
   pageContents: PageContent[];
 
-  @OneToMany(() => Comment, Comment => Comment.page)
+  @OneToMany(() => Comment, (Comment) => Comment.page)
   comments: Comment[];
 }

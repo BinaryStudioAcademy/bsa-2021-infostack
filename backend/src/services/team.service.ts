@@ -15,16 +15,15 @@ export const getAllByWorkspaceId = async (
   return teams.map(mapTeamToITeam);
 };
 
-export const getTeam = async (
-  pageId: string,
-): Promise<ITeam> => {
+export const getTeam = async (teamId: string): Promise<ITeam> => {
   const pageRepository = getCustomRepository(TeamRepository);
-  const page = await pageRepository.findByIdWithUsers(pageId);
-  return mapTeamToITeam(page);
+  const team = await pageRepository.findByIdWithUsers(teamId);
+  return mapTeamToITeam(team);
 };
 
 export const create = async (
   userId: string,
+  workspaceId: string,
   newTeam: ITeamCreation,
 ): Promise<ITeam> => {
   if (!newTeam.name) {
@@ -42,7 +41,7 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  await teamRepository.save(team);
+  await teamRepository.save({ workspaceId, name: team.name });
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findUserTeams(userId);
   user.teams.push(team);
@@ -53,7 +52,7 @@ export const create = async (
 
 export const updateNameById = async (
   teamId: string,
-  newName: string ,
+  newName: string,
 ): Promise<ITeam> => {
   if (!newName) {
     throw new HttpError({
@@ -75,9 +74,7 @@ export const updateNameById = async (
   return mapTeamToITeam(team);
 };
 
-export const deleteById = async (
-  id: string,
-): Promise<ITeam> => {
+export const deleteById = async (id: string): Promise<ITeam> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const teamToRemove = await teamRepository.findByIdWithUsers(id);
   const team = await teamRepository.remove(teamToRemove);

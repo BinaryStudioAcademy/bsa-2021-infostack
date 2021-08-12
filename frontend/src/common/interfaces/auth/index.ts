@@ -4,6 +4,7 @@ export type {
   ITokens,
   IRefreshToken,
   ISetPasswordValidation,
+  IUpdatePasswordAndFullName,
   ILogin,
   IRegister,
 } from 'infostack-shared/common/interfaces';

@@ -1,3 +1,4 @@
+import { IUser } from '../user/user.interface';
 import { IPageContent } from './page-content.interface';
 
 interface IPage {
@@ -6,6 +7,7 @@ interface IPage {
   parentPageId?: string;
   childPages?: IPage[];
   pageContents: IPageContent[];
+  followingUsers?: IUser[];
 }
 
 export type { IPage };

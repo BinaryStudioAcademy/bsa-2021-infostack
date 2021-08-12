@@ -1,9 +1,9 @@
 import { Spinner, Card } from 'react-bootstrap';
-import { ITeam } from 'common/interfaces/team';
+import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { teamsActions } from 'store/teams';
 import Item from './item/item';
 import CreateButton from './create-button/create-button';
-import { Popup } from '../../common/popup/popup';
+import { Popup } from './popup/popup';
 import {
   useState,
   useEffect,
@@ -14,11 +14,10 @@ import {
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
-  const { teams, creatingError } = useAppSelector((state) => state.teams);
+  const { teams } = useAppSelector((state) => state.teams);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [popUpText, setPopUpText] = useState('');
 
   useEffect(() => {
     dispatch(teamsActions.loadTeams());
@@ -38,13 +37,10 @@ const TeamSettings: React.FC = () => {
 
   const handleCreationCancel = (): void => {
     setIsPopUpVisible(false);
-    setPopUpText('');
   };
 
-  const handleCreationConfirm = (): void => {
-    if (popUpText) {
-      dispatch(teamsActions.createTeam(popUpText));
-    }
+  const handleCreation = async (data: ITeamCreation): Promise<void> => {
+    dispatch(teamsActions.createTeam(data.name));
   };
 
   return (
@@ -57,34 +53,28 @@ const TeamSettings: React.FC = () => {
       </Card.Header>
       <Card.Body className="cardBody">
         <div
-          className={
-            `teams text-secondary d-flex flex-column align-items-start p-4${!teams ? ' vh-91' : ''}`
-          }
+          className={`teams text-secondary d-flex flex-column align-items-start p-4${
+            !teams ? ' vh-91' : ''
+          }`}
         >
-          {!teams && <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
-            <Spinner animation="border" variant="secondary" />
-          </div>
-          }
-          {
-            teams && <div className="teams-container py-2 w-100">
-              {teams.map((team: ITeam) => renderTeamItem(team))}
+          {!teams && (
+            <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
+              <Spinner animation="border" variant="secondary" />
             </div>
-          }
+          )}
+          {teams &&
+            (teams.length === 0 ? (
+              <div>There is no teams in this workspace. Start adding</div>
+            ) : (
+              <div className="teams-container py-2 w-100">
+                {teams.map((team: ITeam) => renderTeamItem(team))}
+              </div>
+            ))}
           <Popup
-            query="Enter name of team:"
-            isVisible={isPopUpVisible}
-            inputValue={popUpText}
-            setPopUpText={setPopUpText}
-            error={creatingError}
-            cancelButton={{
-              text: 'Cancel',
-              onClick: handleCreationCancel,
-            }}
-            confirmButton={{
-              text: 'Save',
-              onClick: handleCreationConfirm,
-              disabled: !popUpText,
-            }}
+            title="Enter name of team:"
+            showPopup={isPopUpVisible}
+            onPopupClose={handleCreationCancel}
+            handleFunction={handleCreation}
           />
         </div>
       </Card.Body>

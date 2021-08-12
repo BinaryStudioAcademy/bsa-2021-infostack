@@ -1,14 +1,34 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { PageContent } from '../entities/page-content';
 import { User } from '../entities/user';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
   public findByEmail(email: string): Promise<User> {
-    return this.findOne({ email }, { relations: ['skills'] });
+    return this.findOne({ email }, { relations: ['skills', 'followingPages'] });
   }
 
-  public findById(id: string):Promise<User> {
-    return this.findOne({ id }, { relations: ['skills'] });
+  public findById(id: string): Promise<User> {
+    return this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.skills', 'skills')
+      .leftJoinAndSelect('user.followingPages', 'pages')
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('MAX("content"."createdAt")', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = pages.id',
+      )
+      .leftJoinAndSelect(
+        'pages.pageContents',
+        'pageContents',
+        '"pageContents"."createdAt" = "last_version"."created_at"',
+      )
+      .where('user.id = :id', { id })
+      .getOne();
   }
 
   public findUserTeams(userId: string): Promise<User> {
