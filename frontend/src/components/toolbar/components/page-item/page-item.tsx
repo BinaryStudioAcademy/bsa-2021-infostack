@@ -65,10 +65,11 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
           styles.navbarBrand,
           styles.navbarLinkInsideSection,
           'd-flex',
+          'w-75',
           `${isSelected}`,
         )}
       >
-        {title}
+        <div className="text-truncate">{title}</div>
       </Link>
     );
   };
