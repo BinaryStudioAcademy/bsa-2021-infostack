@@ -14,8 +14,9 @@ import {
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/pages';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { Popup } from './components/popup/popup';
+import { Popup } from '../popup/popup';
 import { CommentSection } from '../comment-section/comment-section';
+import ModalComponent from 'components/modal/modal';
 import { Spinner } from 'components/common/spinner/spinner';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
@@ -34,6 +35,7 @@ const PageContent: React.FC = () => {
   const content = currentPage?.pageContents[0]?.content;
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -71,8 +73,13 @@ const PageContent: React.FC = () => {
     setIsPopUpVisible(false);
   };
 
+  const handleIviteCancel = (): void => {
+    setIsModalVisible(false);
+  };
+
   const handleAssignConfirm = (): void => {
     setIsPopUpVisible(false);
+    setIsModalVisible(true);
   };
 
   const handleEditing = (): void => {
@@ -122,7 +129,7 @@ const PageContent: React.FC = () => {
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
                   {isPageAdmin && (
-                    <Button onClick={onAssign} className="ms-3">
+                    <Button onClick={onAssign} className="me-3">
                       Assign permissions
                     </Button>
                   )}
@@ -168,10 +175,15 @@ const PageContent: React.FC = () => {
             text: 'Cancel',
             onClick: handleAssignCancel,
           }}
-          confirmButton={{
+          inviteButton={{
             text: 'Add user',
             onClick: handleAssignConfirm,
           }}
+        />
+        <ModalComponent
+          onModalClose={handleIviteCancel}
+          title={'Invite to Workspace'}
+          showModal={isModalVisible}
         />
       </div>
     );

@@ -13,7 +13,12 @@ type Props = {
   onChange(id: string, role: string): void;
 };
 
-const Item: React.FC<Props> = ({ participant, options, onDelete, onChange }) => {
+const Item: React.FC<Props> = ({
+  participant,
+  options,
+  onDelete,
+  onChange,
+}) => {
   const selectField = useRef(null);
 
   const onRoleChange = (selectedOption: IOption | null): void => {
@@ -23,7 +28,8 @@ const Item: React.FC<Props> = ({ participant, options, onDelete, onChange }) => 
     }
   };
 
-  const onParticipantDelete = (): void => onDelete(participant.id, participant.type);
+  const onParticipantDelete = (): void =>
+    onDelete(participant.id, participant.type);
 
   return (
     <tr>
