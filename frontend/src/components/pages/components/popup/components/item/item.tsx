@@ -44,7 +44,6 @@ const Item: React.FC<Props> = ({
           onChange={onRoleChange}
           value={{ label: participant.role, value: participant.role }}
           options={options}
-          // menuPortalTarget={selectField.current}
         />
       </td>
       <td>
