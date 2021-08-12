@@ -11,7 +11,8 @@ const CreateButton: React.FC<Props> = ({ onClick }) => (
     className="create-team-button float-right"
     onClick={onClick}
   >
-    + New team
+    <i className="bi bi-plus-lg"></i>
+    New team
   </Button>
 );
 

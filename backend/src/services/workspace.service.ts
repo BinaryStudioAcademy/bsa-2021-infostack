@@ -174,5 +174,5 @@ export const create = async (
     role: RoleType.ADMIN,
   });
   await userWorkspaceRepository.save(userWorkspace);
-  return { id: workspace.id, title: workspace.name };
+  return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
 };
