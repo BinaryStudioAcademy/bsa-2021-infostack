@@ -10,6 +10,7 @@ import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from '../plus-button/plus-button-root';
 import { RootState } from 'common/types/types';
 import { useState } from 'react';
+import { replaceIdParam } from 'helpers/helpers';
 
 type Props = {
   title?: string;
@@ -45,12 +46,9 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const isSelected = id === currentPage?.id ? styles.selectedPage : '';
 
   const LinkWithTitle: React.FC<LinkProps> = ({ id }) => {
-
     return (
       <Link
-        to={
-          `${AppRoute.PAGE.slice(0, AppRoute.PAGE.length - 3)}${id}` as AppRoute
-        }
+        to={replaceIdParam(AppRoute.PAGE, id || '') as AppRoute}
         className={getAllowedClasses(
           styles.navbarBrand,
           styles.navbarLinkInsideSection,
@@ -65,9 +63,13 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
 
   return (
     <>
-      <Accordion flush key={id} activeKey={activeKey} onSelect={(): void => setActiveKey(undefined)}>
+      <Accordion
+        flush
+        key={id}
+        activeKey={activeKey}
+        onSelect={(): void => setActiveKey(undefined)}
+      >
         <Accordion.Item eventKey={id as string} className="bg-transparent">
-
           {childPages && childPages.length ? (
             <>
               <Accordion.Header className={styles.accordionHeader}>

@@ -19,10 +19,16 @@ const { reducer, actions } = createSlice({
   name: ReducerName.WORKSPACES,
   initialState,
   reducers: {
-    [ActionType.SET_WORKSPACES]: (state, action: PayloadAction<IWorkspace[]>) => {
+    [ActionType.SET_WORKSPACES]: (
+      state,
+      action: PayloadAction<IWorkspace[]>,
+    ) => {
       state.workspaces = action.payload;
     },
-    [ActionType.SET_CURRENT_WORKSPACE]: (state, action: PayloadAction<IWorkspace>) => {
+    [ActionType.SET_CURRENT_WORKSPACE]: (
+      state,
+      action: PayloadAction<IWorkspace>,
+    ) => {
       state.currentWorkspace = action.payload;
     },
     [ActionType.REMOVE_CURREND_WORKSPACE]: (state) => {

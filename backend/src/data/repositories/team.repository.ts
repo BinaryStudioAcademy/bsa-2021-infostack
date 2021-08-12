@@ -12,20 +12,15 @@ class TeamRepository extends Repository<Team> {
       where: {
         workspaceId: workspaceId,
       },
-      relations: [
-        'users',
-      ],
-    },
-    );
+      relations: ['users'],
+    });
   }
 
   public findByIdWithUsers(id: string): Promise<Team> {
     return this.findOne(
       { id },
       {
-        relations: [
-          'users',
-        ],
+        relations: ['users'],
       },
     );
   }

@@ -60,7 +60,6 @@ const SetPassword: React.FC = () => {
         register={register('password')}
         errors={errors.password}
       />
-
       <FormField
         label="Repeat password"
         type="password"

@@ -1,5 +1,6 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
-import { Container, Popup, Spinner } from './components';
+import { Container } from './components';
+import { Spinner, Popup } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { workspacesActions } from 'store/actions';
 import {
@@ -10,16 +11,21 @@ import {
   useCookies,
   useHistory,
 } from 'hooks/hooks';
+import { WorkspaceApi } from 'services';
 
 const Workspaces: React.FC = () => {
-  const { workspaces, currentWorkspace, creatingError } = useAppSelector((state) => state.workspaces);
+  const { workspaces, currentWorkspace, creatingError } = useAppSelector(
+    (state) => state.workspaces,
+  );
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [popUpText, setPopUpText] = useState('');
   const [isWorkspaceSelected, setIsWorkspaceSelected] = useState(false);
 
-  const [cookies, setCookie, removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    CookieVariable.WORKSPACE_ID,
+  ]);
 
   const history = useHistory();
 
@@ -35,9 +41,17 @@ const Workspaces: React.FC = () => {
     dispatch(workspacesActions.loadWorkspace(id));
     setIsWorkspaceSelected(true);
   };
+  const handleInviteAccepted = async (id: string): Promise<void> => {
+    await new WorkspaceApi().updateInviteStatusAccepted(id);
+    dispatch(workspacesActions.loadWorkspace(id));
+    setIsWorkspaceSelected(true);
+  };
+  const handleInviteDeclined = async (id: string): Promise<void> => {
+    await new WorkspaceApi().updateInviteStatusDeclined(id);
+    dispatch(workspacesActions.loadWorkspaces());
+  };
 
-  const handleCreate = (): void =>
-    setIsPopUpVisible(true);
+  const handleCreate = (): void => setIsPopUpVisible(true);
 
   const handleCreationCancel = (): void => {
     setIsPopUpVisible(false);
@@ -48,7 +62,9 @@ const Workspaces: React.FC = () => {
     if (isWorkspaceSelected) {
       if (currentWorkspace) {
         handleCreationCancel();
-        setCookie(CookieVariable.WORKSPACE_ID, currentWorkspace.id, { path: '/' });
+        setCookie(CookieVariable.WORKSPACE_ID, currentWorkspace.id, {
+          path: '/',
+        });
         history.push(AppRoute.ROOT);
       } else if (cookies[CookieVariable.WORKSPACE_ID]) {
         removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
@@ -67,14 +83,17 @@ const Workspaces: React.FC = () => {
     <div className="bg-light">
       <BootstrapContainer className="position-relative d-flex flex-column align-items-center pt-5 vh-100">
         <h1 className="h3 mb-5">Select the workspace</h1>
-        {workspaces
-          ? <Container
+        {workspaces ? (
+          <Container
             workspaces={workspaces}
             onItemClick={handleItemClick}
             onCreate={handleCreate}
+            onClickAccept={handleInviteAccepted}
+            onClickDecline={handleInviteDeclined}
           />
-          : <Spinner />
-        }
+        ) : (
+          <Spinner />
+        )}
         <Popup
           query="Enter name of workspace:"
           isVisible={isPopUpVisible}

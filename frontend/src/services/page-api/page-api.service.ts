@@ -1,7 +1,14 @@
 import { IParticipant } from 'common/interfaces/participant';
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { IPage, IPageRequest, IPageNav } from 'common/interfaces/pages';
+import {
+  IPage,
+  IPageRequest,
+  IPageFollowed,
+  IEditPageContent,
+  IPageNav,
+} from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
+import { IPageContributor } from 'common/interfaces/pages';
 
 class PageApi {
   private http = http;
@@ -41,7 +48,18 @@ class PageApi {
     });
   }
 
-  public async setPermission(id: string, payload: IParticipant): Promise<IParticipant> {
+  public async getPagesFollowedByUser(
+    userId: string | undefined,
+  ): Promise<IPageFollowed[]> {
+    return this.http.load(`${this.BASE}/following/${userId}`, {
+      method: HttpMethod.GET,
+    });
+  }
+
+  public async setPermission(
+    id: string,
+    payload: IParticipant,
+  ): Promise<IParticipant> {
     return this.http.load(`${this.BASE}/${id}/permissions`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -49,12 +67,42 @@ class PageApi {
     });
   }
 
-  public async deletePermission(id: string, participantType: string, participantId: string): Promise<void> {
-    return this.http.load(`${this.BASE}/${id}/permissions/${participantType}/${participantId}`, {
-      method: HttpMethod.DELETE,
+  public async deletePermission(
+    id: string,
+    participantType: string,
+    participantId: string,
+  ): Promise<void> {
+    return this.http.load(
+      `${this.BASE}/${id}/permissions/${participantType}/${participantId}`,
+      {
+        method: HttpMethod.DELETE,
+      },
+    );
+  }
+
+  public async followPage(pageId: string | undefined): Promise<IPage[]> {
+    return this.http.load(`${this.BASE}/follow/${pageId}`, {
+      method: HttpMethod.POST,
     });
   }
 
+  public async unfollowPage(pageId: string | undefined): Promise<IPage[]> {
+    return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
+      method: HttpMethod.POST,
+    });
+  }
+
+  public async editPageContent(payload: IEditPageContent): Promise<IPage> {
+    return this.http.load(`${this.BASE}/${payload.pageId}/version`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  public async getPageContributors(id: string): Promise<IPageContributor[]> {
+    return this.http.load(`${this.BASE}/${id}/contributors`);
+  }
 }
 
 export { PageApi };

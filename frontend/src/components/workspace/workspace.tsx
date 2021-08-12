@@ -9,7 +9,6 @@ import IntegrationSettings from './integration-settings/integration-settings';
 import WorkspaceProfileSettings from './profile-settings/profile-settings';
 
 const Workspace: React.FC = () => {
-
   return (
     <div className="settings-container">
       <h1 className="title">Settings</h1>

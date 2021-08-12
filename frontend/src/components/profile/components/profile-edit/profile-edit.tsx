@@ -1,6 +1,7 @@
 import Avatar from 'react-avatar';
 import CreatableSelect from 'react-select/creatable';
 import { OptionsType } from 'react-select';
+import { CSSObject } from '@emotion/serialize';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import {
   useState,
@@ -13,6 +14,10 @@ import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-c
 import { authActions } from 'store/actions';
 import { UserApi, SkillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
+import { IUserAccount } from 'common/interfaces/user';
+import { useForm } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
+import { accountInfoSchema } from 'validations/account-info-schema';
 import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
@@ -51,6 +56,18 @@ const ProfileEdit: React.FC = () => {
       setAllSkills(skills);
     });
   }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUserAccount>({
+    resolver: yupResolver(accountInfoSchema),
+    defaultValues: {
+      fullName: user?.fullName,
+      title: user?.title,
+    },
+  });
 
   const handleRemove = (): void => {
     if (user) {
@@ -144,32 +161,38 @@ const ProfileEdit: React.FC = () => {
 
   const handleInputChange = (inputValue: OptionsType<ISkill>): void => {
     const lastSkill = inputValue[inputValue.length - 1];
-    const lastSkillName = lastSkill.value ?? '';
 
-    if (lastSkill.__isNew__) {
-      skillApi.createSkill(lastSkillName).then((response: ISkill) => {
-        setAllSkills((oldSkills) => {
-          const newSkills = [...oldSkills];
-          inputValue[inputValue.length - 1].value = response.id;
-          const addedSkill = {
-            value: response.id,
-            label: response.name,
-          } as ISkill;
-          newSkills[newSkills.length] = addedSkill;
+    if (lastSkill) {
+      const lastSkillName = lastSkill.value ?? '';
 
-          return newSkills;
+      if (lastSkill.__isNew__) {
+        skillApi.createSkill(lastSkillName).then((response: ISkill) => {
+          setAllSkills((oldSkills) => {
+            const newSkills = [...oldSkills];
+            inputValue[inputValue.length - 1].value = response.id;
+            const addedSkill = {
+              value: response.id,
+              label: response.name,
+            } as ISkill;
+            newSkills[newSkills.length] = addedSkill;
+
+            return newSkills;
+          });
         });
-      });
-    }
-
-    const result = inputValue.map((item: ISkill) => {
-      if (item.__isNew__) {
-        item.value = lastSkill.value;
       }
 
-      return item;
-    });
-    setUserSkills(result);
+      const result = inputValue.map((item: ISkill) => {
+        if (item.__isNew__) {
+          item.value = lastSkill.value;
+        }
+
+        return item;
+      });
+
+      setUserSkills(result);
+    } else {
+      setUserSkills([]);
+    }
   };
 
   return (
@@ -206,12 +229,18 @@ const ProfileEdit: React.FC = () => {
                   Full name
                 </Form.Label>
                 <Form.Control
+                  {...register('fullName')}
                   className={getAllowedClasses(styles.cardInput)}
                   type="text"
                   placeholder="Full name"
-                  value={userFullName}
                   onChange={(e): void => setUserFullName(e.target.value)}
+                  isInvalid={!!errors.fullName}
                 />
+                {errors.fullName && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors?.fullName.message}
+                  </Form.Control.Feedback>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupTitle">
                 <Form.Label
@@ -220,12 +249,18 @@ const ProfileEdit: React.FC = () => {
                   Title
                 </Form.Label>
                 <Form.Control
+                  {...register('title')}
                   className={getAllowedClasses(styles.cardInput)}
                   type="text"
                   placeholder="Title"
-                  value={userTitle}
                   onChange={(e): void => setUserTitle(e.target.value)}
+                  isInvalid={!!errors.title}
                 />
+                {errors.title && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors?.title.message}
+                  </Form.Control.Feedback>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupSelect">
                 <Form.Label
@@ -239,6 +274,12 @@ const ProfileEdit: React.FC = () => {
                     onChange={handleInputChange}
                     value={userSkills}
                     options={allSkills}
+                    styles={{
+                      placeholder: (styles): CSSObject => ({
+                        ...styles,
+                        fontSize: '1.34rem',
+                      }),
+                    }}
                   />
                 }
               </Form.Group>
@@ -303,7 +344,7 @@ const ProfileEdit: React.FC = () => {
           variant="primary"
           className={getAllowedClasses(styles.cardButton)}
           size="sm"
-          onClick={!isUploading ? handleSaveChanges : undefined}
+          onClick={!isUploading ? handleSubmit(handleSaveChanges) : undefined}
           disabled={isUploading}
         >
           {isUploading ? 'Uploading…' : 'Save changes'}

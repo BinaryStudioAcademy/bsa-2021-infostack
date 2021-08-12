@@ -15,7 +15,6 @@ class TagRepository extends Repository<Tag> {
       .orderBy('tag.name', 'ASC')
       .getMany();
   }
-
 }
 
 export default TagRepository;

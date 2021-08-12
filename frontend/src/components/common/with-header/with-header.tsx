@@ -13,7 +13,7 @@ const WithHeader = (Component: React.FC): React.FC => {
           <Header />
         </div>
         <div className={styles.toolbar}>
-          <Toolbar title={currentWorkspace?.title}/>
+          <Toolbar title={currentWorkspace?.title} />
         </div>
         <div className={styles.content}>
           <Component />

@@ -28,10 +28,7 @@ class WorkspaceRepository extends Repository<Workspace> {
     return this.findOne(
       { id },
       {
-        relations: [
-          'teams',
-          'teams.users',
-        ],
+        relations: ['teams', 'teams.users'],
       },
     );
   }
