@@ -43,6 +43,4 @@ const workspacesActions = {
   createWorkspace,
 };
 
-export {
-  workspacesActions,
-};
+export { workspacesActions };

@@ -10,8 +10,16 @@ class UserApi {
     return await this.http.load(`${this.BASE}/me/profile`);
   }
 
-  public async getUserInfo(id: string | undefined): Promise<IUserWithTokens> {
+  public async getUserInfo(id: string | undefined): Promise<IUser> {
     return await this.http.load(`${this.BASE}/${id}/profile`);
+  }
+
+  public checkIfUserRegisteredOnInvite(
+    token: string | undefined,
+  ): Promise<string> {
+    return this.http.load(
+      `${this.BASE}/check-user-registration?token=${token}`,
+    );
   }
 
   public async update(

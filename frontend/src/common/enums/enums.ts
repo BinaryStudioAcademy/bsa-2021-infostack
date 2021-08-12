@@ -5,3 +5,4 @@ export { CookieVariable } from './cookies/cookies';
 export { LocalStorageVariable } from './local-starage/local-storage';
 export { RoleType } from './roles/roles';
 export { EmitterEvents } from './emitter/emitter';
+export * from './socket';

@@ -26,27 +26,30 @@ export class User extends AbstractEntity {
   @Column({ length: 200, nullable: true })
   title: string;
 
-  @OneToMany(() => RefreshToken, RefreshToken => RefreshToken.user)
+  @OneToMany(() => RefreshToken, (RefreshToken) => RefreshToken.user)
   refreshTokens: RefreshToken[];
 
-  @OneToMany(() => UserWorkspace, userWorkspace => userWorkspace.user)
+  @OneToMany(() => UserWorkspace, (userWorkspace) => userWorkspace.user)
   userWorkspaces!: UserWorkspace[];
 
-  @ManyToMany(() => Team, team => team.users)
+  @ManyToMany(() => Team, (team) => team.users)
   teams: Team[];
 
-  @ManyToMany(() => Skill, skill => skill.users)
+  @ManyToMany(() => Skill, (skill) => skill.users)
   skills: Skill[];
 
-  @OneToMany(() => Page, Page => Page.author)
+  @OneToMany(() => Page, (Page) => Page.author)
   pages: Page[];
 
-  @OneToMany(() => UserPermission, userPermission => userPermission.user)
+  @ManyToMany(() => Page, (page) => page.followingUsers)
+  followingPages: Page[];
+
+  @OneToMany(() => UserPermission, (userPermission) => userPermission.user)
   userPermissions!: UserPermission[];
 
-  @OneToMany(() => PageContent, PageContent => PageContent.author)
+  @OneToMany(() => PageContent, (PageContent) => PageContent.author)
   pageContents: PageContent[];
 
-  @OneToMany(() => Comment, Comment => Comment.author)
+  @OneToMany(() => Comment, (Comment) => Comment.author)
   comments: Comment[];
 }

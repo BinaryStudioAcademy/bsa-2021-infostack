@@ -8,11 +8,16 @@ import { HttpErrorMessage } from '../common/enums/http-error-message';
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITag[]> => {
-  const tags = await getCustomRepository(TagRepository).findAllByWorkspaceId(workspaceId);
+  const tags = await getCustomRepository(TagRepository).findAllByWorkspaceId(
+    workspaceId,
+  );
   return tags;
 };
 
-export const create = async (workspaceId: string, newTag: ITagCreation): Promise<ITag> => {
+export const create = async (
+  workspaceId: string,
+  newTag: ITagCreation,
+): Promise<ITag> => {
   const tagRepository = getCustomRepository(TagRepository);
   if (!newTag.name) {
     throw new HttpError({
@@ -27,7 +32,8 @@ export const create = async (workspaceId: string, newTag: ITagCreation): Promise
       message: HttpErrorMessage.TAG_IN_WORKSPACE_ALREADY_EXISTS,
     });
   }
-  const { id, name } = await tagRepository.save(newTag);
+  const tag = { name: newTag.name, workspaceId };
+  const { id, name } = await tagRepository.save(tag);
   return { id, name };
 };
 

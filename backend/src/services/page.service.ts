@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
-import { PageContentRepository } from '../data/repositories/page-content.repository';
+import PageContentRepository from '../data/repositories/page-content.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import {
@@ -10,6 +10,8 @@ import {
   IPageNav,
   IPage,
   IPageContributor,
+  IPageFollowed,
+  IEditPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
@@ -77,7 +79,7 @@ export const getPages = async (
 
   const userPermissions = await userPermissionRepository.findById(userId);
 
-  const allPages = await pageRepository.findPages(workspaceId);
+  const allPages = await pageRepository.findPagesWithLastContent(workspaceId);
 
   const permittedPages: Page[] = allPages.filter(
     (page) =>
@@ -100,7 +102,33 @@ export const getPages = async (
 
 export const getPage = async (pageId: string): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.findByIdWithContents(pageId);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  return mapPageToIPage(page);
+};
+
+export const updateContent = async (body: IEditPageContent): Promise<IPage> => {
+  const pageId = body.pageId;
+  const pageRepository = getCustomRepository(PageRepository);
+  const pageToUpdate = await pageRepository.findByIdWithLastContent(pageId);
+
+  const contentPageId = pageToUpdate.pageContents[0].id;
+  const pageContentRepository = getCustomRepository(PageContentRepository);
+  const contentToUpdate = await pageContentRepository.findById(contentPageId);
+
+  const oldContent = pageToUpdate.pageContents[0].content;
+  const oldTitle = pageToUpdate.pageContents[0].title;
+
+  contentToUpdate.content = body.content || oldContent;
+  contentToUpdate.title = body.title || oldTitle;
+
+  await pageContentRepository.save({
+    title: contentToUpdate.title,
+    content: contentToUpdate.content,
+    authorId: contentToUpdate.authorId,
+    pageId: pageId,
+  });
+
+  const page = await pageRepository.findByIdWithLastContent(pageId);
   return mapPageToIPage(page);
 };
 
@@ -111,4 +139,57 @@ export const getContributors = async (
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
   return mapPageToContributors(page);
+};
+
+export const getPagesFollowedByUser = async (
+  userId: string,
+): Promise<IPageFollowed[]> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const { followingPages } = await userRepository.findById(userId);
+  if (followingPages.length > 0) {
+    const pages = followingPages.map((page) => {
+      return {
+        id: page.id,
+        title: page.pageContents[0].title,
+      };
+    });
+
+    return pages;
+  } else {
+    return [];
+  }
+};
+
+export const followPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const page = await pageRepository.findById(pageId);
+  page.followingUsers.push(user);
+  user.followingPages.push(page);
+  await userRepository.save(user);
+  await pageRepository.save(page);
+};
+
+export const unfollowPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const page = await pageRepository.findById(pageId);
+  const newFollowingUsers = page.followingUsers.filter(
+    (user) => user.id !== userId,
+  );
+  const newFollowingPages = user.followingPages.filter(
+    (page) => page.id !== pageId,
+  );
+  page.followingUsers = newFollowingUsers;
+  user.followingPages = newFollowingPages;
+  await userRepository.save(user);
+  await pageRepository.save(page);
 };
