@@ -5,7 +5,7 @@ import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import PageContentRepository from '../data/repositories/page-content.repository';
-import { PermissionType } from 'infostack-shared/common/enums';
+import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
 import { IPageRequest, IPageNav, IPage } from '../common/interfaces/page';
 import { IParticipant } from '../common/interfaces/participant';
@@ -53,6 +53,39 @@ export const createPage = async (
   return mapPageToIPage(page);
 };
 
+const addPermissionField = async (
+  userId: string,
+  teamId: string,
+  page: IPageNav,
+): Promise<IPageNav> => {
+  const userPermissionRepository = getCustomRepository(UserPermissionRepository);
+  const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
+  const userPermission = await userPermissionRepository.findByUserAndPageId(userId, page.id);
+  if (userPermission) {
+    return { ...page, permission: userPermission.option };
+  }
+  const teamPermission = await teamPermissionRepository.findByTeamAndPageId(teamId, page.id);
+  if (teamPermission) {
+    return { ...page, permission: teamPermission.option };
+  }
+  return page;
+};
+
+const addPermissions = async (
+  userId: string,
+  teamId: string,
+  page: IPageNav,
+): Promise<IPageNav> => {
+  const pageWithPermissions = await addPermissionField(userId, teamId, page);
+  const children = page.childPages;
+  const childrenWithPermissions = [] as IPageNav[];
+  for (const child of children) {
+    const childWithPermissions = await addPermissions(userId, teamId, child);
+    childrenWithPermissions.push(childWithPermissions);
+  }
+  return { ...pageWithPermissions, childPages: childrenWithPermissions };
+};
+
 export const getPages = async (
   userId: string,
   workspaceId: string,
@@ -84,7 +117,7 @@ export const getPages = async (
   );
 
   const toBeDeleted = new Set<string>();
-  const pagesWihtChildren = permittedPages.reduce((acc, cur, _index, array) => {
+  const pagesWihtChildren = permittedPages.reduce((acc, cur, _, array) => {
     const childPages = array.filter((page) => page.parentPageId === cur.id);
     cur.childPages = childPages;
     childPages.forEach((child) => toBeDeleted.add(child.id));
@@ -96,15 +129,8 @@ export const getPages = async (
 
   const finalPages = [] as IPageNav[];
   for (const page of pagesToShow) {
-    const userPermission = await userPermissionRepository.findByUserAndPageId(userId, page.id);
-    if (userPermission) {
-      finalPages.push({ ...page, permission: userPermission.option });
-      continue;
-    }
-    const teamPermission = await teamPermissionRepository.findByTeamAndPageId(teamId, page.id);
-    if (teamPermission) {
-      finalPages.push({ ...page, permission: teamPermission.option });
-    }
+    const pageWithPermissions = await addPermissions(userId, teamId, page);
+    finalPages.push(pageWithPermissions);
   }
 
   return finalPages;
@@ -128,32 +154,66 @@ export const getPermissions = async (
   return mapPermissionstoParticipants(usersPermissions, teamsPermissions);
 };
 
+const setUserPermission = async (
+  page: Page,
+  participant: IParticipant,
+): Promise<void> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const userPermissionRepository = getCustomRepository(UserPermissionRepository);
+  const user = await userRepository.findById(participant.id);
+  const userPermission = await userPermissionRepository.findOne({ user, page });
+  if (userPermission) {
+    await userPermissionRepository.update(userPermission, { option: participant.role as PermissionType });
+  } else {
+    await userPermissionRepository.createAndSave(user, page, participant.role as PermissionType);
+  }
+};
+
+const setTeamPermission = async (
+  page: Page,
+  participant: IParticipant,
+): Promise<void> => {
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
+  const team = await teamRepository.findById(participant.id);
+  const teamPermission = await teamPermissionRepository.findOne({ team, page });
+  if (teamPermission) {
+    await teamPermissionRepository.update(teamPermission, { option: participant.role as PermissionType });
+  } else {
+    await teamPermissionRepository.createAndSave(team, page, participant.role as PermissionType);
+  }
+};
+
+const setPermissionForChildren = async (
+  allPages: Page[],
+  pageId: string,
+  participant: IParticipant,
+  set: (
+    page: Page,
+    participant: IParticipant,
+  ) => Promise<void>,
+): Promise<void> => {
+  const children = allPages.filter(page => page.parentPageId === pageId);
+  for (const child of children) {
+    await set(child, participant);
+    await setPermissionForChildren(allPages, child.id, participant, set);
+  }
+};
+
 export const setPermission = async (
+  workspaceId: string,
   pageId: string,
   participant: IParticipant,
 ): Promise<IParticipant> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
+  const allPages = await pageRepository.findPages(workspaceId);
   if (participant.type === ParticipantType.USER) {
-    const userPermissionRepository = getCustomRepository(UserPermissionRepository);
-    const userRepository = getCustomRepository(UserRepository);
-    const user = await userRepository.findById(participant.id);
-    const userPermission = await userPermissionRepository.findOne({ user, page });
-    if (userPermission) {
-      await userPermissionRepository.update(userPermission, { option: participant.role as PermissionType });
-    } else {
-      await userPermissionRepository.createAndSave(user, page, participant.role as PermissionType);
-    }
+    setUserPermission(page, participant);
+    setPermissionForChildren(allPages, pageId, participant, setUserPermission);
   } else if (participant.type === ParticipantType.TEAM) {
-    const teamPermissionRepository = getCustomRepository(TeamPermissionRepository);
-    const teamRepository = getCustomRepository(TeamRepository);
-    const team = await teamRepository.findById(participant.id);
-    const teamPermission = await teamPermissionRepository.findOne({ team, page });
-    if (teamPermission) {
-      await teamPermissionRepository.update(teamPermission, { option: participant.role as PermissionType });
-    } else {
-      await teamPermissionRepository.createAndSave(team, page, participant.role as PermissionType);
-    }
+    setTeamPermission(page, participant);
+    setPermissionForChildren(allPages, pageId, participant, setTeamPermission);
   }
   return participant;
 };

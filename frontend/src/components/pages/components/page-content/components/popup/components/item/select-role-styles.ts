@@ -3,10 +3,13 @@
 export default {
   menu: (provided: any): any => ({
     ...provided,
-    position: 'absolute',
-    top: '-9rem',
-    left: '-15rem',
+    zIndex: 9999,
+    // position: 'absolute',
+    // top: '-9rem',
+    // left: '-15rem',
   }),
+
+  menuPortal: (provided: any): any => ({ ...provided, zIndex: 9999 }),
 
   option: (provided: any): any => ({
     ...provided,

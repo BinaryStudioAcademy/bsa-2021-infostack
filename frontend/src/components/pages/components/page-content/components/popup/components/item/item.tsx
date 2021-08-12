@@ -38,7 +38,7 @@ const Item: React.FC<Props> = ({ participant, options, onDelete, onChange }) => 
           onChange={onRoleChange}
           value={{ label: participant.role, value: participant.role }}
           options={options}
-          menuPortalTarget={selectField.current}
+          // menuPortalTarget={selectField.current}
         />
       </td>
       <td>

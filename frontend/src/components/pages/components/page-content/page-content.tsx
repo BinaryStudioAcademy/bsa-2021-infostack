@@ -13,7 +13,6 @@ import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/pages';
 import { AppRoute, PermissionType } from 'common/enums/enums';
 import { Popup } from './components/popup/popup';
-import { IPageNav } from 'common/interfaces/pages';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 
@@ -29,8 +28,8 @@ const PageContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
 
-  const { permission } = pages?.find(page => page.id === paramsId) as IPageNav;
-  const isPageAdmin = permission === PermissionType.ADMIN;
+  const сurrentNavPage = pages?.find(page => page.id === paramsId);
+  const isPageAdmin = сurrentNavPage?.permission === PermissionType.ADMIN;
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;

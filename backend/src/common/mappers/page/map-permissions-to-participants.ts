@@ -1,7 +1,7 @@
 import { IParticipant } from 'src/common/interfaces/participant';
 import { UserPermission } from 'src/data/entities/user-permission';
 import { TeamPermission } from 'src/data/entities/team-permission';
-import { ParticipantType } from 'infostack-shared/common/enums';
+import { ParticipantType } from '../../enums/participant-type';
 
 export const mapPermissionstoParticipants = (
   usersPermissions: UserPermission[],

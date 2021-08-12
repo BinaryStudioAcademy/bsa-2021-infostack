@@ -33,7 +33,7 @@ router.get(
 
 router.post(
   '/:id/permissions',
-  run(req => setPermission(req.params.id, req.body)),
+  run(req => setPermission(req.workspaceId, req.params.id, req.body)),
 );
 
 router.delete(
