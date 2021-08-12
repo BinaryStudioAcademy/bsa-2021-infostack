@@ -9,10 +9,9 @@ import { pagesActions } from 'store/pages';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from '../plus-button/plus-button-root';
 import { RootState } from 'common/types/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { isHaveCurPage } from 'helpers/toolbar/checkPage';
-import { useEffect } from 'react';
 
 type Props = {
   title?: string;
@@ -79,11 +78,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
       <Accordion
         flush
         key={id}
-        activeKey={
-          currentPage && isHaveCurPage(childPages, currentPage?.id)
-            ? id
-            : activeKey
-        }
+        activeKey={isHaveCurPage(childPages, currentPage?.id) ? id : activeKey}
         onSelect={(): void => setActiveKey(undefined)}
       >
         <Accordion.Item eventKey={id as string} className="bg-transparent">

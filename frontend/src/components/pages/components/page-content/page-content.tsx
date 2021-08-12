@@ -6,13 +6,13 @@ import {
   useEffect,
   useState,
   useParams,
+  useHistory,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import './page-content.scss';
 import { Card, Col, Row } from 'react-bootstrap';
 import { pagesActions } from 'store/pages';
 import isUUID from 'is-uuid';
-import { useHistory } from 'react-router';
 import { AppRoute } from 'common/enums/enums';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
