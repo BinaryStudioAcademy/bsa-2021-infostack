@@ -121,7 +121,7 @@ const PageContent: React.FC = () => {
             <Row className="mb-4">
               <Col>
                 <Card border="light" className={styles.card}>
-                  <Card.Body>
+                  <Card.Body className={styles.content}>
                     <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
                   </Card.Body>
                 </Card>
