@@ -10,6 +10,7 @@ class UserRepository extends Repository<User> {
 
   public findById(id: string): Promise<User> {
     return this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.skills', 'skills')
       .leftJoinAndSelect('user.followingPages', 'pages')
       .leftJoin(
         (qb) =>
