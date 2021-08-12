@@ -2,6 +2,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import isUUID from 'is-uuid';
 import {
   useAppDispatch,
@@ -157,7 +158,9 @@ const PageContent: React.FC = () => {
               <Col>
                 <Card border="light" className={getAllowedClasses(styles.card)}>
                   <Card.Body className={getAllowedClasses(styles.content)}>
-                    <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[gfm]}>
+                      {content || 'Empty page'}
+                    </ReactMarkdown>
                   </Card.Body>
                 </Card>
               </Col>
