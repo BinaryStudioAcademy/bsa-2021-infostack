@@ -3,11 +3,9 @@ import { yupResolver } from 'hooks/hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'validations/reset-password-schema';
 import FormField from 'components/common/form-field/form-field';
-import styles from './styles.module.scss';
 import { WorkspaceApi } from 'services';
 import { toast } from 'react-toastify';
 import { Button, Modal } from 'react-bootstrap';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import { IRegister } from 'infostack-shared';
 import { usersActions } from 'store/users';
 
@@ -50,10 +48,8 @@ const ModalComponent: React.FC<Props> = ({
   return (
     <>
       <Modal
-        className={getAllowedClasses(
-          'd-flex align-items-center',
-          styles.modalContent,
-        )}
+        className="d-flex align-items-center"
+        dialogClassName="w-25 rounded"
         show={showModal}
         onHide={handleClose}
         backdrop="static"
