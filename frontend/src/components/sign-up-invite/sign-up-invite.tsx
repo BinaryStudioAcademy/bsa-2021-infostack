@@ -7,7 +7,11 @@ import { AuthApi, UserApi } from 'services';
 import { useForm } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { signUpInviteSchema } from 'validations/sign-up-invite-schema';
-import { IRegister, IUpdatePasswordAndFullName, DefaultUserName } from 'infostack-shared';
+import {
+  IRegister,
+  IUpdatePasswordAndFullName,
+  DefaultUserName,
+} from 'infostack-shared';
 import { useEffect } from 'react';
 
 const SignUpInvite: React.FC = () => {
@@ -20,10 +24,12 @@ const SignUpInvite: React.FC = () => {
     history.push(AppRoute.LOGIN);
   }
 
-  const checkIfUserExistedBefore = async (): Promise<void>  => {
-    const isUserNameDefault = await new UserApi().checkIfUserRegisteredOnInvite(token);
+  const checkIfUserExistedBefore = async (): Promise<void> => {
+    const isUserNameDefault = await new UserApi().checkIfUserRegisteredOnInvite(
+      token,
+    );
 
-    if(!(isUserNameDefault === DefaultUserName.WAITING_FOR_JOIN)) {
+    if (!(isUserNameDefault === DefaultUserName.WAITING_FOR_JOIN)) {
       history.push(AppRoute.LOGIN);
     }
   };
@@ -38,7 +44,9 @@ const SignUpInvite: React.FC = () => {
     formState: { errors },
   } = useForm<IRegister>({ resolver: yupResolver(signUpInviteSchema) });
 
-  const handleSubmitForm = async (data: IUpdatePasswordAndFullName): Promise<void> => {
+  const handleSubmitForm = async (
+    data: IUpdatePasswordAndFullName,
+  ): Promise<void> => {
     const { password, fullName } = data;
 
     await new AuthApi().updatePasswordAndFullName({
@@ -46,7 +54,6 @@ const SignUpInvite: React.FC = () => {
       password,
       fullName,
     });
-
   };
 
   return (
@@ -73,7 +80,6 @@ const SignUpInvite: React.FC = () => {
         errors={errors.password}
       />
     </Sign>
-
   );
 };
 

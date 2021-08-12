@@ -12,7 +12,7 @@ type Props = {
   controlId?: string;
   register?: UseFormRegisterReturn;
   errors?: FieldError | undefined;
-  value?: string,
+  value?: string;
 };
 
 const FormField: React.FC<Props> = ({
@@ -27,13 +27,16 @@ const FormField: React.FC<Props> = ({
 }) => (
   <Form.Group className="mb-3" controlId={controlId}>
     <Form.Label className={styles.label}>{label}</Form.Label>
-    {value ? <Form.Control readOnly placeholder={value}/> :
+    {value ? (
+      <Form.Control readOnly placeholder={value} />
+    ) : (
       <Form.Control
         {...register}
         type={type}
         placeholder={placeholder}
         isInvalid={!!errors}
-      />}
+      />
+    )}
     {errors && (
       <Form.Control.Feedback type="invalid">
         {errors?.message}
