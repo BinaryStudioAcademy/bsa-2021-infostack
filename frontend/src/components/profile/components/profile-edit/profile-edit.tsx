@@ -181,13 +181,7 @@ const ProfileEdit: React.FC = () => {
         });
       }
 
-      const result = inputValue.map((item: ISkill) => {
-        if (item.__isNew__) {
-          item.value = lastSkill.value;
-        }
-
-        return item;
-      });
+      const result = inputValue.map((item: ISkill) => item);
 
       setUserSkills(result);
     } else {

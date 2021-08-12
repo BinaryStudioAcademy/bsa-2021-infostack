@@ -30,6 +30,7 @@ router
     '/:id/profile',
     run((req) => updateUserInfo(req.params.id, req.body)),
   )
+
   .put(
     '/:id/avatar',
     upload().single('image'),
