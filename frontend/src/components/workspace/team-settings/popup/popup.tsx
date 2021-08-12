@@ -60,6 +60,7 @@ export const Popup: React.FC<Props> = ({
   return (
     <Modal
       className={getAllowedClasses('d-flex align-items-center')}
+      dialogClassName="w-25 rounded"
       show={showPopup}
       onHide={handleClose}
       backdrop="static"
