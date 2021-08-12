@@ -109,7 +109,9 @@ const addPermissionField = async <T extends { id?: string }>(
       teamId,
       page.id,
     );
-    teamPermissions.push(teamPermission.option);
+    if (teamPermission) {
+      teamPermissions.push(teamPermission.option);
+    }
   }
   if (teamPermissions.length) {
     return { ...page, permission: maximum(teamPermissions) };
