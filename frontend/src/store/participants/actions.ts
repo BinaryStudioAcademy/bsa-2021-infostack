@@ -14,24 +14,43 @@ const loadParticipants = createAsyncThunk(
 
 const createParticipant = createAsyncThunk(
   ActionType.ADD_PARTICIPANT,
-  async (payload: { pageId: string, participant: IParticipant }, { dispatch }): Promise<void> => {
-    const response = await new PageApi().setPermission(payload.pageId, payload.participant);
+  async (
+    payload: { pageId: string; participant: IParticipant },
+    { dispatch },
+  ): Promise<void> => {
+    const response = await new PageApi().setPermission(
+      payload.pageId,
+      payload.participant,
+    );
     dispatch(actions.addParticipant(response));
   },
 );
 
 const chageRole = createAsyncThunk(
   ActionType.UPDATE_PARTICIPANT,
-  async (payload: { pageId: string, participant: IParticipant }, { dispatch }): Promise<void> => {
-    const response = await new PageApi().setPermission(payload.pageId, payload.participant);
+  async (
+    payload: { pageId: string; participant: IParticipant },
+    { dispatch },
+  ): Promise<void> => {
+    const response = await new PageApi().setPermission(
+      payload.pageId,
+      payload.participant,
+    );
     dispatch(actions.updateParticipant(response));
   },
 );
 
 const deleteParticipant = createAsyncThunk(
   ActionType.REMOVE_PARTICIPANT,
-  async (payload: { pageId: string, participantType: string, participantId: string }, { dispatch }): Promise<void> => {
-    await new PageApi().deletePermission(payload.pageId, payload.participantType, payload.participantId);
+  async (
+    payload: { pageId: string; participantType: string; participantId: string },
+    { dispatch },
+  ): Promise<void> => {
+    await new PageApi().deletePermission(
+      payload.pageId,
+      payload.participantType,
+      payload.participantId,
+    );
     dispatch(actions.removeParticipant(payload.participantId));
   },
 );

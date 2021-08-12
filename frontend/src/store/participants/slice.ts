@@ -15,14 +15,23 @@ const { reducer, actions } = createSlice({
   name: ReducerName.WORKSPACE,
   initialState,
   reducers: {
-    [ActionType.SET_PARTICIPANTS]: (state, action: PayloadAction<IParticipant[]>) => {
+    [ActionType.SET_PARTICIPANTS]: (
+      state,
+      action: PayloadAction<IParticipant[]>,
+    ) => {
       state.participants = action.payload;
     },
-    [ActionType.ADD_PARTICIPANT]: (state, action: PayloadAction<IParticipant>) => {
+    [ActionType.ADD_PARTICIPANT]: (
+      state,
+      action: PayloadAction<IParticipant>,
+    ) => {
       state.participants.push(action.payload);
     },
-    [ActionType.UPDATE_PARTICIPANT]: (state, action: PayloadAction<IParticipant>) => {
-      state.participants = state.participants.map(participant => {
+    [ActionType.UPDATE_PARTICIPANT]: (
+      state,
+      action: PayloadAction<IParticipant>,
+    ) => {
+      state.participants = state.participants.map((participant) => {
         if (participant.id === action.payload.id) {
           return action.payload;
         }
@@ -30,7 +39,9 @@ const { reducer, actions } = createSlice({
       });
     },
     [ActionType.REMOVE_PARTICIPANT]: (state, action: PayloadAction<string>) => {
-      state.participants= state.participants.filter(participant => participant.id !== action.payload);
+      state.participants = state.participants.filter(
+        (participant) => participant.id !== action.payload,
+      );
     },
   },
 });

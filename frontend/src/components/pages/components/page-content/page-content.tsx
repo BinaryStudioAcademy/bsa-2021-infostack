@@ -47,7 +47,13 @@ const PageContent: React.FC = () => {
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
-    await dispatch(pagesActions.getPage(payload));
+    if (currentPage && id !== currentPage.id) {
+      await dispatch(pagesActions.getPage(payload));
+    }
+    if (!currentPage) {
+      await dispatch(pagesActions.getPage(payload));
+    }
+    return;
   };
 
   useEffect(() => {

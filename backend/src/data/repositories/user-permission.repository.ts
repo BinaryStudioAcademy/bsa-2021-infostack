@@ -6,8 +6,11 @@ import { PermissionType } from '../../common/enums/permission-type';
 
 @EntityRepository(UserPermission)
 class UserPermissionRepository extends Repository<UserPermission> {
-
-  public createAndSave(user: User, page: Page, option: PermissionType): Promise<UserPermission> {
+  public createAndSave(
+    user: User,
+    page: Page,
+    option: PermissionType,
+  ): Promise<UserPermission> {
     const userPermission = this.create({
       user,
       page,
@@ -17,18 +20,14 @@ class UserPermissionRepository extends Repository<UserPermission> {
     return this.manager.save(userPermission);
   }
 
-  public findByUserId(
-    userId: string,
-  ): Promise<UserPermission[]> {
+  public findByUserId(userId: string): Promise<UserPermission[]> {
     return this.find({
       relations: ['page'],
       where: { user: userId },
     });
   }
 
-  public findByPageId(
-    pageId: string,
-  ): Promise<UserPermission[]> {
+  public findByPageId(pageId: string): Promise<UserPermission[]> {
     return this.find({
       relations: ['user'],
       where: { page: pageId },
