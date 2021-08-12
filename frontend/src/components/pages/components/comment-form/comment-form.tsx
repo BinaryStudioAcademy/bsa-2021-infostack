@@ -64,7 +64,7 @@ export const CommentForm: React.FC<Props> = ({
                 onChange={handleChange}
               />
               <Button
-                disabled={isDisabled}
+                disabled={isDisabled || text === ''}
                 onClick={handleSubmit}
                 className={styles.text}
               >
