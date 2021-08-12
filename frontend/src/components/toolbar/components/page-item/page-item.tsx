@@ -11,7 +11,7 @@ import PlusButtonRoot from '../plus-button/plus-button-root';
 import { RootState } from 'common/types/types';
 import { useEffect, useState } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
-import { isHaveCurPage } from 'helpers/toolbar/checkPage';
+import { isHaveCurPage } from 'helpers/toolbar/check-Page';
 
 type Props = {
   title?: string;
