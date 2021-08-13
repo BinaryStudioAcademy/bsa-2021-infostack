@@ -32,8 +32,13 @@ const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const { user } = useAppSelector((state) => state.auth);
   const pageApi = new PageApi();
-  const pageTitle = currentPage?.pageContents[0]?.title;
-  const content = currentPage?.pageContents[0]?.content;
+  const last = currentPage?.pageContents?.length;
+  const pageTitle = last
+    ? currentPage?.pageContents[last - 1]?.title
+    : undefined;
+  const content = last
+    ? currentPage?.pageContents[last - 1]?.content
+    : undefined;
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
