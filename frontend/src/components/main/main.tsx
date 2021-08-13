@@ -4,7 +4,7 @@ import {
   LocalStorageVariable,
 } from 'common/enums/enums';
 import { Route, Switch } from 'components/common/common';
-import withHeader from 'components/common/with-header/with-header';
+import WithHeader from 'components/common/with-header/with-header';
 import Pages from 'components/pages/pages';
 import ProfileInfo from 'components/profile/components/profile-info/profile-info';
 import Workspace from 'components/workspace/workspace';
@@ -49,24 +49,35 @@ const Main: React.FC = () => {
 
   return (
     <Switch>
-      <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
-      <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
+      <Route
+        path={AppRoute.PAGE}
+        render={(): JSX.Element => <WithHeader Component={Pages} />}
+        exact
+      />
+      <Route
+        path={AppRoute.SETTINGS}
+        render={(): JSX.Element => <WithHeader Component={Settings} />}
+      />
       <Route
         path={AppRoute.PROFILE}
-        component={withHeader(ProfileInfo)}
+        render={(): JSX.Element => <WithHeader Component={ProfileInfo} />}
         key={Date.now()}
       />
       <Route
         path={AppRoute.WORKSPACE_SETTING}
-        component={withHeader(Workspace)}
+        render={(): JSX.Element => <WithHeader Component={Workspace} />}
         exact
       />
       <Route
         path={AppRoute.CONTENT_SETTING}
-        component={withHeader(PageContentEditor)}
+        render={(): JSX.Element => <WithHeader Component={PageContentEditor} />}
         exact
       />
-      <Route path="/" component={withHeader(Pages)} exact />
+      <Route
+        path="/"
+        render={(): JSX.Element => <WithHeader Component={Pages} />}
+        exact
+      />
       <Route path="*" component={NotFound} />
     </Switch>
   );

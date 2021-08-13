@@ -12,6 +12,7 @@ import {
   followPage,
   unfollowPage,
   updateContent,
+  getTableOfContents,
 } from '../../services/page.service';
 import { getComments, addComment } from '../../services/comment.service';
 
@@ -92,6 +93,11 @@ router.post(
 router.post(
   '/:id/version',
   run((req) => updateContent(req.userId, req.body)),
+);
+
+router.get(
+  '/:id/table-of-contents',
+  run((req) => getTableOfContents(req.params.id)),
 );
 
 export default router;

@@ -56,7 +56,12 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   );
 
   return (
-    <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">
+    <Navbar
+      className={getAllowedClasses(
+        'bg-dark flex-column px-5 overflow-auto w-100',
+        styles.navbar,
+      )}
+    >
       <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-truncate">
         {title}
       </h1>
