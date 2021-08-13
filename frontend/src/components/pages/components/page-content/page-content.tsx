@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Dropdown, Row } from 'react-bootstrap';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
@@ -26,6 +26,7 @@ import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
+// import { NavLink } from 'react-router-dom';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -144,12 +145,31 @@ const PageContent: React.FC = () => {
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
                   {isPageAdmin && (
-                    <Button
-                      onClick={onAssign}
-                      className={canEdit ? 'me-3' : ''}
-                    >
-                      Assign permissions
-                    </Button>
+                    <>
+                      <Dropdown className="me-3 d-inline-flex sm">
+                        <Dropdown.Toggle className="sm" id="dropdown-basic">
+                          Dropdown Button
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item href="#/action-1">
+                            Action
+                          </Dropdown.Item>
+                          <Dropdown.Item href="#/action-2">
+                            Another action
+                          </Dropdown.Item>
+                          <Dropdown.Item href="#/action-3">
+                            Something else
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                      <Button
+                        onClick={onAssign}
+                        className={canEdit ? 'me-3' : ''}
+                      >
+                        Assign permissions
+                      </Button>
+                    </>
                   )}
                   {canEdit && <EditButton onClick={handleEditing} />}
                   <Button
