@@ -14,7 +14,7 @@ export const accountInfoSchema = yup.object().shape({
     .required(),
   title: yup
     .string()
-    .min(2, 'Title must be at least 2 character')
-    .max(30, 'Title must be at most 30 characters')
-    .required(),
+    .nullable()
+    .notRequired()
+    .max(30, 'Title must be at most 30 characters'),
 });

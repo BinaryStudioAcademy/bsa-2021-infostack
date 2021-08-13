@@ -7,8 +7,9 @@ import {
   Col,
   Row,
 } from 'react-bootstrap';
-import Editor from 'react-markdown-editor-lite';
+import Editor, { Plugins } from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
 import { AppRoute } from 'common/enums/enums';
@@ -32,6 +33,9 @@ const PageContentEditor: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const editorRef = useRef(null);
+
+  Editor.unuse(Plugins.Image);
+  Editor.unuse(Plugins.FontUnderline);
 
   if (!currentPage) {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
@@ -75,7 +79,7 @@ const PageContentEditor: React.FC = () => {
               value={markDownContent}
               onChange={({ text }): void => setMarkDownContent(text)}
               renderHTML={(text): JSX.Element => (
-                <ReactMarkdown>{text}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
               )}
               ref={editorRef}
             />

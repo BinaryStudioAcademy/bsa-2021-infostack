@@ -89,7 +89,7 @@ export const updateUserInfo = async (
   const userToUpdate = await userRepository.findById(id);
 
   userToUpdate.fullName = body.fullName || userToUpdate.fullName;
-  userToUpdate.title = body.title || userToUpdate.title;
+  userToUpdate.title = body.title || null;
 
   const skillRepository = getCustomRepository(SkillRepository);
   const foundSkills = await skillRepository.getSkillsById(body.skills);

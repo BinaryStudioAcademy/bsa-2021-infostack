@@ -2,7 +2,7 @@ import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { Popup } from '../popup/popup';
 import { teamsActions } from 'store/actions';
-import { useState, useAppDispatch, useEffect } from 'hooks/hooks';
+import { useState, useAppDispatch } from 'hooks/hooks';
 import './styles.scss';
 
 interface Props {
@@ -12,13 +12,6 @@ interface Props {
 const DropDown: React.FC<Props> = ({ team }) => {
   const dispatch = useAppDispatch();
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [popUpText, setPopUpText] = useState('');
-
-  useEffect(() => {
-    if (team) {
-      setPopUpText(team.name);
-    }
-  }, [team]);
 
   const onEditTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
@@ -60,7 +53,7 @@ const DropDown: React.FC<Props> = ({ team }) => {
         showPopup={isPopUpVisible}
         handleFunction={handleEditing}
         onPopupClose={handleEditingCancel}
-        inputValue={popUpText}
+        inputValue={team.name}
       />
     </div>
   );

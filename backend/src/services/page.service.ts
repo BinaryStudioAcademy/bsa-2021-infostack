@@ -361,7 +361,10 @@ export const deletePermission = async (
   }
 };
 
-export const updateContent = async (body: IEditPageContent): Promise<IPage> => {
+export const updateContent = async (
+  userId: string,
+  body: IEditPageContent,
+): Promise<IPage> => {
   const pageId = body.pageId;
   const pageRepository = getCustomRepository(PageRepository);
   const pageToUpdate = await pageRepository.findByIdWithLastContent(pageId);
@@ -384,7 +387,18 @@ export const updateContent = async (body: IEditPageContent): Promise<IPage> => {
   });
 
   const page = await pageRepository.findByIdWithLastContent(pageId);
-  return mapPageToIPage(page);
+
+  const userRepository = getCustomRepository(UserRepository);
+
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+
+  const pageWithPermission = addPermissionField(
+    userId,
+    teamsIds,
+    mapPageToIPage(page),
+  );
+  return pageWithPermission;
 };
 
 export const getContributors = async (

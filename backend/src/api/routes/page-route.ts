@@ -91,12 +91,7 @@ router.post(
 
 router.post(
   '/:id/version',
-  run((req) => updateContent(req.body)),
-);
-
-router.post(
-  '/:id/version',
-  run((req) => updateContent(req.body)),
+  run((req) => updateContent(req.userId, req.body)),
 );
 
 export default router;
