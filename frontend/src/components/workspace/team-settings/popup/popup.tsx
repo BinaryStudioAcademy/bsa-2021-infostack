@@ -1,6 +1,5 @@
 import { Modal, Button } from 'react-bootstrap';
-import { useEffect, useState } from 'hooks/hooks';
-import { useForm } from 'hooks/hooks';
+import { useEffect, useState, useForm } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import FormField from 'components/common/form-field/form-field';
 import { yupResolver, useAppSelector } from 'hooks/hooks';
@@ -34,7 +33,7 @@ export const Popup: React.FC<Props> = ({
 
   const handleClose = (): void => {
     onPopupClose();
-    reset({ name: '' });
+    reset({ name: inputValue });
   };
 
   const {
@@ -49,13 +48,19 @@ export const Popup: React.FC<Props> = ({
     },
   });
 
+  useEffect(() => {
+    if (inputValue) {
+      reset({ name: inputValue });
+    }
+  }, [inputValue]);
+
   const handleSubmitForm = async (data: ITeamCreation): Promise<void> => {
     setSubmitDisabled(true);
     handleFunction(data);
     onPopupClose();
 
     setSubmitDisabled(false);
-    reset({ name: '' });
+    reset({ name: inputValue });
   };
 
   return (

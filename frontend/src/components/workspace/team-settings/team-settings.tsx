@@ -71,6 +71,7 @@ const TeamSettings: React.FC = () => {
             showPopup={isPopUpVisible}
             onPopupClose={handleCreationCancel}
             handleFunction={handleCreation}
+            inputValue=""
           />
         </div>
       </Card.Body>
