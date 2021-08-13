@@ -10,7 +10,7 @@ import { Link } from 'components/common/common';
 import './profile-info.scss';
 import { UserApi } from 'services';
 import { IUser } from 'common/interfaces/user';
-import UserAvatar from '../../../common/avatar/avatar';
+import UserAvatar from 'components/common/avatar/avatar';
 
 const ProfileInfo: React.FC = () => {
   const [user, setUser] = useState<IUser>({

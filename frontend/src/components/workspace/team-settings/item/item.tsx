@@ -1,7 +1,7 @@
 import { Card } from 'react-bootstrap';
 import { ITeam, ITeamUser } from 'common/interfaces/team';
 import DropDown from '../drop-down/drop-down';
-import UserAvatar from '../../../common/avatar/avatar';
+import UserAvatar from 'components/common/avatar/avatar';
 import './styles.scss';
 
 interface Props {

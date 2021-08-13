@@ -17,7 +17,7 @@ import { IUserAccount } from 'common/interfaces/user';
 import { useForm } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { accountInfoSchema } from 'validations/account-info-schema';
-import UserAvatar from '../../../common/avatar/avatar';
+import UserAvatar from 'components/common/avatar/avatar';
 import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
