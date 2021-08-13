@@ -1,7 +1,7 @@
 import Avatar from 'react-avatar';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { ReactElement } from 'react-markdown';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   round: boolean;
   className?: string;
   style?: React.CSSProperties;
-  onClick?: (userId?: string | undefined) => void;
+  onClick?: (e: SyntheticEvent) => void;
   showTooltip?: boolean;
 };
 
@@ -40,7 +40,7 @@ const UserAvatar: React.FC<Props> = ({
           round={round}
           className={className}
           style={style}
-          onClick={onClick ? (): void => onClick() : undefined}
+          onClick={onClick}
         />
       </div>
     )}
