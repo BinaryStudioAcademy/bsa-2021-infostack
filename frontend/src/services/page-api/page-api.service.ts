@@ -56,7 +56,7 @@ class PageApi {
   public async getPageTableOfContents(
     id: string,
   ): Promise<IPageTableOfContents> {
-    return this.http.load(`${this.BASE}/${id}/table-of-content`);
+    return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
 }
 
