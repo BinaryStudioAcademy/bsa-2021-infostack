@@ -5,8 +5,10 @@ import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
 import { replaceIdParam } from 'helpers/helpers';
 import UserAvatar from '../../../common/avatar/avatar';
+import { getAllowedClasses } from 'helpers/dom/dom';
 
 interface IPageContributorsProps {
+  className?: string;
   contributors: IPageContributor[];
   avatarSize?: number;
 }
@@ -16,6 +18,7 @@ const DEFAULT_AVATAR_SIZE = 40;
 const PageContributors: React.FC<IPageContributorsProps> = ({
   contributors,
   avatarSize = DEFAULT_AVATAR_SIZE,
+  className,
 }) => {
   const history = useHistory();
 
@@ -34,7 +37,7 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
   };
 
   return (
-    <Card border="light" className={styles.card}>
+    <Card border="light" className={getAllowedClasses(styles.card, className)}>
       <Card.Header className="bg-white border-0 d-flex align-items-center">
         Contributors
         <Badge className={styles.badge} pill={true}>
