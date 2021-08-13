@@ -153,7 +153,7 @@ export const getPages = async (
   const allPages = await pageRepository.findPagesWithLastContent(workspaceId);
 
   const toBeDeleted = new Set<string>();
-  const pagesWihtChildren = allPages.reduce((acc, cur, _, array) => {
+  const pagesWithChildren = allPages.reduce((acc, cur, _, array) => {
     const childPages = array.filter((page) => page.parentPageId === cur.id);
     cur.childPages = childPages;
     childPages.forEach((child) => toBeDeleted.add(child.id));
@@ -162,7 +162,7 @@ export const getPages = async (
   }, []);
 
   const pagesToShow = mapPagesToPagesNav(
-    pagesWihtChildren.filter((page) => !toBeDeleted.has(page.id)),
+    pagesWithChildren.filter((page) => !toBeDeleted.has(page.id)),
   );
 
   const pagesWithPermissions = [] as IPageNav[];
