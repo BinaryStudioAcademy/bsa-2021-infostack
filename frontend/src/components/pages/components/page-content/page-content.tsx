@@ -43,6 +43,9 @@ const PageContent: React.FC = () => {
   const paramsId = useParams<{ id: string }>().id;
 
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
+  const canEdit =
+    currentPage?.permission === PermissionType.ADMIN ||
+    currentPage?.permission === PermissionType.WRITE;
   const [isContributorsLoading, setIsContributorsLoading] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
 
@@ -140,7 +143,7 @@ const PageContent: React.FC = () => {
                       Assign permissions
                     </Button>
                   )}
-                  <EditButton onClick={handleEditing} />
+                  {canEdit && <EditButton onClick={handleEditing} />}
                   <Button
                     className="ms-3"
                     onClick={
