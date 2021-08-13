@@ -1,0 +1,23 @@
+import { Dropdown, SafeAnchor } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import styles from './styles.module.scss';
+
+type Child = string | JSX.Element;
+
+type Props = {
+  to?: string;
+  onClick?: () => void;
+  children?: Child | Child[];
+};
+
+export const VersionItem: React.FC<Props> = ({ to, onClick, children }) => (
+  <Dropdown.Item
+    as={to ? Link : SafeAnchor}
+    to={to}
+    className={getAllowedClasses(styles.versionItem, 'text-secondary')}
+    onClick={onClick}
+  >
+    {children}
+  </Dropdown.Item>
+);

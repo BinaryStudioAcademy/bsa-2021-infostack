@@ -1,4 +1,4 @@
-import { Card, Col, Dropdown, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
@@ -27,6 +27,7 @@ import { replaceIdParam } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 // import { NavLink } from 'react-router-dom';
+import VersionDropdown from '../version-dropdown/version-dropdown';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -146,23 +147,7 @@ const PageContent: React.FC = () => {
                 <div>
                   {isPageAdmin && (
                     <>
-                      <Dropdown className="me-3 d-inline-flex sm">
-                        <Dropdown.Toggle className="sm" id="dropdown-basic">
-                          Dropdown Button
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item href="#/action-1">
-                            Action
-                          </Dropdown.Item>
-                          <Dropdown.Item href="#/action-2">
-                            Another action
-                          </Dropdown.Item>
-                          <Dropdown.Item href="#/action-3">
-                            Something else
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                      <VersionDropdown />
                       <Button
                         onClick={onAssign}
                         className={canEdit ? 'me-3' : ''}
