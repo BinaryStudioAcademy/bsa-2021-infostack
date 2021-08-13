@@ -4,6 +4,7 @@ import { IOption } from 'common/interfaces/components/select';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { useRef } from 'hooks/hooks';
 import selectRoleStyles from './select-role-styles';
+import Badge from 'react-bootstrap/Badge';
 import styles from '../styles.module.scss';
 
 type Props = {
@@ -34,7 +35,16 @@ const Item: React.FC<Props> = ({
   return (
     <tr>
       <td>{participant.name}</td>
-      <td>{participant.type}</td>
+      <td>
+        <h6>
+          <Badge
+            bg={participant.type === 'user' ? 'info' : 'danger'}
+            style={{ fontWeight: 'unset' }}
+          >
+            {participant.type}
+          </Badge>
+        </h6>
+      </td>
       <td ref={selectField}>
         <Select
           closeOnSelect

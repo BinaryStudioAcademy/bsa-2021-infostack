@@ -15,6 +15,7 @@ import {
   IPageContributor,
   IPageFollowed,
   IEditPageContent,
+  IPageTableOfContents,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
@@ -22,6 +23,7 @@ import { mapPermissionstoParticipants } from '../common/mappers/page/map-permiss
 import { maximum } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
+import { parseHeadings } from '../common/utils/markdown.util';
 
 export const createPage = async (
   userId: string,
@@ -408,6 +410,15 @@ export const getContributors = async (
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
   return mapPageToContributors(page);
+};
+
+export const getTableOfContents = async (
+  pageId: string,
+): Promise<IPageTableOfContents> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const { pageContents } = await pageRepository.findByIdWithLastContent(pageId);
+
+  return { headings: parseHeadings(pageContents[0].content) };
 };
 
 export const getPagesFollowedByUser = async (

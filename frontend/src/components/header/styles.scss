@@ -67,6 +67,9 @@
   .dropdown {
     & > .dropdown-toggle,
     & > .dropdown-toggle:hover {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       color: var(--header-color);
       font-size: 1.4rem;
       font-weight: 400;
@@ -75,7 +78,6 @@
 
     .dropdown-menu {
       .dropdown-item {
-
         a,
         button {
           display: block;
