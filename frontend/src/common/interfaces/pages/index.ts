@@ -4,4 +4,6 @@ export type {
   IPageNav,
   IPageContributor,
   IEditPageContent,
+  IPageTableOfContents,
+  IPageTableOfContentsHeading,
 } from 'infostack-shared/common/interfaces';
