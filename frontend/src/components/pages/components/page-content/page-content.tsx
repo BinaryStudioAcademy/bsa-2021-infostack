@@ -32,8 +32,13 @@ const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const { user } = useAppSelector((state) => state.auth);
   const pageApi = new PageApi();
-  const pageTitle = currentPage?.pageContents[0]?.title;
-  const content = currentPage?.pageContents[0]?.content;
+  const last = currentPage?.pageContents?.length;
+  const pageTitle = last
+    ? currentPage?.pageContents[last - 1]?.title
+    : undefined;
+  const content = last
+    ? currentPage?.pageContents[last - 1]?.content
+    : undefined;
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -43,6 +48,9 @@ const PageContent: React.FC = () => {
   const paramsId = useParams<{ id: string }>().id;
 
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
+  const canEdit =
+    currentPage?.permission === PermissionType.ADMIN ||
+    currentPage?.permission === PermissionType.WRITE;
   const [isContributorsLoading, setIsContributorsLoading] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
 
@@ -136,11 +144,14 @@ const PageContent: React.FC = () => {
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
                   {isPageAdmin && (
-                    <Button onClick={onAssign} className="me-3">
+                    <Button
+                      onClick={onAssign}
+                      className={canEdit ? 'me-3' : ''}
+                    >
                       Assign permissions
                     </Button>
                   )}
-                  <EditButton onClick={handleEditing} />
+                  {canEdit && <EditButton onClick={handleEditing} />}
                   <Button
                     className="ms-3"
                     onClick={
