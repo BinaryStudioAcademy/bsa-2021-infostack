@@ -1,0 +1,28 @@
+.card {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+
+  .accordion {
+    text-align: left;
+
+    .accordionTitle {
+      color: #212529;
+      cursor: pointer;
+      margin-left: 0.5rem;
+
+      text-decoration: none;
+
+      &:hover {
+        color: #60676d;
+      }
+    }
+
+    .accordionBody {
+      background: transparent;
+    }
+
+    .chevronIcon {
+      font-size: 1.7rem;
+      cursor: pointer;
+    }
+  }
+}
