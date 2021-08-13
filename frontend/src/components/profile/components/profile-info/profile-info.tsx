@@ -32,7 +32,6 @@ const ProfileInfo: React.FC = () => {
       await userApi.getUserInfo(id).then((user) => {
         if (user.id.length > 0) {
           if (mounted) {
-            setUser(user);
             setPermission(true);
             setUser(user);
           }
