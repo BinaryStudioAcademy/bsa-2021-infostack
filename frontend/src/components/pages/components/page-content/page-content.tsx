@@ -25,13 +25,22 @@ import { IPageContributor } from 'common/interfaces/pages';
 import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/dom/dom';
+import { FollowModal } from '../follow-modal/follow-modal';
 import styles from './styles.module.scss';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const childPages = useAppSelector((state) => {
+    const { pages, currentPage } = state.pages;
+
+    if (pages && currentPage) {
+      const page = pages.find((p) => p.id === currentPage.id);
+      return page ? page.childPages : null;
+    }
+  });
+
   const { user } = useAppSelector((state) => state.auth);
-  const pageApi = new PageApi();
   const last = currentPage?.pageContents?.length;
   const pageTitle = last
     ? currentPage?.pageContents[last - 1]?.title
@@ -42,6 +51,10 @@ const PageContent: React.FC = () => {
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFollowModalVisible, setIsFollowModalVisible] =
+    useState<boolean>(false);
+  const toggleFollowModal = (): void =>
+    setIsFollowModalVisible((prev) => !prev);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -116,17 +129,39 @@ const PageContent: React.FC = () => {
       }
     };
 
-    const onPageFollow = async (pageId: string | undefined): Promise<void> => {
-      await pageApi.followPage(pageId);
-      await dispatch(pagesActions.setPage(pageId));
+    const handlePageFollow =
+      (pageId: string) =>
+      async (withChildren: boolean): Promise<void> => {
+        toggleFollowModal();
+        // eslint-disable-next-line no-console
+        console.log('hello');
+
+        await dispatch(pagesActions.followPage({ pageId, withChildren }));
+      };
+
+    const handlePageUnfollow =
+      (pageId: string) =>
+      async (withChildren: boolean): Promise<void> => {
+        toggleFollowModal();
+        await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
+      };
+
+    const onPageFollow = (): void => {
+      if (childPages && childPages.length) {
+        toggleFollowModal();
+      } else {
+        isCurrentPageFollowed
+          ? handlePageUnfollow(paramsId)(false)
+          : handlePageFollow(paramsId)(false);
+      }
     };
 
-    const onPageUnfollow = async (
-      pageId: string | undefined,
-    ): Promise<void> => {
-      await pageApi.unfollowPage(pageId);
-      await dispatch(pagesActions.setPage(pageId));
-    };
+    // const onPageUnfollow = async (
+    //   pageId: string | undefined,
+    // ): Promise<void> => {
+    //   await pageApi.unfollowPage(pageId);
+    //   await dispatch(pagesActions.setPage(pageId));
+    // };
 
     useEffect(() => {
       isPageFollowed();
@@ -152,14 +187,7 @@ const PageContent: React.FC = () => {
                     </Button>
                   )}
                   {canEdit && <EditButton onClick={handleEditing} />}
-                  <Button
-                    className="ms-3"
-                    onClick={
-                      isCurrentPageFollowed
-                        ? (): Promise<void> => onPageUnfollow(paramsId)
-                        : (): Promise<void> => onPageFollow(paramsId)
-                    }
-                  >
+                  <Button className="ms-3" onClick={onPageFollow}>
                     {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                   </Button>
                 </div>
@@ -204,6 +232,15 @@ const PageContent: React.FC = () => {
           onModalClose={handleIviteCancel}
           title={'Invite to Workspace'}
           showModal={isModalVisible}
+        />
+        <FollowModal
+          show={isFollowModalVisible}
+          isFollowing={isCurrentPageFollowed}
+          handler={
+            isCurrentPageFollowed
+              ? handlePageUnfollow(paramsId)
+              : handlePageFollow(paramsId)
+          }
         />
       </div>
     );
