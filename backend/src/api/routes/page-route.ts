@@ -6,6 +6,7 @@ import {
   getPage,
   getContributors,
   updateContent,
+  getTableOfContents,
 } from '../../services/page.service';
 import { getComments, addComment } from '../../services/comment.service';
 
@@ -35,11 +36,14 @@ router
   .post(
     '/:id/comments',
     run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
+  )
+  .get(
+    '/:id/table-of-contents',
+    run((req) => getTableOfContents(req.params.id)),
+  )
+  .post(
+    '/:id/version',
+    run((req) => updateContent(req.body)),
   );
-
-router.post(
-  '/:id/version',
-  run((req) => updateContent(req.body)),
-);
 
 export default router;
