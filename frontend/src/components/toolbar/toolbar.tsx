@@ -57,7 +57,9 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
 
   return (
     <Navbar className="bg-dark flex-column px-5 overflow-auto w-100 vh-100">
-      <h1 className="h5 mt-5 mb-5 text-light text-center">{title}</h1>
+      <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-truncate">
+        {title}
+      </h1>
       <div className="pt-3 w-100">
         <div className="pt-3 w-100 pt-3 w-100 d-flex justify-content-between align-items-center">
           <SectionName name="Pages" />
