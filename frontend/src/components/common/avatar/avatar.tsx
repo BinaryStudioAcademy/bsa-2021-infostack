@@ -5,7 +5,6 @@ import React from 'react';
 import { ReactElement } from 'react-markdown';
 
 type Props = {
-  key?: string;
   size: string;
   name: string | undefined;
   src: string | undefined;
@@ -17,7 +16,6 @@ type Props = {
 };
 
 const UserAvatar: React.FC<Props> = ({
-  key,
   size,
   name,
   src,
@@ -36,7 +34,6 @@ const UserAvatar: React.FC<Props> = ({
     {({ ref, ...triggerHandler }): ReactElement => (
       <div {...triggerHandler} ref={ref}>
         <Avatar
-          key={key}
           size={size}
           name={name}
           src={src}

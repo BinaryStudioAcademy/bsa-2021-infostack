@@ -50,7 +50,6 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
             <div key={id} style={avatarWrapperStyle}>
               <UserAvatar
                 style={avatarStyles}
-                key={id}
                 name={fullName}
                 src={avatar}
                 round={true}
