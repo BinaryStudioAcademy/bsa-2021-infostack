@@ -34,6 +34,7 @@ export const Popup: React.FC<Props> = ({
 
   const handleClose = (): void => {
     onPopupClose();
+    reset({ name: '' });
   };
 
   const {
@@ -54,7 +55,7 @@ export const Popup: React.FC<Props> = ({
     onPopupClose();
 
     setSubmitDisabled(false);
-    reset();
+    reset({ name: '' });
   };
 
   return (

@@ -25,11 +25,13 @@ const ModalComponent: React.FC<Props> = ({
 
   const handleClose = (): void => {
     onModalClose();
+    reset({ email: '' });
   };
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<IWorkspaceInvite>({ resolver: yupResolver(resetPasswordSchema) });
 
@@ -43,6 +45,7 @@ const ModalComponent: React.FC<Props> = ({
 
     setSubmitDisabled(false);
     dispatch(usersActions.loadUsers());
+    reset({ email: '' });
   };
 
   return (
