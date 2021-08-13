@@ -67,13 +67,16 @@ export const updateNameById = async (
   }
   const teamRepository = getCustomRepository(TeamRepository);
   const isNameUsed = await teamRepository.findByName(newName);
-  if (isNameUsed) {
+
+  const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
+
+  if (isNameUsed && isNameUsed.name != teamToUpdate.name) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: HttpErrorMessage.TEAM_NAME_ALREADY_EXISTS,
     });
   }
-  const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
+
   teamToUpdate.name = newName || teamToUpdate.name;
   const team = await teamRepository.save(teamToUpdate);
   return mapTeamToITeam(team);

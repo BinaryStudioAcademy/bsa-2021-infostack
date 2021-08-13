@@ -1,4 +1,5 @@
 import { Spinner, Card } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { teamsActions } from 'store/teams';
 import Item from './item/item';
@@ -14,7 +15,7 @@ import {
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
-  const { teams } = useAppSelector((state) => state.teams);
+  const { teams, error } = useAppSelector((state) => state.teams);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -22,6 +23,13 @@ const TeamSettings: React.FC = () => {
   useEffect(() => {
     dispatch(teamsActions.loadTeams());
   }, []);
+
+  useEffect(() => {
+    if (error != '') {
+      toast.info(error);
+      dispatch(teamsActions.removeConflictError());
+    }
+  }, [error]);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
     return <Item key={team.id} team={team} />;

@@ -19,10 +19,10 @@ const createTeam = createAsyncThunk(
     try {
       const team = await new TeamApi().createTeam(payload);
       dispatch(actions.addTeam(team));
-      dispatch(actions.removeCreatingError());
+      dispatch(actions.removeConflictError());
     } catch (err) {
       if (err.status === HttpCode.CONFLICT) {
-        dispatch(actions.setCreatingError(err.message));
+        dispatch(actions.setConflictError(err.message));
       }
     }
   },
@@ -34,10 +34,10 @@ const updateTeam = createAsyncThunk(
     try {
       const team = await new TeamApi().updateTeam(payload);
       dispatch(actions.updateTeam(team));
-      dispatch(actions.removeEditingError());
+      dispatch(actions.removeConflictError());
     } catch (err) {
       if (err.status === HttpCode.CONFLICT) {
-        dispatch(actions.setEditingError(err.message));
+        dispatch(actions.setConflictError(err.message));
       }
     }
   },

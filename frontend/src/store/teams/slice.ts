@@ -5,14 +5,12 @@ import { ActionType } from './common';
 
 type State = {
   teams: ITeam[];
-  editingError: string;
-  creatingError: string;
+  error: string;
 };
 
 const initialState: State = {
   teams: [],
-  editingError: '',
-  creatingError: '',
+  error: '',
 };
 
 const { reducer, actions } = createSlice({
@@ -36,17 +34,11 @@ const { reducer, actions } = createSlice({
         (team: ITeam) => team.id !== action.payload,
       );
     },
-    [ActionType.SET_CREATING_ERROR]: (state, action: PayloadAction<string>) => {
-      state.creatingError = action.payload;
+    [ActionType.SET_CONFLICT_ERROR]: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
-    [ActionType.REMOVE_CREATING_ERROR]: (state) => {
-      state.creatingError = '';
-    },
-    [ActionType.SET_EDITING_ERROR]: (state, action: PayloadAction<string>) => {
-      state.editingError = action.payload;
-    },
-    [ActionType.REMOVE_EDITING_ERROR]: (state) => {
-      state.editingError = '';
+    [ActionType.REMOVE_CONFLICT_ERROR]: (state) => {
+      state.error = '';
     },
   },
 });

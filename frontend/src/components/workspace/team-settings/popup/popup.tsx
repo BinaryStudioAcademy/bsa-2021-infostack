@@ -1,12 +1,11 @@
 import { Modal, Button } from 'react-bootstrap';
-import { useEffect, useState } from 'hooks/hooks';
+import { useState } from 'hooks/hooks';
 import { useForm } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import FormField from 'components/common/form-field/form-field';
-import { yupResolver, useAppSelector } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
 import { teamNameSchema } from 'validations/team-name-schema';
 import { ITeamCreation } from 'common/interfaces/team';
-import { toast } from 'react-toastify';
 
 type Props = {
   title: string;
@@ -23,14 +22,7 @@ export const Popup: React.FC<Props> = ({
   handleFunction,
   inputValue,
 }) => {
-  const { creatingError } = useAppSelector((state) => state.teams);
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
-
-  useEffect(() => {
-    if (creatingError != '') {
-      toast.info(creatingError);
-    }
-  }, [creatingError]);
 
   const handleClose = (): void => {
     onPopupClose();
