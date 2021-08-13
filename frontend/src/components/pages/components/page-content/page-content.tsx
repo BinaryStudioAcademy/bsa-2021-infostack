@@ -2,6 +2,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import isUUID from 'is-uuid';
 import {
   useAppDispatch,
@@ -42,6 +43,9 @@ const PageContent: React.FC = () => {
   const paramsId = useParams<{ id: string }>().id;
 
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
+  const canEdit =
+    currentPage?.permission === PermissionType.ADMIN ||
+    currentPage?.permission === PermissionType.WRITE;
   const [isContributorsLoading, setIsContributorsLoading] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
 
@@ -135,11 +139,14 @@ const PageContent: React.FC = () => {
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
                   {isPageAdmin && (
-                    <Button onClick={onAssign} className="me-3">
+                    <Button
+                      onClick={onAssign}
+                      className={canEdit ? 'me-3' : ''}
+                    >
                       Assign permissions
                     </Button>
                   )}
-                  <EditButton onClick={handleEditing} />
+                  {canEdit && <EditButton onClick={handleEditing} />}
                   <Button
                     className="ms-3"
                     onClick={
@@ -157,7 +164,9 @@ const PageContent: React.FC = () => {
               <Col>
                 <Card border="light" className={getAllowedClasses(styles.card)}>
                   <Card.Body className={getAllowedClasses(styles.content)}>
-                    <ReactMarkdown>{content || 'Empty page'}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[gfm]}>
+                      {content || 'Empty page'}
+                    </ReactMarkdown>
                   </Card.Body>
                 </Card>
               </Col>
