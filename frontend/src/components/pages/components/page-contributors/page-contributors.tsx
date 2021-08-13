@@ -1,10 +1,10 @@
 import { Card, Badge } from 'react-bootstrap';
-import Avatar from 'react-avatar';
 import { IPageContributor } from 'common/interfaces/pages';
 import { useHistory } from 'react-router-dom';
 import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
 import { replaceIdParam } from 'helpers/helpers';
+import UserAvatar from '../../../common/avatar/avatar';
 
 interface IPageContributorsProps {
   contributors: IPageContributor[];
@@ -19,10 +19,13 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
 }) => {
   const history = useHistory();
 
+  const avatarWrapperStyle: React.CSSProperties = {
+    marginLeft: -(+avatarSize / 2.2) + 'px',
+  };
+
   const avatarStyles: React.CSSProperties = {
     boxSizing: 'content-box',
     border: '4px solid white',
-    marginLeft: -(+avatarSize / 2.2) + 'px',
     cursor: 'pointer',
   };
 
@@ -39,17 +42,22 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
         </Badge>
       </Card.Header>
       <Card.Body>
-        <div style={{ marginLeft: +avatarSize / 2 }}>
+        <div
+          className="d-flex justify-content-start"
+          style={{ marginLeft: +avatarSize / 2 }}
+        >
           {contributors.map(({ id, fullName, avatar }) => (
-            <Avatar
-              style={avatarStyles}
-              key={id}
-              name={fullName}
-              src={avatar}
-              round={true}
-              size={avatarSize.toString()}
-              onClick={handleAvatarClick.bind(null, id)}
-            />
+            <div key={id} style={avatarWrapperStyle}>
+              <UserAvatar
+                style={avatarStyles}
+                key={id}
+                name={fullName}
+                src={avatar}
+                round={true}
+                size={avatarSize.toString()}
+                onClick={handleAvatarClick.bind(null, id)}
+              />
+            </div>
           ))}
         </div>
       </Card.Body>
