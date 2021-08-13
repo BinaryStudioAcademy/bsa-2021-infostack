@@ -23,7 +23,7 @@ router
 
   .post(
     '/',
-    run((req) => create(req.userId, { name: req.body.name })),
+    run((req) => create(req.userId, req.workspaceId, { name: req.body.name })),
   )
 
   .put(

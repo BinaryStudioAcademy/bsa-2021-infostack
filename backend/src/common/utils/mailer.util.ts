@@ -31,6 +31,7 @@ const sendMail = async (
   options: Pick<Mail.Options, 'to' | 'text' | 'subject'>,
 ): Promise<void> => {
   const transporter = await createTransport();
+
   await transporter.sendMail(options);
 };
 

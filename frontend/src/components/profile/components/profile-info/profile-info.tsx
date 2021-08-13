@@ -6,16 +6,25 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
-import { Link } from 'react-router-dom';
+import { Link } from 'components/common/common';
 import './profile-info.scss';
 import { UserApi } from 'services';
 import { IUser } from 'common/interfaces/user';
+import { AppRoute } from '../../../../common/enums/enums';
 
 const ProfileInfo: React.FC = () => {
+  const [user, setUser] = useState<IUser>({
+    id: '',
+    avatar: '',
+    fullName: '',
+    email: '',
+    title: '',
+    skills: [],
+    followingPages: [],
+  });
   const [permission, setPermission] = useState(true);
   const userApi = new UserApi();
   const { id } = useParams<{ id?: string }>();
-  const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
     let mounted = true;
@@ -25,6 +34,7 @@ const ProfileInfo: React.FC = () => {
           if (mounted) {
             setUser(user);
             setPermission(true);
+            setUser(user);
           }
         } else {
           if (mounted) {
@@ -106,21 +116,25 @@ const ProfileInfo: React.FC = () => {
                       Followings
                     </Card.Title>
                     <div className="following-pages-container">
-                      <Link to={'#'} className="following-page">
-                        <i className="bi bi-file-text-fill"></i>Page 1
-                      </Link>
-                      <Link to={'#'} className="following-page">
-                        <i className="bi bi-file-text-fill"></i>Page 2
-                      </Link>
-                      <Link to={'#'} className="following-page">
-                        <i className="bi bi-file-text-fill"></i>Page 3
-                      </Link>
-                      <Link to={'#'} className="following-page">
-                        <i className="bi bi-file-text-fill"></i>Page 4
-                      </Link>
-                      <Link to={'#'} className="following-page">
-                        <i className="bi bi-file-text-fill"></i>Page 5
-                      </Link>
+                      {user &&
+                      user.followingPages &&
+                      user?.followingPages?.length > 0
+                        ? user?.followingPages?.map((page) => (
+                            <Link
+                              to={
+                                `${AppRoute.PAGE.slice(
+                                  0,
+                                  AppRoute.PAGE.length - 3,
+                                )}${page.id}` as AppRoute
+                              }
+                              key={page.id}
+                              className="following-page"
+                            >
+                              <i className="bi bi-file-text-fill"></i>
+                              {page.pageContents[0].title}
+                            </Link>
+                          ))
+                        : null}
                     </div>
                   </Card.Body>
                 </Card>

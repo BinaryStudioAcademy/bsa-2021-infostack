@@ -3,6 +3,7 @@ export type {
   IPageRequest,
   IPageNav,
   IPageContributor,
+  IPageFollowed,
   IEditPageContent,
   IPageTableOfContentsHeading,
   IPageTableOfContents,

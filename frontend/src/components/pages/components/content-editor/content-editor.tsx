@@ -7,8 +7,9 @@ import {
   Col,
   Row,
 } from 'react-bootstrap';
-import Editor from 'react-markdown-editor-lite';
+import Editor, { Plugins } from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
 import { AppRoute } from 'common/enums/enums';
@@ -21,6 +22,7 @@ import {
   useRef,
 } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 const PageContentEditor: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -31,6 +33,13 @@ const PageContentEditor: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const editorRef = useRef(null);
+
+  Editor.unuse(Plugins.Image);
+  Editor.unuse(Plugins.FontUnderline);
+
+  if (!currentPage) {
+    history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
+  }
 
   const [titleInputValue, setTitleInputValue] = useState(pageTitle);
   const [markDownContent, setMarkDownContent] = useState(content);
@@ -65,12 +74,12 @@ const PageContentEditor: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Card border="light" className="card">
+          <Card border="light" className={styles.content}>
             <Editor
               value={markDownContent}
               onChange={({ text }): void => setMarkDownContent(text)}
               renderHTML={(text): JSX.Element => (
-                <ReactMarkdown>{text}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
               )}
               ref={editorRef}
             />

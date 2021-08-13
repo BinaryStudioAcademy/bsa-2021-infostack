@@ -8,6 +8,7 @@ import styles from './styles.module.scss';
 
 type Props = {
   onSubmit: (text: string) => void;
+  onCancel?: () => void;
   isDisabled?: boolean;
   className?: string;
   placeholder?: string;
@@ -16,6 +17,7 @@ type Props = {
 
 export const CommentForm: React.FC<Props> = ({
   onSubmit,
+  onCancel,
   isDisabled = false,
   className,
   placeholder,
@@ -32,6 +34,11 @@ export const CommentForm: React.FC<Props> = ({
   const handleSubmit = (): void => {
     onSubmit(text);
     setText('');
+  };
+
+  const handleCancel = (): void => {
+    setText('');
+    onCancel?.();
   };
 
   const handleAvatarClick = (userId?: string): void => {
@@ -64,11 +71,17 @@ export const CommentForm: React.FC<Props> = ({
                 onChange={handleChange}
               />
               <Button
-                disabled={isDisabled}
+                disabled={isDisabled || text === ''}
                 onClick={handleSubmit}
                 className={styles.text}
               >
                 Submit
+              </Button>
+              <Button
+                onClick={handleCancel}
+                className={getAllowedClasses('ms-2', styles.text)}
+              >
+                Cancel
               </Button>
             </div>
           </div>

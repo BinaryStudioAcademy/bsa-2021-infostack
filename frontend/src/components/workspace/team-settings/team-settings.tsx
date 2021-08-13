@@ -1,9 +1,9 @@
 import { Spinner, Card } from 'react-bootstrap';
-import { ITeam } from 'common/interfaces/team';
+import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { teamsActions } from 'store/teams';
 import Item from './item/item';
 import CreateButton from './create-button/create-button';
-import { Popup } from '../../common/popup/popup';
+import { Popup } from './popup/popup';
 import {
   useState,
   useEffect,
@@ -14,22 +14,17 @@ import {
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
-  const { teams, creatingError } = useAppSelector((state) => state.teams);
+  const { teams } = useAppSelector((state) => state.teams);
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [popUpText, setPopUpText] = useState('');
 
   useEffect(() => {
     dispatch(teamsActions.loadTeams());
   }, []);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
-    return <Item key={team.id} team={team} onClick={onItemClick} />;
-  };
-
-  const onItemClick = (id: string): void => {
-    dispatch(teamsActions.loadTeam(id));
+    return <Item key={team.id} team={team} />;
   };
 
   const onCreateTeamButtonClick = (): void => {
@@ -38,13 +33,10 @@ const TeamSettings: React.FC = () => {
 
   const handleCreationCancel = (): void => {
     setIsPopUpVisible(false);
-    setPopUpText('');
   };
 
-  const handleCreationConfirm = (): void => {
-    if (popUpText) {
-      dispatch(teamsActions.createTeam(popUpText));
-    }
+  const handleCreation = async (data: ITeamCreation): Promise<void> => {
+    dispatch(teamsActions.createTeam(data.name));
   };
 
   return (
@@ -66,26 +58,19 @@ const TeamSettings: React.FC = () => {
               <Spinner animation="border" variant="secondary" />
             </div>
           )}
-          {teams && (
-            <div className="teams-container py-2 w-100">
-              {teams.map((team: ITeam) => renderTeamItem(team))}
-            </div>
-          )}
+          {teams &&
+            (teams.length === 0 ? (
+              <div>There is no teams in this workspace. Start adding</div>
+            ) : (
+              <div className="teams-container py-2 w-100">
+                {teams.map((team: ITeam) => renderTeamItem(team))}
+              </div>
+            ))}
           <Popup
-            query="Enter name of team:"
-            isVisible={isPopUpVisible}
-            inputValue={popUpText}
-            setPopUpText={setPopUpText}
-            error={creatingError}
-            cancelButton={{
-              text: 'Cancel',
-              onClick: handleCreationCancel,
-            }}
-            confirmButton={{
-              text: 'Save',
-              onClick: handleCreationConfirm,
-              disabled: !popUpText,
-            }}
+            title="Enter name of team:"
+            showPopup={isPopUpVisible}
+            onPopupClose={handleCreationCancel}
+            handleFunction={handleCreation}
           />
         </div>
       </Card.Body>

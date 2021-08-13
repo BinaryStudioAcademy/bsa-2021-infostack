@@ -4,6 +4,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useEffect,
+  useHistory,
   useLocation,
   useParams,
 } from 'hooks/hooks';
@@ -13,6 +14,8 @@ import PagesList from './components/pages-list/pages-list';
 import styles from './styles.module.scss';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from './components/plus-button/plus-button-root';
+import { replaceIdParam } from 'helpers/helpers';
+import { AppRoute } from 'common/enums/enums';
 
 type Props = {
   title?: string;
@@ -21,8 +24,11 @@ type Props = {
 const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  const paramsId = useParams();
+  const paramsId = useParams<{ id: string }>().id;
   const url = useLocation().pathname;
+  const history = useHistory();
+
+  const pages = useAppSelector((state: RootState) => state.pages);
 
   useEffect(() => {
     dispatch(pagesActions.getPagesAsync());
@@ -30,17 +36,20 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
 
   const addPage = async (): Promise<void> => {
     const payload: IPageRequest = { title: 'New Page', content: '' };
-    await dispatch(pagesActions.createPage(payload));
+    await dispatch(pagesActions.createPage(payload))
+      .unwrap()
+      .then((res) =>
+        history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute),
+      );
+
     await dispatch(pagesActions.getPagesAsync());
   };
 
   useEffect(() => {
-    if (currentPage && !url.includes(currentPage.id)) {
+    if (currentPage && !url.includes('/page/')) {
       dispatch(pagesActions.clearCurrentPage());
     }
   }, [paramsId]);
-
-  const pages = useAppSelector((state: RootState) => state.pages);
 
   const SectionName: React.FC<{ name: string }> = ({ name }) => (
     <h2 className={getAllowedClasses(styles.sectionName)}>{name}</h2>
@@ -53,7 +62,9 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
         styles.navbar,
       )}
     >
-      <h1 className="h5 mt-5 mb-5 text-light text-center">{title}</h1>
+      <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-truncate">
+        {title}
+      </h1>
       <div className="pt-3 w-100">
         <div className="pt-3 w-100 pt-3 w-100 d-flex justify-content-between align-items-center">
           <SectionName name="Pages" />

@@ -15,14 +15,15 @@ export const getAllByWorkspaceId = async (
   return teams.map(mapTeamToITeam);
 };
 
-export const getTeam = async (pageId: string): Promise<ITeam> => {
+export const getTeam = async (teamId: string): Promise<ITeam> => {
   const pageRepository = getCustomRepository(TeamRepository);
-  const page = await pageRepository.findByIdWithUsers(pageId);
-  return mapTeamToITeam(page);
+  const team = await pageRepository.findByIdWithUsers(teamId);
+  return mapTeamToITeam(team);
 };
 
 export const create = async (
   userId: string,
+  workspaceId: string,
   newTeam: ITeamCreation,
 ): Promise<ITeam> => {
   if (!newTeam.name) {
@@ -33,6 +34,7 @@ export const create = async (
   }
   const teamRepository = getCustomRepository(TeamRepository);
   const isNameUsed = await teamRepository.findByName(newTeam.name);
+
   if (isNameUsed) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
@@ -40,11 +42,15 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  await teamRepository.save(team);
+  await teamRepository.save({ workspaceId, name: team.name });
+  const newTeamDetails = await teamRepository.findByName(team.name);
+
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findUserTeams(userId);
-  user.teams.push(team);
+
+  user.teams.push(newTeamDetails);
   userRepository.save(user);
+
   const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
   return { id: team.id, name: team.name, users };
 };

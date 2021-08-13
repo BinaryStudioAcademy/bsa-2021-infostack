@@ -4,13 +4,14 @@ import { getAllowedClasses } from 'helpers/dom/dom';
 import { IPageNav } from 'common/interfaces/pages';
 import { AppRoute } from 'common/enums/enums';
 import styles from '../../styles.module.scss';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useHistory } from 'hooks/hooks';
 import { pagesActions } from 'store/pages';
 import { IPageRequest } from 'common/interfaces/pages';
 import PlusButtonRoot from '../plus-button/plus-button-root';
 import { RootState } from 'common/types/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
+import { isHaveCurPage } from 'helpers/toolbar/check-page';
 
 type Props = {
   title?: string;
@@ -22,6 +23,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const [activeKey, setActiveKey] = useState<undefined | string>(undefined);
+  const history = useHistory();
 
   const addSubPage = async (
     event: React.MouseEvent<HTMLElement>,
@@ -34,7 +36,11 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
       parentPageId: id,
     };
 
-    await dispatch(pagesActions.createPage(payload));
+    await dispatch(pagesActions.createPage(payload))
+      .unwrap()
+      .then((res) =>
+        history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute),
+      );
     await dispatch(pagesActions.getPagesAsync());
     setActiveKey(id);
   };
@@ -42,6 +48,12 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
   type LinkProps = {
     id?: string;
   };
+
+  useEffect(() => {
+    if (currentPage && isHaveCurPage(childPages, currentPage?.id)) {
+      setActiveKey(currentPage?.id);
+    }
+  }, [currentPage?.id]);
 
   const isSelected = id === currentPage?.id ? styles.selectedPage : '';
 
@@ -53,10 +65,11 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
           styles.navbarBrand,
           styles.navbarLinkInsideSection,
           'd-flex',
+          'w-75',
           `${isSelected}`,
         )}
       >
-        {title}
+        <div className="text-truncate">{title}</div>
       </Link>
     );
   };
@@ -66,7 +79,7 @@ const PageItem: React.FC<Props> = ({ title = 'New Page', id, childPages }) => {
       <Accordion
         flush
         key={id}
-        activeKey={activeKey}
+        activeKey={isHaveCurPage(childPages, currentPage?.id) ? id : activeKey}
         onSelect={(): void => setActiveKey(undefined)}
       >
         <Accordion.Item eventKey={id as string} className="bg-transparent">

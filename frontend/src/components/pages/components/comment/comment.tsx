@@ -61,7 +61,7 @@ export const Comment: React.FC<Props> = ({
           className={getAllowedClasses('text-secondary', styles.respond)}
           onClick={toggleField}
         >
-          {isFieldVisible ? 'cancel' : 'respond'}
+          respond
         </button>
         {isFieldVisible && (
           <CommentForm
@@ -69,6 +69,7 @@ export const Comment: React.FC<Props> = ({
             placeholder="Add a response"
             avatarSize="30"
             onSubmit={handleSubmit}
+            onCancel={toggleField}
           />
         )}
         {children && <ListGroup variant="flush">{children}</ListGroup>}
