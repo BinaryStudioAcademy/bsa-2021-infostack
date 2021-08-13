@@ -1,4 +1,3 @@
-import Avatar from 'react-avatar';
 import CreatableSelect from 'react-select/creatable';
 import { OptionsType } from 'react-select';
 import { CSSObject } from '@emotion/serialize';
@@ -18,6 +17,7 @@ import { IUserAccount } from 'common/interfaces/user';
 import { useForm } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { accountInfoSchema } from 'validations/account-info-schema';
+import UserAvatar from 'components/common/avatar/avatar';
 import styles from './styles.module.scss';
 
 const ProfileEdit: React.FC = () => {
@@ -283,12 +283,13 @@ const ProfileEdit: React.FC = () => {
             md={4}
             className="d-flex text-center flex-column align-items-center"
           >
-            <Avatar
+            <UserAvatar
               className={`${getAllowedClasses(styles.cardImage)} mb-3`}
               name={user?.fullName}
               src={selectedImgURL ? selectedImgURL : user?.avatar}
               round={true}
               size="12.8rem"
+              showTooltip={false}
             />
 
             {user?.avatar && (

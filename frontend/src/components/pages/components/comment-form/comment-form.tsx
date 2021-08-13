@@ -1,9 +1,9 @@
-import Avatar from 'react-avatar';
 import { Form, Button } from 'react-bootstrap';
 import { useState, useAppSelector, useHistory } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
+import UserAvatar from '../../../common/avatar/avatar';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -53,16 +53,16 @@ export const CommentForm: React.FC<Props> = ({
     <>
       <Form className={className}>
         <Form.Group>
-          <div className="d-flex">
-            <Avatar
+          <div className="d-flex align-items-start">
+            <UserAvatar
               size={avatarSize}
               name={user?.fullName}
               src={user?.avatar}
               round
-              className={getAllowedClasses('me-3', styles.avatar)}
+              className={getAllowedClasses(styles.avatar)}
               onClick={(): void => handleAvatarClick(user?.id)}
             />
-            <div className="flex-grow-1">
+            <div className="flex-grow-1 ms-3">
               <Form.Control
                 as="textarea"
                 placeholder={placeholder}

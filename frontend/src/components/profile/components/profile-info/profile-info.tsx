@@ -1,4 +1,3 @@
-import Avatar from 'react-avatar';
 import { useState, useEffect, useParams } from 'hooks/hooks';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,6 +9,7 @@ import { Link } from 'components/common/common';
 import './profile-info.scss';
 import { UserApi } from 'services';
 import { IUser } from 'common/interfaces/user';
+import UserAvatar from 'components/common/avatar/avatar';
 import { AppRoute } from '../../../../common/enums/enums';
 
 const ProfileInfo: React.FC = () => {
@@ -71,12 +71,13 @@ const ProfileInfo: React.FC = () => {
                         </Card.Title>
                         <ListGroup variant="flush">
                           <ListGroup.Item className="card-block-item align-items-center">
-                            <Avatar
+                            <UserAvatar
                               size="100"
                               name={user?.fullName}
                               src={user?.avatar}
                               round={true}
                               className="user-avatar"
+                              showTooltip={false}
                             />
                             <Card.Title className="profile-user-title">
                               {user?.fullName}
