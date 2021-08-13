@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { passwordRegex, fullNameRegex } from './regex/regex';
+import { titleRegex, passwordRegex } from './regex/regex';
 
 export const signUpSchema = yup.object().shape({
   fullName: yup
@@ -8,7 +8,7 @@ export const signUpSchema = yup.object().shape({
     .min(5)
     .max(30)
     .matches(
-      fullNameRegex,
+      titleRegex,
       'fullName must consist of latin letters (upper and lower case), numbers, and symbols',
     )
     .required(),

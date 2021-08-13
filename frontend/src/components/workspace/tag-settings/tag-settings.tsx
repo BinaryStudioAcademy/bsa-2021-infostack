@@ -36,7 +36,7 @@ const TagSettings: React.FC = () => {
               className={getAllowedClasses(styles.button)}
               onClick={handleNewTagFormOpen}
             >
-              <i className="bi bi-plus-lg"></i>New Tag
+              <i className="bi bi-plus-lg text-white"></i>New Tag
             </Button>
           )}
         </Card.Title>

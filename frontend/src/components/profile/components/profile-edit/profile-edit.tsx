@@ -322,7 +322,7 @@ const ProfileEdit: React.FC = () => {
               onClick={handleUpload}
             >
               <i
-                className={`bi bi-cloud-arrow-up-fill ${getAllowedClasses(
+                className={`bi bi-cloud-arrow-up-fill text-white ${getAllowedClasses(
                   styles.uploadIcon,
                 )}`}
               />
