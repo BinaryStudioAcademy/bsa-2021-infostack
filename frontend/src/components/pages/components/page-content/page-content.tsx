@@ -139,7 +139,10 @@ const PageContent: React.FC = () => {
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
                   {isPageAdmin && (
-                    <Button onClick={onAssign} className="me-3">
+                    <Button
+                      onClick={onAssign}
+                      className={canEdit ? 'me-3' : ''}
+                    >
                       Assign permissions
                     </Button>
                   )}
