@@ -4,9 +4,10 @@ import {
   IPageRequest,
   IEditPageContent,
   IPageNav,
+  IPageTableOfContents,
+  IPageContributor,
 } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
-import { IPageContributor } from 'common/interfaces/pages';
 
 class PageApi {
   private http = http;
@@ -50,6 +51,12 @@ class PageApi {
 
   public async getPageContributors(id: string): Promise<IPageContributor[]> {
     return this.http.load(`${this.BASE}/${id}/contributors`);
+  }
+
+  public async getPageTableOfContents(
+    id: string,
+  ): Promise<IPageTableOfContents> {
+    return this.http.load(`${this.BASE}/${id}/table-of-content`);
   }
 }
 
