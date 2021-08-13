@@ -1,10 +1,5 @@
 import Avatar from 'react-avatar';
-import {
-  useState,
-  useEffect,
-  useParams,
-  useAppSelector,
-} from '../../hooks/hooks';
+import { useState, useEffect, useParams } from 'hooks/hooks';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,12 +9,13 @@ import Badge from 'react-bootstrap/Badge';
 import { Link } from 'react-router-dom';
 import './profile-info.scss';
 import { UserApi } from 'services';
+import { IUser } from 'common/interfaces/user';
 
 const ProfileInfo: React.FC = () => {
   const [permission, setPermission] = useState(true);
   const userApi = new UserApi();
   const { id } = useParams<{ id?: string }>();
-  const { user } = useAppSelector((state) => state.auth);
+  const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
     let mounted = true;
@@ -27,6 +23,7 @@ const ProfileInfo: React.FC = () => {
       await userApi.getUserInfo(id).then((user) => {
         if (user.id.length > 0) {
           if (mounted) {
+            setUser(user);
             setPermission(true);
           }
         } else {
@@ -42,7 +39,7 @@ const ProfileInfo: React.FC = () => {
     return (): void => {
       mounted = false;
     };
-  }, []);
+  }, [id]);
 
   return (
     <Container className="profile-container" fluid>
