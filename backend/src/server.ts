@@ -18,12 +18,12 @@ import {
 } from './api/middlewares';
 import { SocketEvents } from './common/enums/socket';
 
-const { nodeEnv, url, port, socketPort } = env.app;
+const { nodeEnv, url, port } = env.app;
 
 const app: Express = express();
-const socketServer = createServer(app);
+const httpServer = createServer(app);
 
-const io = new Server(socketServer, {
+const io = new Server(httpServer, {
   cors: {
     origin: nodeEnv === 'production' ? url : 'http://localhost:3000',
     methods: ['GET', 'POST'],
@@ -48,7 +48,7 @@ app.use('*', (_req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
-app.listen(port, async () => {
+httpServer.listen(port, async () => {
   try {
     await createConnection(ormconfig);
   } catch (error) {
@@ -56,7 +56,5 @@ app.listen(port, async () => {
   }
   logger.info(`Server is running at ${port}.`);
 });
-
-socketServer.listen(socketPort);
 
 export default app;
