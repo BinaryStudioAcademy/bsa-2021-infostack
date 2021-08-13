@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { fullNameRegex } from './regex/regex';
+import { titleRegex } from './regex/regex';
 
 export const accountInfoSchema = yup.object().shape({
   fullName: yup
@@ -8,7 +8,7 @@ export const accountInfoSchema = yup.object().shape({
     .min(5, 'Full name must be at least 5 characters')
     .max(30, 'Full name must be at most 30 characters')
     .matches(
-      fullNameRegex,
+      titleRegex,
       'Full name must consist of latin letters (upper and lower case), numbers, and symbols',
     )
     .required(),
