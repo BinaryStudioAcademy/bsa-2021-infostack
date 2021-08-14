@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { Team } from '../entities/team';
 
 @EntityRepository(Team)
@@ -27,6 +27,13 @@ class TeamRepository extends Repository<Team> {
 
   public findByName(name: string): Promise<Team> {
     return this.findOne({ name });
+  }
+
+  public deleteById(id: string): Promise<DeleteResult> {
+    return this.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
   }
 }
 

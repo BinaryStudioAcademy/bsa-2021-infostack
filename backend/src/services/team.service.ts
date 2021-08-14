@@ -3,6 +3,7 @@ import UserRepository from '../data/repositories/user.repository';
 import { ITeam, ITeamCreation } from '../common/interfaces/team/team.interface';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import TeamRepository from '../data/repositories/team.repository';
+import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -79,9 +80,8 @@ export const updateNameById = async (
   return mapTeamToITeam(team);
 };
 
-export const deleteById = async (id: string): Promise<ITeam> => {
-  const teamRepository = getCustomRepository(TeamRepository);
-  const teamToRemove = await teamRepository.findByIdWithUsers(id);
-  const team = await teamRepository.remove(teamToRemove);
-  return mapTeamToITeam(team);
+export const deleteById = async (id: string): Promise<void> => {
+  await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
+
+  await getCustomRepository(TeamRepository).deleteById(id);
 };
