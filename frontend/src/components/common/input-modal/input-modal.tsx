@@ -2,7 +2,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { FieldError } from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
-import FormField from 'components/common/form-field/form-field';
+import { FormField } from '../form-field/form-field';
 import { IButton } from 'common/interfaces/components/button';
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
   resolverSchema?: AnyObjectSchema;
 };
 
-const InputModal: React.FC<Props> = ({
+export const InputModal: React.FC<Props> = ({
   title,
   showModal,
   inputName,
@@ -76,4 +76,3 @@ const InputModal: React.FC<Props> = ({
     </Modal>
   );
 };
-export default InputModal;

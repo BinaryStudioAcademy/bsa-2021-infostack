@@ -1,0 +1,13 @@
+.teamSettingsDropdown {
+  .dropdownToggle::after {
+    display: none !important;
+  }
+
+  .dropdownMenu {
+    width: 180px;
+  }
+
+  .dropdownTeamDetails {
+    font-size: 20px;
+  }
+}

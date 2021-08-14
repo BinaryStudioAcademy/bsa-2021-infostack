@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
-import { HttpCode } from 'infostack-shared/common/enums';
-import { IRequestWithUser } from '../../common/models/user/request-with-user.interface';
+import { HttpCode } from 'src/common/enums/http-code';
+import { IRequestWithUser } from '../../common/interfaces/http/request-with-user.interface';
 
 export const verifyWorkspaceId = (
   req: IRequestWithUser,

@@ -1,8 +1,9 @@
 import { Response, NextFunction } from 'express';
-import { HttpCode, HttpErrorMessage } from 'infostack-shared/common/enums';
 import jwt from 'jsonwebtoken';
+import { HttpCode } from 'src/common/enums/http-code';
+import { HttpErrorMessage } from 'src/common/enums/http-error-message';
 import whiteListRoutes from '../../config/white-list-routes-config';
-import { IRequestWithUser } from '../../common/models/user/request-with-user.interface';
+import { IRequestWithUser } from 'src/common/interfaces/http';
 import { env } from '../../env';
 
 export const auth = (
@@ -25,6 +26,8 @@ export const auth = (
 
     next();
   } catch (err) {
-    res.status(HttpCode.UNAUTHORIZED).json({ msg: HttpErrorMessage.UNAUTHORIZED, error: err });
+    res
+      .status(HttpCode.UNAUTHORIZED)
+      .json({ msg: HttpErrorMessage.UNAUTHORIZED, error: err });
   }
 };

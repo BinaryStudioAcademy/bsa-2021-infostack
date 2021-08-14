@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import {
   useAppDispatch,
@@ -13,26 +14,25 @@ import {
   useHistory,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
-import { pagesActions } from 'store/pages';
+import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { Popup } from '../popup/popup';
-import { CommentSection } from '../comment-section/comment-section';
-import InviteModal from 'components/common/invite-modal/invite-modal';
-import { Spinner } from 'components/common/spinner/spinner';
-import PageContributors from '../page-contributors/page-contributors';
+import { InviteModal, Spinner } from 'components/common/common';
+import {
+  EditButton,
+  PageTableOfContents,
+  PageContributors,
+  CommentSection,
+  Popup,
+} from '../components';
 import { PageApi } from 'services';
 import {
   IPageContributor,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
-import EditButton from '../edit-button/edit-button';
-import { replaceIdParam } from 'helpers/helpers';
-import PageTableOfContents from '../page-table-of-contents.tsx/page-table-of-contents';
-import slug from 'remark-slug';
-import { getAllowedClasses } from 'helpers/dom/dom';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-const PageContent: React.FC = () => {
+export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const { user } = useAppSelector((state) => state.auth);
@@ -231,5 +231,3 @@ const PageContent: React.FC = () => {
 
   return !isSpinner && !isLeftBlockLoading ? <Content /> : <Spinner />;
 };
-
-export default PageContent;

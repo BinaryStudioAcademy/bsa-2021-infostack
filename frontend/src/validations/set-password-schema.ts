@@ -13,6 +13,10 @@ export const setPasswordSchema = yup.object().shape({
     .required(),
   passwordRepeat: yup
     .string()
-    .oneOf([yup.ref('password'), null], "passwords don't match")
+    .oneOf(
+      [yup.ref('password'), null],
+      //prettier ignore
+      "passwords don't match",
+    )
     .required('required'),
 });

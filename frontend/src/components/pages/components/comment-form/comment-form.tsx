@@ -1,9 +1,9 @@
 import { Form, Button } from 'react-bootstrap';
 import { useState, useAppSelector, useHistory } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
-import UserAvatar from '../../../common/avatar/avatar';
+import { UserAvatar } from 'components/common/common';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 type Props = {

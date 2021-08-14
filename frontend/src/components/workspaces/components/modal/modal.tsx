@@ -1,10 +1,14 @@
 import { toast } from 'react-toastify';
-import { useEffect, useState } from 'hooks/hooks';
-import { useForm } from 'hooks/hooks';
-import { yupResolver, useAppSelector } from 'hooks/hooks';
+import {
+  useEffect,
+  useState,
+  useForm,
+  yupResolver,
+  useAppSelector,
+} from 'hooks/hooks';
 import { workspaceSchema } from 'validations/workspace-schema';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
-import InputModal from 'components/common/input-modal/input-modal';
+import { InputModal } from 'components/common/common';
 
 type Props = {
   showModal: boolean;
