@@ -10,22 +10,32 @@ import {
   useAppDispatch,
   useCookies,
   useHistory,
+  useForm,
+  yupResolver,
 } from 'hooks/hooks';
+import { workspaceSchema } from 'validations/workspace-schema';
 import { WorkspaceApi } from 'services';
 
 const Workspaces: React.FC = () => {
-  const { workspaces, currentWorkspace, creatingError } = useAppSelector(
+  const { workspaces, currentWorkspace } = useAppSelector(
     (state) => state.workspaces,
   );
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [popUpText, setPopUpText] = useState('');
   const [isWorkspaceSelected, setIsWorkspaceSelected] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies([
     CookieVariable.WORKSPACE_ID,
   ]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ workspaceTitle: string }>({
+    resolver: yupResolver(workspaceSchema),
+  });
 
   const history = useHistory();
 
@@ -55,7 +65,6 @@ const Workspaces: React.FC = () => {
 
   const handleCreationCancel = (): void => {
     setIsPopUpVisible(false);
-    setPopUpText('');
   };
 
   useEffect(() => {
@@ -72,15 +81,14 @@ const Workspaces: React.FC = () => {
     }
   }, [currentWorkspace]);
 
-  const handleCreationConfirm = (): void => {
-    if (popUpText) {
-      dispatch(
-        workspacesActions.createWorkspace({
-          title: popUpText,
-        }),
-      );
-      setIsWorkspaceSelected(true);
-    }
+  const handleCreationConfirm = (data: { workspaceTitle: string }): void => {
+    dispatch(
+      workspacesActions.createWorkspace({
+        title: data.workspaceTitle,
+      }),
+    );
+    setIsPopUpVisible(false);
+    setIsWorkspaceSelected(true);
   };
 
   return (
@@ -101,17 +109,15 @@ const Workspaces: React.FC = () => {
         <Popup
           query="Enter name of workspace:"
           isVisible={isPopUpVisible}
-          inputValue={popUpText}
-          setPopUpText={setPopUpText}
-          error={creatingError}
+          register={register('workspaceTitle')}
+          errors={errors?.workspaceTitle}
           cancelButton={{
             text: 'Cancel',
             onClick: handleCreationCancel,
           }}
           confirmButton={{
             text: 'Save',
-            onClick: handleCreationConfirm,
-            disabled: !popUpText,
+            onClick: handleSubmit(handleCreationConfirm),
           }}
         />
       </BootstrapContainer>

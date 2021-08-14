@@ -21,9 +21,14 @@ import ModalComponent from 'components/modal/modal';
 import { Spinner } from 'components/common/spinner/spinner';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
-import { IPageContributor } from 'common/interfaces/pages';
+import {
+  IPageContributor,
+  IPageTableOfContentsHeading,
+} from 'common/interfaces/pages';
 import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
+import PageTableOfContents from '../page-table-of-contents.tsx/page-table-of-contents';
+import slug from 'remark-slug';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 import PageTags from '../page-tags/page-tags';
@@ -52,8 +57,13 @@ const PageContent: React.FC = () => {
   const canEdit =
     currentPage?.permission === PermissionType.ADMIN ||
     currentPage?.permission === PermissionType.WRITE;
-  const [isContributorsLoading, setIsContributorsLoading] = useState(false);
+
+  const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
+
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
+  const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
+    [],
+  );
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
@@ -68,13 +78,21 @@ const PageContent: React.FC = () => {
 
   useEffect(() => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
-      setIsContributorsLoading(true);
-      new PageApi()
-        .getPageContributors(paramsId)
-        .then((contributors) => setContributors(contributors))
-        .finally(() => setIsContributorsLoading(false));
+      setIsLeftBlockLoading(true);
 
       getPageById(paramsId);
+
+      const contributorsPromise = new PageApi().getPageContributors(paramsId);
+      const TOCPromise = new PageApi().getPageTableOfContents(paramsId);
+
+      Promise.all([contributorsPromise, TOCPromise]).then(
+        ([contributors, TOC]) => {
+          setContributors(contributors);
+          setTOCHeadings(TOC.headings);
+        },
+      );
+
+      setIsLeftBlockLoading(false);
     } else {
       dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
@@ -137,8 +155,9 @@ const PageContent: React.FC = () => {
       <div className="p-4">
         <Row>
           <Col xs={2}>
+            <PageTableOfContents headings={TOCHeadings} />
             <PageTags />
-            <PageContributors contributors={contributors} />
+            <PageContributors className="mt-4" contributors={contributors} />
           </Col>
           <Col>
             <Row>
@@ -169,9 +188,10 @@ const PageContent: React.FC = () => {
             </Row>
             <Row className="mb-4">
               <Col>
-                <Card border="light" className={getAllowedClasses(styles.card)}>
+                <Card border="light" className={styles.card}>
                   <Card.Body className={getAllowedClasses(styles.content)}>
-                    <ReactMarkdown remarkPlugins={[gfm]}>
+                    {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
+                    <ReactMarkdown remarkPlugins={[slug, gfm]}>
                       {content || 'Empty page'}
                     </ReactMarkdown>
                   </Card.Body>
@@ -211,7 +231,7 @@ const PageContent: React.FC = () => {
     );
   };
 
-  return !isSpinner && !isContributorsLoading ? <Content /> : <Spinner />;
+  return !isSpinner && !isLeftBlockLoading ? <Content /> : <Spinner />;
 };
 
 export default PageContent;

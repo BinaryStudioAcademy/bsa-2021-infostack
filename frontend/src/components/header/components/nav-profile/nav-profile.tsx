@@ -1,4 +1,3 @@
-import Avatar from 'react-avatar';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavItem from 'react-bootstrap/NavItem';
@@ -8,6 +7,7 @@ import { authActions } from 'store/actions';
 import { ProfileItem } from './components/profile-item/profile-item';
 import './styles.scss';
 import { replaceIdParam } from 'helpers/helpers';
+import UserAvatar from '../../../common/avatar/avatar';
 
 type Props = {
   userName: string;
@@ -33,16 +33,16 @@ const NavProfile: React.FC<Props> = ({ userName, userAvatar, userId }) => {
   return (
     <Dropdown as={NavItem} align="end">
       <Dropdown.Toggle as={NavLink} id="dropdown-profile-details">
-        <Avatar
+        <UserAvatar
           size="40"
           name={userName}
           src={userAvatar}
           round={true}
           className="userAvatar"
+          showTooltip={false}
         />
         <span className="text-dark userName">{userName}</span>
       </Dropdown.Toggle>
-
       <Dropdown.Menu>
         <ProfileItem to={replaceIdParam(AppRoute.PROFILE, userId || '')}>
           <i className="bi bi-person"></i>

@@ -14,6 +14,7 @@ import {
   updateContent,
   getTags,
   savePageTags,
+  getTableOfContents,
 } from '../../services/page.service';
 import { getComments, addComment } from '../../services/comment.service';
 
@@ -104,6 +105,11 @@ router.get(
 router.post(
   '/:id/tags',
   run((req) => savePageTags(req.params.id, req.body)),
+);
+
+router.post(
+  '/:id/table-of-contents',
+  run((req) => getTableOfContents(req.params.id)),
 );
 
 export default router;

@@ -6,6 +6,8 @@ import {
   IPageFollowed,
   IEditPageContent,
   IPageNav,
+  IPageTableOfContents,
+  IPageContributor,
 } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
 import { IPageContributor } from 'common/interfaces/pages';
@@ -118,6 +120,12 @@ class PageApi {
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
     });
+  }
+  
+  public async getPageTableOfContents(
+    id: string,
+  ): Promise<IPageTableOfContents> {
+    return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
 }
 
