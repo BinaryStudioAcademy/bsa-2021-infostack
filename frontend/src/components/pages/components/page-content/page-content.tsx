@@ -56,10 +56,7 @@ const PageContent: React.FC = () => {
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isFollowModalVisible, setIsFollowModalVisible] =
-    useState<boolean>(false);
-  const toggleFollowModal = (): void =>
-    setIsFollowModalVisible((prev) => !prev);
+  const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -150,20 +147,20 @@ const PageContent: React.FC = () => {
     const handlePageFollow =
       (pageId: string) =>
       async (withChildren: boolean): Promise<void> => {
-        toggleFollowModal();
+        setIsFollowModalVisible(false);
         await dispatch(pagesActions.followPage({ pageId, withChildren }));
       };
 
     const handlePageUnfollow =
       (pageId: string) =>
       async (withChildren: boolean): Promise<void> => {
-        toggleFollowModal();
+        setIsFollowModalVisible(false);
         await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
       };
 
     const onPageFollow = (): void => {
       if (childPages && childPages.length) {
-        toggleFollowModal();
+        setIsFollowModalVisible(true);
       } else {
         isCurrentPageFollowed
           ? handlePageUnfollow(paramsId)(false)
