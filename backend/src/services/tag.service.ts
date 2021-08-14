@@ -1,5 +1,5 @@
 import { getCustomRepository } from 'typeorm';
-import { ITag, ITagCreation } from 'infostack-shared/common/interfaces';
+import { ITag } from 'infostack-shared/common/interfaces';
 import TagRepository from '../data/repositories/tag.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
@@ -16,24 +16,24 @@ export const getAllByWorkspaceId = async (
 
 export const create = async (
   workspaceId: string,
-  newTag: ITagCreation,
+  name: string,
 ): Promise<ITag> => {
   const tagRepository = getCustomRepository(TagRepository);
-  if (!newTag.name) {
+  if (!name) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.TAG_EMPTY_STRING,
+      message: HttpErrorMessage.TAG_EMPTY_NAME,
     });
   }
-  const tagsInDB = await tagRepository.find({ workspaceId, name: newTag.name });
+  const tagsInDB = await tagRepository.find({ workspaceId, name });
   if (tagsInDB.length) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: HttpErrorMessage.TAG_IN_WORKSPACE_ALREADY_EXISTS,
     });
   }
-  const tag = { name: newTag.name, workspaceId };
-  const { id, name } = await tagRepository.save(tag);
+  const tag = { name, workspaceId };
+  const { id } = await tagRepository.save(tag);
   return { id, name };
 };
 
@@ -49,6 +49,7 @@ export const deleteById = async (id: string): Promise<void> => {
 };
 
 export const updateNameById = async (
+  workspaceId: string,
   id: string,
   name: string,
 ): Promise<{ id: string; name: string }> => {
@@ -56,8 +57,17 @@ export const updateNameById = async (
   if (!name) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.TAG_EMPTY_STRING,
+      message: HttpErrorMessage.TAG_EMPTY_NAME,
     });
+  }
+  const tagsInDB = await tagRepository.find({ workspaceId, name });
+  if (tagsInDB.length) {
+    if (tagsInDB[0].id !== id || tagsInDB.length > 1) {
+      throw new HttpError({
+        status: HttpCode.CONFLICT,
+        message: HttpErrorMessage.TAG_IN_WORKSPACE_ALREADY_EXISTS,
+      });
+    }
   }
   const result = await tagRepository.update(id, { name });
   if (!result.affected) {

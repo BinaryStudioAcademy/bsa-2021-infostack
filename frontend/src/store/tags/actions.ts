@@ -3,6 +3,8 @@ import { actions } from './slice';
 import { ActionType } from './common';
 import { TagApi } from 'services';
 
+const TAG_EMPTY_NAME = 'Empty tag name is not allowed';
+
 const loadTags = createAsyncThunk(
   ActionType.SET_TAGS,
   async (_, { dispatch }): Promise<void> => {
@@ -14,16 +16,34 @@ const loadTags = createAsyncThunk(
 const requestUpdate = createAsyncThunk(
   ActionType.UPDATE_TAG,
   async (tag: { id: string; name: string }, { dispatch }): Promise<void> => {
-    await new TagApi().update(tag.id, tag.name);
-    dispatch(actions.updateTag({ id: tag.id, updatedName: tag.name }));
+    try {
+      if (tag.name) {
+        await new TagApi().update(tag.id, tag.name);
+        dispatch(actions.updateTag({ id: tag.id, updatedName: tag.name }));
+        dispatch(actions.setEditName(null));
+      } else {
+        dispatch(actions.setEditTagError(TAG_EMPTY_NAME));
+      }
+    } catch (err) {
+      dispatch(actions.setEditTagError(err.message));
+    }
   },
 );
 
 const requestAdd = createAsyncThunk(
   ActionType.ADD_TAG,
   async (name: string, { dispatch }): Promise<void> => {
-    const response = await new TagApi().add(name);
-    dispatch(actions.addTag(response));
+    try {
+      if (name) {
+        const response = await new TagApi().add(name);
+        dispatch(actions.addTag(response));
+        dispatch(actions.setAddName(null));
+      } else {
+        dispatch(actions.setAddTagError(TAG_EMPTY_NAME));
+      }
+    } catch (err) {
+      dispatch(actions.setAddTagError(err.message));
+    }
   },
 );
 
@@ -31,7 +51,7 @@ const requestDelete = createAsyncThunk(
   ActionType.DELETE_TAG,
   async (id: string, { dispatch }): Promise<void> => {
     await new TagApi().delete(id);
-    dispatch(actions.deleteTag({ id }));
+    dispatch(actions.deleteTag(id));
   },
 );
 
