@@ -7,6 +7,7 @@ enum AppRoute {
   SET_PASSWORD = '/set-password',
   WORKSPACES = '/workspaces',
   PAGE = '/page/:id',
+  PAGE_PREVIOUS_VERSION = '/page/:id/version/:versionId',
   PROFILE = '/users/profile/:id',
   SETTINGS = '/settings',
   SETTINGS_PROFILE = '/settings/profile',

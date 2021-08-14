@@ -1,19 +1,19 @@
-import { AppRoute } from 'common/enums/enums';
 import { Dropdown } from 'react-bootstrap';
 import { VersionItem } from '../version-item/version-item';
 import { BlueCircle } from '../version-item/blue-circle/blue-circle';
-import { useAppSelector } from 'hooks/hooks';
-// import { IPageContent } from 'infostack-shared';
+import { useAppSelector, useParams } from 'hooks/hooks';
 
 const VersionDropdown: React.FC = () => {
+  const pageId = useParams<{ id: string }>().id;
+
   const pageContents = useAppSelector(
     (state) => state.pages.currentPage?.pageContents,
   );
   const { currentPage } = useAppSelector((state) => state.pages);
   // eslint-disable-next-line no-console
-  console.log('pageContents', pageContents);
+  console.log('VersionDropdown pageId', pageId);
+  const currVersionId = useParams<{ versionId: string }>().versionId;
 
-  // eslint-disable-next-line no-console
   const latestVersion = currentPage?.pageContents[0];
 
   const formattedVersionDate = (createdAt: string): string => {
@@ -26,26 +26,34 @@ const VersionDropdown: React.FC = () => {
     return [day, month, year].join('.');
   };
 
-  // eslint-disable-next-line no-console
-  console.log(formattedVersionDate);
-
   return (
     <Dropdown className="me-3 d-inline-flex sm">
       <Dropdown.Toggle className="sm" id="dropdown-page-version">
-        Version: {}
+        Version: currVer date
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {pageContents ? (
           pageContents.map((version) => (
             <>
-              <VersionItem key={version.id} to={AppRoute.PAGE}>
+              <VersionItem
+                id={version.id}
+                versionId={version.id}
+                key={version.id}
+                pageId={pageId}
+              >
                 {version.createdAt === latestVersion?.createdAt ? (
                   <>
-                    <BlueCircle /> {formattedVersionDate(version.createdAt)}{' '}
-                    (Latest)
+                    {' '}
+                    {currVersionId === version.id || !currVersionId ? (
+                      <BlueCircle />
+                    ) : null}
+                    {formattedVersionDate(version.createdAt)} (Latest)
                   </>
                 ) : (
-                  formattedVersionDate(version.createdAt)
+                  <>
+                    {currVersionId === version.id ? <BlueCircle /> : null}
+                    {formattedVersionDate(version.createdAt)}
+                  </>
                 )}
               </VersionItem>
             </>
