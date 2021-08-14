@@ -6,7 +6,7 @@ import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { useState } from 'react';
-import ModalComponent from 'components/modal/modal';
+import InviteModal from 'components/common/invite-modal/invite-modal';
 
 export const TABLE_HEADERS = [
   'Name',
@@ -32,11 +32,7 @@ const UsersSettings: React.FC = () => {
 
   return (
     <>
-      <ModalComponent
-        onModalClose={closeModal}
-        title={'Invite to Workspace'}
-        showModal={isModalShowed}
-      />
+      <InviteModal onModalClose={closeModal} showModal={isModalShowed} />
       <Card
         className={`${getAllowedClasses(styles.card)} justify-content-center`}
       >

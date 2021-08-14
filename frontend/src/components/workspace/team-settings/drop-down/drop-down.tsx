@@ -1,6 +1,6 @@
 import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
-import { Popup } from '../popup/popup';
+import { CreateTeamModal } from '../modal/modal';
 import { teamsActions } from 'store/actions';
 import { useState, useAppDispatch } from 'hooks/hooks';
 import './styles.scss';
@@ -11,14 +11,14 @@ interface Props {
 
 const DropDown: React.FC<Props> = ({ team }) => {
   const dispatch = useAppDispatch();
-  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onEditTeamButtonClick = (): void => {
-    setIsPopUpVisible(true);
+    setIsModalVisible(true);
   };
 
   const handleEditingCancel = (): void => {
-    setIsPopUpVisible(false);
+    setIsModalVisible(false);
   };
 
   const handleEditing = async (data: ITeamCreation): Promise<void> => {
@@ -48,11 +48,10 @@ const DropDown: React.FC<Props> = ({ team }) => {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <Popup
-        title="Enter new name of team:"
-        showPopup={isPopUpVisible}
+      <CreateTeamModal
+        showModal={isModalVisible}
         handleFunction={handleEditing}
-        onPopupClose={handleEditingCancel}
+        onModalClose={handleEditingCancel}
         inputValue={team.name}
       />
     </div>

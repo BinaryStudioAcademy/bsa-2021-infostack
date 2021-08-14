@@ -3,7 +3,7 @@ import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { teamsActions } from 'store/teams';
 import Item from './item/item';
 import CreateButton from './create-button/create-button';
-import { Popup } from './popup/popup';
+import { CreateTeamModal } from './modal/modal';
 import {
   useState,
   useEffect,
@@ -66,10 +66,9 @@ const TeamSettings: React.FC = () => {
                 {teams.map((team: ITeam) => renderTeamItem(team))}
               </div>
             ))}
-          <Popup
-            title="Enter name of team:"
-            showPopup={isPopUpVisible}
-            onPopupClose={handleCreationCancel}
+          <CreateTeamModal
+            showModal={isPopUpVisible}
+            onModalClose={handleCreationCancel}
             handleFunction={handleCreation}
           />
         </div>

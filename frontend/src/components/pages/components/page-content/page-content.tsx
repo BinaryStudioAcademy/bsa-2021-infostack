@@ -17,7 +17,7 @@ import { pagesActions } from 'store/pages';
 import { AppRoute, PermissionType } from 'common/enums/enums';
 import { Popup } from '../popup/popup';
 import { CommentSection } from '../comment-section/comment-section';
-import ModalComponent from 'components/modal/modal';
+import InviteModal from 'components/common/invite-modal/invite-modal';
 import { Spinner } from 'components/common/spinner/spinner';
 import PageContributors from '../page-contributors/page-contributors';
 import { PageApi } from 'services';
@@ -221,9 +221,8 @@ const PageContent: React.FC = () => {
             onClick: handleAssignConfirm,
           }}
         />
-        <ModalComponent
+        <InviteModal
           onModalClose={handleIviteCancel}
-          title={'Invite to Workspace'}
           showModal={isModalVisible}
         />
       </div>
