@@ -61,7 +61,7 @@ const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
         styles.navbar,
       )}
     >
-      <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-truncate">
+      <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-break">
         {title}
       </h1>
       <div className="pt-3 w-100">

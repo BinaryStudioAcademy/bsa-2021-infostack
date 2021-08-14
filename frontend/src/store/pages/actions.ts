@@ -2,7 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { PageApi } from 'services';
-import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
+import {
+  IPageNav,
+  IPageRequest,
+  IEditPageContent,
+} from 'common/interfaces/pages';
+import { RootState } from 'common/types/types';
 
 interface PageAction {
   type: string;
@@ -56,6 +61,60 @@ const setPage = createAsyncThunk(
   },
 );
 
+type FollowPayload = {
+  pageId: string;
+  withChildren: boolean;
+};
+
+const getPagesIds = ({ id, childPages }: IPageNav): string[] =>
+  childPages ? [id, ...childPages.flatMap(getPagesIds)] : [id];
+
+const followPage = createAsyncThunk<
+  Promise<void>,
+  FollowPayload,
+  { state: RootState }
+>(
+  ActionType.GET_PAGE,
+  async ({ pageId, withChildren }, { dispatch, getState }) => {
+    const pageApi = new PageApi();
+
+    if (withChildren) {
+      const pages = getState().pages.pages as IPageNav[];
+      const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
+      const ids = getPagesIds(currentPage);
+      await pageApi.followPages(ids);
+    } else {
+      await pageApi.followPage(pageId);
+    }
+
+    const response = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(response));
+  },
+);
+
+const unfollowPage = createAsyncThunk<
+  Promise<void>,
+  FollowPayload,
+  { state: RootState }
+>(
+  ActionType.GET_PAGE,
+  async ({ pageId, withChildren }, { dispatch, getState }) => {
+    const pageApi = new PageApi();
+
+    if (withChildren) {
+      const pages = getState().pages.pages as IPageNav[];
+      const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
+      const ids = getPagesIds(currentPage);
+      await pageApi.unfollowPages(ids);
+    } else {
+      await pageApi.unfollowPage(pageId);
+    }
+
+    const response = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(response));
+  },
+);
+
 const setCurrentPageFollowed = (payload: boolean): PageAction => ({
   type: ActionType.SET_CURRENT_PAGE_FOLLOWED,
   payload,
@@ -83,6 +142,8 @@ const pagesActions = {
   setPage,
   setCurrentPageFollowed,
   editPageContent,
+  followPage,
+  unfollowPage,
 };
 
 export { pagesActions };

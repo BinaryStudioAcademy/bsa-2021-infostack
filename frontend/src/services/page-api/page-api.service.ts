@@ -81,15 +81,31 @@ class PageApi {
     );
   }
 
-  public async followPage(pageId: string | undefined): Promise<IPage[]> {
+  public async followPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/follow/${pageId}`, {
       method: HttpMethod.POST,
     });
   }
 
-  public async unfollowPage(pageId: string | undefined): Promise<IPage[]> {
+  public async followPages(pageIds: string[]): Promise<void> {
+    return this.http.load(`${this.BASE}/follow`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(pageIds),
+    });
+  }
+
+  public async unfollowPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
       method: HttpMethod.POST,
+    });
+  }
+
+  public async unfollowPages(pageIds: string[]): Promise<void> {
+    return this.http.load(`${this.BASE}/unfollow`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(pageIds),
     });
   }
 
