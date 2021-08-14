@@ -1,12 +1,13 @@
 import { ITag } from 'common/interfaces/tag';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { Http } from 'services/http/http.service';
-
-const http = new Http();
+import { http } from 'services/http/http.service';
 
 class TagApi {
+  private http = http;
+  private BASE = '/api/tags';
+
   public async add(name: string): Promise<ITag> {
-    const response: ITag = await http.load('/api/tags', {
+    const response: ITag = await this.http.load(this.BASE, {
       method: HttpMethod.POST,
       payload: JSON.stringify({ name }),
       contentType: ContentType.JSON,
@@ -15,14 +16,14 @@ class TagApi {
   }
 
   public async delete(id: string): Promise<string> {
-    const response: string = await http.load(`/api/tags/${id}`, {
+    const response: string = await this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.DELETE,
     });
     return response;
   }
 
   public async update(id: string, name: string): Promise<ITag> {
-    const response: ITag = await http.load(`/api/tags/${id}`, {
+    const response: ITag = await this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.PUT,
       payload: JSON.stringify({ name }),
       contentType: ContentType.JSON,
@@ -31,7 +32,7 @@ class TagApi {
   }
 
   public async getAll(): Promise<ITag[]> {
-    const response: ITag[] = await http.load('/api/tags');
+    const response: ITag[] = await this.http.load(this.BASE);
     return response;
   }
 }

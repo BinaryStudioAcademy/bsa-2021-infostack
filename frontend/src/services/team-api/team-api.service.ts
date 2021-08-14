@@ -1,9 +1,9 @@
 import { ITeam, ITeamEditing } from 'common/interfaces/team';
-import { Http } from 'services/http/http.service';
 import { ContentType, HttpMethod } from 'common/enums/enums';
+import { http } from 'services/http/http.service';
 
 class TeamApi {
-  private http = new Http();
+  private http = http;
   private BASE = '/api/teams';
 
   public async getTeams(): Promise<ITeam[]> {
