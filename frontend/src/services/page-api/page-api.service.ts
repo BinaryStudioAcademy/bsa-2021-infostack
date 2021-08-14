@@ -10,7 +10,6 @@ import {
   IPageContributor,
 } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
-import { IPageContributor } from 'common/interfaces/pages';
 import { ITag } from 'common/interfaces/tag';
 
 class PageApi {
