@@ -26,6 +26,7 @@ import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
+import PageTags from '../page-tags/page-tags';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -136,6 +137,7 @@ const PageContent: React.FC = () => {
       <div className="p-4">
         <Row>
           <Col xs={2}>
+            <PageTags />
             <PageContributors contributors={contributors} />
           </Col>
           <Col>
