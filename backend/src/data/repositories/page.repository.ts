@@ -78,14 +78,39 @@ class PageRepository extends Repository<Page> {
     });
   }
 
-  public findPageVersionsByIdWithAuthor(id: string): Promise<Page> {
-    return this.findOne(id, {
-      relations: ['pageContents', 'pageContents.author'],
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+  public findByIdWithVersionContent(
+    pageId: string,
+    versionId: string,
+  ): Promise<Page> {
+    return this.createQueryBuilder('page')
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('"content"."createdAt"', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = page.id',
+      )
+      .leftJoinAndSelect(
+        'page.pageContents',
+        'pageContents',
+        '"pageContents"."createdAt" = "last_version"."created_at"',
+      )
+      .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+      .where('page.id = :id', { id: pageId })
+      .andWhere('pageContents.id =  :id', { id: versionId })
+      .getOne();
   }
+  // public findPageVersionsByIdWithAuthor(id: string): Promise<Page> {
+  //   return this.findOne(id, {
+  //     relations: ['pageContents', 'pageContents.author'],
+  //     order: {
+  //       createdAt: 'DESC',
+  //     },
+  //   });
+  // }
 }
 
 export default PageRepository;

@@ -183,10 +183,35 @@ export const getPage = async (
   const page = await pageRepository.findByIdWithContents(pageId);
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
+  // eslint-disable-next-line no-console
+  // console.log('Page in getPage page.service.ts', page);
+
   const pageWithPermission = await addPermissionField<IPage>(
     userId,
     teamsIds,
     mapPageToIPage(page),
+  );
+  return { ...pageWithPermission, permission: PermissionType.ADMIN };
+};
+
+export const getPageByVersion = async (
+  pageId: string,
+  userId: string,
+  versionId: string,
+): Promise<IPage> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const pageWithVersionContent =
+    await pageRepository.findByIdWithVersionContent(pageId, versionId); // добавить в pageRepo это. Сделать запрос
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+  // eslint-disable-next-line no-console
+  // console.log('Page in getPage page.service.ts', page);
+
+  const pageWithPermission = await addPermissionField<IPage>(
+    userId,
+    teamsIds,
+    mapPageToIPage(pageWithVersionContent),
   );
   return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
@@ -278,6 +303,7 @@ export const setPermission = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
   const allPages = await pageRepository.findPages(workspaceId);
+
   if (participant.type === ParticipantType.USER) {
     setUserPermission(page, participant);
     setPermissionForChildren(allPages, pageId, participant, setUserPermission);
