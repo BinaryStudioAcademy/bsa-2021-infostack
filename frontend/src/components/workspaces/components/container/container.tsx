@@ -4,7 +4,7 @@ import { IWorkspace } from 'common/interfaces/workspace';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 import { InviteStatus } from 'infostack-shared';
-import { InviteItem } from 'components/workspaces/invite-item/invite-item';
+import { InviteItem } from 'components/workspaces/components/invite-item/invite-item';
 
 type Props = {
   workspaces: IWorkspace[];
