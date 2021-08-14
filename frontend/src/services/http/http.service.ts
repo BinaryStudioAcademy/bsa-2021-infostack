@@ -133,7 +133,6 @@ class Http {
         await this.checkStatus(response);
         const tokens = await response.json();
         this.emitter.emit(EmitterEvents.GET_ACCESS_TOKEN, tokens.accessToken);
-        this.areTokensRefreshing = false;
         localStorage.setItem(
           LocalStorageVariable.ACCESS_TOKEN,
           tokens.accessToken,
@@ -142,6 +141,7 @@ class Http {
           LocalStorageVariable.REFRESH_TOKEN,
           tokens.refreshToken,
         );
+        this.areTokensRefreshing = false;
         return tokens.accessToken;
       } catch (error) {
         if (error.status === HttpCode.UNAUTHORIZED) {
