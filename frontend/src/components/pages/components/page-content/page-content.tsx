@@ -151,9 +151,6 @@ const PageContent: React.FC = () => {
       (pageId: string) =>
       async (withChildren: boolean): Promise<void> => {
         toggleFollowModal();
-        // eslint-disable-next-line no-console
-        console.log('hello');
-
         await dispatch(pagesActions.followPage({ pageId, withChildren }));
       };
 
@@ -173,13 +170,6 @@ const PageContent: React.FC = () => {
           : handlePageFollow(paramsId)(false);
       }
     };
-
-    // const onPageUnfollow = async (
-    //   pageId: string | undefined,
-    // ): Promise<void> => {
-    //   await pageApi.unfollowPage(pageId);
-    //   await dispatch(pagesActions.setPage(pageId));
-    // };
 
     useEffect(() => {
       isPageFollowed();
