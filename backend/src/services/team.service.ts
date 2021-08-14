@@ -43,7 +43,10 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  await teamRepository.save({ workspaceId, name: team.name });
+  const { id, name } = await teamRepository.save({
+    workspaceId,
+    name: team.name,
+  });
   const newTeamDetails = await teamRepository.findByName(team.name);
 
   const userRepository = getCustomRepository(UserRepository);
@@ -53,7 +56,7 @@ export const create = async (
   userRepository.save(user);
 
   const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
-  return { id: team.id, name: team.name, users };
+  return { id: id, name: name, users };
 };
 
 export const updateNameById = async (
@@ -82,6 +85,5 @@ export const updateNameById = async (
 
 export const deleteById = async (id: string): Promise<void> => {
   await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
-
   await getCustomRepository(TeamRepository).deleteById(id);
 };
