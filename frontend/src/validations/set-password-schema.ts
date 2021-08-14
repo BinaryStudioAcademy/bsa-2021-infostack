@@ -15,8 +15,8 @@ export const setPasswordSchema = yup.object().shape({
     .string()
     .oneOf(
       [yup.ref('password'), null],
-      //prettier ignore
-      "passwords don't match",
+      //prettier-ignore
+      'passwords don\'t match',
     )
     .required('required'),
 });
