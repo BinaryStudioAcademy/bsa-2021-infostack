@@ -121,7 +121,7 @@ class PageApi {
       payload: JSON.stringify(payload),
     });
   }
-  
+
   public async getPageTableOfContents(
     id: string,
   ): Promise<IPageTableOfContents> {
