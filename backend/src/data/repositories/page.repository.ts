@@ -83,6 +83,34 @@ class PageRepository extends Repository<Page> {
       relations: ['tags'],
     });
   }
+
+  public followPage(userId: string, pageId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageId)
+      .add(userId);
+  }
+
+  public followPages(userId: string, pageIds: string[]): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageIds)
+      .add(userId);
+  }
+
+  public unfollowPage(userId: string, pageId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageId)
+      .remove(userId);
+  }
+
+  public unfollowPages(userId: string, pageIds: string[]): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageIds)
+      .remove(userId);
+  }
 }
 
 export default PageRepository;

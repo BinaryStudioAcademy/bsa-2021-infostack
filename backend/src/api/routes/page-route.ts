@@ -10,7 +10,9 @@ import {
   getContributors,
   getPagesFollowedByUser,
   followPage,
+  followPages,
   unfollowPage,
+  unfollowPages,
   updateContent,
   getTags,
   savePageTags,
@@ -88,8 +90,18 @@ router.post(
 );
 
 router.post(
+  '/follow',
+  run((req) => followPages(req.userId, req.body)),
+);
+
+router.post(
   '/unfollow/:id',
   run((req) => unfollowPage(req.userId, req.params.id)),
+);
+
+router.post(
+  '/unfollow',
+  run((req) => unfollowPages(req.userId, req.body)),
 );
 
 router.post(
