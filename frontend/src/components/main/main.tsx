@@ -20,6 +20,7 @@ import {
 import { authActions } from 'store/actions';
 import { workspacesActions } from 'store/actions';
 import NotFound from 'components/not-found/not-found';
+import PageContent from 'components/pages/components/page-content/page-content';
 
 const Main: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
@@ -50,6 +51,11 @@ const Main: React.FC = () => {
   return (
     <Switch>
       <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
+      <Route
+        path={AppRoute.PAGE_PREVIOUS_VERSION}
+        component={withHeader(PageContent)}
+        exact
+      />
       <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
       <Route
         path={AppRoute.PROFILE}
