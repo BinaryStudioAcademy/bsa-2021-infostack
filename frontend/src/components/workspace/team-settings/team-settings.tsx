@@ -10,17 +10,17 @@ import {
   useAppSelector,
   useAppDispatch,
 } from 'hooks/hooks';
-
 import './styles.scss';
 
 const TeamSettings: React.FC = () => {
   const { teams } = useAppSelector((state) => state.teams);
+
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
 
   useEffect(() => {
-    dispatch(teamsActions.loadTeams());
+    dispatch(teamsActions.fetchTeams());
   }, []);
 
   const renderTeamItem = (team: ITeam): JSX.Element => {
