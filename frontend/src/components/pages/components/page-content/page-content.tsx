@@ -40,7 +40,7 @@ const PageContent: React.FC = () => {
     const { pages, currentPage } = state.pages;
 
     if (pages && currentPage) {
-      const page = pages.find((p) => p.id === currentPage.id);
+      const page = pages.find((page) => page.id === currentPage.id);
       return page ? page.childPages : null;
     }
   });
