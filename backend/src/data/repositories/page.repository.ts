@@ -41,12 +41,12 @@ class PageRepository extends Repository<Page> {
   }
 
   public findByIdWithContents(id: string): Promise<Page> {
-    return this.findOne(
-      { id },
-      {
-        relations: ['pageContents', 'followingUsers'],
-      },
-    );
+    return this.createQueryBuilder('page')
+      .leftJoinAndSelect('page.pageContents', 'pageContents')
+      .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+      .where('page.id = :id', { id: id })
+      .orderBy('pageContents.createdAt', 'DESC')
+      .getOne();
   }
 
   public findByIdWithLastContent(id: string): Promise<Page> {
@@ -75,6 +75,15 @@ class PageRepository extends Repository<Page> {
   public findByIdWithAuthorAndContent(id: string): Promise<Page> {
     return this.findOne(id, {
       relations: ['author', 'pageContents', 'pageContents.author'],
+    });
+  }
+
+  public findPageVersionsByIdWithAuthor(id: string): Promise<Page> {
+    return this.findOne(id, {
+      relations: ['pageContents', 'pageContents.author'],
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 }
