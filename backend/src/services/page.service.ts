@@ -190,7 +190,7 @@ export const getPage = async (
     teamsIds,
     mapPageToIPage(page),
   );
-  return { ...pageWithPermission, permission: PermissionType.ADMIN };
+  return pageWithPermission;
 };
 
 export const getPermissions = async (
