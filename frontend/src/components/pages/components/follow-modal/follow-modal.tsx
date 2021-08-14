@@ -15,7 +15,7 @@ export const FollowModal: React.FC<Props> = ({
     show={show}
     title={`Do you want to ${
       isFollowing ? 'unfollow' : 'follow'
-    } the child pages of this page sa well?`}
+    } the child pages of this page as well?`}
     actions={[
       {
         text: 'Decline',
