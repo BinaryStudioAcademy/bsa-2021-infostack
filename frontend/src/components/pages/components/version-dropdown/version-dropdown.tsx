@@ -10,6 +10,7 @@ import { AppRoute } from 'common/enums/enums';
 import { useHistory } from 'react-router-dom';
 import { IPageContributor } from 'common/interfaces/pages';
 import Avatar from 'react-avatar';
+import styles from './styles.module.scss';
 
 type Props = {
   currContent?: IPageContent | undefined;
@@ -79,17 +80,6 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
           ...pageContentsCopy[index],
           author: { ...versionAuthor },
         };
-        // eslint-disable-next-line no-console
-        // console.log('pageContentsCopy[pageVersionIndex]', pageContentsCopy[pageVersionIndex]);
-        // } else {
-        //   pageContentsCopy[index] = {
-        //     ...pageContentsCopy[index],
-        //     author: {
-        //       authorId: 'unavailable',
-        //       avatar: 'unavailable',
-        //       fullName: 'unavailable',
-        //     },
-        //   };
       }
       // eslint-disable-next-line no-console
       console.log('pageContentsCopy before Render', pageContentsCopy);
@@ -111,13 +101,16 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
       : formattedVersionDate(currContent ? currContent.createdAt : '');
   return (
     <Dropdown as={NavLink} className="me-3 d-inline-flex sm">
-      <Dropdown.Toggle as={NavLink} className={getAllowedClasses('sm')}>
+      <Dropdown.Toggle
+        as={NavLink}
+        className={getAllowedClasses('sm text-secondary')}
+      >
         Version: {versionButtonValue}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {pageContentsCopy ? (
           pageContentsCopy.map(({ id, createdAt, author, authorId }) => (
-            <>
+            <div className="d-flex" key={id}>
               <VersionItem
                 id={id}
                 versionId={id}
@@ -126,45 +119,45 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                 latest={createdAt === latestVersion?.createdAt}
               >
                 {createdAt === latestVersion?.createdAt ? (
-                  <>
+                  <div className="d-flex">
                     {' '}
                     {currVersionId === id || !currVersionId ? (
                       <BlueCircle />
                     ) : null}
                     {formattedVersionDate(createdAt)} (Latest)
-                    <Avatar
-                      key={authorId}
-                      name={author ? author?.fullName : 'not found'}
-                      src={author ? author?.avatar : ''}
-                      round={true}
-                      size="20"
-                      onClick={handleAvatarClick.bind(null, id)}
-                    />
-                    <p className="my-0">{`${author.fullName}`}</p>
-                  </>
+                  </div>
                 ) : (
-                  <>
+                  <div className="d-flex">
                     {currVersionId === id ? <BlueCircle /> : null}
                     {formattedVersionDate(createdAt)}
-                    <>
-                      <Avatar
-                        className="float-right"
-                        key={id}
-                        name={author ? author?.fullName : 'not found'}
-                        src={author ? author?.avatar : ''}
-                        round={true}
-                        size="20"
-                        onClick={handleAvatarClick.bind(null, id)}
-                      />
-                      <p className="my-0">{`${author.fullName}`}</p>
-                    </>
-                  </>
+                  </div>
                 )}
               </VersionItem>
-            </>
+              <div
+                onClick={handleAvatarClick.bind(
+                  null,
+                  author ? author?.authorId : authorId,
+                )}
+                className="d-flex m-auto"
+              >
+                <Avatar
+                  key={id}
+                  name={author ? author?.fullName : 'not found'}
+                  src={author ? author?.avatar : ''}
+                  round={true}
+                  size="20"
+                />
+                <p
+                  className={getAllowedClasses(
+                    'my-0 text-secondary',
+                    styles.authorFullName,
+                  )}
+                >{`${author.fullName}`}</p>
+              </div>
+            </div>
           ))
         ) : (
-          <p>no versions</p>
+          <p className="fs-6"> no versions </p>
         )}
       </Dropdown.Menu>
     </Dropdown>

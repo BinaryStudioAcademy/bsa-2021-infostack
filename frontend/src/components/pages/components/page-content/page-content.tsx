@@ -26,21 +26,37 @@ import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
-// import { NavLink } from 'react-router-dom';
 import VersionDropdown from '../version-dropdown/version-dropdown';
+import { IPageContent } from 'infostack-shared';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const { user } = useAppSelector((state) => state.auth);
+  const [currContent, setCurrContent] = useState<IPageContent | undefined>();
+
   const pageApi = new PageApi();
-  const last = currentPage?.pageContents?.length;
-  const pageTitle = last
-    ? currentPage?.pageContents[last - 1]?.title
-    : undefined;
-  const content = last
-    ? currentPage?.pageContents[last - 1]?.content
-    : undefined;
+  const paramsVersionId = useParams<{ versionId: string }>().versionId;
+
+  useEffect(() => {
+    if (paramsVersionId) {
+      const currentContent = currentPage?.pageContents.find(
+        (content) => content.id === paramsVersionId,
+      );
+      if (currentContent) setCurrContent(currentContent);
+    }
+  }, [paramsVersionId]);
+
+  // eslint-disable-next-line no-console
+  console.log('currContent', currContent);
+
+  const pageTitle = currContent
+    ? currContent.title
+    : currentPage?.pageContents[0].title || undefined;
+
+  const content = currContent
+    ? currContent.content
+    : currentPage?.pageContents[0].content || undefined;
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -48,6 +64,12 @@ const PageContent: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
+  // const pageIdVersionId = useParams<{ pageId: string }>().versionId;
+
+  // eslint-disable-next-line no-console
+  console.log('paramsId', paramsId);
+  // eslint-disable-next-line no-console
+  console.log('paramsVersionId', paramsVersionId);
 
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
   const canEdit =
@@ -70,7 +92,7 @@ const PageContent: React.FC = () => {
   useEffect(() => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
       setIsContributorsLoading(true);
-      new PageApi()
+      pageApi
         .getPageContributors(paramsId)
         .then((contributors) => setContributors(contributors))
         .finally(() => setIsContributorsLoading(false));
@@ -147,7 +169,10 @@ const PageContent: React.FC = () => {
                 <div>
                   {isPageAdmin && (
                     <>
-                      <VersionDropdown />
+                      <VersionDropdown
+                        currContent={currContent}
+                        contributors={contributors}
+                      />
                       <Button
                         onClick={onAssign}
                         className={canEdit ? 'me-3' : ''}

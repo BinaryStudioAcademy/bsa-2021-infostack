@@ -39,10 +39,7 @@ export const VersionItem: React.FC<Props> = ({
             versionId || '',
           ) as AppRoute)
     }
-    className={getAllowedClasses(
-      styles.versionItem,
-      'd-flex align-items-center',
-    )}
+    className={getAllowedClasses(styles.versionItem, 'text-secondary')}
     onClick={onClick}
   >
     {children}
