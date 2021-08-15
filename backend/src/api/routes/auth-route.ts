@@ -8,6 +8,8 @@ import {
   refreshTokens,
   logout,
   updatePasswordAndFullName,
+  loginGoogle,
+  getLoginGoogleUrl,
 } from '../../services/auth.service';
 
 const router: Router = Router();
@@ -44,6 +46,16 @@ router.post(
 router.post(
   '/logout',
   run((req) => logout(req.body)),
+);
+
+router.get(
+  '/login/google',
+  run((_) => getLoginGoogleUrl()),
+);
+
+router.post(
+  '/login/google',
+  run((req) => loginGoogle(req.body.code)),
 );
 
 export default router;

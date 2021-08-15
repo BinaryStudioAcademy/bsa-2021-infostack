@@ -24,6 +24,8 @@ import { ISetPassword } from '../common/interfaces/auth/set-password.interface';
 import jwt from 'jsonwebtoken';
 import { IUpdatePasswordAndFullName } from 'infostack-shared';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
+import { google } from 'googleapis';
+import { User } from '~/data/entities/user';
 
 const setTokens = async (user: IUser): Promise<ITokens> => {
   const tokens = generateTokens(user.id);
@@ -50,28 +52,12 @@ export const register = async (
   }
 
   const hashedPassword = await hash(body.password);
-  const { password, ...user } = await userRepository.save({
+  const user = await userRepository.save({
     ...body,
     password: hashedPassword,
   });
-  const newFollowingPages = user.followingPages?.map((page) =>
-    mapPageToIPage(page),
-  );
-  const userWithMappedPages = { ...user, followingPages: newFollowingPages };
-  const tokens = await setTokens(userWithMappedPages);
-  const { id, fullName, email, avatar, title, skills, followingPages } =
-    userWithMappedPages;
 
-  return {
-    id,
-    fullName,
-    email,
-    avatar,
-    title,
-    skills,
-    followingPages,
-    ...tokens,
-  };
+  return getIUserWithTokens(user);
 };
 
 export const login = async (
@@ -94,24 +80,8 @@ export const login = async (
       message: HttpErrorMessage.INVALID_PASSWORD,
     });
   }
-  const newFollowingPages = user.followingPages?.map((page) =>
-    mapPageToIPage(page),
-  );
-  const userWithMappedPages = { ...user, followingPages: newFollowingPages };
-  const tokens = await setTokens(userWithMappedPages);
-  const { id, fullName, email, avatar, title, skills, followingPages } =
-    userWithMappedPages;
 
-  return {
-    id,
-    fullName,
-    email,
-    avatar,
-    title,
-    skills,
-    followingPages,
-    ...tokens,
-  };
+  return getIUserWithTokens(user);
 };
 
 export const resetPassword = async (body: IResetPassword): Promise<void> => {
@@ -215,4 +185,66 @@ export const logout = async (body: IRefreshToken): Promise<void> => {
   if (userRefreshToken?.token) {
     await refreshTokenRepository.remove(userRefreshToken);
   }
+};
+
+export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
+  const { clientId, clientSecret, redirectUrl } = env.google;
+  const oauth2Client = new google.auth.OAuth2(
+    clientId,
+    clientSecret,
+    redirectUrl,
+  );
+  const scopes = ['profile', 'email', 'openid'];
+  return {
+    url: oauth2Client.generateAuthUrl({
+      scope: scopes,
+    }),
+  };
+};
+
+export const loginGoogle = async (
+  code: string,
+): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
+  const { clientId, clientSecret, redirectUrl } = env.google;
+  const oauth2Client = new google.auth.OAuth2(
+    clientId,
+    clientSecret,
+    redirectUrl,
+  );
+  const { tokens } = await oauth2Client.getToken(code);
+  const decodeToken = jwt.decode(tokens.id_token, { json: true });
+  const { email, name, picture } = decodeToken;
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findByEmail(email);
+  if (user) {
+    return getIUserWithTokens(user);
+  }
+  const newUser = await userRepository.save({
+    email,
+    fullName: name,
+    avatar: picture,
+  });
+  return getIUserWithTokens(newUser);
+};
+
+const getIUserWithTokens = async (
+  user: User,
+): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
+  const newFollowingPages = user.followingPages?.map((page) =>
+    mapPageToIPage(page),
+  );
+  const userWithMappedPages = { ...user, followingPages: newFollowingPages };
+  const tokens = await setTokens(userWithMappedPages);
+  const { id, fullName, email, avatar, title, skills, followingPages } =
+    userWithMappedPages;
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages,
+    ...tokens,
+  };
 };
