@@ -1,9 +1,9 @@
 import { ISkill } from 'common/interfaces/skill';
-import { Http } from 'services/http/http.service';
 import { HttpMethod, ContentType } from 'common/enums/enums';
+import { http } from 'services/http/http.service';
 
 class SkillApi {
-  private http = new Http();
+  private http = http;
   private BASE = '/api/skills';
 
   public async getAllSkills(): Promise<ISkill[]> {
