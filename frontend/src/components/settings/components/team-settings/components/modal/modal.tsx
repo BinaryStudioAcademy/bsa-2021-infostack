@@ -1,7 +1,6 @@
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'hooks/hooks';
 import { useForm } from 'hooks/hooks';
-import { yupResolver, useAppSelector } from 'hooks/hooks';
+import { yupResolver } from 'hooks/hooks';
 import { teamNameSchema } from 'validations/team-name-schema';
 import { ITeamCreation } from 'common/interfaces/team';
 import { InputModal } from 'components/common/input-modal/input-modal';
@@ -19,14 +18,7 @@ export const CreateTeamModal: React.FC<Props> = ({
   handleFunction,
   inputValue,
 }) => {
-  const { creatingError } = useAppSelector((state) => state.teams);
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
-
-  useEffect(() => {
-    if (creatingError != '') {
-      toast.info(creatingError);
-    }
-  }, [creatingError]);
 
   const handleClose = (): void => {
     onModalClose();

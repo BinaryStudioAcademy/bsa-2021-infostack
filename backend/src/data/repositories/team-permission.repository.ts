@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Team } from '../entities/team';
 import { Page } from '../entities/page';
 import { TeamPermission } from '../entities/team-permission';
@@ -42,6 +42,13 @@ class TeamPermissionRepository extends Repository<TeamPermission> {
       relations: ['team', 'page'],
       where: { team: teamId, page: pageId },
     });
+  }
+
+  public deleteByTeamId(teamId: string): Promise<DeleteResult> {
+    return this.createQueryBuilder()
+      .delete()
+      .where('teamId = :teamId', { teamId })
+      .execute();
   }
 }
 

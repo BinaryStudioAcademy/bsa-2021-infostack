@@ -42,7 +42,7 @@ export const Popup: React.FC<Props> = ({
 
   useEffect(() => {
     dispatch(usersActions.loadUsers());
-    dispatch(teamsActions.loadTeams());
+    dispatch(teamsActions.fetchTeams());
     if (currentPage?.id) {
       dispatch(participantsActions.loadParticipants(currentPage?.id));
     }
