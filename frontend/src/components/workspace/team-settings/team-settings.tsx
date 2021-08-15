@@ -25,7 +25,7 @@ const TeamSettings: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (error != '') {
+    if (error) {
       toast.info(error);
       dispatch(teamsActions.removeConflictError());
     }
