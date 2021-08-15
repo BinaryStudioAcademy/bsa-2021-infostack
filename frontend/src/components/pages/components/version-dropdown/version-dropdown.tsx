@@ -81,18 +81,27 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
         };
         // eslint-disable-next-line no-console
         // console.log('pageContentsCopy[pageVersionIndex]', pageContentsCopy[pageVersionIndex]);
-      } else {
-        pageContentsCopy[index] = {
-          ...pageContentsCopy[index],
-          author: {
-            authorId: 'unavailable',
-            avatar: 'unavailable',
-            fullName: 'unavailable',
-          },
-        };
+        // } else {
+        //   pageContentsCopy[index] = {
+        //     ...pageContentsCopy[index],
+        //     author: {
+        //       authorId: 'unavailable',
+        //       avatar: 'unavailable',
+        //       fullName: 'unavailable',
+        //     },
+        //   };
       }
       // eslint-disable-next-line no-console
       console.log('pageContentsCopy before Render', pageContentsCopy);
+    } else {
+      pageContentsCopy[index] = {
+        ...pageContentsCopy[index],
+        author: {
+          authorId: 'unavailable',
+          avatar: 'unavailable',
+          fullName: 'unavailable',
+        },
+      };
     }
   });
 
@@ -107,53 +116,52 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {pageContentsCopy ? (
-          pageContentsCopy.map(
-            ({ id, createdAt, fullName, avatar, author, authorId }) => (
-              <>
-                <p>{`${author.fullName}`}</p>
-                <VersionItem
-                  id={id}
-                  versionId={id}
-                  key={id}
-                  pageId={pageId}
-                  latest={createdAt === latestVersion?.createdAt}
-                >
-                  {createdAt === latestVersion?.createdAt ? (
-                    <>
-                      {' '}
-                      {currVersionId === id || !currVersionId ? (
-                        <BlueCircle />
-                      ) : null}
-                      {formattedVersionDate(createdAt)} (Latest)
-                      <Avatar
-                        // style={avatarStyles}
-                        key={authorId}
-                        name={author ? author?.fullName : 'not found'}
-                        src={author ? author?.avatar : ''}
-                        round={true}
-                        size="20"
-                        onClick={handleAvatarClick.bind(null, id)}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      {currVersionId === id ? <BlueCircle /> : null}
-                      {formattedVersionDate(createdAt)}
-                      <Avatar
-                        // style={avatarStyles}
-                        key={id}
-                        name={fullName}
-                        src={avatar}
-                        round={true}
-                        size="20"
-                        onClick={handleAvatarClick.bind(null, id)}
-                      />
-                    </>
-                  )}
-                </VersionItem>
-              </>
-            ),
-          )
+          pageContentsCopy.map(({ id, createdAt, author, authorId }) => (
+            <>
+              <VersionItem
+                id={id}
+                versionId={id}
+                key={id}
+                pageId={pageId}
+                latest={createdAt === latestVersion?.createdAt}
+              >
+                {createdAt === latestVersion?.createdAt ? (
+                  <>
+                    {' '}
+                    {currVersionId === id || !currVersionId ? (
+                      <BlueCircle />
+                    ) : null}
+                    {formattedVersionDate(createdAt)} (Latest)
+                    <Avatar
+                      // style={avatarStyles}
+                      key={authorId}
+                      name={author ? author?.fullName : 'not found'}
+                      src={author ? author?.avatar : ''}
+                      round={true}
+                      size="20"
+                      onClick={handleAvatarClick.bind(null, id)}
+                    />
+                    <p>{`${author.fullName}`}</p>
+                  </>
+                ) : (
+                  <>
+                    {currVersionId === id ? <BlueCircle /> : null}
+                    {formattedVersionDate(createdAt)}
+                    <Avatar
+                      // style={avatarStyles}
+                      key={id}
+                      name={author ? author?.fullName : 'not found'}
+                      src={author ? author?.avatar : ''}
+                      round={true}
+                      size="20"
+                      onClick={handleAvatarClick.bind(null, id)}
+                    />
+                    <p>{`${author.fullName}`}</p>
+                  </>
+                )}
+              </VersionItem>
+            </>
+          ))
         ) : (
           <p>no versions</p>
         )}
