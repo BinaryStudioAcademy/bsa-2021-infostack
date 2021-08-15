@@ -133,7 +133,6 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                     ) : null}
                     {formattedVersionDate(createdAt)} (Latest)
                     <Avatar
-                      // style={avatarStyles}
                       key={authorId}
                       name={author ? author?.fullName : 'not found'}
                       src={author ? author?.avatar : ''}
