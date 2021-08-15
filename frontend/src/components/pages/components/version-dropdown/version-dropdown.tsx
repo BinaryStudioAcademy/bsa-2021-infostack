@@ -2,8 +2,16 @@ import { Dropdown } from 'react-bootstrap';
 import { VersionItem } from '../version-item/version-item';
 import { BlueCircle } from '../version-item/blue-circle/blue-circle';
 import { useAppSelector, useParams } from 'hooks/hooks';
+import { IPageContent } from 'infostack-shared';
+import styles from './styles.module.scss';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import NavLink from 'react-bootstrap/NavLink';
 
-const VersionDropdown: React.FC = () => {
+type Props = {
+  currContent?: IPageContent | undefined;
+};
+
+const VersionDropdown: React.FC<Props> = ({ currContent }) => {
   const pageId = useParams<{ id: string }>().id;
 
   const pageContents = useAppSelector(
@@ -26,10 +34,17 @@ const VersionDropdown: React.FC = () => {
     return [day, month, year].join('.');
   };
 
+  const versionButtonValue =
+    !currVersionId || currentPage?.pageContents[0]?.id === currVersionId
+      ? 'Latest'
+      : formattedVersionDate(currContent ? currContent.createdAt : '');
   return (
-    <Dropdown className="me-3 d-inline-flex sm">
-      <Dropdown.Toggle className="sm" id="dropdown-page-version">
-        Version: currVer date
+    <Dropdown as={NavLink} className="me-3 d-inline-flex sm">
+      <Dropdown.Toggle
+        as={NavLink}
+        className={getAllowedClasses('sm', styles.dropdownButton)}
+      >
+        Version: {versionButtonValue}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {pageContents ? (
@@ -40,6 +55,7 @@ const VersionDropdown: React.FC = () => {
                 versionId={version.id}
                 key={version.id}
                 pageId={pageId}
+                latest={version.createdAt === latestVersion?.createdAt}
               >
                 {version.createdAt === latestVersion?.createdAt ? (
                   <>
