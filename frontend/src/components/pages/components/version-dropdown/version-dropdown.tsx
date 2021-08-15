@@ -140,22 +140,24 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                       size="20"
                       onClick={handleAvatarClick.bind(null, id)}
                     />
-                    <p>{`${author.fullName}`}</p>
+                    <p className="my-0">{`${author.fullName}`}</p>
                   </>
                 ) : (
                   <>
                     {currVersionId === id ? <BlueCircle /> : null}
                     {formattedVersionDate(createdAt)}
-                    <Avatar
-                      // style={avatarStyles}
-                      key={id}
-                      name={author ? author?.fullName : 'not found'}
-                      src={author ? author?.avatar : ''}
-                      round={true}
-                      size="20"
-                      onClick={handleAvatarClick.bind(null, id)}
-                    />
-                    <p>{`${author.fullName}`}</p>
+                    <>
+                      <Avatar
+                        className="float-right"
+                        key={id}
+                        name={author ? author?.fullName : 'not found'}
+                        src={author ? author?.avatar : ''}
+                        round={true}
+                        size="20"
+                        onClick={handleAvatarClick.bind(null, id)}
+                      />
+                      <p className="my-0">{`${author.fullName}`}</p>
+                    </>
                   </>
                 )}
               </VersionItem>
