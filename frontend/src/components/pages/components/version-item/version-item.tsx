@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 import { AppRoute } from 'common/enums/enums';
-import { replacePageIdParamAndVersionId } from 'helpers/helpers';
-// import { replacePageIdParamAndVersionId } from 'helpers/helpers';
-// import { AppRoute } from 'common/enums/enums';
+import {
+  replaceIdParam,
+  replacePageIdParamAndVersionId,
+} from 'helpers/helpers';
 
 type Child = string | JSX.Element;
 
@@ -15,6 +16,7 @@ type Props = {
   pageId: string;
   onClick?: () => void;
   children?: Child | Child[];
+  latest: boolean;
 };
 
 export const VersionItem: React.FC<Props> = ({
@@ -23,16 +25,19 @@ export const VersionItem: React.FC<Props> = ({
   id,
   versionId,
   pageId,
+  latest,
 }) => (
   <Dropdown.Item
     id={id}
     as={Link}
     to={
-      replacePageIdParamAndVersionId(
-        AppRoute.PAGE_PREVIOUS_VERSION,
-        pageId || '',
-        versionId || '',
-      ) as AppRoute
+      latest
+        ? (replaceIdParam(AppRoute.PAGE, pageId || '') as AppRoute)
+        : (replacePageIdParamAndVersionId(
+            AppRoute.PAGE_PREVIOUS_VERSION,
+            pageId || '',
+            versionId || '',
+          ) as AppRoute)
     }
     className={getAllowedClasses(
       styles.versionItem,
