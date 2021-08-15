@@ -30,7 +30,7 @@ export const CreateTeamModal: React.FC<Props> = ({
 
   const handleClose = (): void => {
     onModalClose();
-    reset({ name: '' });
+    reset({ name: inputValue });
   };
 
   const {
@@ -45,13 +45,19 @@ export const CreateTeamModal: React.FC<Props> = ({
     },
   });
 
+  useEffect(() => {
+    if (inputValue) {
+      reset({ name: inputValue });
+    }
+  }, [inputValue]);
+
   const handleSubmitForm = async (data: ITeamCreation): Promise<void> => {
     setSubmitDisabled(true);
     handleFunction(data);
     onModalClose();
 
     setSubmitDisabled(false);
-    reset({ name: '' });
+    reset({ name: inputValue });
   };
 
   return (

@@ -69,6 +69,7 @@ export const TeamSettings: React.FC = () => {
             showModal={isPopUpVisible}
             onModalClose={handleCreationCancel}
             handleFunction={handleCreation}
+            inputValue=""
           />
         </div>
       </Card.Body>
