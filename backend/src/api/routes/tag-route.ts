@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RoleType } from 'infostack-shared';
+import { RoleType } from '../../common/enums/role-type';
 import {
   create,
   getAllByWorkspaceId,

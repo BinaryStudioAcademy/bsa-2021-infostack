@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -15,7 +16,7 @@ type Props = {
   value?: string;
 };
 
-const FormField: React.FC<Props> = ({
+export const FormField: React.FC<Props> = ({
   label,
   type,
   placeholder,
@@ -26,7 +27,7 @@ const FormField: React.FC<Props> = ({
   value,
 }) => (
   <Form.Group className="mb-3" controlId={controlId}>
-    <Form.Label className={styles.label}>{label}</Form.Label>
+    <Form.Label className={getAllowedClasses(styles.label)}>{label}</Form.Label>
     {value ? (
       <Form.Control readOnly placeholder={value} />
     ) : (
@@ -42,8 +43,10 @@ const FormField: React.FC<Props> = ({
         {errors?.message}
       </Form.Control.Feedback>
     )}
-    {helper && <Form.Text className={styles.helper}>{helper}</Form.Text>}
+    {helper && (
+      <Form.Text className={getAllowedClasses(styles.helper)}>
+        {helper}
+      </Form.Text>
+    )}
   </Form.Group>
 );
-
-export default FormField;

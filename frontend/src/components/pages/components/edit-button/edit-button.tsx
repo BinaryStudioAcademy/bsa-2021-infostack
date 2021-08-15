@@ -4,7 +4,7 @@ interface Props {
   onClick(): void;
 }
 
-const EditButton: React.FC<Props> = ({ onClick }) => (
+export const EditButton: React.FC<Props> = ({ onClick }) => (
   <Button
     variant="primary"
     className="edit-button float-right"
@@ -13,5 +13,3 @@ const EditButton: React.FC<Props> = ({ onClick }) => (
     Edit page
   </Button>
 );
-
-export default EditButton;
