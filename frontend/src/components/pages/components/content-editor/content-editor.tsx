@@ -13,7 +13,7 @@ import gfm from 'remark-gfm';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
 import { AppRoute } from 'common/enums/enums';
-import { pagesActions } from 'store/pages';
+import { pagesActions } from 'store/actions';
 import {
   useState,
   useAppDispatch,
@@ -22,9 +22,10 @@ import {
   useRef,
 } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-const PageContentEditor: React.FC = () => {
+export const ContentEditor: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
@@ -74,7 +75,7 @@ const PageContentEditor: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Card border="light" className={styles.content}>
+          <Card border="light" className={getAllowedClasses(styles.content)}>
             <Editor
               value={markDownContent}
               onChange={({ text }): void => setMarkDownContent(text)}
@@ -94,5 +95,3 @@ const PageContentEditor: React.FC = () => {
     </div>
   );
 };
-
-export default PageContentEditor;

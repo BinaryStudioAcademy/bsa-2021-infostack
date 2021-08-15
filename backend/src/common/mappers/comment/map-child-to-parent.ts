@@ -1,4 +1,4 @@
-import { IComment } from '../../interfaces/comment/comment.interface';
+import { IComment } from '../../interfaces/comment';
 
 export const mapChildToParent = (comments: IComment[]): IComment[] => {
   const commentMap = new Map();

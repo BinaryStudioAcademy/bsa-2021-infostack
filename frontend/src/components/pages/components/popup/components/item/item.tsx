@@ -1,10 +1,10 @@
 import Select from 'react-select';
+import Badge from 'react-bootstrap/Badge';
 import { IParticipant } from 'common/interfaces/participant';
 import { IOption } from 'common/interfaces/components/select';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import { useRef } from 'hooks/hooks';
 import selectRoleStyles from './select-role-styles';
-import Badge from 'react-bootstrap/Badge';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from '../styles.module.scss';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
   onChange(id: string, role: string): void;
 };
 
-const Item: React.FC<Props> = ({
+export const Item: React.FC<Props> = ({
   participant,
   options,
   onDelete,
@@ -65,5 +65,3 @@ const Item: React.FC<Props> = ({
     </tr>
   );
 };
-
-export default Item;

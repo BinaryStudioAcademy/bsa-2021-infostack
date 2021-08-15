@@ -6,13 +6,15 @@ import {
   useRouteMatch,
   Route,
 } from 'react-router-dom';
-import { getAllowedClasses } from 'helpers/dom/get-allowed-classes/get-allowed-classes.helper';
-import ProfileEdit from '../profile/components/profile-edit/profile-edit';
-import TeamSettings from '../workspace/team-settings/team-settings';
-import Menu from './components/menu';
+import {
+  Menu,
+  ProfileSettings,
+  TeamSettings,
+  UsersSettings,
+  TagSettings,
+} from './components/components';
 import { AppRoute } from 'common/enums/enums';
-import UsersSettings from 'components/workspace/users-settings/users-settings';
-import TagsSettings from 'components/workspace/tag-settings/tag-settings';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 const Settings: React.FC = () => {
@@ -39,7 +41,7 @@ const Settings: React.FC = () => {
                 <Switch>
                   <Route
                     path={AppRoute.SETTINGS_PROFILE}
-                    component={ProfileEdit}
+                    component={ProfileSettings}
                     exact
                   />
                   <Route
@@ -54,7 +56,7 @@ const Settings: React.FC = () => {
                   />
                   <Route
                     path={AppRoute.SETTINGS_TAGS}
-                    component={TagsSettings}
+                    component={TagSettings}
                     exact
                   />
                   <Route path={match.path}>
