@@ -7,12 +7,10 @@ import {
   useState,
 } from 'hooks/hooks';
 import { SocketContext } from 'context/socket';
-import { commentsActions } from 'store/comments';
+import { commentsActions } from 'store/actions';
 import { IComment } from 'common/interfaces/comment';
 import { SocketEvents } from 'common/enums/enums';
-import { Comment } from '../comment/comment';
-import { Response } from '../response/response';
-import { CommentForm } from '../comment-form/comment-form';
+import { Comment, Response, CommentForm } from '../components';
 
 type Props = {
   pageId: string;

@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import {
   useAppDispatch,
@@ -13,30 +14,38 @@ import {
   useHistory,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
-import { pagesActions } from 'store/pages';
+import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { Popup } from '../popup/popup';
-import { CommentSection } from '../comment-section/comment-section';
-import InviteModal from 'components/common/invite-modal/invite-modal';
-import { Spinner } from 'components/common/spinner/spinner';
-import PageContributors from '../page-contributors/page-contributors';
+import { InviteModal, Spinner } from 'components/common/common';
+import {
+  EditButton,
+  PageTableOfContents,
+  PageContributors,
+  CommentSection,
+  Popup,
+} from '../components';
 import { PageApi } from 'services';
 import {
   IPageContributor,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
-import EditButton from '../edit-button/edit-button';
-import { replaceIdParam } from 'helpers/helpers';
-import PageTableOfContents from '../page-table-of-contents.tsx/page-table-of-contents';
-import slug from 'remark-slug';
-import { getAllowedClasses } from 'helpers/dom/dom';
+import { FollowModal } from '../follow-modal/follow-modal';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-const PageContent: React.FC = () => {
+export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const childPages = useAppSelector((state) => {
+    const { pages, currentPage } = state.pages;
+
+    if (pages && currentPage) {
+      const page = pages.find((page) => page.id === currentPage.id);
+      return page ? page.childPages : null;
+    }
+  });
+
   const { user } = useAppSelector((state) => state.auth);
-  const pageApi = new PageApi();
   const last = currentPage?.pageContents?.length;
   const pageTitle = last
     ? currentPage?.pageContents[last - 1]?.title
@@ -47,6 +56,7 @@ const PageContent: React.FC = () => {
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -134,16 +144,28 @@ const PageContent: React.FC = () => {
       }
     };
 
-    const onPageFollow = async (pageId: string | undefined): Promise<void> => {
-      await pageApi.followPage(pageId);
-      await dispatch(pagesActions.setPage(pageId));
-    };
+    const handlePageFollow =
+      (pageId: string) =>
+      async (withChildren: boolean): Promise<void> => {
+        setIsFollowModalVisible(false);
+        await dispatch(pagesActions.followPage({ pageId, withChildren }));
+      };
 
-    const onPageUnfollow = async (
-      pageId: string | undefined,
-    ): Promise<void> => {
-      await pageApi.unfollowPage(pageId);
-      await dispatch(pagesActions.setPage(pageId));
+    const handlePageUnfollow =
+      (pageId: string) =>
+      async (withChildren: boolean): Promise<void> => {
+        setIsFollowModalVisible(false);
+        await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
+      };
+
+    const onPageFollow = (): void => {
+      if (childPages && childPages.length) {
+        setIsFollowModalVisible(true);
+      } else {
+        isCurrentPageFollowed
+          ? handlePageUnfollow(paramsId)(false)
+          : handlePageFollow(paramsId)(false);
+      }
     };
 
     useEffect(() => {
@@ -172,14 +194,7 @@ const PageContent: React.FC = () => {
                     </Button>
                   )}
                   {canEdit && <EditButton onClick={handleEditing} />}
-                  <Button
-                    className="ms-3"
-                    onClick={
-                      isCurrentPageFollowed
-                        ? (): Promise<void> => onPageUnfollow(paramsId)
-                        : (): Promise<void> => onPageFollow(paramsId)
-                    }
-                  >
+                  <Button className="ms-3" onClick={onPageFollow}>
                     {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                   </Button>
                 </div>
@@ -225,11 +240,18 @@ const PageContent: React.FC = () => {
           onModalClose={handleIviteCancel}
           showModal={isModalVisible}
         />
+        <FollowModal
+          show={isFollowModalVisible}
+          isFollowing={isCurrentPageFollowed}
+          handler={
+            isCurrentPageFollowed
+              ? handlePageUnfollow(paramsId)
+              : handlePageFollow(paramsId)
+          }
+        />
       </div>
     );
   };
 
   return !isSpinner && !isLeftBlockLoading ? <Content /> : <Spinner />;
 };
-
-export default PageContent;

@@ -15,7 +15,7 @@ type Props = {
   showTooltip?: boolean;
 };
 
-const UserAvatar: React.FC<Props> = ({
+export const UserAvatar: React.FC<Props> = ({
   size,
   name,
   src,
@@ -46,5 +46,3 @@ const UserAvatar: React.FC<Props> = ({
     )}
   </OverlayTrigger>
 );
-
-export default UserAvatar;

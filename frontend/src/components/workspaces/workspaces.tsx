@@ -1,5 +1,4 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
-import { Container } from './components';
 import { Spinner } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { workspacesActions } from 'store/actions';
@@ -12,7 +11,7 @@ import {
   useHistory,
 } from 'hooks/hooks';
 import { WorkspaceApi } from 'services';
-import { CreateWorkspaceModal } from './components';
+import { CreateWorkspaceModal, Container } from './components/components';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
 
 const Workspaces: React.FC = () => {

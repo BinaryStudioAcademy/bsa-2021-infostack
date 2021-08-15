@@ -1,10 +1,12 @@
-import { IRefreshToken, ILogin, IRegister } from 'common/interfaces/auth';
 import { IUserWithTokens } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import {
   IResetPassword,
   ISetPassword,
   IUpdatePasswordAndFullName,
+  IRefreshToken,
+  ILogin,
+  IRegister,
 } from 'common/interfaces/auth';
 import { http } from 'services/http/http.service';
 

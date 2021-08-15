@@ -6,14 +6,14 @@ import { resetPasswordSchema } from 'validations/reset-password-schema';
 import { WorkspaceApi } from 'services';
 import { IRegister } from 'common/interfaces/auth';
 import { usersActions } from 'store/users';
-import InputModal from '../input-modal/input-modal';
+import { InputModal } from '../input-modal/input-modal';
 
 type Props = {
   showModal: boolean;
   onModalClose: () => void;
 };
 
-const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
+export const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
   const dispatch = useAppDispatch();
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
 
@@ -64,4 +64,3 @@ const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
     />
   );
 };
-export default InviteModal;

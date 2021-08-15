@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
-import { ITeam, ITeamCreation } from '../common/interfaces/team/team.interface';
+import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import TeamRepository from '../data/repositories/team.repository';
 import { HttpError } from '../common/errors/http-error';

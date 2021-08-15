@@ -1,4 +1,4 @@
-import { ITeam } from '../../interfaces/team/team.interface';
+import { ITeam } from '../../interfaces/team';
 import { Team } from '../../../data/entities/team';
 
 export const mapTeamToITeam = (team: Team): ITeam => {

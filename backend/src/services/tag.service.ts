@@ -1,5 +1,5 @@
 import { getCustomRepository } from 'typeorm';
-import { ITag, ITagCreation } from 'infostack-shared/common/interfaces';
+import { ITag, ITagCreation } from '../common/interfaces/tag';
 import TagRepository from '../data/repositories/tag.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';

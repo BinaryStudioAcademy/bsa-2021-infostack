@@ -1,1 +1,1 @@
-export { SocketEvents } from 'infostack-shared';
+export { SocketEvents } from 'infostack-shared/common/enums';
