@@ -21,6 +21,7 @@ import {
   EditButton,
   PageTableOfContents,
   PageContributors,
+  PageFollowingUsers,
   CommentSection,
   Popup,
 } from '../components';
@@ -180,6 +181,10 @@ export const PageContent: React.FC = () => {
             <PageTableOfContents headings={TOCHeadings} />
             <PageTags />
             <PageContributors className="mt-4" contributors={contributors} />
+            <PageFollowingUsers
+              className="mt-4"
+              followers={currentPage?.followingUsers}
+            />
           </Col>
           <Col>
             <Row>
