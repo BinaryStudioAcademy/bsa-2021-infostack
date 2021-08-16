@@ -116,10 +116,10 @@ const ProfileInfo: React.FC = () => {
                         ? user?.followingPages?.map((page) => (
                             <Link
                               to={
-                                `${AppRoute.PAGE.slice(
-                                  0,
-                                  AppRoute.PAGE.length - 3,
-                                )}${page.id}` as AppRoute
+                                replaceIdParam(
+                                  AppRoute.PAGE,
+                                  page.id,
+                                ) as AppRoute
                               }
                               key={page.id}
                               className="following-page"
