@@ -8,8 +8,8 @@
   text-overflow: ellipsis;
 }
 
-.authorFullName:hover {
-  background-color: #e9ecef;
+.avatarContainer:hover {
+  background: linear-gradient(90deg, #eff2f561 0%, #8789922b);
 }
 
 .nav-link {
@@ -19,4 +19,10 @@
 .dropDownMenu {
   max-height: 210px;
   overflow: overlay;
+  padding: 0px;
+}
+
+.dropDownMenu.show,
+.dropdown-menu.show {
+  padding: 0px;
 }

@@ -128,7 +128,10 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                   null,
                   author ? author?.authorId : authorId,
                 )}
-                className="d-flex align-items-center"
+                className={getAllowedClasses(
+                  'd-flex align-items-center',
+                  styles.avatarContainer,
+                )}
               >
                 <Avatar
                   key={id}
