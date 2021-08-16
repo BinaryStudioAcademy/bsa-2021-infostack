@@ -1,10 +1,10 @@
-import Avatar from 'react-avatar';
 import { ListGroup } from 'react-bootstrap';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import { useState, useHistory } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
-import { CommentForm } from '../comment-form/comment-form';
+import { CommentForm } from '../components';
+import { UserAvatar } from 'components/common/common';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -43,16 +43,18 @@ export const Comment: React.FC<Props> = ({
   };
 
   return (
-    <ListGroup.Item className={getAllowedClasses('d-flex', styles.comment)}>
-      <Avatar
+    <ListGroup.Item
+      className={getAllowedClasses('d-flex align-items-start', styles.comment)}
+    >
+      <UserAvatar
         size="40"
         name={name}
         src={avatar}
         round
-        className={getAllowedClasses('me-3', styles.avatar)}
+        className={getAllowedClasses(styles.avatar)}
         onClick={(): void => handleAvatarClick(userId)}
       />
-      <div className="w-100">
+      <div className="w-100 ms-3">
         <p className={getAllowedClasses('mb-2', styles.userName)}>{name}</p>
         <p className={getAllowedClasses('text-secondary mb-0', styles.text)}>
           {text}

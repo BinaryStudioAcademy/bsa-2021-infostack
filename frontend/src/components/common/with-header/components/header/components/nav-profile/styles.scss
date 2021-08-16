@@ -1,0 +1,13 @@
+.userAvatar {
+  object-fit: cover;
+}
+
+.userName {
+  max-width: 9vw;
+  margin-left: 0.5rem;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}

@@ -1,4 +1,4 @@
-import { IWorkspaceUser } from '../../interfaces/workspace/workspace-user';
+import { IWorkspaceUser } from '../../interfaces/workspace';
 import { Workspace } from '../../../data/entities/workspace';
 
 export const mapWorkspaceToWorkspaceUsers = (

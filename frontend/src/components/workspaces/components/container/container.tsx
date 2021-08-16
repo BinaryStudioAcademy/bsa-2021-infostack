@@ -1,10 +1,8 @@
-import { CreateButton } from '../create-button/create-button';
-import { Item } from '../item/item';
+import { CreateButton, Item, InviteItem } from '../components';
 import { IWorkspace } from 'common/interfaces/workspace';
-import { getAllowedClasses } from 'helpers/dom/dom';
+import { InviteStatus } from 'common/enums/enums';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { InviteStatus } from 'infostack-shared';
-import { InviteItem } from 'components/workspaces/invite-item/invite-item';
 
 type Props = {
   workspaces: IWorkspace[];

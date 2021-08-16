@@ -6,9 +6,11 @@ import {
   IPageFollowed,
   IEditPageContent,
   IPageNav,
+  IPageTableOfContents,
+  IPageContributor,
 } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
-import { IPageContributor } from 'common/interfaces/pages';
+import { ITag } from 'common/interfaces/tag';
 
 class PageApi {
   private http = http;
@@ -80,15 +82,31 @@ class PageApi {
     );
   }
 
-  public async followPage(pageId: string | undefined): Promise<IPage[]> {
+  public async followPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/follow/${pageId}`, {
       method: HttpMethod.POST,
     });
   }
 
-  public async unfollowPage(pageId: string | undefined): Promise<IPage[]> {
+  public async followPages(pageIds: string[]): Promise<void> {
+    return this.http.load(`${this.BASE}/follow`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(pageIds),
+    });
+  }
+
+  public async unfollowPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
       method: HttpMethod.POST,
+    });
+  }
+
+  public async unfollowPages(pageIds: string[]): Promise<void> {
+    return this.http.load(`${this.BASE}/unfollow`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(pageIds),
     });
   }
 
@@ -102,6 +120,27 @@ class PageApi {
 
   public async getPageContributors(id: string): Promise<IPageContributor[]> {
     return this.http.load(`${this.BASE}/${id}/contributors`);
+  }
+
+  public async getPageTags(id: string | undefined): Promise<ITag[]> {
+    return this.http.load(`${this.BASE}/${id}/tags`);
+  }
+
+  public async savePageTags(
+    id: string | undefined,
+    payload: (string | undefined)[],
+  ): Promise<ITag[]> {
+    return this.http.load(`${this.BASE}/${id}/tags`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  public async getPageTableOfContents(
+    id: string,
+  ): Promise<IPageTableOfContents> {
+    return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
 }
 

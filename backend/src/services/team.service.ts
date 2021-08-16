@@ -1,8 +1,9 @@
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
-import { ITeam, ITeamCreation } from '../common/interfaces/team/team.interface';
+import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import TeamRepository from '../data/repositories/team.repository';
+import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -42,7 +43,10 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  await teamRepository.save({ workspaceId, name: team.name });
+  const { id, name } = await teamRepository.save({
+    workspaceId,
+    name: team.name,
+  });
   const newTeamDetails = await teamRepository.findByName(team.name);
 
   const userRepository = getCustomRepository(UserRepository);
@@ -52,7 +56,7 @@ export const create = async (
   userRepository.save(user);
 
   const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
-  return { id: team.id, name: team.name, users };
+  return { id: id, name: name, users };
 };
 
 export const updateNameById = async (
@@ -67,21 +71,21 @@ export const updateNameById = async (
   }
   const teamRepository = getCustomRepository(TeamRepository);
   const isNameUsed = await teamRepository.findByName(newName);
-  if (isNameUsed) {
+  const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
+
+  if (isNameUsed && isNameUsed.name != teamToUpdate.name) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: HttpErrorMessage.TEAM_NAME_ALREADY_EXISTS,
     });
   }
-  const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
+
   teamToUpdate.name = newName || teamToUpdate.name;
   const team = await teamRepository.save(teamToUpdate);
   return mapTeamToITeam(team);
 };
 
-export const deleteById = async (id: string): Promise<ITeam> => {
-  const teamRepository = getCustomRepository(TeamRepository);
-  const teamToRemove = await teamRepository.findByIdWithUsers(id);
-  const team = await teamRepository.remove(teamToRemove);
-  return mapTeamToITeam(team);
+export const deleteById = async (id: string): Promise<void> => {
+  await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
+  await getCustomRepository(TeamRepository).deleteById(id);
 };

@@ -103,6 +103,40 @@ class PageRepository extends Repository<Page> {
       .andWhere('pageContents.id =  :id', { id: versionId })
       .getOne();
   }
+
+  public findByIdWithTags(id: string): Promise<Page> {
+    return this.findOne(id, {
+      relations: ['tags'],
+    });
+  }
+
+  public followPage(userId: string, pageId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageId)
+      .add(userId);
+  }
+
+  public followPages(userId: string, pageIds: string[]): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageIds)
+      .add(userId);
+  }
+
+  public unfollowPage(userId: string, pageId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageId)
+      .remove(userId);
+  }
+
+  public unfollowPages(userId: string, pageIds: string[]): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('followingUsers')
+      .of(pageIds)
+      .remove(userId);
+  }
 }
 
 export default PageRepository;

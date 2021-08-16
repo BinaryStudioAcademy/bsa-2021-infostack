@@ -1,28 +1,33 @@
 import { Card, Badge } from 'react-bootstrap';
-import Avatar from 'react-avatar';
-import { IPageContributor } from 'common/interfaces/pages';
 import { useHistory } from 'react-router-dom';
+import { IPageContributor } from 'common/interfaces/pages';
 import { AppRoute } from 'common/enums/enums';
+import { UserAvatar } from 'components/common/common';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { replaceIdParam } from 'helpers/helpers';
 
 interface IPageContributorsProps {
+  className?: string;
   contributors: IPageContributor[];
   avatarSize?: number;
 }
 
 const DEFAULT_AVATAR_SIZE = 40;
 
-const PageContributors: React.FC<IPageContributorsProps> = ({
+export const PageContributors: React.FC<IPageContributorsProps> = ({
   contributors,
   avatarSize = DEFAULT_AVATAR_SIZE,
+  className,
 }) => {
   const history = useHistory();
+
+  const avatarWrapperStyle: React.CSSProperties = {
+    marginLeft: -(+avatarSize / 2.2) + 'px',
+  };
 
   const avatarStyles: React.CSSProperties = {
     boxSizing: 'content-box',
     border: '4px solid white',
-    marginLeft: -(+avatarSize / 2.2) + 'px',
     cursor: 'pointer',
   };
 
@@ -31,7 +36,7 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
   };
 
   return (
-    <Card border="light" className={styles.card}>
+    <Card border="light" className={getAllowedClasses(styles.card, className)}>
       <Card.Header className="bg-white border-0 d-flex align-items-center">
         Contributors
         <Badge className={styles.badge} pill={true}>
@@ -39,22 +44,24 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
         </Badge>
       </Card.Header>
       <Card.Body>
-        <div style={{ marginLeft: +avatarSize / 2 }}>
+        <div
+          className="d-flex justify-content-start"
+          style={{ marginLeft: +avatarSize / 2 }}
+        >
           {contributors.map(({ id, fullName, avatar }) => (
-            <Avatar
-              style={avatarStyles}
-              key={id}
-              name={fullName}
-              src={avatar}
-              round={true}
-              size={avatarSize.toString()}
-              onClick={handleAvatarClick.bind(null, id)}
-            />
+            <div key={id} style={avatarWrapperStyle}>
+              <UserAvatar
+                style={avatarStyles}
+                name={fullName}
+                src={avatar}
+                round={true}
+                size={avatarSize.toString()}
+                onClick={handleAvatarClick.bind(null, id)}
+              />
+            </div>
           ))}
         </div>
       </Card.Body>
     </Card>
   );
 };
-
-export default PageContributors;

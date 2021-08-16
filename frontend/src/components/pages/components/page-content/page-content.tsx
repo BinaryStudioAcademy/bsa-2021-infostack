@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import {
   useAppDispatch,
@@ -13,30 +14,46 @@ import {
   useHistory,
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
-import { pagesActions } from 'store/pages';
+import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { Popup } from '../popup/popup';
-import { CommentSection } from '../comment-section/comment-section';
-import ModalComponent from 'components/modal/modal';
-import { Spinner } from 'components/common/spinner/spinner';
-import PageContributors from '../page-contributors/page-contributors';
 import { pageApi } from 'services';
-import { IPageContributor } from 'common/interfaces/pages';
-import EditButton from '../edit-button/edit-button';
-import { replaceIdParam } from 'helpers/helpers';
-import { getAllowedClasses } from 'helpers/dom/dom';
-import styles from './styles.module.scss';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
 import { IPageContent } from 'infostack-shared';
+import { InviteModal, Spinner } from 'components/common/common';
+import {
+  EditButton,
+  PageTableOfContents,
+  PageContributors,
+  CommentSection,
+  Popup,
+} from '../components';
+import {
+  IPageContributor,
+  IPageTableOfContentsHeading,
+} from 'common/interfaces/pages';
+import { FollowModal } from '../follow-modal/follow-modal';
+import styles from './styles.module.scss';
+import PageTags from '../page-tags/page-tags';
 
 const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const childPages = useAppSelector((state) => {
+    const { pages, currentPage } = state.pages;
+
+    if (pages && currentPage) {
+      const page = pages.find((page) => page.id === currentPage.id);
+      return page ? page.childPages : null;
+    }
+  });
+
   const { user } = useAppSelector((state) => state.auth);
   const [currContent, setCurrContent] = useState<IPageContent | undefined>();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -67,8 +84,13 @@ const PageContent: React.FC = () => {
   const canEdit =
     currentPage?.permission === PermissionType.ADMIN ||
     currentPage?.permission === PermissionType.WRITE;
-  const [isContributorsLoading, setIsContributorsLoading] = useState(false);
+
+  const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
+
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
+  const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
+    [],
+  );
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
@@ -83,13 +105,21 @@ const PageContent: React.FC = () => {
 
   useEffect(() => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
-      setIsContributorsLoading(true);
-      pageApi
-        .getPageContributors(paramsId)
-        .then((contributors) => setContributors(contributors))
-        .finally(() => setIsContributorsLoading(false));
+      setIsLeftBlockLoading(true);
 
       getPageById(paramsId);
+
+      const contributorsPromise = pageApi.getPageContributors(paramsId);
+      const TOCPromise = pageApi.getPageTableOfContents(paramsId);
+
+      Promise.all([contributorsPromise, TOCPromise]).then(
+        ([contributors, TOC]) => {
+          setContributors(contributors);
+          setTOCHeadings(TOC.headings);
+        },
+      );
+
+      setIsLeftBlockLoading(false);
     } else {
       dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
@@ -132,16 +162,28 @@ const PageContent: React.FC = () => {
       }
     };
 
-    const onPageFollow = async (pageId: string | undefined): Promise<void> => {
-      await pageApi.followPage(pageId);
-      await dispatch(pagesActions.setPage(pageId));
-    };
+    const handlePageFollow =
+      (pageId: string) =>
+      async (withChildren: boolean): Promise<void> => {
+        setIsFollowModalVisible(false);
+        await dispatch(pagesActions.followPage({ pageId, withChildren }));
+      };
 
-    const onPageUnfollow = async (
-      pageId: string | undefined,
-    ): Promise<void> => {
-      await pageApi.unfollowPage(pageId);
-      await dispatch(pagesActions.setPage(pageId));
+    const handlePageUnfollow =
+      (pageId: string) =>
+      async (withChildren: boolean): Promise<void> => {
+        setIsFollowModalVisible(false);
+        await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
+      };
+
+    const onPageFollow = (): void => {
+      if (childPages && childPages.length) {
+        setIsFollowModalVisible(true);
+      } else {
+        isCurrentPageFollowed
+          ? handlePageUnfollow(paramsId)(false)
+          : handlePageFollow(paramsId)(false);
+      }
     };
 
     useEffect(() => {
@@ -152,7 +194,9 @@ const PageContent: React.FC = () => {
       <div className="p-4">
         <Row>
           <Col xs={2}>
-            <PageContributors contributors={contributors} />
+            <PageTableOfContents headings={TOCHeadings} />
+            <PageTags />
+            <PageContributors className="mt-4" contributors={contributors} />
           </Col>
           <Col>
             <Row>
@@ -174,14 +218,7 @@ const PageContent: React.FC = () => {
                     </>
                   )}
                   {canEdit && <EditButton onClick={handleEditing} />}
-                  <Button
-                    className="ms-3"
-                    onClick={
-                      isCurrentPageFollowed
-                        ? (): Promise<void> => onPageUnfollow(paramsId)
-                        : (): Promise<void> => onPageFollow(paramsId)
-                    }
-                  >
+                  <Button className="ms-3" onClick={onPageFollow}>
                     {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                   </Button>
                 </div>
@@ -189,9 +226,10 @@ const PageContent: React.FC = () => {
             </Row>
             <Row className="mb-4">
               <Col>
-                <Card border="light" className={getAllowedClasses(styles.card)}>
+                <Card border="light" className={styles.card}>
                   <Card.Body className={getAllowedClasses(styles.content)}>
-                    <ReactMarkdown remarkPlugins={[gfm]}>
+                    {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
+                    <ReactMarkdown remarkPlugins={[slug, gfm]}>
                       {content || 'Empty page'}
                     </ReactMarkdown>
                   </Card.Body>
@@ -222,16 +260,24 @@ const PageContent: React.FC = () => {
             onClick: handleAssignConfirm,
           }}
         />
-        <ModalComponent
+        <InviteModal
           onModalClose={handleIviteCancel}
-          title={'Invite to Workspace'}
           showModal={isModalVisible}
+        />
+        <FollowModal
+          show={isFollowModalVisible}
+          isFollowing={isCurrentPageFollowed}
+          handler={
+            isCurrentPageFollowed
+              ? handlePageUnfollow(paramsId)
+              : handlePageFollow(paramsId)
+          }
         />
       </div>
     );
   };
 
-  return !isSpinner && !isContributorsLoading ? <Content /> : <Spinner />;
+  return !isSpinner && !isLeftBlockLoading ? <Content /> : <Spinner />;
 };
 
 export default PageContent;

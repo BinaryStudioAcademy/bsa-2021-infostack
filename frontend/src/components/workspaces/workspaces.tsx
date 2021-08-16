@@ -1,6 +1,5 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
-import { Container } from './components';
-import { Spinner, Popup } from 'components/common/common';
+import { Spinner } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums/enums';
 import { workspacesActions } from 'store/actions';
 import {
@@ -12,15 +11,16 @@ import {
   useHistory,
 } from 'hooks/hooks';
 import { WorkspaceApi } from 'services';
+import { CreateWorkspaceModal, Container } from './components/components';
+import { IWorkspaceCreation } from 'common/interfaces/workspace';
 
 const Workspaces: React.FC = () => {
-  const { workspaces, currentWorkspace, creatingError } = useAppSelector(
+  const { workspaces, currentWorkspace } = useAppSelector(
     (state) => state.workspaces,
   );
   const dispatch = useAppDispatch();
 
-  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [popUpText, setPopUpText] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isWorkspaceSelected, setIsWorkspaceSelected] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -41,21 +41,22 @@ const Workspaces: React.FC = () => {
     dispatch(workspacesActions.loadWorkspace(id));
     setIsWorkspaceSelected(true);
   };
+
   const handleInviteAccepted = async (id: string): Promise<void> => {
     await new WorkspaceApi().updateInviteStatusAccepted(id);
     dispatch(workspacesActions.loadWorkspace(id));
     setIsWorkspaceSelected(true);
   };
+
   const handleInviteDeclined = async (id: string): Promise<void> => {
     await new WorkspaceApi().updateInviteStatusDeclined(id);
     dispatch(workspacesActions.loadWorkspaces());
   };
 
-  const handleCreate = (): void => setIsPopUpVisible(true);
+  const handleCreate = (): void => setIsModalVisible(true);
 
   const handleCreationCancel = (): void => {
-    setIsPopUpVisible(false);
-    setPopUpText('');
+    setIsModalVisible(false);
   };
 
   useEffect(() => {
@@ -72,15 +73,13 @@ const Workspaces: React.FC = () => {
     }
   }, [currentWorkspace]);
 
-  const handleCreationConfirm = (): void => {
-    if (popUpText) {
-      dispatch(
-        workspacesActions.createWorkspace({
-          title: popUpText,
-        }),
-      );
-      setIsWorkspaceSelected(true);
-    }
+  const handleCreationConfirm = (data: IWorkspaceCreation): void => {
+    dispatch(
+      workspacesActions.createWorkspace({
+        title: data.title,
+      }),
+    );
+    setIsWorkspaceSelected(true);
   };
 
   return (
@@ -98,21 +97,10 @@ const Workspaces: React.FC = () => {
         ) : (
           <Spinner />
         )}
-        <Popup
-          query="Enter name of workspace:"
-          isVisible={isPopUpVisible}
-          inputValue={popUpText}
-          setPopUpText={setPopUpText}
-          error={creatingError}
-          cancelButton={{
-            text: 'Cancel',
-            onClick: handleCreationCancel,
-          }}
-          confirmButton={{
-            text: 'Save',
-            onClick: handleCreationConfirm,
-            disabled: !popUpText,
-          }}
+        <CreateWorkspaceModal
+          showModal={isModalVisible}
+          onModalClose={handleCreationCancel}
+          handleFunction={handleCreationConfirm}
         />
       </BootstrapContainer>
     </div>

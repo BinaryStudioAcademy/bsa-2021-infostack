@@ -3,13 +3,13 @@ import {
   CookieVariable,
   LocalStorageVariable,
 } from 'common/enums/enums';
-import { Route, Switch } from 'components/common/common';
-import withHeader from 'components/common/with-header/with-header';
+import { Route, Switch, WithHeader } from 'components/common/common';
+import NotFound from 'components/not-found/not-found';
 import Pages from 'components/pages/pages';
-import ProfileInfo from 'components/profile/components/profile-info/profile-info';
-import Workspace from 'components/workspace/workspace';
+import ProfileInfo from 'components/profile-info/profile-info';
 import Settings from 'components/settings/settings';
-import PageContentEditor from 'components/pages/components/content-editor/content-editor';
+import { ContentEditor } from 'components/pages/components/components';
+import PageContent from 'components/pages/components/page-content/page-content';
 import {
   useAppDispatch,
   useAppSelector,
@@ -17,10 +17,7 @@ import {
   useHistory,
   useCookies,
 } from 'hooks/hooks';
-import { authActions } from 'store/actions';
-import { workspacesActions } from 'store/actions';
-import NotFound from 'components/not-found/not-found';
-import PageContent from 'components/pages/components/page-content/page-content';
+import { authActions, workspacesActions } from 'store/actions';
 
 const Main: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
@@ -50,29 +47,35 @@ const Main: React.FC = () => {
 
   return (
     <Switch>
-      <Route path={AppRoute.PAGE} component={withHeader(Pages)} exact />
       <Route
-        path={AppRoute.PAGE_PREVIOUS_VERSION}
-        component={withHeader(PageContent)}
+        path={AppRoute.PAGE}
+        render={(): JSX.Element => <WithHeader Component={Pages} />}
         exact
       />
-      <Route path={AppRoute.SETTINGS} component={withHeader(Settings)} />
+      <Route
+        path={AppRoute.PAGE_PREVIOUS_VERSION}
+        render={(): JSX.Element => <WithHeader Component={PageContent} />}
+        exact
+      />
+      <Route
+        path={AppRoute.SETTINGS}
+        render={(): JSX.Element => <WithHeader Component={Settings} />}
+      />
       <Route
         path={AppRoute.PROFILE}
-        component={withHeader(ProfileInfo)}
+        render={(): JSX.Element => <WithHeader Component={ProfileInfo} />}
         key={Date.now()}
       />
       <Route
-        path={AppRoute.WORKSPACE_SETTING}
-        component={withHeader(Workspace)}
+        path={AppRoute.CONTENT_SETTING}
+        render={(): JSX.Element => <WithHeader Component={ContentEditor} />}
         exact
       />
       <Route
-        path={AppRoute.CONTENT_SETTING}
-        component={withHeader(PageContentEditor)}
+        path="/"
+        render={(): JSX.Element => <WithHeader Component={Pages} />}
         exact
       />
-      <Route path="/" component={withHeader(Pages)} exact />
       <Route path="*" component={NotFound} />
     </Switch>
   );
