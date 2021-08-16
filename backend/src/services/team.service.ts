@@ -71,7 +71,6 @@ export const updateNameById = async (
   }
   const teamRepository = getCustomRepository(TeamRepository);
   const isNameUsed = await teamRepository.findByName(newName);
-
   const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
 
   if (isNameUsed && isNameUsed.name != teamToUpdate.name) {

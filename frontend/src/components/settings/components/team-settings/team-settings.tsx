@@ -13,6 +13,7 @@ import './styles.scss';
 
 export const TeamSettings: React.FC = () => {
   const { teams } = useAppSelector((state) => state.teams);
+
   const dispatch = useAppDispatch();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
