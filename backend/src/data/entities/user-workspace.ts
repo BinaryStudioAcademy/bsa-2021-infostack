@@ -24,6 +24,7 @@ export class UserWorkspace extends BaseEntity {
   @Column({
     type: 'enum',
     enum: InviteStatus,
+    nullable: true,
   })
   status: InviteStatus;
 }
