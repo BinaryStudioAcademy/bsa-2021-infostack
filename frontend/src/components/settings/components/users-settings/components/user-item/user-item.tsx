@@ -1,5 +1,6 @@
 import { InviteStatus } from 'common/enums/invite-status';
 import { IWorkspaceUser } from 'common/interfaces/workspace';
+import { useAppSelector } from 'hooks/hooks';
 import Button from 'react-bootstrap/Button';
 
 interface IUserItemProps extends IWorkspaceUser {
@@ -14,6 +15,7 @@ export const UserItem: React.FC<IUserItemProps> = ({
   id,
   onDelete,
 }) => {
+  const { user } = useAppSelector((state) => state.auth);
   const onDeleteUser = (): void => {
     onDelete(fullName, id);
   };
@@ -30,7 +32,9 @@ export const UserItem: React.FC<IUserItemProps> = ({
           variant="danger"
           size="sm"
           disabled={
-            status === InviteStatus.DELETED || status === InviteStatus.DECLINED
+            status === InviteStatus.DELETED ||
+            status === InviteStatus.DECLINED ||
+            id === user?.id
           }
         >
           Delete
