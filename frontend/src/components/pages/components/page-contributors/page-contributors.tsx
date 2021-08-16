@@ -1,11 +1,10 @@
 import { Card, Badge } from 'react-bootstrap';
-import { IPageContributor } from 'common/interfaces/pages';
 import { useHistory } from 'react-router-dom';
+import { IPageContributor } from 'common/interfaces/pages';
 import { AppRoute } from 'common/enums/enums';
+import { UserAvatar } from 'components/common/common';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { replaceIdParam } from 'helpers/helpers';
-import UserAvatar from '../../../common/avatar/avatar';
-import { getAllowedClasses } from 'helpers/dom/dom';
 
 interface IPageContributorsProps {
   className?: string;
@@ -15,7 +14,7 @@ interface IPageContributorsProps {
 
 const DEFAULT_AVATAR_SIZE = 40;
 
-const PageContributors: React.FC<IPageContributorsProps> = ({
+export const PageContributors: React.FC<IPageContributorsProps> = ({
   contributors,
   avatarSize = DEFAULT_AVATAR_SIZE,
   className,
@@ -66,5 +65,3 @@ const PageContributors: React.FC<IPageContributorsProps> = ({
     </Card>
   );
 };
-
-export default PageContributors;

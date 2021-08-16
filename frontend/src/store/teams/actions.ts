@@ -1,63 +1,30 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { actions } from './slice';
+import { ITeamEditing, ITeam } from 'common/interfaces/team';
+import { teamApi } from 'services';
 import { ActionType } from './common';
-import { TeamApi } from 'services';
-import { ITeamEditing } from 'common/interfaces/team';
-import { HttpCode } from 'common/enums/enums';
 
-const loadTeams = createAsyncThunk(
-  ActionType.SET_TEAMS,
-  async (_, { dispatch }): Promise<void> => {
-    const response = await new TeamApi().getTeams();
-    dispatch(actions.setTeams(response));
-  },
+export const fetchTeams = createAsyncThunk<ITeam[]>(
+  ActionType.FETCH_TEAMS,
+  () => teamApi.getTeams(),
 );
 
-const createTeam = createAsyncThunk(
-  ActionType.ADD_TEAM,
-  async (payload: string, { dispatch }) => {
-    try {
-      const team = await new TeamApi().createTeam(payload);
-      dispatch(actions.addTeam(team));
-      dispatch(actions.removeCreatingError());
-    } catch (err) {
-      if (err.status === HttpCode.CONFLICT) {
-        dispatch(actions.setCreatingError(err.message));
-      }
-    }
-  },
+export const createTeam = createAsyncThunk<ITeam, string>(
+  ActionType.CREATE_TEAM,
+  (name) => teamApi.createTeam(name),
 );
 
-const updateTeam = createAsyncThunk(
+export const updateTeam = createAsyncThunk<ITeam, ITeamEditing>(
   ActionType.UPDATE_TEAM,
-  async (payload: ITeamEditing, { dispatch }) => {
-    try {
-      const team = await new TeamApi().updateTeam(payload);
-      dispatch(actions.updateTeam(team));
-      dispatch(actions.removeEditingError());
-    } catch (err) {
-      if (err.status === HttpCode.CONFLICT) {
-        dispatch(actions.setEditingError(err.message));
-      }
-    }
-  },
+  (payload) => teamApi.updateTeam(payload),
 );
 
-const deleteTeam = createAsyncThunk(
+export const deleteTeam = createAsyncThunk<void, string>(
   ActionType.DELETE_TEAM,
-  async (payload: string, { dispatch }) => {
-    try {
-      await new TeamApi().deleteTeam(payload);
-      dispatch(actions.deleteTeam(payload));
-    } catch (err) {
-      alert(err);
-    }
-  },
+  (id) => teamApi.deleteTeam(id),
 );
 
 const teamsActions = {
-  ...actions,
-  loadTeams,
+  fetchTeams,
   createTeam,
   updateTeam,
   deleteTeam,

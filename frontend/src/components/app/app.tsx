@@ -1,13 +1,17 @@
-import Login from 'components/login/login';
-import SignUp from 'components/sign-up/sign-up';
+import Login from 'components/auth/login/login';
+import SignUp from 'components/auth/sign-up/sign-up';
 import Workspaces from 'components/workspaces/workspaces';
-import ProtectedRoute from 'components/common/protected-route/protected-route';
+import Main from 'components/main/main';
+import ResetPassword from 'components/auth/reset-password/reset-password';
+import SetPassword from 'components/auth/set-password/set-password';
+import NotFound from 'components/not-found/not-found';
+import SignUpInvite from 'components/auth/sign-up-invite/sign-up-invite';
+import { ProtectedRoute, Route, Switch } from 'components/common/common';
 import {
   AppRoute,
   LocalStorageVariable,
   CookieVariable,
 } from 'common/enums/enums';
-import { Route, Switch } from 'components/common/common';
 import {
   useLocation,
   useAppSelector,
@@ -15,12 +19,7 @@ import {
   useHistory,
   useCookies,
 } from 'hooks/hooks';
-import Main from 'components/main/main';
-import ResetPassword from 'components/reset-password/reset-password';
-import SetPassword from 'components/set-password/set-password';
-import NotFound from 'components/not-found/not-found';
 import { ToastContainer } from 'react-toastify';
-import SignUpInvite from 'components/sign-up-invite/sign-up-invite';
 import LoginGoogle from 'components/login-google/login-google';
 
 const App: React.FC = () => {

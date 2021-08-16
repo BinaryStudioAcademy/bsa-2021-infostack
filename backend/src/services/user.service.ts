@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import jwt from 'jsonwebtoken';
 import UserRepository from '../data/repositories/user.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import {
@@ -7,9 +8,8 @@ import {
   uploadFile,
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
-import { IUser } from 'infostack-shared';
+import { IUser } from '../common/interfaces/user';
 import { env } from '../env';
-import jwt from 'jsonwebtoken';
 import SkillRepository from '../data/repositories/skill.repository';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 

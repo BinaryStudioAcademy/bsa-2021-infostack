@@ -1,11 +1,11 @@
 import { Form, Button } from 'react-bootstrap';
-import { getAllowedClasses } from 'helpers/dom/dom';
-import styles from './styles.module.scss';
 import React from 'react';
 import { Link } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
 import GoogleButton from 'react-google-button';
 import { AuthApi } from 'services';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 type AlternativeRoute = {
   question: string;
@@ -23,7 +23,7 @@ type Props = {
   altRoute?: AlternativeRoute;
 };
 
-const Sign: React.FC<Props> = ({
+export const Sign: React.FC<Props> = ({
   header,
   secondaryText,
   submitText,
@@ -78,5 +78,3 @@ const Sign: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Sign;

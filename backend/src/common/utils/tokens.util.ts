@@ -5,7 +5,7 @@ import {
   REFRESH_TOKEN_EXPIRES_IN,
   INVITE_TOKEN_EXPIRES_IN,
 } from '../../config/jwt-config';
-import { ITokens } from '../interfaces/auth/tokens.interface';
+import { ITokens } from '../interfaces/auth';
 
 const { secretKey } = env.app;
 

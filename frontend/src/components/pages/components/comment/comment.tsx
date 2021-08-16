@@ -1,11 +1,11 @@
 import { ListGroup } from 'react-bootstrap';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import { useState, useHistory } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
-import { CommentForm } from '../comment-form/comment-form';
+import { CommentForm } from '../components';
+import { UserAvatar } from 'components/common/common';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import UserAvatar from '../../../common/avatar/avatar';
 
 type Props = {
   userId: string;

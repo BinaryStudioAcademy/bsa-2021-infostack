@@ -7,4 +7,6 @@ export { RoleType } from './roles/roles';
 export { EmitterEvents } from './emitter/emitter';
 export { ParticipantType } from './participant/participant';
 export { PermissionType } from './permissions/permissions';
-export * from './socket';
+export { DefaultUserName } from './default-username/default-username';
+export { SocketEvents } from './socket';
+export { InviteStatus } from './invite-status';

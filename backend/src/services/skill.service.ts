@@ -1,6 +1,6 @@
-import SkillRepository from '../data/repositories/skill.repository';
 import { getCustomRepository } from 'typeorm';
-import { ISkill } from 'infostack-shared';
+import SkillRepository from '../data/repositories/skill.repository';
+import { ISkill } from '../common/interfaces/skill';
 
 export const getAllSkills = async (): Promise<ISkill[]> => {
   const skillRepository = getCustomRepository(SkillRepository);
