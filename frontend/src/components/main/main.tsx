@@ -9,7 +9,7 @@ import Pages from 'components/pages/pages';
 import ProfileInfo from 'components/profile-info/profile-info';
 import Settings from 'components/settings/settings';
 import { ContentEditor } from 'components/pages/components/components';
-import PageContent from 'components/pages/components/page-content/page-content';
+import { PageContent } from 'components/pages/components/components';
 import {
   useAppDispatch,
   useAppSelector,

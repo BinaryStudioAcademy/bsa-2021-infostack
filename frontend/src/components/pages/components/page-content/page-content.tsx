@@ -36,7 +36,7 @@ import { FollowModal } from '../follow-modal/follow-modal';
 import styles from './styles.module.scss';
 import PageTags from '../page-tags/page-tags';
 
-const PageContent: React.FC = () => {
+export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const childPages = useAppSelector((state) => {
@@ -120,6 +120,8 @@ const PageContent: React.FC = () => {
       );
 
       setIsLeftBlockLoading(false);
+      // eslint-disable-next-line no-console
+      console.log('contributors', contributors);
     } else {
       dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
@@ -279,5 +281,3 @@ const PageContent: React.FC = () => {
 
   return !isSpinner && !isLeftBlockLoading ? <Content /> : <Spinner />;
 };
-
-export default PageContent;
