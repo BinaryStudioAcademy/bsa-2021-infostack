@@ -1,2 +1,1 @@
-export { IUserWithTokens } from 'infostack-shared';
-export { IUser } from 'infostack-shared';
+export { IUserWithTokens, IUser } from 'infostack-shared';
