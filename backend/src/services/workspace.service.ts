@@ -3,7 +3,7 @@ import {
   IWorkspace,
   IWorkspaceUser,
   IWorkspaceCreation,
-} from '../common/interfaces/workspace/workspace';
+} from '../common/interfaces/workspace';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
@@ -13,7 +13,9 @@ import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
-import { InviteStatus, IRegister, DefaultUserName } from 'infostack-shared';
+import { InviteStatus } from '../common/enums/invite-status';
+import { IRegister } from '../common/interfaces/auth';
+import { DefaultUserName } from '../common/enums/default-username';
 import { generateInviteToken } from '../common/utils/tokens.util';
 import { env } from '../env';
 

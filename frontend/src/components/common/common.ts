@@ -1,4 +1,10 @@
 export { Switch, Route } from 'react-router-dom';
-export { default as Link } from './link/link';
+export { UserAvatar } from './avatar/avatar';
+export { FormField } from './form-field/form-field';
+export { InputModal } from './input-modal/input-modal';
+export { InviteModal } from './invite-modal/invite-modal';
+export { Link } from './link/link';
+export { ProtectedRoute } from './protected-route/protected-route';
+export { Sign } from './sign/sign';
 export { Spinner } from './spinner/spinner';
-export { Popup } from './popup/popup';
+export { WithHeader } from './with-header/with-header';

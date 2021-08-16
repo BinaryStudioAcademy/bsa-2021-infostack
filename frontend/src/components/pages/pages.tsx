@@ -1,7 +1,7 @@
-import PageContent from './components/page-content/page-content';
+import { PageContent } from './components/components';
 import { AppRoute } from 'common/enums/enums';
 import { Switch } from 'components/common/common';
-import ProtectedRoute from 'components/common/protected-route/protected-route';
+import { ProtectedRoute } from 'components/common/common';
 
 const Pages: React.FC = () => (
   <Switch>

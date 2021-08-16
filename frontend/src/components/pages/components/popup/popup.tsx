@@ -4,11 +4,8 @@ import { IButton } from 'common/interfaces/components/button';
 import { IParticipant } from 'common/interfaces/participant';
 import { IOption } from 'common/interfaces/components/select';
 import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { usersActions } from 'store/actions';
-import { teamsActions } from 'store/actions';
-import { participantsActions } from 'store/actions';
-import TableHead from './components/table-head/table-head';
-import Item from './components/item/item';
+import { usersActions, teamsActions, participantsActions } from 'store/actions';
+import { TableHead, Item } from './components/components';
 import { ParticipantType, PermissionType } from 'common/enums/enums';
 import selectParticipantStyles from './select-participant-styles';
 import { sortObjByName } from 'helpers/helpers';
@@ -45,7 +42,7 @@ export const Popup: React.FC<Props> = ({
 
   useEffect(() => {
     dispatch(usersActions.loadUsers());
-    dispatch(teamsActions.loadTeams());
+    dispatch(teamsActions.fetchTeams());
     if (currentPage?.id) {
       dispatch(participantsActions.loadParticipants(currentPage?.id));
     }

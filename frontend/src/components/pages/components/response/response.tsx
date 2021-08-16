@@ -1,9 +1,9 @@
 import { ListGroup } from 'react-bootstrap';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import { replaceIdParam } from 'helpers/helpers';
 import { useHistory } from 'hooks/hooks';
 import { AppRoute } from 'common/enums/enums';
-import UserAvatar from 'components/common/avatar/avatar';
+import { UserAvatar } from 'components/common/common';
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 type Props = {
