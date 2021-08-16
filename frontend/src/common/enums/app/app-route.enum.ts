@@ -1,6 +1,7 @@
 enum AppRoute {
   ROOT = '/',
   LOGIN = '/login',
+  LOGIN_GOOGLE = '/login-google',
   SIGN_UP = '/signup',
   INVITE = '/invite',
   RESET_PASSWORD = '/reset-password',
