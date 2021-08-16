@@ -1,0 +1,25 @@
+.natificationItem {
+  color: #293042;
+
+  .icon {
+    cursor: default;
+    font-size: 2rem;
+  }
+
+  .textMiddle {
+    display: block;
+    width: 100%;
+    font-size: 1.4rem;
+
+    i {
+      color: #3f80ea;
+    }
+  }
+
+  .textSmall {
+    display: block;
+    width: 100%;
+    color: #6c757d;
+    font-size: 1.1rem;
+  }
+}

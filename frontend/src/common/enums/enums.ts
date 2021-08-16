@@ -8,5 +8,5 @@ export { EmitterEvents } from './emitter/emitter';
 export { ParticipantType } from './participant/participant';
 export { PermissionType } from './permissions/permissions';
 export { DefaultUserName } from './default-username/default-username';
-export { SocketEvents } from './socket';
-export { InviteStatus } from './invite-status';
+export { SocketEvents } from './socket/soket';
+export { InviteStatus } from './invite-status/invite-status';
