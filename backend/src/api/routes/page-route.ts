@@ -131,7 +131,7 @@ router.post(
   run((req) => savePageTags(req.params.id, req.body)),
 );
 
-router.post(
+router.get(
   '/:id/table-of-contents',
   run((req) => getTableOfContents(req.params.id)),
 );

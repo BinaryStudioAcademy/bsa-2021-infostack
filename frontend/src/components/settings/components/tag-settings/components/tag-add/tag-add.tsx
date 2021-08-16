@@ -1,50 +1,70 @@
-import { useAppDispatch, useState } from 'hooks/hooks';
-import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
-import { tagActions } from 'store/actions';
+import { Form } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector, useState } from 'hooks/hooks';
+import { tagActions } from 'store/tags';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from '../../styles.module.scss';
-import './styles.scss';
 
-export const TagAdd: React.FC = () => {
+export const TagAdd: React.FC<{
+  newTagInputRef: React.RefObject<HTMLInputElement>;
+}> = ({ newTagInputRef }) => {
   const dispatch = useAppDispatch();
-  const [newTagName, setNewTagName] = useState('');
+  const [name, error] = useAppSelector((state) => {
+    return [state.tags.tagAddName, state.tags.tagAddError];
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (newTagInputRef.current) {
+    // Do not change to newTagInputRef.curent.value = name && error ? name : ''
+    // as it will cause UI cursor bug
+    // It is not about assigning specific value
+    // First of all it checks whether to assign new value or not
+    if (name && error) {
+      newTagInputRef.current.value = name;
+    }
+    if (!name) {
+      newTagInputRef.current.value = '';
+    }
+  }
 
   const handleAddNewTag = async (): Promise<void> => {
-    dispatch(tagActions.requestAdd(newTagName));
-    setNewTagName('');
-  };
-
-  const handleNewTagFormClose = (): void => {
-    dispatch(tagActions.setNewTagForm({ isOpen: false }));
+    if (newTagInputRef.current) {
+      setIsLoading(true);
+      newTagInputRef.current.blur();
+      await dispatch(tagActions.requestAdd(newTagInputRef.current.value));
+      setIsLoading(false);
+      newTagInputRef.current.focus();
+    }
   };
 
   return (
-    <Form className="newTagForm">
-      <Form.Group>
-        <Form.Label className={getAllowedClasses(styles.inputLabel)}>
-          New Tag
-        </Form.Label>
-        <InputGroup>
-          <FormControl
-            className={getAllowedClasses(styles.input)}
-            placeholder="name..."
-            value={newTagName}
-            onChange={({ target }): void => setNewTagName(target.value)}
-          />
-          <Button
-            onClick={handleNewTagFormClose}
-            className={getAllowedClasses(styles.button)}
-          >
-            <i className="bi  bi-x-lg"></i>
-          </Button>
-          <Button
-            onClick={handleAddNewTag}
-            className={getAllowedClasses(styles.button)}
-          >
-            <i className="bi bi-plus-lg text-white"></i>
-          </Button>
-        </InputGroup>
-      </Form.Group>
+    <Form
+      onSubmit={(evt): void => {
+        evt.preventDefault();
+        handleAddNewTag();
+      }}
+      validated={error ? false : undefined}
+    >
+      <Form.Control
+        ref={newTagInputRef}
+        placeholder="Type a name and press Enter"
+        autoFocus
+        onBlur={({ target }): void => {
+          target.value = target.value.trim();
+          dispatch(tagActions.setAddName(target.value));
+        }}
+        onChange={(_evt): void => {
+          if (error) dispatch(tagActions.setAddTagError(null));
+        }}
+        className={getAllowedClasses(styles.input)}
+        isInvalid={!!error}
+        disabled={isLoading}
+      />
+      <Form.Control.Feedback
+        type="invalid"
+        className={getAllowedClasses(styles.feedback)}
+      >
+        {error}
+      </Form.Control.Feedback>
     </Form>
   );
 };
