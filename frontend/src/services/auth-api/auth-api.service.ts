@@ -75,6 +75,18 @@ class AuthApi {
       contentType: ContentType.JSON,
     });
   }
+
+  public async getLoginGoogleUrl(): Promise<{ url: string }> {
+    return this.http.load(`${this.BASE}/login/google`);
+  }
+
+  public async loginGoogle(code: string): Promise<IUserWithTokens> {
+    return this.http.load(`${this.BASE}/login/google`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify({ code }),
+      contentType: ContentType.JSON,
+    });
+  }
 }
 
 export { AuthApi };
