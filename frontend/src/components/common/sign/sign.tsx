@@ -1,8 +1,8 @@
-import { Form, Button } from 'react-bootstrap';
 import React from 'react';
+import GoogleButton from 'react-google-button';
+import { Form, Button } from 'react-bootstrap';
 import { Link } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
-import GoogleButton from 'react-google-button';
 import { AuthApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
