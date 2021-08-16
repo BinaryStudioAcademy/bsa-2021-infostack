@@ -3,7 +3,7 @@ import { IComment } from '../../common/interfaces/comment';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
-export class CommentRepository extends Repository<Comment> {
+class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
     'comment.text',
@@ -31,3 +31,4 @@ export class CommentRepository extends Repository<Comment> {
       .getOne();
   }
 }
+export default CommentRepository;

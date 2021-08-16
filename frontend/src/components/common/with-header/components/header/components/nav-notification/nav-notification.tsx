@@ -1,26 +1,55 @@
 import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
 import { IconWithCount, NotificationItem } from './components/components';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { notificationsActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 export const NavNotification: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { notifications, count } = useAppSelector(
+    (state) => state.notifications,
+  );
+
+  const onDropdownToggle = (isOpen: boolean): void => {
+    if (isOpen) {
+      dispatch(notificationsActions.loadNotifications());
+    } else {
+      dispatch(notificationsActions.removeNotifications());
+    }
+  };
+
   return (
     <Dropdown as={NavItem} align="end">
-      <Dropdown.Toggle as={NavLink} id="dropdown-notifications" bsPrefix="m-0">
-        <IconWithCount />
+      <Dropdown.Toggle
+        as={NavLink}
+        id="dropdown-notifications"
+        bsPrefix="m-0"
+        onToggle={onDropdownToggle}
+      >
+        <IconWithCount count={count} />
       </Dropdown.Toggle>
       <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
         <Dropdown.Header className="text-center text-dark">
-          4 New Notifications
+          {count} New Notifications
         </Dropdown.Header>
         <Dropdown.Divider />
-        <NotificationItem
-          icon="bi bi-chat-left"
-          title="New comment from FF"
-          subtitle="Page1"
-          message="qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
-          time="3 days ago"
-        />
+        {notifications.map((notification) => (
+          <NotificationItem
+            key={notification.id}
+            icon="bi bi-chat-left"
+            title={notification.title}
+            subtitle={notification.subtitle}
+            body={notification.body}
+            time="3 days ago"
+          />
+        ))}
+        <Dropdown.Divider />
+        <div className="d-flex justify-content-center align-items-center">
+          <span className={getAllowedClasses(styles.footerText)}>
+            Show all messages
+          </span>
+        </div>
       </Dropdown.Menu>
     </Dropdown>
   );

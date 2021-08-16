@@ -5,7 +5,7 @@ type Props = {
   icon: string;
   title: string;
   subtitle?: string;
-  message?: string;
+  body?: string;
   time: string;
 };
 
@@ -13,10 +13,12 @@ export const NotificationItem: React.FC<Props> = ({
   icon,
   title,
   subtitle,
-  message,
+  body,
   time,
 }) => (
-  <div className={getAllowedClasses(styles.natificationItem, 'd-flex p-3')}>
+  <div
+    className={getAllowedClasses(styles.natificationItem, 'd-flex px-3 py-2')}
+  >
     <div className="w-25 d-flex justify-content-center align-items-center">
       <i className={getAllowedClasses(styles.icon, icon)} />
     </div>
@@ -35,7 +37,7 @@ export const NotificationItem: React.FC<Props> = ({
           'd-inline-block text-truncate w-100',
         )}
       >
-        {message}
+        {body}
       </span>
       <span className={getAllowedClasses(styles.textSmall, 'text-break w-100')}>
         {time}

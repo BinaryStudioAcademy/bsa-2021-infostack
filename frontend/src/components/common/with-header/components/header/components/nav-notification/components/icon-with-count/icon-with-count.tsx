@@ -1,7 +1,11 @@
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-export const IconWithCount: React.FC = () => (
+type Props = {
+  count: number;
+};
+
+export const IconWithCount: React.FC<Props> = ({ count }) => (
   <div className="position-relative">
     <div
       className={getAllowedClasses(
@@ -9,7 +13,7 @@ export const IconWithCount: React.FC = () => (
         'rounded-circle text-white bg-primary',
       )}
     >
-      4
+      {count}
     </div>
     <i className={getAllowedClasses(styles.chatIcon, 'bi bi-chat')}></i>
   </div>

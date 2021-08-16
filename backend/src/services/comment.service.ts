@@ -4,7 +4,7 @@ import { ICommentRequest, IComment } from '../common/interfaces/comment';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { HttpError } from '../common/errors/http-error';
-import { CommentRepository } from '../data/repositories/comment.repository';
+import CommentRepository from '../data/repositories/comment.repository';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 
 export const getComments = async (pageId: string): Promise<IComment[]> => {
