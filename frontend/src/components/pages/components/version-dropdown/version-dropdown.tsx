@@ -2,13 +2,16 @@ import { Dropdown } from 'react-bootstrap';
 import { VersionItem } from '../version-item/version-item';
 import { BlueCircle } from '../version-item/blue-circle/blue-circle';
 import { useAppSelector, useParams } from 'hooks/hooks';
-import { IPageContent, IPageContentWithAuthor } from 'infostack-shared';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import NavLink from 'react-bootstrap/NavLink';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { useHistory } from 'react-router-dom';
-import { IPageContributor } from 'common/interfaces/pages';
+import {
+  IPageContributor,
+  IPageContent,
+  IPageContentWithAuthor,
+} from 'common/interfaces/pages';
 import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
 
@@ -25,8 +28,6 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
     (state) => state.pages.currentPage?.pageContents,
   );
   const { currentPage } = useAppSelector((state) => state.pages);
-  // eslint-disable-next-line no-console
-  console.log('VersionDropdown pageId', pageId);
 
   const currVersionId = useParams<{ versionId: string }>().versionId;
 
@@ -49,21 +50,12 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
   const pageContentsCopy: IPageContentWithAuthor[] = JSON.parse(
     JSON.stringify(pageContents),
   );
-  // eslint-disable-next-line no-console
-  console.log(
-    'contributors',
-    contributors,
-    'pageContentsCopy',
-    pageContentsCopy,
-  );
 
   pageContentsCopy.forEach((contentVersion: IPageContent, index): void => {
     const authorId = contentVersion?.authorId;
     const contributorInState = contributors.find(
       (contributor) => authorId === contributor.id,
     );
-    // eslint-disable-next-line no-console
-    console.log('contributorInState', contributorInState);
 
     if (contributorInState) {
       const { avatar, fullName, id } = contributorInState;
@@ -73,16 +65,12 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
         fullName: fullName || 'unavailable',
       };
 
-      // const pageVersionIndex = pageContentsCopy.findIndex((version: IPageContent) => version.authorId === id);
-
       if (index >= 0) {
         pageContentsCopy[index] = {
           ...pageContentsCopy[index],
           author: { ...versionAuthor },
         };
       }
-      // eslint-disable-next-line no-console
-      console.log('pageContentsCopy before Render', pageContentsCopy);
     } else {
       pageContentsCopy[index] = {
         ...pageContentsCopy[index],
@@ -98,7 +86,9 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
   const versionButtonValue =
     !currVersionId || currentPage?.pageContents[0]?.id === currVersionId
       ? 'Latest'
-      : formattedVersionDate(currContent ? currContent.createdAt : '');
+      : formattedVersionDate(
+          currContent ? currContent?.createdAt : new Date().toString(),
+        );
   return (
     <Dropdown as={NavLink} className="me-3 d-inline-flex sm">
       <Dropdown.Toggle
@@ -107,7 +97,7 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
       >
         Version: {versionButtonValue}
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu className={getAllowedClasses(styles.dropDownMenu)}>
         {pageContentsCopy ? (
           pageContentsCopy.map(({ id, createdAt, author, authorId }) => (
             <div className="d-flex" key={id}>
@@ -138,7 +128,7 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                   null,
                   author ? author?.authorId : authorId,
                 )}
-                className="d-flex m-auto"
+                className="d-flex align-items-center"
               >
                 <Avatar
                   key={id}

@@ -105,4 +105,4 @@ class PageApi {
   }
 }
 
-export { PageApi };
+export const pageApi = new PageApi();

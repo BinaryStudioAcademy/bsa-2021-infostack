@@ -20,7 +20,7 @@ import { CommentSection } from '../comment-section/comment-section';
 import ModalComponent from 'components/modal/modal';
 import { Spinner } from 'components/common/spinner/spinner';
 import PageContributors from '../page-contributors/page-contributors';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import { IPageContributor } from 'common/interfaces/pages';
 import EditButton from '../edit-button/edit-button';
 import { replaceIdParam } from 'helpers/helpers';
@@ -35,7 +35,13 @@ const PageContent: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [currContent, setCurrContent] = useState<IPageContent | undefined>();
 
-  const pageApi = new PageApi();
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const paramsId = useParams<{ id: string }>().id;
+
   const paramsVersionId = useParams<{ versionId: string }>().versionId;
 
   useEffect(() => {
@@ -43,12 +49,11 @@ const PageContent: React.FC = () => {
       const currentContent = currentPage?.pageContents.find(
         (content) => content.id === paramsVersionId,
       );
-      if (currentContent) setCurrContent(currentContent);
+      if (currentContent) {
+        setCurrContent(currentContent);
+      }
     }
   }, [paramsVersionId]);
-
-  // eslint-disable-next-line no-console
-  console.log('currContent', currContent);
 
   const pageTitle = currContent
     ? currContent.title
@@ -57,19 +62,6 @@ const PageContent: React.FC = () => {
   const content = currContent
     ? currContent.content
     : currentPage?.pageContents[0].content || undefined;
-
-  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const history = useHistory();
-  const dispatch = useAppDispatch();
-  const paramsId = useParams<{ id: string }>().id;
-  // const pageIdVersionId = useParams<{ pageId: string }>().versionId;
-
-  // eslint-disable-next-line no-console
-  console.log('paramsId', paramsId);
-  // eslint-disable-next-line no-console
-  console.log('paramsVersionId', paramsVersionId);
 
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
   const canEdit =

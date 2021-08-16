@@ -103,14 +103,6 @@ class PageRepository extends Repository<Page> {
       .andWhere('pageContents.id =  :id', { id: versionId })
       .getOne();
   }
-  // public findPageVersionsByIdWithAuthor(id: string): Promise<Page> {
-  //   return this.findOne(id, {
-  //     relations: ['pageContents', 'pageContents.author'],
-  //     order: {
-  //       createdAt: 'DESC',
-  //     },
-  //   });
-  // }
 }
 
 export default PageRepository;

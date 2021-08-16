@@ -32,7 +32,7 @@ export const createPage = async (
   const { title, content } = pageContent;
 
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.save({
+  const { id } = await pageRepository.save({
     authorId: userId,
     workspaceId,
     parentPageId,
@@ -46,8 +46,10 @@ export const createPage = async (
     title,
     content,
     authorId: userId,
-    pageId: page.id,
+    pageId: id,
   });
+
+  const page = await pageRepository.findByIdWithContents(id);
 
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
@@ -183,8 +185,6 @@ export const getPage = async (
   const page = await pageRepository.findByIdWithContents(pageId);
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
-  // eslint-disable-next-line no-console
-  // console.log('Page in getPage page.service.ts', page);
 
   const pageWithPermission = await addPermissionField<IPage>(
     userId,
@@ -194,7 +194,7 @@ export const getPage = async (
   return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
 
-export const getPageByVersion = async (
+export const getPageVersionContent = async (
   pageId: string,
   userId: string,
   versionId: string,
@@ -202,11 +202,9 @@ export const getPageByVersion = async (
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
   const pageWithVersionContent =
-    await pageRepository.findByIdWithVersionContent(pageId, versionId); // добавить в pageRepo это. Сделать запрос
+    await pageRepository.findByIdWithVersionContent(pageId, versionId);
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
-  // eslint-disable-next-line no-console
-  // console.log('Page in getPage page.service.ts', page);
 
   const pageWithPermission = await addPermissionField<IPage>(
     userId,
@@ -408,7 +406,7 @@ export const updateContent = async (
   await pageContentRepository.save({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
-    authorId: contentToUpdate.authorId,
+    authorId: userId,
     pageId: pageId,
   });
 

@@ -1,15 +1,22 @@
 .authorFullName {
   font-size: 1.32rem;
-  width: 50px;
-  margin-left: 5px;
+  width: 160px;
+  padding-left: 5px;
+  padding-right: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .authorFullName:hover {
-  font-size: 1.32rem;
-  width: 50px;
-  margin-left: 5px;
+  background-color: #e9ecef;
 }
 
 .nav-link {
   color: #6c757d !important;
+}
+
+.dropDownMenu {
+  max-height: 210px;
+  overflow: overlay;
 }
