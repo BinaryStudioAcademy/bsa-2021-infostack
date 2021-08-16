@@ -2,7 +2,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector, useRef, useState } from 'hooks/hooks';
 import { tagActions } from 'store/tags';
 import { getAllowedClasses } from 'helpers/helpers';
-import styles from '../styles.module.scss';
+import styles from '../../styles.module.scss';
 
 export const TagEdit: React.FC<{
   newTagInputRef: React.RefObject<HTMLInputElement>;
