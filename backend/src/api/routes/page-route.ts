@@ -14,6 +14,8 @@ import {
   unfollowPage,
   unfollowPages,
   updateContent,
+  getTags,
+  savePageTags,
   getTableOfContents,
 } from '../../services/page.service';
 import { getComments, addComment } from '../../services/comment.service';
@@ -108,6 +110,16 @@ router.post(
 );
 
 router.get(
+  '/:id/tags',
+  run((req) => getTags(req.params.id)),
+);
+
+router.post(
+  '/:id/tags',
+  run((req) => savePageTags(req.params.id, req.body)),
+);
+
+router.post(
   '/:id/table-of-contents',
   run((req) => getTableOfContents(req.params.id)),
 );
