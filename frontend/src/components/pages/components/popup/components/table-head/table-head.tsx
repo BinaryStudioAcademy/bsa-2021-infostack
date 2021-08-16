@@ -1,12 +1,13 @@
+import { getAllowedClasses } from 'helpers/helpers';
 import styles from '../styles.module.scss';
 
 interface ITableHeadProps {
   headers: string[];
 }
 
-const TableHead: React.FC<ITableHeadProps> = ({ headers }) => {
+export const TableHead: React.FC<ITableHeadProps> = ({ headers }) => {
   return (
-    <thead className={styles.tableHead}>
+    <thead className={getAllowedClasses(styles.tableHead)}>
       <tr>
         {headers.map((header) => (
           <th key={header}>{header}</th>
@@ -15,5 +16,3 @@ const TableHead: React.FC<ITableHeadProps> = ({ headers }) => {
     </thead>
   );
 };
-
-export default TableHead;

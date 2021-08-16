@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express';
-import { HttpCode } from 'infostack-shared/common/enums';
 import { getCustomRepository } from 'typeorm';
+import { HttpCode } from '../../common/enums/http-code';
 import UserWorkspaceRepository from '../../data/repositories/user-workspace.repository';
 import { RoleType } from '~/common/enums/role-type';
-import { IRequestWithUser } from '~/common/models/user/request-with-user.interface';
+import { IRequestWithUser } from '~/common/interfaces/http';
 
 export const permit = (...permittedRoles: RoleType[]) => {
   return async (

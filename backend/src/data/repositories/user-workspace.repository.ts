@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { InviteStatus } from 'infostack-shared';
+import { InviteStatus } from '../../common/enums/invite-status';
 import { UserWorkspace } from '../entities/user-workspace';
 
 @EntityRepository(UserWorkspace)

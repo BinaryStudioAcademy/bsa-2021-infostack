@@ -1,45 +1,58 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { ReducerName } from 'common/enums/app/reducer-name.enum';
 import { ITeam } from 'common/interfaces/team';
-import { ActionType } from './common';
+import { fetchTeams, createTeam, updateTeam, deleteTeam } from './actions';
 
 type State = {
   teams: ITeam[];
-  error: string;
+  isLoading: boolean;
 };
 
 const initialState: State = {
   teams: [],
-  error: '',
+  isLoading: false,
 };
 
 const { reducer, actions } = createSlice({
   name: ReducerName.TEAMS,
   initialState,
-  reducers: {
-    [ActionType.SET_TEAMS]: (state, action: PayloadAction<ITeam[]>) => {
-      state.teams = action.payload;
-    },
-    [ActionType.ADD_TEAM]: (state, action: PayloadAction<ITeam>) => {
-      state.teams.push(action.payload);
-    },
-    [ActionType.UPDATE_TEAM]: (state, action: PayloadAction<ITeam>) => {
-      const id = action.payload.id;
-      state.teams = state.teams.map((team: ITeam) =>
-        team.id === id ? action.payload : team,
-      );
-    },
-    [ActionType.DELETE_TEAM]: (state, action: PayloadAction<string>) => {
-      state.teams = state.teams.filter(
-        (team: ITeam) => team.id !== action.payload,
-      );
-    },
-    [ActionType.SET_CONFLICT_ERROR]: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-    },
-    [ActionType.REMOVE_CONFLICT_ERROR]: (state) => {
-      state.error = '';
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTeams.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchTeams.fulfilled, (state, action) => {
+        state.teams = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchTeams.rejected, (state) => {
+        toast.error('Error happened while loading teams.');
+        state.isLoading = false;
+      })
+      .addCase(createTeam.fulfilled, (state, action) => {
+        state.teams.push(action.payload);
+      })
+      .addCase(createTeam.rejected, () => {
+        toast.error('Error happened while creating a team.');
+      })
+      .addCase(updateTeam.fulfilled, (state, action) => {
+        const id = action.payload.id;
+        state.teams = state.teams.map((team) =>
+          team.id === id ? action.payload : team,
+        );
+      })
+      .addCase(updateTeam.rejected, () => {
+        toast.error('Error happened while updating the team.');
+      })
+      .addCase(deleteTeam.fulfilled, (state, action) => {
+        const id = action.meta.arg;
+        state.teams = state.teams.filter((team) => team.id !== id);
+      })
+      .addCase(deleteTeam.rejected, () => {
+        toast.error('Error happened while deleting the team.');
+      });
   },
 });
 

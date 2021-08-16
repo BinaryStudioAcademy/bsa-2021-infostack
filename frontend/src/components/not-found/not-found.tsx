@@ -1,6 +1,6 @@
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { getAllowedClasses } from 'helpers/dom/dom';
+import { Link } from 'components/common/common';
+import { getAllowedClasses } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
 
