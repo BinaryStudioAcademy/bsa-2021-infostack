@@ -6,10 +6,8 @@ type Props = {
   className?: string;
 };
 
-const Link: React.FC<Props> = ({ children, to, className }) => (
+export const Link: React.FC<Props> = ({ children, to, className }) => (
   <AppLink className={className} to={to}>
     {children}
   </AppLink>
 );
-
-export default Link;

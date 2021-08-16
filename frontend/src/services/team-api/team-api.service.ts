@@ -6,13 +6,13 @@ class TeamApi {
   private http = http;
   private BASE = '/api/teams';
 
-  public async getTeams(): Promise<ITeam[]> {
+  public getTeams(): Promise<ITeam[]> {
     return this.http.load(this.BASE, {
       contentType: ContentType.JSON,
     });
   }
 
-  public async createTeam(name: string): Promise<ITeam> {
+  public createTeam(name: string): Promise<ITeam> {
     return this.http.load(this.BASE, {
       method: HttpMethod.POST,
       payload: JSON.stringify({ name }),
@@ -20,7 +20,7 @@ class TeamApi {
     });
   }
 
-  public async updateTeam(payload: ITeamEditing): Promise<ITeam> {
+  public updateTeam(payload: ITeamEditing): Promise<ITeam> {
     return this.http.load(`${this.BASE}/${payload.id}`, {
       method: HttpMethod.PUT,
       payload: JSON.stringify(payload),
@@ -28,17 +28,17 @@ class TeamApi {
     });
   }
 
-  public async deleteTeam(payload: string): Promise<ITeam> {
+  public async deleteTeam(payload: string): Promise<void> {
     return this.http.load(`${this.BASE}/${payload}`, {
       method: HttpMethod.DELETE,
     });
   }
 
-  public async getTeam(id?: string): Promise<ITeam> {
+  public getTeam(id?: string): Promise<ITeam> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
     });
   }
 }
 
-export { TeamApi };
+export const teamApi = new TeamApi();

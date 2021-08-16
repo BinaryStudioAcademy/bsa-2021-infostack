@@ -2,14 +2,16 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { TagApi } from 'services';
+import { ITag } from 'common/interfaces/tag';
 
 const TAG_EMPTY_NAME = 'Empty tag name is not allowed';
 
 const loadTags = createAsyncThunk(
   ActionType.SET_TAGS,
-  async (_, { dispatch }): Promise<void> => {
+  async (_, { dispatch }): Promise<ITag[]> => {
     const response = await new TagApi().getAll();
     dispatch(actions.setTags(response));
+    return response;
   },
 );
 

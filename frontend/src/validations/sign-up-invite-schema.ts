@@ -9,7 +9,7 @@ export const signUpInviteSchema = yup.object().shape({
     .max(30)
     .matches(
       titleRegex,
-      'fullName must consist of latin letters (upper and lower case), numbers, and symbols',
+      'full name must consist of latin letters (upper and lower case), numbers, and symbols',
     )
     .required(),
   password: yup

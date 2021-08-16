@@ -23,6 +23,8 @@ import { mapPermissionstoParticipants } from '../common/mappers/page/map-permiss
 import { maximum } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
+import { ITag } from '../common/interfaces/tag';
+import TagRepository from '../data/repositories/tag.repository';
 import { parseHeadings } from '../common/utils/markdown.util';
 
 export const createPage = async (
@@ -463,3 +465,24 @@ export const unfollowPages = async (
   pageIds: string[],
 ): Promise<void> =>
   getCustomRepository(PageRepository).unfollowPages(userId, pageIds);
+
+export const getTags = async (pageId: string): Promise<ITag[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithTags(pageId);
+
+  return page.tags;
+};
+
+export const savePageTags = async (
+  pageId: string,
+  body: string[],
+): Promise<ITag[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findById(pageId);
+  const tagRepository = getCustomRepository(TagRepository);
+  const tags = await tagRepository.getTagsByIds(body);
+  page.tags = tags;
+  await pageRepository.save(page);
+
+  return tags;
+};

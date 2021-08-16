@@ -1,14 +1,8 @@
 import { getCustomRepository } from 'typeorm';
+import jwt from 'jsonwebtoken';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
-import { IRegister } from '../common/interfaces/auth/register.interface';
-import { ILogin } from '../common/interfaces/auth/login.interface';
-import {
-  IUserWithTokens,
-  IUser,
-} from '../common/interfaces/user/user-auth.interface';
-import { ITokens } from './../common/interfaces/auth/tokens.interface';
-import { IRefreshToken } from './../common/interfaces/auth/refresh-tokens.interface';
+import { IUserWithTokens, IUser } from '../common/interfaces/user';
 import {
   generateTokens,
   generateAccessToken,
@@ -18,11 +12,16 @@ import RefreshTokenRepository from '../data/repositories/refresh-token.repositor
 import { hash, verify } from '../common/utils/hash.util';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
-import { IResetPassword } from '../common/interfaces/auth/reset-password.interface';
+import {
+  IResetPassword,
+  IRegister,
+  IRefreshToken,
+  ITokens,
+  ILogin,
+  ISetPassword,
+  IUpdatePasswordAndFullName,
+} from '../common/interfaces/auth';
 import { env } from '../env';
-import { ISetPassword } from '../common/interfaces/auth/set-password.interface';
-import jwt from 'jsonwebtoken';
-import { IUpdatePasswordAndFullName } from 'infostack-shared';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 
 const setTokens = async (user: IUser): Promise<ITokens> => {
