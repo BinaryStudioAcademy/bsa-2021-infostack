@@ -50,9 +50,9 @@ export const notifyUsers = async (comment: IComment): Promise<void> => {
       Hello,
 
       You received a response from ${comment.author.fullName} to your comment:
-      
+
       "${comment.text}"
-      
+
       ${url}`,
     });
   } else {
@@ -72,11 +72,11 @@ export const notifyUsers = async (comment: IComment): Promise<void> => {
         subject: 'A new comment to the page you are following',
         text: `
         Hello,
-  
+
         A page you are following received a new comment from ${comment.author.fullName}:
-      
+
         "${comment.text}"
-        
+
         ${url}`,
       });
     }
