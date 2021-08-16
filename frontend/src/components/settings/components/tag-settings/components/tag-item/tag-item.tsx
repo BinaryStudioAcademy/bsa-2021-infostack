@@ -1,40 +1,46 @@
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Button } from 'react-bootstrap';
 import { useAppDispatch } from 'hooks/hooks';
 import { tagActions } from 'store/tags';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from '../../styles.module.scss';
-import './styles.scss';
 
-export const TagItem: React.FC<{ id: string; name: string }> = ({
-  id,
-  name,
-}) => {
+export const TagItem: React.FC<{
+  id: string;
+  name: string;
+  newTagInputRef: React.RefObject<HTMLInputElement>;
+}> = ({ id, name, newTagInputRef }) => {
   const dispatch = useAppDispatch();
 
   const handleDelete = async (): Promise<void> => {
     dispatch(tagActions.requestDelete(id));
+    newTagInputRef.current?.focus();
   };
 
-  const handleUpdate = async (): Promise<void> => {
+  const handleEdit = async (): Promise<void> => {
     dispatch(tagActions.setTagToEdit(id));
   };
 
   return (
-    <DropdownButton
-      id={name}
-      title={name}
-      className={`${getAllowedClasses(styles.button, styles.item)} btn-tag`}
-    >
-      <Dropdown.Item onClick={handleUpdate}>
-        <i className="bi-pencil" />
-        Edit
-      </Dropdown.Item>
-      <Dropdown.Divider />
-      <Dropdown.Item onClick={handleDelete}>
-        <i className="bi-trash-fill" />
-        Delete
-      </Dropdown.Item>
-    </DropdownButton>
+    <tr className={getAllowedClasses(styles.tr)}>
+      <td className={getAllowedClasses(styles.td)}>{name}</td>
+      <td className={getAllowedClasses(styles.tdButton)}>
+        <Button
+          onClick={handleEdit}
+          variant="link"
+          className={`${getAllowedClasses(styles.button)} text-secondary`}
+        >
+          Rename
+        </Button>
+      </td>
+      <td className={getAllowedClasses(styles.tdButton)}>
+        <Button
+          onClick={handleDelete}
+          variant="link"
+          className={`${getAllowedClasses(styles.button)} text-danger`}
+        >
+          Delete
+        </Button>
+      </td>
+    </tr>
   );
 };
