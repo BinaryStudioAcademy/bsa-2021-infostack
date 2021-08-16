@@ -78,6 +78,12 @@ class PageRepository extends Repository<Page> {
     });
   }
 
+  public findByIdWithTags(id: string): Promise<Page> {
+    return this.findOne(id, {
+      relations: ['tags'],
+    });
+  }
+
   public followPage(userId: string, pageId: string): Promise<void> {
     return this.createQueryBuilder()
       .relation('followingUsers')
