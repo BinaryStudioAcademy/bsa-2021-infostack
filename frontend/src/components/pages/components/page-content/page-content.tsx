@@ -85,6 +85,11 @@ export const PageContent: React.FC = () => {
     currentPage?.permission === PermissionType.ADMIN ||
     currentPage?.permission === PermissionType.WRITE;
 
+  const canRead =
+    currentPage?.permission === PermissionType.READ ||
+    currentPage?.permission === PermissionType.WRITE ||
+    currentPage?.permission === PermissionType.ADMIN;
+
   const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
 
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
@@ -203,12 +208,14 @@ export const PageContent: React.FC = () => {
               <Col className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
+                  {canRead && (
+                    <VersionDropdown
+                      currContent={currContent}
+                      contributors={contributors}
+                    />
+                  )}
                   {isPageAdmin && (
                     <>
-                      <VersionDropdown
-                        currContent={currContent}
-                        contributors={contributors}
-                      />
                       <Button
                         onClick={onAssign}
                         className={canEdit ? 'me-3' : ''}
