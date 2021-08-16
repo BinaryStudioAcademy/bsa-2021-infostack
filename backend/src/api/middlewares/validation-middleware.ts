@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { SchemaOf } from 'yup';
+import { AnySchema } from 'yup';
 
 export const validationMiddleware =
-  (schema: SchemaOf<Record<string, string>>) =>
+  (schema: AnySchema) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const data = req.body;
     try {
