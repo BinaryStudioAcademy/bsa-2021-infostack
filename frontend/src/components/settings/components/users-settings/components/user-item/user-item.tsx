@@ -1,3 +1,4 @@
+import { InviteStatus } from 'common/enums/invite-status';
 import { IWorkspaceUser } from 'common/interfaces/workspace';
 import Button from 'react-bootstrap/Button';
 
@@ -24,7 +25,14 @@ export const UserItem: React.FC<IUserItemProps> = ({
       <td>{teams.length ? teams.join(', ') : 'No teams found'}</td>
       <td>{status}</td>
       <td>
-        <Button onClick={(): void => onDeleteUser()} variant="danger" size="sm">
+        <Button
+          onClick={(): void => onDeleteUser()}
+          variant="danger"
+          size="sm"
+          disabled={
+            status === InviteStatus.DELETED || status === InviteStatus.DECLINED
+          }
+        >
           Delete
         </Button>
       </td>
