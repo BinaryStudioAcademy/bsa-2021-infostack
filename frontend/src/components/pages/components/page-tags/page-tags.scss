@@ -1,0 +1,32 @@
+.card-block-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.tags-title {
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.tag-badge {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0.75rem 0.75rem 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #f2f8ff;
+}
+
+.btn-manage {
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.btn-done {
+  font-size: 1.4rem;
+  cursor: pointer;
+}

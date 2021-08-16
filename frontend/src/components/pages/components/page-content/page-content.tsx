@@ -32,6 +32,7 @@ import {
 import { FollowModal } from '../follow-modal/follow-modal';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import PageTags from '../page-tags/page-tags';
 
 export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -177,7 +178,7 @@ export const PageContent: React.FC = () => {
         <Row>
           <Col xs={2}>
             <PageTableOfContents headings={TOCHeadings} />
-
+            <PageTags />
             <PageContributors className="mt-4" contributors={contributors} />
           </Col>
           <Col>
