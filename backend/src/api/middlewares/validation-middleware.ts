@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { SchemaOf } from 'yup';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const validationMiddleware =
-  (schema: SchemaOf<object>) =>
+  (schema: SchemaOf<Record<string, string>>) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const data = req.body;
     try {
