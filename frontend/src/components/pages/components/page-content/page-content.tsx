@@ -120,8 +120,6 @@ export const PageContent: React.FC = () => {
       );
 
       setIsLeftBlockLoading(false);
-      // eslint-disable-next-line no-console
-      console.log('contributors', contributors);
     } else {
       dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);

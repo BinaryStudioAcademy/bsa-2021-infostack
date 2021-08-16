@@ -414,7 +414,7 @@ export const updateContent = async (
     pageId: pageId,
   });
 
-  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const page = await pageRepository.findByIdWithContents(pageId);
 
   const userRepository = getCustomRepository(UserRepository);
 
