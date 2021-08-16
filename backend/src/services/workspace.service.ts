@@ -90,6 +90,23 @@ export const updateInviteStatusDeclined = async (
 
   await userWorkspaceRepository.save(userWorkspaceUpdated);
 };
+
+export const updateUserStatusDeleted = async (
+  userId: string,
+  workspaceId: string,
+): Promise<void> => {
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspaceToUpdate =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+      userId,
+      workspaceId,
+    );
+  const userWorkspaceUpdated = { ...userWorkspaceToUpdate };
+  userWorkspaceUpdated.status = InviteStatus.DELETED;
+
+  await userWorkspaceRepository.save(userWorkspaceUpdated);
+};
+
 export const addUserToWorkspace = async (
   userId: string,
   workspaceId: string,
@@ -142,12 +159,14 @@ export const getUserWorkspaces = async (
   );
   const workspaces = [] as IWorkspace[];
   for (const userWorkspace of usersWorkspaces) {
-    const workspace = userWorkspace.workspace;
-    workspaces.push({
-      id: workspace.id,
-      title: workspace.name,
-      status: userWorkspace.status,
-    });
+    if (userWorkspace.status !== InviteStatus.DELETED) {
+      const workspace = userWorkspace.workspace;
+      workspaces.push({
+        id: workspace.id,
+        title: workspace.name,
+        status: userWorkspace.status,
+      });
+    }
   }
   return workspaces;
 };

@@ -8,6 +8,7 @@ import {
   inviteToWorkspace,
   updateInviteStatusAccepted,
   updateInviteStatusDeclined,
+  updateUserStatusDeleted,
 } from '../../services/workspace.service';
 import { permit } from '../middlewares/permissions-middleware';
 import { RoleType } from '../../common/enums/role-type';
@@ -35,6 +36,10 @@ router
   .put(
     '/:id/decline-invite-status',
     run((req) => updateInviteStatusDeclined(req.userId, req.params.id)),
+  )
+  .put(
+    '/:id/delete-user-status',
+    run((req) => updateUserStatusDeleted(req.params.id, req.workspaceId)),
   )
   .post(
     '/invite',

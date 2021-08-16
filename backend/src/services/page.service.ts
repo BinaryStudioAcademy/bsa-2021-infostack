@@ -303,7 +303,9 @@ const deleteUserPermission = async (
     participantId,
     pageId,
   );
-  await userPermissionRepository.remove(userPermission);
+  if (userPermission) {
+    await userPermissionRepository.remove(userPermission);
+  }
 };
 
 const deleteTeamPermission = async (
@@ -363,6 +365,15 @@ export const deletePermission = async (
       deleteTeamPermission,
     );
   }
+};
+
+export const deleteAllPermissionsForUser = async (
+  userId: string,
+  workspaceId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const allPages = await pageRepository.findPages(workspaceId);
+  allPages.map((page) => deleteUserPermission(page.id, userId));
 };
 
 export const updateContent = async (
@@ -471,6 +482,18 @@ export const getTags = async (pageId: string): Promise<ITag[]> => {
   const page = await pageRepository.findByIdWithTags(pageId);
 
   return page.tags;
+};
+
+export const unfollowAll = async (
+  userId: string,
+  workspaceId: string,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const allPages = await pageRepository.findPages(workspaceId);
+  const pageIds = allPages.map((page) => {
+    return page.id;
+  });
+  await pageRepository.unfollowPages(userId, pageIds);
 };
 
 export const savePageTags = async (

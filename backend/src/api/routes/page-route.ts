@@ -7,11 +7,13 @@ import {
   getPermissions,
   setPermission,
   deletePermission,
+  deleteAllPermissionsForUser,
   getContributors,
   getPagesFollowedByUser,
   followPage,
   followPages,
   unfollowPage,
+  unfollowAll,
   unfollowPages,
   updateContent,
   getTags,
@@ -59,6 +61,11 @@ router.delete(
   ),
 );
 
+router.delete(
+  '/permissions/:userId',
+  run((req) => deleteAllPermissionsForUser(req.params.userId, req.workspaceId)),
+);
+
 router.get(
   '/:id/contributors',
   run((req) => getContributors(req.params.id)),
@@ -102,6 +109,11 @@ router.post(
 router.post(
   '/unfollow',
   run((req) => unfollowPages(req.userId, req.body)),
+);
+
+router.delete(
+  '/unfollow-all/:id',
+  run((req) => unfollowAll(req.params.id, req.workspaceId)),
 );
 
 router.post(
