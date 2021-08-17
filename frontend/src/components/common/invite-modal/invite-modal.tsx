@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useForm, useState } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
-import { resetPasswordSchema } from 'validations/reset-password-schema';
+import { resetPasswordSchema } from 'common/validations';
 import { WorkspaceApi } from 'services';
 import { IRegister } from 'common/interfaces/auth';
 import { usersActions } from 'store/users';

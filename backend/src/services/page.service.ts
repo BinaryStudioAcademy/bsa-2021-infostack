@@ -23,6 +23,8 @@ import { mapPermissionstoParticipants } from '../common/mappers/page/map-permiss
 import { maximum } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
+import { ITag } from '../common/interfaces/tag';
+import TagRepository from '../data/repositories/tag.repository';
 import { parseHeadings } from '../common/utils/markdown.util';
 
 export const createPage = async (
@@ -34,7 +36,7 @@ export const createPage = async (
   const { title, content } = pageContent;
 
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.save({
+  const { id } = await pageRepository.save({
     authorId: userId,
     workspaceId,
     parentPageId,
@@ -48,8 +50,10 @@ export const createPage = async (
     title,
     content,
     authorId: userId,
-    pageId: page.id,
+    pageId: id,
   });
+
+  const page = await pageRepository.findByIdWithContents(id);
 
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
@@ -185,12 +189,33 @@ export const getPage = async (
   const page = await pageRepository.findByIdWithContents(pageId);
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
+
   const pageWithPermission = await addPermissionField<IPage>(
     userId,
     teamsIds,
     mapPageToIPage(page),
   );
   return pageWithPermission;
+};
+
+export const getPageVersionContent = async (
+  pageId: string,
+  userId: string,
+  versionId: string,
+): Promise<IPage> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const pageWithVersionContent =
+    await pageRepository.findByIdWithVersionContent(pageId, versionId);
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+
+  const pageWithPermission = await addPermissionField<IPage>(
+    userId,
+    teamsIds,
+    mapPageToIPage(pageWithVersionContent),
+  );
+  return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
 
 export const getPermissions = async (
@@ -280,6 +305,7 @@ export const setPermission = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
   const allPages = await pageRepository.findPages(workspaceId);
+
   if (participant.type === ParticipantType.USER) {
     setUserPermission(page, participant);
     setPermissionForChildren(allPages, pageId, participant, setUserPermission);
@@ -384,11 +410,11 @@ export const updateContent = async (
   await pageContentRepository.save({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
-    authorId: contentToUpdate.authorId,
+    authorId: userId,
     pageId: pageId,
   });
 
-  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const page = await pageRepository.findByIdWithContents(pageId);
 
   const userRepository = getCustomRepository(UserRepository);
 
@@ -463,3 +489,24 @@ export const unfollowPages = async (
   pageIds: string[],
 ): Promise<void> =>
   getCustomRepository(PageRepository).unfollowPages(userId, pageIds);
+
+export const getTags = async (pageId: string): Promise<ITag[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithTags(pageId);
+
+  return page.tags;
+};
+
+export const savePageTags = async (
+  pageId: string,
+  body: string[],
+): Promise<ITag[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findById(pageId);
+  const tagRepository = getCustomRepository(TagRepository);
+  const tags = await tagRepository.getTagsByIds(body);
+  page.tags = tags;
+  await pageRepository.save(page);
+
+  return tags;
+};

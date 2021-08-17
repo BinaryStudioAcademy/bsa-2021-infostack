@@ -13,7 +13,7 @@ import { UserApi, SkillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
 import { IUserAccount } from 'common/interfaces/user';
 import { useForm, yupResolver } from 'hooks/hooks';
-import { accountInfoSchema } from 'validations/account-info-schema';
+import { accountInfoSchema } from 'common/validations';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';

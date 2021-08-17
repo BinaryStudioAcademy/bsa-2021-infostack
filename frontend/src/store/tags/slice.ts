@@ -5,14 +5,20 @@ import { ActionType } from './common';
 
 type State = {
   tags: ITag[] | null;
-  tagToEditId: string | null;
-  isOpenNewTagForm: boolean;
+  tagAddName: string | null;
+  tagEditId: string | null;
+  tagEditName: string | null;
+  tagAddError: string | null;
+  tagEditError: string | null;
 };
 
 const initialState: State = {
   tags: null,
-  tagToEditId: null,
-  isOpenNewTagForm: false,
+  tagAddName: null,
+  tagAddError: null,
+  tagEditId: null,
+  tagEditName: null,
+  tagEditError: null,
 };
 
 const { reducer, actions } = createSlice({
@@ -24,28 +30,43 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.RESET_TAGS]: (state, _action: PayloadAction<void>) => {
       state.tags = null;
-      state.tagToEditId = null;
-      state.isOpenNewTagForm = false;
+      state.tagAddName = null;
+      state.tagAddError = null;
+      state.tagEditId = null;
+      state.tagEditName = null;
+      state.tagEditError = null;
     },
     [ActionType.SET_TAG_TO_EDIT]: (
       state,
       action: PayloadAction<string | null>,
     ) => {
-      state.tagToEditId = action.payload;
+      state.tagEditId = action.payload;
+      state.tagAddName = null;
+      state.tagAddError = null;
+      state.tagEditError = null;
+      if (state.tags && state.tagEditId) {
+        const tagEdit = state.tags.find((tag) => tag.id === action.payload);
+        if (tagEdit) {
+          state.tagEditName = tagEdit.name;
+        }
+      } else {
+        state.tagEditName = null;
+      }
     },
     [ActionType.ADD_TAG]: (state, action: PayloadAction<ITag>) => {
       state.tags?.push(action.payload);
+      state.tagAddName = null;
+      state.tagAddError = null;
+      state.tagEditId = null;
+      state.tagEditName = null;
+      state.tagEditError = null;
     },
-    [ActionType.DELETE_TAG]: (state, action: PayloadAction<{ id: string }>) => {
+    [ActionType.DELETE_TAG]: (state, action: PayloadAction<string>) => {
       if (state.tags) {
-        if (state.tags.length === 1) {
-          state.tags = [];
-        } else {
-          const indexToDelete = state.tags.findIndex(
-            (tag) => tag.id === action.payload.id,
-          );
-          state.tags.splice(indexToDelete, 1);
-        }
+        const indexToDelete = state.tags.findIndex(
+          (tag) => tag.id === action.payload,
+        );
+        state.tags.splice(indexToDelete, 1);
       }
     },
     [ActionType.UPDATE_TAG]: (
@@ -58,13 +79,31 @@ const { reducer, actions } = createSlice({
       if (updatedTag) {
         updatedTag.name = action.payload.updatedName;
       }
-      state.tagToEditId = null;
+      state.tagEditId = null;
     },
-    [ActionType.SET_NEW_TAG_FORM]: (
+    [ActionType.SET_ADD_TAG_ERROR]: (
       state,
-      action: PayloadAction<{ isOpen: boolean }>,
+      action: PayloadAction<string | null>,
     ) => {
-      state.isOpenNewTagForm = action.payload.isOpen;
+      state.tagAddError = action.payload;
+    },
+    [ActionType.SET_ADD_NAME]: (
+      state,
+      action: PayloadAction<string | null>,
+    ) => {
+      state.tagAddName = action.payload;
+    },
+    [ActionType.SET_EDIT_TAG_ERROR]: (
+      state,
+      action: PayloadAction<string | null>,
+    ) => {
+      state.tagEditError = action.payload;
+    },
+    [ActionType.SET_EDIT_NAME]: (
+      state,
+      action: PayloadAction<string | null>,
+    ) => {
+      state.tagEditName = action.payload;
     },
   },
 });

@@ -9,6 +9,7 @@ import Pages from 'components/pages/pages';
 import ProfileInfo from 'components/profile-info/profile-info';
 import Settings from 'components/settings/settings';
 import { ContentEditor } from 'components/pages/components/components';
+import { PageContent } from 'components/pages/components/components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -49,6 +50,11 @@ const Main: React.FC = () => {
       <Route
         path={AppRoute.PAGE}
         render={(): JSX.Element => <WithHeader Component={Pages} />}
+        exact
+      />
+      <Route
+        path={AppRoute.PAGE_PREVIOUS_VERSION}
+        render={(): JSX.Element => <WithHeader Component={PageContent} />}
         exact
       />
       <Route
