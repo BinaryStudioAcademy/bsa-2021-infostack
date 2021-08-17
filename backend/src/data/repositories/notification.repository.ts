@@ -40,6 +40,10 @@ class NotificationRepository extends Repository<Notification> {
       take: limit,
     });
   }
+
+  public findById(id: string): Promise<Notification> {
+    return this.findOne({ id });
+  }
 }
 
 export default NotificationRepository;

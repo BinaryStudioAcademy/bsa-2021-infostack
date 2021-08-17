@@ -1,14 +1,31 @@
 import { getCustomRepository } from 'typeorm';
 // import { Server } from 'socket.io';
+import { EntityType } from '../common/enums/entity-type';
 import { INotification } from '../common/interfaces/notification';
 import CommentRepository from '../data/repositories/comment.repository';
 import NotificationRepository from '../data/repositories/notification.repository';
 import PageRepository from '../data/repositories/page.repository';
 import { mapNatoficationToINatofication } from '../common/mappers/notification/map-notification-to-inotification';
+import { Notification } from '../data/entities/notification';
+
+const setSubtitle = async (
+  notification: Notification,
+): Promise<INotification> => {
+  const commentRepository = getCustomRepository(CommentRepository);
+  const pageRepository = getCustomRepository(PageRepository);
+  const comment = await commentRepository.findOneById(
+    notification.entityTypeId,
+  );
+  const page = await pageRepository.findByIdWithLastContent(comment.pageId);
+  return {
+    ...mapNatoficationToINatofication(notification),
+    subtitle: page.pageContents[0].title,
+  };
+};
 
 export const getNotifications = async (
   userId: string,
-  limit: number,
+  limit?: number,
 ): Promise<INotification[]> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
   const notifications = limit
@@ -16,7 +33,7 @@ export const getNotifications = async (
     : await notificationRepository.findAllByUserId(userId);
 
   const commentNotifications = notifications.filter(
-    (notification) => notification.type === 'comment',
+    (notification) => notification.type === EntityType.COMMENT,
   );
   if (!commentNotifications.length) {
     return notifications.map(mapNatoficationToINatofication);
@@ -24,17 +41,9 @@ export const getNotifications = async (
     const expandedNotifications = notifications
       .filter((notification) => notification.type !== 'comment')
       .map(mapNatoficationToINatofication);
-    const commentRepository = getCustomRepository(CommentRepository);
-    const pageRepository = getCustomRepository(PageRepository);
     for (const notification of commentNotifications) {
-      const comment = await commentRepository.findOneById(
-        notification.entityTypeId,
-      );
-      const page = await pageRepository.findByIdWithLastContent(comment.pageId);
-      expandedNotifications.push({
-        ...mapNatoficationToINatofication(notification),
-        subtitle: page.pageContents[0].title,
-      });
+      const expandedNotification = await setSubtitle(notification);
+      expandedNotifications.push(expandedNotification);
     }
     return expandedNotifications;
   }
@@ -49,4 +58,31 @@ export const getNotificationsCount = async (
     (notification) => !notification.read,
   ).length;
   return { count };
+};
+
+export const updateRead = async (
+  notificationId: string,
+  body: { read: boolean },
+): Promise<INotification> => {
+  const notificationRepository = getCustomRepository(NotificationRepository);
+  await notificationRepository.update({ id: notificationId }, body);
+  const notification = await notificationRepository.findById(notificationId);
+  if (notification.type === EntityType.COMMENT) {
+    const expandedNotification = await setSubtitle(notification);
+    return expandedNotification;
+  } else {
+    return mapNatoficationToINatofication(notification);
+  }
+};
+
+export const updateReadForAll = async (
+  userId: string,
+  body: { read: boolean },
+): Promise<INotification[]> => {
+  const notificationRepository = getCustomRepository(NotificationRepository);
+  const notifications = await notificationRepository.findAllByUserId(userId);
+  for (const notification of notifications) {
+    await notificationRepository.update({ id: notification.id }, body);
+  }
+  return await getNotifications(userId);
 };

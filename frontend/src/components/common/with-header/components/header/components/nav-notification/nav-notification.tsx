@@ -56,6 +56,14 @@ export const NavNotification: React.FC = () => {
     dispatch(notificationsActions.toggleIsExpanded());
   };
 
+  const onReadAll = (): void => {
+    dispatch(notificationsActions.readAllNotifications());
+  };
+
+  const onRead = (id: string): void => {
+    dispatch(notificationsActions.readNotification(id));
+  };
+
   return (
     <Dropdown align="end" onToggle={onDropdownToggle}>
       <Dropdown.Toggle as={Button} id="dropdown-notifications" bsPrefix="m-0">
@@ -71,34 +79,45 @@ export const NavNotification: React.FC = () => {
           <Dropdown.Header className="text-center text-dark">
             {count} New Notifications
           </Dropdown.Header>
-          {!!count && (
-            <>
-              <Dropdown.Divider />
-              {notifications.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  icon={
-                    notification.type === EntityType.COMMENT
-                      ? 'bi bi-chat-left'
-                      : 'bi bi-info-circle'
-                  }
-                  title={notification.title}
-                  subtitle={notification.subtitle}
-                  body={notification.body}
-                  time="3 days ago"
-                />
-              ))}
-              <Dropdown.Divider />
+          <Dropdown.Divider className="mb-0" />
+          {notifications.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              id={notification.id}
+              icon={
+                notification.type === EntityType.COMMENT
+                  ? 'bi bi-chat-left'
+                  : 'bi bi-info-circle'
+              }
+              title={notification.title}
+              subtitle={notification.subtitle}
+              body={notification.body}
+              read={notification.read}
+              time="3 days ago"
+              onRead={onRead}
+            />
+          ))}
+          <Dropdown.Divider className="mt-0" />
+          <div className="d-flex justify-content-around align-items-center p-1">
+            {isExpanded && (
               <div
-                className="d-flex justify-content-center align-items-center"
-                onClick={onShowAll}
+                className="d-flex justify-content-center align-items-center p-1"
+                onClick={onReadAll}
               >
                 <span className={getAllowedClasses(styles.footerText)}>
-                  {isExpanded ? 'Hide' : 'Show'} all messages
+                  Make all read
                 </span>
               </div>
-            </>
-          )}
+            )}
+            <div
+              className="d-flex justify-content-center align-items-center p-1"
+              onClick={onShowAll}
+            >
+              <span className={getAllowedClasses(styles.footerText)}>
+                {isExpanded ? 'Hide' : 'Show'} all messages
+              </span>
+            </div>
+          </div>
         </Dropdown.Menu>
       )}
     </Dropdown>

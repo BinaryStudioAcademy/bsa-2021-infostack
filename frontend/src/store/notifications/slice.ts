@@ -25,6 +25,17 @@ export const { reducer, actions } = createSlice({
     ) => {
       state.notifications = action.payload;
     },
+    [ActionType.UPDATE_NOTIFICATION]: (
+      state,
+      action: PayloadAction<INotification>,
+    ) => {
+      state.notifications = state.notifications.map((notification) => {
+        if (notification.id === action.payload.id) {
+          return action.payload;
+        }
+        return notification;
+      });
+    },
     [ActionType.REMOVE_NOTIFICATIONS]: (state) => {
       state.notifications = [];
     },
@@ -33,6 +44,9 @@ export const { reducer, actions } = createSlice({
     },
     [ActionType.INCREMENT_COUNT]: (state) => {
       state.count += 1;
+    },
+    [ActionType.DECREMENT_COUNT]: (state) => {
+      state.count -= 1;
     },
     [ActionType.TOGGLE_IS_EXPANDED]: (state) => {
       state.isExpanded = !state.isExpanded;
