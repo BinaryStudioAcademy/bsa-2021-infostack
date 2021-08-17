@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppRoute } from 'common/enums/enums';
-import { FormField, Sign } from 'components/common/common';
+import { FormField, Link, Sign } from 'components/common/common';
 import { loginSchema } from 'common/validations';
 import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
 import { authActions } from 'store/actions';
