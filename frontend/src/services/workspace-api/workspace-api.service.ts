@@ -69,7 +69,7 @@ class WorkspaceApi {
     const updateResponse: IWorkspace = await this.http.load(
       `${this.BASE}/${id}/delete-user`,
       {
-        method: HttpMethod.PUT,
+        method: HttpMethod.DELETE,
       },
     );
 

@@ -37,8 +37,9 @@ router
     '/:id/decline-invite-status',
     run((req) => updateInviteStatusDeclined(req.userId, req.params.id)),
   )
-  .put(
+  .delete(
     '/:id/delete-user',
+    permit(RoleType.ADMIN),
     run((req) => deleteUserFromWorkspace(req.params.id, req.workspaceId)),
   )
   .post(
