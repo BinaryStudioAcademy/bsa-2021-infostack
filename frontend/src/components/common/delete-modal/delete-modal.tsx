@@ -20,16 +20,12 @@ export const DeleteModal: React.FC<Props> = ({
   const [isDeleteDisabled, setDeleteDisabled] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleClose = (): void => {
-    onModalClose();
-  };
-
   const handleDelete = async (): Promise<void> => {
     setDeleteDisabled(true);
 
     await new WorkspaceApi().deleteUserFromWorkspace(id);
 
-    handleClose();
+    onModalClose();
     toast.info('User was deleted');
 
     setDeleteDisabled(false);
@@ -51,7 +47,7 @@ export const DeleteModal: React.FC<Props> = ({
       <Modal.Footer>
         <Button
           variant="primary"
-          onClick={handleClose}
+          onClick={onModalClose}
           disabled={isDeleteDisabled}
         >
           No
