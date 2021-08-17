@@ -1,8 +1,8 @@
-import { Button, Modal } from 'react-bootstrap';
 import { WorkspaceApi } from 'services';
 import { useAppDispatch, useState } from 'hooks/hooks';
 import { usersActions } from 'store/users';
 import { toast } from 'react-toastify';
+import { ConfirmModal } from '../confirm-modal/confirm-modal';
 
 type Props = {
   showModal: boolean;
@@ -33,33 +33,20 @@ export const DeleteModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal
-      show={showModal}
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header>
-        <Modal.Title className="fs-6" id="contained-modal-title-vcenter">
-          Delete confirmation
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>Are you sure you want to delete {fullName}?</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="primary"
-          onClick={onModalClose}
-          disabled={isDeleteDisabled}
-        >
-          No
-        </Button>
-        <Button
-          variant="danger"
-          onClick={handleDelete}
-          disabled={isDeleteDisabled}
-        >
-          Yes
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <ConfirmModal
+      title="Delete confirmation"
+      showModal={showModal}
+      modalText={`Are you sure you want to delete ${fullName}?`}
+      confirmButton={{
+        text: 'Yes',
+        onClick: handleDelete,
+        disabled: isDeleteDisabled,
+      }}
+      cancelButton={{
+        text: 'No',
+        onClick: onModalClose,
+        disabled: isDeleteDisabled,
+      }}
+    />
   );
 };
