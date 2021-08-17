@@ -27,6 +27,9 @@ class NotificationRepository extends Repository<Notification> {
   public findAllByUserId(userId: string): Promise<Notification[]> {
     return this.find({
       where: { userId },
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
@@ -38,6 +41,9 @@ class NotificationRepository extends Repository<Notification> {
       where: { userId },
       skip: 0,
       take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 

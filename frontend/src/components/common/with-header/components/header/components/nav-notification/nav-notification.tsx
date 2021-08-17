@@ -9,9 +9,10 @@ import {
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums/enums';
 import { notificationsActions } from 'store/actions';
+import { EntityType } from 'common/enums/enums';
+import { toDayJS } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { EntityType } from 'common/enums/enums';
 
 const NOTIFICATIONS_LIMIT = 4;
 
@@ -93,7 +94,7 @@ export const NavNotification: React.FC = () => {
               subtitle={notification.subtitle}
               body={notification.body}
               read={notification.read}
-              time="3 days ago"
+              time={toDayJS(notification.createdAt).fromNow()}
               onRead={onRead}
             />
           ))}
