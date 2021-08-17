@@ -19,7 +19,7 @@ import { AppRoute, PermissionType } from 'common/enums/enums';
 import { pageApi } from 'services';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
-import { IPageContent } from 'infostack-shared';
+import { IPageContent } from 'common/interfaces/pages';
 import { InviteModal, Spinner } from 'components/common/common';
 import {
   EditButton,
