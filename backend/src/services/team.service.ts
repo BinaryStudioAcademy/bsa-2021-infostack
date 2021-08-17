@@ -118,6 +118,7 @@ export const addUser = async (
   userId: string,
   workspaceId: string,
 ): Promise<ITeam[]> => {
+  console.log(teamId, userId, workspaceId);
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
@@ -141,8 +142,8 @@ export const deleteUser = async (
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId);
 
-  const newTeam = team.users.filter((user) => user.id !== userId);
-  await teamRepository.save(newTeam);
+  team.users = team.users.filter((user) => user.id !== userId);
+  await teamRepository.save(team);
 
   const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
 

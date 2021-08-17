@@ -45,7 +45,7 @@ class TeamApi {
       `${this.BASE}/${payload.teamId}/users/${payload.teamId}`,
       {
         method: HttpMethod.POST,
-        payload: JSON.stringify(payload.userId),
+        payload: JSON.stringify(payload),
         contentType: ContentType.JSON,
       },
     );
@@ -56,7 +56,7 @@ class TeamApi {
       `${this.BASE}/${payload.teamId}/users/${payload.teamId}`,
       {
         method: HttpMethod.PUT,
-        payload: JSON.stringify(payload.userId),
+        payload: JSON.stringify(payload),
         contentType: ContentType.JSON,
       },
     );
