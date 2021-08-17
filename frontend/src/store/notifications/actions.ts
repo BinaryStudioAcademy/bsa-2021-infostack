@@ -5,8 +5,8 @@ import { NotificationApi } from 'services';
 
 const loadNotifications = createAsyncThunk(
   ActionType.SET_NOTIFICATIONS,
-  async (_, { dispatch }) => {
-    const notifications = await new NotificationApi().getAll();
+  async (limit: number | undefined, { dispatch }) => {
+    const notifications = await new NotificationApi().get(limit);
     dispatch(actions.setNotifications(notifications));
   },
 );

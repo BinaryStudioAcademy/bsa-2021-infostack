@@ -5,12 +5,13 @@ import { EntityType } from '../../enums/entity-type';
 export const mapNatoficationToINatofication = (
   notification: Notification,
 ): INotification => {
-  const { id, title, body, type, createdAt } = notification;
+  const { id, title, body, type, read, createdAt } = notification;
   return {
     id,
     title,
     body,
     type: type as EntityType,
+    read,
     createdAt: createdAt?.toISOString(),
   };
 };

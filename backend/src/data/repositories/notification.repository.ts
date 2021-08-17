@@ -24,9 +24,20 @@ class NotificationRepository extends Repository<Notification> {
     return this.manager.save(notification);
   }
 
-  public findByUserId(userId: string): Promise<Notification[]> {
+  public findAllByUserId(userId: string): Promise<Notification[]> {
     return this.find({
       where: { userId },
+    });
+  }
+
+  public findSomeByUserId(
+    userId: string,
+    limit: number,
+  ): Promise<Notification[]> {
+    return this.find({
+      where: { userId },
+      skip: 0,
+      take: limit,
     });
   }
 }

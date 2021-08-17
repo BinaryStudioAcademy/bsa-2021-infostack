@@ -13,68 +13,94 @@ import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 import { EntityType } from 'common/enums/enums';
 
+const NOTIFICATIONS_LIMIT = 4;
+
 export const NavNotification: React.FC = () => {
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
-  const { notifications, count } = useAppSelector(
+  const { notifications, count, isExpanded } = useAppSelector(
     (state) => state.notifications,
   );
 
   const onDropdownToggle = (isOpen: boolean): void => {
     if (isOpen) {
-      dispatch(notificationsActions.loadNotifications());
+      dispatch(notificationsActions.loadNotifications(NOTIFICATIONS_LIMIT));
     } else {
       dispatch(notificationsActions.removeNotifications());
+      dispatch(notificationsActions.setIsExpanded(false));
     }
   };
 
-  const onComment = (): void => {
+  const onNotification = (): void => {
     dispatch(notificationsActions.incrementCount());
   };
 
   useEffect(() => {
-    socket.on(SocketEvents.NOTIFICATION_NEW, onComment);
+    socket.on(SocketEvents.NOTIFICATION_NEW, onNotification);
 
     return (): void => {
-      socket.off(SocketEvents.NOTIFICATION_NEW, onComment);
+      socket.off(SocketEvents.NOTIFICATION_NEW, onNotification);
     };
   }, []);
+
+  useEffect(() => {
+    if (isExpanded) {
+      dispatch(notificationsActions.loadNotifications());
+    } else {
+      dispatch(notificationsActions.loadNotifications(NOTIFICATIONS_LIMIT));
+    }
+  }, [isExpanded]);
+
+  const onShowAll = (): void => {
+    dispatch(notificationsActions.removeNotifications());
+    dispatch(notificationsActions.toggleIsExpanded());
+  };
 
   return (
     <Dropdown align="end" onToggle={onDropdownToggle}>
       <Dropdown.Toggle as={Button} id="dropdown-notifications" bsPrefix="m-0">
         <IconWithCount count={count} />
       </Dropdown.Toggle>
-      <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
-        <Dropdown.Header className="text-center text-dark">
-          {count} New Notifications
-        </Dropdown.Header>
-        {!!count && (
-          <>
-            <Dropdown.Divider />
-            {notifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                icon={
-                  notification.type === EntityType.COMMENT
-                    ? 'bi bi-chat-left'
-                    : 'bi bi-info-circle'
-                }
-                title={notification.title}
-                subtitle={notification.subtitle}
-                body={notification.body}
-                time="3 days ago"
-              />
-            ))}
-            <Dropdown.Divider />
-            <div className="d-flex justify-content-center align-items-center">
-              <span className={getAllowedClasses(styles.footerText)}>
-                Show all messages
-              </span>
-            </div>
-          </>
-        )}
-      </Dropdown.Menu>
+      {!!notifications.length && (
+        <Dropdown.Menu
+          className={getAllowedClasses(
+            styles.popover,
+            isExpanded ? styles.expanded : '',
+          )}
+        >
+          <Dropdown.Header className="text-center text-dark">
+            {count} New Notifications
+          </Dropdown.Header>
+          {!!count && (
+            <>
+              <Dropdown.Divider />
+              {notifications.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  icon={
+                    notification.type === EntityType.COMMENT
+                      ? 'bi bi-chat-left'
+                      : 'bi bi-info-circle'
+                  }
+                  title={notification.title}
+                  subtitle={notification.subtitle}
+                  body={notification.body}
+                  time="3 days ago"
+                />
+              ))}
+              <Dropdown.Divider />
+              <div
+                className="d-flex justify-content-center align-items-center"
+                onClick={onShowAll}
+              >
+                <span className={getAllowedClasses(styles.footerText)}>
+                  {isExpanded ? 'Hide' : 'Show'} all messages
+                </span>
+              </div>
+            </>
+          )}
+        </Dropdown.Menu>
+      )}
     </Dropdown>
   );
 };

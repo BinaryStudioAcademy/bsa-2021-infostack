@@ -6,11 +6,13 @@ import { ActionType } from './common';
 type State = {
   notifications: INotification[];
   count: number;
+  isExpanded: boolean;
 };
 
 const initialState: State = {
   notifications: [],
   count: 0,
+  isExpanded: false,
 };
 
 export const { reducer, actions } = createSlice({
@@ -31,6 +33,12 @@ export const { reducer, actions } = createSlice({
     },
     [ActionType.INCREMENT_COUNT]: (state) => {
       state.count += 1;
+    },
+    [ActionType.TOGGLE_IS_EXPANDED]: (state) => {
+      state.isExpanded = !state.isExpanded;
+    },
+    [ActionType.SET_IS_EXPANDED]: (state, action: PayloadAction<boolean>) => {
+      state.isExpanded = action.payload;
     },
   },
 });

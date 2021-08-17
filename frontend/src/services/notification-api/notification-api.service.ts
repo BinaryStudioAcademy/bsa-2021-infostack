@@ -5,7 +5,10 @@ class NotificationApi {
   private readonly BASE = '/api/notifications';
   private readonly _httpService = http;
 
-  public async getAll(): Promise<INotification[]> {
+  public async get(limit: number | undefined): Promise<INotification[]> {
+    if (limit) {
+      return this._httpService.load(`${this.BASE}?limit=${limit}`);
+    }
     return this._httpService.load(this.BASE);
   }
 

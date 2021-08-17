@@ -9,7 +9,7 @@ const router: Router = Router();
 
 router.get(
   '/',
-  run((req) => getNotifications(req.userId)),
+  run((req) => getNotifications(req.userId, req.query.limit)),
 );
 
 router.get(
