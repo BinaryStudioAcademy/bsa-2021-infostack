@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { Sign, FormField } from 'components/common/common';
 import { AuthApi } from 'services';
-import { resetPasswordSchema } from 'validations/reset-password-schema';
+import { resetPasswordSchema } from 'common/validations';
 import { useForm, useState, yupResolver } from 'hooks/hooks';
 import { IResetPassword } from 'common/interfaces/auth';
 
