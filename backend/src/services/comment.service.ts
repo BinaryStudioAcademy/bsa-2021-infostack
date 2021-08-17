@@ -9,8 +9,8 @@ import NotificationRepository from '../data/repositories/notification.repository
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
-import { MAX_NOTIFICATION_TITLE_LENGTH } from '~/common/constants/notification';
-import { EntityType } from '~/common/enums/entity-type';
+import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification';
+import { EntityType } from '../common/enums/entity-type';
 
 export const getComments = async (pageId: string): Promise<IComment[]> => {
   const comments = await getCustomRepository(CommentRepository).findByPageId(

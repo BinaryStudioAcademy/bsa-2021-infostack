@@ -16,6 +16,9 @@ import {
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
+import { pageApi } from 'services';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
+import VersionDropdown from '../version-dropdown/version-dropdown';
 import { InviteModal, Spinner } from 'components/common/common';
 import {
   EditButton,
@@ -25,13 +28,12 @@ import {
   CommentSection,
   Popup,
 } from '../components';
-import { PageApi } from 'services';
 import {
+  IPageContent,
   IPageContributor,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
-import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 import PageTags from '../page-tags/page-tags';
 
@@ -48,13 +50,7 @@ export const PageContent: React.FC = () => {
   });
 
   const { user } = useAppSelector((state) => state.auth);
-  const last = currentPage?.pageContents?.length;
-  const pageTitle = last
-    ? currentPage?.pageContents[last - 1]?.title
-    : undefined;
-  const content = last
-    ? currentPage?.pageContents[last - 1]?.content
-    : undefined;
+  const [currContent, setCurrContent] = useState<IPageContent | undefined>();
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -64,10 +60,36 @@ export const PageContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
 
+  const paramsVersionId = useParams<{ versionId: string }>().versionId;
+
+  useEffect(() => {
+    if (paramsVersionId) {
+      const currentContent = currentPage?.pageContents.find(
+        (content) => content.id === paramsVersionId,
+      );
+      if (currentContent) {
+        setCurrContent(currentContent);
+      }
+    }
+  }, [paramsVersionId]);
+
+  const pageTitle = currContent
+    ? currContent.title
+    : currentPage?.pageContents[0].title || undefined;
+
+  const content = currContent
+    ? currContent.content
+    : currentPage?.pageContents[0].content || undefined;
+
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
   const canEdit =
     currentPage?.permission === PermissionType.ADMIN ||
     currentPage?.permission === PermissionType.WRITE;
+
+  const canRead =
+    currentPage?.permission === PermissionType.READ ||
+    currentPage?.permission === PermissionType.WRITE ||
+    currentPage?.permission === PermissionType.ADMIN;
 
   const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
 
@@ -93,8 +115,8 @@ export const PageContent: React.FC = () => {
 
       getPageById(paramsId);
 
-      const contributorsPromise = new PageApi().getPageContributors(paramsId);
-      const TOCPromise = new PageApi().getPageTableOfContents(paramsId);
+      const contributorsPromise = pageApi.getPageContributors(paramsId);
+      const TOCPromise = pageApi.getPageTableOfContents(paramsId);
 
       Promise.all([contributorsPromise, TOCPromise]).then(
         ([contributors, TOC]) => {
@@ -191,13 +213,21 @@ export const PageContent: React.FC = () => {
               <Col className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
                 <div>
+                  {canRead && (
+                    <VersionDropdown
+                      currContent={currContent}
+                      contributors={contributors}
+                    />
+                  )}
                   {isPageAdmin && (
-                    <Button
-                      onClick={onAssign}
-                      className={canEdit ? 'me-3' : ''}
-                    >
-                      Assign permissions
-                    </Button>
+                    <>
+                      <Button
+                        onClick={onAssign}
+                        className={canEdit ? 'me-3' : ''}
+                      >
+                        Assign permissions
+                      </Button>
+                    </>
                   )}
                   {canEdit && <EditButton onClick={handleEditing} />}
                   <Button className="ms-3" onClick={onPageFollow}>

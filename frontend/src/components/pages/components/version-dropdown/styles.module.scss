@@ -1,0 +1,28 @@
+.authorFullName {
+  font-size: 1.32rem;
+  width: 160px;
+  padding-left: 5px;
+  padding-right: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.avatarContainer:hover {
+  background: linear-gradient(90deg, #eff2f561 0%, #8789922b);
+}
+
+.nav-link {
+  color: #6c757d !important;
+}
+
+.dropDownMenu {
+  max-height: 205px;
+  overflow: overlay;
+  padding: 0px;
+}
+
+.dropDownMenu.show,
+.dropdown-menu.show {
+  padding: 0px;
+}
