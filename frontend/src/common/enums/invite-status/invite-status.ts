@@ -1,1 +1,1 @@
-export { InviteStatus } from 'infostack-shared';
+export { InviteStatus } from 'infostack-shared/common/enums';
