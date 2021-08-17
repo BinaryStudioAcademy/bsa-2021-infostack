@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class addDefaultStatusValueNotNull1629190860113
   implements MigrationInterface
 {
-  public async up(queryRunner: QueryRunner): Promise<any> {
+  public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       'ALTER TABLE "user_workspace" DROP COLUMN "status"',
     );
@@ -12,7 +12,7 @@ export class addDefaultStatusValueNotNull1629190860113
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<any> {
+  public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       'ALTER TABLE "user_workspace" DROP COLUMN "status"',
     );
