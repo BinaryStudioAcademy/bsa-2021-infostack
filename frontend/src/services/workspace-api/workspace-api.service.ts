@@ -67,7 +67,7 @@ class WorkspaceApi {
 
   public async deleteUserFromWorkspace(id: string): Promise<IWorkspace> {
     const updateResponse: IWorkspace = await this.http.load(
-      `${this.BASE}/${id}/delete-user`,
+      `${this.BASE}/users/${id}`,
       {
         method: HttpMethod.DELETE,
       },
