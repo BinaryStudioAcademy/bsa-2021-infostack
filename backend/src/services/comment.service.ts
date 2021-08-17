@@ -7,8 +7,8 @@ import { HttpError } from '../common/errors/http-error';
 import CommentRepository from '../data/repositories/comment.repository';
 import NotificationRepository from '../data/repositories/notification.repository';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
-import { sendMail } from '../common/utils/mailer.util';
-import { env } from '../env';
+// import { sendMail } from '../common/utils/mailer.util';
+// import { env } from '../env';
 import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification';
 import { EntityType } from '../common/enums/entity-type';
 
@@ -20,8 +20,8 @@ export const getComments = async (pageId: string): Promise<IComment[]> => {
 };
 
 export const notifyUsers = async (comment: IComment): Promise<void> => {
-  const { app } = env;
-  const url = app.url;
+  // const { app } = env;
+  // const url = app.url;
 
   const commentRepository = getCustomRepository(CommentRepository);
   const { page } = await commentRepository.findPageByCommentId(comment.id);
@@ -34,30 +34,33 @@ export const notifyUsers = async (comment: IComment): Promise<void> => {
     const { author } = await commentRepository.findOneById(
       comment.parentCommentId,
     );
-    await notificationRepository.createAndSave(
-      title,
-      body,
-      EntityType.COMMENT,
-      comment.id,
-      author.id,
-      false,
-    );
+    if (author.id !== comment.author.id) {
+      await notificationRepository.createAndSave(
+        title,
+        body,
+        EntityType.COMMENT,
+        comment.id,
+        author.id,
+        false,
+      );
 
-    await sendMail({
-      to: author.email,
-      subject: 'A new response to your comment',
-      text: `
-      Hello,
+      // await sendMail({
+      //   to: author.email,
+      //   subject: 'A new response to your comment',
+      //   text: `
+      //   Hello,
 
-      You received a response from ${comment.author.fullName} to your comment:
+      //   You received a response from ${comment.author.fullName} to your comment:
 
-      "${comment.text}"
+      //   "${comment.text}"
 
-      ${url}`,
-    });
+      //   ${url}`,
+      // });
+    }
   } else {
     for (const followingUser of followingUsers) {
-      const { id, email } = followingUser;
+      // const { id, email } = followingUser;
+      const { id } = followingUser;
       await notificationRepository.createAndSave(
         title,
         body,
@@ -67,18 +70,18 @@ export const notifyUsers = async (comment: IComment): Promise<void> => {
         false,
       );
 
-      await sendMail({
-        to: email,
-        subject: 'A new comment to the page you are following',
-        text: `
-        Hello,
+      // await sendMail({
+      //   to: email,
+      //   subject: 'A new comment to the page you are following',
+      //   text: `
+      //   Hello,
 
-        A page you are following received a new comment from ${comment.author.fullName}:
+      //   A page you are following received a new comment from ${comment.author.fullName}:
 
-        "${comment.text}"
+      //   "${comment.text}"
 
-        ${url}`,
-      });
+      //   ${url}`,
+      // });
     }
   }
 };

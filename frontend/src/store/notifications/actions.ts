@@ -8,6 +8,7 @@ const loadNotifications = createAsyncThunk(
   async (_, { dispatch }) => {
     const notifications = await new NotificationApi().getAll();
     dispatch(actions.setNotifications(notifications));
+    dispatch(actions.setCount(notifications.length));
   },
 );
 

@@ -12,7 +12,7 @@ import {
 import { http } from 'services/http/http.service';
 import { ITag } from 'common/interfaces/tag';
 
-class PageApi {
+export class PageApi {
   private http = http;
   private BASE = '/api/pages';
 
@@ -143,5 +143,3 @@ class PageApi {
     return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
 }
-
-export const pageApi = new PageApi();
