@@ -1,4 +1,4 @@
-import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
+import { Dropdown, Button } from 'react-bootstrap';
 import { IconWithCount, NotificationItem } from './components/components';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { notificationsActions } from 'store/actions';
@@ -20,9 +20,9 @@ export const NavNotification: React.FC = () => {
   };
 
   return (
-    <Dropdown as={NavItem} align="end">
+    <Dropdown align="end">
       <Dropdown.Toggle
-        as={NavLink}
+        as={Button}
         id="dropdown-notifications"
         bsPrefix="m-0"
         onToggle={onDropdownToggle}
