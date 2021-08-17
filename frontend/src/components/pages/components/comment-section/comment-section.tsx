@@ -36,7 +36,7 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
   };
 
   useEffect(() => {
-    dispatch(commentsActions.loadComments(pageId));
+    dispatch(commentsActions.fetchComments(pageId));
     socket.emit(SocketEvents.PAGE_JOIN, pageId);
     socket.on(SocketEvents.PAGE_NEW_COMMENT, onComment);
 
