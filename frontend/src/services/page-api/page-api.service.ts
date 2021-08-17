@@ -82,6 +82,18 @@ class PageApi {
     );
   }
 
+  public async deleteAllPermissionsForUser(userId: string): Promise<void> {
+    return this.http.load(`${this.BASE}/permissions/${userId}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
+
+  public async deleteAllFollowingsForUser(userId: string): Promise<void> {
+    return this.http.load(`${this.BASE}/unfollow-all/${userId}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
+
   public async followPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/follow/${pageId}`, {
       method: HttpMethod.POST,

@@ -6,7 +6,11 @@ import { IOption } from 'common/interfaces/components/select';
 import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { usersActions, teamsActions, participantsActions } from 'store/actions';
 import { TableHead, Item } from './components/components';
-import { ParticipantType, PermissionType } from 'common/enums/enums';
+import {
+  InviteStatus,
+  ParticipantType,
+  PermissionType,
+} from 'common/enums/enums';
 import selectParticipantStyles from './select-participant-styles';
 import { sortObjByName } from 'helpers/helpers';
 
@@ -106,7 +110,10 @@ export const Popup: React.FC<Props> = ({
   };
 
   const getOptions = (): participantOption[] => {
-    const mappedUsers = users
+    const joinedUsers = users.filter(
+      (user) => user.status === InviteStatus.JOINED,
+    );
+    const mappedUsers = joinedUsers
       .map((user) => ({
         id: user.id,
         value: user.fullName,
