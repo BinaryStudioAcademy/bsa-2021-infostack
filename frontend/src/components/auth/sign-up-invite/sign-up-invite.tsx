@@ -3,7 +3,7 @@ import { AppRoute } from 'common/enums/enums';
 import { Sign, FormField } from 'components/common/common';
 import { useHistory, useForm, yupResolver, useEffect } from 'hooks/hooks';
 import { AuthApi, UserApi } from 'services';
-import { signUpInviteSchema } from 'validations/sign-up-invite-schema';
+import { signUpInviteSchema } from 'common/validations';
 import { IRegister, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
 import { DefaultUserName } from 'common/enums/enums';
 
