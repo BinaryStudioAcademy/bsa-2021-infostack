@@ -40,4 +40,9 @@ export const env = {
       refreshToken: getOsEnv('MAILER_AUTH_REFRESH_TOKEN'),
     },
   },
+  google: {
+    clientId: getOsEnv('GOOGLE_CLIENT_ID'),
+    clientSecret: getOsEnv('GOOGLE_CLIENT_SECRET'),
+    redirectUrl: getOsEnv('GOOGLE_REDIRECT_URL'),
+  },
 } as const;
