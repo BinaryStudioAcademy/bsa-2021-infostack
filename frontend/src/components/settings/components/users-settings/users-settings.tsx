@@ -7,7 +7,7 @@ import {
   useState,
 } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
-import { InviteModal, DeleteModal } from 'components/common/common';
+import { InviteModal, DeleteUserModal } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
@@ -48,12 +48,12 @@ export const UsersSettings: React.FC = () => {
   return (
     <>
       <InviteModal onModalClose={closeModal} showModal={isModalShowed} />
-      <DeleteModal
+      <DeleteUserModal
         showModal={isDeleteModalShown}
         onModalClose={onUserDeleteClose}
         fullName={userToDeleteName}
         id={userToDeleteId}
-      ></DeleteModal>
+      ></DeleteUserModal>
       <Card
         className={`${getAllowedClasses(styles.card)} justify-content-center`}
       >

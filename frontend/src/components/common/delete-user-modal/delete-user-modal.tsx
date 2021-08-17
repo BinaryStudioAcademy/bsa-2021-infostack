@@ -11,7 +11,7 @@ type Props = {
   onModalClose: () => void;
 };
 
-export const DeleteModal: React.FC<Props> = ({
+export const DeleteUserModal: React.FC<Props> = ({
   showModal,
   fullName,
   id,
