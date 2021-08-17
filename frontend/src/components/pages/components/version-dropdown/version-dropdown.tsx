@@ -4,7 +4,7 @@ import { BlueCircle } from '../version-item/blue-circle/blue-circle';
 import { useAppSelector, useParams } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import NavLink from 'react-bootstrap/NavLink';
-import { replaceIdParam } from 'helpers/helpers';
+import { replaceIdParam, formattedVersionDate } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { useHistory } from 'react-router-dom';
 import {
@@ -32,16 +32,6 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
   const currVersionId = useParams<{ versionId: string }>().versionId;
 
   const latestVersion = currentPage?.pageContents[0];
-
-  const formattedVersionDate = (createdAt: string): string => {
-    const formattedDate = new Date(createdAt),
-      year = formattedDate.getFullYear();
-    let day = '' + formattedDate.getDate(),
-      month = '' + (formattedDate.getMonth() + 1);
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-    return [day, month, year].join('.');
-  };
 
   const handleAvatarClick = (userId: string): void => {
     history.push(replaceIdParam(AppRoute.PROFILE, userId));
