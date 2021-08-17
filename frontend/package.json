@@ -21,6 +21,7 @@
     "dayjs": "1.10.6",
     "infostack-shared": "file:../shared/build",
     "is-uuid": "1.0.2",
+    "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-avatar": "3.10.0",
     "react-bootstrap": "2.0.0-beta.4",

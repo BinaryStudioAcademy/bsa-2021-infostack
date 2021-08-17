@@ -23,15 +23,6 @@ export const NavNotification: React.FC = () => {
     (state) => state.notifications,
   );
 
-  const onDropdownToggle = (isOpen: boolean): void => {
-    if (isOpen) {
-      dispatch(notificationsActions.loadNotifications(NOTIFICATIONS_LIMIT));
-    } else {
-      dispatch(notificationsActions.removeNotifications());
-      dispatch(notificationsActions.setIsExpanded(false));
-    }
-  };
-
   const onNotification = (): void => {
     dispatch(notificationsActions.incrementCount());
   };
@@ -46,14 +37,33 @@ export const NavNotification: React.FC = () => {
 
   useEffect(() => {
     if (isExpanded) {
-      dispatch(notificationsActions.loadNotifications());
+      dispatch(
+        notificationsActions.loadMoreNotifications({
+          from: NOTIFICATIONS_LIMIT,
+        }),
+      );
     } else {
-      dispatch(notificationsActions.loadNotifications(NOTIFICATIONS_LIMIT));
+      dispatch(
+        notificationsActions.loadNotifications({ limit: NOTIFICATIONS_LIMIT }),
+      );
     }
   }, [isExpanded]);
 
+  const onDropdownToggle = (isOpen: boolean): void => {
+    if (isOpen) {
+      dispatch(
+        notificationsActions.loadNotifications({ limit: NOTIFICATIONS_LIMIT }),
+      );
+    } else {
+      dispatch(notificationsActions.removeNotifications());
+      dispatch(notificationsActions.setIsExpanded(false));
+    }
+  };
+
   const onShowAll = (): void => {
-    dispatch(notificationsActions.removeNotifications());
+    if (isExpanded) {
+      dispatch(notificationsActions.removeNotifications());
+    }
     dispatch(notificationsActions.toggleIsExpanded());
   };
 
@@ -71,33 +81,33 @@ export const NavNotification: React.FC = () => {
         <IconWithCount count={count} />
       </Dropdown.Toggle>
       {!!notifications.length && (
-        <Dropdown.Menu
-          className={getAllowedClasses(
-            styles.popover,
-            isExpanded ? styles.expanded : '',
-          )}
-        >
+        <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
           <Dropdown.Header className="text-center text-dark">
             {count} New Notifications
           </Dropdown.Header>
           <Dropdown.Divider className="mb-0" />
-          {notifications.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              id={notification.id}
-              icon={
-                notification.type === EntityType.COMMENT
-                  ? 'bi bi-chat-left'
-                  : 'bi bi-info-circle'
-              }
-              title={notification.title}
-              subtitle={notification.subtitle}
-              body={notification.body}
-              read={notification.read}
-              time={toDayJS(notification.createdAt).fromNow()}
-              onRead={onRead}
-            />
-          ))}
+          <div className={getAllowedClasses(isExpanded ? styles.expanded : '')}>
+            {notifications.map((notification, i) => (
+              <>
+                {!!i && <Dropdown.Divider className="my-0" />}
+                <NotificationItem
+                  key={notification.id}
+                  id={notification.id}
+                  icon={
+                    notification.type === EntityType.COMMENT
+                      ? 'bi bi-chat-left'
+                      : 'bi bi-info-circle'
+                  }
+                  title={notification.title}
+                  subtitle={notification.subtitle}
+                  body={notification.body}
+                  read={notification.read}
+                  time={toDayJS(notification.createdAt).fromNow()}
+                  onRead={onRead}
+                />
+              </>
+            ))}
+          </div>
           <Dropdown.Divider className="mt-0" />
           <div className="d-flex justify-content-around align-items-center p-1">
             {isExpanded && (

@@ -2,12 +2,21 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { NotificationApi } from 'services';
+import { IQuery } from 'common/interfaces/query';
 
 const loadNotifications = createAsyncThunk(
   ActionType.SET_NOTIFICATIONS,
-  async (limit: number | undefined, { dispatch }) => {
-    const notifications = await new NotificationApi().get(limit);
+  async (query: IQuery | undefined, { dispatch }) => {
+    const notifications = await new NotificationApi().get(query);
     dispatch(actions.setNotifications(notifications));
+  },
+);
+
+const loadMoreNotifications = createAsyncThunk(
+  ActionType.ADD_NOTIFICATIONS,
+  async (query: IQuery | undefined, { dispatch }) => {
+    const notifications = await new NotificationApi().get(query);
+    dispatch(actions.addNotifications(notifications));
   },
 );
 
@@ -40,6 +49,7 @@ const readNotification = createAsyncThunk(
 const notificationsActions = {
   ...actions,
   loadNotifications,
+  loadMoreNotifications,
   loadCount,
   readAllNotifications,
   readNotification,

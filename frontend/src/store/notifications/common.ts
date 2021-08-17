@@ -1,5 +1,6 @@
 enum ActionType {
   SET_NOTIFICATIONS = 'setNotifications',
+  ADD_NOTIFICATIONS = 'addNotifications',
   UPDATE_NOTIFICATION = 'updateNotification',
   REMOVE_NOTIFICATIONS = 'removeNotifications',
   SET_COUNT = 'setCount',

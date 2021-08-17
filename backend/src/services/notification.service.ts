@@ -26,11 +26,15 @@ const setSubtitle = async (
 export const getNotifications = async (
   userId: string,
   limit?: number,
+  from?: number,
 ): Promise<INotification[]> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
-  const notifications = limit
-    ? await notificationRepository.findSomeByUserId(userId, limit)
-    : await notificationRepository.findAllByUserId(userId);
+  const start = from || 0;
+  const notifications = await notificationRepository.findSomeByUserId(
+    userId,
+    start,
+    limit,
+  );
 
   const commentNotifications = notifications.filter(
     (notification) => notification.type === EntityType.COMMENT,

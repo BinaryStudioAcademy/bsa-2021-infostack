@@ -1,16 +1,17 @@
 import { http } from 'services/http/http.service';
 import { INotification } from 'common/interfaces/notification';
 import { ContentType, HttpMethod } from 'common/enums/enums';
+import { getStringifiedQuery } from 'helpers/helpers';
+import { IQuery } from 'common/interfaces/query';
 
 class NotificationApi {
   private readonly BASE = '/api/notifications';
   private readonly _httpService = http;
 
-  public async get(limit: number | undefined): Promise<INotification[]> {
-    if (limit) {
-      return this._httpService.load(`${this.BASE}?limit=${limit}`);
-    }
-    return this._httpService.load(this.BASE);
+  public async get(query?: IQuery): Promise<INotification[]> {
+    return this._httpService.load(
+      `${this.BASE}${query ? `?${getStringifiedQuery(query)}` : ''}`,
+    );
   }
 
   public async getCount(): Promise<{ count: number }> {

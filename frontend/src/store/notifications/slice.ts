@@ -25,6 +25,12 @@ export const { reducer, actions } = createSlice({
     ) => {
       state.notifications = action.payload;
     },
+    [ActionType.ADD_NOTIFICATIONS]: (
+      state,
+      action: PayloadAction<INotification[]>,
+    ) => {
+      state.notifications = [...state.notifications, ...action.payload];
+    },
     [ActionType.UPDATE_NOTIFICATION]: (
       state,
       action: PayloadAction<INotification>,

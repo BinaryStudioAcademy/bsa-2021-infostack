@@ -11,7 +11,7 @@ const router: Router = Router();
 
 router.get(
   '/',
-  run((req) => getNotifications(req.userId, req.query.limit)),
+  run((req) => getNotifications(req.userId, req.query.limit, req.query.from)),
 );
 
 router.get(

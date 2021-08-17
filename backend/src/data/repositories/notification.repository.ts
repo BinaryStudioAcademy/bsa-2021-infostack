@@ -35,16 +35,27 @@ class NotificationRepository extends Repository<Notification> {
 
   public findSomeByUserId(
     userId: string,
+    skip: number,
     limit: number,
   ): Promise<Notification[]> {
-    return this.find({
-      where: { userId },
-      skip: 0,
-      take: limit,
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+    if (limit) {
+      return this.find({
+        where: { userId },
+        skip: skip,
+        take: limit,
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+    } else {
+      return this.find({
+        where: { userId },
+        skip: skip,
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+    }
   }
 
   public findById(id: string): Promise<Notification> {
