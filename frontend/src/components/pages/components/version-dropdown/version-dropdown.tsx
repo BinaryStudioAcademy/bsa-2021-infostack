@@ -2,9 +2,12 @@ import { Dropdown } from 'react-bootstrap';
 import { VersionItem } from '../version-item/version-item';
 import { BlueCircle } from '../version-item/blue-circle/blue-circle';
 import { useAppSelector, useParams } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/dom/dom';
 import NavLink from 'react-bootstrap/NavLink';
-import { replaceIdParam, formattedVersionDate } from 'helpers/helpers';
+import {
+  getAllowedClasses,
+  replaceIdParam,
+  formattedVersionDate,
+} from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { useHistory } from 'react-router-dom';
 import {
