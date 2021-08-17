@@ -6,6 +6,7 @@ export interface IComment {
     id: string;
     fullName: string;
     avatar: string;
+    email: string;
   };
   children?: IComment[];
   parentCommentId?: string | null;
