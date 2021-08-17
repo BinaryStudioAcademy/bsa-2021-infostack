@@ -8,6 +8,10 @@ class NotificationApi {
   public async getAll(): Promise<INotification[]> {
     return this._httpService.load(this.BASE);
   }
+
+  public async getCount(): Promise<{ count: number }> {
+    return this._httpService.load(`${this.BASE}/count`);
+  }
 }
 
 export { NotificationApi };

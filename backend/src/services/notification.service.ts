@@ -9,9 +9,8 @@ import { mapNatoficationToINatofication } from '../common/mappers/notification/m
 export const getNotifications = async (
   userId: string,
 ): Promise<INotification[]> => {
-  const notifications = await getCustomRepository(
-    NotificationRepository,
-  ).findByUserId(userId);
+  const notificationRepository = getCustomRepository(NotificationRepository);
+  const notifications = await notificationRepository.findByUserId(userId);
 
   const commentNotifications = notifications.filter(
     (notification) => notification.type === 'comment',
@@ -36,4 +35,15 @@ export const getNotifications = async (
     }
     return expandedNotifications;
   }
+};
+
+export const getNotificationsCount = async (
+  userId: string,
+): Promise<{ count: number }> => {
+  const notificationRepository = getCustomRepository(NotificationRepository);
+  const notifications = await notificationRepository.findByUserId(userId);
+  const count = notifications.filter(
+    (notification) => !notification.read,
+  ).length;
+  return { count };
 };

@@ -11,6 +11,7 @@ import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent'
 // import { env } from '../env';
 import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification';
 import { EntityType } from '../common/enums/entity-type';
+import { SocketEvents } from '../common/enums/socket';
 
 export const getComments = async (pageId: string): Promise<IComment[]> => {
   const comments = await getCustomRepository(CommentRepository).findByPageId(
@@ -19,7 +20,10 @@ export const getComments = async (pageId: string): Promise<IComment[]> => {
   return mapChildToParent(comments);
 };
 
-export const notifyUsers = async (comment: IComment): Promise<void> => {
+export const notifyUsers = async (
+  comment: IComment,
+  io: Server,
+): Promise<void> => {
   // const { app } = env;
   // const url = app.url;
 
@@ -35,6 +39,7 @@ export const notifyUsers = async (comment: IComment): Promise<void> => {
       comment.parentCommentId,
     );
     if (author.id !== comment.author.id) {
+      io.to(author.id).emit(SocketEvents.NOTIFICATION_NEW);
       await notificationRepository.createAndSave(
         title,
         body,
@@ -59,29 +64,32 @@ export const notifyUsers = async (comment: IComment): Promise<void> => {
     }
   } else {
     for (const followingUser of followingUsers) {
-      // const { id, email } = followingUser;
-      const { id } = followingUser;
-      await notificationRepository.createAndSave(
-        title,
-        body,
-        EntityType.COMMENT,
-        comment.id,
-        id,
-        false,
-      );
+      if (followingUser.id !== comment.author.id) {
+        // const { id, email } = followingUser;
+        const { id } = followingUser;
+        io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
+        await notificationRepository.createAndSave(
+          title,
+          body,
+          EntityType.COMMENT,
+          comment.id,
+          id,
+          false,
+        );
 
-      // await sendMail({
-      //   to: email,
-      //   subject: 'A new comment to the page you are following',
-      //   text: `
-      //   Hello,
+        // await sendMail({
+        //   to: email,
+        //   subject: 'A new comment to the page you are following',
+        //   text: `
+        //   Hello,
 
-      //   A page you are following received a new comment from ${comment.author.fullName}:
+        //   A page you are following received a new comment from ${comment.author.fullName}:
 
-      //   "${comment.text}"
+        //   "${comment.text}"
 
-      //   ${url}`,
-      // });
+        //   ${url}`,
+        // });
+      }
     }
   }
 };
@@ -116,9 +124,9 @@ export const addComment = async (
 
   const comment = await commentRepository.findOneById(id);
 
-  io.to(pageId).emit('page/newComment', comment);
+  io.to(pageId).emit(SocketEvents.PAGE_NEW_COMMENT, comment);
 
-  notifyUsers(comment);
+  notifyUsers(comment, io);
 
   return comment;
 };

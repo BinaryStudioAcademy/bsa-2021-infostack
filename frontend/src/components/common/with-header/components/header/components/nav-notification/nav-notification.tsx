@@ -1,6 +1,13 @@
 import { Dropdown, Button } from 'react-bootstrap';
 import { IconWithCount, NotificationItem } from './components/components';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useContext,
+  useEffect,
+} from 'hooks/hooks';
+import { SocketContext } from 'context/socket';
+import { SocketEvents } from 'common/enums/enums';
 import { notificationsActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
@@ -8,6 +15,7 @@ import { EntityType } from 'common/enums/enums';
 
 export const NavNotification: React.FC = () => {
   const dispatch = useAppDispatch();
+  const socket = useContext(SocketContext);
   const { notifications, count } = useAppSelector(
     (state) => state.notifications,
   );
@@ -19,6 +27,18 @@ export const NavNotification: React.FC = () => {
       dispatch(notificationsActions.removeNotifications());
     }
   };
+
+  const onComment = (): void => {
+    dispatch(notificationsActions.incrementCount());
+  };
+
+  useEffect(() => {
+    socket.on(SocketEvents.NOTIFICATION_NEW, onComment);
+
+    return (): void => {
+      socket.off(SocketEvents.NOTIFICATION_NEW, onComment);
+    };
+  }, []);
 
   return (
     <Dropdown align="end" onToggle={onDropdownToggle}>

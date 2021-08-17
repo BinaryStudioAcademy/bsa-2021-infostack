@@ -29,5 +29,8 @@ export const { reducer, actions } = createSlice({
     [ActionType.SET_COUNT]: (state, action: PayloadAction<number>) => {
       state.count = action.payload;
     },
+    [ActionType.INCREMENT_COUNT]: (state) => {
+      state.count += 1;
+    },
   },
 });
