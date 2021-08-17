@@ -36,7 +36,7 @@ export const createPage = async (
   const { title, content } = pageContent;
 
   const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.save({
+  const { id } = await pageRepository.save({
     authorId: userId,
     workspaceId,
     parentPageId,
@@ -50,8 +50,10 @@ export const createPage = async (
     title,
     content,
     authorId: userId,
-    pageId: page.id,
+    pageId: id,
   });
+
+  const page = await pageRepository.findByIdWithContents(id);
 
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
@@ -187,12 +189,33 @@ export const getPage = async (
   const page = await pageRepository.findByIdWithContents(pageId);
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
+
   const pageWithPermission = await addPermissionField<IPage>(
     userId,
     teamsIds,
     mapPageToIPage(page),
   );
   return pageWithPermission;
+};
+
+export const getPageVersionContent = async (
+  pageId: string,
+  userId: string,
+  versionId: string,
+): Promise<IPage> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const pageWithVersionContent =
+    await pageRepository.findByIdWithVersionContent(pageId, versionId);
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+
+  const pageWithPermission = await addPermissionField<IPage>(
+    userId,
+    teamsIds,
+    mapPageToIPage(pageWithVersionContent),
+  );
+  return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
 
 export const getPermissions = async (
@@ -282,6 +305,7 @@ export const setPermission = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
   const allPages = await pageRepository.findPages(workspaceId);
+
   if (participant.type === ParticipantType.USER) {
     setUserPermission(page, participant);
     setPermissionForChildren(allPages, pageId, participant, setUserPermission);
@@ -303,7 +327,9 @@ const deleteUserPermission = async (
     participantId,
     pageId,
   );
-  await userPermissionRepository.remove(userPermission);
+  if (userPermission) {
+    await userPermissionRepository.remove(userPermission);
+  }
 };
 
 const deleteTeamPermission = async (
@@ -386,11 +412,11 @@ export const updateContent = async (
   await pageContentRepository.save({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
-    authorId: contentToUpdate.authorId,
+    authorId: userId,
     pageId: pageId,
   });
 
-  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const page = await pageRepository.findByIdWithContents(pageId);
 
   const userRepository = getCustomRepository(UserRepository);
 

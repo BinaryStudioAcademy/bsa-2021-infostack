@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import { IParticipant } from 'common/interfaces/participant';
 
 const loadParticipants = createAsyncThunk(
   ActionType.SET_PARTICIPANTS,
   async (payload: string, { dispatch }): Promise<void> => {
-    const response = await new PageApi().getPermissions(payload);
+    const response = await pageApi.getPermissions(payload);
     dispatch(actions.setParticipants(response));
   },
 );
@@ -18,7 +18,7 @@ const createParticipant = createAsyncThunk(
     payload: { pageId: string; participant: IParticipant },
     { dispatch },
   ): Promise<void> => {
-    const response = await new PageApi().setPermission(
+    const response = await pageApi.setPermission(
       payload.pageId,
       payload.participant,
     );
@@ -32,7 +32,7 @@ const chageRole = createAsyncThunk(
     payload: { pageId: string; participant: IParticipant },
     { dispatch },
   ): Promise<void> => {
-    const response = await new PageApi().setPermission(
+    const response = await pageApi.setPermission(
       payload.pageId,
       payload.participant,
     );
@@ -46,7 +46,7 @@ const deleteParticipant = createAsyncThunk(
     payload: { pageId: string; participantType: string; participantId: string },
     { dispatch },
   ): Promise<void> => {
-    await new PageApi().deletePermission(
+    await pageApi.deletePermission(
       payload.pageId,
       payload.participantType,
       payload.participantId,

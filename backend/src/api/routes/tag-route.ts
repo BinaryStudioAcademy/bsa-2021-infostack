@@ -19,12 +19,12 @@ router
   .post(
     '/',
     permit(RoleType.ADMIN),
-    run((req) => create(req.workspaceId, { name: req.body.name })),
+    run((req) => create(req.workspaceId, req.body.name)),
   )
   .put(
     '/:id',
     permit(RoleType.ADMIN),
-    run((req) => updateNameById(req.params.id, req.body.name)),
+    run((req) => updateNameById(req.workspaceId, req.params.id, req.body.name)),
   )
   .delete(
     '/:id',

@@ -9,14 +9,7 @@ const login = createAsyncThunk(
   ActionType.SET_USER,
   async (loginPayload: ILogin, { dispatch }): Promise<void> => {
     const loginResponse = await new AuthApi().loginUser(loginPayload);
-    localStorage.setItem(
-      LocalStorageVariable.ACCESS_TOKEN,
-      loginResponse.accessToken,
-    );
-    localStorage.setItem(
-      LocalStorageVariable.REFRESH_TOKEN,
-      loginResponse.refreshToken,
-    );
+    setTokensLocalStorage(loginResponse);
     dispatch(actions.setUser(loginResponse));
   },
 );
@@ -25,14 +18,7 @@ const register = createAsyncThunk(
   ActionType.SET_USER,
   async (registerPayload: IRegister, { dispatch }): Promise<void> => {
     const registerResponse = await new AuthApi().registerUser(registerPayload);
-    localStorage.setItem(
-      LocalStorageVariable.ACCESS_TOKEN,
-      registerResponse.accessToken,
-    );
-    localStorage.setItem(
-      LocalStorageVariable.REFRESH_TOKEN,
-      registerResponse.refreshToken,
-    );
+    setTokensLocalStorage(registerResponse);
     dispatch(actions.setUser(registerResponse));
   },
 );
@@ -61,12 +47,33 @@ const loadUser = createAsyncThunk(
   },
 );
 
+const loginGoogle = createAsyncThunk(
+  ActionType.SET_USER,
+  async (code: string, { dispatch }): Promise<void> => {
+    const loginResponse = await new AuthApi().loginGoogle(code);
+    setTokensLocalStorage(loginResponse);
+    dispatch(actions.setUser(loginResponse));
+  },
+);
+
+const setTokensLocalStorage = ({
+  accessToken,
+  refreshToken,
+}: {
+  accessToken: string;
+  refreshToken: string;
+}): void => {
+  localStorage.setItem(LocalStorageVariable.ACCESS_TOKEN, accessToken);
+  localStorage.setItem(LocalStorageVariable.REFRESH_TOKEN, refreshToken);
+};
+
 const authActions = {
   ...actions,
   login,
   register,
   logout,
   loadUser,
+  loginGoogle,
 };
 
 export { authActions };

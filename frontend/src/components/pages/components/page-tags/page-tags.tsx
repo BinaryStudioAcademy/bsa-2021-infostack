@@ -10,12 +10,11 @@ import { Badge, Card, ListGroup } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { CSSObject } from '@emotion/serialize';
 import { OptionsType } from 'react-select';
-import { PageApi, TagApi } from 'services';
+import { pageApi, TagApi } from 'services';
 import { tagActions } from 'store/tags';
 import './page-tags.scss';
 
 const PageTags: React.FC = () => {
-  const pageApi = new PageApi();
   const tagApi = new TagApi();
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
