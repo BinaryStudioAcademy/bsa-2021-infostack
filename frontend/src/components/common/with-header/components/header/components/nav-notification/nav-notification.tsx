@@ -20,13 +20,8 @@ export const NavNotification: React.FC = () => {
   };
 
   return (
-    <Dropdown align="end">
-      <Dropdown.Toggle
-        as={Button}
-        id="dropdown-notifications"
-        bsPrefix="m-0"
-        onToggle={onDropdownToggle}
-      >
+    <Dropdown align="end" onToggle={onDropdownToggle}>
+      <Dropdown.Toggle as={Button} id="dropdown-notifications" bsPrefix="m-0">
         <IconWithCount count={count} />
       </Dropdown.Toggle>
       <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
