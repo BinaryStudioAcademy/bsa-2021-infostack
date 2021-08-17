@@ -7,7 +7,7 @@ import {
   useState,
 } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
-import { InviteModal } from 'components/common/common';
+import { InviteModal, DeleteUserModal } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
@@ -28,14 +28,32 @@ export const UsersSettings: React.FC = () => {
   }, []);
 
   const [isModalShowed, setModalShowed] = useState(false);
-
+  const [isDeleteModalShown, setDeleteModalShown] = useState(false);
+  const [userToDeleteName, setUserToDeleteName] = useState('');
+  const [userToDeleteId, setUserToDeleteId] = useState('');
   const closeModal = (): void => {
     setModalShowed(false);
+  };
+
+  const onUserDelete = (fullName: string, id: string): void => {
+    setUserToDeleteName(fullName);
+    setUserToDeleteId(id);
+    setDeleteModalShown(true);
+  };
+
+  const onUserDeleteClose = (): void => {
+    setDeleteModalShown(false);
   };
 
   return (
     <>
       <InviteModal onModalClose={closeModal} showModal={isModalShowed} />
+      <DeleteUserModal
+        showModal={isDeleteModalShown}
+        onModalClose={onUserDeleteClose}
+        fullName={userToDeleteName}
+        id={userToDeleteId}
+      ></DeleteUserModal>
       <Card
         className={`${getAllowedClasses(styles.card)} justify-content-center`}
       >
@@ -56,7 +74,9 @@ export const UsersSettings: React.FC = () => {
             <TableHead headers={TABLE_HEADERS} />
             <tbody>
               {users?.map((user) => {
-                return <UserItem key={user.id} {...user} />;
+                return (
+                  <UserItem key={user.id} onDelete={onUserDelete} {...user} />
+                );
               })}
             </tbody>
           </Table>

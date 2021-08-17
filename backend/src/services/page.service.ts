@@ -327,7 +327,9 @@ const deleteUserPermission = async (
     participantId,
     pageId,
   );
-  await userPermissionRepository.remove(userPermission);
+  if (userPermission) {
+    await userPermissionRepository.remove(userPermission);
+  }
 };
 
 const deleteTeamPermission = async (
