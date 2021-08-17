@@ -11,6 +11,7 @@ import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
+import { sendMail } from '../common/utils/mailer.util';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -118,7 +119,6 @@ export const addUser = async (
   userId: string,
   workspaceId: string,
 ): Promise<ITeam[]> => {
-  console.log(teamId, userId, workspaceId);
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
@@ -131,6 +131,14 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
+  const message = `Hi, you have been added to new team -- "${team.name}".`;
+
+  await sendMail({
+    to: user.email,
+    subject: 'You have been added to the Infostack Workspace',
+    text: message,
+  });
+
   return teamsWithUsersRoles;
 };
 
@@ -141,6 +149,8 @@ export const deleteUser = async (
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
 
   team.users = team.users.filter((user) => user.id !== userId);
   await teamRepository.save(team);
@@ -148,6 +158,14 @@ export const deleteUser = async (
   const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
+
+  const message = `Hi, you have been deleled from team -- "${team.name}".`;
+
+  await sendMail({
+    to: user.email,
+    subject: 'You have been deleted from team',
+    text: message,
+  });
 
   return teamsWithUsersRoles;
 };
