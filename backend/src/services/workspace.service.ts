@@ -8,6 +8,8 @@ import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-wo
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import UserRepository from '../data/repositories/user.repository';
+import PageRepository from '../data/repositories/page.repository';
+import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import { RoleType } from '../common/enums/role-type';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
@@ -91,7 +93,7 @@ export const updateInviteStatusDeclined = async (
   await userWorkspaceRepository.save(userWorkspaceUpdated);
 };
 
-export const updateUserStatusDeleted = async (
+export const deleteUserFromWorkspace = async (
   userId: string,
   workspaceId: string,
 ): Promise<void> => {
@@ -103,8 +105,30 @@ export const updateUserStatusDeleted = async (
     );
   const userWorkspaceUpdated = { ...userWorkspaceToUpdate };
   userWorkspaceUpdated.status = InviteStatus.DELETED;
-
   await userWorkspaceRepository.save(userWorkspaceUpdated);
+
+  const pageRepository = getCustomRepository(PageRepository);
+  const allPagesForPermissions = await pageRepository.findPages(workspaceId);
+  await Promise.all(
+    allPagesForPermissions.map(async (page) => {
+      const userPermissionRepository = getCustomRepository(
+        UserPermissionRepository,
+      );
+      const userPermission = await userPermissionRepository.findByUserAndPageId(
+        userId,
+        page.id,
+      );
+      if (userPermission) {
+        await userPermissionRepository.remove(userPermission);
+      }
+    }),
+  );
+
+  const allPagesForFollowings = await pageRepository.findPages(workspaceId);
+  const pageIds = allPagesForFollowings.map((page) => {
+    return page.id;
+  });
+  await pageRepository.unfollowPages(userId, pageIds);
 };
 
 export const addUserToWorkspace = async (

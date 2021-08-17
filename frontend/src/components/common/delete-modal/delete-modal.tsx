@@ -1,5 +1,5 @@
 import { Button, Modal } from 'react-bootstrap';
-import { PageApi, WorkspaceApi } from 'services';
+import { WorkspaceApi } from 'services';
 import { useAppDispatch, useState } from 'hooks/hooks';
 import { usersActions } from 'store/users';
 import { toast } from 'react-toastify';
@@ -27,9 +27,7 @@ export const DeleteModal: React.FC<Props> = ({
   const handleDelete = async (): Promise<void> => {
     setDeleteDisabled(true);
 
-    await new WorkspaceApi().updateUserStatusDeleted(id);
-    await new PageApi().deleteAllPermissionsForUser(id);
-    await new PageApi().deleteAllFollowingsForUser(id);
+    await new WorkspaceApi().deleteUserFromWorkspace(id);
 
     handleClose();
     toast.info('User was deleted');
