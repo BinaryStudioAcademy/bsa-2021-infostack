@@ -253,82 +253,47 @@ export const PageContent: React.FC = () => {
                       </Card.Body>
                     </Card>
                   </Col>
+                </Row>
+                <Row>
                   <Col>
-                    <Row>
-                      <Col className="d-flex justify-content-between mb-4">
-                        <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-                        <div>
-                          {isPageAdmin && (
-                            <Button
-                              onClick={onAssign}
-                              className={canEdit ? 'me-3' : ''}
-                            >
-                              Assign permissions
-                            </Button>
-                          )}
-                          {canEdit && <EditButton onClick={handleEditing} />}
-                          <Button className="ms-3" onClick={onPageFollow}>
-                            {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className="mb-4">
-                      <Col>
-                        <Card border="light" className={styles.card}>
-                          <Card.Body
-                            className={getAllowedClasses(styles.content)}
-                          >
-                            {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
-                            <ReactMarkdown remarkPlugins={[slug, gfm]}>
-                              {content || 'Empty page'}
-                            </ReactMarkdown>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Card
-                          border="light"
-                          className={getAllowedClasses(styles.card)}
-                        >
-                          <Card.Header>Comments</Card.Header>
-                          <Card.Body>
-                            <CommentSection pageId={paramsId} />
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </Row>
+                    <Card
+                      border="light"
+                      className={getAllowedClasses(styles.card)}
+                    >
+                      <Card.Header>Comments</Card.Header>
+                      <Card.Body>
+                        <CommentSection pageId={paramsId} />
+                      </Card.Body>
+                    </Card>
                   </Col>
                 </Row>
-                <Popup
-                  query="Users & Teams"
-                  isVisible={isPopUpVisible}
-                  cancelButton={{
-                    text: 'Cancel',
-                    onClick: handleAssignCancel,
-                  }}
-                  inviteButton={{
-                    text: 'Add user',
-                    onClick: handleAssignConfirm,
-                  }}
-                />
-                <InviteModal
-                  onModalClose={handleIviteCancel}
-                  showModal={isModalVisible}
-                />
-                <FollowModal
-                  show={isFollowModalVisible}
-                  isFollowing={isCurrentPageFollowed}
-                  handler={
-                    isCurrentPageFollowed
-                      ? handlePageUnfollow(paramsId)
-                      : handlePageFollow(paramsId)
-                  }
-                />
               </Col>
             </Row>
+            <Popup
+              query="Users & Teams"
+              isVisible={isPopUpVisible}
+              cancelButton={{
+                text: 'Cancel',
+                onClick: handleAssignCancel,
+              }}
+              inviteButton={{
+                text: 'Add user',
+                onClick: handleAssignConfirm,
+              }}
+            />
+            <InviteModal
+              onModalClose={handleIviteCancel}
+              showModal={isModalVisible}
+            />
+            <FollowModal
+              show={isFollowModalVisible}
+              isFollowing={isCurrentPageFollowed}
+              handler={
+                isCurrentPageFollowed
+                  ? handlePageUnfollow(paramsId)
+                  : handlePageFollow(paramsId)
+              }
+            />
           </>
         ) : (
           <h1 className="d-flex justify-content-center">
