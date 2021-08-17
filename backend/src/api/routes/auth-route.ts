@@ -9,6 +9,8 @@ import {
   refreshTokens,
   logout,
   updatePasswordAndFullName,
+  loginGoogle,
+  getLoginGoogleUrl,
 } from '../../services/auth.service';
 import { validationMiddleware } from '../middlewares';
 
@@ -47,6 +49,16 @@ router.post(
 router.post(
   '/logout',
   run((req) => logout(req.body)),
+);
+
+router.get(
+  '/login/google',
+  run((_) => getLoginGoogleUrl()),
+);
+
+router.post(
+  '/login/google',
+  run((req) => loginGoogle(req.body.code)),
 );
 
 export default router;

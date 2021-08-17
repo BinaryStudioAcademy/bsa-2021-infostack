@@ -2,11 +2,9 @@ import * as React from 'react';
 import { AppRoute } from 'common/enums/enums';
 import { FormField, Sign } from 'components/common/common';
 import { loginSchema } from 'common/validations';
-import { useAppDispatch, useHistory } from 'hooks/hooks';
+import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
 import { authActions } from 'store/actions';
-import { useForm, yupResolver } from 'hooks/hooks';
 import { ILogin } from 'common/interfaces/auth';
-import { Link } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
