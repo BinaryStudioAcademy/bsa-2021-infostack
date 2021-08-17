@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ITeamEditing, ITeam } from 'common/interfaces/team';
+import { ITeamEditing, ITeam, ITeamAddUser } from 'common/interfaces/team';
 import { teamApi } from 'services';
 import { ActionType } from './common';
 
@@ -23,11 +23,23 @@ export const deleteTeam = createAsyncThunk<void, string>(
   (id) => teamApi.deleteTeam(id),
 );
 
+export const addUser = createAsyncThunk<ITeam[], ITeamAddUser>(
+  ActionType.ADD_USER,
+  (payload: ITeamAddUser) => teamApi.addUser(payload),
+);
+
+export const deleteUser = createAsyncThunk<ITeam[], ITeamAddUser>(
+  ActionType.DELETE_USER,
+  (payload: ITeamAddUser) => teamApi.deleteUser(payload),
+);
+
 const teamsActions = {
   fetchTeams,
   createTeam,
   updateTeam,
   deleteTeam,
+  addUser,
+  deleteUser,
 };
 
 export { teamsActions };

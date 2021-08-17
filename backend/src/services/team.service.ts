@@ -1,25 +1,33 @@
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
-import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
+import {
+  mapTeamsToITeams,
+  mapTeamToITeam,
+} from '../common/mappers/team/map-team-to-iteam';
 import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
+import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
-  return teams.map(mapTeamToITeam);
+
+  const teamsWithUsersRoles = mapTeamsToITeams(teams);
+  return teamsWithUsersRoles;
 };
 
 export const getTeam = async (teamId: string): Promise<ITeam> => {
   const pageRepository = getCustomRepository(TeamRepository);
   const team = await pageRepository.findByIdWithUsers(teamId);
-  return mapTeamToITeam(team);
+  const teamWithUsersRoles = mapTeamToITeam(team);
+
+  return teamWithUsersRoles;
 };
 
 export const create = async (
@@ -55,7 +63,22 @@ export const create = async (
   user.teams.push(newTeamDetails);
   userRepository.save(user);
 
-  const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+      userId,
+      workspaceId,
+    );
+
+  const users = [
+    {
+      id: user.id,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      roleInWorkspace: userWorkspace.role,
+    },
+  ];
+
   return { id: id, name: name, users };
 };
 
@@ -88,4 +111,42 @@ export const updateNameById = async (
 export const deleteById = async (id: string): Promise<void> => {
   await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
   await getCustomRepository(TeamRepository).deleteById(id);
+};
+
+export const addUser = async (
+  teamId: string,
+  userId: string,
+  workspaceId: string,
+): Promise<ITeam[]> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const teamRepository = getCustomRepository(TeamRepository);
+  const team = await teamRepository.findByIdWithUsers(teamId);
+
+  team.users.push(user);
+  await teamRepository.save(team);
+
+  const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
+
+  const teamsWithUsersRoles = mapTeamsToITeams(teams);
+
+  return teamsWithUsersRoles;
+};
+
+export const deleteUser = async (
+  teamId: string,
+  userId: string,
+  workspaceId: string,
+): Promise<ITeam[]> => {
+  const teamRepository = getCustomRepository(TeamRepository);
+  const team = await teamRepository.findByIdWithUsers(teamId);
+
+  const newTeam = team.users.filter((user) => user.id !== userId);
+  await teamRepository.save(newTeam);
+
+  const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
+
+  const teamsWithUsersRoles = mapTeamsToITeams(teams);
+
+  return teamsWithUsersRoles;
 };
