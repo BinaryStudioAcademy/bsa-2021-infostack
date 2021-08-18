@@ -62,3 +62,7 @@ export const addComment = async (
     createdAt: comment.createdAt.toISOString(),
   };
 };
+
+export const deleteComment = async (id: string): Promise<void> => {
+  getCustomRepository(CommentRepository).deleteById(id);
+};
