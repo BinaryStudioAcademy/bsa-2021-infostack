@@ -8,12 +8,12 @@ class TeamRepository extends Repository<Team> {
   }
 
   public findAllByWorkspaceId(workspaceId: string): Promise<Team[]> {
-    return this.find({
-      where: {
-        workspaceId: workspaceId,
-      },
-      relations: ['users'],
-    });
+    return this.createQueryBuilder('team')
+      .leftJoinAndSelect('team.users', 'users')
+      .leftJoinAndSelect('users.userWorkspaces', 'users.userWorkspaces')
+      .where('users.userWorkspaces.workspaceId = :id', { id: workspaceId })
+      .where('team.workspaceId = :id', { id: workspaceId })
+      .getMany();
   }
 
   public findByIdWithUsers(id: string): Promise<Team> {
