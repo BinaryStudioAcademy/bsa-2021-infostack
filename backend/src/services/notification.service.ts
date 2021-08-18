@@ -1,5 +1,4 @@
 import { getCustomRepository } from 'typeorm';
-// import { Server } from 'socket.io';
 import { EntityType } from '../common/enums/entity-type';
 import { INotification } from '../common/interfaces/notification';
 import CommentRepository from '../data/repositories/comment.repository';
