@@ -386,7 +386,7 @@ export const updateContent = async (
   await pageContentRepository.save({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
-    authorId: contentToUpdate.authorId,
+    authorId: userId,
     pageId: pageId,
   });
 
