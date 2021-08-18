@@ -14,26 +14,24 @@ class ActivityRepository {
       select * from (select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
       inner join "user" on comment."authorId" = "user".id
       left join page_content p on (comment."pageId" = p."pageId"
-			and not exists (
-				select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"
-			)
-		  )
+and not exists (
+select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"
+)
+)
       union
       select page_content.id as id, page_content."authorId", "user"."fullName", "user".avatar, (extract(epoch from page_content."createdAt"::timestamp)) as "createdAtTimestamp", "pageId", content, ('page') as type, page_content.title, EXTRACT(EPOCH FROM page_content."createdAt"::timestamp - page."createdAt"::timestamp) < 1 as "isNew"  from page_content
       inner join "user" on page_content."authorId" = "user".id
-	    inner join "page" on page_content."pageId" = page.id) as records
-	    where exists (select from user_permission where "pageId" = records."pageId" and  user_permission."userId" = $1)
-	    or exists (
-	    select * from "user" as u
+inner join "page" on page_content."pageId" = page.id) as records
+where exists (select from user_permission where "pageId" = records."pageId" and  user_permission."userId" = $1)
+or exists (
+select * from "user" as u
       inner join team_member on u.id = team_member."userId"
       inner join team_permission on team_permission."teamId" = team_member."teamId"
       where u.id = $1 and "pageId" = records."pageId"
-	)
-    order by "createdAtTimestamp" desc
-    
+)
+    order by "createdAtTimestamp" desc 
     ${options.take ? `limit ${options.take}` : ''}
-    ${options.skip ? `offset ${options.skip}` : ''}
-    `,
+    ${options.skip ? `offset ${options.skip}` : ''}`,
       [options.userId],
     );
 
@@ -47,21 +45,19 @@ class ActivityRepository {
       inner join "user" on comment."authorId" = "user".id
       left join page_content p on (comment."pageId" = p."pageId"
 			and not exists (
-				select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"
-			)
-		  )
-      union
+select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"
+)
+)
+union
       select page_content.id as id, page_content."authorId", "user"."fullName", "user".avatar, (extract(epoch from page_content."createdAt"::timestamp)) as "createdAtTimestamp", "pageId", content, ('page') as type, page_content.title, EXTRACT(EPOCH FROM page_content."createdAt"::timestamp - page."createdAt"::timestamp) < 1 as "isNew"  from page_content
       inner join "user" on page_content."authorId" = "user".id
 	    inner join "page" on page_content."pageId" = page.id) as records
-	    where exists (select from user_permission where "pageId" = records."pageId" and  user_permission."userId" = $1)
-	    or exists (
-	    select * from "user" as u
-      inner join team_member on u.id = team_member."userId"
+where exists (select from user_permission where "pageId" = records."pageId" and  user_permission."userId" = $1)
+or exists (
+select * from "user" as u
+inner join team_member on u.id = team_member."userId"
       inner join team_permission on team_permission."teamId" = team_member."teamId"
-      where u.id = $1 and "pageId" = records."pageId"
-	    )
-    `,
+      where u.id = $1 and "pageId" = records."pageId")`,
       [userId],
     );
 
@@ -95,11 +91,9 @@ class ActivityRepository {
       inner join team_permission on team_permission."teamId" = team_member."teamId"
       where u.id = $1 and "pageId" = records."pageId"
         )
-      
       order by "createdAtTimestamp" desc
     ${options.take ? `limit ${options.take}` : ''}
-    ${options.skip ? `offset ${options.skip}` : ''}
-    `,
+    ${options.skip ? `offset ${options.skip}` : ''}`,
       [options.userId],
     );
 
@@ -129,9 +123,7 @@ class ActivityRepository {
         select * from "user" as u
       inner join team_member on u.id = team_member."userId"
       inner join team_permission on team_permission."teamId" = team_member."teamId"
-      where u.id = $1 and "pageId" = records."pageId"
-        )
-    `,
+      where u.id = $1 and "pageId" = records."pageId")`,
       [userId],
     );
 
