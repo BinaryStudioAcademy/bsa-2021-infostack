@@ -1,1 +1,7 @@
-export { IUserWithTokens, IUser } from 'infostack-shared';
+export {
+  IUserWithTokens,
+  IUser,
+  IUserActivity,
+  IGetActivities,
+  IGetUserActivities,
+} from 'infostack-shared';
