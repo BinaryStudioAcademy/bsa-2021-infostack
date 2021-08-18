@@ -76,8 +76,11 @@ export const ContentEditor: React.FC = () => {
             title: titleInputValue.trim(),
             content: markDownContent?.length === 0 ? ' ' : markDownContent,
           }),
-        );
-        history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
+        )
+          .unwrap()
+          .then((): void =>
+            history.push(replaceIdParam(AppRoute.PAGE, paramsId || '')),
+          );
       }
     } else if (titleInputValue?.trim().length === 0) {
       toast.warning('Title could not be empty');
