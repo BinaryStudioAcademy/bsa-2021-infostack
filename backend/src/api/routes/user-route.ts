@@ -44,7 +44,9 @@ router
   )
   .get(
     '/activities',
-    run((req) => getActivities({ skip: req.query.skip, take: req.query.take })),
+    run((req) =>
+      getActivities(req.userId, { skip: req.query.skip, take: req.query.take }),
+    ),
   )
   .get(
     '/:id/activities',
