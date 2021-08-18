@@ -4,7 +4,7 @@ import { INotification } from '../common/interfaces/notification';
 import CommentRepository from '../data/repositories/comment.repository';
 import NotificationRepository from '../data/repositories/notification.repository';
 import PageRepository from '../data/repositories/page.repository';
-import { mapNatoficationToINatofication } from '../common/mappers/notification/map-notification-to-inotification';
+import { mapNotificationToINotification } from '../common/mappers/notification/map-notification-to-inotification';
 import { Notification } from '../data/entities/notification';
 
 const setSubtitle = async (
@@ -17,7 +17,7 @@ const setSubtitle = async (
   );
   const page = await pageRepository.findByIdWithLastContent(comment.pageId);
   return {
-    ...mapNatoficationToINatofication(notification),
+    ...mapNotificationToINotification(notification),
     subtitle: page.pageContents[0].title,
   };
 };
@@ -39,11 +39,11 @@ export const getNotifications = async (
     (notification) => notification.type === EntityType.COMMENT,
   );
   if (!commentNotifications.length) {
-    return notifications.map(mapNatoficationToINatofication);
+    return notifications.map(mapNotificationToINotification);
   } else {
     const expandedNotifications = notifications
       .filter((notification) => notification.type !== 'comment')
-      .map(mapNatoficationToINatofication);
+      .map(mapNotificationToINotification);
     for (const notification of commentNotifications) {
       const expandedNotification = await setSubtitle(notification);
       expandedNotifications.push(expandedNotification);
@@ -74,7 +74,7 @@ export const updateRead = async (
     const expandedNotification = await setSubtitle(notification);
     return expandedNotification;
   } else {
-    return mapNatoficationToINatofication(notification);
+    return mapNotificationToINotification(notification);
   }
 };
 
