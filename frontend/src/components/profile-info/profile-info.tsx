@@ -5,6 +5,8 @@ import { UserApi } from 'services';
 import { IUser } from 'common/interfaces/user';
 import { AppRoute } from 'common/enums/enums';
 import './profile-info.scss';
+import { replaceIdParam } from 'helpers/helpers';
+import { Activities } from './components/components';
 
 const ProfileInfo: React.FC = () => {
   const [user, setUser] = useState<IUser>({
@@ -97,6 +99,32 @@ const ProfileInfo: React.FC = () => {
                                 ))}
                             </div>
                           </ListGroup.Item>
+                          <ListGroup.Item className="card-block-item">
+                            <Card.Title className="d-flex justify-content-start profile-skills-title">
+                              Followings
+                            </Card.Title>
+                            <div className="following-pages-container">
+                              {user &&
+                              user.followingPages &&
+                              user?.followingPages?.length > 0
+                                ? user?.followingPages?.map((page) => (
+                                    <Link
+                                      to={
+                                        replaceIdParam(
+                                          AppRoute.PAGE,
+                                          page.id,
+                                        ) as AppRoute
+                                      }
+                                      key={page.id}
+                                      className="following-page"
+                                    >
+                                      <i className="bi bi-file-text-fill"></i>
+                                      {page.pageContents[0].title}
+                                    </Link>
+                                  ))
+                                : null}
+                            </div>
+                          </ListGroup.Item>
                         </ListGroup>
                       </Card.Body>
                     </Card>
@@ -106,30 +134,7 @@ const ProfileInfo: React.FC = () => {
               <Col sm={9}>
                 <Card>
                   <Card.Body>
-                    <Card.Title className="d-flex justify-content-start profile-card-title">
-                      Followings
-                    </Card.Title>
-                    <div className="following-pages-container">
-                      {user &&
-                      user.followingPages &&
-                      user?.followingPages?.length > 0
-                        ? user?.followingPages?.map((page) => (
-                            <Link
-                              to={
-                                replaceIdParam(
-                                  AppRoute.PAGE,
-                                  page.id,
-                                ) as AppRoute
-                              }
-                              key={page.id}
-                              className="following-page"
-                            >
-                              <i className="bi bi-file-text-fill"></i>
-                              {page.pageContents[0].title}
-                            </Link>
-                          ))
-                        : null}
-                    </div>
+                    <Activities />
                   </Card.Body>
                 </Card>
               </Col>

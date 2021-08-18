@@ -2,7 +2,6 @@
   font-size: 2.2rem;
   padding: 2.5rem 2.5rem 1.5rem;
   background-color: #f7f9fc;
-  height: 91vh;
 }
 
 .skill-badge {
@@ -50,22 +49,27 @@
   flex-direction: column;
 }
 
+.skills-container {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
 .following-pages-container a {
   display: flex;
   align-items: center;
 }
 
 .following-page {
-  padding: 0rem 1.25rem 0.75rem 1.25rem;
   font-size: 1.25rem;
   text-decoration: none;
   font-weight: 500;
   color: #495057;
 }
+
 .profile-user-title {
   margin-top: 1rem;
   font-size: 1.6rem;
 }
+
 .profile-skills-title {
   font-size: 1.6rem;
   margin-top: 0.75rem;
