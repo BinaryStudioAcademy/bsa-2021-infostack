@@ -63,7 +63,7 @@ const { reducer, actions } = createSlice({
       .addCase(addUser.fulfilled, (state, action) => {
         state.teams = action.payload;
       })
-      .addCase(addUser.rejected, (state) => {
+      .addCase(addUser.rejected, () => {
         toast.error('Error happened while adding user to team.');
       })
       .addCase(deleteUser.fulfilled, (state, action) => {

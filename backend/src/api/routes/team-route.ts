@@ -40,12 +40,16 @@ router
 
   .post(
     '/:id/users/:id',
-    run((req) => addUser(req.params.id, req.body.userId, req.workspaceId)),
+    run((req) =>
+      addUser(req.params.id, req.body.userId, req.workspaceId, req.io),
+    ),
   )
 
   .put(
     '/:id/users/:id',
-    run((req) => deleteUser(req.params.id, req.body.userId, req.workspaceId)),
+    run((req) =>
+      deleteUser(req.params.id, req.body.userId, req.workspaceId, req.io),
+    ),
   );
 
 export default router;

@@ -12,6 +12,12 @@ import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import { sendMail } from '../common/utils/mailer.util';
+import { EntityType } from '../common/enums/entity-type';
+import { SocketEvents } from '../common/enums/socket';
+import { Server } from 'socket.io';
+import { User } from '../data/entities/user';
+import NotificationRepository from '../data/repositories/notification.repository';
+import { Team } from '../data/entities/team';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -118,6 +124,7 @@ export const addUser = async (
   teamId: string,
   userId: string,
   workspaceId: string,
+  io: Server,
 ): Promise<ITeam[]> => {
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
@@ -131,13 +138,7 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  const message = `Hi, you have been added to new team -- "${team.name}".`;
-
-  await sendMail({
-    to: user.email,
-    subject: 'You have been added to the Infostack Workspace',
-    text: message,
-  });
+  notifyUser(team, user, EntityType.ADD_TO_TEAM, io);
 
   return teamsWithUsersRoles;
 };
@@ -146,6 +147,7 @@ export const deleteUser = async (
   teamId: string,
   userId: string,
   workspaceId: string,
+  io: Server,
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId);
@@ -159,13 +161,38 @@ export const deleteUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  const message = `Hi, you have been deleled from team -- "${team.name}".`;
+  notifyUser(team, user, EntityType.ADD_TO_TEAM, io);
+
+  return teamsWithUsersRoles;
+};
+
+export const notifyUser = async (
+  team: Team,
+  user: User,
+  reason: EntityType,
+  io: Server,
+): Promise<void> => {
+  const reasonText =
+    reason === EntityType.ADD_TO_TEAM ? 'added to' : 'deleted from';
+
+  const notificationRepository = getCustomRepository(NotificationRepository);
+
+  const title = `You have been ${reasonText} team.`;
+  const body = `You have been ${reasonText} team -- "${team.name}".`;
+
+  io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+  await notificationRepository.createAndSave(
+    title,
+    body,
+    reason,
+    team.id,
+    user.id,
+    false,
+  );
 
   await sendMail({
     to: user.email,
-    subject: 'You have been deleted from team',
-    text: message,
+    subject: title,
+    text: body,
   });
-
-  return teamsWithUsersRoles;
 };
