@@ -201,11 +201,37 @@ export const ProfileSettings: React.FC = () => {
     setCropModalVisible(false);
   };
 
-  // const updateAvatar = (croppedImgURL: string): void => {
-  const updateAvatar = (croppedImage: File): void => {
-    // setSelectedFile(selectedFile);
-    // setSelectedImgURL(croppedImgURL);
-    setSelectedFile(croppedImage);
+  const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
+    return new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          reject(new Error('Canvas is empty'));
+          return;
+        }
+        resolve(blob);
+      }, 'image/jpeg');
+    });
+  };
+
+  const canvasToDataURL = (canvas: HTMLCanvasElement): string => {
+    const croppedImageDataURL = canvas.toDataURL('image/jpeg');
+    return croppedImageDataURL;
+  };
+
+  const updateAvatar = async (
+    croppedImageCanvas: HTMLCanvasElement,
+  ): Promise<void> => {
+    const croppedImageBlob = await canvasToBlob(croppedImageCanvas);
+    const newImageName = selectedFile?.name + '_cropped';
+    const croppedImageFile = new File([croppedImageBlob], newImageName, {
+      type: 'image/jpeg',
+    });
+
+    const croppedImageDataURL = canvasToDataURL(croppedImageCanvas);
+
+    setSelectedImgURL(croppedImageDataURL);
+    setSelectedFile(croppedImageFile);
+
     setCropModalVisible(false);
   };
   //  if (selectedFile || avatarLoading) {
@@ -380,7 +406,7 @@ export const ProfileSettings: React.FC = () => {
       <CropAvatar
         isShown={isCropModalVisible}
         src={selectedImgURL}
-        imageName={selectedFile?.name}
+        // imageName={selectedFile?.name}
         handleClose={handleCropModalClose}
         updateAvatar={updateAvatar}
         // clearAvatarData={clearAvatarData}

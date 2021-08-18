@@ -9,15 +9,14 @@ import { ICropData } from 'common/interfaces/components/crop-data';
 interface IProps {
   isShown: boolean;
   src: string;
-  imageName: string | undefined;
+  // imageName: string | undefined;
   handleClose: () => void;
-  updateAvatar: (croppedImage: File) => void;
+  updateAvatar: (croppedImageCanvas: HTMLCanvasElement) => void;
 }
 
 export const CropAvatar: React.FC<IProps> = ({
   isShown,
   src,
-  imageName,
   handleClose,
   updateAvatar,
 }) => {
@@ -37,10 +36,11 @@ export const CropAvatar: React.FC<IProps> = ({
     setImage(img);
   };
 
+  // Promise<Blob>
   const getCroppedImg = (
     img: HTMLImageElement,
     cropData: ICropData,
-  ): Promise<Blob> => {
+  ): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');
     const scaleX = img.naturalWidth / img.width;
     const scaleY = img.naturalHeight / img.height;
@@ -60,40 +60,30 @@ export const CropAvatar: React.FC<IProps> = ({
       cropData.height,
     );
 
-    return new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          reject(new Error('Canvas is empty'));
-          return;
-        }
-        resolve(blob);
-      }, 'image/jpeg');
-    });
+    return canvas;
+
+    // return new Promise<Blob>((resolve, reject) => {
+    //   canvas.toBlob(blob => {
+    //     if (!blob) {
+    //       reject(new Error('Canvas is empty'));
+    //       return;
+    //     }
+    //     resolve(blob);
+    //   }, 'image/jpeg');
+    // });
   };
-
-  // const blobToFile = (croppedBlob: Blob, fileName: string): File => { ..croppedBlob, fileName: fileName, lastModified: new Date() }
-
-  // const blobToFile = (croppedBlob: Blob, fileName: string): File => { retyrn
-  //   let blob: File = croppedBlob;
-  //   blob.name = fileName;
-  //   blob.lastModifiedDate = new Date();
-
-  //   //Cast to a File() type
-  //   return <File>theBlob;
-  // };
 
   const onSave = async (): Promise<void> => {
     try {
       setCroppedAvatarLoading(true);
-      const croppedImage = await getCroppedImg(
+      // const croppedImage = await getCroppedImg(image as HTMLImageElement, crop as ICropData);
+      const croppedImage = getCroppedImg(
         image as HTMLImageElement,
         crop as ICropData,
       );
-      const newImageName = imageName + '_cropped';
-      const croppedFile = new File([croppedImage], newImageName, {
-        type: 'image/jpeg',
-      });
-      updateAvatar(croppedFile);
+      // const newImageName = imageName + '_cropped';
+      // const croppedFile = new File([croppedImage], newImageName, { type: 'image/jpeg' });
+      updateAvatar(croppedImage);
       // clearAvatarData();
     } catch (error) {
       toast.error(`Error: ${error.message}`);
