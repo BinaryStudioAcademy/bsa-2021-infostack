@@ -63,4 +63,4 @@ class TeamApi {
   }
 }
 
-export const teamApi = new TeamApi();
+export { TeamApi };

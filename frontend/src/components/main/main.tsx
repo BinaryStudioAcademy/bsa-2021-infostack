@@ -16,14 +16,22 @@ import {
   useEffect,
   useHistory,
   useCookies,
+  useContext,
 } from 'hooks/hooks';
-import { authActions, workspacesActions } from 'store/actions';
+import { SocketContext } from 'context/socket';
+import { SocketEvents } from 'common/enums/enums';
+import {
+  authActions,
+  workspacesActions,
+  notificationsActions,
+} from 'store/actions';
 
 const Main: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
   const { user } = useAppSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const socket = useContext(SocketContext);
   const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
 
@@ -31,7 +39,15 @@ const Main: React.FC = () => {
     if (token && !user) {
       dispatch(authActions.loadUser());
     }
+    socket.emit(SocketEvents.PAGE_JOIN, token);
+    dispatch(notificationsActions.loadCount());
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      socket.emit(SocketEvents.APP_JOIN, user.id);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!currentWorkspace) {
