@@ -16,9 +16,14 @@ import { ISkill } from 'common/interfaces/skill';
 import { IUserAccount } from 'common/interfaces/user';
 import { useForm, yupResolver } from 'hooks/hooks';
 import { accountInfoSchema } from 'common/validations';
-import { MAX_FILE_SIZE } from 'common/constants/constants';
+import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from 'common/constants/constants';
 import { UserAvatar } from 'components/common/common';
-import { getAllowedClasses, bytesToMegabytes } from 'helpers/helpers';
+import {
+  getAllowedClasses,
+  bytesToMegabytes,
+  canvasToBlob,
+  canvasToDataURL,
+} from 'helpers/helpers';
 import { CropAvatar } from './components/crop-avatar/crop-avatar';
 import styles from './styles.module.scss';
 
@@ -151,7 +156,11 @@ export const ProfileSettings: React.FC = () => {
   const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files[0]) {
       if (bytesToMegabytes(e.target.files[0].size) > MAX_FILE_SIZE) {
-        toast.error(`Error: File must be less than ${MAX_FILE_SIZE} Mb.`);
+        toast.error(`File must be less than ${MAX_FILE_SIZE} Mb.`);
+      } else if (!ALLOWED_FILE_TYPES.includes(e.target.files[0].type)) {
+        toast.error(
+          'Forbidden file type. Please choose image with type .png, .jpg or .jpeg',
+        );
       } else {
         const reader = new FileReader();
         reader.onload = (e): void => {
@@ -201,23 +210,6 @@ export const ProfileSettings: React.FC = () => {
     setCropModalVisible(false);
   };
 
-  const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
-    return new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          reject(new Error('Canvas is empty'));
-          return;
-        }
-        resolve(blob);
-      }, 'image/jpeg');
-    });
-  };
-
-  const canvasToDataURL = (canvas: HTMLCanvasElement): string => {
-    const croppedImageDataURL = canvas.toDataURL('image/jpeg');
-    return croppedImageDataURL;
-  };
-
   const updateAvatar = async (
     croppedImageCanvas: HTMLCanvasElement,
   ): Promise<void> => {
@@ -234,14 +226,6 @@ export const ProfileSettings: React.FC = () => {
 
     setCropModalVisible(false);
   };
-  //  if (selectedFile || avatarLoading) {
-  // if (selectedImgURL) {
-  //   setCropModalVisible(true);
-  // }
-
-  // const clearAvatarData = (): void => {
-  //   setSelectedImgURL('');
-  // };
 
   return (
     <>
@@ -406,7 +390,6 @@ export const ProfileSettings: React.FC = () => {
       <CropAvatar
         isShown={isCropModalVisible}
         src={selectedImgURL}
-        // imageName={selectedFile?.name}
         handleClose={handleCropModalClose}
         updateAvatar={updateAvatar}
         // clearAvatarData={clearAvatarData}

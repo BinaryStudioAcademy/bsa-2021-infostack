@@ -1,15 +1,14 @@
-import { useState } from 'hooks/hooks';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
-import styles from './styles.module.scss';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { useState } from 'hooks/hooks';
 import { ICropData } from 'common/interfaces/components/crop-data';
+import styles from './styles.module.scss';
 
 interface IProps {
   isShown: boolean;
   src: string;
-  // imageName: string | undefined;
   handleClose: () => void;
   updateAvatar: (croppedImageCanvas: HTMLCanvasElement) => void;
 }
@@ -22,7 +21,7 @@ export const CropAvatar: React.FC<IProps> = ({
 }) => {
   const [crop, setCrop] = useState<ReactCrop.Crop>({
     unit: '%',
-    height: 100,
+    height: 128,
     aspect: 1,
   });
   const [image, setImage] = useState<HTMLImageElement | null>(null);
@@ -36,7 +35,6 @@ export const CropAvatar: React.FC<IProps> = ({
     setImage(img);
   };
 
-  // Promise<Blob>
   const getCroppedImg = (
     img: HTMLImageElement,
     cropData: ICropData,
@@ -61,28 +59,15 @@ export const CropAvatar: React.FC<IProps> = ({
     );
 
     return canvas;
-
-    // return new Promise<Blob>((resolve, reject) => {
-    //   canvas.toBlob(blob => {
-    //     if (!blob) {
-    //       reject(new Error('Canvas is empty'));
-    //       return;
-    //     }
-    //     resolve(blob);
-    //   }, 'image/jpeg');
-    // });
   };
 
   const onSave = async (): Promise<void> => {
     try {
       setCroppedAvatarLoading(true);
-      // const croppedImage = await getCroppedImg(image as HTMLImageElement, crop as ICropData);
       const croppedImage = getCroppedImg(
         image as HTMLImageElement,
         crop as ICropData,
       );
-      // const newImageName = imageName + '_cropped';
-      // const croppedFile = new File([croppedImage], newImageName, { type: 'image/jpeg' });
       updateAvatar(croppedImage);
       // clearAvatarData();
     } catch (error) {
@@ -111,24 +96,20 @@ export const CropAvatar: React.FC<IProps> = ({
             crop={crop}
             keepSelection
             circularCrop
-            minHeight={100}
+            minHeight={128}
             onImageLoaded={onImageLoaded}
             imageStyle={{ maxWidth: '460px', maxHeight: '460px' }}
           />
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={handleClose}
-          // disabled={cancelButton.disabled}
-        >
+        <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button
           variant="primary"
           onClick={onSave}
-          disabled={!image || croppedAvatarLoading}
+          disabled={croppedAvatarLoading}
         >
           Save
         </Button>

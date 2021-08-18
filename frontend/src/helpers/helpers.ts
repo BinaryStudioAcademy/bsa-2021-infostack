@@ -8,3 +8,5 @@ export { getFormattedVersionDate } from './version-date/version-date';
 export { toDayJS } from './date/date';
 export { getStringifiedQuery } from './http/http';
 export { bytesToMegabytes } from './file/file';
+export { canvasToBlob } from './file/file';
+export { canvasToDataURL } from './file/file';
