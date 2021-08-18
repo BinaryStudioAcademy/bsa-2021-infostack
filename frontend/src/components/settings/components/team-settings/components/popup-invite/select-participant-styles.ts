@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default {
-  menu: (provided: any): any => ({
-    ...provided,
-    zIndex: 9999,
-  }),
-
-  menuPortal: (provided: any): any => ({ ...provided, zIndex: 9999 }),
-
   option: (provided: any): any => ({
     ...provided,
-    fontSize: '1rem',
+    fontSize: '1.25rem',
     padding: '0.2rem',
   }),
 
@@ -18,13 +11,13 @@ export default {
     ...provided,
     background: '#fff',
     borderColor: '#9e9e9e',
-    minHeight: '25px',
-    height: '25px',
+    minHeight: '30px',
+    height: '30px',
   }),
 
   valueContainer: (provided: any): any => ({
     ...provided,
-    height: '25px',
+    height: '30px',
     padding: '0 6px',
   }),
 
@@ -33,12 +26,16 @@ export default {
     margin: '0px',
   }),
 
-  indicatorSeparator: (): any => ({
-    display: 'none',
-  }),
-
   indicatorsContainer: (provided: any): any => ({
     ...provided,
-    height: '25px',
+    height: '30px',
+  }),
+
+  noOptionsMessage: (provided: any): any => ({
+    ...provided,
+    height: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
   }),
 };
