@@ -1,10 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
-import {
-  mapTeamsToITeams,
-  mapTeamToITeam,
-} from '../common/mappers/team/map-team-to-iteam';
+import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { HttpError } from '../common/errors/http-error';
@@ -18,6 +15,7 @@ import { Server } from 'socket.io';
 import { User } from '../data/entities/user';
 import NotificationRepository from '../data/repositories/notification.repository';
 import { Team } from '../data/entities/team';
+import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -138,7 +136,7 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, 'add', io);
+  notifyUser(team, user, 'added to', io);
 
   return teamsWithUsersRoles;
 };
@@ -161,7 +159,7 @@ export const deleteUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, 'delete', io);
+  notifyUser(team, user, 'deleted from', io);
 
   return teamsWithUsersRoles;
 };
@@ -172,12 +170,10 @@ export const notifyUser = async (
   reason: string,
   io: Server,
 ): Promise<void> => {
-  const reasonText = reason === 'add' ? 'added to' : 'deleted from';
-
   const notificationRepository = getCustomRepository(NotificationRepository);
 
-  const title = `You have been ${reasonText} Infostack team.`;
-  const body = `You have been ${reasonText} Infostack team -- "${team.name}".`;
+  const title = `You have been ${reason} Infostack team.`;
+  const body = `You have been ${reason} Infostack team -- "${team.name}".`;
 
   io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
   await notificationRepository.createAndSave(
