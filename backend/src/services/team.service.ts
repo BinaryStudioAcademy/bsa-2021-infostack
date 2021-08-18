@@ -138,7 +138,7 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, EntityType.ADD_TO_TEAM, io);
+  notifyUser(team, user, 'add', io);
 
   return teamsWithUsersRoles;
 };
@@ -161,7 +161,7 @@ export const deleteUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, EntityType.ADD_TO_TEAM, io);
+  notifyUser(team, user, 'delete', io);
 
   return teamsWithUsersRoles;
 };
@@ -169,22 +169,21 @@ export const deleteUser = async (
 export const notifyUser = async (
   team: Team,
   user: User,
-  reason: EntityType,
+  reason: string,
   io: Server,
 ): Promise<void> => {
-  const reasonText =
-    reason === EntityType.ADD_TO_TEAM ? 'added to' : 'deleted from';
+  const reasonText = reason === 'add' ? 'added to' : 'deleted from';
 
   const notificationRepository = getCustomRepository(NotificationRepository);
 
-  const title = `You have been ${reasonText} team.`;
-  const body = `You have been ${reasonText} team -- "${team.name}".`;
+  const title = `You have been ${reasonText} Infostack team.`;
+  const body = `You have been ${reasonText} Infostack team -- "${team.name}".`;
 
   io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
   await notificationRepository.createAndSave(
-    title,
     body,
-    reason,
+    null,
+    EntityType.TEAM,
     team.id,
     user.id,
     false,
