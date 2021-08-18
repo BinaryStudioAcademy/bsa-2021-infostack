@@ -35,7 +35,6 @@ export const ContentEditor: React.FC = () => {
   const dispatch = useAppDispatch();
   const editorRef = useRef(null);
 
-  // Editor.unuse(Plugins.Image);
   Editor.unuse(Plugins.FontUnderline);
 
   if (!currentPage) {
