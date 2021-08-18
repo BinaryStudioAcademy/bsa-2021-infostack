@@ -14,7 +14,7 @@ interface PageAction {
   payload: boolean;
 }
 
-const createPage = createAsyncThunk(
+export const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
     dispatch(actions.toggleSpinner());

@@ -2,6 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ReducerName } from 'common/enums/app/reducer-name.enum';
 import { IPageNav, IPage } from 'common/interfaces/pages';
 import { ActionType } from './common';
+import { toast } from 'react-toastify';
+import { createPage } from './actions';
 
 type State = {
   pages: IPageNav[] | null;
@@ -48,14 +50,17 @@ const { reducer, actions } = createSlice({
       state.currentPage = null;
       state.isCurrentPageFollowed = false;
     },
-  },
-  extraReducers: {
     [ActionType.SET_CURRENT_PAGE_FOLLOWED]: (
       state,
       action: PayloadAction<boolean>,
     ) => {
       state.isCurrentPageFollowed = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createPage.rejected, () => {
+      toast.error('You do not have enough permissions to perform this action.');
+    });
   },
 });
 

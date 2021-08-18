@@ -5,8 +5,10 @@ import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import PageContentRepository from '../data/repositories/page-content.repository';
+import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
+import { InviteStatus } from '../common/enums/invite-status';
 import { IParticipant } from '../common/interfaces/participant';
 import {
   IPageRequest,
@@ -26,69 +28,87 @@ import { mapPageToContributors } from '../common/mappers/page/map-page-contents-
 import { ITag } from '../common/interfaces/tag';
 import TagRepository from '../data/repositories/tag.repository';
 import { parseHeadings } from '../common/utils/markdown.util';
+import { HttpError } from '../common/errors/http-error';
+import { HttpCode } from '../common/enums/http-code';
+import { HttpErrorMessage } from '../common/enums/http-error-message';
 
 export const createPage = async (
   userId: string,
   workspaceId: string,
   body: IPageRequest,
 ): Promise<IPage> => {
-  const { parentPageId, ...pageContent } = body;
-  const { title, content } = pageContent;
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+      userId,
+      workspaceId,
+    );
 
-  const pageRepository = getCustomRepository(PageRepository);
-  const { id } = await pageRepository.save({
-    authorId: userId,
-    workspaceId,
-    parentPageId,
-    pageContents: [pageContent],
-  });
+  if (userWorkspace.status === InviteStatus.JOINED) {
+    const { parentPageId, ...pageContent } = body;
+    const { title, content } = pageContent;
 
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(userId);
-  const pageContentRepository = getCustomRepository(PageContentRepository);
-  await pageContentRepository.save({
-    title,
-    content,
-    authorId: userId,
-    pageId: id,
-  });
+    const pageRepository = getCustomRepository(PageRepository);
+    const { id } = await pageRepository.save({
+      authorId: userId,
+      workspaceId,
+      parentPageId,
+      pageContents: [pageContent],
+    });
 
-  const page = await pageRepository.findByIdWithContents(id);
+    const userRepository = getCustomRepository(UserRepository);
+    const user = await userRepository.findById(userId);
 
-  const userPermissionRepository = getCustomRepository(
-    UserPermissionRepository,
-  );
-  await userPermissionRepository.createAndSave(
-    user,
-    page,
-    PermissionType.ADMIN,
-  );
-  const usersPermissions = await userPermissionRepository.findByPageId(
-    parentPageId,
-  );
-  for (const userPermission of usersPermissions) {
+    const pageContentRepository = getCustomRepository(PageContentRepository);
+    await pageContentRepository.save({
+      title,
+      content,
+      authorId: userId,
+      pageId: id,
+    });
+
+    const page = await pageRepository.findByIdWithContents(id);
+
+    const userPermissionRepository = getCustomRepository(
+      UserPermissionRepository,
+    );
     await userPermissionRepository.createAndSave(
-      userPermission.user,
+      user,
       page,
-      userPermission.option,
+      PermissionType.ADMIN,
     );
-  }
-
-  const teamPermissionRepository = getCustomRepository(
-    TeamPermissionRepository,
-  );
-  const teamsPermissions = await teamPermissionRepository.findByPageId(
-    parentPageId,
-  );
-  for (const teamPermission of teamsPermissions) {
-    await teamPermissionRepository.createAndSave(
-      teamPermission.team,
-      page,
-      teamPermission.option,
+    const usersPermissions = await userPermissionRepository.findByPageId(
+      parentPageId,
     );
-  }
+    for (const userPermission of usersPermissions) {
+      await userPermissionRepository.createAndSave(
+        userPermission.user,
+        page,
+        userPermission.option,
+      );
+    }
 
-  return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
+    const teamPermissionRepository = getCustomRepository(
+      TeamPermissionRepository,
+    );
+    const teamsPermissions = await teamPermissionRepository.findByPageId(
+      parentPageId,
+    );
+    for (const teamPermission of teamsPermissions) {
+      await teamPermissionRepository.createAndSave(
+        teamPermission.team,
+        page,
+        teamPermission.option,
+      );
+    }
+
+    return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
+  } else {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.NO_PERMISSIONS,
+    });
+  }
 };
 
 const addPermissionField = async <T extends { id?: string }>(
