@@ -1,4 +1,5 @@
-import CreatableSelect, { OptionsType } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import { OptionsType } from 'react-select';
 import { CSSObject } from '@emotion/serialize';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import {
