@@ -47,7 +47,7 @@ ${options.skip ? `offset ${options.skip}` : ''}`,
 union
       select page_content.id as id, page_content."authorId", "user"."fullName", "user".avatar, (extract(epoch from page_content."createdAt"::timestamp)) as "createdAtTimestamp", "pageId", content, ('page') as type, page_content.title, EXTRACT(EPOCH FROM page_content."createdAt"::timestamp - page."createdAt"::timestamp) < 1 as "isNew"  from page_content
       inner join "user" on page_content."authorId" = "user".id
-	    inner join "page" on page_content."pageId" = page.id) as records
+inner join "page" on page_content."pageId" = page.id) as records
 where exists (select from user_permission where "pageId" = records."pageId" and  user_permission."userId" = $1) or exists (
 select * from "user" as u
 inner join team_member on u.id = team_member."userId"
