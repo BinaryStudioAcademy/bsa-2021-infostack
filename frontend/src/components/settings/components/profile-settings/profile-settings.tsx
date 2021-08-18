@@ -392,7 +392,6 @@ export const ProfileSettings: React.FC = () => {
         src={selectedImgURL}
         handleClose={handleCropModalClose}
         updateAvatar={updateAvatar}
-        // clearAvatarData={clearAvatarData}
       />
     </>
   );

@@ -4,7 +4,6 @@ import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useState } from 'hooks/hooks';
 import { ICropData } from 'common/interfaces/components/crop-data';
-import styles from './styles.module.scss';
 
 interface IProps {
   isShown: boolean;
@@ -69,7 +68,6 @@ export const CropAvatar: React.FC<IProps> = ({
         crop as ICropData,
       );
       updateAvatar(croppedImage);
-      // clearAvatarData();
     } catch (error) {
       toast.error(`Error: ${error.message}`);
       setCroppedAvatarLoading(false);
@@ -85,22 +83,20 @@ export const CropAvatar: React.FC<IProps> = ({
       backdrop="static"
       keyboard={false}
     >
-      <Modal.Header closeButton className={styles.header}>
+      <Modal.Header closeButton>
         <Modal.Title className="fs-6">Crop the avatar</Modal.Title>
       </Modal.Header>
-      <Modal.Body className={styles.cropAvatar}>
-        <div className={styles.imgWrp}>
-          <ReactCrop
-            src={src}
-            onChange={onCropChange}
-            crop={crop}
-            keepSelection
-            circularCrop
-            minHeight={128}
-            onImageLoaded={onImageLoaded}
-            imageStyle={{ maxWidth: '460px', maxHeight: '460px' }}
-          />
-        </div>
+      <Modal.Body>
+        <ReactCrop
+          src={src}
+          onChange={onCropChange}
+          crop={crop}
+          keepSelection
+          circularCrop
+          minHeight={128}
+          onImageLoaded={onImageLoaded}
+          imageStyle={{ maxWidth: '460px', maxHeight: '460px' }}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
