@@ -1,21 +1,30 @@
 import { ListGroup } from 'react-bootstrap';
 import { replaceIdParam } from 'helpers/helpers';
-import { useHistory } from 'hooks/hooks';
+import { useAppSelector, useHistory } from 'hooks/hooks';
 import { AppRoute } from 'common/enums/enums';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { commentsSelectors, IStoreComment } from 'store/comments/slice';
 
 type Props = {
-  userId: string;
-  name: string;
-  avatar: string;
-  text: string;
+  id: string;
+  // userId: string;
+  // name: string;
+  // avatar: string;
+  // text: string;
 };
 
-export const Response: React.FC<Props> = ({ userId, name, avatar, text }) => {
+export const Response: React.FC<Props> = ({ id }) => {
   const history = useHistory();
+  const response = useAppSelector((state) =>
+    commentsSelectors.selectById(state, id),
+  ) as IStoreComment;
 
+  const {
+    text,
+    author: { id: userId, fullName: name, avatar },
+  } = response;
   const handleAvatarClick = (userId?: string): void => {
     if (!userId) {
       return;

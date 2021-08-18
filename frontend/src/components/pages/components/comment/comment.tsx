@@ -1,29 +1,42 @@
 import { ListGroup } from 'react-bootstrap';
-import { useState, useHistory } from 'hooks/hooks';
+import { useState, useHistory, useAppSelector } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { commentsSelectors, IStoreComment } from 'store/comments/slice';
+import { Response } from '../components';
 
 type Props = {
-  userId: string;
-  avatar: string;
-  name: string;
-  text: string;
+  id: string;
+  // userId: string;
+  // avatar: string;
+  // name: string;
+  // text: string;
   handleResponse: (text: string) => void;
-  children?: JSX.Element[];
+  // children?: JSX.Element[];
 };
 
 export const Comment: React.FC<Props> = ({
-  userId,
-  name,
-  avatar,
-  text,
+  id,
+  // userId,
+  // name,
+  // avatar,
+  // text,
+  // children,
   handleResponse,
-  children,
 }) => {
+  const comment = useAppSelector((state) =>
+    commentsSelectors.selectById(state, id),
+  ) as IStoreComment;
+  const {
+    text,
+    children,
+    author: { id: userId, fullName: name, avatar },
+  } = comment;
+
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
   const history = useHistory();
 
@@ -74,7 +87,20 @@ export const Comment: React.FC<Props> = ({
             onCancel={toggleField}
           />
         )}
-        {children && <ListGroup variant="flush">{children}</ListGroup>}
+        {children && (
+          <ListGroup variant="flush">
+            {children.map((id) => (
+              <Response
+                key={id}
+                id={id}
+                // userId={userId}
+                // name={fullName}
+                // avatar={avatar}
+                // text={text}
+              />
+            ))}
+          </ListGroup>
+        )}
       </div>
     </ListGroup.Item>
   );
