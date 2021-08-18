@@ -7,6 +7,7 @@ import { WorkspaceApi } from 'services';
 import { IRegister } from 'common/interfaces/auth';
 import { usersActions } from 'store/users';
 import { InputModal } from '../input-modal/input-modal';
+import { InviteStatus } from 'common/enums/invite-status/invite-status';
 
 type Props = {
   showModal: boolean;
@@ -17,6 +18,7 @@ export const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
   const dispatch = useAppDispatch();
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
+  const { users } = useAppSelector((state) => state.users);
 
   const handleClose = (): void => {
     onModalClose();
@@ -32,15 +34,32 @@ export const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
 
   const handleSubmitForm = async (data: IRegister): Promise<void> => {
     if (data.email !== user?.email) {
-      setSubmitDisabled(true);
-      await new WorkspaceApi().inviteToWorkspace(data);
+      let shouldEmailBeSent = true;
+      const userToInvite = users.find((user) => user.email === data.email);
+      if (userToInvite) {
+        if (
+          userToInvite.status === InviteStatus.JOINED ||
+          userToInvite.status === InviteStatus.PENDING
+        ) {
+          shouldEmailBeSent = false;
+        }
+      }
+      if (shouldEmailBeSent) {
+        setSubmitDisabled(true);
+        await new WorkspaceApi().inviteToWorkspace(data);
 
-      onModalClose();
-      toast.info('Email with an invitation is sent');
+        onModalClose();
+        toast.info('Email with an invitation is sent');
 
-      setSubmitDisabled(false);
-      dispatch(usersActions.loadUsers());
-      reset({ email: '' });
+        setSubmitDisabled(false);
+        dispatch(usersActions.loadUsers());
+        reset({ email: '' });
+      } else {
+        toast.error(
+          'Error: Cannot re-invite a user with joined or pending status',
+        );
+        reset({ email: '' });
+      }
     } else {
       toast.error('Error: Cannot invite yourself');
       reset({ email: '' });

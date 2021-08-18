@@ -5,11 +5,12 @@ export const mapWorkspaceToWorkspaceUsers = (
   workspace: Workspace,
 ): IWorkspaceUser[] => {
   return workspace.userWorkspaces.map(({ user, role, status }) => {
-    const { id, fullName, teams } = user;
+    const { id, fullName, email, teams } = user;
 
     return {
       id,
       fullName,
+      email,
       role,
       status,
       teams: teams
