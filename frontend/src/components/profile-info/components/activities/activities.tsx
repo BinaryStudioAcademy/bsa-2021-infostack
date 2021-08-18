@@ -7,7 +7,11 @@ import {
 } from 'hooks/hooks';
 import { activitiesActions } from 'store/activities';
 import { IUserActivity } from 'common/interfaces/user';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import {
+  getAllowedClasses,
+  replaceIdParam,
+  replacePageIdParamAndVersionId,
+} from 'helpers/helpers';
 import { FilterOption, FILTER_OPTIONS } from 'store/activities/slice';
 import { UserAvatar } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
@@ -70,10 +74,22 @@ const Activities: React.FC = () => {
 
 const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
   const history = useHistory();
-  const { user, page, type, isNew, createdAtTimestamp } = activity;
+  const { id, user, page, type, isNew, createdAtTimestamp } = activity;
 
   const handleClick = (): void => {
-    history.push(replaceIdParam(AppRoute.PAGE, page.id));
+    let path: string;
+
+    if (type === 'comment') {
+      path = replaceIdParam(AppRoute.PAGE, page.id);
+    } else {
+      path = replacePageIdParamAndVersionId(
+        AppRoute.PAGE_PREVIOUS_VERSION,
+        page.id,
+        id,
+      );
+    }
+
+    history.push(path);
   };
 
   const getMessage = (): string => {
