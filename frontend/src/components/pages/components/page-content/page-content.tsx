@@ -248,7 +248,7 @@ export const PageContent: React.FC = () => {
                       <Card.Body className={getAllowedClasses(styles.content)}>
                         {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
                         <ReactMarkdown remarkPlugins={[slug, gfm]}>
-                          {content || 'Empty page'}
+                          {content?.trim() || 'Empty page'}
                         </ReactMarkdown>
                       </Card.Body>
                     </Card>

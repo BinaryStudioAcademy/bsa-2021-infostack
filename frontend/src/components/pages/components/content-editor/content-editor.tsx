@@ -56,16 +56,18 @@ export const ContentEditor: React.FC = () => {
       titleInputValue &&
       titleInputValue?.trim().length <= PageTitle.MAX_PAGE_TITLE_LENGTH
     ) {
-      if (markDownContent) {
+      if (markDownContent || titleInputValue) {
         dispatch(
           pagesActions.editPageContent({
             pageId: paramsId,
             title: titleInputValue.trim(),
-            content: markDownContent,
+            content: markDownContent?.length === 0 ? ' ' : markDownContent,
           }),
         );
         history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
       }
+    } else if (titleInputValue?.trim().length === 0) {
+      toast.warning('Sorry, title could not be empty');
     } else {
       toast.warning(
         `Sorry, title could not be so long. Please delete ${
