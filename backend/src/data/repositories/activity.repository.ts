@@ -1,11 +1,14 @@
 import { IPagination } from '../../common/interfaces/common';
 import { getManager } from 'typeorm';
 import { mapGetActivitiesResultToUserActivities } from '../../common/mappers/user/map-get-activities-to-user-activities';
+import { IUserActivity } from '../../common/interfaces/user';
 
 class ActivityRepository {
   private _manager = getManager();
 
-  public async getAll(options?: Partial<IPagination>) {
+  public async getAll(
+    options?: Partial<IPagination>,
+  ): Promise<IUserActivity[]> {
     const result = await this._manager.query(
       `
     select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
@@ -48,7 +51,9 @@ inner join "page" on page_content."pageId" = page.id
     return parseInt(count);
   }
 
-  public async getByUserId(options: Partial<IPagination> & { userId: string }) {
+  public async getByUserId(
+    options: Partial<IPagination> & { userId: string },
+  ): Promise<IUserActivity[]> {
     const result = await this._manager.query(
       `
     select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
@@ -74,7 +79,7 @@ inner join "page" on page_content."pageId" = page.id
     return mapGetActivitiesResultToUserActivities(result);
   }
 
-  public async countByUserId(userId: string) {
+  public async countByUserId(userId: string): Promise<number> {
     const [{ count }] = await this._manager.query(
       `
       select count(id) from (
