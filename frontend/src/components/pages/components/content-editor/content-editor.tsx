@@ -67,7 +67,7 @@ export const ContentEditor: React.FC = () => {
         history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
       }
     } else if (titleInputValue?.trim().length === 0) {
-      toast.warning('Sorry, title could not be empty');
+      toast.warning('Title could not be empty');
     } else {
       toast.warning(
         `Sorry, title could not be so long. Please delete ${
