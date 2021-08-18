@@ -105,8 +105,8 @@ export const createPage = async (
     return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
   } else {
     throw new HttpError({
-      status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.NO_PERMISSIONS,
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.DELETED_FROM_WORKSPACE,
     });
   }
 };

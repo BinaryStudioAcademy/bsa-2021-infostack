@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { PageApi } from 'services';
@@ -14,14 +15,18 @@ interface PageAction {
   payload: boolean;
 }
 
-export const createPage = createAsyncThunk(
+const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const createPageResponse = await new PageApi().createPage(createPayload);
-    dispatch(actions.createPage(createPageResponse));
-    dispatch(actions.toggleSpinner());
-    return createPageResponse;
+    try {
+      const createPageResponse = await new PageApi().createPage(createPayload);
+      dispatch(actions.createPage(createPageResponse));
+      dispatch(actions.toggleSpinner());
+      return createPageResponse;
+    } catch (e) {
+      toast.error(e.message);
+    }
   },
 );
 
