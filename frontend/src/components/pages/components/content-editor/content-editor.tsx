@@ -35,7 +35,6 @@ export const ContentEditor: React.FC = () => {
   const dispatch = useAppDispatch();
   const editorRef = useRef(null);
 
-  Editor.unuse(Plugins.Image);
   Editor.unuse(Plugins.FontUnderline);
 
   if (!currentPage) {
@@ -49,6 +48,20 @@ export const ContentEditor: React.FC = () => {
     target,
   }: React.ChangeEvent<HTMLInputElement>): void => {
     setTitleInputValue(target.value);
+  };
+
+  const onImageUpload = (
+    file: Blob,
+  ): Promise<string | ArrayBuffer | null | undefined> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (data): void => {
+        if (data) {
+          resolve(data?.target?.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSaveConfirm = (): void => {
@@ -93,6 +106,7 @@ export const ContentEditor: React.FC = () => {
             <Editor
               value={markDownContent}
               onChange={({ text }): void => setMarkDownContent(text)}
+              onImageUpload={onImageUpload}
               renderHTML={(text): JSX.Element => (
                 <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
               )}
