@@ -15,7 +15,6 @@ import { tagActions } from 'store/tags';
 import './page-tags.scss';
 
 const PageTags: React.FC = () => {
-  const pageApi = new PageApi();
   const tagApi = new TagApi();
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -62,7 +61,7 @@ const PageTags: React.FC = () => {
       (item) => item.value,
     );
 
-    pageApi
+    new PageApi()
       .savePageTags(currentPage?.id, tagsRequest)
       .then((tags) => {
         const newPageTags = tags.map((tag) => {
@@ -76,7 +75,7 @@ const PageTags: React.FC = () => {
 
   useEffect(() => {
     if (currentPage) {
-      pageApi.getPageTags(currentPage?.id).then((tags) => {
+      new PageApi().getPageTags(currentPage?.id).then((tags) => {
         const newPageTags = tags.map((tag) => {
           const { id, name } = tag;
           return { ...tag, value: id, label: name } as ITagSelect;

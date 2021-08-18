@@ -3,7 +3,7 @@ import { AppRoute } from 'common/enums/enums';
 import { Sign, FormField } from 'components/common/common';
 import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
 import { authActions } from 'store/actions';
-import { signUpSchema } from 'validations/sign-up-schema';
+import { signUpSchema } from 'common/validations';
 import { IRegister } from 'common/interfaces/auth';
 
 const SignUp: React.FC = () => {

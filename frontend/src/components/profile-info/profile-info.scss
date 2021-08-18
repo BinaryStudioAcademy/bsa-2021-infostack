@@ -59,6 +59,10 @@
 }
 
 .following-page {
+  padding: 0rem 1.25rem 0.75rem 1.25rem;
+}
+
+.following-page-title-container {
   font-size: 1.25rem;
   text-decoration: none;
   font-weight: 500;
@@ -76,7 +80,7 @@
   margin-bottom: 2rem;
 }
 
-.following-page i {
+.following-page-title-container i {
   margin-right: 1rem;
   font-size: 1.8rem;
   color: #3f80ea;

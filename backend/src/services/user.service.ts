@@ -60,7 +60,13 @@ export const getUserByIdWithWorkspace = async (
       title: workspace.name,
     };
   });
-  const newFollowingPages = followingPages.map((page) => mapPageToIPage(page));
+
+  const followingPagesInCurrentWorkspace = followingPages.filter(
+    (page) => page.workspaceId === workspaceId,
+  );
+  const newFollowingPages = followingPagesInCurrentWorkspace.map((page) =>
+    mapPageToIPage(page),
+  );
   let permission = false;
   workspaces.map((workspace) =>
     workspace.id === workspaceId ? (permission = true) : null,

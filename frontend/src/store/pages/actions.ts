@@ -76,18 +76,16 @@ const followPage = createAsyncThunk<
 >(
   ActionType.GET_PAGE,
   async ({ pageId, withChildren }, { dispatch, getState }) => {
-    const pageApi = new PageApi();
-
     if (withChildren) {
       const pages = getState().pages.pages as IPageNav[];
       const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
       const ids = getPagesIds(currentPage);
-      await pageApi.followPages(ids);
+      await new PageApi().followPages(ids);
     } else {
-      await pageApi.followPage(pageId);
+      await new PageApi().followPage(pageId);
     }
 
-    const response = await pageApi.getPage(pageId);
+    const response = await new PageApi().getPage(pageId);
     dispatch(actions.getPage(response));
   },
 );
@@ -99,18 +97,16 @@ const unfollowPage = createAsyncThunk<
 >(
   ActionType.GET_PAGE,
   async ({ pageId, withChildren }, { dispatch, getState }) => {
-    const pageApi = new PageApi();
-
     if (withChildren) {
       const pages = getState().pages.pages as IPageNav[];
       const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
       const ids = getPagesIds(currentPage);
-      await pageApi.unfollowPages(ids);
+      await new PageApi().unfollowPages(ids);
     } else {
-      await pageApi.unfollowPage(pageId);
+      await new PageApi().unfollowPage(pageId);
     }
 
-    const response = await pageApi.getPage(pageId);
+    const response = await new PageApi().getPage(pageId);
     dispatch(actions.getPage(response));
   },
 );

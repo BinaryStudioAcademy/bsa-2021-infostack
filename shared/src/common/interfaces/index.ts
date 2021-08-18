@@ -8,3 +8,4 @@ export * from './team';
 export * from './skill';
 export * from './participant';
 export * from './common';
+export * from './notification';
