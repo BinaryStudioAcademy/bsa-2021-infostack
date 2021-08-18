@@ -2,7 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { ReducerName } from 'common/enums/app/reducer-name.enum';
 import { ITeam } from 'common/interfaces/team';
-import { fetchTeams, createTeam, updateTeam, deleteTeam } from './actions';
+import {
+  fetchTeams,
+  createTeam,
+  updateTeam,
+  deleteTeam,
+  addUser,
+  deleteUser,
+} from './actions';
 
 type State = {
   teams: ITeam[];
@@ -52,6 +59,18 @@ const { reducer, actions } = createSlice({
       })
       .addCase(deleteTeam.rejected, () => {
         toast.error('Error happened while deleting the team.');
+      })
+      .addCase(addUser.fulfilled, (state, action) => {
+        state.teams = action.payload;
+      })
+      .addCase(addUser.rejected, () => {
+        toast.error('Error happened while adding user to team.');
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.teams = action.payload;
+      })
+      .addCase(deleteUser.rejected, () => {
+        toast.error('Error happened while deleting the user.');
       });
   },
 });
