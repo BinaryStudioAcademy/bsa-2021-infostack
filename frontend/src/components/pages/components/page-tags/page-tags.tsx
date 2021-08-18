@@ -10,7 +10,7 @@ import { Badge, Card, ListGroup } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { CSSObject } from '@emotion/serialize';
 import { OptionsType } from 'react-select';
-import { pageApi, TagApi } from 'services';
+import { PageApi, TagApi } from 'services';
 import { tagActions } from 'store/tags';
 import './page-tags.scss';
 
@@ -61,7 +61,7 @@ const PageTags: React.FC = () => {
       (item) => item.value,
     );
 
-    pageApi
+    new PageApi()
       .savePageTags(currentPage?.id, tagsRequest)
       .then((tags) => {
         const newPageTags = tags.map((tag) => {
@@ -75,7 +75,7 @@ const PageTags: React.FC = () => {
 
   useEffect(() => {
     if (currentPage) {
-      pageApi.getPageTags(currentPage?.id).then((tags) => {
+      new PageApi().getPageTags(currentPage?.id).then((tags) => {
         const newPageTags = tags.map((tag) => {
           const { id, name } = tag;
           return { ...tag, value: id, label: name } as ITagSelect;
