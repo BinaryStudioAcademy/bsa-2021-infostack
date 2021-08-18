@@ -27,9 +27,8 @@ or exists (
 select * from "user" as u
       inner join team_member on u.id = team_member."userId"
       inner join team_permission on team_permission."teamId" = team_member."teamId"
-      where u.id = $1 and "pageId" = records."pageId"
-)
-    order by "createdAtTimestamp" desc 
+      where u.id = $1 and "pageId" = records."pageId")
+order by "createdAtTimestamp" desc 
     ${options.take ? `limit ${options.take}` : ''}
     ${options.skip ? `offset ${options.skip}` : ''}`,
       [options.userId],
@@ -74,23 +73,19 @@ inner join team_member on u.id = team_member."userId"
         inner join "user" on comment."authorId" = "user".id
         left join page_content p on (comment."pageId" = p."pageId"
         and not exists (
-        select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"
-        )
-        )
+        select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"))
             where comment."authorId" = $1
           union
           select page_content.id as id, page_content."authorId", "user"."fullName", "user".avatar, (extract(epoch from page_content."createdAt"::timestamp)) as "createdAtTimestamp", "pageId", content, ('page') as type, page_content.title, EXTRACT(EPOCH FROM page_content."createdAt"::timestamp - page."createdAt"::timestamp) < 1 as "isNew"  from page_content
             inner join "user" on page_content."authorId" = "user".id
           inner join "page" on page_content."pageId" = page.id
             where page_content."authorId" = $1) as records
-          
       where exists (select from user_permission where "pageId" = records."pageId" and  "userId" = $1)
         or exists (
         select * from "user" as u
       inner join team_member on u.id = team_member."userId"
       inner join team_permission on team_permission."teamId" = team_member."teamId"
-      where u.id = $1 and "pageId" = records."pageId"
-        )
+      where u.id = $1 and "pageId" = records."pageId")
       order by "createdAtTimestamp" desc
     ${options.take ? `limit ${options.take}` : ''}
     ${options.skip ? `offset ${options.skip}` : ''}`,
@@ -108,16 +103,13 @@ inner join team_member on u.id = team_member."userId"
         inner join "user" on comment."authorId" = "user".id
         left join page_content p on (comment."pageId" = p."pageId"
         and not exists (
-        select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"
-        )
-        )
+        select 1 from page_content as p1 where p1."pageId" = comment."pageId" and p1."createdAt" > p."createdAt"))
             where comment."authorId" = $1
           union
           select page_content.id as id, page_content."authorId", "user"."fullName", "user".avatar, (extract(epoch from page_content."createdAt"::timestamp)) as "createdAtTimestamp", "pageId", content, ('page') as type, page_content.title, EXTRACT(EPOCH FROM page_content."createdAt"::timestamp - page."createdAt"::timestamp) < 1 as "isNew"  from page_content
             inner join "user" on page_content."authorId" = "user".id
           inner join "page" on page_content."pageId" = page.id
             where page_content."authorId" = $1) as records
-          
       where exists (select from user_permission where "pageId" = records."pageId" and  "userId" = $1)
         or exists (
         select * from "user" as u
