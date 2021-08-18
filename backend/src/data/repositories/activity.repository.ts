@@ -1,6 +1,6 @@
 import { IPagination } from '../../common/interfaces/common';
 import { getManager } from 'typeorm';
-import { mapGetActivitiesResultToUserActivities } from '../../common/mappers/user/map-get-activities-to-user-activities';
+import { mapGetActivitiesResultToUserActivities } from '../../common/mappers/user/map-user-activities-raw-results-to-user-activities';
 import { IUserActivity } from '../../common/interfaces/user';
 
 class ActivityRepository {
