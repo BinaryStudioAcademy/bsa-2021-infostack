@@ -30,10 +30,17 @@
   }
 
   .btn-primary {
-    background: #f3f6fb;
+    background: #fff;
     border: 0;
     box-shadow: none;
     padding: 0.35rem 1.4rem;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: #fff;
+      box-shadow: none;
+    }
   }
 
   .input-group {
@@ -42,11 +49,15 @@
     flex-wrap: wrap;
     position: relative;
     width: 100%;
-    & > .btn-primary:hover,
-    & > .btn-primary:active,
-    & > .btn-primary:focus {
-      background: var(--header-input-background);
-      box-shadow: none;
+
+    & > .btn-primary {
+      background: #f3f6fb;
+
+      &:hover,
+      &:active,
+      &:focus {
+        background: var(--header-input-background);
+      }
     }
 
     .form-control {

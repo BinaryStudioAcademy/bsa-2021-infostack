@@ -2,4 +2,4 @@ export {
   IWorkspace,
   IWorkspaceUser,
   IWorkspaceCreation,
-} from 'infostack-shared';
+} from 'infostack-shared/common/interfaces';

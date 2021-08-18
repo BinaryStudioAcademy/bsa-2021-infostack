@@ -1,4 +1,4 @@
-import { InviteStatus } from 'common/enums/invite-status';
+import { InviteStatus } from 'common/enums/enums';
 import { IWorkspaceUser } from 'common/interfaces/workspace';
 import { useAppSelector } from 'hooks/hooks';
 import Button from 'react-bootstrap/Button';

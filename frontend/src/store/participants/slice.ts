@@ -12,7 +12,7 @@ const initialState: State = {
 };
 
 const { reducer, actions } = createSlice({
-  name: ReducerName.WORKSPACE,
+  name: ReducerName.PARTICIPANTS,
   initialState,
   reducers: {
     [ActionType.SET_PARTICIPANTS]: (
