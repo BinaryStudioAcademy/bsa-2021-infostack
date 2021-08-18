@@ -2,6 +2,14 @@
   word-break: break-all;
 }
 
+:global(.card) {
+  max-width: 87vw;
+}
+
+:global(.card) img {
+  max-width: 42vw;
+}
+
 ol {
   list-style-position: inside;
 }
