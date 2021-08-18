@@ -10,3 +10,4 @@ export { PermissionType } from './permissions/permissions';
 export { DefaultUserName } from './default-username/default-username';
 export { SocketEvents } from './socket';
 export { InviteStatus } from './invite-status';
+export { PageTitle } from './page-content/page-title';
