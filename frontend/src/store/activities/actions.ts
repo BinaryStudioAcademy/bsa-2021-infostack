@@ -17,11 +17,12 @@ const fetchActivities = createAsyncThunk(
     let result: IPaginated<IUserActivity>;
 
     if (filter === 'All') {
-      result = await new UserApi().getActivities(pagination);
+      result = await new UserApi().getActivities({ ...pagination, skip: 0 });
     } else {
       result = await new UserApi().getUserActivities({
         userId: user?.id || '',
         ...pagination,
+        skip: 0,
       });
     }
 
