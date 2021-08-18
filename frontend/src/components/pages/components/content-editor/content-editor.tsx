@@ -70,7 +70,7 @@ export const ContentEditor: React.FC = () => {
       toast.warning('Title could not be empty');
     } else {
       toast.warning(
-        `Sorry, title could not be so long. Please delete ${
+        `Title could not be so long. Please delete ${
           titleInputValue &&
           titleInputValue?.length - PageTitle.MAX_PAGE_TITLE_LENGTH
         } symbol(s)`,
