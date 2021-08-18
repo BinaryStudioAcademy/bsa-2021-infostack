@@ -89,7 +89,9 @@ export const ContentEditor: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Button onClick={handleSaveConfirm}>Save</Button>
+          <Button onClick={handleSaveConfirm} variant="success" size="sm">
+            Save
+          </Button>
         </Col>
       </Row>
     </div>

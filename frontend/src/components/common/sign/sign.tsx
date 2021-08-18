@@ -48,8 +48,7 @@ export const Sign: React.FC<Props> = ({
           {children}
           <div className="text-center">
             <Button
-              className={styles.button}
-              variant="primary"
+              variant="success"
               type="submit"
               onClick={onSubmit}
               disabled={isSubmitDisabled}

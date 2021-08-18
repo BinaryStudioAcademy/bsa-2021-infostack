@@ -230,13 +230,20 @@ export const PageContent: React.FC = () => {
                           <Button
                             onClick={onAssign}
                             className={canEdit ? 'me-3' : ''}
+                            variant="success"
+                            size="sm"
                           >
                             Assign permissions
                           </Button>
                         </>
                       )}
                       {canEdit && <EditButton onClick={handleEditing} />}
-                      <Button className="ms-3" onClick={onPageFollow}>
+                      <Button
+                        className="ms-3"
+                        onClick={onPageFollow}
+                        variant={isCurrentPageFollowed ? 'danger' : 'success'}
+                        size="sm"
+                      >
                         {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                       </Button>
                     </div>
