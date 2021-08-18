@@ -1,9 +1,10 @@
 export { Http } from './http/http.service';
 export { AuthApi } from './auth-api/auth-api.service';
-export { pageApi } from './page-api/page-api.service';
-export { commentApi } from './comment-api/comment-api.service';
+export { PageApi } from './page-api/page-api.service';
+export { CommentApi } from './comment-api/comment-api.service';
 export { UserApi } from './user-api/user-api.service';
 export { WorkspaceApi } from './workspace-api/workspace-api.service';
 export { TagApi } from './tag-api/tag-api.service';
-export { teamApi } from './team-api/team-api.service';
+export { TeamApi } from './team-api/team-api.service';
 export { SkillApi } from './skill-api/skill-api.service';
+export { NotificationApi } from './notification-api/notification-api.service';
