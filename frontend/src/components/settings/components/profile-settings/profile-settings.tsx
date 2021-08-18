@@ -1,5 +1,6 @@
 import CreatableSelect from 'react-select/creatable';
 import { OptionsType } from 'react-select';
+import { toast } from 'react-toastify';
 import { CSSObject } from '@emotion/serialize';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
 import {
@@ -15,8 +16,9 @@ import { ISkill } from 'common/interfaces/skill';
 import { IUserAccount } from 'common/interfaces/user';
 import { useForm, yupResolver } from 'hooks/hooks';
 import { accountInfoSchema } from 'common/validations';
+import { MAX_FILE_SIZE } from 'common/constants/constants';
 import { UserAvatar } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses, bytesToMegabytes } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 export const ProfileSettings: React.FC = () => {
@@ -146,15 +148,20 @@ export const ProfileSettings: React.FC = () => {
 
   const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e): void => {
-        if (e.target && e.target.result) {
-          setSelectedImgURL(e.target.result.toString());
-        }
-      };
-      const selectedFile = e.target.files[0];
-      reader.readAsDataURL(selectedFile);
-      setSelectedFile(selectedFile);
+      if (bytesToMegabytes(e.target.files[0].size) > MAX_FILE_SIZE) {
+        toast.error(`Error: File must be less than ${MAX_FILE_SIZE} Mb.`);
+      } else {
+        console.info(e.target.files[0].size);
+        const reader = new FileReader();
+        reader.onload = (e): void => {
+          if (e.target && e.target.result) {
+            setSelectedImgURL(e.target.result.toString());
+          }
+        };
+        const selectedFile = e.target.files[0];
+        reader.readAsDataURL(selectedFile);
+        setSelectedFile(selectedFile);
+      }
     }
   };
 
