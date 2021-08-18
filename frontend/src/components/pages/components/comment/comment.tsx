@@ -1,38 +1,33 @@
 import { ListGroup } from 'react-bootstrap';
-import { useState, useHistory, useAppSelector } from 'hooks/hooks';
+import {
+  useState,
+  useHistory,
+  useAppSelector,
+  useAppDispatch,
+} from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { commentsSelectors, IStoreComment } from 'store/comments/slice';
-import { Response } from '../components';
+import { commentsSelectors } from 'store/comments/slice';
+import { ICommentNormalized } from 'common/interfaces/comment';
+import { commentsActions } from 'store/comments';
 
 type Props = {
   id: string;
-  // userId: string;
-  // avatar: string;
-  // name: string;
-  // text: string;
-  handleResponse: (text: string) => void;
-  // children?: JSX.Element[];
 };
 
-export const Comment: React.FC<Props> = ({
-  id,
-  // userId,
-  // name,
-  // avatar,
-  // text,
-  // children,
-  handleResponse,
-}) => {
+export const Comment: React.FC<Props> = ({ id }) => {
   const comment = useAppSelector((state) =>
     commentsSelectors.selectById(state, id),
-  ) as IStoreComment;
+  ) as ICommentNormalized;
+  const dispatch = useAppDispatch();
+
   const {
     text,
+    pageId,
     children,
     author: { id: userId, fullName: name, avatar },
   } = comment;
@@ -41,6 +36,15 @@ export const Comment: React.FC<Props> = ({
   const history = useHistory();
 
   const toggleField = (): void => setIsFieldVisible((prev) => !prev);
+
+  const handleResponse = (text: string): void => {
+    dispatch(
+      commentsActions.createComment({
+        pageId,
+        payload: { text, parentCommentId: id },
+      }),
+    );
+  };
 
   const handleSubmit = (text: string): void => {
     handleResponse(text);
@@ -90,7 +94,7 @@ export const Comment: React.FC<Props> = ({
         {children && (
           <ListGroup variant="flush">
             {children.map((id) => (
-              <Response
+              <Comment
                 key={id}
                 id={id}
                 // userId={userId}

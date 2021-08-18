@@ -55,15 +55,6 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
     setIsLoading(false);
   };
 
-  const handleResponse = (commentId: string, text: string): void => {
-    dispatch(
-      commentsActions.createResponse({
-        pageId,
-        payload: { text, parentCommentId: commentId },
-      }),
-    );
-  };
-
   return (
     <>
       <CommentForm
@@ -81,7 +72,6 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
             // name={fullName}
             // avatar={avatar}
             // text={text}
-            handleResponse={(text: string): void => handleResponse(id, text)}
           />
         ))}
       </ListGroup>

@@ -1,5 +1,6 @@
 export interface IComment {
   id: string;
+  createdAt: string;
   text: string;
   pageId: string;
   author: {
@@ -8,6 +9,5 @@ export interface IComment {
     avatar: string;
     email: string;
   };
-  children?: IComment[];
-  parentCommentId?: string | null;
+  parentCommentId: string | null;
 }

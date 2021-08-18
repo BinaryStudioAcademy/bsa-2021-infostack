@@ -5,7 +5,8 @@ import { AppRoute } from 'common/enums/enums';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { commentsSelectors, IStoreComment } from 'store/comments/slice';
+import { commentsSelectors } from 'store/comments/slice';
+import { ICommentNormalized } from 'common/interfaces/comment';
 
 type Props = {
   id: string;
@@ -19,7 +20,7 @@ export const Response: React.FC<Props> = ({ id }) => {
   const history = useHistory();
   const response = useAppSelector((state) =>
     commentsSelectors.selectById(state, id),
-  ) as IStoreComment;
+  ) as ICommentNormalized;
 
   const {
     text,

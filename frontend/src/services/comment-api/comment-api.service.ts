@@ -1,12 +1,16 @@
 import { http } from 'services/http/http.service';
-import { IComment, ICommentRequest } from 'common/interfaces/comment';
+import {
+  IComment,
+  ICommentRequest,
+  ICommentResponse,
+} from 'common/interfaces/comment';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 
 class CommentApi {
   private readonly BASE = '/api/pages';
   private readonly _httpService = http;
 
-  public async getAll(pageId: string): Promise<IComment[]> {
+  public async getAll(pageId: string): Promise<ICommentResponse[]> {
     return this._httpService.load(`${this.BASE}/${pageId}/comments`);
   }
 

@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { IComment } from '../../common/interfaces/comment';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
 export class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
+    'comment.createdAt',
     'comment.text',
     'comment.pageId',
     'comment.parentCommentId',
@@ -15,7 +15,7 @@ export class CommentRepository extends Repository<Comment> {
     'author.email',
   ];
 
-  public async findByPageId(pageId: string): Promise<IComment[]> {
+  public async findByPageId(pageId: string): Promise<Comment[]> {
     return this.createQueryBuilder('comment')
       .where('comment.pageId = :pageId', { pageId })
       .innerJoinAndSelect('comment.author', 'author')
@@ -24,7 +24,7 @@ export class CommentRepository extends Repository<Comment> {
       .getMany();
   }
 
-  public async findOneById(id: string): Promise<IComment> {
+  public async findOneById(id: string): Promise<Comment> {
     return this.createQueryBuilder('comment')
       .where('comment.id = :id', { id })
       .innerJoinAndSelect('comment.author', 'author')
