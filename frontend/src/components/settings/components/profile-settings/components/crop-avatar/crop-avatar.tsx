@@ -24,7 +24,6 @@ export const CropAvatar: React.FC<IProps> = ({
     aspect: 1,
   });
   const [image, setImage] = useState<HTMLImageElement | null>(null);
-  const [croppedAvatarLoading, setCroppedAvatarLoading] = useState(false);
 
   const onCropChange = (newCrop: ReactCrop.Crop): void => {
     setCrop(newCrop);
@@ -62,7 +61,6 @@ export const CropAvatar: React.FC<IProps> = ({
 
   const onSave = async (): Promise<void> => {
     try {
-      setCroppedAvatarLoading(true);
       const croppedImage = getCroppedImg(
         image as HTMLImageElement,
         crop as ICropData,
@@ -70,7 +68,6 @@ export const CropAvatar: React.FC<IProps> = ({
       updateAvatar(croppedImage);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
-      setCroppedAvatarLoading(false);
     }
   };
 
@@ -102,11 +99,7 @@ export const CropAvatar: React.FC<IProps> = ({
         <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button
-          variant="primary"
-          onClick={onSave}
-          disabled={croppedAvatarLoading}
-        >
+        <Button variant="primary" onClick={onSave}>
           Save
         </Button>
       </Modal.Footer>

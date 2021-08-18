@@ -1,6 +1,6 @@
 const canvasToDataURL = (canvas: HTMLCanvasElement): string => {
-  const croppedImageDataURL = canvas.toDataURL('image/jpeg');
-  return croppedImageDataURL;
+  const imageDataURL = canvas.toDataURL('image/jpeg');
+  return imageDataURL;
 };
 
 export { canvasToDataURL };
