@@ -24,6 +24,11 @@ export const NavNotification: React.FC = () => {
   );
 
   const onNotification = (): void => {
+    if (isExpanded) {
+      dispatch(notificationsActions.loadLastNotifications({ limit: 1 }));
+    } else {
+      dispatch(notificationsActions.changeLastNotifications({ limit: 1 }));
+    }
     dispatch(notificationsActions.incrementCount());
   };
 

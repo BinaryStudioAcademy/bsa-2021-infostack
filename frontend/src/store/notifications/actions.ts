@@ -20,6 +20,22 @@ const loadMoreNotifications = createAsyncThunk(
   },
 );
 
+const loadLastNotifications = createAsyncThunk(
+  ActionType.ADD_NOTIFICATIONS_TO_TOP,
+  async (query: IQuery | undefined, { dispatch }) => {
+    const notifications = await new NotificationApi().get(query);
+    dispatch(actions.addNotificationsToTop(notifications));
+  },
+);
+
+const changeLastNotifications = createAsyncThunk(
+  ActionType.CHANGE_NOTIFICATIONS_ON_TOP,
+  async (query: IQuery | undefined, { dispatch }) => {
+    const notifications = await new NotificationApi().get(query);
+    dispatch(actions.changeNotificationsOnTop(notifications));
+  },
+);
+
 const loadCount = createAsyncThunk(
   ActionType.SET_COUNT,
   async (_, { dispatch }) => {
@@ -50,6 +66,8 @@ const notificationsActions = {
   ...actions,
   loadNotifications,
   loadMoreNotifications,
+  loadLastNotifications,
+  changeLastNotifications,
   loadCount,
   readAllNotifications,
   readNotification,
