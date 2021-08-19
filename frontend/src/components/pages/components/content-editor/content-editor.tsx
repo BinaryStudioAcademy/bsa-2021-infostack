@@ -131,7 +131,7 @@ export const ContentEditor: React.FC = () => {
             Save
           </Button>
           <Button onClick={handleCancel} variant="warning" size="sm">
-            Canscel
+            Cancel
           </Button>
         </Col>
       </Row>
