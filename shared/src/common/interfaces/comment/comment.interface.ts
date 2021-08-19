@@ -11,5 +11,6 @@ export interface IComment {
     avatar: string;
     email: string;
   };
+  parentCommentId: string | null;
   reactions?: ICommentReaction[];
 }
