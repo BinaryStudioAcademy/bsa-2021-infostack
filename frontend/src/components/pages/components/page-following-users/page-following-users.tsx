@@ -27,7 +27,6 @@ export const PageFollowingUsers: React.FC<IPageContributorsProps> = ({
 
   const avatarStyles: React.CSSProperties = {
     boxSizing: 'content-box',
-    border: '4px solid white',
     cursor: 'pointer',
   };
 
@@ -44,7 +43,7 @@ export const PageFollowingUsers: React.FC<IPageContributorsProps> = ({
         </Badge>
       </Card.Header>
       <Card.Body>
-        {followers && (
+        {followers ? (
           <div
             className="d-flex justify-content-start"
             style={{ marginLeft: +avatarSize / 2 }}
@@ -62,6 +61,8 @@ export const PageFollowingUsers: React.FC<IPageContributorsProps> = ({
               </div>
             ))}
           </div>
+        ) : (
+          <span className="text-warning">no followers</span>
         )}
       </Card.Body>
     </Card>

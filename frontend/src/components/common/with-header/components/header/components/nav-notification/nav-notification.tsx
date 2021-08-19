@@ -81,8 +81,12 @@ export const NavNotification: React.FC = () => {
   };
 
   return (
-    <Dropdown align="end" onToggle={onDropdownToggle}>
-      <Dropdown.Toggle as={Button} id="dropdown-notifications" bsPrefix="m-0">
+    <Dropdown align="end" onToggle={onDropdownToggle} className="mx-2">
+      <Dropdown.Toggle
+        as={Button}
+        id="dropdown-notifications"
+        bsPrefix="m-0 mt-2"
+      >
         <IconWithCount count={count} />
       </Dropdown.Toggle>
       {!!notifications.length && (
