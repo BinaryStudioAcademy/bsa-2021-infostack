@@ -123,6 +123,11 @@ export const createPage = async (
   }
 };
 
+export const deletePage = async (pageId: string): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  await pageRepository.deleteById(pageId);
+};
+
 const addPermissionField = async <T extends { id?: string }>(
   userId: string,
   teamsIds: string[],

@@ -8,7 +8,10 @@ export class UserPermission extends BaseEntity {
   @ManyToOne(() => User, (user) => user.userPermissions, { primary: true })
   user: User;
 
-  @ManyToOne(() => Page, (page) => page.userPermissions, { primary: true })
+  @ManyToOne(() => Page, (page) => page.userPermissions, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   page: Page;
 
   @Column({
