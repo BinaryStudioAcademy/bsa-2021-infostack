@@ -82,22 +82,13 @@ export const TagEdit: React.FC<{
           </Form.Control.Feedback>
         </Form>
       </td>
-      <td className={getAllowedClasses(styles.tdButton)}>
-        <Button
-          onClick={handleSave}
-          variant="link"
-          disabled={!!error || undefined}
-          className={`${getAllowedClasses(styles.button)} text-success`}
-        >
+      <td className={getAllowedClasses(styles.tdButtonSmall)}>
+        <Button onClick={handleSave} variant="success" size="sm">
           Save
         </Button>
       </td>
       <td className={getAllowedClasses(styles.tdButton)}>
-        <Button
-          onClick={handleCancel}
-          variant="link"
-          className={`${getAllowedClasses(styles.button)} text-warning`}
-        >
+        <Button onClick={handleCancel} variant="warning" size="sm">
           Cancel
         </Button>
       </td>

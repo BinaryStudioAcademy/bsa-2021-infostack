@@ -45,7 +45,7 @@
     flex: 1 1 auto;
     padding: 2rem;
     .tr {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       .td {
         color: #737373;
         overflow: hidden;
@@ -57,19 +57,21 @@
         .input {
           color: #6c757d;
           width: 220px;
-          font-size: 1.2rem;
+          font-size: 1.4rem;
           font-weight: 400;
         }
       }
       .tdButton {
         width: 7.5rem;
-        text-align: center;
+      }
+      .tdButtonSmall {
+        width: 5rem;
       }
     }
 
     .button {
       text-decoration: none;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       padding: 0;
     }
   }

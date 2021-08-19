@@ -185,7 +185,9 @@ const ProfileInfo: React.FC = () => {
                                           {page.pageContents[0].title}
                                         </Link>
                                         <Button
+                                          variant="danger"
                                           className="ms-3"
+                                          size="sm"
                                           onClick={(): Promise<void> =>
                                             onPageUnfollow(page.id)
                                           }

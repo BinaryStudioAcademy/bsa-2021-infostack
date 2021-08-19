@@ -24,20 +24,12 @@ export const TagItem: React.FC<{
     <tr className={getAllowedClasses(styles.tr)}>
       <td className={getAllowedClasses(styles.td)}>{name}</td>
       <td className={getAllowedClasses(styles.tdButton)}>
-        <Button
-          onClick={handleEdit}
-          variant="link"
-          className={`${getAllowedClasses(styles.button)} text-success`}
-        >
+        <Button onClick={handleEdit} variant="warning" size="sm">
           Rename
         </Button>
       </td>
       <td className={getAllowedClasses(styles.tdButton)}>
-        <Button
-          onClick={handleDelete}
-          variant="link"
-          className={`${getAllowedClasses(styles.button)} text-danger`}
-        >
+        <Button onClick={handleDelete} variant="danger" size="sm">
           Delete
         </Button>
       </td>

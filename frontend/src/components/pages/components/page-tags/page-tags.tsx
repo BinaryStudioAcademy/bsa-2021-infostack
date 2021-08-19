@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'hooks/hooks';
-import { Badge, Card, ListGroup } from 'react-bootstrap';
+import { Badge, Button, Card } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { CSSObject } from '@emotion/serialize';
 import { OptionsType } from 'react-select';
@@ -142,39 +142,42 @@ const PageTags: React.FC = () => {
   };
 
   return (
-    <ListGroup.Item className="card-block-item border-light">
-      <Card.Title className="d-flex justify-content-between align-items-center h6 text-secondary tags-title">
-        <div>Tags</div>
-        {isCanManage ? (
-          !isEditMode ? (
+    <Card border="light" className="card">
+      <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
+        Tags
+        {isCanManage &&
+          (!isEditMode ? (
             <span className="btn-manage text-success" onClick={handleManage}>
               manage
             </span>
           ) : (
-            <span
-              className="btn-done p-2 bg-success text-white"
+            <Button
+              variant="success"
+              className="btn-done p-1 text-white"
               onClick={handleDone}
             >
               done
-            </span>
+            </Button>
+          ))}
+      </Card.Header>
+      <Card.Body>
+        {pageTags?.length ? (
+          !isEditMode ? (
+            <div className="d-flex align-items-start flex-wrap">
+              {pageTags.map(({ id, name }) => (
+                <Badge pill text="primary" className="tag-badge" key={id}>
+                  {name}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <PageTagSelect />
           )
         ) : (
-          <></>
+          <span className="text-warning">no tags</span>
         )}
-      </Card.Title>
-      {!isEditMode ? (
-        <div className="d-flex align-items-start flex-wrap">
-          {!!pageTags?.length &&
-            pageTags.map(({ id, name }) => (
-              <Badge pill text="primary" className="tag-badge" key={id}>
-                {name}
-              </Badge>
-            ))}
-        </div>
-      ) : (
-        <PageTagSelect />
-      )}
-    </ListGroup.Item>
+      </Card.Body>
+    </Card>
   );
 };
 

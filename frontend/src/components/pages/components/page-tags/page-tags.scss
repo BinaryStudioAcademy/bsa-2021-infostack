@@ -1,9 +1,10 @@
-.card-block-item {
+.card {
   display: flex;
   flex-direction: column;
   padding: 1.25rem;
   margin-bottom: 1.25rem;
   margin-top: 1.25rem;
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
 }
 
 .tags-title {
@@ -27,6 +28,5 @@
 }
 
 .btn-done {
-  font-size: 1.4rem;
-  cursor: pointer;
+  font-size: 1.1rem;
 }
