@@ -1,5 +1,6 @@
 import Button from 'react-bootstrap/Button';
-import './styles.scss';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 type Props = {
   onClick(): void;
@@ -8,7 +9,7 @@ type Props = {
 export const CreateButton: React.FC<Props> = ({ onClick }) => (
   <Button
     variant="success"
-    className="create-team-button float-right"
+    className={getAllowedClasses(styles.createTeamButton, 'float-right')}
     onClick={onClick}
   >
     <i className="bi bi-plus-lg text-white"></i>

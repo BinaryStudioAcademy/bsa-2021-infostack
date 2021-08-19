@@ -2,7 +2,8 @@ import { Card } from 'react-bootstrap';
 import { ITeam, ITeamUser } from 'common/interfaces/team';
 import { DropDown } from '../components';
 import { UserAvatar } from 'components/common/avatar/avatar';
-import './styles.scss';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 type Props = {
   team: ITeam;
@@ -23,14 +24,24 @@ export const Item: React.FC<Props> = ({ team }) => {
   };
 
   return (
-    <Card className="teamCard shadow rounded border-0 p-2">
-      <Card.Title className="teamName d-flex justify-content-between m-0 p-3">
+    <Card
+      className={getAllowedClasses(
+        styles.teamCard,
+        'shadow rounded border-0 p-2',
+      )}
+    >
+      <Card.Title
+        className={getAllowedClasses(
+          styles.teamName,
+          'd-flex justify-content-between m-0 p-3',
+        )}
+      >
         {team.name}
         <DropDown team={team} />
       </Card.Title>
-      <Card.Body className="d-flex justify-content-between card-body">
+      <Card.Body className="d-flex justify-content-between">
         {team.users && (
-          <div className="avatarsContainer">
+          <div className={getAllowedClasses(styles.avatarsContainer)}>
             {team.users.map((user) => renderUserAvatar(user))}
           </div>
         )}
