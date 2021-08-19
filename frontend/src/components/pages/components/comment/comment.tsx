@@ -6,7 +6,7 @@ import { CommentForm } from '../components';
 import { Emoji } from '../emoji/emoji';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
-import { ICommentReaction } from '../../../../common/interfaces/comment-reaction';
+import { ICommentReaction } from 'common/interfaces/comment-reaction';
 import styles from './styles.module.scss';
 
 type Props = {
