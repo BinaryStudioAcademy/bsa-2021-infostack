@@ -1,3 +1,5 @@
+import { ICommentReaction } from '../comment-reaction';
+
 export interface IComment {
   id: string;
   text: string;
@@ -10,4 +12,5 @@ export interface IComment {
   };
   children?: IComment[];
   parentCommentId?: string | null;
+  reactions?: ICommentReaction[];
 }

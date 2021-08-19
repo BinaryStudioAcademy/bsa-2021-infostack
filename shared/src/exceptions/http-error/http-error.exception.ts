@@ -1,4 +1,4 @@
-import { HttpCode, CustomExceptionName } from '~/common/enums';
+import { HttpCode, CustomExceptionName } from '../../common/enums';
 import { DEFAULT_MESSAGE } from './common/constants';
 
 class HttpError extends Error {

@@ -13,12 +13,14 @@ class CommentRepository extends Repository<Comment> {
     'author.id',
     'author.fullName',
     'author.email',
+    'reactions',
   ];
 
   public async findByPageId(pageId: string): Promise<IComment[]> {
     return this.createQueryBuilder('comment')
       .where('comment.pageId = :pageId', { pageId })
       .innerJoinAndSelect('comment.author', 'author')
+      .leftJoinAndSelect('comment.reactions', 'reactions')
       .select(this.SELECTION)
       .orderBy('comment.createdAt', 'DESC')
       .getMany();
@@ -28,6 +30,7 @@ class CommentRepository extends Repository<Comment> {
     return this.createQueryBuilder('comment')
       .where('comment.id = :id', { id })
       .innerJoinAndSelect('comment.author', 'author')
+      .leftJoinAndSelect('comment.reactions', 'reactions')
       .select(this.SELECTION)
       .getOne();
   }

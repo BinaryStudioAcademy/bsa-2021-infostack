@@ -28,7 +28,7 @@ export const UserItem: React.FC<IUserItemProps> = ({
       <td>{status}</td>
       <td>
         <Button
-          onClick={(): void => onDeleteUser()}
+          onClick={onDeleteUser}
           variant="danger"
           size="sm"
           disabled={

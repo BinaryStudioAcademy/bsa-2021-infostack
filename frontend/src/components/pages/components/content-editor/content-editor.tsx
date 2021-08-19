@@ -64,6 +64,10 @@ export const ContentEditor: React.FC = () => {
     });
   };
 
+  const handleCancel = (): void => {
+    history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
+  };
+
   const handleSaveConfirm = (): void => {
     if (
       titleInputValue &&
@@ -78,9 +82,7 @@ export const ContentEditor: React.FC = () => {
           }),
         )
           .unwrap()
-          .then((): void =>
-            history.push(replaceIdParam(AppRoute.PAGE, paramsId || '')),
-          );
+          .then(handleCancel);
       }
     } else if (titleInputValue?.trim().length === 0) {
       toast.warning('Title could not be empty');
@@ -120,8 +122,16 @@ export const ContentEditor: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Button onClick={handleSaveConfirm} variant="success" size="sm">
+          <Button
+            onClick={handleSaveConfirm}
+            variant="success"
+            size="sm"
+            className="me-3"
+          >
             Save
+          </Button>
+          <Button onClick={handleCancel} variant="warning" size="sm">
+            Cancel
           </Button>
         </Col>
       </Row>

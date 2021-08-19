@@ -40,6 +40,7 @@ export const DeleteParticipantModal: React.FC<Props> = ({
       confirmButton={{
         text: 'Yes',
         onClick: handleDelete,
+        variant: 'danger',
       }}
       cancelButton={{
         text: 'No',
