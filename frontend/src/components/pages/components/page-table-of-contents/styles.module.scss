@@ -1,19 +1,46 @@
 .card {
   box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
 
+  .title {
+    text-transform: uppercase;
+  }
+
   .accordion {
     text-align: left;
 
+    .accordionTitleContainer {
+      display: flex;
+      align-items: center;
+
+      margin-bottom: 0.6rem;
+    }
+
     .accordionTitle {
+      max-width: 22rem;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
       color: #212529;
       cursor: pointer;
-      margin-left: 0.5rem;
+      margin-left: 1rem;
+
+      font-size: 1.5rem;
 
       text-decoration: none;
 
       &:hover {
         color: #60676d;
       }
+
+      &:only-child {
+        margin-left: 2rem;
+      }
+    }
+
+    .levelOneAccordionTitle {
+      font-weight: 500;
     }
 
     .accordionBody {
@@ -21,7 +48,9 @@
     }
 
     .chevronIcon {
-      font-size: 1.7rem;
+      width: 1rem;
+
+      font-size: 1.2rem;
       cursor: pointer;
     }
   }
