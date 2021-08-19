@@ -37,9 +37,11 @@ export const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
     const payload: IPageRequest = { title: 'New Page', content: '' };
     await dispatch(pagesActions.createPage(payload))
       .unwrap()
-      .then((res) =>
-        history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute),
-      );
+      .then((res) => {
+        if (res) {
+          history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute);
+        }
+      });
 
     await dispatch(pagesActions.getPagesAsync());
   };
