@@ -1,13 +1,8 @@
-import {
-  Entity,
-  Column,
-  OneToMany,
-  RelationId,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, OneToMany, RelationId, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { User } from './user';
+import { Reaction } from './reaction';
 
 @Entity()
 export class Comment extends AbstractEntity {
@@ -18,23 +13,26 @@ export class Comment extends AbstractEntity {
   @Column()
   readonly authorId: string;
 
-  @ManyToOne(() => User, user => user.comments)
+  @ManyToOne(() => User, (user) => user.comments)
   author: User;
 
   @RelationId((comment: Comment) => comment.page)
   @Column()
   readonly pageId: string;
 
-  @ManyToOne(() => Page, page => page.comments)
+  @ManyToOne(() => Page, (page) => page.comments)
   page: Page;
 
   @RelationId((comment: Comment) => comment.parentComment)
   @Column({ nullable: true })
   readonly parentCommentId: string;
 
-  @ManyToOne(() => Comment, comment => comment.childComments)
+  @ManyToOne(() => Comment, (comment) => comment.childComments)
   parentComment: Comment;
 
-  @OneToMany(() => Comment, comment => comment.parentComment)
+  @OneToMany(() => Comment, (comment) => comment.parentComment)
   childComments: Comment[];
+
+  @OneToMany(() => Reaction, (reaction) => reaction.comment)
+  reactions: Reaction[];
 }

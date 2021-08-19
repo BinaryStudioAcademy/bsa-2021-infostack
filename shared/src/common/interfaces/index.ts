@@ -3,6 +3,7 @@ export * from './pages';
 export * from './workspace';
 export * from './auth';
 export * from './comment';
+export * from './comment-reaction';
 export * from './tag';
 export * from './team';
 export * from './skill';

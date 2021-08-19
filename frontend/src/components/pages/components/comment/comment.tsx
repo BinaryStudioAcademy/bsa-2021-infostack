@@ -3,8 +3,10 @@ import { useState, useHistory } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
+import { Emoji } from '../emoji/emoji';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
+import { ICommentReaction } from '../../../../common/interfaces/comment-reaction';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -14,6 +16,8 @@ type Props = {
   text: string;
   handleResponse: (text: string) => void;
   children?: JSX.Element[];
+  reactions?: ICommentReaction[];
+  commentId?: string;
 };
 
 export const Comment: React.FC<Props> = ({
@@ -23,6 +27,8 @@ export const Comment: React.FC<Props> = ({
   text,
   handleResponse,
   children,
+  reactions,
+  commentId,
 }) => {
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
   const history = useHistory();
@@ -59,6 +65,9 @@ export const Comment: React.FC<Props> = ({
         <p className={getAllowedClasses('text-secondary mb-0', styles.text)}>
           {text}
         </p>
+
+        <Emoji reactions={reactions} commentId={commentId} />
+
         <button
           className={getAllowedClasses('text-secondary', styles.respond)}
           onClick={toggleField}

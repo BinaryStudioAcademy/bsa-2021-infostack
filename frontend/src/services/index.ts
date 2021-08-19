@@ -7,3 +7,4 @@ export { WorkspaceApi } from './workspace-api/workspace-api.service';
 export { TagApi } from './tag-api/tag-api.service';
 export { teamApi } from './team-api/team-api.service';
 export { SkillApi } from './skill-api/skill-api.service';
+export { CommentReactionApi } from './comment-reaction-api/comment-reaction-api.service';
