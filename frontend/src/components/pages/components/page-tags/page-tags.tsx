@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'hooks/hooks';
-import { Badge, Card, ListGroup } from 'react-bootstrap';
+import { Badge, Button, Card, ListGroup } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { CSSObject } from '@emotion/serialize';
 import { OptionsType } from 'react-select';
@@ -133,12 +133,13 @@ const PageTags: React.FC = () => {
             manage
           </span>
         ) : (
-          <span
-            className="btn-done p-2 bg-success text-white"
+          <Button
+            variant="success"
+            className="btn-done p-1 text-white"
             onClick={handleDone}
           >
             done
-          </span>
+          </Button>
         )}
       </Card.Title>
       {!isEditMode ? (
