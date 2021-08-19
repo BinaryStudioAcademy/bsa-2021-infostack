@@ -106,9 +106,6 @@ export const createPage = async (
       workspaceId,
     );
 
-    // eslint-disable-next-line no-console
-    console.log(workspaceAdmins);
-
     for (const workspaceAdmin of workspaceAdmins) {
       await userPermissionRepository.createAndSave(
         workspaceAdmin.user,
