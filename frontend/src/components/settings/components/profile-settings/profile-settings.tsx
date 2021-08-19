@@ -214,7 +214,7 @@ export const ProfileSettings: React.FC = () => {
     croppedImageCanvas: HTMLCanvasElement,
   ): Promise<void> => {
     const croppedImageBlob = await canvasToBlob(croppedImageCanvas);
-    const newImageName = selectedFile?.name + '_cropped';
+    const newImageName = 'cropped_' + selectedFile?.name;
     const croppedImageFile = new File([croppedImageBlob], newImageName, {
       type: 'image/jpeg',
     });
