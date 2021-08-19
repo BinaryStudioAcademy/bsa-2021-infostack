@@ -1,30 +1,24 @@
 import { ListGroup } from 'react-bootstrap';
-import {
-  useState,
-  useHistory,
-  useAppSelector,
-  useAppDispatch,
-} from 'hooks/hooks';
+import { useState, useHistory, useAppSelector } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
 import { UserAvatar } from 'components/common/common';
 import { commentsSelectors } from 'store/comments/slice';
 import { ICommentNormalized } from 'common/interfaces/comment';
-import { commentsActions } from 'store/comments';
 import { TimeAgo } from 'components/common/time-ago/time-ago';
 import styles from './styles.module.scss';
 
 type Props = {
   id: string;
+  handleDelete: (id: string) => void;
 };
 
-export const Comment: React.FC<Props> = ({ id }) => {
+export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
   const comment = useAppSelector((state) =>
     commentsSelectors.selectById(state, id),
   ) as ICommentNormalized;
   const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
 
   const {
     text,
@@ -38,24 +32,6 @@ export const Comment: React.FC<Props> = ({ id }) => {
   const history = useHistory();
 
   const toggleField = (): void => setIsFieldVisible((prev) => !prev);
-
-  const handleResponse = (text: string): void => {
-    dispatch(
-      commentsActions.createComment({
-        pageId,
-        payload: { text, parentCommentId: id },
-      }),
-    );
-  };
-
-  const handleSubmit = (text: string): void => {
-    handleResponse(text);
-    toggleField();
-  };
-
-  const handleDelete = (): void => {
-    dispatch(commentsActions.deleteComment({ id, pageId }));
-  };
 
   const handleAvatarClick = (userId?: string): void => {
     if (!userId) {
@@ -88,24 +64,24 @@ export const Comment: React.FC<Props> = ({ id }) => {
             reply
           </a>{' '}
           {isOwnComment && (
-            <a className={styles.action} onClick={handleDelete}>
+            <a className={styles.action} onClick={(): void => handleDelete(id)}>
               delete
             </a>
           )}
         </div>
         {isFieldVisible && (
           <CommentForm
+            pageId={pageId}
+            parentCommentId={id}
             className="mt-2"
-            placeholder="Add a response"
-            avatarSize="30"
-            onSubmit={handleSubmit}
-            onCancel={toggleField}
+            placeholder="Add a reply"
+            onSubmit={toggleField}
           />
         )}
         {children && (
           <ListGroup variant="flush" className="w-100 mw-100">
             {children.map((id) => (
-              <Comment key={id} id={id} />
+              <Comment key={id} id={id} handleDelete={handleDelete} />
             ))}
           </ListGroup>
         )}

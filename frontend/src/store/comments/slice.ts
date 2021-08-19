@@ -16,7 +16,9 @@ const commentsAdapter = createEntityAdapter<ICommentNormalized>({
 });
 
 type State = {
-  status: RequestStatus;
+  fetchStatus: RequestStatus;
+  createStatus: RequestStatus;
+  deleteStatus: RequestStatus;
   error: string | null;
 };
 
@@ -24,6 +26,8 @@ const addComment = (
   state: EntityState<ICommentNormalized> & State,
   action: PayloadAction<ICommentNormalized>,
 ): void => {
+  state.createStatus = RequestStatus.IDLE;
+
   const comment = action.payload;
   const { id, parentCommentId } = comment;
 
@@ -44,7 +48,9 @@ const addComment = (
 export const { reducer, actions } = createSlice({
   name: ReducerName.COMMENTS,
   initialState: commentsAdapter.getInitialState<State>({
-    status: RequestStatus.IDLE,
+    fetchStatus: RequestStatus.IDLE,
+    createStatus: RequestStatus.IDLE,
+    deleteStatus: RequestStatus.IDLE,
     error: null,
   }),
   reducers: {
@@ -53,26 +59,34 @@ export const { reducer, actions } = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchComments.pending, (state) => {
-        state.status = RequestStatus.LOADING;
+        state.fetchStatus = RequestStatus.LOADING;
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
-        state.status = RequestStatus.SUCCEEDED;
+        state.fetchStatus = RequestStatus.SUCCEEDED;
         commentsAdapter.removeAll(state);
         if (action.payload) {
           commentsAdapter.upsertMany(state, action.payload);
         }
       })
       .addCase(fetchComments.rejected, (state) => {
-        state.status = RequestStatus.FAILED;
+        state.fetchStatus = RequestStatus.FAILED;
         state.error = 'Could not load comments';
       });
     builder
+      .addCase(createComment.pending, (state) => {
+        state.createStatus = RequestStatus.LOADING;
+      })
       .addCase(createComment.fulfilled, addComment)
       .addCase(createComment.rejected, (state) => {
         state.error = 'Could not add comment';
       });
     builder
+      .addCase(deleteComment.pending, (state) => {
+        state.deleteStatus = RequestStatus.LOADING;
+      })
       .addCase(deleteComment.fulfilled, (state, action) => {
+        state.deleteStatus = RequestStatus.IDLE;
+
         const { id } = action.meta.arg;
         const comment = state.entities[id] as ICommentNormalized;
         if (comment.parentCommentId !== null) {
