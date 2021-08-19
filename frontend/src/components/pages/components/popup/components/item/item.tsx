@@ -10,7 +10,7 @@ import styles from '../styles.module.scss';
 type Props = {
   participant: IParticipant;
   options: IOption[];
-  onDelete(id: string, type: string): void;
+  onDelete(participant: IParticipant): void;
   onChange(id: string, role: string): void;
   removable: boolean;
 };
@@ -31,8 +31,7 @@ export const Item: React.FC<Props> = ({
     }
   };
 
-  const onParticipantDelete = (): void =>
-    onDelete(participant.id, participant.type);
+  const onParticipantDelete = (): void => onDelete(participant);
 
   return (
     <tr>

@@ -3,9 +3,18 @@ import Select from 'react-select';
 import { IButton } from 'common/interfaces/components/button';
 import { IParticipant } from 'common/interfaces/participant';
 import { IOption } from 'common/interfaces/components/select';
-import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
+import {
+  useEffect,
+  useAppDispatch,
+  useAppSelector,
+  useState,
+} from 'hooks/hooks';
 import { usersActions, teamsActions, participantsActions } from 'store/actions';
-import { TableHead, Item } from './components/components';
+import {
+  TableHead,
+  Item,
+  DeleteParticipantModal,
+} from './components/components';
 import {
   InviteStatus,
   ParticipantType,
@@ -23,7 +32,7 @@ type Props = {
 
 type participantOption = IOption & IParticipant;
 
-const TABLE_HEADERS = ['Name', 'User or Team', 'Acces', ''];
+const TABLE_HEADERS = ['Name', 'Participant or Team', 'Acces', ''];
 
 const OPTIONS = [
   { label: PermissionType.ADMIN, value: PermissionType.ADMIN },
@@ -43,6 +52,9 @@ export const Popup: React.FC<Props> = ({
   const { teams } = useAppSelector((state) => state.teams);
   const { currentPage } = useAppSelector((state) => state.pages);
   const { participants } = useAppSelector((state) => state.participants);
+  const [isDeleteModalShown, setDeleteModalShown] = useState(false);
+  const [participantToDelete, setParticipantToDelete] =
+    useState<IParticipant>();
 
   useEffect(() => {
     dispatch(usersActions.loadUsers());
@@ -72,16 +84,13 @@ export const Popup: React.FC<Props> = ({
     }
   };
 
-  const handleDeleteItem = (id: string, type: string): void => {
-    if (currentPage?.id) {
-      dispatch(
-        participantsActions.deleteParticipant({
-          pageId: currentPage?.id,
-          participantType: type,
-          participantId: id,
-        }),
-      );
-    }
+  const handleDeleteItem = (participant: IParticipant): void => {
+    setParticipantToDelete(participant);
+    setDeleteModalShown(true);
+  };
+
+  const onParticipantDeleteClose = (): void => {
+    setDeleteModalShown(false);
   };
 
   const handleRoleChange = (id: string, role: string): void => {
@@ -110,10 +119,10 @@ export const Popup: React.FC<Props> = ({
   };
 
   const getOptions = (): participantOption[] => {
-    const joinedUsers = users.filter(
+    const joinedParticipants = users.filter(
       (user) => user.status === InviteStatus.JOINED,
     );
-    const mappedUsers = joinedUsers
+    const mappedParticipants = joinedParticipants
       .map((user) => ({
         id: user.id,
         value: user.fullName,
@@ -133,7 +142,7 @@ export const Popup: React.FC<Props> = ({
         type: ParticipantType.TEAM,
       }))
       .sort(sortObjByName);
-    return [...mappedUsers, ...mappedTeams];
+    return [...mappedParticipants, ...mappedTeams];
   };
 
   const getValue = (): participantOption => ({
@@ -146,53 +155,62 @@ export const Popup: React.FC<Props> = ({
   });
 
   return (
-    <Modal
-      show={isVisible}
-      onHide={cancelButton.onClick}
-      dialogClassName="w-75 mw-100 rounded"
-    >
-      <Modal.Header closeButton className="p-5 pb-3">
-        <div className="d-flex w-100 justify-content-between">
-          <Modal.Title className="h5 m-0">{query}</Modal.Title>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={inviteButton.onClick}
-            className="mx-3"
-          >
-            {inviteButton.text}
-          </Button>
-        </div>
-      </Modal.Header>
-      <Modal.Body className="p-5 pt-3 mb-5">
-        <Select
-          className="mt-4 mb-5"
-          onChange={handleSelectChange}
-          value={getValue()}
-          options={getOptions()}
-          styles={selectParticipantStyles}
-          isClearable
-          isSearchabl
-          autoFocus
-        />
-        <Table>
-          <TableHead headers={TABLE_HEADERS} />
-          <tbody>
-            {participants?.map((participant) => {
-              return (
-                <Item
-                  key={participant.id}
-                  participant={participant}
-                  options={OPTIONS}
-                  onDelete={handleDeleteItem}
-                  onChange={handleRoleChange}
-                  removable={participant.id !== currentPage?.authorId}
-                />
-              );
-            })}
-          </tbody>
-        </Table>
-      </Modal.Body>
-    </Modal>
+    <>
+      {participantToDelete && (
+        <DeleteParticipantModal
+          showModal={isDeleteModalShown}
+          onModalClose={onParticipantDeleteClose}
+          participant={participantToDelete}
+        ></DeleteParticipantModal>
+      )}
+      <Modal
+        show={isVisible}
+        onHide={cancelButton.onClick}
+        dialogClassName="w-75 mw-100 rounded"
+      >
+        <Modal.Header closeButton className="p-5 pb-3">
+          <div className="d-flex w-100 justify-content-between">
+            <Modal.Title className="h5 m-0">{query}</Modal.Title>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={inviteButton.onClick}
+              className="mx-3"
+            >
+              {inviteButton.text}
+            </Button>
+          </div>
+        </Modal.Header>
+        <Modal.Body className="p-5 pt-3 mb-5">
+          <Select
+            className="mt-4 mb-5"
+            onChange={handleSelectChange}
+            value={getValue()}
+            options={getOptions()}
+            styles={selectParticipantStyles}
+            isClearable
+            isSearchabl
+            autoFocus
+          />
+          <Table>
+            <TableHead headers={TABLE_HEADERS} />
+            <tbody>
+              {participants?.map((participant) => {
+                return (
+                  <Item
+                    key={participant.id}
+                    participant={participant}
+                    options={OPTIONS}
+                    onDelete={handleDeleteItem}
+                    onChange={handleRoleChange}
+                    removable={participant.id !== currentPage?.authorId}
+                  />
+                );
+              })}
+            </tbody>
+          </Table>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 };
