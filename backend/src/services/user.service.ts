@@ -8,10 +8,17 @@ import {
   uploadFile,
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
-import { IUser } from '../common/interfaces/user';
+import {
+  IUser,
+  IGetActivities,
+  IGetUserActivities,
+  IUserActivity,
+} from '../common/interfaces/user';
+import { IPaginated } from '../common/interfaces/common';
 import { env } from '../env';
 import SkillRepository from '../data/repositories/skill.repository';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
+import ActivityRepository from '../data/repositories/activity.repository';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
@@ -145,4 +152,32 @@ export const deleteAvatar = async (id: string): Promise<void> => {
 
     await userRepository.updateAvatarById(user.id, '');
   }
+};
+
+export const getActivities = async (
+  userId: string,
+  data: IGetActivities,
+): Promise<IPaginated<IUserActivity>> => {
+  const { take, skip } = data;
+  const activityRepository = new ActivityRepository();
+  const activities = await activityRepository.getAll({ take, skip, userId });
+  const totalItems = await activityRepository.countAll(userId);
+
+  return { items: activities, totalItems };
+};
+
+export const getUserActivities = async (
+  data: IGetUserActivities,
+): Promise<IPaginated<IUserActivity>> => {
+  const { take, skip, userId } = data;
+
+  const activityRepository = new ActivityRepository();
+  const activities = await activityRepository.getByUserId({
+    userId,
+    take,
+    skip,
+  });
+  const totalItems = await activityRepository.countByUserId(userId);
+
+  return { items: activities, totalItems };
 };
