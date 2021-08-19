@@ -335,7 +335,7 @@ export const ProfileSettings: React.FC = () => {
 
               {user?.avatar && (
                 <Button
-                  variant="primary"
+                  variant="danger"
                   className={getAllowedClasses(
                     styles.avatarControlButton,
                     'mb-3',
@@ -355,7 +355,7 @@ export const ProfileSettings: React.FC = () => {
                 hidden
               />
               <Button
-                variant="danger"
+                variant="warning"
                 className={getAllowedClasses(
                   styles.avatarControlButton,
                   styles.spaceBetween,
@@ -376,7 +376,7 @@ export const ProfileSettings: React.FC = () => {
             </Col>
           </Row>
           <Button
-            variant="primary"
+            variant="success"
             className={getAllowedClasses(styles.cardButton)}
             size="sm"
             onClick={!isUploading ? handleSubmit(handleSaveChanges) : undefined}
