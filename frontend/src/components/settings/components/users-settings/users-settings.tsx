@@ -1,5 +1,5 @@
 import { Button, Card, Table } from 'react-bootstrap';
-import { TableHead, UserItem } from './components/components';
+import { TableHead, UserItem, DeleteUserModal } from './components/components';
 import {
   useEffect,
   useAppDispatch,
@@ -7,7 +7,7 @@ import {
   useState,
 } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
-import { InviteModal, DeleteUserModal } from 'components/common/common';
+import { InviteModal } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
@@ -66,7 +66,13 @@ export const UsersSettings: React.FC = () => {
           <Card.Title as="h5" className={getAllowedClasses(styles.title)}>
             Users
           </Card.Title>
-          <Button onClick={(): void => setModalShowed(true)}>Invite</Button>
+          <Button
+            onClick={(): void => setModalShowed(true)}
+            variant="success"
+            size="sm"
+          >
+            Invite
+          </Button>
         </Card.Header>
 
         <Card.Body className={getAllowedClasses(styles.body)}>

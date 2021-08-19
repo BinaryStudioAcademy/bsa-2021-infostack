@@ -76,8 +76,11 @@ export const ContentEditor: React.FC = () => {
             title: titleInputValue.trim(),
             content: markDownContent?.length === 0 ? ' ' : markDownContent,
           }),
-        );
-        history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
+        )
+          .unwrap()
+          .then((): void =>
+            history.push(replaceIdParam(AppRoute.PAGE, paramsId || '')),
+          );
       }
     } else if (titleInputValue?.trim().length === 0) {
       toast.warning('Title could not be empty');
@@ -117,7 +120,9 @@ export const ContentEditor: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Button onClick={handleSaveConfirm}>Save</Button>
+          <Button onClick={handleSaveConfirm} variant="success" size="sm">
+            Save
+          </Button>
         </Col>
       </Row>
     </div>
