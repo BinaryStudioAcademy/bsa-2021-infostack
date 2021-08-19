@@ -1,9 +1,9 @@
 import Button from 'react-bootstrap/Button';
 import './styles.scss';
 
-interface Props {
+type Props = {
   onClick(): void;
-}
+};
 
 export const CreateButton: React.FC<Props> = ({ onClick }) => (
   <Button

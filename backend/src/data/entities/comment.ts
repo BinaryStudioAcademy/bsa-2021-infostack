@@ -2,6 +2,7 @@ import { Entity, Column, OneToMany, RelationId, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { User } from './user';
+import { Reaction } from './reaction';
 
 @Entity()
 export class Comment extends AbstractEntity {
@@ -33,4 +34,7 @@ export class Comment extends AbstractEntity {
 
   @OneToMany(() => Comment, (comment) => comment.parentComment)
   childComments: Comment[];
+
+  @OneToMany(() => Reaction, (reaction) => reaction.comment)
+  reactions: Reaction[];
 }

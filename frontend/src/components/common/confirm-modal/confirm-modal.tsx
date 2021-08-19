@@ -42,8 +42,7 @@ export const ConfirmModal: React.FC<Props> = ({
         )}
         {confirmButton && (
           <Button
-            size="sm"
-            variant="danger"
+            variant={confirmButton.variant || 'success'}
             onClick={confirmButton.onClick}
             disabled={confirmButton.disabled}
           >

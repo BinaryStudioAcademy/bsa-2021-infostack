@@ -36,7 +36,7 @@ export const NavProfile: React.FC<Props> = ({
     <Dropdown as={NavItem} align="end">
       <Dropdown.Toggle as={NavLink} id="dropdown-profile-details">
         <UserAvatar
-          size="40"
+          size="35"
           name={userName}
           src={userAvatar}
           round={true}

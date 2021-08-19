@@ -3,6 +3,8 @@ import { replaceIdParam } from 'helpers/helpers';
 import { useHistory } from 'hooks/hooks';
 import { AppRoute } from 'common/enums/enums';
 import { UserAvatar } from 'components/common/common';
+import { Emoji } from '../emoji/emoji';
+import { ICommentReaction } from 'common/interfaces/comment-reaction';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
@@ -11,9 +13,18 @@ type Props = {
   name: string;
   avatar: string;
   text: string;
+  commentId: string;
+  reactions: ICommentReaction[];
 };
 
-export const Response: React.FC<Props> = ({ userId, name, avatar, text }) => {
+export const Response: React.FC<Props> = ({
+  userId,
+  name,
+  avatar,
+  text,
+  commentId,
+  reactions,
+}) => {
   const history = useHistory();
 
   const handleAvatarClick = (userId?: string): void => {
@@ -42,6 +53,7 @@ export const Response: React.FC<Props> = ({ userId, name, avatar, text }) => {
           </span>
           : {text}
         </p>
+        <Emoji reactions={reactions} commentId={commentId} />
       </div>
     </ListGroup.Item>
   );
