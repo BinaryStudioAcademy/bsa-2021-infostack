@@ -71,10 +71,18 @@ export const PageDropdown: React.FC<Props> = ({ className }) => {
             : "It's a parent page. Are you sure you want to delte this page with its child pages?"}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            variant="secondary"
+            className={getAllowedClasses(styles.confirmButton)}
+            onClick={handleClose}
+          >
             Close
           </Button>
-          <Button variant="danger" onClick={handlePageDelete}>
+          <Button
+            variant="danger"
+            className={getAllowedClasses(styles.confirmButton)}
+            onClick={handlePageDelete}
+          >
             Delete
           </Button>
         </Modal.Footer>
