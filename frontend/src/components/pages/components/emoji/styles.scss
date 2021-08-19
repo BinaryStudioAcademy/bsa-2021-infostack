@@ -51,13 +51,6 @@
     }
   }
 
-  .dropup.show {
-    .dropdown-toggle.btn {
-      background-color: #fff;
-      border-color: #777;
-    }
-  }
-
   .dropdown-toggle.btn {
     font-size: 14px;
     border-radius: 30px;
@@ -81,6 +74,13 @@
 
     &:focus {
       box-shadow: none;
+    }
+  }
+
+  .dropup.show {
+    .dropdown-toggle.btn {
+      background-color: #fff;
+      border-color: #777;
     }
   }
 
