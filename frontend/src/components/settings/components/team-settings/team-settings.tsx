@@ -61,7 +61,7 @@ export const TeamSettings: React.FC = () => {
             (teams.length === 0 ? (
               <div>There is no teams in this workspace. Start adding</div>
             ) : (
-              <div className="teams-container py-2 w-100">
+              <div className="teamsContainer py-2 w-100">
                 {teams.map((team: ITeam) => renderTeamItem(team))}
               </div>
             ))}
