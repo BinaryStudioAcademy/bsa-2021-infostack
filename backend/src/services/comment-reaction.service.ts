@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import CommentReactionRepository from '../data/repositories/comment-reaction.repository';
-import { CommentRepository } from '../data/repositories/comment.repository';
+import CommentRepository from '../data/repositories/comment.repository';
 import { ICommentReaction } from '../common/interfaces/comment-reaction';
 import { IRequestWithUser } from '../common/interfaces/http/request-with-user.interface';
 

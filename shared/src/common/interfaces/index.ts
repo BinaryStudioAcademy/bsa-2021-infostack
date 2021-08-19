@@ -4,6 +4,7 @@ export * from './workspace';
 export * from './auth';
 export * from './comment';
 export * from './comment-reaction';
+export * from './emoji';
 export * from './tag';
 export * from './team';
 export * from './skill';
