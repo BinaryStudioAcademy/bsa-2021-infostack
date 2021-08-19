@@ -10,10 +10,13 @@
 
     .accordionTitleContainer {
       display: flex;
+      align-items: center;
+
+      margin-bottom: 0.6rem;
     }
 
     .accordionTitle {
-      max-width: 12rem;
+      max-width: 22rem;
 
       white-space: nowrap;
       overflow: hidden;
@@ -21,13 +24,23 @@
 
       color: #212529;
       cursor: pointer;
-      margin-left: 0.5rem;
+      margin-left: 1rem;
+
+      font-size: 1.5rem;
 
       text-decoration: none;
 
       &:hover {
         color: #60676d;
       }
+
+      &:only-child {
+        margin-left: 2rem;
+      }
+    }
+
+    .levelOneAccordionTitle {
+      font-weight: 500;
     }
 
     .accordionBody {
@@ -35,7 +48,9 @@
     }
 
     .chevronIcon {
-      font-size: 1.7rem;
+      width: 1rem;
+
+      font-size: 1.2rem;
       cursor: pointer;
     }
   }
