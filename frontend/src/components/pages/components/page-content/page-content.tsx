@@ -240,7 +240,6 @@ export const PageContent: React.FC = () => {
                     )}
 
                     <PageActionsDropdown
-                      className="ms-3"
                       onAssign={onAssign}
                       onEditing={onEditing}
                       onPageFollow={onPageFollow}
