@@ -15,6 +15,6 @@ export const IconWithCount: React.FC<Props> = ({ count }) => (
     >
       {count}
     </div>
-    <i className={getAllowedClasses(styles.chatIcon, 'bi bi-chat')}></i>
+    <i className={getAllowedClasses(styles.bellIcon, 'bi bi-bell')}></i>
   </div>
 );

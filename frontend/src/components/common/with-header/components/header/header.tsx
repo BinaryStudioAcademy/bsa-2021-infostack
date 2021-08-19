@@ -1,10 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar';
-import {
-  NavDisableNotifications,
-  NavProfile,
-  NavNotification,
-  Search,
-} from './components/components';
+import { NavProfile, NavNotification, Search } from './components/components';
 import { useAppSelector } from 'hooks/hooks';
 import './styles.scss';
 
@@ -16,7 +11,6 @@ export const Header: React.FC = () => {
         <Search />
         <Navbar>
           <NavNotification />
-          <NavDisableNotifications />
           <NavProfile
             userName={user.fullName}
             userAvatar={user.avatar}
