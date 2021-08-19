@@ -6,7 +6,8 @@ interface Props {
 
 export const EditButton: React.FC<Props> = ({ onClick }) => (
   <Button
-    variant="primary"
+    variant="success"
+    size="sm"
     className="edit-button float-right"
     onClick={onClick}
   >

@@ -25,7 +25,7 @@ const NotFound: React.FC = () => {
               <Link to={AppRoute.ROOT}>
                 <Button
                   className={getAllowedClasses(styles.notFoundButton)}
-                  variant="primary"
+                  variant="success"
                 >
                   Return to website
                 </Button>

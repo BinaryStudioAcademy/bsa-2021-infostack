@@ -25,33 +25,12 @@
   }
 
   .cardButton {
-    background-color: #3f80ea;
-    color: #fff;
     font-size: 1.32rem;
     padding: 0.4rem 1.12rem;
     border-radius: 0.32rem;
     font-weight: 400;
-    cursor: pointer;
     height: 3rem;
     margin-top: 3rem;
-
-    &:hover {
-      background-color: #366dc7;
-      border-color: #3266bb;
-      color: #fff;
-    }
-
-    &:disabled {
-      color: #fff;
-    }
-
-    &:focus {
-      color: #fff;
-
-      &:hover {
-        color: #fff;
-      }
-    }
   }
 
   .cardTitle {
@@ -109,24 +88,6 @@
     font-size: 1.32rem;
     padding: 0.4rem 1.12rem;
     border-radius: 0.2rem;
-
-    &:hover {
-      background-color: #366dc7;
-      border-color: #3266bb;
-      color: #fff;
-    }
-
-    &:disabled {
-      color: #fff;
-    }
-
-    &:focus {
-      color: #fff;
-
-      &:hover {
-        color: #fff;
-      }
-    }
   }
 
   .spaceBetween {
