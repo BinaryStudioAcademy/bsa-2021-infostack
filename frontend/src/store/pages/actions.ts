@@ -10,11 +10,6 @@ import {
 } from 'common/interfaces/pages';
 import { RootState } from 'common/types/types';
 
-interface PageAction {
-  type: string;
-  payload: boolean;
-}
-
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
@@ -128,11 +123,6 @@ const unfollowPage = createAsyncThunk<
   },
 );
 
-const setCurrentPageFollowed = (payload: boolean): PageAction => ({
-  type: ActionType.SET_CURRENT_PAGE_FOLLOWED,
-  payload,
-});
-
 const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
@@ -154,7 +144,6 @@ const pagesActions = {
   getPagesAsync,
   getPage,
   setPage,
-  setCurrentPageFollowed,
   editPageContent,
   followPage,
   unfollowPage,
