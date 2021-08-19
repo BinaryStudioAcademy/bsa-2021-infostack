@@ -21,6 +21,8 @@ import { FollowModal } from '../pages/components/follow-modal/follow-modal';
 import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums/enums';
 import './profile-info.scss';
+import { replaceIdParam } from 'helpers/helpers';
+import { Activities } from './components/components';
 
 const ProfileInfo: React.FC = () => {
   const [user, setUser] = useState<IUser>({
@@ -159,6 +161,50 @@ const ProfileInfo: React.FC = () => {
                                 ))}
                             </div>
                           </ListGroup.Item>
+                          <ListGroup.Item className="card-block-item">
+                            <Card.Title className="d-flex justify-content-start profile-skills-title">
+                              Followings
+                            </Card.Title>
+                            <div className="following-pages-container">
+                              {user &&
+                              user.followingPages &&
+                              user?.followingPages?.length > 0
+                                ? user?.followingPages?.map((page) => (
+                                    <div key={page.id}>
+                                      <div className="following-page d-flex justify-content-between">
+                                        <Link
+                                          to={
+                                            replaceIdParam(
+                                              AppRoute.PAGE,
+                                              page.id,
+                                            ) as AppRoute
+                                          }
+                                          className="following-page-title-container"
+                                        >
+                                          <i className="bi bi-file-text-fill"></i>
+                                          {page.pageContents[0].title}
+                                        </Link>
+                                        <Button
+                                          variant="danger"
+                                          className="ms-3"
+                                          size="sm"
+                                          onClick={(): Promise<void> =>
+                                            onPageUnfollow(page.id)
+                                          }
+                                        >
+                                          Unfollow
+                                        </Button>
+                                      </div>
+                                      <FollowModal
+                                        show={isFollowModalVisible}
+                                        isFollowing={true}
+                                        handler={handlePageUnfollow()}
+                                      />
+                                    </div>
+                                  ))
+                                : null}
+                            </div>
+                          </ListGroup.Item>
                         </ListGroup>
                       </Card.Body>
                     </Card>
@@ -168,48 +214,7 @@ const ProfileInfo: React.FC = () => {
               <Col sm={9}>
                 <Card>
                   <Card.Body>
-                    <Card.Title className="d-flex justify-content-start profile-card-title">
-                      Followings
-                    </Card.Title>
-                    <div className="following-pages-container">
-                      {user &&
-                      user.followingPages &&
-                      user?.followingPages?.length > 0
-                        ? user?.followingPages?.map((page) => (
-                            <div key={page.id}>
-                              <div className="following-page d-flex justify-content-between">
-                                <Link
-                                  to={
-                                    `${AppRoute.PAGE.slice(
-                                      0,
-                                      AppRoute.PAGE.length - 3,
-                                    )}${page.id}` as AppRoute
-                                  }
-                                  className="following-page-title-container"
-                                >
-                                  <i className="bi bi-file-text-fill"></i>
-                                  {page.pageContents[0].title}
-                                </Link>
-                                <Button
-                                  variant="danger"
-                                  className="ms-3"
-                                  size="sm"
-                                  onClick={(): Promise<void> =>
-                                    onPageUnfollow(page.id)
-                                  }
-                                >
-                                  Unfollow
-                                </Button>
-                              </div>
-                              <FollowModal
-                                show={isFollowModalVisible}
-                                isFollowing={true}
-                                handler={handlePageUnfollow()}
-                              />
-                            </div>
-                          ))
-                        : null}
-                    </div>
+                    <Activities />
                   </Card.Body>
                 </Card>
               </Col>

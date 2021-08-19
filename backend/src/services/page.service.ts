@@ -6,6 +6,7 @@ import TeamPermissionRepository from '../data/repositories/team-permission.repos
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
 import PageContentRepository from '../data/repositories/page-content.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
+import TagRepository from '../data/repositories/tag.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
 import { InviteStatus } from '../common/enums/invite-status';
@@ -26,7 +27,6 @@ import { maximum } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
 import { ITag } from '../common/interfaces/tag';
-import TagRepository from '../data/repositories/tag.repository';
 import { parseHeadings } from '../common/utils/markdown.util';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
@@ -102,6 +102,18 @@ export const createPage = async (
       );
     }
 
+    const workspaceAdmins = await userWorkspaceRepository.findWorkspaceAdmins(
+      workspaceId,
+    );
+
+    for (const workspaceAdmin of workspaceAdmins) {
+      await userPermissionRepository.createAndSave(
+        workspaceAdmin.user,
+        page,
+        PermissionType.ADMIN,
+      );
+    }
+
     return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
   } else {
     throw new HttpError({
@@ -109,6 +121,11 @@ export const createPage = async (
       message: HttpErrorMessage.DELETED_FROM_WORKSPACE,
     });
   }
+};
+
+export const deletePage = async (pageId: string): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  await pageRepository.deleteById(pageId);
 };
 
 const addPermissionField = async <T extends { id?: string }>(

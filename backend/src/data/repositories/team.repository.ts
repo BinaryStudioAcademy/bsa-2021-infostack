@@ -16,6 +16,13 @@ class TeamRepository extends Repository<Team> {
       .getMany();
   }
 
+  public findTeamsByIds(teamIds: string[]): Promise<Team[]> {
+    return this.createQueryBuilder('team')
+      .leftJoinAndSelect('team.users', 'users')
+      .where('team.id IN(:...ids)', { ids: teamIds })
+      .getMany();
+  }
+
   public findByIdWithUsers(id: string): Promise<Team> {
     return this.findOne(
       { id },

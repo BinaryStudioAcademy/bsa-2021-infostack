@@ -13,6 +13,8 @@ import { OptionsType } from 'react-select';
 import { PageApi, TagApi } from 'services';
 import { tagActions } from 'store/tags';
 import './page-tags.scss';
+import { PermissionType } from 'common/enums/enums';
+import { toast } from 'react-toastify';
 
 const PageTags: React.FC = () => {
   const tagApi = new TagApi();
@@ -21,6 +23,7 @@ const PageTags: React.FC = () => {
   const [allTags, setAllTags] = useState<ITagSelect[]>([]);
   const [pageTags, setPageTags] = useState<ITagSelect[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const isCanManage = currentPage?.permission !== PermissionType.READ;
 
   const handleInputChange = (inputValue: OptionsType<ITagSelect>): void => {
     const lastTag = inputValue[inputValue.length - 1];
@@ -28,7 +31,10 @@ const PageTags: React.FC = () => {
     if (lastTag) {
       const lastTagName = lastTag.value ?? '';
 
-      if (lastTag.__isNew__) {
+      if (
+        currentPage?.permission === PermissionType.ADMIN &&
+        lastTag.__isNew__
+      ) {
         tagApi.add(lastTagName).then((response: ITagSelect) => {
           setAllTags((oldTags) => {
             const newTags = [...oldTags];
@@ -57,6 +63,17 @@ const PageTags: React.FC = () => {
   };
 
   const handleDone = (): void => {
+    if (currentPage?.permission !== PermissionType.ADMIN) {
+      const allTagsIds = allTags.map((tag) => tag.id);
+      const pageTagsIds = pageTags.map((tag) => tag.id);
+
+      if (pageTagsIds.some((id) => !allTagsIds.includes(id))) {
+        toast.error('Error: you can not add new tags. Must choose available.');
+        setIsEditMode(!isEditMode);
+        return;
+      }
+    }
+
     const tagsRequest: (string | undefined)[] = pageTags.map(
       (item) => item.value,
     );

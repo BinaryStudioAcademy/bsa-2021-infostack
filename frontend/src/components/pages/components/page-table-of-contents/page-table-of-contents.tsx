@@ -4,7 +4,7 @@ import {
   IPageTableOfContents,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
-import { useHistory, useState } from 'hooks/hooks';
+import { useState } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
@@ -38,8 +38,9 @@ const Toggle: React.FC<{ eventKey: string }> = ({ eventKey }) => {
 const MenuItem: React.FC<{ heading: IPageTableOfContentsHeading }> = ({
   heading,
 }) => {
-  const history = useHistory();
-  history;
+  const titleClassName = getAllowedClasses(styles.accordionTitle, {
+    [styles.levelOneAccordionTitle]: heading.level === 1,
+  });
 
   return (
     <Accordion flush>
@@ -50,7 +51,7 @@ const MenuItem: React.FC<{ heading: IPageTableOfContentsHeading }> = ({
       >
         {heading.children.length ? (
           <Accordion flush>
-            <div>
+            <div className={styles.accordionTitleContainer}>
               <Toggle eventKey={heading.slug} />
 
               <ScrollLink
@@ -58,7 +59,7 @@ const MenuItem: React.FC<{ heading: IPageTableOfContentsHeading }> = ({
                 smooth={true}
                 offset={SCROLL_OFFSET}
                 duration={SCROLL_DURATION}
-                className={styles.accordionTitle}
+                className={titleClassName}
               >
                 {heading.title}
               </ScrollLink>
@@ -71,15 +72,17 @@ const MenuItem: React.FC<{ heading: IPageTableOfContentsHeading }> = ({
             </Accordion.Body>
           </Accordion>
         ) : (
-          <ScrollLink
-            to={heading.slug}
-            smooth={true}
-            offset={SCROLL_OFFSET}
-            duration={SCROLL_DURATION}
-            className={styles.accordionTitle}
-          >
-            {heading.title}
-          </ScrollLink>
+          <div className={styles.accordionTitleContainer}>
+            <ScrollLink
+              to={heading.slug}
+              smooth={true}
+              offset={SCROLL_OFFSET}
+              duration={SCROLL_DURATION}
+              className={titleClassName}
+            >
+              {heading.title}
+            </ScrollLink>
+          </div>
         )}
       </Accordion.Item>
     </Accordion>
@@ -91,7 +94,12 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
 }) => {
   return (
     <Card border="light" className={styles.card}>
-      <Card.Header className="bg-white border-0 d-flex align-items-center">
+      <Card.Header
+        className={getAllowedClasses(
+          styles.title,
+          'bg-white border-0 d-flex align-items-center',
+        )}
+      >
         Table of contents
       </Card.Header>
       <Card.Body className={styles.accordion}>

@@ -27,6 +27,7 @@ import {
   PageFollowingUsers,
   CommentSection,
   Popup,
+  PageDropdown,
 } from '../components';
 import {
   IPageContent,
@@ -218,7 +219,7 @@ export const PageContent: React.FC = () => {
                 <Row>
                   <Col className="d-flex justify-content-between mb-4 align-items-center">
                     <h1 className="h3">{pageTitle || 'New Page'}</h1>
-                    <div>
+                    <div className="d-flex align-items-center">
                       {canRead && (
                         <VersionDropdown
                           currContent={currContent}
@@ -246,6 +247,7 @@ export const PageContent: React.FC = () => {
                       >
                         {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                       </Button>
+                      <PageDropdown className="ms-3" />
                     </div>
                   </Col>
                 </Row>

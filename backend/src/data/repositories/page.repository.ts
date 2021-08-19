@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
 
@@ -136,6 +136,13 @@ class PageRepository extends Repository<Page> {
       .relation('followingUsers')
       .of(pageIds)
       .remove(userId);
+  }
+
+  public deleteById(id: string): Promise<DeleteResult> {
+    return this.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
   }
 }
 
