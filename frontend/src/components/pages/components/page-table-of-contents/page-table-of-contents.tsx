@@ -95,11 +95,15 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
         Table of contents
       </Card.Header>
       <Card.Body className={styles.accordion}>
-        <Accordion flush>
-          {headings.map((heading) => {
-            return <MenuItem key={heading.slug} heading={heading} />;
-          })}
-        </Accordion>
+        {headings.length ? (
+          <Accordion flush>
+            {headings.map((heading) => {
+              return <MenuItem key={heading.slug} heading={heading} />;
+            })}
+          </Accordion>
+        ) : (
+          <span className="text-warning">no content</span>
+        )}
       </Card.Body>
     </Card>
   );

@@ -142,20 +142,23 @@ const PageTags: React.FC = () => {
           </Button>
         )}
       </Card.Header>
-      {/* <Card.Title className="d-flex justify-content-between align-items-center h6 text-secondary tags-title">
-      </Card.Title> */}
-      {!isEditMode ? (
-        <div className="d-flex align-items-start flex-wrap">
-          {!!pageTags?.length &&
-            pageTags.map(({ id, name }) => (
-              <Badge pill text="primary" className="tag-badge" key={id}>
-                {name}
-              </Badge>
-            ))}
-        </div>
-      ) : (
-        <PageTagSelect />
-      )}
+      <Card.Body>
+        {pageTags?.length ? (
+          !isEditMode ? (
+            <div className="d-flex align-items-start flex-wrap">
+              {pageTags.map(({ id, name }) => (
+                <Badge pill text="primary" className="tag-badge" key={id}>
+                  {name}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <PageTagSelect />
+          )
+        ) : (
+          <span className="text-warning">no tags</span>
+        )}
+      </Card.Body>
     </Card>
   );
 };
