@@ -20,6 +20,7 @@ import { IRegister } from '../common/interfaces/auth';
 import { DefaultUserName } from '../common/enums/default-username';
 import { generateInviteToken } from '../common/utils/tokens.util';
 import { env } from '../env';
+import TeamRepository from '../data/repositories/team.repository';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -106,6 +107,21 @@ export const deleteUserFromWorkspace = async (
   const userWorkspaceUpdated = { ...userWorkspaceToUpdate };
   userWorkspaceUpdated.status = InviteStatus.DELETED;
   await userWorkspaceRepository.save(userWorkspaceUpdated);
+
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const userTeamsInWorkspace = user.teams.filter(
+    (team) => team.workspaceId === workspaceId,
+  );
+  const userTeamsInWorkspaceIds = userTeamsInWorkspace.map((team) => team.id);
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teams = await teamRepository.findTeamsByIds(userTeamsInWorkspaceIds);
+  await Promise.all(
+    teams.map(async (team) => {
+      team.users = team.users.filter((user) => user.id !== userId);
+      await teamRepository.save(team);
+    }),
+  );
 
   const pageRepository = getCustomRepository(PageRepository);
   const allPagesForPermissions = await pageRepository.findPages(workspaceId);
