@@ -5,14 +5,14 @@ import { toast } from 'react-toastify';
 import { useState } from 'hooks/hooks';
 import { ICropData } from 'common/interfaces/components/crop-data';
 
-interface IProps {
+type Props = {
   isShown: boolean;
   src: string;
   handleClose: () => void;
   updateAvatar: (croppedImageCanvas: HTMLCanvasElement) => void;
-}
+};
 
-export const CropAvatar: React.FC<IProps> = ({
+export const CropAvatar: React.FC<Props> = ({
   isShown,
   src,
   handleClose,
