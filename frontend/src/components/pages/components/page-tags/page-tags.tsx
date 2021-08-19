@@ -68,7 +68,7 @@ const PageTags: React.FC = () => {
       const pageTagsIds = pageTags.map((tag) => tag.id);
 
       if (pageTagsIds.some((id) => !allTagsIds.includes(id))) {
-        toast.error('test');
+        toast.error("Error: you can't add new tags. Must choose available.");
         setIsEditMode(!isEditMode);
         return;
       }
