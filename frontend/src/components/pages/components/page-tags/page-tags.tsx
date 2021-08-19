@@ -161,8 +161,8 @@ const PageTags: React.FC = () => {
           ))}
       </Card.Header>
       <Card.Body>
-        {pageTags?.length ? (
-          !isEditMode ? (
+        {!isEditMode ? (
+          pageTags?.length ? (
             <div className="d-flex align-items-start flex-wrap">
               {pageTags.map(({ id, name }) => (
                 <Badge pill text="primary" className="tag-badge" key={id}>
@@ -171,10 +171,10 @@ const PageTags: React.FC = () => {
               ))}
             </div>
           ) : (
-            <PageTagSelect />
+            <span className="text-warning">no tags</span>
           )
         ) : (
-          <span className="text-warning">no tags</span>
+          <PageTagSelect />
         )}
       </Card.Body>
     </Card>
