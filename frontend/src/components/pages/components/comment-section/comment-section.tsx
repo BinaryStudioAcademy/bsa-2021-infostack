@@ -38,6 +38,12 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
     }
   };
 
+  const onDelete = ({ id, sender }: { id: string; sender: string }): void => {
+    if (sender !== user?.id) {
+      dispatch(commentsActions.removeComment(id));
+    }
+  };
+
   const handleDelete = (id: string): void => {
     setCommentToDelete(id);
     setIsModalVisible(true);
@@ -64,9 +70,11 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
     dispatch(commentsActions.fetchComments(pageId));
     socket.emit(SocketEvents.PAGE_JOIN, pageId);
     socket.on(SocketEvents.PAGE_NEW_COMMENT, onComment);
+    socket.on(SocketEvents.PAGE_DELETE_COMMENT, onDelete);
 
     return (): void => {
       socket.off(SocketEvents.PAGE_NEW_COMMENT, onComment);
+      socket.off(SocketEvents.PAGE_DELETE_COMMENT, onDelete);
     };
   }, []);
 

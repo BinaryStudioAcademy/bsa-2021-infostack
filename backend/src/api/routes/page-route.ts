@@ -91,7 +91,9 @@ router.post(
 
 router.delete(
   '/:id/comments/:commentId',
-  run((req) => deleteComment(req.params.commentId)),
+  run((req) =>
+    deleteComment(req.params.commentId, req.params.id, req.userId, req.io),
+  ),
 );
 
 router.get(

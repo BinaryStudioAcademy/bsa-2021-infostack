@@ -76,6 +76,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
             className="mt-2"
             placeholder="Add a reply"
             onSubmit={toggleField}
+            onCancel={toggleField}
           />
         )}
         {children && (

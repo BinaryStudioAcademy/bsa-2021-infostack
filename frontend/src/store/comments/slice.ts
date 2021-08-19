@@ -45,6 +45,29 @@ const addComment = (
   commentsAdapter.addOne(state, comment);
 };
 
+const removeComment = (
+  state: EntityState<ICommentNormalized> & State,
+  id: string,
+): void => {
+  state.deleteStatus = RequestStatus.IDLE;
+
+  const comment = state.entities[id] as ICommentNormalized;
+  if (comment.parentCommentId !== null) {
+    const parent = state.entities[
+      comment.parentCommentId
+    ] as ICommentNormalized;
+
+    commentsAdapter.updateOne(state, {
+      id: parent.id,
+      changes: {
+        children: parent.children?.filter((child) => child !== id),
+      },
+    });
+  }
+
+  commentsAdapter.removeOne(state, id);
+};
+
 export const { reducer, actions } = createSlice({
   name: ReducerName.COMMENTS,
   initialState: commentsAdapter.getInitialState<State>({
@@ -55,6 +78,11 @@ export const { reducer, actions } = createSlice({
   }),
   reducers: {
     [ActionType.ADD_COMMENT]: addComment,
+    [ActionType.REMOVE_COMMENT]: (state, action) => {
+      const id = action.payload;
+
+      removeComment(state, id);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -78,6 +106,7 @@ export const { reducer, actions } = createSlice({
       })
       .addCase(createComment.fulfilled, addComment)
       .addCase(createComment.rejected, (state) => {
+        state.createStatus = RequestStatus.FAILED;
         state.error = 'Could not add comment';
       });
     builder
@@ -85,26 +114,12 @@ export const { reducer, actions } = createSlice({
         state.deleteStatus = RequestStatus.LOADING;
       })
       .addCase(deleteComment.fulfilled, (state, action) => {
-        state.deleteStatus = RequestStatus.IDLE;
-
         const { id } = action.meta.arg;
-        const comment = state.entities[id] as ICommentNormalized;
-        if (comment.parentCommentId !== null) {
-          const parent = state.entities[
-            comment.parentCommentId
-          ] as ICommentNormalized;
 
-          commentsAdapter.updateOne(state, {
-            id: parent.id,
-            changes: {
-              children: parent.children?.filter((child) => child !== id),
-            },
-          });
-        }
-
-        commentsAdapter.removeOne(state, id);
+        removeComment(state, id);
       })
       .addCase(deleteComment.rejected, (state) => {
+        state.deleteStatus = RequestStatus.FAILED;
         state.error = 'Could not delete comment';
       });
   },

@@ -147,6 +147,12 @@ export const addComment = async (
   return response;
 };
 
-export const deleteComment = async (id: string): Promise<void> => {
+export const deleteComment = async (
+  id: string,
+  pageId: string,
+  userId: string,
+  io: Server,
+): Promise<void> => {
   getCustomRepository(CommentRepository).deleteById(id);
+  io.to(pageId).emit(SocketEvents.PAGE_DELETE_COMMENT, { id, sender: userId });
 };

@@ -13,6 +13,7 @@ type Props = {
   className?: string;
   placeholder?: string;
   onSubmit?: () => void;
+  onCancel?: () => void;
 };
 
 export const CommentForm: React.FC<Props> = ({
@@ -21,6 +22,7 @@ export const CommentForm: React.FC<Props> = ({
   className,
   placeholder,
   onSubmit,
+  onCancel,
 }) => {
   const [text, setText] = useState('');
   const user = useAppSelector((state) => state.auth.user);
@@ -46,6 +48,11 @@ export const CommentForm: React.FC<Props> = ({
     } catch {
       toast.error('Could not add comment');
     }
+  };
+
+  const handleCancel = (): void => {
+    setText('');
+    onCancel?.();
   };
 
   const isSubmitDisabled =
@@ -78,7 +85,7 @@ export const CommentForm: React.FC<Props> = ({
               />
               <Button
                 disabled={isCancelDisabled}
-                onClick={(): void => setText('')}
+                onClick={handleCancel}
                 className={styles.text}
                 variant="warning"
               >
