@@ -13,11 +13,6 @@ export const Menu: React.FC = () => {
 
   return (
     <Card className={getAllowedClasses(styles.menuCard)}>
-      <Card.Header className={getAllowedClasses(styles.cardHeader)}>
-        <h5 className={getAllowedClasses(styles.cardTitle)}>
-          Profile Settings
-        </h5>
-      </Card.Header>
       <ListGroup variant="flush" className={getAllowedClasses(styles.menuLsit)}>
         <ListGroup.Item
           action
