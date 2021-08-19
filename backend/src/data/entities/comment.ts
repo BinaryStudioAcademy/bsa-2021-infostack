@@ -1,7 +1,6 @@
 import {
   Entity,
   Column,
-  // OneToMany,
   RelationId,
   ManyToOne,
   Tree,
@@ -29,7 +28,9 @@ export class Comment extends AbstractEntity {
   @Column()
   readonly pageId: string;
 
-  @ManyToOne(() => Page, (page) => page.comments)
+  @ManyToOne(() => Page, (page) => page.comments, {
+    onDelete: 'CASCADE',
+  })
   page: Page;
 
   @RelationId((comment: Comment) => comment.parentComment)
@@ -41,9 +42,4 @@ export class Comment extends AbstractEntity {
 
   @TreeParent()
   parentComment: Comment;
-  // @ManyToOne(() => Comment, comment => comment.childComments)
-  // parentComment: Comment;
-
-  // @OneToMany(() => Comment, comment => comment.parentComment)
-  // childComments: Comment[];
 }

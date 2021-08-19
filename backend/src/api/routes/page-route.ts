@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
   createPage,
+  deletePage,
   getPages,
   getPage,
   getPermissions,
@@ -39,6 +40,11 @@ router.get(
 router.get(
   '/:id',
   run((req) => getPage(req.params.id, req.userId)),
+);
+
+router.delete(
+  '/:id',
+  run((req) => deletePage(req.params.id)),
 );
 
 router.get(
