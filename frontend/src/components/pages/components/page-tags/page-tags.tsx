@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'hooks/hooks';
-import { Badge, Button, Card, ListGroup } from 'react-bootstrap';
+import { Badge, Button, Card } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { CSSObject } from '@emotion/serialize';
 import { OptionsType } from 'react-select';
@@ -125,9 +125,9 @@ const PageTags: React.FC = () => {
   };
 
   return (
-    <ListGroup.Item className="card-block-item border-light">
-      <Card.Title className="d-flex justify-content-between align-items-center h6 text-secondary tags-title">
-        <div>Tags</div>
+    <Card border="light" className="card">
+      <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
+        Tags
         {!isEditMode ? (
           <span className="btn-manage text-success" onClick={handleManage}>
             manage
@@ -141,7 +141,9 @@ const PageTags: React.FC = () => {
             done
           </Button>
         )}
-      </Card.Title>
+      </Card.Header>
+      {/* <Card.Title className="d-flex justify-content-between align-items-center h6 text-secondary tags-title">
+      </Card.Title> */}
       {!isEditMode ? (
         <div className="d-flex align-items-start flex-wrap">
           {!!pageTags?.length &&
@@ -154,7 +156,7 @@ const PageTags: React.FC = () => {
       ) : (
         <PageTagSelect />
       )}
-    </ListGroup.Item>
+    </Card>
   );
 };
 
