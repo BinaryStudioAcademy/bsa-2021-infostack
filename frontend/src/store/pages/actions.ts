@@ -22,10 +22,11 @@ const createPage = createAsyncThunk(
     try {
       const createPageResponse = await new PageApi().createPage(createPayload);
       dispatch(actions.createPage(createPageResponse));
-      dispatch(actions.toggleSpinner());
       return createPageResponse;
     } catch (e) {
       toast.error(e.message);
+    } finally {
+      dispatch(actions.toggleSpinner());
     }
   },
 );
