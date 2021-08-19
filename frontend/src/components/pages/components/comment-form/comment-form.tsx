@@ -81,7 +81,7 @@ export const CommentForm: React.FC<Props> = ({
               <Button
                 onClick={handleCancel}
                 className={getAllowedClasses('ms-2', styles.text)}
-                variant="secondary"
+                variant="warning"
               >
                 Cancel
               </Button>

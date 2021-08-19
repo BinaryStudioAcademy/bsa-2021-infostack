@@ -7,19 +7,32 @@ import TeamPermissionRepository from '../data/repositories/team-permission.repos
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
+import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
+import { sendMail } from '../common/utils/mailer.util';
+import { EntityType } from '../common/enums/entity-type';
+import { SocketEvents } from '../common/enums/socket';
+import { Server } from 'socket.io';
+import { User } from '../data/entities/user';
+import NotificationRepository from '../data/repositories/notification.repository';
+import { Team } from '../data/entities/team';
+import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
-  return teams.map(mapTeamToITeam);
+
+  const teamsWithUsersRoles = mapTeamsToITeams(teams);
+  return teamsWithUsersRoles;
 };
 
 export const getTeam = async (teamId: string): Promise<ITeam> => {
   const pageRepository = getCustomRepository(TeamRepository);
   const team = await pageRepository.findByIdWithUsers(teamId);
-  return mapTeamToITeam(team);
+  const teamWithUsersRoles = mapTeamToITeam(team);
+
+  return teamWithUsersRoles;
 };
 
 export const create = async (
@@ -55,7 +68,22 @@ export const create = async (
   user.teams.push(newTeamDetails);
   userRepository.save(user);
 
-  const users = [{ id: user.id, fullName: user.fullName, avatar: user.avatar }];
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+      userId,
+      workspaceId,
+    );
+
+  const users = [
+    {
+      id: user.id,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      roleInWorkspace: userWorkspace.role,
+    },
+  ];
+
   return { id: id, name: name, users };
 };
 
@@ -88,4 +116,78 @@ export const updateNameById = async (
 export const deleteById = async (id: string): Promise<void> => {
   await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
   await getCustomRepository(TeamRepository).deleteById(id);
+};
+
+export const addUser = async (
+  teamId: string,
+  userId: string,
+  workspaceId: string,
+  io: Server,
+): Promise<ITeam[]> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  const teamRepository = getCustomRepository(TeamRepository);
+  const team = await teamRepository.findByIdWithUsers(teamId);
+
+  team.users.push(user);
+  await teamRepository.save(team);
+
+  const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
+
+  const teamsWithUsersRoles = mapTeamsToITeams(teams);
+
+  notifyUser(team, user, 'added to', io);
+
+  return teamsWithUsersRoles;
+};
+
+export const deleteUser = async (
+  teamId: string,
+  userId: string,
+  workspaceId: string,
+  io: Server,
+): Promise<ITeam[]> => {
+  const teamRepository = getCustomRepository(TeamRepository);
+  const team = await teamRepository.findByIdWithUsers(teamId);
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+
+  team.users = team.users.filter((user) => user.id !== userId);
+  await teamRepository.save(team);
+
+  const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
+
+  const teamsWithUsersRoles = mapTeamsToITeams(teams);
+
+  notifyUser(team, user, 'deleted from', io);
+
+  return teamsWithUsersRoles;
+};
+
+export const notifyUser = async (
+  team: Team,
+  user: User,
+  reason: string,
+  io: Server,
+): Promise<void> => {
+  const notificationRepository = getCustomRepository(NotificationRepository);
+
+  const title = `You have been ${reason} Infostack team.`;
+  const body = `You have been ${reason} Infostack team -- "${team.name}".`;
+
+  io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+  await notificationRepository.createAndSave(
+    body,
+    null,
+    EntityType.TEAM,
+    team.id,
+    user.id,
+    false,
+  );
+
+  await sendMail({
+    to: user.email,
+    subject: title,
+    text: body,
+  });
 };

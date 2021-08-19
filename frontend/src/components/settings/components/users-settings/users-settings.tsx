@@ -1,5 +1,5 @@
 import { Button, Card, Table } from 'react-bootstrap';
-import { TableHead, UserItem } from './components/components';
+import { TableHead, UserItem, DeleteUserModal } from './components/components';
 import {
   useEffect,
   useAppDispatch,
@@ -28,14 +28,32 @@ export const UsersSettings: React.FC = () => {
   }, []);
 
   const [isModalShowed, setModalShowed] = useState(false);
-
+  const [isDeleteModalShown, setDeleteModalShown] = useState(false);
+  const [userToDeleteName, setUserToDeleteName] = useState('');
+  const [userToDeleteId, setUserToDeleteId] = useState('');
   const closeModal = (): void => {
     setModalShowed(false);
+  };
+
+  const onUserDelete = (fullName: string, id: string): void => {
+    setUserToDeleteName(fullName);
+    setUserToDeleteId(id);
+    setDeleteModalShown(true);
+  };
+
+  const onUserDeleteClose = (): void => {
+    setDeleteModalShown(false);
   };
 
   return (
     <>
       <InviteModal onModalClose={closeModal} showModal={isModalShowed} />
+      <DeleteUserModal
+        showModal={isDeleteModalShown}
+        onModalClose={onUserDeleteClose}
+        fullName={userToDeleteName}
+        id={userToDeleteId}
+      ></DeleteUserModal>
       <Card
         className={`${getAllowedClasses(styles.card)} justify-content-center`}
       >
@@ -48,7 +66,13 @@ export const UsersSettings: React.FC = () => {
           <Card.Title as="h5" className={getAllowedClasses(styles.title)}>
             Users
           </Card.Title>
-          <Button onClick={(): void => setModalShowed(true)}>Invite</Button>
+          <Button
+            onClick={(): void => setModalShowed(true)}
+            variant="success"
+            size="sm"
+          >
+            Invite
+          </Button>
         </Card.Header>
 
         <Card.Body className={getAllowedClasses(styles.body)}>
@@ -56,7 +80,9 @@ export const UsersSettings: React.FC = () => {
             <TableHead headers={TABLE_HEADERS} />
             <tbody>
               {users?.map((user) => {
-                return <UserItem key={user.id} {...user} />;
+                return (
+                  <UserItem key={user.id} onDelete={onUserDelete} {...user} />
+                );
               })}
             </tbody>
           </Table>

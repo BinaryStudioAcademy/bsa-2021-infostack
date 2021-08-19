@@ -64,5 +64,16 @@ class WorkspaceApi {
 
     return updateResponse;
   }
+
+  public async deleteUserFromWorkspace(id: string): Promise<IWorkspace> {
+    const updateResponse: IWorkspace = await this.http.load(
+      `${this.BASE}/users/${id}`,
+      {
+        method: HttpMethod.DELETE,
+      },
+    );
+
+    return updateResponse;
+  }
 }
 export { WorkspaceApi };

@@ -6,7 +6,7 @@ import NavLink from 'react-bootstrap/NavLink';
 import {
   getAllowedClasses,
   replaceIdParam,
-  formattedVersionDate,
+  getFormattedVersionDate,
 } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { useHistory } from 'react-router-dom';
@@ -79,11 +79,11 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
   const versionButtonValue =
     !currVersionId || currentPage?.pageContents[0]?.id === currVersionId
       ? 'Latest'
-      : formattedVersionDate(
+      : getFormattedVersionDate(
           currContent ? currContent?.createdAt : new Date().toString(),
         );
   return (
-    <Dropdown as={NavLink} className="me-3 d-inline-flex sm">
+    <Dropdown as={NavLink} align="end" className="me-3 d-inline-flex sm">
       <Dropdown.Toggle
         as={NavLink}
         className={getAllowedClasses('sm text-secondary')}
@@ -107,12 +107,12 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                     {currVersionId === id || !currVersionId ? (
                       <BlueCircle />
                     ) : null}
-                    {formattedVersionDate(createdAt)} (Latest)
+                    {getFormattedVersionDate(createdAt)} (Latest)
                   </div>
                 ) : (
                   <div className="d-flex">
                     {currVersionId === id ? <BlueCircle /> : null}
-                    {formattedVersionDate(createdAt)}
+                    {getFormattedVersionDate(createdAt)}
                   </div>
                 )}
               </VersionItem>
