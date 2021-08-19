@@ -6,9 +6,9 @@ import { useState, useAppDispatch } from 'hooks/hooks';
 import { Popup } from '../popup-invite/popup-invite';
 import './styles.scss';
 
-interface Props {
+type Props = {
   team: ITeam;
-}
+};
 
 export const DropDown: React.FC<Props> = ({ team }) => {
   const dispatch = useAppDispatch();

@@ -4,9 +4,9 @@ import { DropDown } from '../components';
 import { UserAvatar } from 'components/common/avatar/avatar';
 import './styles.scss';
 
-interface Props {
+type Props = {
   team: ITeam;
-}
+};
 
 export const Item: React.FC<Props> = ({ team }) => {
   const renderUserAvatar = (user: ITeamUser): JSX.Element => {
