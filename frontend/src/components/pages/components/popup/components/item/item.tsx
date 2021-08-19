@@ -12,6 +12,7 @@ type Props = {
   options: IOption[];
   onDelete(id: string, type: string): void;
   onChange(id: string, role: string): void;
+  removable: boolean;
 };
 
 export const Item: React.FC<Props> = ({
@@ -19,6 +20,7 @@ export const Item: React.FC<Props> = ({
   options,
   onDelete,
   onChange,
+  removable,
 }) => {
   const selectField = useRef(null);
 
@@ -57,10 +59,12 @@ export const Item: React.FC<Props> = ({
         />
       </td>
       <td>
-        <i
-          className={getAllowedClasses('bi-trash', styles.trashIcon)}
-          onClick={onParticipantDelete}
-        />
+        {removable && (
+          <i
+            className={getAllowedClasses('bi-trash', styles.trashIcon)}
+            onClick={onParticipantDelete}
+          />
+        )}
       </td>
     </tr>
   );

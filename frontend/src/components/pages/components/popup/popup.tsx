@@ -186,6 +186,7 @@ export const Popup: React.FC<Props> = ({
                   options={OPTIONS}
                   onDelete={handleDeleteItem}
                   onChange={handleRoleChange}
+                  removable={participant.id !== currentPage?.authorId}
                 />
               );
             })}
