@@ -14,6 +14,7 @@ import styles from './styles.module.scss';
 import { commentsSelectors } from 'store/comments/slice';
 import { ICommentNormalized } from 'common/interfaces/comment';
 import { commentsActions } from 'store/comments';
+import { TimeAgo } from 'components/common/time-ago/time-ago';
 
 type Props = {
   id: string;
@@ -23,13 +24,15 @@ export const Comment: React.FC<Props> = ({ id }) => {
   const comment = useAppSelector((state) =>
     commentsSelectors.selectById(state, id),
   ) as ICommentNormalized;
+  const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
 
   const {
     text,
     pageId,
     children,
-    author: { id: userId, fullName: name, avatar },
+    createdAt,
+    author: { id: authorId, fullName: name, avatar },
   } = comment;
 
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
@@ -51,6 +54,10 @@ export const Comment: React.FC<Props> = ({ id }) => {
     toggleField();
   };
 
+  const handleDelete = (): void => {
+    dispatch(commentsActions.deleteComment({ id, pageId }));
+  };
+
   const handleAvatarClick = (userId?: string): void => {
     if (!userId) {
       return;
@@ -58,6 +65,8 @@ export const Comment: React.FC<Props> = ({ id }) => {
 
     history.push(replaceIdParam(AppRoute.PROFILE, userId));
   };
+
+  const isOwnComment = user?.id === authorId;
 
   return (
     <ListGroup.Item
@@ -69,10 +78,13 @@ export const Comment: React.FC<Props> = ({ id }) => {
         src={avatar}
         round
         className={getAllowedClasses(styles.avatar)}
-        onClick={(): void => handleAvatarClick(userId)}
+        onClick={(): void => handleAvatarClick(authorId)}
       />
       <div className="w-100 ms-3">
-        <p className={getAllowedClasses('mb-2', styles.userName)}>{name}</p>
+        <p className={getAllowedClasses('mb-2', styles.userName)}>
+          {name}
+          <TimeAgo timestamp={createdAt} />
+        </p>
         <p className={getAllowedClasses('text-secondary mb-0', styles.text)}>
           {text}
         </p>
@@ -81,7 +93,15 @@ export const Comment: React.FC<Props> = ({ id }) => {
           onClick={toggleField}
         >
           respond
-        </button>
+        </button>{' '}
+        {isOwnComment && (
+          <button
+            className={getAllowedClasses('text-secondary', styles.respond)}
+            onClick={handleDelete}
+          >
+            delete
+          </button>
+        )}
         {isFieldVisible && (
           <CommentForm
             className="mt-2"
@@ -94,14 +114,7 @@ export const Comment: React.FC<Props> = ({ id }) => {
         {children && (
           <ListGroup variant="flush">
             {children.map((id) => (
-              <Comment
-                key={id}
-                id={id}
-                // userId={userId}
-                // name={fullName}
-                // avatar={avatar}
-                // text={text}
-              />
+              <Comment key={id} id={id} />
             ))}
           </ListGroup>
         )}

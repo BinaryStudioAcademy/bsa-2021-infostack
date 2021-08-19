@@ -10,11 +10,11 @@ class CommentApi {
   private readonly BASE = '/api/pages';
   private readonly _httpService = http;
 
-  public async getAll(pageId: string): Promise<ICommentResponse[]> {
+  public getAll(pageId: string): Promise<ICommentResponse[]> {
     return this._httpService.load(`${this.BASE}/${pageId}/comments`);
   }
 
-  public async addComment(
+  public addComment(
     pageId: string,
     payload: ICommentRequest,
   ): Promise<IComment> {
@@ -22,6 +22,12 @@ class CommentApi {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
+    });
+  }
+
+  public deleteComment(id: string, pageId: string): Promise<void> {
+    return this._httpService.load(`${this.BASE}/${pageId}/comments/${id}`, {
+      method: HttpMethod.DELETE,
     });
   }
 }

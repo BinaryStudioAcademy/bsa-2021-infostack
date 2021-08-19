@@ -29,15 +29,18 @@ export const createComment = createAsyncThunk<
   commentApi.addComment(pageId, payload),
 );
 
-// export const createResponse = createAsyncThunk<
-//   IComment,
-//   { pageId: string; payload: ICommentRequest }
-// >(ActionType.CREATE_RESPONSE, ({ pageId, payload }) =>
-//   commentApi.addComment(pageId, payload),
-// );
+export const deleteComment = createAsyncThunk<
+  void,
+  {
+    id: string;
+    pageId: string;
+  }
+>(ActionType.DELETE_COMMENT, ({ id, pageId }) =>
+  commentApi.deleteComment(id, pageId),
+);
 
 export const asyncActions = {
   fetchComments,
   createComment,
-  // createResponse,
+  deleteComment,
 };
