@@ -2,9 +2,10 @@ import { parseISO, format, formatDistanceToNow, isThisWeek } from 'date-fns';
 
 type Props = {
   timestamp: string;
+  className?: string;
 };
 
-export const TimeAgo: React.FC<Props> = ({ timestamp }) => {
+export const TimeAgo: React.FC<Props> = ({ timestamp, className }) => {
   let timeAgo = '';
   if (timestamp) {
     const date = parseISO(timestamp);
@@ -14,8 +15,8 @@ export const TimeAgo: React.FC<Props> = ({ timestamp }) => {
   }
 
   return (
-    <span title={timestamp}>
-      &nbsp; <i>{timeAgo}</i>
+    <span title={timestamp} className={className}>
+      &nbsp; {timeAgo}
     </span>
   );
 };

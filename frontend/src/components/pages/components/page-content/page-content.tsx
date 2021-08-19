@@ -208,7 +208,7 @@ export const PageContent: React.FC = () => {
               followers={currentPage?.followingUsers}
             />
           </Col>
-          <Col>
+          <Col xs={10}>
             <Row>
               <Col className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
@@ -250,12 +250,7 @@ export const PageContent: React.FC = () => {
             </Row>
             <Row>
               <Col>
-                <Card border="light" className={getAllowedClasses(styles.card)}>
-                  <Card.Header>Comments</Card.Header>
-                  <Card.Body>
-                    <CommentSection pageId={paramsId} />
-                  </Card.Body>
-                </Card>
+                <CommentSection pageId={paramsId} />
               </Col>
             </Row>
           </Col>

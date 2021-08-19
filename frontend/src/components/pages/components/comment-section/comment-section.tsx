@@ -1,4 +1,4 @@
-import { ListGroup } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import {
   useAppDispatch,
   useAppSelector,
@@ -12,6 +12,9 @@ import { selectRootIds } from 'store/comments/slice';
 import { IComment } from 'common/interfaces/comment';
 import { SocketEvents } from 'common/enums/enums';
 import { Comment, CommentForm } from '../components';
+
+import styles from './styles.module.scss';
+import { getAllowedClasses } from 'helpers/helpers';
 
 type Props = {
   pageId: string;
@@ -49,18 +52,23 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
   };
 
   return (
-    <>
-      <CommentForm
-        className="mb-5"
-        placeholder="Add a comment"
-        isDisabled={isLoading}
-        onSubmit={handleSubmit}
-      />
-      <ListGroup variant="flush">
-        {comments.map((id) => (
-          <Comment key={id} id={id} />
-        ))}
-      </ListGroup>
-    </>
+    <Card border="light" className={styles.card}>
+      <Card.Header className={getAllowedClasses('bg-white', styles.header)}>
+        Comments
+      </Card.Header>
+      <Card.Body>
+        <CommentForm
+          className="m-0"
+          placeholder="Add a comment"
+          isDisabled={isLoading}
+          onSubmit={handleSubmit}
+        />
+        <div className={styles.list}>
+          {comments.map((id) => (
+            <Comment key={id} id={id} />
+          ))}
+        </div>
+      </Card.Body>
+    </Card>
   );
 };

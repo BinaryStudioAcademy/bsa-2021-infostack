@@ -9,12 +9,11 @@ import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
 import { UserAvatar } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
-import styles from './styles.module.scss';
 import { commentsSelectors } from 'store/comments/slice';
 import { ICommentNormalized } from 'common/interfaces/comment';
 import { commentsActions } from 'store/comments';
 import { TimeAgo } from 'components/common/time-ago/time-ago';
+import styles from './styles.module.scss';
 
 type Props = {
   id: string;
@@ -69,39 +68,31 @@ export const Comment: React.FC<Props> = ({ id }) => {
   const isOwnComment = user?.id === authorId;
 
   return (
-    <ListGroup.Item
-      className={getAllowedClasses('d-flex align-items-start', styles.comment)}
-    >
+    <div className={styles.comment}>
       <UserAvatar
         size="40"
         name={name}
         src={avatar}
         round
-        className={getAllowedClasses(styles.avatar)}
+        className={styles.avatar}
         onClick={(): void => handleAvatarClick(authorId)}
       />
-      <div className="w-100 ms-3">
-        <p className={getAllowedClasses('mb-2', styles.userName)}>
-          {name}
+      <div className={styles.content}>
+        <span className={styles.author}>{name}</span>
+        <span className={styles.metadata}>
           <TimeAgo timestamp={createdAt} />
-        </p>
-        <p className={getAllowedClasses('text-secondary mb-0', styles.text)}>
-          {text}
-        </p>
-        <button
-          className={getAllowedClasses('text-secondary', styles.respond)}
-          onClick={toggleField}
-        >
-          respond
-        </button>{' '}
-        {isOwnComment && (
-          <button
-            className={getAllowedClasses('text-secondary', styles.respond)}
-            onClick={handleDelete}
-          >
-            delete
-          </button>
-        )}
+        </span>
+        <div className={styles.text}>{text}</div>
+        <div className={styles.actions}>
+          <a className={styles.action} onClick={toggleField}>
+            reply
+          </a>{' '}
+          {isOwnComment && (
+            <a className={styles.action} onClick={handleDelete}>
+              delete
+            </a>
+          )}
+        </div>
         {isFieldVisible && (
           <CommentForm
             className="mt-2"
@@ -112,13 +103,13 @@ export const Comment: React.FC<Props> = ({ id }) => {
           />
         )}
         {children && (
-          <ListGroup variant="flush">
+          <ListGroup variant="flush" className="w-100 mw-100">
             {children.map((id) => (
               <Comment key={id} id={id} />
             ))}
           </ListGroup>
         )}
       </div>
-    </ListGroup.Item>
+    </div>
   );
 };
