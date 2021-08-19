@@ -1,4 +1,4 @@
-import { RoleType } from '~/common/enums';
+import { RoleType } from '../../../common/enums';
 
 interface ITeamUser {
   id: string;

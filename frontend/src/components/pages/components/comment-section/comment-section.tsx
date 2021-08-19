@@ -77,6 +77,7 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
             text,
             author: { id: userId, fullName, avatar },
             children,
+            reactions = [],
           }) => (
             <Comment
               key={id}
@@ -84,17 +85,26 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
               name={fullName}
               avatar={avatar}
               text={text}
+              reactions={reactions}
+              commentId={id}
               handleResponse={(text: string): void => handleResponse(id, text)}
             >
               {children &&
                 children.map(
-                  ({ id, text, author: { id: userId, fullName, avatar } }) => (
+                  ({
+                    id,
+                    text,
+                    author: { id: userId, fullName, avatar },
+                    reactions = [],
+                  }) => (
                     <Response
                       key={id}
                       userId={userId}
                       name={fullName}
                       avatar={avatar}
                       text={text}
+                      commentId={id}
+                      reactions={reactions}
                     />
                   ),
                 )}

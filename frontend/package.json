@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "1.6.0",
     "bootstrap": "5.0.2",
     "clsx": "1.1.1",
+    "emoji-picker-react": "3.4.8",
     "dayjs": "1.10.6",
     "infostack-shared": "file:../shared/build",
     "is-uuid": "1.0.2",
