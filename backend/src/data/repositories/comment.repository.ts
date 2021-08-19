@@ -1,9 +1,4 @@
-import {
-  EntityRepository,
-  // In,
-  Repository,
-  // getTreeRepository
-} from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
@@ -38,22 +33,6 @@ export class CommentRepository extends Repository<Comment> {
   }
 
   public async deleteById(id: string): Promise<void> {
-    // const comment = await this.findOne({ id });
-
-    // const descendants = await getTreeRepository(Comment)
-    //   .findDescendants(comment);
-
-    // const descendantIds = descendants
-    //   .map((descendant: Comment) => descendant.id);
-
-    // console.log(descendants);
-
-    // await this.createQueryBuilder()
-    //   .update(Comment)
-    //   .set({ parentCommentId: null })
-    //   .where({ id: In(descendantIds) })
-    //   .execute();
-
     this.delete(id);
   }
 
