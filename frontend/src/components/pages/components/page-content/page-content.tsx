@@ -308,7 +308,8 @@ export const PageContent: React.FC = () => {
             modalText={
               isParentPage
                 ? 'Are you sure you want to delete this page?'
-                : "It's a parent page. Are you sure you want to delte this page with its child pages?"
+                : // prettier-ignore
+                  'It\'s a parent page. Are you sure you want to delte this page with its child pages?'
             }
             confirmButton={{
               text: 'Delete',
