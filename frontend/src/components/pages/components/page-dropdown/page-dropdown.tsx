@@ -68,7 +68,7 @@ export const PageDropdown: React.FC<Props> = ({ className }) => {
         <Modal.Body>
           {isParentPage
             ? 'Are you sure you want to delete this page?'
-            : "It's a parent page. Are you sure you want to delete this page with its child pages?"}
+            : 'It\'s a parent page. Are you sure you want to delete this page with its child pages?'}
         </Modal.Body>
         <Modal.Footer>
           <Button
