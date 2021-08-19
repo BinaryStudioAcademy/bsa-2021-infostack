@@ -50,8 +50,10 @@ export const Sign: React.FC<Props> = ({
             <Button
               variant="success"
               type="submit"
+              size="lg"
               onClick={onSubmit}
               disabled={isSubmitDisabled}
+              className="my-3"
             >
               {submitText}
             </Button>
