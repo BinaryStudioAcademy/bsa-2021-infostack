@@ -32,4 +32,4 @@ class CommentApi {
   }
 }
 
-export { CommentApi };
+export const commentApi = new CommentApi();
