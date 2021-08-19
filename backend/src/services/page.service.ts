@@ -91,6 +91,11 @@ export const createPage = async (
   return { ...mapPageToIPage(page), permission: PermissionType.ADMIN };
 };
 
+export const deletePage = async (pageId: string) => {
+  const pageRepository = getCustomRepository(PageRepository);
+  await pageRepository.deleteById(pageId);
+};
+
 const addPermissionField = async <T extends { id?: string }>(
   userId: string,
   teamsIds: string[],

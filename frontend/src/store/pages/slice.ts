@@ -37,6 +37,9 @@ const { reducer, actions } = createSlice({
     [ActionType.SET_PAGES]: (state, action: PayloadAction<IPageNav[]>) => {
       state.pages = action.payload;
     },
+    [ActionType.DELETE_PAGE]: (state) => {
+      state.currentPage = null;
+    },
     [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
       state.isCurrentPageFollowed = false;

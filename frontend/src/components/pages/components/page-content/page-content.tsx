@@ -36,6 +36,7 @@ import {
 import { FollowModal } from '../follow-modal/follow-modal';
 import styles from './styles.module.scss';
 import PageTags from '../page-tags/page-tags';
+import { PageDropdown } from '../page-dropdown/page-dropdown';
 
 export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -212,7 +213,7 @@ export const PageContent: React.FC = () => {
             <Row>
               <Col className="d-flex justify-content-between mb-4">
                 <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-                <div>
+                <div className="d-flex align-items-center">
                   {canRead && (
                     <VersionDropdown
                       currContent={currContent}
@@ -233,6 +234,7 @@ export const PageContent: React.FC = () => {
                   <Button className="ms-3" onClick={onPageFollow}>
                     {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                   </Button>
+                  <PageDropdown className="ms-3" />
                 </div>
               </Col>
             </Row>

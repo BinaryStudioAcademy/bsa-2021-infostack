@@ -36,16 +36,22 @@ export class Page extends AbstractEntity {
   @Column({ nullable: true })
   readonly parentPageId: string;
 
-  @ManyToOne(() => Page, (page) => page.childPages)
+  @ManyToOne(() => Page, (page) => page.childPages, {
+    onDelete: 'CASCADE',
+  })
   parentPage: Page;
 
   @OneToMany(() => Page, (page) => page.parentPage)
   childPages: Page[];
 
-  @OneToMany(() => UserPermission, (userPermission) => userPermission.page)
+  @OneToMany(() => UserPermission, (userPermission) => userPermission.page, {
+    onDelete: 'CASCADE',
+  })
   userPermissions: UserPermission[];
 
-  @OneToMany(() => TeamPermission, (teamPermission) => teamPermission.page)
+  @OneToMany(() => TeamPermission, (teamPermission) => teamPermission.page, {
+    onDelete: 'CASCADE',
+  })
   teamPermissions: TeamPermission[];
 
   @ManyToMany(() => Tag, (tag) => tag.pages, { cascade: true })
@@ -56,7 +62,9 @@ export class Page extends AbstractEntity {
   @JoinTable({ name: 'user_followedPages' })
   followingUsers: User[];
 
-  @OneToMany(() => PageContent, (PageContent) => PageContent.page)
+  @OneToMany(() => PageContent, (PageContent) => PageContent.page, {
+    onDelete: 'CASCADE',
+  })
   pageContents: PageContent[];
 
   @OneToMany(() => Comment, (Comment) => Comment.page)

@@ -1,0 +1,15 @@
+.dropdown {
+  .dropdownButton {
+    padding: 0.375rem 0.75rem;
+    background-color: #fff;
+    font-size: 2rem;
+
+    &::after {
+      display: none !important;
+    }
+  }
+
+  .dropdownItem {
+    font-size: 1.32rem;
+  }
+}
