@@ -7,6 +7,7 @@ import {
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
+import NotificationRepository from '../data/repositories/notification.repository';
 import UserRepository from '../data/repositories/user.repository';
 import PageRepository from '../data/repositories/page.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
@@ -21,6 +22,11 @@ import { DefaultUserName } from '../common/enums/default-username';
 import { generateInviteToken } from '../common/utils/tokens.util';
 import { env } from '../env';
 import TeamRepository from '../data/repositories/team.repository';
+import { Server } from 'socket.io';
+import { SocketEvents } from '../common/enums/socket';
+import { EntityType } from '../common/enums/entity-type';
+import { Team } from '../data/entities/team';
+import { User } from '../data/entities/user';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -97,6 +103,7 @@ export const updateInviteStatusDeclined = async (
 export const deleteUserFromWorkspace = async (
   userId: string,
   workspaceId: string,
+  io: Server,
 ): Promise<void> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
   const userWorkspaceToUpdate =
@@ -120,6 +127,7 @@ export const deleteUserFromWorkspace = async (
     teams.map(async (team) => {
       team.users = team.users.filter((user) => user.id !== userId);
       await teamRepository.save(team);
+      notifyUser(team, user, 'deleted from', io);
     }),
   );
 
@@ -236,4 +244,32 @@ export const create = async (
   });
   await userWorkspaceRepository.save(userWorkspace);
   return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
+};
+
+export const notifyUser = async (
+  team: Team,
+  user: User,
+  reason: string,
+  io: Server,
+): Promise<void> => {
+  const notificationRepository = getCustomRepository(NotificationRepository);
+
+  const title = `You have been ${reason} Infostack team.`;
+  const body = `You have been ${reason} Infostack team -- "${team.name}".`;
+
+  io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+  await notificationRepository.createAndSave(
+    body,
+    null,
+    EntityType.TEAM,
+    team.id,
+    user.id,
+    false,
+  );
+
+  await sendMail({
+    to: user.email,
+    subject: title,
+    text: body,
+  });
 };
