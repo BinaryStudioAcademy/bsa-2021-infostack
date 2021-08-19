@@ -1,8 +1,10 @@
 import { getCustomRepository } from 'typeorm';
 import { EntityType } from '../common/enums/entity-type';
 import { INotification } from '../common/interfaces/notification';
-import CommentRepository from '../data/repositories/comment.repository';
-import NotificationRepository from '../data/repositories/notification.repository';
+import {
+  CommentRepository,
+  NotificationRepository,
+} from '../data/repositories';
 import PageRepository from '../data/repositories/page.repository';
 import { mapNotificationToINotification } from '../common/mappers/notification/map-notification-to-inotification';
 import { Notification } from '../data/entities/notification';

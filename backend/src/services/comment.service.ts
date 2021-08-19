@@ -8,7 +8,10 @@ import {
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { HttpError } from '../common/errors/http-error';
-import { CommentRepository } from '../data/repositories/comment.repository';
+import {
+  CommentRepository,
+  NotificationRepository,
+} from '../data/repositories';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
