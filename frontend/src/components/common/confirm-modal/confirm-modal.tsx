@@ -33,7 +33,7 @@ export const ConfirmModal: React.FC<Props> = ({
       <Modal.Footer>
         {cancelButton && (
           <Button
-            variant="primary"
+            variant="warning"
             onClick={cancelButton.onClick}
             disabled={cancelButton.disabled}
           >

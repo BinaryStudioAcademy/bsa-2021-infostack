@@ -82,7 +82,7 @@ export const PageItem: React.FC<Props> = ({
           `${isSelected}`,
         )}
       >
-        <div className="text-truncate">{title}</div>
+        <div className="text-break">{title}</div>
       </Link>
     );
   };

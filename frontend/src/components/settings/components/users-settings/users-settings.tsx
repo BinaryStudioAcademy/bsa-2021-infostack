@@ -66,7 +66,13 @@ export const UsersSettings: React.FC = () => {
           <Card.Title as="h5" className={getAllowedClasses(styles.title)}>
             Users
           </Card.Title>
-          <Button onClick={(): void => setModalShowed(true)}>Invite</Button>
+          <Button
+            onClick={(): void => setModalShowed(true)}
+            variant="success"
+            size="sm"
+          >
+            Invite
+          </Button>
         </Card.Header>
 
         <Card.Body className={getAllowedClasses(styles.body)}>

@@ -60,6 +60,8 @@ export const NotificationItem: React.FC<Props> = ({
           <Button
             onClick={(): void => onRead(id)}
             className={getAllowedClasses(styles.readBtn)}
+            variant="success"
+            size="sm"
           >
             read
           </Button>

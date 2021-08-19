@@ -20,12 +20,15 @@ export const InviteItem: React.FC<Props> = ({
         {workspace.title}
       </Card.Title>
       <div className="d-flex w-100 mt-5 align-items-center justify-content-around">
-        <Button onClick={(): void => onClickAccept(workspace.id)}>
+        <Button
+          onClick={(): void => onClickAccept(workspace.id)}
+          variant="success"
+        >
           Accept
         </Button>
         <Button
           onClick={(): void => onClickDecline(workspace.id)}
-          className="btn-secondary"
+          variant="warning"
         >
           Decline
         </Button>
