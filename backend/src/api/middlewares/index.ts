@@ -4,3 +4,4 @@ export { permit } from './permissions-middleware';
 export { socketInjector } from './socket-middleware';
 export { verifyUserId } from './verify-user-id';
 export { verifyWorkspaceId } from './verify-workspace-id';
+export { validationMiddleware } from './validation-middleware';

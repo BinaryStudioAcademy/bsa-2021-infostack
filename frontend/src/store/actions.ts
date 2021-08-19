@@ -6,3 +6,5 @@ export { tagActions } from './tags';
 export { teamsActions } from './teams';
 export { participantsActions } from './participants';
 export { commentsActions } from './comments';
+export { activitiesActions } from './activities';
+export { notificationsActions } from './notifications';

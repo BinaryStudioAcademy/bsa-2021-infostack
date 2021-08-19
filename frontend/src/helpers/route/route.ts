@@ -1,6 +1,2 @@
-import { AppRoute } from 'common/enums/enums';
-
-const replaceIdParam = (route: AppRoute, id: string): string =>
-  route.replace(':id', id);
-
-export { replaceIdParam };
+export { replaceIdParam } from './replace-id-param/replace-id-param.helper';
+export { replacePageIdParamAndVersionId } from './replace-id-param-and-version/replace-id-param.helper';

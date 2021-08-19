@@ -3,7 +3,7 @@ import { IComment } from '../../common/interfaces/comment';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
-export class CommentRepository extends Repository<Comment> {
+class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
     'comment.text',
@@ -12,6 +12,7 @@ export class CommentRepository extends Repository<Comment> {
     'author.avatar',
     'author.id',
     'author.fullName',
+    'author.email',
     'reactions',
   ];
 
@@ -33,4 +34,14 @@ export class CommentRepository extends Repository<Comment> {
       .select(this.SELECTION)
       .getOne();
   }
+
+  public async findPageByCommentId(id: string): Promise<Comment> {
+    return this.findOne(
+      { id },
+      {
+        relations: ['page', 'page.followingUsers'],
+      },
+    );
+  }
 }
+export default CommentRepository;

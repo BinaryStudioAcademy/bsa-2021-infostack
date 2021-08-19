@@ -1,11 +1,26 @@
+.logo {
+  height: 10%;
+  margin-bottom: 2%;
+}
+
 .container {
   width: clamp(500px, 30%, 600px);
+  padding-bottom: 6%;
 }
 
 .header {
   color: #495070;
 }
 
-.button {
-  background-color: #3f80ea;
+.line {
+  display: inline-block;
+  width: 45%;
+  vertical-align: middle;
+  margin: 1rem 0;
+}
+
+.or {
+  display: inline-block;
+  width: 10%;
+  margin: 1rem 0;
 }

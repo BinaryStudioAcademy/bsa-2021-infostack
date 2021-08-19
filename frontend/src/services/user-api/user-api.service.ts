@@ -1,6 +1,13 @@
-import { IUser, IUserWithTokens } from 'common/interfaces/user';
+import {
+  IGetActivities,
+  IGetUserActivities,
+  IUser,
+  IUserActivity,
+  IUserWithTokens,
+} from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
 import { http } from 'services/http/http.service';
+import { IPaginated } from 'common/interfaces/common';
 
 class UserApi {
   private http = http;
@@ -58,9 +65,26 @@ class UserApi {
   }
 
   public async deleteAvatar(id: string): Promise<void> {
-    return http.load(`/api/users/${id}/avatar`, {
+    return this.http.load(`/api/users/${id}/avatar`, {
       method: HttpMethod.DELETE,
     });
+  }
+
+  public async getActivities(
+    data: IGetActivities,
+  ): Promise<IPaginated<IUserActivity>> {
+    const { skip, take } = data;
+    return http.load(`/api/users/activities?skip=${skip}&take=${take}`);
+  }
+
+  public async getUserActivities(
+    data: IGetUserActivities,
+  ): Promise<IPaginated<IUserActivity>> {
+    const { skip, take, userId } = data;
+
+    return http.load(
+      `/api/users/${userId}/activities?skip=${skip}&take=${take}`,
+    );
   }
 }
 

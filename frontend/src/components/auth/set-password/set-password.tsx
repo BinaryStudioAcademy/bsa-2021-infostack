@@ -3,7 +3,7 @@ import { Sign, FormField } from 'components/common/common';
 import { AuthApi } from 'services';
 import { AppRoute } from 'common/enums/enums';
 import { ToastContent } from './components/components';
-import { setPasswordSchema } from 'validations/set-password-schema';
+import { setPasswordSchema } from 'common/validations';
 import { useForm, useHistory, yupResolver } from 'hooks/hooks';
 import { ISetPasswordValidation } from 'common/interfaces/auth';
 

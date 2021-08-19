@@ -6,7 +6,7 @@ import {
   yupResolver,
   useAppSelector,
 } from 'hooks/hooks';
-import { workspaceSchema } from 'validations/workspace-schema';
+import { workspaceSchema } from 'common/validations';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
 import { InputModal } from 'components/common/common';
 

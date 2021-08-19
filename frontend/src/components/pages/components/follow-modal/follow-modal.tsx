@@ -10,27 +10,27 @@ export const FollowModal: React.FC<Props> = ({
   show,
   isFollowing,
   handler,
-}) => (
-  <Modal
-    show={show}
-    title={`Do you want to ${
-      isFollowing ? 'unfollow' : 'follow'
-    } the child pages of this page as well?`}
-    actions={[
-      {
-        text: 'Decline',
-        buttonVariant: 'secondary',
-        handler: (): void => handler(false),
-      },
-      {
-        text: 'Agree',
-        buttonVariant: 'primary',
-        handler: (): void => handler(true),
-      },
-    ]}
-  >
-    If you <strong>agree</strong> you will automatically
-    {isFollowing ? 'unfollow' : 'follow'} all subpages{' '}
-    <em>to which you have a permission</em>.
-  </Modal>
-);
+}) => {
+  const followText = isFollowing ? 'unfollow' : 'follow';
+
+  return (
+    <Modal
+      show={show}
+      title={'Confirm'}
+      actions={[
+        {
+          text: 'No',
+          buttonVariant: 'warning',
+          handler: (): void => handler(false),
+        },
+        {
+          text: 'Yes',
+          buttonVariant: isFollowing ? 'danger' : 'success',
+          handler: (): void => handler(true),
+        },
+      ]}
+    >
+      Do you want to {followText} the child pages of this page as well?
+    </Modal>
+  );
+};

@@ -8,4 +8,6 @@ export { LocalStorageVariable } from './local-storage';
 export { ParticipantType } from './participant';
 export { InviteStatus } from './status';
 export { DefaultUserName } from './default-username';
+export { EntityType } from './entity-type';
+export { PageTitle } from './page-content';
 export * from './socket';

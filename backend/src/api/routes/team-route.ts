@@ -6,6 +6,8 @@ import {
   create,
   updateNameById,
   deleteById,
+  addUser,
+  deleteUser,
 } from '../../services/team.service';
 
 const router: Router = Router();
@@ -34,6 +36,20 @@ router
   .delete(
     '/:id',
     run((req) => deleteById(req.params.id)),
+  )
+
+  .post(
+    '/:id/users/:id',
+    run((req) =>
+      addUser(req.params.id, req.body.userId, req.workspaceId, req.io),
+    ),
+  )
+
+  .put(
+    '/:id/users/:id',
+    run((req) =>
+      deleteUser(req.params.id, req.body.userId, req.workspaceId, req.io),
+    ),
   );
 
 export default router;

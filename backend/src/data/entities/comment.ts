@@ -20,7 +20,9 @@ export class Comment extends AbstractEntity {
   @Column()
   readonly pageId: string;
 
-  @ManyToOne(() => Page, (page) => page.comments)
+  @ManyToOne(() => Page, (page) => page.comments, {
+    onDelete: 'CASCADE',
+  })
   page: Page;
 
   @RelationId((comment: Comment) => comment.parentComment)

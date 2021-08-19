@@ -1,2 +1,8 @@
-export { IUserWithTokens } from 'infostack-shared';
-export { IUser } from 'infostack-shared';
+export {
+  IUserWithTokens,
+  IUser,
+  IUserActivity,
+  IGetActivities,
+  IGetUserActivities,
+} from 'infostack-shared';
+export { IUserActivityRawResult } from './user-activity-raw-result.interface';

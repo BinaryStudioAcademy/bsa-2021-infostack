@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { PageApi } from 'services';
@@ -18,10 +19,15 @@ const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const createPageResponse = await new PageApi().createPage(createPayload);
-    dispatch(actions.createPage(createPageResponse));
-    dispatch(actions.toggleSpinner());
-    return createPageResponse;
+    try {
+      const createPageResponse = await new PageApi().createPage(createPayload);
+      dispatch(actions.createPage(createPageResponse));
+      return createPageResponse;
+    } catch (e) {
+      toast.error(e.message);
+    } finally {
+      dispatch(actions.toggleSpinner());
+    }
   },
 );
 
@@ -61,6 +67,17 @@ const setPage = createAsyncThunk(
   },
 );
 
+const deletePage = createAsyncThunk(
+  ActionType.DELETE_PAGE,
+  async (pageId: string, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    await new PageApi().deletePage(pageId);
+    dispatch(actions.deletePage());
+    dispatch(getPagesAsync());
+    dispatch(actions.toggleSpinner());
+  },
+);
+
 type FollowPayload = {
   pageId: string;
   withChildren: boolean;
@@ -76,18 +93,16 @@ const followPage = createAsyncThunk<
 >(
   ActionType.GET_PAGE,
   async ({ pageId, withChildren }, { dispatch, getState }) => {
-    const pageApi = new PageApi();
-
     if (withChildren) {
       const pages = getState().pages.pages as IPageNav[];
       const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
       const ids = getPagesIds(currentPage);
-      await pageApi.followPages(ids);
+      await new PageApi().followPages(ids);
     } else {
-      await pageApi.followPage(pageId);
+      await new PageApi().followPage(pageId);
     }
 
-    const response = await pageApi.getPage(pageId);
+    const response = await new PageApi().getPage(pageId);
     dispatch(actions.getPage(response));
   },
 );
@@ -99,18 +114,16 @@ const unfollowPage = createAsyncThunk<
 >(
   ActionType.GET_PAGE,
   async ({ pageId, withChildren }, { dispatch, getState }) => {
-    const pageApi = new PageApi();
-
     if (withChildren) {
       const pages = getState().pages.pages as IPageNav[];
       const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
       const ids = getPagesIds(currentPage);
-      await pageApi.unfollowPages(ids);
+      await new PageApi().unfollowPages(ids);
     } else {
-      await pageApi.unfollowPage(pageId);
+      await new PageApi().unfollowPage(pageId);
     }
 
-    const response = await pageApi.getPage(pageId);
+    const response = await new PageApi().getPage(pageId);
     dispatch(actions.getPage(response));
   },
 );
@@ -136,6 +149,7 @@ const editPageContent = createAsyncThunk(
 const pagesActions = {
   ...actions,
   createPage,
+  deletePage,
   createVersionPage,
   getPagesAsync,
   getPage,

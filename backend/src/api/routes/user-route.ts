@@ -8,6 +8,8 @@ import {
   getUserByIdWithWorkspace,
   deleteAvatar,
   getInviteUserById,
+  getActivities,
+  getUserActivities,
 } from '../../services/user.service';
 
 const router: Router = Router();
@@ -35,11 +37,26 @@ router
     '/:id/avatar',
     upload().single('image'),
     run((req) => updateAvatar(req.params.id, req.file)),
+  )
+  .delete(
+    '/:id/avatar',
+    run((req) => deleteAvatar(req.userId)),
+  )
+  .get(
+    '/activities',
+    run((req) =>
+      getActivities(req.userId, { skip: req.query.skip, take: req.query.take }),
+    ),
+  )
+  .get(
+    '/:id/activities',
+    run((req) =>
+      getUserActivities({
+        skip: req.query.skip,
+        take: req.query.take,
+        userId: req.userId,
+      }),
+    ),
   );
-
-router.delete(
-  '/:id/avatar',
-  run((req) => deleteAvatar(req.userId)),
-);
 
 export default router;

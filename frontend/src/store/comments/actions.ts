@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { commentApi } from 'services';
+import { CommentApi } from 'services';
 import { ICommentRequest } from 'common/interfaces/comment';
 
 const loadComments = createAsyncThunk(
   ActionType.SET_COMMENTS,
   async (pageId: string, { dispatch }) => {
-    const comments = await commentApi.getAll(pageId);
+    const comments = await new CommentApi().getAll(pageId);
     dispatch(actions.setComments(comments));
   },
 );
@@ -18,7 +18,7 @@ const createComment = createAsyncThunk(
     { pageId, payload }: { pageId: string; payload: ICommentRequest },
     { dispatch },
   ) => {
-    const comment = await commentApi.addComment(pageId, payload);
+    const comment = await new CommentApi().addComment(pageId, payload);
     dispatch(actions.addComment(comment));
   },
 );
@@ -29,7 +29,7 @@ const createResponse = createAsyncThunk(
     { pageId, payload }: { pageId: string; payload: ICommentRequest },
     { dispatch },
   ) => {
-    const response = await commentApi.addComment(pageId, payload);
+    const response = await new CommentApi().addComment(pageId, payload);
     dispatch(actions.addResponse(response));
   },
 );

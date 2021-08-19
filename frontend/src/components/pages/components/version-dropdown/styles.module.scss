@@ -1,0 +1,24 @@
+.authorFullName {
+  font-size: 1.32rem;
+  width: max-content;
+  padding-left: 5px;
+  padding-right: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.avatarContainer:hover p {
+  color: black !important;
+}
+
+.dropDownMenu {
+  max-height: 205px;
+  overflow: overlay;
+  padding: 0px;
+}
+
+.dropDownMenu.show,
+.dropdown-menu.show {
+  padding: 0px;
+}

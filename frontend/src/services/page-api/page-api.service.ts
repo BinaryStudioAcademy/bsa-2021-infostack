@@ -10,8 +10,9 @@ import {
   IPageContributor,
 } from 'common/interfaces/pages';
 import { http } from 'services/http/http.service';
+import { ITag } from 'common/interfaces/tag';
 
-class PageApi {
+export class PageApi {
   private http = http;
   private BASE = '/api/pages';
 
@@ -20,6 +21,12 @@ class PageApi {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
+    });
+  }
+
+  public async deletePage(id: string): Promise<void> {
+    return this.http.load(`${this.BASE}/${id}`, {
+      method: HttpMethod.DELETE,
     });
   }
 
@@ -81,6 +88,18 @@ class PageApi {
     );
   }
 
+  public async deleteAllPermissionsForUser(userId: string): Promise<void> {
+    return this.http.load(`${this.BASE}/permissions/${userId}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
+
+  public async deleteAllFollowingsForUser(userId: string): Promise<void> {
+    return this.http.load(`${this.BASE}/unfollow-all/${userId}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
+
   public async followPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/follow/${pageId}`, {
       method: HttpMethod.POST,
@@ -121,11 +140,24 @@ class PageApi {
     return this.http.load(`${this.BASE}/${id}/contributors`);
   }
 
+  public async getPageTags(id: string | undefined): Promise<ITag[]> {
+    return this.http.load(`${this.BASE}/${id}/tags`);
+  }
+
+  public async savePageTags(
+    id: string | undefined,
+    payload: (string | undefined)[],
+  ): Promise<ITag[]> {
+    return this.http.load(`${this.BASE}/${id}/tags`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
   public async getPageTableOfContents(
     id: string,
   ): Promise<IPageTableOfContents> {
     return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
 }
-
-export { PageApi };

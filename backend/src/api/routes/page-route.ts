@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
   createPage,
+  deletePage,
   getPages,
   getPage,
   getPermissions,
@@ -14,6 +15,8 @@ import {
   unfollowPage,
   unfollowPages,
   updateContent,
+  getTags,
+  savePageTags,
   getTableOfContents,
 } from '../../services/page.service';
 import { getComments, addComment } from '../../services/comment.service';
@@ -33,6 +36,11 @@ router.get(
 router.get(
   '/:id',
   run((req) => getPage(req.params.id, req.userId)),
+);
+
+router.delete(
+  '/:id',
+  run((req) => deletePage(req.params.id)),
 );
 
 router.get(
@@ -105,6 +113,16 @@ router.post(
 router.post(
   '/:id/version',
   run((req) => updateContent(req.userId, req.body)),
+);
+
+router.get(
+  '/:id/tags',
+  run((req) => getTags(req.params.id)),
+);
+
+router.post(
+  '/:id/tags',
+  run((req) => savePageTags(req.params.id, req.body)),
 );
 
 router.get(

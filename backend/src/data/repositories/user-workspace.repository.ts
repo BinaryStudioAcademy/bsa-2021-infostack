@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InviteStatus } from '../../common/enums/invite-status';
+import { RoleType } from '../../common/enums/role-type';
 import { UserWorkspace } from '../entities/user-workspace';
 
 @EntityRepository(UserWorkspace)
@@ -33,6 +34,17 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
       relations: ['workspace', 'user'],
       where: { user: userId, workspace: workspaceId },
     });
+  }
+
+  public findWorkspaceAdmins(workspaceId: string): Promise<UserWorkspace[]> {
+    return this.createQueryBuilder('userWorkspace')
+      .leftJoin('userWorkspace.workspace', 'workspace')
+      .leftJoinAndSelect('userWorkspace.user', 'user')
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .andWhere('userWorkspace.role = :role', {
+        role: RoleType.ADMIN,
+      })
+      .getMany();
   }
 }
 

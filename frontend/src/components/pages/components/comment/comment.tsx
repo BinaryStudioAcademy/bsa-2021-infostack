@@ -69,7 +69,7 @@ export const Comment: React.FC<Props> = ({
         <Emoji reactions={reactions} commentId={commentId} />
 
         <button
-          className={getAllowedClasses('text-secondary', styles.respond)}
+          className={getAllowedClasses('text-success', styles.respond)}
           onClick={toggleField}
         >
           respond
