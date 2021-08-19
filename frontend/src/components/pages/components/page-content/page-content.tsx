@@ -207,7 +207,7 @@ export const PageContent: React.FC = () => {
 
   useEffect(() => {
     isPageFollowed();
-  }, []);
+  }, [isPageFollowed]);
 
   if (isSpinner || isLeftBlockLoading) {
     return <Spinner />;
