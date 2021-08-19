@@ -6,7 +6,7 @@ import { AppRoute } from 'common/enums/enums';
 import { AuthApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import logo from 'assets/img/logo.svg';
+import logo from 'assets/img/logo_dark.svg';
 
 type AlternativeRoute = {
   question: string;
