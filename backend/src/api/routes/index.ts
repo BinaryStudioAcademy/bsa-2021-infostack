@@ -6,7 +6,7 @@ import workspaceRoute from './workspace-route';
 import tagRoute from './tag-route';
 import teamRoute from './team-route';
 import skillRoute from './skill-route';
-import commentReactionRoute from './comment-reaction-route';
+import commentReactionRoute from './comment-route';
 import notificationRoute from './notification-route';
 
 const routes = (app: Express): void => {

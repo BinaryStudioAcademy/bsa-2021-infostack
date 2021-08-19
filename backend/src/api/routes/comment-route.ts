@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
-  getAllCommentReactions,
   handleCommentReaction,
-} from '../../services/comment-reaction.service';
+  getAllCommentReactions,
+} from '../../services/comment.service';
 
 const router: Router = Router({ mergeParams: true });
 

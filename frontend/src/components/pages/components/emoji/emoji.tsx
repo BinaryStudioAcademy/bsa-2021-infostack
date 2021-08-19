@@ -1,10 +1,10 @@
+import Picker from 'emoji-picker-react';
 import { MutableRefObject, SyntheticEvent } from 'react';
 import { Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useAppSelector, useEffect, useState, useRef } from 'hooks/hooks';
 import { CommentReactionApi } from 'services';
-import Picker from 'emoji-picker-react';
-import { ICommentReaction } from '../../../../common/interfaces/comment-reaction';
-import { IEmoji } from '../../../../common/interfaces/emoji';
+import { ICommentReaction } from 'common/interfaces/comment-reaction';
+import { IEmoji } from 'common/interfaces/emoji';
 import './styles.scss';
 
 type Props = {
