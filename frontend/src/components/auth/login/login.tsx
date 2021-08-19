@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { AppRoute } from 'common/enums/enums';
 import { FormField, Link, Sign } from 'components/common/common';
 import { loginSchema } from 'common/validations';
@@ -14,12 +13,22 @@ const Login: React.FC = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<ILogin>({ resolver: yupResolver(loginSchema) });
 
   const handleSubmitForm = async (data: ILogin): Promise<void> => {
-    await dispatch(authActions.login(data));
-    push(AppRoute.WORKSPACES);
+    try {
+      await dispatch(authActions.login(data)).unwrap();
+      push(AppRoute.WORKSPACES);
+    } catch (err) {
+      if (err.message.toLowerCase().includes('email')) {
+        setError('email', err);
+      }
+      if (err.message.toLowerCase().includes('password')) {
+        setError('password', err);
+      }
+    }
   };
 
   return (
@@ -43,6 +52,7 @@ const Login: React.FC = () => {
         register={register('email')}
         errors={errors.email}
       />
+
       <FormField
         register={register('password')}
         label="Password"
