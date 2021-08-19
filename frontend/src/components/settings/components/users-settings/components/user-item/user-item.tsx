@@ -1,7 +1,9 @@
+import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { useAppSelector } from 'hooks/hooks';
+import { getAllowedClasses } from 'helpers/helpers';
 import { InviteStatus } from 'common/enums/enums';
 import { IWorkspaceUser } from 'common/interfaces/workspace';
-import { useAppSelector } from 'hooks/hooks';
-import Button from 'react-bootstrap/Button';
+import styles from './styles.module.scss';
 
 interface IUserItemProps extends IWorkspaceUser {
   onDelete: (fullName: string, id: string) => void;
@@ -20,11 +22,25 @@ export const UserItem: React.FC<IUserItemProps> = ({
     onDelete(fullName, id);
   };
 
+  const teamsList = teams.length ? teams.join(', ') : 'No teams found';
+
   return (
     <tr>
       <td>{fullName}</td>
       <td>{role}</td>
-      <td>{teams.length ? teams.join(', ') : 'No teams found'}</td>
+      <OverlayTrigger
+        trigger="hover"
+        placement="bottom"
+        overlay={
+          <Popover id="popover-positioned-bottom">
+            <Popover.Body className={getAllowedClasses(styles.popoverText)}>
+              {teamsList}
+            </Popover.Body>
+          </Popover>
+        }
+      >
+        <td>{teamsList}</td>
+      </OverlayTrigger>
       <td>{status}</td>
       <td>
         <Button
