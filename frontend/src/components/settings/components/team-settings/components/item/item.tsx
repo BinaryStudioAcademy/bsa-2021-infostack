@@ -4,9 +4,9 @@ import { DropDown } from '../components';
 import { UserAvatar } from 'components/common/avatar/avatar';
 import './styles.scss';
 
-interface Props {
+type Props = {
   team: ITeam;
-}
+};
 
 export const Item: React.FC<Props> = ({ team }) => {
   const renderUserAvatar = (user: ITeamUser): JSX.Element => {
@@ -23,14 +23,14 @@ export const Item: React.FC<Props> = ({ team }) => {
   };
 
   return (
-    <Card className="team-card shadow rounded border-0 p-2">
-      <Card.Title className="team-name d-flex justify-content-between">
+    <Card className="teamCard shadow rounded border-0 p-2">
+      <Card.Title className="teamName d-flex justify-content-between m-0 p-3">
         {team.name}
         <DropDown team={team} />
       </Card.Title>
       <Card.Body className="d-flex justify-content-between card-body">
         {team.users && (
-          <div className="avatars-container">
+          <div className="avatarsContainer">
             {team.users.map((user) => renderUserAvatar(user))}
           </div>
         )}
