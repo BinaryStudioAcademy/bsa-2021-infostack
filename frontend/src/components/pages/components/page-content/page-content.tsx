@@ -16,7 +16,7 @@ import {
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { pageApi } from 'services';
+import { PageApi } from 'services';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
 import { InviteModal, Spinner } from 'components/common/common';
@@ -36,7 +36,6 @@ import {
 import { FollowModal } from '../follow-modal/follow-modal';
 import styles from './styles.module.scss';
 import PageTags from '../page-tags/page-tags';
-import { PageDropdown } from '../page-dropdown/page-dropdown';
 
 export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -83,6 +82,7 @@ export const PageContent: React.FC = () => {
     : currentPage?.pageContents[0].content || undefined;
 
   const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
+  const canView = currentPage?.permission ? true : false;
   const canEdit =
     currentPage?.permission === PermissionType.ADMIN ||
     currentPage?.permission === PermissionType.WRITE;
@@ -116,8 +116,8 @@ export const PageContent: React.FC = () => {
 
       getPageById(paramsId);
 
-      const contributorsPromise = pageApi.getPageContributors(paramsId);
-      const TOCPromise = pageApi.getPageTableOfContents(paramsId);
+      const contributorsPromise = new PageApi().getPageContributors(paramsId);
+      const TOCPromise = new PageApi().getPageTableOfContents(paramsId);
 
       Promise.all([contributorsPromise, TOCPromise]).then(
         ([contributors, TOC]) => {
@@ -199,94 +199,114 @@ export const PageContent: React.FC = () => {
 
     return (
       <div className="p-4">
-        <Row>
-          <Col xs={2}>
-            <PageTableOfContents headings={TOCHeadings} />
-            <PageTags />
-            <PageContributors className="mt-4" contributors={contributors} />
-            <PageFollowingUsers
-              className="mt-4"
-              followers={currentPage?.followingUsers}
-            />
-          </Col>
-          <Col>
+        {canView ? (
+          <>
             <Row>
-              <Col className="d-flex justify-content-between mb-4">
-                <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
-                <div className="d-flex align-items-center">
-                  {canRead && (
-                    <VersionDropdown
-                      currContent={currContent}
-                      contributors={contributors}
-                    />
-                  )}
-                  {isPageAdmin && (
-                    <>
+              <Col xs={2}>
+                <PageTableOfContents headings={TOCHeadings} />
+                <PageTags />
+                <PageContributors
+                  className="mt-4"
+                  contributors={contributors}
+                />
+                <PageFollowingUsers
+                  className="mt-4"
+                  followers={currentPage?.followingUsers}
+                />
+              </Col>
+              <Col>
+                <Row>
+                  <Col className="d-flex justify-content-between mb-4">
+                    <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+                    <div>
+                      {canRead && (
+                        <VersionDropdown
+                          currContent={currContent}
+                          contributors={contributors}
+                        />
+                      )}
+                      {isPageAdmin && (
+                        <>
+                          <Button
+                            onClick={onAssign}
+                            className={canEdit ? 'me-3' : ''}
+                            variant="success"
+                            size="sm"
+                          >
+                            Assign permissions
+                          </Button>
+                        </>
+                      )}
+                      {canEdit && <EditButton onClick={handleEditing} />}
                       <Button
-                        onClick={onAssign}
-                        className={canEdit ? 'me-3' : ''}
+                        className="ms-3"
+                        onClick={onPageFollow}
+                        variant={isCurrentPageFollowed ? 'danger' : 'success'}
+                        size="sm"
                       >
-                        Assign permissions
+                        {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
                       </Button>
-                    </>
-                  )}
-                  {canEdit && <EditButton onClick={handleEditing} />}
-                  <Button className="ms-3" onClick={onPageFollow}>
-                    {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
-                  </Button>
-                  <PageDropdown className="ms-3" />
-                </div>
+                    </div>
+                  </Col>
+                </Row>
+                <Row className="mb-4">
+                  <Col>
+                    <Card border="light" className={styles.card}>
+                      <Card.Body className={getAllowedClasses(styles.content)}>
+                        {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
+                        <ReactMarkdown remarkPlugins={[slug, gfm]}>
+                          {content?.trim() || 'Empty page'}
+                        </ReactMarkdown>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Card
+                      border="light"
+                      className={getAllowedClasses(styles.card)}
+                    >
+                      <Card.Header>Comments</Card.Header>
+                      <Card.Body>
+                        <CommentSection pageId={paramsId} />
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
               </Col>
             </Row>
-            <Row className="mb-4">
-              <Col>
-                <Card border="light" className={styles.card}>
-                  <Card.Body className={getAllowedClasses(styles.content)}>
-                    {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
-                    <ReactMarkdown remarkPlugins={[slug, gfm]}>
-                      {content || 'Empty page'}
-                    </ReactMarkdown>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Card border="light" className={getAllowedClasses(styles.card)}>
-                  <Card.Header>Comments</Card.Header>
-                  <Card.Body>
-                    <CommentSection pageId={paramsId} />
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Popup
-          query="Users & Teams"
-          isVisible={isPopUpVisible}
-          cancelButton={{
-            text: 'Cancel',
-            onClick: handleAssignCancel,
-          }}
-          inviteButton={{
-            text: 'Add user',
-            onClick: handleAssignConfirm,
-          }}
-        />
-        <InviteModal
-          onModalClose={handleIviteCancel}
-          showModal={isModalVisible}
-        />
-        <FollowModal
-          show={isFollowModalVisible}
-          isFollowing={isCurrentPageFollowed}
-          handler={
-            isCurrentPageFollowed
-              ? handlePageUnfollow(paramsId)
-              : handlePageFollow(paramsId)
-          }
-        />
+            <Popup
+              query="Users & Teams"
+              isVisible={isPopUpVisible}
+              cancelButton={{
+                text: 'Cancel',
+                onClick: handleAssignCancel,
+              }}
+              inviteButton={{
+                text: 'Add user',
+                onClick: handleAssignConfirm,
+              }}
+            />
+            <InviteModal
+              onModalClose={handleIviteCancel}
+              showModal={isModalVisible}
+            />
+            <FollowModal
+              show={isFollowModalVisible}
+              isFollowing={isCurrentPageFollowed}
+              handler={
+                isCurrentPageFollowed
+                  ? handlePageUnfollow(paramsId)
+                  : handlePageFollow(paramsId)
+              }
+            />
+          </>
+        ) : (
+          <h1 className="d-flex justify-content-center">
+            No permission to view the requested page
+          </h1>
+        )}
       </div>
     );
   };

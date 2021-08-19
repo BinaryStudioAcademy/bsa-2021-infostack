@@ -41,5 +41,4 @@ class CommentRepository extends Repository<Comment> {
     );
   }
 }
-
 export default CommentRepository;

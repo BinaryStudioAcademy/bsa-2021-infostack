@@ -1,13 +1,15 @@
+.logo {
+  height: 10%;
+  margin-bottom: 2%;
+}
+
 .container {
   width: clamp(500px, 30%, 600px);
+  padding-bottom: 6%;
 }
 
 .header {
   color: #495070;
-}
-
-.button {
-  background-color: #3f80ea;
 }
 
 .line {

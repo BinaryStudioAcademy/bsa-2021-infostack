@@ -1,4 +1,4 @@
-import { ITeam, ITeamEditing } from 'common/interfaces/team';
+import { ITeam, ITeamEditing, ITeamAddUser } from 'common/interfaces/team';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { http } from 'services/http/http.service';
 
@@ -39,6 +39,28 @@ class TeamApi {
       method: HttpMethod.GET,
     });
   }
+
+  public addUser(payload: ITeamAddUser): Promise<ITeam[]> {
+    return this.http.load(
+      `${this.BASE}/${payload.teamId}/users/${payload.teamId}`,
+      {
+        method: HttpMethod.POST,
+        payload: JSON.stringify(payload),
+        contentType: ContentType.JSON,
+      },
+    );
+  }
+
+  public deleteUser(payload: ITeamAddUser): Promise<ITeam[]> {
+    return this.http.load(
+      `${this.BASE}/${payload.teamId}/users/${payload.teamId}`,
+      {
+        method: HttpMethod.PUT,
+        payload: JSON.stringify(payload),
+        contentType: ContentType.JSON,
+      },
+    );
+  }
 }
 
-export const teamApi = new TeamApi();
+export { TeamApi };

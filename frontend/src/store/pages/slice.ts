@@ -51,8 +51,6 @@ const { reducer, actions } = createSlice({
       state.currentPage = null;
       state.isCurrentPageFollowed = false;
     },
-  },
-  extraReducers: {
     [ActionType.SET_CURRENT_PAGE_FOLLOWED]: (
       state,
       action: PayloadAction<boolean>,

@@ -74,12 +74,14 @@ export const CommentForm: React.FC<Props> = ({
                 disabled={isDisabled || text === ''}
                 onClick={handleSubmit}
                 className={styles.text}
+                variant="success"
               >
                 Submit
               </Button>
               <Button
                 onClick={handleCancel}
                 className={getAllowedClasses('ms-2', styles.text)}
+                variant="warning"
               >
                 Cancel
               </Button>

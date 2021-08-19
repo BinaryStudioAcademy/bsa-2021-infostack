@@ -3,6 +3,7 @@ export { UserAvatar } from './avatar/avatar';
 export { FormField } from './form-field/form-field';
 export { InputModal } from './input-modal/input-modal';
 export { InviteModal } from './invite-modal/invite-modal';
+export { ConfirmModal } from './confirm-modal/confirm-modal';
 export { Link } from './link/link';
 export { ProtectedRoute } from './protected-route/protected-route';
 export { Sign } from './sign/sign';
