@@ -5,13 +5,16 @@ import {
   ICommentRequest,
   ICommentResponse,
 } from '../common/interfaces/comment';
-import { HttpCode } from '../common/enums/http-code';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { HttpError } from '../common/errors/http-error';
 import {
   CommentRepository,
   NotificationRepository,
 } from '../data/repositories';
+import { ICommentReaction } from '../common/interfaces/comment-reaction';
+import { IRequestWithUser } from '../common/interfaces/http/request-with-user.interface';
+import { HttpCode } from '../common/enums/http-code';
+import { HttpErrorMessage } from '../common/enums/http-error-message';
+import { HttpError } from '../common/errors/http-error';
+import CommentReactionRepository from '../data/repositories/comment-reaction.repository';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
@@ -155,4 +158,42 @@ export const deleteComment = async (
 ): Promise<void> => {
   getCustomRepository(CommentRepository).deleteById(id);
   io.to(pageId).emit(SocketEvents.PAGE_DELETE_COMMENT, { id, sender: userId });
+};
+
+export const handleCommentReaction = async (
+  commentId: string,
+  req: IRequestWithUser,
+): Promise<ICommentReaction[]> => {
+  const { userId, body } = req;
+  const { reaction } = body;
+
+  const commentReactionRepository = getCustomRepository(
+    CommentReactionRepository,
+  );
+  const foundReaction = await commentReactionRepository.findOne({
+    where: { commentId, userId, reaction },
+  });
+
+  if (foundReaction) {
+    await commentReactionRepository.remove(foundReaction);
+  } else {
+    await commentReactionRepository.save({ commentId, userId, reaction });
+  }
+
+  const commentRepository = getCustomRepository(CommentRepository);
+  const comment = await commentRepository.findOneById(commentId);
+  const { reactions } = comment;
+
+  return reactions;
+};
+
+export const getAllCommentReactions = async (
+  commentId: string,
+): Promise<ICommentReaction[]> => {
+  const commentReactionRepository = getCustomRepository(
+    CommentReactionRepository,
+  );
+  const reactions = await commentReactionRepository.find({ commentId });
+
+  return reactions;
 };

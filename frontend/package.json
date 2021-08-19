@@ -20,6 +20,7 @@
     "clsx": "1.1.1",
     "date-fns": "^2.23.0",
     "normalizr": "3.6.1",
+    "emoji-picker-react": "3.4.8",
     "dayjs": "1.10.6",
     "infostack-shared": "file:../shared/build",
     "is-uuid": "1.0.2",

@@ -10,6 +10,7 @@ import {
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { User } from './user';
+import { Reaction } from './reaction';
 
 @Entity()
 @Tree('closure-table')
@@ -42,4 +43,7 @@ export class Comment extends AbstractEntity {
 
   @TreeParent()
   parentComment: Comment;
+
+  @OneToMany(() => Reaction, (reaction) => reaction.comment)
+  reactions: Reaction[];
 }

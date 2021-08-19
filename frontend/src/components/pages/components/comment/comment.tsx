@@ -3,6 +3,7 @@ import { useState, useHistory, useAppSelector } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
+import { Emoji } from '../emoji/emoji';
 import { UserAvatar } from 'components/common/common';
 import { commentsSelectors } from 'store/comments/slice';
 import { ICommentNormalized } from 'common/interfaces/comment';
@@ -26,6 +27,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
     children,
     createdAt,
     author: { id: authorId, fullName: name, avatar },
+    reactions,
   } = comment;
 
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
@@ -59,6 +61,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
           <TimeAgo timestamp={createdAt} />
         </span>
         <div className={styles.text}>{text}</div>
+        <Emoji reactions={reactions} commentId={id} />
         <div className={styles.actions}>
           <a className={styles.action} onClick={toggleField}>
             reply
