@@ -1,43 +1,39 @@
 import { ListGroup } from 'react-bootstrap';
-import { useState, useHistory } from 'hooks/hooks';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { useState, useHistory, useAppSelector } from 'hooks/hooks';
+import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
 import { Emoji } from '../emoji/emoji';
 import { UserAvatar } from 'components/common/common';
-import { ICommentReaction } from 'common/interfaces/comment-reaction';
+import { commentsSelectors } from 'store/comments/slice';
+import { ICommentNormalized } from 'common/interfaces/comment';
+import { TimeAgo } from 'components/common/time-ago/time-ago';
 import styles from './styles.module.scss';
 
 type Props = {
-  userId: string;
-  avatar: string;
-  name: string;
-  text: string;
-  handleResponse: (text: string) => void;
-  children?: JSX.Element[];
-  reactions?: ICommentReaction[];
-  commentId?: string;
+  id: string;
+  handleDelete: (id: string) => void;
 };
 
-export const Comment: React.FC<Props> = ({
-  userId,
-  name,
-  avatar,
-  text,
-  handleResponse,
-  children,
-  reactions,
-  commentId,
-}) => {
+export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
+  const comment = useAppSelector((state) =>
+    commentsSelectors.selectById(state, id),
+  ) as ICommentNormalized;
+  const user = useAppSelector((state) => state.auth.user);
+
+  const {
+    text,
+    pageId,
+    children,
+    createdAt,
+    author: { id: authorId, fullName: name, avatar },
+    reactions,
+  } = comment;
+
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
   const history = useHistory();
 
   const toggleField = (): void => setIsFieldVisible((prev) => !prev);
-
-  const handleSubmit = (text: string): void => {
-    handleResponse(text);
-    toggleField();
-  };
 
   const handleAvatarClick = (userId?: string): void => {
     if (!userId) {
@@ -47,43 +43,53 @@ export const Comment: React.FC<Props> = ({
     history.push(replaceIdParam(AppRoute.PROFILE, userId));
   };
 
+  const isOwnComment = user?.id === authorId;
+
   return (
-    <ListGroup.Item
-      className={getAllowedClasses('d-flex align-items-start', styles.comment)}
-    >
+    <div className={styles.comment}>
       <UserAvatar
         size="40"
         name={name}
         src={avatar}
         round
-        className={getAllowedClasses(styles.avatar)}
-        onClick={(): void => handleAvatarClick(userId)}
+        className={styles.avatar}
+        onClick={(): void => handleAvatarClick(authorId)}
       />
-      <div className="w-100 ms-3">
-        <p className={getAllowedClasses('mb-2', styles.userName)}>{name}</p>
-        <p className={getAllowedClasses('text-secondary mb-0', styles.text)}>
-          {text}
-        </p>
-
-        <Emoji reactions={reactions} commentId={commentId} />
-
-        <button
-          className={getAllowedClasses('text-success', styles.respond)}
-          onClick={toggleField}
-        >
-          respond
-        </button>
+      <div className={styles.content}>
+        <span className={styles.author}>{name}</span>
+        <span className={styles.metadata}>
+          <TimeAgo timestamp={createdAt} />
+        </span>
+        <div className={styles.text}>{text}</div>
+        <Emoji reactions={reactions} commentId={id} />
+        <div className={styles.actions}>
+          <a className={styles.action} onClick={toggleField}>
+            reply
+          </a>{' '}
+          {isOwnComment && (
+            <a className={styles.action} onClick={(): void => handleDelete(id)}>
+              delete
+            </a>
+          )}
+        </div>
         {isFieldVisible && (
           <CommentForm
+            pageId={pageId}
+            parentCommentId={id}
             className="mt-2"
-            placeholder="Add a response"
-            avatarSize="30"
-            onSubmit={handleSubmit}
+            placeholder="Add a reply"
+            onSubmit={toggleField}
             onCancel={toggleField}
           />
         )}
-        {children && <ListGroup variant="flush">{children}</ListGroup>}
+        {children && (
+          <ListGroup variant="flush" className="w-100 mw-100">
+            {children.map((id) => (
+              <Comment key={id} id={id} handleDelete={handleDelete} />
+            ))}
+          </ListGroup>
+        )}
       </div>
-    </ListGroup.Item>
+    </div>
   );
 };
