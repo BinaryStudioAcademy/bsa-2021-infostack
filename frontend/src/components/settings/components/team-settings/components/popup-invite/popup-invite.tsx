@@ -8,6 +8,7 @@ import { InviteStatus, RoleType } from 'common/enums/enums';
 import { sortObjByName } from 'helpers/helpers';
 import { ITeamUser } from 'common/interfaces/team';
 import selectParticipantStyles from './select-participant-styles';
+import { toast } from 'react-toastify';
 
 type Props = {
   teamId: string;
@@ -61,7 +62,14 @@ export const Popup: React.FC<Props> = ({
 
   const handleDeleteItem = (id: string): void => {
     if (teamId) {
-      dispatch(teamsActions.deleteUser({ userId: id, teamId: teamId }));
+      const adminsInTeam = teamUsers.map(
+        (user) => user.roleInWorkspace === RoleType.ADMIN,
+      );
+      if (adminsInTeam && adminsInTeam.length > 1) {
+        dispatch(teamsActions.deleteUser({ userId: id, teamId: teamId }));
+      } else {
+        toast.error('Error: you can\'t delete last "admin" in the team');
+      }
     }
   };
 
