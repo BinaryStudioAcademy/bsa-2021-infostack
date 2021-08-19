@@ -1,6 +1,11 @@
 .teamCard {
-  height: 12rem;
+  width: 27rem;
+  min-height: 11rem;
   box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 15%) !important;
+}
+
+.card-body {
+  gap: 1rem;
 }
 
 .teamName {
