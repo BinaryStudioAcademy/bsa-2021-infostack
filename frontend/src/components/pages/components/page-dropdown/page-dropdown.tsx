@@ -24,8 +24,6 @@ export const PageDropdown: React.FC<Props> = ({ className }) => {
     (state: RootState) => state.pages.currentPage,
   );
 
-  const isParentPage = !!currentPage?.parentPageId;
-
   const [show, setShow] = useState(false);
 
   const handleClose = (): void => setShow(false);
@@ -66,9 +64,8 @@ export const PageDropdown: React.FC<Props> = ({ className }) => {
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {isParentPage
-            ? 'Are you sure you want to delete this page?'
-            : "It's a parent page. Are you sure you want to delte this page with its child pages?"}
+          Are you sure you want to delete this page? <br />
+          If this page contains subpages they will be deleted as well
         </Modal.Body>
         <Modal.Footer>
           <Button
