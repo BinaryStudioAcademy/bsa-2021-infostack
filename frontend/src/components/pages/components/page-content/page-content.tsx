@@ -216,8 +216,8 @@ export const PageContent: React.FC = () => {
               </Col>
               <Col>
                 <Row>
-                  <Col className="d-flex justify-content-between mb-4">
-                    <h1 className="h3 mb-3">{pageTitle || 'New Page'}</h1>
+                  <Col className="d-flex justify-content-between mb-4 align-items-center">
+                    <h1 className="h3">{pageTitle || 'New Page'}</h1>
                     <div>
                       {canRead && (
                         <VersionDropdown
