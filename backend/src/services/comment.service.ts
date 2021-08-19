@@ -166,9 +166,7 @@ export const getAllCommentReactions = async (
   const commentReactionRepository = getCustomRepository(
     CommentReactionRepository,
   );
-  const reactions = await commentReactionRepository.getAllReactionsByCommentId(
-    commentId,
-  );
+  const reactions = await commentReactionRepository.find({ commentId });
 
   return reactions;
 };
