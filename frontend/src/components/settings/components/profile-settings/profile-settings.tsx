@@ -355,7 +355,7 @@ export const ProfileSettings: React.FC = () => {
                 hidden
               />
               <Button
-                variant="warning"
+                variant="success"
                 className={getAllowedClasses(
                   styles.avatarControlButton,
                   styles.spaceBetween,

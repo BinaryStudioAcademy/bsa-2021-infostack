@@ -94,12 +94,7 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
 }) => {
   return (
     <Card border="light" className={styles.card}>
-      <Card.Header
-        className={getAllowedClasses(
-          styles.title,
-          'bg-white border-0 d-flex align-items-center',
-        )}
-      >
+      <Card.Header className="bg-white border-0 d-flex align-items-center">
         Table of contents
       </Card.Header>
       <Card.Body className={styles.accordion}>
