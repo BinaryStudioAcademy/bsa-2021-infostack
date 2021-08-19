@@ -6,6 +6,7 @@ import { AppRoute } from 'common/enums/enums';
 import { AuthApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import logo from 'assets/img/logo.svg';
 
 type AlternativeRoute = {
   question: string;
@@ -38,7 +39,8 @@ export const Sign: React.FC<Props> = ({
   };
 
   return (
-    <div className="vh-100 vw-100 d-flex justify-content-center align-items-center bg-light text-center">
+    <div className="vh-100 vw-100 d-flex flex-column justify-content-center align-items-center bg-light text-center">
+      <img src={logo} alt="Infostack logo" className={styles.logo}></img>
       <div className={styles.container}>
         <h1 className={getAllowedClasses('h4', styles.header)}>{header}</h1>
         <p className="text-secondary">{secondaryText}</p>
