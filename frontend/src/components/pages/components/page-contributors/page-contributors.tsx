@@ -27,7 +27,6 @@ export const PageContributors: React.FC<IPageContributorsProps> = ({
 
   const avatarStyles: React.CSSProperties = {
     boxSizing: 'content-box',
-    // border: '4px solid white',
     cursor: 'pointer',
   };
 
