@@ -88,7 +88,7 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
         as={NavLink}
         className={getAllowedClasses('sm text-secondary')}
       >
-        Version: {versionButtonValue}
+        <span className="me-2">Version: {versionButtonValue}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu className={getAllowedClasses(styles.dropDownMenu)}>
         {pageContentsCopy ? (
