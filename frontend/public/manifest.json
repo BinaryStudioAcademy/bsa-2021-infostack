@@ -1,6 +1,6 @@
 {
-  "short_name": "Infostack",
-  "name": "Infostack makes documentation a joy to write",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,14 +8,14 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo120.png",
+      "src": "logo192.png",
       "type": "image/png",
-      "sizes": "120x120"
+      "sizes": "192x192"
     },
     {
-      "src": "logo768.png",
+      "src": "logo512.png",
       "type": "image/png",
-      "sizes": "768x768"
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",
