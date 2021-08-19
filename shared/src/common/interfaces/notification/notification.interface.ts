@@ -1,4 +1,4 @@
-import { EntityType } from '~/common/enums/entity-type';
+import { EntityType } from '../../../common/enums/entity-type';
 
 interface INotification {
   id: string;

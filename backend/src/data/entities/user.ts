@@ -8,6 +8,7 @@ import { PageContent } from './page-content';
 import { Comment } from './comment';
 import { Team } from './team';
 import { Skill } from './skill';
+import { Reaction } from './reaction';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -52,4 +53,7 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Comment, (Comment) => Comment.author)
   comments: Comment[];
+
+  @OneToMany(() => Reaction, (reaction) => reaction.user)
+  reactions: Reaction[];
 }
