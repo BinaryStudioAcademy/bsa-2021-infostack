@@ -1,10 +1,10 @@
 import { Card, Col, Row } from 'react-bootstrap';
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import slug from 'remark-slug';
 import isUUID from 'is-uuid';
+import { toast } from 'react-toastify';
 import {
   useAppDispatch,
   useAppSelector,
@@ -19,15 +19,14 @@ import { AppRoute, PermissionType } from 'common/enums/enums';
 import { PageApi } from 'services';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
-import { InviteModal, Spinner } from 'components/common/common';
+import { ConfirmModal, InviteModal, Spinner } from 'components/common/common';
 import {
-  EditButton,
   PageTableOfContents,
   PageContributors,
   PageFollowingUsers,
   CommentSection,
   Popup,
-  PageDropdown,
+  PageActionsDropdown,
 } from '../components';
 import {
   IPageContent,
@@ -35,8 +34,8 @@ import {
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
-import styles from './styles.module.scss';
 import PageTags from '../page-tags/page-tags';
+import styles from './styles.module.scss';
 
 export const PageContent: React.FC = () => {
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
@@ -49,31 +48,29 @@ export const PageContent: React.FC = () => {
       return page ? page.childPages : null;
     }
   });
-
+  const { isCurrentPageFollowed } = useAppSelector(
+    (state: RootState) => state.pages,
+  );
   const { user } = useAppSelector((state) => state.auth);
-  const [currContent, setCurrContent] = useState<IPageContent | undefined>();
 
-  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currContent, setCurrContent] = useState<IPageContent | undefined>();
+  const [isPermissionsModalVisible, setIsPermissionsModalVisible] =
+    useState(false);
+  const [isInviteModalVisible, setIsInviteModalVisible] = useState(false);
   const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
+  const [contributors, setContributors] = useState<IPageContributor[]>([]);
+  const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
+    [],
+  );
 
   const history = useHistory();
   const dispatch = useAppDispatch();
   const paramsId = useParams<{ id: string }>().id;
-
   const paramsVersionId = useParams<{ versionId: string }>().versionId;
 
-  useEffect(() => {
-    if (paramsVersionId) {
-      const currentContent = currentPage?.pageContents.find(
-        (content) => content.id === paramsVersionId,
-      );
-      if (currentContent) {
-        setCurrContent(currentContent);
-      }
-    }
-  }, [paramsVersionId]);
-
+  const isParentPage = !!currentPage?.parentPageId;
   const pageTitle = currContent
     ? currContent.title
     : currentPage?.pageContents[0].title || undefined;
@@ -82,23 +79,12 @@ export const PageContent: React.FC = () => {
     ? currContent.content
     : currentPage?.pageContents[0].content || undefined;
 
-  const isPageAdmin = currentPage?.permission === PermissionType.ADMIN;
   const canView = currentPage?.permission ? true : false;
-  const canEdit =
-    currentPage?.permission === PermissionType.ADMIN ||
-    currentPage?.permission === PermissionType.WRITE;
 
   const canRead =
     currentPage?.permission === PermissionType.READ ||
     currentPage?.permission === PermissionType.WRITE ||
     currentPage?.permission === PermissionType.ADMIN;
-
-  const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
-
-  const [contributors, setContributors] = useState<IPageContributor[]>([]);
-  const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
-    [],
-  );
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
@@ -110,6 +96,17 @@ export const PageContent: React.FC = () => {
     }
     return;
   };
+
+  useEffect(() => {
+    if (paramsVersionId) {
+      const currentContent = currentPage?.pageContents.find(
+        (content) => content.id === paramsVersionId,
+      );
+      if (currentContent) {
+        setCurrContent(currentContent);
+      }
+    }
+  }, [paramsVersionId]);
 
   useEffect(() => {
     if (paramsId && isUUID.anyNonNil(paramsId)) {
@@ -135,183 +132,200 @@ export const PageContent: React.FC = () => {
   }, [paramsId]);
 
   const onAssign = (): void => {
-    setIsPopUpVisible(true);
+    setIsPermissionsModalVisible(true);
   };
 
   const handleAssignCancel = (): void => {
-    setIsPopUpVisible(false);
-  };
-
-  const handleIviteCancel = (): void => {
-    setIsModalVisible(false);
+    setIsPermissionsModalVisible(false);
   };
 
   const handleAssignConfirm = (): void => {
-    setIsPopUpVisible(false);
-    setIsModalVisible(true);
+    setIsPermissionsModalVisible(false);
+    setIsInviteModalVisible(true);
   };
 
-  const handleEditing = (): void => {
+  const handleIviteCancel = (): void => {
+    setIsInviteModalVisible(false);
+  };
+
+  const onEditing = (): void => {
     history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
   };
 
-  const Content: React.FC = () => {
-    const { isCurrentPageFollowed } = useAppSelector(
-      (state: RootState) => state.pages,
-    );
-
-    const isPageFollowed = async (): Promise<void> => {
-      if (currentPage?.followingUsers) {
-        currentPage.followingUsers.map((follower) => {
-          if (follower.id === user?.id) {
-            dispatch(pagesActions.setCurrentPageFollowed(true));
-          }
-        });
-      }
-    };
-
-    const handlePageFollow =
-      (pageId: string) =>
-      async (withChildren: boolean): Promise<void> => {
-        setIsFollowModalVisible(false);
-        await dispatch(pagesActions.followPage({ pageId, withChildren }));
-      };
-
-    const handlePageUnfollow =
-      (pageId: string) =>
-      async (withChildren: boolean): Promise<void> => {
-        setIsFollowModalVisible(false);
-        await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
-      };
-
-    const onPageFollow = (): void => {
-      if (childPages && childPages.length) {
-        setIsFollowModalVisible(true);
-      } else {
-        isCurrentPageFollowed
-          ? handlePageUnfollow(paramsId)(false)
-          : handlePageFollow(paramsId)(false);
-      }
-    };
-
-    useEffect(() => {
-      isPageFollowed();
-    }, []);
-
-    return (
-      <div className="p-4">
-        {canView ? (
-          <>
-            <Row>
-              <Col xs={2}>
-                <PageTableOfContents headings={TOCHeadings} />
-                <PageTags />
-                <PageContributors
-                  className="mt-4"
-                  contributors={contributors}
-                />
-                <PageFollowingUsers
-                  className="mt-4"
-                  followers={currentPage?.followingUsers}
-                />
-              </Col>
-              <Col>
-                <Row>
-                  <Col className="d-flex justify-content-between mb-4 align-items-center">
-                    <h1 className="h3">{pageTitle || 'New Page'}</h1>
-                    <div className="d-flex align-items-center">
-                      {canRead && (
-                        <VersionDropdown
-                          currContent={currContent}
-                          contributors={contributors}
-                        />
-                      )}
-                      {isPageAdmin && (
-                        <>
-                          <Button
-                            onClick={onAssign}
-                            className={canEdit ? 'me-3' : ''}
-                            variant="success"
-                            size="sm"
-                          >
-                            Assign permissions
-                          </Button>
-                        </>
-                      )}
-                      {canEdit && <EditButton onClick={handleEditing} />}
-                      <Button
-                        className="ms-3"
-                        onClick={onPageFollow}
-                        variant={isCurrentPageFollowed ? 'danger' : 'success'}
-                        size="sm"
-                      >
-                        {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
-                      </Button>
-                      <PageDropdown className="ms-3" />
-                    </div>
-                  </Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col>
-                    <Card border="light" className={styles.card}>
-                      <Card.Body className={getAllowedClasses(styles.content)}>
-                        {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
-                        <ReactMarkdown remarkPlugins={[slug, gfm]}>
-                          {content?.trim() || 'Empty page'}
-                        </ReactMarkdown>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Card
-                      border="light"
-                      className={getAllowedClasses(styles.card)}
-                    >
-                      <Card.Header>Comments</Card.Header>
-                      <Card.Body>
-                        <CommentSection pageId={paramsId} />
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Popup
-              query="Users & Teams"
-              isVisible={isPopUpVisible}
-              cancelButton={{
-                text: 'Cancel',
-                onClick: handleAssignCancel,
-              }}
-              inviteButton={{
-                text: 'Add user',
-                onClick: handleAssignConfirm,
-              }}
-            />
-            <InviteModal
-              onModalClose={handleIviteCancel}
-              showModal={isModalVisible}
-            />
-            <FollowModal
-              show={isFollowModalVisible}
-              isFollowing={isCurrentPageFollowed}
-              handler={
-                isCurrentPageFollowed
-                  ? handlePageUnfollow(paramsId)
-                  : handlePageFollow(paramsId)
-              }
-            />
-          </>
-        ) : (
-          <h1 className="d-flex justify-content-center">
-            No permission to view the requested page
-          </h1>
-        )}
-      </div>
-    );
+  const onDelete = (): void => {
+    setIsDeleteModalVisible(true);
   };
 
-  return !isSpinner && !isLeftBlockLoading ? <Content /> : <Spinner />;
+  const handleDeleteCancel = (): void => {
+    setIsDeleteModalVisible(false);
+  };
+
+  const handleDeleteConfirm = async (): Promise<void> => {
+    if (currentPage) {
+      await dispatch(pagesActions.deletePage(currentPage.id));
+      history.push(AppRoute.ROOT);
+      toast.info('Page has been deleted successfully.', {
+        closeOnClick: false,
+        pauseOnHover: true,
+      });
+    }
+  };
+
+  const isPageFollowed = async (): Promise<void> => {
+    if (currentPage?.followingUsers) {
+      currentPage.followingUsers.map((follower) => {
+        if (follower.id === user?.id) {
+          dispatch(pagesActions.setCurrentPageFollowed(true));
+        }
+      });
+    }
+  };
+
+  const handlePageFollow =
+    (pageId: string) =>
+    async (withChildren: boolean): Promise<void> => {
+      setIsFollowModalVisible(false);
+      await dispatch(pagesActions.followPage({ pageId, withChildren }));
+    };
+
+  const handlePageUnfollow =
+    (pageId: string) =>
+    async (withChildren: boolean): Promise<void> => {
+      setIsFollowModalVisible(false);
+      await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
+    };
+
+  const onPageFollow = (): void => {
+    if (childPages && childPages.length) {
+      setIsFollowModalVisible(true);
+    } else {
+      isCurrentPageFollowed
+        ? handlePageUnfollow(paramsId)(false)
+        : handlePageFollow(paramsId)(false);
+    }
+  };
+
+  useEffect(() => {
+    isPageFollowed();
+  }, []);
+
+  if (isSpinner || isLeftBlockLoading) {
+    return <Spinner />;
+  }
+
+  return (
+    <div className="p-4">
+      {canView ? (
+        <>
+          <Row>
+            <Col xs={2}>
+              <PageTableOfContents headings={TOCHeadings} />
+              <PageTags />
+              <PageContributors className="mt-4" contributors={contributors} />
+              <PageFollowingUsers
+                className="mt-4"
+                followers={currentPage?.followingUsers}
+              />
+            </Col>
+            <Col>
+              <Row>
+                <Col className="d-flex justify-content-between mb-4 align-items-center">
+                  <h1 className="h3">{pageTitle || 'New Page'}</h1>
+                  <div className="d-flex align-items-center">
+                    {canRead && (
+                      <VersionDropdown
+                        currContent={currContent}
+                        contributors={contributors}
+                      />
+                    )}
+
+                    <PageActionsDropdown
+                      className="ms-3"
+                      onAssign={onAssign}
+                      onEditing={onEditing}
+                      onPageFollow={onPageFollow}
+                      onDelete={onDelete}
+                      isCurrentPageFollowed={isCurrentPageFollowed}
+                    />
+                  </div>
+                </Col>
+              </Row>
+              <Row className="mb-4">
+                <Col>
+                  <Card border="light" className={styles.card}>
+                    <Card.Body className={getAllowedClasses(styles.content)}>
+                      {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
+                      <ReactMarkdown remarkPlugins={[slug, gfm]}>
+                        {content?.trim() || 'Empty page'}
+                      </ReactMarkdown>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Card
+                    border="light"
+                    className={getAllowedClasses(styles.card)}
+                  >
+                    <Card.Header>Comments</Card.Header>
+                    <Card.Body>
+                      <CommentSection pageId={paramsId} />
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Popup
+            query="Users & Teams"
+            isVisible={isPermissionsModalVisible}
+            cancelButton={{
+              text: 'Cancel',
+              onClick: handleAssignCancel,
+            }}
+            inviteButton={{
+              text: 'Add user',
+              onClick: handleAssignConfirm,
+            }}
+          />
+          <InviteModal
+            onModalClose={handleIviteCancel}
+            showModal={isInviteModalVisible}
+          />
+          <FollowModal
+            show={isFollowModalVisible}
+            isFollowing={isCurrentPageFollowed}
+            handler={
+              isCurrentPageFollowed
+                ? handlePageUnfollow(paramsId)
+                : handlePageFollow(paramsId)
+            }
+          />
+          <ConfirmModal
+            title="Delete confirmation"
+            showModal={isDeleteModalVisible}
+            modalText={
+              isParentPage
+                ? 'Are you sure you want to delete this page?'
+                : "It's a parent page. Are you sure you want to delte this page with its child pages?"
+            }
+            confirmButton={{
+              text: 'Delete',
+              onClick: handleDeleteConfirm,
+              variant: 'danger',
+            }}
+            cancelButton={{
+              text: 'Close',
+              onClick: handleDeleteCancel,
+            }}
+          />
+        </>
+      ) : (
+        <h1 className="d-flex justify-content-center">
+          No permission to view the requested page
+        </h1>
+      )}
+    </div>
+  );
 };

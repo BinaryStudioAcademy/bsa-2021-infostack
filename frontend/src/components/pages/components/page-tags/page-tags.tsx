@@ -145,19 +145,20 @@ const PageTags: React.FC = () => {
     <Card border="light" className="card">
       <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
         Tags
-        {!isEditMode ? (
-          <span className="btn-manage text-success" onClick={handleManage}>
-            manage
-          </span>
-        ) : (
-          <Button
-            variant="success"
-            className="btn-done p-1 text-white"
-            onClick={handleDone}
-          >
-            done
-          </Button>
-        )}
+        {isCanManage &&
+          (!isEditMode ? (
+            <span className="btn-manage text-success" onClick={handleManage}>
+              manage
+            </span>
+          ) : (
+            <Button
+              variant="success"
+              className="btn-done p-1 text-white"
+              onClick={handleDone}
+            >
+              done
+            </Button>
+          ))}
       </Card.Header>
       <Card.Body>
         {pageTags?.length ? (
