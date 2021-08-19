@@ -49,9 +49,11 @@ export const PageItem: React.FC<Props> = ({
 
     await dispatch(pagesActions.createPage(payload))
       .unwrap()
-      .then((res) =>
-        history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute),
-      );
+      .then((res) => {
+        if (res) {
+          history.push(replaceIdParam(AppRoute.PAGE, res.id || '') as AppRoute);
+        }
+      });
     await dispatch(pagesActions.getPagesAsync());
     setActiveKey(id);
   };
