@@ -1,11 +1,10 @@
 import { ListGroup } from 'react-bootstrap';
 import { useState, useHistory } from 'hooks/hooks';
-import { replaceIdParam } from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
 import { CommentForm } from '../components';
 import { Emoji } from '../emoji/emoji';
 import { UserAvatar } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
 import { ICommentReaction } from 'common/interfaces/comment-reaction';
 import styles from './styles.module.scss';
 
