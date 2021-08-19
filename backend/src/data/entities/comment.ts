@@ -1,10 +1,20 @@
-import { Entity, Column, OneToMany, RelationId, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  RelationId,
+  ManyToOne,
+  Tree,
+  TreeChildren,
+  TreeParent,
+  OneToMany,
+} from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { User } from './user';
 import { Reaction } from './reaction';
 
 @Entity()
+@Tree('closure-table')
 export class Comment extends AbstractEntity {
   @Column()
   text: string;
@@ -29,11 +39,11 @@ export class Comment extends AbstractEntity {
   @Column({ nullable: true })
   readonly parentCommentId: string;
 
-  @ManyToOne(() => Comment, (comment) => comment.childComments)
-  parentComment: Comment;
-
-  @OneToMany(() => Comment, (comment) => comment.parentComment)
+  @TreeChildren()
   childComments: Comment[];
+
+  @TreeParent()
+  parentComment: Comment;
 
   @OneToMany(() => Reaction, (reaction) => reaction.comment)
   reactions: Reaction[];

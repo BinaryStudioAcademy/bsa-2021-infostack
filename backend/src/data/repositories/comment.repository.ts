@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { IComment } from '../../common/interfaces/comment';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
-class CommentRepository extends Repository<Comment> {
+export class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
+    'comment.createdAt',
     'comment.text',
     'comment.pageId',
     'comment.parentCommentId',
@@ -16,7 +16,7 @@ class CommentRepository extends Repository<Comment> {
     'reactions',
   ];
 
-  public async findByPageId(pageId: string): Promise<IComment[]> {
+  public findByPageId(pageId: string): Promise<Comment[]> {
     return this.createQueryBuilder('comment')
       .where('comment.pageId = :pageId', { pageId })
       .innerJoinAndSelect('comment.author', 'author')
@@ -26,13 +26,17 @@ class CommentRepository extends Repository<Comment> {
       .getMany();
   }
 
-  public async findOneById(id: string): Promise<IComment> {
+  public findOneById(id: string): Promise<Comment> {
     return this.createQueryBuilder('comment')
       .where('comment.id = :id', { id })
       .innerJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('comment.reactions', 'reactions')
       .select(this.SELECTION)
       .getOne();
+  }
+
+  public async deleteById(id: string): Promise<void> {
+    this.delete(id);
   }
 
   public async findPageByCommentId(id: string): Promise<Comment> {
@@ -44,4 +48,3 @@ class CommentRepository extends Repository<Comment> {
     );
   }
 }
-export default CommentRepository;
