@@ -111,7 +111,7 @@ export const createPage = async (
   }
 };
 
-export const deletePage = async (pageId: string) => {
+export const deletePage = async (pageId: string): Promise<void> => {
   const pageRepository = getCustomRepository(PageRepository);
   await pageRepository.deleteById(pageId);
 };
