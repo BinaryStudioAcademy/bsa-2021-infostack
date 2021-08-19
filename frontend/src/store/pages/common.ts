@@ -1,5 +1,6 @@
 enum ActionType {
   CREATE_PAGE = 'createPage',
+  DELETE_PAGE = 'deletePage',
   CREATE_VERSION_PAGE = 'createVersionPage',
   GET_PAGE = 'getPage',
   SET_PAGES = 'setPages',

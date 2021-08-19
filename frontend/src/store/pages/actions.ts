@@ -67,6 +67,17 @@ const setPage = createAsyncThunk(
   },
 );
 
+const deletePage = createAsyncThunk(
+  ActionType.DELETE_PAGE,
+  async (pageId: string, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    await new PageApi().deletePage(pageId);
+    dispatch(actions.deletePage());
+    dispatch(getPagesAsync());
+    dispatch(actions.toggleSpinner());
+  },
+);
+
 type FollowPayload = {
   pageId: string;
   withChildren: boolean;
@@ -138,6 +149,7 @@ const editPageContent = createAsyncThunk(
 const pagesActions = {
   ...actions,
   createPage,
+  deletePage,
   createVersionPage,
   getPagesAsync,
   getPage,

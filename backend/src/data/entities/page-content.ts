@@ -1,9 +1,4 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  RelationId,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, RelationId } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { User } from './user';
@@ -14,7 +9,9 @@ export class PageContent extends AbstractEntity {
   @Column()
   readonly pageId: string;
 
-  @ManyToOne(() => Page, page => page.pageContents)
+  @ManyToOne(() => Page, (page) => page.pageContents, {
+    onDelete: 'CASCADE',
+  })
   page: Page;
 
   @Column({ length: 50 })
@@ -27,6 +24,6 @@ export class PageContent extends AbstractEntity {
   @Column()
   readonly authorId: string;
 
-  @ManyToOne(() => User, user => user.pageContents)
+  @ManyToOne(() => User, (user) => user.pageContents)
   author: User;
 }

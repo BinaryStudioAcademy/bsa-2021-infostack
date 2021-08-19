@@ -24,6 +24,12 @@ export class PageApi {
     });
   }
 
+  public async deletePage(id: string): Promise<void> {
+    return this.http.load(`${this.BASE}/${id}`, {
+      method: HttpMethod.DELETE,
+    });
+  }
+
   public async createVersionPage(payload: IPageRequest): Promise<IPageNav> {
     return this.http.load(`${this.BASE}/:id/version`, {
       method: HttpMethod.POST,
