@@ -7,7 +7,7 @@ interface Props {
 
 export const CreateButton: React.FC<Props> = ({ onClick }) => (
   <Button
-    variant="primary"
+    variant="success"
     className="create-team-button float-right"
     onClick={onClick}
   >

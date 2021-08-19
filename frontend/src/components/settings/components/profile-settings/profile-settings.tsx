@@ -355,7 +355,7 @@ export const ProfileSettings: React.FC = () => {
                 hidden
               />
               <Button
-                variant="primary"
+                variant="danger"
                 className={getAllowedClasses(
                   styles.avatarControlButton,
                   styles.spaceBetween,
@@ -370,7 +370,6 @@ export const ProfileSettings: React.FC = () => {
                 />
                 Upload
               </Button>
-
               <span className={getAllowedClasses(styles.uploadText)}>
                 For best results use an image at least 128px in .jpg format
               </span>

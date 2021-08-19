@@ -20,12 +20,12 @@ export const FollowModal: React.FC<Props> = ({
       actions={[
         {
           text: 'No',
-          buttonVariant: 'secondary',
+          buttonVariant: 'warning',
           handler: (): void => handler(false),
         },
         {
           text: 'Yes',
-          buttonVariant: 'primary',
+          buttonVariant: isFollowing ? 'danger' : 'success',
           handler: (): void => handler(true),
         },
       ]}
