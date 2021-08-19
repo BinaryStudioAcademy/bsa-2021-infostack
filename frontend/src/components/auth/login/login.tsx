@@ -52,7 +52,6 @@ const Login: React.FC = () => {
         register={register('email')}
         errors={errors.email}
       />
-
       <FormField
         register={register('password')}
         label="Password"
