@@ -87,7 +87,7 @@ export const TagEdit: React.FC<{
           onClick={handleSave}
           variant="link"
           disabled={!!error || undefined}
-          className={`${getAllowedClasses(styles.button)} text-primary`}
+          className={`${getAllowedClasses(styles.button)} text-success`}
         >
           Save
         </Button>
@@ -96,7 +96,7 @@ export const TagEdit: React.FC<{
         <Button
           onClick={handleCancel}
           variant="link"
-          className={`${getAllowedClasses(styles.button)} text-secondary`}
+          className={`${getAllowedClasses(styles.button)} text-warning`}
         >
           Cancel
         </Button>

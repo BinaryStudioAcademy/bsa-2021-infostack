@@ -6,7 +6,7 @@ import { AppRoute } from 'common/enums/enums';
 import { AuthApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import logo from 'assets/img/logo.svg';
+import logo from 'assets/img/logo_dark.svg';
 
 type AlternativeRoute = {
   question: string;
@@ -48,8 +48,7 @@ export const Sign: React.FC<Props> = ({
           {children}
           <div className="text-center">
             <Button
-              className={styles.button}
-              variant="primary"
+              variant="success"
               type="submit"
               onClick={onSubmit}
               disabled={isSubmitDisabled}

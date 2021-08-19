@@ -27,7 +27,7 @@ export const TagItem: React.FC<{
         <Button
           onClick={handleEdit}
           variant="link"
-          className={`${getAllowedClasses(styles.button)} text-secondary`}
+          className={`${getAllowedClasses(styles.button)} text-success`}
         >
           Rename
         </Button>

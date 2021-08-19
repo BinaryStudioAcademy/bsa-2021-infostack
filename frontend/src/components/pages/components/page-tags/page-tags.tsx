@@ -129,7 +129,7 @@ const PageTags: React.FC = () => {
       <Card.Title className="d-flex justify-content-between align-items-center h6 text-secondary tags-title">
         <div>Tags</div>
         {!isEditMode ? (
-          <span className="btn-manage text-primary" onClick={handleManage}>
+          <span className="btn-manage text-success" onClick={handleManage}>
             manage
           </span>
         ) : (

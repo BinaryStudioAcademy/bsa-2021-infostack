@@ -60,7 +60,7 @@ export const Comment: React.FC<Props> = ({
           {text}
         </p>
         <button
-          className={getAllowedClasses('text-secondary', styles.respond)}
+          className={getAllowedClasses('text-success', styles.respond)}
           onClick={toggleField}
         >
           respond

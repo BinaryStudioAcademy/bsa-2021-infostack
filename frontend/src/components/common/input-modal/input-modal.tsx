@@ -56,7 +56,7 @@ export const InputModal: React.FC<Props> = ({
       <Modal.Footer>
         {cancelButton && (
           <Button
-            variant="secondary"
+            variant="warning"
             onClick={cancelButton.onClick}
             disabled={cancelButton.disabled}
           >
@@ -65,7 +65,7 @@ export const InputModal: React.FC<Props> = ({
         )}
         {confirmButton && (
           <Button
-            variant="primary"
+            variant="success"
             onClick={confirmButton.onClick}
             disabled={confirmButton.disabled}
           >
