@@ -1,6 +1,7 @@
 // Bootstrap variables
 $primary: #3f80ea;
 $secondary: #495057;
+$success: #4bba73;
 $dark: #293042;
 $font-size-base: 1.6rem;
 $min-contrast-ratio: 3.8;
@@ -46,4 +47,21 @@ h6 {
   line-height: 1.2;
   margin-bottom: 0.5rem;
   margin-top: 0;
+}
+
+.list-group-item.active {
+  background-color: $success;
+  border-color: $success;
+}
+
+.btn-success,
+.btn-success:hover,
+.btn-success:active,
+.btn-success:focus,
+.btn-success:disabled {
+  color: white;
+}
+
+.dropdown-item:active {
+  background-color: $success;
 }

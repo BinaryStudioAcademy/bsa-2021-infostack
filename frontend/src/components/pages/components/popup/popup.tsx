@@ -155,7 +155,7 @@ export const Popup: React.FC<Props> = ({
         <div className="d-flex w-100 justify-content-between">
           <Modal.Title className="h5 m-0">{query}</Modal.Title>
           <Button
-            variant="primary"
+            variant="success"
             size="sm"
             onClick={inviteButton.onClick}
             className="mx-3"

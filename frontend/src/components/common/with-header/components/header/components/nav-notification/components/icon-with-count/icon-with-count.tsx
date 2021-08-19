@@ -10,7 +10,7 @@ export const IconWithCount: React.FC<Props> = ({ count }) => (
     <div
       className={getAllowedClasses(
         styles.count,
-        'rounded-circle text-white bg-primary',
+        'rounded-circle text-white bg-success',
       )}
     >
       {count}
