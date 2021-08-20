@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Row, Popover, OverlayTrigger } from 'react-bootstrap';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -227,8 +227,8 @@ export const PageContent: React.FC = () => {
     <div className="p-4">
       {canView ? (
         <>
-          <Row>
-            <Col xs={2}>
+          <Row className="gx-5">
+            <Col xs={12} lg={3} xl={2}>
               <PageTableOfContents headings={TOCHeadings} />
               <PageTags />
               <PageContributors className="mt-4" contributors={contributors} />
@@ -237,10 +237,26 @@ export const PageContent: React.FC = () => {
                 followers={currentPage?.followingUsers}
               />
             </Col>
-            <Col xs={10}>
+            <Col xs={12} lg={9} xl={10}>
               <Row>
                 <Col className="d-flex justify-content-between mb-4 align-items-center">
-                  <h1 className="h3">{pageTitle || 'New Page'}</h1>
+                  <OverlayTrigger
+                    trigger="hover"
+                    placement="bottom"
+                    overlay={
+                      <Popover id="popover-positioned-bottom">
+                        <Popover.Body
+                          className={getAllowedClasses(styles.popoverText)}
+                        >
+                          {pageTitle || 'New Page'}
+                        </Popover.Body>
+                      </Popover>
+                    }
+                  >
+                    <h1 className={getAllowedClasses(styles.pageHeading, 'h3')}>
+                      {pageTitle || 'New Page'}
+                    </h1>
+                  </OverlayTrigger>
                   <div className="d-flex align-items-center">
                     {canRead && (
                       <VersionDropdown

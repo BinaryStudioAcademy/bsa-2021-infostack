@@ -5,3 +5,15 @@
     word-break: break-all;
   }
 }
+
+.pageHeading {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.popoverText {
+  font-size: 1.32rem;
+  color: #737373;
+  font-family: 'Poppins', sans-serif;
+}
