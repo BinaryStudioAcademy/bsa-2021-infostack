@@ -489,7 +489,7 @@ export const getTableOfContentsByPageId = async (
 export const getTableOfContentsByPageIdAndVersionId = async (
   pageId: string,
   versionId: string,
-): Promise<any> => {
+): Promise<IPageTableOfContents> => {
   const pageContentRepository = getCustomRepository(PageContentRepository);
   const { content } = await pageContentRepository.findByIdAndPageId(
     versionId,
