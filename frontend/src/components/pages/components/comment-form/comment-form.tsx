@@ -1,39 +1,53 @@
 import { Form, Button } from 'react-bootstrap';
-import { useState, useAppSelector, useHistory } from 'hooks/hooks';
-import { replaceIdParam } from 'helpers/helpers';
-import { AppRoute } from 'common/enums/enums';
+import { useState, useAppSelector, useAppDispatch } from 'hooks/hooks';
+import { RequestStatus } from 'common/enums/enums';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
+import { commentsActions } from 'store/comments';
 import styles from './styles.module.scss';
+import { toast } from 'react-toastify';
 
 type Props = {
-  onSubmit: (text: string) => void;
-  onCancel?: () => void;
-  isDisabled?: boolean;
+  pageId: string;
+  parentCommentId?: string;
   className?: string;
   placeholder?: string;
-  avatarSize?: string;
+  onSubmit?: () => void;
+  onCancel?: () => void;
 };
 
 export const CommentForm: React.FC<Props> = ({
-  onSubmit,
-  onCancel,
-  isDisabled = false,
+  pageId,
+  parentCommentId,
   className,
   placeholder,
-  avatarSize = '40',
+  onSubmit,
+  onCancel,
 }) => {
   const [text, setText] = useState('');
   const user = useAppSelector((state) => state.auth.user);
-  const history = useHistory();
+  const { createStatus, fetchStatus, deleteStatus } = useAppSelector(
+    (state) => state.comments,
+  );
+  const dispatch = useAppDispatch();
 
   const handleChange = ({
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>): void => setText(value);
 
-  const handleSubmit = (): void => {
-    onSubmit(text);
-    setText('');
+  const handleSubmit = async (): Promise<void> => {
+    try {
+      await dispatch(
+        commentsActions.createComment({
+          pageId,
+          payload: { text, parentCommentId },
+        }),
+      ).unwrap();
+      setText('');
+      onSubmit?.();
+    } catch {
+      toast.error('Could not add comment');
+    }
   };
 
   const handleCancel = (): void => {
@@ -41,13 +55,12 @@ export const CommentForm: React.FC<Props> = ({
     onCancel?.();
   };
 
-  const handleAvatarClick = (userId?: string): void => {
-    if (!userId) {
-      return;
-    }
-
-    history.push(replaceIdParam(AppRoute.PROFILE, userId));
-  };
+  const isSubmitDisabled =
+    createStatus === RequestStatus.LOADING ||
+    fetchStatus === RequestStatus.LOADING ||
+    deleteStatus === RequestStatus.LOADING;
+  const isCancelDisabled = createStatus === RequestStatus.LOADING;
+  const isFieldDisabled = isCancelDisabled;
 
   return (
     <>
@@ -55,15 +68,15 @@ export const CommentForm: React.FC<Props> = ({
         <Form.Group>
           <div className="d-flex align-items-start">
             <UserAvatar
-              size={avatarSize}
+              size="40"
               name={user?.fullName}
               src={user?.avatar}
               round
               className={getAllowedClasses(styles.avatar)}
-              onClick={(): void => handleAvatarClick(user?.id)}
             />
             <div className="flex-grow-1 ms-3">
               <Form.Control
+                disabled={isFieldDisabled}
                 as="textarea"
                 placeholder={placeholder}
                 value={text}
@@ -71,19 +84,20 @@ export const CommentForm: React.FC<Props> = ({
                 onChange={handleChange}
               />
               <Button
-                disabled={isDisabled || text === ''}
-                onClick={handleSubmit}
-                className={styles.text}
-                variant="success"
-              >
-                Submit
-              </Button>
-              <Button
+                disabled={isCancelDisabled}
                 onClick={handleCancel}
-                className={getAllowedClasses('ms-2', styles.text)}
+                className={styles.text}
                 variant="warning"
               >
                 Cancel
+              </Button>
+              <Button
+                disabled={isSubmitDisabled || text.trim() === ''}
+                onClick={handleSubmit}
+                className={getAllowedClasses('ms-2', styles.text)}
+                variant="success"
+              >
+                Submit
               </Button>
             </div>
           </div>

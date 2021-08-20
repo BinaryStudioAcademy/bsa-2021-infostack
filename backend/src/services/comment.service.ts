@@ -1,13 +1,19 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
-import { ICommentRequest, IComment } from '../common/interfaces/comment';
+import {
+  IComment,
+  ICommentRequest,
+  ICommentResponse,
+} from '../common/interfaces/comment';
+import {
+  CommentRepository,
+  NotificationRepository,
+} from '../data/repositories';
 import { ICommentReaction } from '../common/interfaces/comment-reaction';
 import { IRequestWithUser } from '../common/interfaces/http/request-with-user.interface';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { HttpError } from '../common/errors/http-error';
-import CommentRepository from '../data/repositories/comment.repository';
-import NotificationRepository from '../data/repositories/notification.repository';
 import CommentReactionRepository from '../data/repositories/comment-reaction.repository';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
@@ -16,11 +22,18 @@ import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification'
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
 
-export const getComments = async (pageId: string): Promise<IComment[]> => {
+export const getComments = async (
+  pageId: string,
+): Promise<ICommentResponse[]> => {
   const comments = await getCustomRepository(CommentRepository).findByPageId(
     pageId,
   );
-  return mapChildToParent(comments);
+  return mapChildToParent(
+    comments.map((comment) => ({
+      ...comment,
+      createdAt: comment.createdAt.toISOString(),
+    })),
+  );
 };
 
 export const notifyUsers = async (
@@ -126,11 +139,25 @@ export const addComment = async (
 
   const comment = await commentRepository.findOneById(id);
 
-  io.to(pageId).emit(SocketEvents.PAGE_NEW_COMMENT, comment);
+  const response = {
+    ...comment,
+    createdAt: comment.createdAt.toISOString(),
+  };
 
-  notifyUsers(comment, io);
+  io.to(pageId).emit(SocketEvents.PAGE_NEW_COMMENT, response);
+  notifyUsers(response, io);
 
-  return comment;
+  return response;
+};
+
+export const deleteComment = async (
+  id: string,
+  pageId: string,
+  userId: string,
+  io: Server,
+): Promise<void> => {
+  getCustomRepository(CommentRepository).deleteById(id);
+  io.to(pageId).emit(SocketEvents.PAGE_DELETE_COMMENT, { id, sender: userId });
 };
 
 export const handleCommentReaction = async (

@@ -67,6 +67,9 @@
   text-decoration: none;
   font-weight: 500;
   color: #495057;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .profile-user-title {
