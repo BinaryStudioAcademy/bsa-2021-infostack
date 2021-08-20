@@ -31,6 +31,7 @@ import {
 import {
   IPageContent,
   IPageContributor,
+  IPageTableOfContents,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
@@ -70,7 +71,6 @@ export const PageContent: React.FC = () => {
   const paramsId = useParams<{ id: string }>().id;
   const paramsVersionId = useParams<{ versionId: string }>().versionId;
 
-  const isParentPage = !!currentPage?.parentPageId;
   const pageTitle = currContent
     ? currContent.title
     : currentPage?.pageContents[0].title || undefined;
@@ -114,8 +114,18 @@ export const PageContent: React.FC = () => {
 
       getPageById(paramsId);
 
-      const contributorsPromise = new PageApi().getPageContributors(paramsId);
-      const TOCPromise = new PageApi().getPageTableOfContents(paramsId);
+      const pageApi = new PageApi();
+      const contributorsPromise = pageApi.getPageContributors(paramsId);
+      let TOCPromise: Promise<IPageTableOfContents>;
+
+      if (paramsVersionId) {
+        TOCPromise = pageApi.getPageVersionTableOfContents(
+          paramsId,
+          paramsVersionId,
+        );
+      } else {
+        TOCPromise = pageApi.getPageTableOfContents(paramsId);
+      }
 
       Promise.all([contributorsPromise, TOCPromise]).then(
         ([contributors, TOC]) => {
@@ -129,7 +139,7 @@ export const PageContent: React.FC = () => {
       dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
     }
-  }, [paramsId]);
+  }, [paramsId, paramsVersionId]);
 
   const onAssign = (): void => {
     setIsPermissionsModalVisible(true);
@@ -296,12 +306,7 @@ export const PageContent: React.FC = () => {
           <ConfirmModal
             title="Delete confirmation"
             showModal={isDeleteModalVisible}
-            modalText={
-              isParentPage
-                ? 'Are you sure you want to delete this page?'
-                : // prettier-ignore
-                  'It\'s a parent page. Are you sure you want to delte this page with its child pages?'
-            }
+            modalText="Are you sure you want to delete this page? If this page contains subpages they will be deleted as well."
             confirmButton={{
               text: 'Delete',
               onClick: handleDeleteConfirm,

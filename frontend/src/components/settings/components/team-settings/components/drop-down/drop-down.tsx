@@ -1,10 +1,11 @@
-import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
+import { Dropdown, NavLink } from 'react-bootstrap';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { CreateTeamModal } from '../modal/modal';
 import { teamsActions } from 'store/actions';
 import { useState, useAppDispatch } from 'hooks/hooks';
 import { Popup } from '../popup-invite/popup-invite';
-import './styles.scss';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 type Props = {
   team: ITeam;
@@ -41,21 +42,33 @@ export const DropDown: React.FC<Props> = ({ team }) => {
 
   return (
     <div>
-      <Dropdown as={NavItem} align="end" className="teamSettingsDropdown">
-        <Dropdown.Toggle as={NavLink} className="p-0">
-          <p className="p-0 m-0">...</p>
+      <Dropdown
+        align="end"
+        className={getAllowedClasses(styles.teamSettingsDropdown)}
+      >
+        <Dropdown.Toggle
+          as={NavLink}
+          className={getAllowedClasses(styles.dropdownButton)}
+        >
+          <i className="bi bi-three-dots"></i>
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item
-            className="teamSettingsItem"
+            className={getAllowedClasses(styles.teamSettingsItem)}
             onClick={onEditTeamButtonClick}
           >
             Edit
           </Dropdown.Item>
-          <Dropdown.Item className="teamSettingsItem" onClick={showInvitePopup}>
+          <Dropdown.Item
+            className={getAllowedClasses(styles.teamSettingsItem)}
+            onClick={showInvitePopup}
+          >
             Invite user
           </Dropdown.Item>
-          <Dropdown.Item className="teamSettingsItem" onClick={handleDeleting}>
+          <Dropdown.Item
+            className={getAllowedClasses(styles.teamSettingsItem)}
+            onClick={handleDeleting}
+          >
             Delete
           </Dropdown.Item>
         </Dropdown.Menu>
