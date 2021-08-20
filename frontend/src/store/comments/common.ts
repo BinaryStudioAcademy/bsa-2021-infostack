@@ -1,7 +1,9 @@
 enum ActionType {
-  SET_COMMENTS = 'setComments',
   ADD_COMMENT = 'addComment',
-  ADD_RESPONSE = 'addResponse',
+  REMOVE_COMMENT = 'removeComment',
+  FETCH_COMMENTS = 'fetchComments',
+  CREATE_COMMENT = 'createComment',
+  DELETE_COMMENT = 'deleteComment',
 }
 
 export { ActionType };

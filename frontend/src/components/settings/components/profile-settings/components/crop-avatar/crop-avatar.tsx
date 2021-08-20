@@ -92,7 +92,6 @@ export const CropAvatar: React.FC<Props> = ({
           circularCrop
           minHeight={128}
           onImageLoaded={onImageLoaded}
-          imageStyle={{ maxWidth: '460px', maxHeight: '460px' }}
         />
       </Modal.Body>
       <Modal.Footer>

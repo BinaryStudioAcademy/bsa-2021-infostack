@@ -5,8 +5,8 @@ import { Link } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
 import { AuthApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
-import styles from './styles.module.scss';
 import logo from 'assets/img/logo_dark.svg';
+import styles from './styles.module.scss';
 
 type AlternativeRoute = {
   question: string;

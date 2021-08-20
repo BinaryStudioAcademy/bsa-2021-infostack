@@ -1,4 +1,4 @@
-import { ListGroup } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import {
   useAppDispatch,
   useAppSelector,
@@ -10,108 +10,94 @@ import { SocketContext } from 'context/socket';
 import { commentsActions } from 'store/actions';
 import { IComment } from 'common/interfaces/comment';
 import { SocketEvents } from 'common/enums/enums';
-import { Comment, Response, CommentForm } from '../components';
+import { CommentForm } from '../components';
+
+import styles from './styles.module.scss';
+import { getAllowedClasses } from 'helpers/helpers';
+import { CommentList } from '../comment-list/comment-list';
+import { DeleteModal } from '../delete-modal/delete-modal';
+import { toast } from 'react-toastify';
 
 type Props = {
   pageId: string;
 };
 
 export const CommentSection: React.FC<Props> = ({ pageId }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const comments = useAppSelector((state) => state.comments.comments);
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isModalDisabled, setIsModalDisabled] = useState<boolean>(false);
+  const [commentToDelete, setCommentToDelete] = useState<string | undefined>(
+    undefined,
+  );
 
   const onComment = (comment: IComment): void => {
-    if (comment.author.id === user?.id) {
-      return;
-    }
-
-    if (comment.parentCommentId) {
-      dispatch(commentsActions.addResponse(comment));
-    } else {
+    if (comment.author.id !== user?.id) {
       dispatch(commentsActions.addComment(comment));
     }
   };
 
+  const onDelete = ({ id, sender }: { id: string; sender: string }): void => {
+    if (sender !== user?.id) {
+      dispatch(commentsActions.removeComment(id));
+    }
+  };
+
+  const handleDelete = (id: string): void => {
+    setCommentToDelete(id);
+    setIsModalVisible(true);
+  };
+
+  const modalHandler = async (isConfirmed: boolean): Promise<void> => {
+    try {
+      setIsModalDisabled(true);
+      if (isConfirmed && commentToDelete) {
+        await dispatch(
+          commentsActions.deleteComment({ id: commentToDelete, pageId }),
+        ).unwrap();
+      }
+      setCommentToDelete(undefined);
+      setIsModalVisible(false);
+    } catch {
+      toast.error('Could not delete comment');
+    } finally {
+      setIsModalDisabled(false);
+    }
+  };
+
   useEffect(() => {
-    dispatch(commentsActions.loadComments(pageId));
+    dispatch(commentsActions.fetchComments(pageId));
     socket.emit(SocketEvents.PAGE_JOIN, pageId);
     socket.on(SocketEvents.PAGE_NEW_COMMENT, onComment);
+    socket.on(SocketEvents.PAGE_DELETE_COMMENT, onDelete);
 
     return (): void => {
       socket.off(SocketEvents.PAGE_NEW_COMMENT, onComment);
+      socket.off(SocketEvents.PAGE_DELETE_COMMENT, onDelete);
     };
   }, []);
 
-  const handleSubmit = async (text: string): Promise<void> => {
-    setIsLoading(true);
-    await dispatch(
-      commentsActions.createComment({ pageId, payload: { text } }),
-    );
-    setIsLoading(false);
-  };
-
-  const handleResponse = (commentId: string, text: string): void => {
-    dispatch(
-      commentsActions.createResponse({
-        pageId,
-        payload: { text, parentCommentId: commentId },
-      }),
-    );
-  };
-
   return (
     <>
-      <CommentForm
-        className="mb-5"
-        placeholder="Add a comment"
-        isDisabled={isLoading}
-        onSubmit={handleSubmit}
+      <Card border="light" className={styles.card}>
+        <Card.Header className={getAllowedClasses('bg-white', styles.header)}>
+          Comments
+        </Card.Header>
+        <Card.Body>
+          <CommentForm
+            pageId={pageId}
+            className="m-0"
+            placeholder="Add a comment"
+          />
+          <CommentList pageId={pageId} handleDelete={handleDelete} />
+        </Card.Body>
+      </Card>
+      <DeleteModal
+        show={isModalVisible}
+        handler={modalHandler}
+        isDisabled={isModalDisabled}
       />
-      <ListGroup variant="flush">
-        {comments.map(
-          ({
-            id,
-            text,
-            author: { id: userId, fullName, avatar },
-            children,
-            reactions = [],
-          }) => (
-            <Comment
-              key={id}
-              userId={userId}
-              name={fullName}
-              avatar={avatar}
-              text={text}
-              reactions={reactions}
-              commentId={id}
-              handleResponse={(text: string): void => handleResponse(id, text)}
-            >
-              {children &&
-                children.map(
-                  ({
-                    id,
-                    text,
-                    author: { id: userId, fullName, avatar },
-                    reactions = [],
-                  }) => (
-                    <Response
-                      key={id}
-                      userId={userId}
-                      name={fullName}
-                      avatar={avatar}
-                      text={text}
-                      commentId={id}
-                      reactions={reactions}
-                    />
-                  ),
-                )}
-            </Comment>
-          ),
-        )}
-      </ListGroup>
     </>
   );
 };
