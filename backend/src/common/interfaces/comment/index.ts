@@ -1,1 +1,1 @@
-export { ICommentRequest, IComment } from 'infostack-shared/common/interfaces';
+export { IComment, ICommentRequest, ICommentResponse } from 'infostack-shared';

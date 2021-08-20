@@ -240,7 +240,6 @@ export const PageContent: React.FC = () => {
                     )}
 
                     <PageActionsDropdown
-                      className="ms-3"
                       onAssign={onAssign}
                       onEditing={onEditing}
                       onPageFollow={onPageFollow}
@@ -264,15 +263,7 @@ export const PageContent: React.FC = () => {
               </Row>
               <Row>
                 <Col>
-                  <Card
-                    border="light"
-                    className={getAllowedClasses(styles.card)}
-                  >
-                    <Card.Header>Comments</Card.Header>
-                    <Card.Body>
-                      <CommentSection pageId={paramsId} />
-                    </Card.Body>
-                  </Card>
+                  <CommentSection pageId={paramsId} />
                 </Col>
               </Row>
             </Col>

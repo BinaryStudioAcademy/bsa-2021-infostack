@@ -23,10 +23,6 @@ export const TeamSettings: React.FC = () => {
     dispatch(teamsActions.fetchTeams());
   }, []);
 
-  const renderTeamItem = (team: ITeam): JSX.Element => {
-    return <Item key={team.id} team={team} />;
-  };
-
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
   };
@@ -70,10 +66,12 @@ export const TeamSettings: React.FC = () => {
               <div
                 className={getAllowedClasses(
                   styles.teamsContainer,
-                  'py-2 w-100',
+                  'd-flex flex-wrap py-2 w-100',
                 )}
               >
-                {teams.map((team: ITeam) => renderTeamItem(team))}
+                {teams.map((team: ITeam) => (
+                  <Item key={team.id} team={team} />
+                ))}
               </div>
             ))}
           <CreateTeamModal

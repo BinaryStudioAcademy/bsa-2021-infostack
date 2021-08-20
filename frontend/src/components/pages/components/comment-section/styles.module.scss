@@ -1,0 +1,12 @@
+.card {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  width: 100%;
+
+  .header {
+    border: 0;
+  }
+
+  .content {
+    word-break: break-all;
+  }
+}
