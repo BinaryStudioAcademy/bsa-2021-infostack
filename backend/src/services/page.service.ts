@@ -477,13 +477,26 @@ export const getContributors = async (
   return mapPageToContributors(page);
 };
 
-export const getTableOfContents = async (
+export const getTableOfContentsByPageId = async (
   pageId: string,
 ): Promise<IPageTableOfContents> => {
   const pageRepository = getCustomRepository(PageRepository);
   const { pageContents } = await pageRepository.findByIdWithLastContent(pageId);
 
   return { headings: parseHeadings(pageContents[0].content) };
+};
+
+export const getTableOfContentsByPageIdAndVersionId = async (
+  pageId: string,
+  versionId: string,
+): Promise<IPageTableOfContents> => {
+  const pageContentRepository = getCustomRepository(PageContentRepository);
+  const { content } = await pageContentRepository.findByIdAndPageId(
+    versionId,
+    pageId,
+  );
+
+  return { headings: parseHeadings(content) };
 };
 
 export const getPagesFollowedByUser = async (
