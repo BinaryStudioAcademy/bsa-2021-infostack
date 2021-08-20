@@ -27,7 +27,6 @@ export const PageContributors: React.FC<IPageContributorsProps> = ({
 
   const avatarStyles: React.CSSProperties = {
     boxSizing: 'content-box',
-    border: '4px solid white',
     cursor: 'pointer',
   };
 
@@ -44,23 +43,27 @@ export const PageContributors: React.FC<IPageContributorsProps> = ({
         </Badge>
       </Card.Header>
       <Card.Body>
-        <div
-          className="d-flex justify-content-start"
-          style={{ marginLeft: +avatarSize / 2 }}
-        >
-          {contributors.map(({ id, fullName, avatar }) => (
-            <div key={id} style={avatarWrapperStyle}>
-              <UserAvatar
-                style={avatarStyles}
-                name={fullName}
-                src={avatar}
-                round={true}
-                size={avatarSize.toString()}
-                onClick={handleAvatarClick.bind(null, id)}
-              />
-            </div>
-          ))}
-        </div>
+        {contributors ? (
+          <div
+            className="d-flex justify-content-start"
+            style={{ marginLeft: +avatarSize / 2 }}
+          >
+            {contributors.map(({ id, fullName, avatar }) => (
+              <div key={id} style={avatarWrapperStyle}>
+                <UserAvatar
+                  style={avatarStyles}
+                  name={fullName}
+                  src={avatar}
+                  round={true}
+                  size={avatarSize.toString()}
+                  onClick={handleAvatarClick.bind(null, id)}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <span className="text-warning">no contributors</span>
+        )}
       </Card.Body>
     </Card>
   );

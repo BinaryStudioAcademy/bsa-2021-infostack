@@ -1,14 +1,18 @@
-.team-card {
-  height: 12rem;
+.teamCard {
+  width: 27rem;
+  min-height: 11rem;
   box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 15%) !important;
 }
 
-.team-name {
-  padding: 10px;
-  margin: 0 !important;
+.card-body {
+  gap: 1rem;
 }
 
-.avatars-container {
+.teamName {
+  font-size: 1.8rem;
+}
+
+.avatarsContainer {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;

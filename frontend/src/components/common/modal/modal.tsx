@@ -8,6 +8,7 @@ type Props = {
   title?: string;
   children?: Child | Child[];
   actions?: Action[];
+  isDisabled?: boolean;
 };
 
 type Action = {
@@ -21,6 +22,7 @@ export const Modal: React.FC<Props> = ({
   title = '',
   children,
   actions,
+  isDisabled = false,
 }) => (
   <BSModal
     show={show}
@@ -42,6 +44,7 @@ export const Modal: React.FC<Props> = ({
             key={`${index}${text}`}
             variant={buttonVariant}
             onClick={handler}
+            disabled={isDisabled}
           >
             {text}
           </Button>

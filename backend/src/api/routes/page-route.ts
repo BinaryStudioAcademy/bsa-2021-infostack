@@ -19,7 +19,11 @@ import {
   savePageTags,
   getTableOfContents,
 } from '../../services/page.service';
-import { getComments, addComment } from '../../services/comment.service';
+import {
+  getComments,
+  addComment,
+  deleteComment,
+} from '../../services/comment.service';
 
 const router: Router = Router();
 
@@ -83,6 +87,13 @@ router.get(
 router.post(
   '/:id/comments',
   run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
+);
+
+router.delete(
+  '/:id/comments/:commentId',
+  run((req) =>
+    deleteComment(req.params.commentId, req.params.id, req.userId, req.io),
+  ),
 );
 
 router.get(

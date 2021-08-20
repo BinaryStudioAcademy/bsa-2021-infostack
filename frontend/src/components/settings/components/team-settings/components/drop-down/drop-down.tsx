@@ -6,9 +6,9 @@ import { useState, useAppDispatch } from 'hooks/hooks';
 import { Popup } from '../popup-invite/popup-invite';
 import './styles.scss';
 
-interface Props {
+type Props = {
   team: ITeam;
-}
+};
 
 export const DropDown: React.FC<Props> = ({ team }) => {
   const dispatch = useAppDispatch();
@@ -41,21 +41,21 @@ export const DropDown: React.FC<Props> = ({ team }) => {
 
   return (
     <div>
-      <Dropdown as={NavItem} align="end" className="team-settings-dropdown">
-        <Dropdown.Toggle as={NavLink} className="dropdown-team-details p-0">
+      <Dropdown as={NavItem} align="end" className="teamSettingsDropdown">
+        <Dropdown.Toggle as={NavLink} className="p-0">
           <p className="p-0 m-0">...</p>
         </Dropdown.Toggle>
-        <Dropdown.Menu className="dropdown-menu">
+        <Dropdown.Menu>
           <Dropdown.Item
-            className="dropdown-item"
+            className="teamSettingsItem"
             onClick={onEditTeamButtonClick}
           >
             Edit
           </Dropdown.Item>
-          <Dropdown.Item className="dropdown-item" onClick={showInvitePopup}>
+          <Dropdown.Item className="teamSettingsItem" onClick={showInvitePopup}>
             Invite user
           </Dropdown.Item>
-          <Dropdown.Item className="dropdown-item" onClick={handleDeleting}>
+          <Dropdown.Item className="teamSettingsItem" onClick={handleDeleting}>
             Delete
           </Dropdown.Item>
         </Dropdown.Menu>

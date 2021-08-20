@@ -41,6 +41,7 @@ export const DeleteUserModal: React.FC<Props> = ({
         text: 'Yes',
         onClick: handleDelete,
         disabled: isDeleteDisabled,
+        variant: 'danger',
       }}
       cancelButton={{
         text: 'No',

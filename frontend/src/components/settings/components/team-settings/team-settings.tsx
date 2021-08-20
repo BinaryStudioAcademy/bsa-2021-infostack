@@ -22,10 +22,6 @@ export const TeamSettings: React.FC = () => {
     dispatch(teamsActions.fetchTeams());
   }, []);
 
-  const renderTeamItem = (team: ITeam): JSX.Element => {
-    return <Item key={team.id} team={team} />;
-  };
-
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
   };
@@ -61,8 +57,10 @@ export const TeamSettings: React.FC = () => {
             (teams.length === 0 ? (
               <div>There is no teams in this workspace. Start adding</div>
             ) : (
-              <div className="teams-container py-2 w-100">
-                {teams.map((team: ITeam) => renderTeamItem(team))}
+              <div className="teamsContainer d-flex flex-wrap py-2 w-100">
+                {teams.map((team: ITeam) => (
+                  <Item key={team.id} team={team} />
+                ))}
               </div>
             ))}
           <CreateTeamModal
