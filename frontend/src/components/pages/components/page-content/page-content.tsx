@@ -71,7 +71,6 @@ export const PageContent: React.FC = () => {
   const paramsId = useParams<{ id: string }>().id;
   const paramsVersionId = useParams<{ versionId: string }>().versionId;
 
-  const isParentPage = !!currentPage?.parentPageId;
   const pageTitle = currContent
     ? currContent.title
     : currentPage?.pageContents[0].title || undefined;
@@ -323,12 +322,7 @@ export const PageContent: React.FC = () => {
           <ConfirmModal
             title="Delete confirmation"
             showModal={isDeleteModalVisible}
-            modalText={
-              isParentPage
-                ? 'Are you sure you want to delete this page?'
-                : // prettier-ignore
-                  'It\'s a parent page. Are you sure you want to delte this page with its child pages?'
-            }
+            modalText="Are you sure you want to delete this page? If this page contains subpages they will be deleted as well."
             confirmButton={{
               text: 'Delete',
               onClick: handleDeleteConfirm,
