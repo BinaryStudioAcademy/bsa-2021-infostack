@@ -35,14 +35,9 @@ export const deleteComment = createAsyncThunk<
     id: string;
     pageId: string;
   }
->(ActionType.DELETE_COMMENT, ({ id, pageId }) => {
-  try {
-    commentApi.deleteComment(id, pageId);
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log(e);
-  }
-});
+>(ActionType.DELETE_COMMENT, ({ id, pageId }) =>
+  commentApi.deleteComment(id, pageId),
+);
 
 export const asyncActions = {
   fetchComments,

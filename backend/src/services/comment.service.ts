@@ -161,6 +161,7 @@ export const deleteComment = async (
   const notifications = await notificationRepository.findAllByEntityTypeId(id);
   for (const notification of notifications) {
     await notificationRepository.deleteById(notification.id);
+    io.to(notification.userId).emit(SocketEvents.NOTIFICATION_DELETE);
   }
   io.to(pageId).emit(SocketEvents.PAGE_DELETE_COMMENT, { id, sender: userId });
 };

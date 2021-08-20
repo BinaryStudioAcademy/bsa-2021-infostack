@@ -5,4 +5,5 @@ export enum SocketEvents {
   PAGE_DELETE_COMMENT = 'page/deleteComment',
   APP_JOIN = 'app/join',
   NOTIFICATION_NEW = 'notification/new',
+  NOTIFICATION_DELETE = 'notification/delete',
 }
