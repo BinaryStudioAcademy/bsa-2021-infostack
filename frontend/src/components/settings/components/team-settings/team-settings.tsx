@@ -9,7 +9,8 @@ import {
   useAppSelector,
   useAppDispatch,
 } from 'hooks/hooks';
-import './styles.scss';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 export const TeamSettings: React.FC = () => {
   const { teams } = useAppSelector((state) => state.teams);
@@ -35,16 +36,21 @@ export const TeamSettings: React.FC = () => {
   };
 
   return (
-    <Card className="cardItem">
-      <Card.Header className="cardHeader d-flex justify-content-between">
-        <Card.Title as="h5" className="cardTitle">
+    <Card className={getAllowedClasses(styles.cardItem)}>
+      <Card.Header
+        className={getAllowedClasses(
+          styles.cardHeader,
+          'd-flex justify-content-between',
+        )}
+      >
+        <Card.Title as="h5" className={getAllowedClasses(styles.cardTitle)}>
           Teams
         </Card.Title>
         <CreateButton onClick={onCreateTeamButtonClick} />
       </Card.Header>
-      <Card.Body className="cardBody">
+      <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <div
-          className={`teams text-secondary d-flex flex-column align-items-start p-4${
+          className={`text-secondary d-flex flex-column align-items-start p-4${
             !teams ? ' vh-91' : ''
           }`}
         >
@@ -57,7 +63,12 @@ export const TeamSettings: React.FC = () => {
             (teams.length === 0 ? (
               <div>There is no teams in this workspace. Start adding</div>
             ) : (
-              <div className="teamsContainer d-flex flex-wrap py-2 w-100">
+              <div
+                className={getAllowedClasses(
+                  styles.teamsContainer,
+                  'd-flex flex-wrap py-2 w-100',
+                )}
+              >
                 {teams.map((team: ITeam) => (
                   <Item key={team.id} team={team} />
                 ))}
