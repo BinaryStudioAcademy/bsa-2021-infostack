@@ -237,7 +237,7 @@ export const PageContent: React.FC = () => {
                 followers={currentPage?.followingUsers}
               />
             </Col>
-            <Col>
+            <Col xs={10}>
               <Row>
                 <Col className="d-flex justify-content-between mb-4 align-items-center">
                   <h1 className="h3">{pageTitle || 'New Page'}</h1>
