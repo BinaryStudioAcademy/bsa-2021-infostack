@@ -14,9 +14,7 @@ const setSubtitle = async (
 ): Promise<INotification> => {
   const commentRepository = getCustomRepository(CommentRepository);
   const pageRepository = getCustomRepository(PageRepository);
-  const comment = await commentRepository.findOneById(
-    notification.entityTypeId,
-  );
+  const comment = await commentRepository.findById(notification.entityTypeId);
   const page = await pageRepository.findByIdWithLastContent(comment.pageId);
   return {
     ...mapNotificationToINotification(notification),
