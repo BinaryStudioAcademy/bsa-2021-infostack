@@ -125,7 +125,10 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
 
             <Dropdown.Menu ref={dropdownRef}>
               <Dropdown.Item>
-                <Picker onEmojiClick={onEmojiClick} />
+                <Picker
+                  onEmojiClick={onEmojiClick}
+                  disableSkinTonePicker={true}
+                />
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
