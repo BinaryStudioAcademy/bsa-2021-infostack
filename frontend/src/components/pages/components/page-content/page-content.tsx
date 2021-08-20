@@ -31,6 +31,7 @@ import {
 import {
   IPageContent,
   IPageContributor,
+  IPageTableOfContents,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
@@ -113,8 +114,18 @@ export const PageContent: React.FC = () => {
 
       getPageById(paramsId);
 
-      const contributorsPromise = new PageApi().getPageContributors(paramsId);
-      const TOCPromise = new PageApi().getPageTableOfContents(paramsId);
+      const pageApi = new PageApi();
+      const contributorsPromise = pageApi.getPageContributors(paramsId);
+      let TOCPromise: Promise<IPageTableOfContents>;
+
+      if (paramsVersionId) {
+        TOCPromise = pageApi.getPageVersionTableOfContents(
+          paramsId,
+          paramsVersionId,
+        );
+      } else {
+        TOCPromise = pageApi.getPageTableOfContents(paramsId);
+      }
 
       Promise.all([contributorsPromise, TOCPromise]).then(
         ([contributors, TOC]) => {
@@ -128,7 +139,7 @@ export const PageContent: React.FC = () => {
       dispatch(pagesActions.clearCurrentPage());
       history.push(AppRoute.ROOT);
     }
-  }, [paramsId]);
+  }, [paramsId, paramsVersionId]);
 
   const onAssign = (): void => {
     setIsPermissionsModalVisible(true);

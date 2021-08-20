@@ -160,4 +160,13 @@ export class PageApi {
   ): Promise<IPageTableOfContents> {
     return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
+
+  public async getPageVersionTableOfContents(
+    id: string,
+    versionId: string,
+  ): Promise<IPageTableOfContents> {
+    return this.http.load(
+      `${this.BASE}/${id}/version/${versionId}/table-of-contents`,
+    );
+  }
 }
