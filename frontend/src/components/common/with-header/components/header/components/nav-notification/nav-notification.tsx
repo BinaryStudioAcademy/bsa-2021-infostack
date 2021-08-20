@@ -23,7 +23,7 @@ export const NavNotification: React.FC = () => {
     (state) => state.notifications,
   );
 
-  const onNotification = (): void => {
+  const onNotificationNew = (): void => {
     if (isExpanded) {
       dispatch(notificationsActions.loadLastNotifications({ limit: 1 }));
     } else {
@@ -32,11 +32,17 @@ export const NavNotification: React.FC = () => {
     dispatch(notificationsActions.incrementCount());
   };
 
+  const onNotificationDelete = (): void => {
+    dispatch(notificationsActions.decrementCount());
+  };
+
   useEffect(() => {
-    socket.on(SocketEvents.NOTIFICATION_NEW, onNotification);
+    socket.on(SocketEvents.NOTIFICATION_NEW, onNotificationNew);
+    socket.on(SocketEvents.NOTIFICATION_DELETE, onNotificationDelete);
 
     return (): void => {
-      socket.off(SocketEvents.NOTIFICATION_NEW, onNotification);
+      socket.off(SocketEvents.NOTIFICATION_NEW, onNotificationNew);
+      socket.off(SocketEvents.NOTIFICATION_DELETE, onNotificationDelete);
     };
   }, []);
 
