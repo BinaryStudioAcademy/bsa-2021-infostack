@@ -61,7 +61,7 @@ const removeComment = (
       commentsAdapter.updateOne(state, {
         id: parent.id,
         changes: {
-          children: parent.children?.filter((child) => child !== id),
+          children: parent.children?.filter((childId) => childId !== id),
         },
       });
     }
