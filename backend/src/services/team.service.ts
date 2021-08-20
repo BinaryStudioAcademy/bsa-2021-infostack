@@ -16,6 +16,7 @@ import { User } from '../data/entities/user';
 import NotificationRepository from '../data/repositories/notification.repository';
 import { Team } from '../data/entities/team';
 import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
+import WorkspaceRepository from '../data/repositories/workspace.repository';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -128,6 +129,8 @@ export const addUser = async (
   const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId);
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const workspace = await workspaceRepository.findById(workspaceId);
 
   team.users.push(user);
   await teamRepository.save(team);
@@ -136,7 +139,7 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, 'added to', io);
+  notifyUser(team, user, `added to ${workspace.name}`, io);
 
   return teamsWithUsersRoles;
 };
@@ -151,6 +154,8 @@ export const deleteUser = async (
   const team = await teamRepository.findByIdWithUsers(teamId);
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const workspace = await workspaceRepository.findById(workspaceId);
 
   team.users = team.users.filter((user) => user.id !== userId);
   await teamRepository.save(team);
@@ -159,7 +164,7 @@ export const deleteUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, 'deleted from', io);
+  notifyUser(team, user, `deleted from ${workspace.name}`, io);
 
   return teamsWithUsersRoles;
 };
@@ -172,8 +177,8 @@ export const notifyUser = async (
 ): Promise<void> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
 
-  const title = `You have been ${reason} Infostack team.`;
-  const body = `You have been ${reason} Infostack team -- "${team.name}".`;
+  const title = `You have been ${reason} team.`;
+  const body = `You have been ${reason} team -- "${team.name}".`;
 
   io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
   await notificationRepository.createAndSave(
