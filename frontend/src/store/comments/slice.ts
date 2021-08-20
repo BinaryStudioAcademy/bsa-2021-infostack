@@ -52,22 +52,23 @@ const removeComment = (
   state.deleteStatus = RequestStatus.IDLE;
 
   const comment = state.entities[id] as ICommentNormalized;
-  if (comment) {
-    if (comment.parentCommentId !== null) {
-      const parent = state.entities[
-        comment.parentCommentId
-      ] as ICommentNormalized;
-
-      commentsAdapter.updateOne(state, {
-        id: parent.id,
-        changes: {
-          children: parent.children?.filter((childId) => childId !== id),
-        },
-      });
-    }
-
-    commentsAdapter.removeOne(state, id);
+  if (!comment) {
+    return;
   }
+  if (comment.parentCommentId !== null) {
+    const parent = state.entities[
+      comment.parentCommentId
+    ] as ICommentNormalized;
+
+    commentsAdapter.updateOne(state, {
+      id: parent.id,
+      changes: {
+        children: parent.children?.filter((childId) => childId !== id),
+      },
+    });
+  }
+
+  commentsAdapter.removeOne(state, id);
 };
 
 export const { reducer, actions } = createSlice({
