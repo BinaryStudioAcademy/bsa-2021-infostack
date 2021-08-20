@@ -51,7 +51,7 @@ export const notifyUsers = async (
   const body = comment.text.slice(0, MAX_NOTIFICATION_TITLE_LENGTH);
 
   if (comment.parentCommentId) {
-    const { author } = await commentRepository.findOneById(
+    const { author } = await commentRepository.findById(
       comment.parentCommentId,
     );
     if (author.id !== comment.author.id) {
@@ -137,7 +137,7 @@ export const addComment = async (
     parentCommentId,
   });
 
-  const comment = await commentRepository.findOneById(id);
+  const comment = await commentRepository.findById(id);
 
   const response = {
     ...comment,
@@ -156,7 +156,12 @@ export const deleteComment = async (
   userId: string,
   io: Server,
 ): Promise<void> => {
-  getCustomRepository(CommentRepository).deleteById(id);
+  await getCustomRepository(CommentRepository).deleteById(id);
+  const notificationRepository = getCustomRepository(NotificationRepository);
+  const notifications = await notificationRepository.findAllByEntityTypeId(id);
+  for (const notification of notifications) {
+    await notificationRepository.deleteById(notification.id);
+  }
   io.to(pageId).emit(SocketEvents.PAGE_DELETE_COMMENT, { id, sender: userId });
 };
 
@@ -181,7 +186,7 @@ export const handleCommentReaction = async (
   }
 
   const commentRepository = getCustomRepository(CommentRepository);
-  const comment = await commentRepository.findOneById(commentId);
+  const comment = await commentRepository.findById(commentId);
   const { reactions } = comment;
 
   return reactions;
