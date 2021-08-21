@@ -161,7 +161,7 @@ export const ContentEditor: React.FC = () => {
             <Editor
               // value={markDownContent}
               // onChange={({ text }): void => setMarkDownContent(text)}
-              value={draftMarkDownContent}
+              value={draftMarkDownContent || markDownContent}
               onChange={({ text }): void => setDraftMarkDownContent(text)}
               onImageUpload={onImageUpload}
               renderHTML={(text): JSX.Element => (

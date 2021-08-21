@@ -9,6 +9,7 @@ export const mapPageToIPage = (page: Page): IPage => {
     childPages,
     pageContents,
     followingUsers,
+    draft,
   } = page;
 
   const mappedChildren = childPages?.map(mapPageToIPage);
@@ -27,6 +28,13 @@ export const mapPageToIPage = (page: Page): IPage => {
     };
   });
 
+  const mappedDraft = {
+    id: draft?.id,
+    title: draft?.title,
+    content: draft?.content,
+    pageId: draft?.pageId,
+  };
+
   return {
     id,
     authorId,
@@ -34,5 +42,6 @@ export const mapPageToIPage = (page: Page): IPage => {
     childPages: mappedChildren,
     pageContents: mappedpageContents,
     followingUsers: mappedFollowingUsers,
+    draft: mappedDraft,
   };
 };
