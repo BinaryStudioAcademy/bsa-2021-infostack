@@ -1,4 +1,11 @@
-import { Entity, Column, OneToOne, RelationId, Unique } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToOne,
+  RelationId,
+  Unique,
+  JoinColumn,
+} from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 
@@ -18,5 +25,6 @@ export class Draft extends AbstractEntity {
   @OneToOne(() => Page, (page) => page.draft, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   page: Page;
 }

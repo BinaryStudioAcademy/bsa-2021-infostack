@@ -1,5 +1,6 @@
 import { IUser } from '../user/user.interface';
 import { IPageContent } from './page-content.interface';
+import { IDraft } from './draft.interface';
 import { PermissionType } from '../../enums/index';
 
 interface IPage {
@@ -10,6 +11,7 @@ interface IPage {
   pageContents: IPageContent[];
   permission?: PermissionType;
   followingUsers?: IUser[];
+  draft?: IDraft;
 }
 
 export type { IPage };

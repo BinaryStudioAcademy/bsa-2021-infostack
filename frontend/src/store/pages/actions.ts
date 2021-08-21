@@ -48,8 +48,8 @@ const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const createPageResponse = await new PageApi().getPage(getPayload);
-    dispatch(actions.getPage(createPageResponse));
+    const getPageResponse = await new PageApi().getPage(getPayload);
+    dispatch(actions.getPage(getPageResponse));
     dispatch(actions.toggleSpinner());
   },
 );
@@ -136,6 +136,19 @@ const editPageContent = createAsyncThunk(
   },
 );
 
+const editDraft = createAsyncThunk(
+  ActionType.EDIT_DRAFT,
+  async (getPayload: IEditPageContent, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    const editDraftResponse = await new PageApi().editPageContent(getPayload);
+    dispatch(actions.getPage(editDraftResponse));
+
+    const response = await new PageApi().getPages();
+    dispatch(actions.setPages(response));
+    dispatch(actions.toggleSpinner());
+  },
+);
+
 const pagesActions = {
   ...actions,
   createPage,
@@ -147,6 +160,7 @@ const pagesActions = {
   editPageContent,
   followPage,
   unfollowPage,
+  editDraft,
 };
 
 export { pagesActions };

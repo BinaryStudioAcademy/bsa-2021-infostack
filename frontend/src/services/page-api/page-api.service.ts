@@ -136,6 +136,14 @@ export class PageApi {
     });
   }
 
+  public async editDraft(payload: IEditPageContent): Promise<IPage> {
+    return this.http.load(`${this.BASE}/${payload.pageId}/draft`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
   public async getPageContributors(id: string): Promise<IPageContributor[]> {
     return this.http.load(`${this.BASE}/${id}/contributors`);
   }

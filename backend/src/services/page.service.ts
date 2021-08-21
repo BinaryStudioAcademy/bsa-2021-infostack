@@ -232,6 +232,9 @@ export const getPage = async (
     teamsIds,
     mapPageToIPage(page),
   );
+
+  // const pageWithDraft = await pageRepository.findWithDraft(pageId);
+  console.log(page, pageWithPermission);
   return pageWithPermission;
 };
 
