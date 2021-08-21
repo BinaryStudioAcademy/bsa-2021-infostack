@@ -4,7 +4,7 @@ interface ITeamUser {
   id: string;
   fullName: string;
   avatar: string;
-  roleInWorkspace: RoleType;
+  roleInWorkspace?: RoleType;
 }
 
 export type { ITeamUser };

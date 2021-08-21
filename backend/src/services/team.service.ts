@@ -2,6 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
+import { mapTeamToITeamWithoutRoles } from '../common/mappers/team/map-team-to-iteam-without-roles';
 import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { HttpError } from '../common/errors/http-error';
@@ -99,8 +100,9 @@ export const updateNameById = async (
     });
   }
   const teamRepository = getCustomRepository(TeamRepository);
+  const pageRepository = getCustomRepository(TeamRepository);
   const isNameUsed = await teamRepository.findByName(newName);
-  const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
+  const teamToUpdate = await pageRepository.findByIdWithUsers(teamId);
 
   if (isNameUsed && isNameUsed.name != teamToUpdate.name) {
     throw new HttpError({
@@ -110,8 +112,10 @@ export const updateNameById = async (
   }
 
   teamToUpdate.name = newName || teamToUpdate.name;
-  const team = await teamRepository.save(teamToUpdate);
-  return mapTeamToITeam(team);
+  await teamRepository.save(teamToUpdate);
+  const team = await pageRepository.findByIdWithUsers(teamId);
+
+  return mapTeamToITeamWithoutRoles(team);
 };
 
 export const deleteById = async (id: string): Promise<void> => {
