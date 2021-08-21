@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { AuthApi, UserApi } from 'services';
+import { authApi, userApi } from 'services';
 import { ILogin, IRegister } from 'common/interfaces/auth';
 import { LocalStorageVariable } from 'common/enums/enums';
 
 const login = createAsyncThunk(
   ActionType.SET_USER,
   async (loginPayload: ILogin, { dispatch }): Promise<void> => {
-    const loginResponse = await new AuthApi().loginUser(loginPayload);
+    const loginResponse = await authApi.loginUser(loginPayload);
     setTokensLocalStorage(loginResponse);
     dispatch(actions.setUser(loginResponse));
   },
@@ -17,7 +17,7 @@ const login = createAsyncThunk(
 const register = createAsyncThunk(
   ActionType.SET_USER,
   async (registerPayload: IRegister, { dispatch }): Promise<void> => {
-    const registerResponse = await new AuthApi().registerUser(registerPayload);
+    const registerResponse = await authApi.registerUser(registerPayload);
     setTokensLocalStorage(registerResponse);
     dispatch(actions.setUser(registerResponse));
   },
@@ -32,7 +32,7 @@ const logout = createAsyncThunk(
     localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
     localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
     dispatch(actions.removeUser());
-    if (refreshToken) await new AuthApi().logout({ refreshToken });
+    if (refreshToken) await authApi.logout({ refreshToken });
   },
 );
 
@@ -41,7 +41,7 @@ const loadUser = createAsyncThunk(
   async (payload: undefined, { dispatch }): Promise<void> => {
     const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
     if (token) {
-      const user = await new UserApi().getCurrentUserInfo();
+      const user = await userApi.getCurrentUserInfo();
       dispatch(actions.setUser(user));
     }
   },
@@ -50,7 +50,7 @@ const loadUser = createAsyncThunk(
 const loginGoogle = createAsyncThunk(
   ActionType.SET_USER,
   async (code: string, { dispatch }): Promise<void> => {
-    const loginResponse = await new AuthApi().loginGoogle(code);
+    const loginResponse = await authApi.loginGoogle(code);
     setTokensLocalStorage(loginResponse);
     dispatch(actions.setUser(loginResponse));
   },

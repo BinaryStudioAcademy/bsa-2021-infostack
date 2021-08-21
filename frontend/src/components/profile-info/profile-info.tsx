@@ -15,7 +15,7 @@ import {
   Button,
 } from 'react-bootstrap';
 import { Link, UserAvatar } from 'components/common/common';
-import { UserApi } from 'services';
+import { userApi } from 'services';
 import { IUser } from 'common/interfaces/user';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
 import { pagesActions } from 'store/actions';
@@ -36,7 +36,6 @@ const ProfileInfo: React.FC = () => {
   });
   const [permission, setPermission] = useState(true);
   const [currentPageId, setCurrentPageId] = useState<string>();
-  const userApi = new UserApi();
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {

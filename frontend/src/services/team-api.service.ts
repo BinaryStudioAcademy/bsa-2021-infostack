@@ -1,6 +1,6 @@
 import { ITeam, ITeamEditing, ITeamAddUser } from 'common/interfaces/team';
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class TeamApi {
   private http = http;
@@ -63,4 +63,4 @@ class TeamApi {
   }
 }
 
-export { TeamApi };
+export const teamApi = new TeamApi();

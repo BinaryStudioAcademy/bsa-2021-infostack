@@ -6,7 +6,7 @@ import {
   IUserWithTokens,
 } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 import { IPaginated } from 'common/interfaces/common';
 
 class UserApi {
@@ -88,4 +88,4 @@ class UserApi {
   }
 }
 
-export { UserApi };
+export const userApi = new UserApi();

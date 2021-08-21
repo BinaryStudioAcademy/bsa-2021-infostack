@@ -16,7 +16,7 @@ import {
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
 import { ConfirmModal, InviteModal, Spinner } from 'components/common/common';
@@ -114,7 +114,6 @@ export const PageContent: React.FC = () => {
 
       getPageById(paramsId);
 
-      const pageApi = new PageApi();
       const contributorsPromise = pageApi.getPageContributors(paramsId);
       let TOCPromise: Promise<IPageTableOfContents>;
 

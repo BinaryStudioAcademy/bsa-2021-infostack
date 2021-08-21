@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import {
   IPageNav,
   IPageRequest,
@@ -15,7 +15,7 @@ const createPage = createAsyncThunk(
   async (createPayload: IPageRequest, { dispatch }) => {
     dispatch(actions.toggleSpinner());
     try {
-      const createPageResponse = await new PageApi().createPage(createPayload);
+      const createPageResponse = await pageApi.createPage(createPayload);
       dispatch(actions.createPage(createPageResponse));
       return createPageResponse;
     } catch (e) {
@@ -29,7 +29,7 @@ const createPage = createAsyncThunk(
 const createVersionPage = createAsyncThunk(
   ActionType.CREATE_VERSION_PAGE,
   async (createVersionPayload: IPageRequest, { dispatch }) => {
-    const createVersionPageResponse = await new PageApi().createVersionPage(
+    const createVersionPageResponse = await pageApi.createVersionPage(
       createVersionPayload,
     );
     dispatch(actions.createVersionPage(createVersionPageResponse));
@@ -39,7 +39,7 @@ const createVersionPage = createAsyncThunk(
 const getPagesAsync = createAsyncThunk(
   ActionType.SET_PAGES,
   async (payload: undefined, { dispatch }) => {
-    const response = await new PageApi().getPages();
+    const response = await pageApi.getPages();
     dispatch(actions.setPages(response));
   },
 );
@@ -48,7 +48,7 @@ const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const createPageResponse = await new PageApi().getPage(getPayload);
+    const createPageResponse = await pageApi.getPage(getPayload);
     dispatch(actions.getPage(createPageResponse));
     dispatch(actions.toggleSpinner());
   },
@@ -57,7 +57,7 @@ const getPage = createAsyncThunk(
 const setPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
-    const pageResponse = await new PageApi().getPage(getPayload);
+    const pageResponse = await pageApi.getPage(getPayload);
     dispatch(actions.getPage(pageResponse));
   },
 );
@@ -66,7 +66,7 @@ const deletePage = createAsyncThunk(
   ActionType.DELETE_PAGE,
   async (pageId: string, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    await new PageApi().deletePage(pageId);
+    await pageApi.deletePage(pageId);
     dispatch(actions.deletePage());
     dispatch(getPagesAsync());
     dispatch(actions.toggleSpinner());
@@ -92,12 +92,12 @@ const followPage = createAsyncThunk<
       const pages = getState().pages.pages as IPageNav[];
       const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
       const ids = getPagesIds(currentPage);
-      await new PageApi().followPages(ids);
+      await pageApi.followPages(ids);
     } else {
-      await new PageApi().followPage(pageId);
+      await pageApi.followPage(pageId);
     }
 
-    const response = await new PageApi().getPage(pageId);
+    const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
   },
 );
@@ -113,12 +113,12 @@ const unfollowPage = createAsyncThunk<
       const pages = getState().pages.pages as IPageNav[];
       const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
       const ids = getPagesIds(currentPage);
-      await new PageApi().unfollowPages(ids);
+      await pageApi.unfollowPages(ids);
     } else {
-      await new PageApi().unfollowPage(pageId);
+      await pageApi.unfollowPage(pageId);
     }
 
-    const response = await new PageApi().getPage(pageId);
+    const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
   },
 );
@@ -127,10 +127,10 @@ const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const editContentResponse = await new PageApi().editPageContent(getPayload);
+    const editContentResponse = await pageApi.editPageContent(getPayload);
     dispatch(actions.getPage(editContentResponse));
 
-    const response = await new PageApi().getPages();
+    const response = await pageApi.getPages();
     dispatch(actions.setPages(response));
     dispatch(actions.toggleSpinner());
   },
