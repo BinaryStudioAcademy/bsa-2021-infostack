@@ -10,7 +10,7 @@ import {
   useCookies,
   useHistory,
 } from 'hooks/hooks';
-import { WorkspaceApi } from 'services';
+import { workspaceApi } from 'services';
 import { CreateWorkspaceModal, Container } from './components/components';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
 
@@ -43,13 +43,13 @@ const Workspaces: React.FC = () => {
   };
 
   const handleInviteAccepted = async (id: string): Promise<void> => {
-    await new WorkspaceApi().updateInviteStatusAccepted(id);
+    await workspaceApi.updateInviteStatusAccepted(id);
     dispatch(workspacesActions.loadWorkspace(id));
     setIsWorkspaceSelected(true);
   };
 
   const handleInviteDeclined = async (id: string): Promise<void> => {
-    await new WorkspaceApi().updateInviteStatusDeclined(id);
+    await workspaceApi.updateInviteStatusDeclined(id);
     dispatch(workspacesActions.loadWorkspaces());
   };
 

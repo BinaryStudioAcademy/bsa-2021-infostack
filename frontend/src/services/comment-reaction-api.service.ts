@@ -1,6 +1,6 @@
 import { ICommentReaction } from 'common/interfaces/comment-reaction';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class CommentReactionApi {
   private http = http;
@@ -18,4 +18,4 @@ class CommentReactionApi {
   }
 }
 
-export { CommentReactionApi };
+export const commentReactionApi = new CommentReactionApi();

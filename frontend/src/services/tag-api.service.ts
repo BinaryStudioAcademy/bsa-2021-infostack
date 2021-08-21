@@ -1,6 +1,6 @@
 import { ITag } from 'common/interfaces/tag';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class TagApi {
   private http = http;
@@ -37,4 +37,4 @@ class TagApi {
   }
 }
 
-export { TagApi };
+export const tagApi = new TagApi();

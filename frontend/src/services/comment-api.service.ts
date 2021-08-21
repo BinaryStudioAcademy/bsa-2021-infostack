@@ -1,4 +1,4 @@
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 import {
   IComment,
   ICommentRequest,

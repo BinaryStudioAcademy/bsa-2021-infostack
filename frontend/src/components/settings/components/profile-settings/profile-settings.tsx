@@ -11,7 +11,7 @@ import {
   useRef,
 } from 'hooks/hooks';
 import { authActions } from 'store/actions';
-import { UserApi, SkillApi } from 'services';
+import { userApi, skillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
 import { IUserAccount } from 'common/interfaces/user';
 import { useForm, yupResolver } from 'hooks/hooks';
@@ -40,8 +40,6 @@ export const ProfileSettings: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isCropModalVisible, setCropModalVisible] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
-  const userApi = new UserApi();
-  const skillApi = new SkillApi();
 
   useEffect(() => {
     if (user) {

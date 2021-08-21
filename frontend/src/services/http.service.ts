@@ -157,6 +157,4 @@ class Http {
   };
 }
 
-const http = new Http();
-
-export { http, Http };
+export const http = new Http();

@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { WorkspaceApi } from 'services';
+import { workspaceApi } from 'services';
 
 const loadUsers = createAsyncThunk(
   ActionType.SET_USERS,
   async (_, { dispatch }): Promise<void> => {
-    const response = await new WorkspaceApi().getUsers();
+    const response = await workspaceApi.getUsers();
     dispatch(actions.setUsers(response));
   },
 );
