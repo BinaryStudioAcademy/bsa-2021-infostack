@@ -2,6 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/user.repository';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
+import { mapTeamToITeamWithoutRoles } from '../common/mappers/team/map-team-to-iteam-without-roles';
 import TeamRepository from '../data/repositories/team.repository';
 import TeamPermissionRepository from '../data/repositories/team-permission.repository';
 import { HttpError } from '../common/errors/http-error';
@@ -21,16 +22,18 @@ import WorkspaceRepository from '../data/repositories/workspace.repository';
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITeam[]> => {
-  const teamRepository = getCustomRepository(TeamRepository);
-  const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
+  const teams = await getCustomRepository(TeamRepository).findAllByWorkspaceId(
+    workspaceId,
+  );
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
   return teamsWithUsersRoles;
 };
 
 export const getTeam = async (teamId: string): Promise<ITeam> => {
-  const pageRepository = getCustomRepository(TeamRepository);
-  const team = await pageRepository.findByIdWithUsers(teamId);
+  const team = await getCustomRepository(TeamRepository).findByIdWithUsers(
+    teamId,
+  );
   const teamWithUsersRoles = mapTeamToITeam(team);
 
   return teamWithUsersRoles;
@@ -69,12 +72,9 @@ export const create = async (
   user.teams.push(newTeamDetails);
   userRepository.save(user);
 
-  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspace =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
-      userId,
-      workspaceId,
-    );
+  const userWorkspace = await getCustomRepository(
+    UserWorkspaceRepository,
+  ).findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
 
   const users = [
     {
@@ -111,7 +111,8 @@ export const updateNameById = async (
 
   teamToUpdate.name = newName || teamToUpdate.name;
   const team = await teamRepository.save(teamToUpdate);
-  return mapTeamToITeam(team);
+
+  return mapTeamToITeamWithoutRoles(team);
 };
 
 export const deleteById = async (id: string): Promise<void> => {
@@ -152,8 +153,7 @@ export const deleteUser = async (
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId);
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(userId);
+  const user = await getCustomRepository(UserRepository).findById(userId);
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findById(workspaceId);
 
@@ -175,13 +175,11 @@ export const notifyUser = async (
   reason: string,
   io: Server,
 ): Promise<void> => {
-  const notificationRepository = getCustomRepository(NotificationRepository);
-
   const title = `You have been ${reason} team.`;
   const body = `You have been ${reason} team -- "${team.name}".`;
 
   io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
-  await notificationRepository.createAndSave(
+  await getCustomRepository(NotificationRepository).createAndSave(
     body,
     null,
     EntityType.TEAM,
