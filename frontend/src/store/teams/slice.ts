@@ -4,6 +4,7 @@ import { ReducerName } from 'common/enums/app/reducer-name.enum';
 import { ITeam } from 'common/interfaces/team';
 import {
   fetchTeams,
+  fetchTeamsForUser,
   createTeam,
   updateTeam,
   deleteTeam,
@@ -13,11 +14,13 @@ import {
 
 type State = {
   teams: ITeam[];
+  userTeams: ITeam[];
   isLoading: boolean;
 };
 
 const initialState: State = {
   teams: [],
+  userTeams: [],
   isLoading: false,
 };
 
@@ -35,7 +38,18 @@ const { reducer, actions } = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchTeams.rejected, (state) => {
-        toast.error('Error happened while loading teams.');
+        toast.error('Error happened while loading user teams.');
+        state.isLoading = false;
+      })
+      .addCase(fetchTeamsForUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchTeamsForUser.fulfilled, (state, action) => {
+        state.userTeams = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchTeamsForUser.rejected, (state) => {
+        toast.error('Error happened while loading user teams.');
         state.isLoading = false;
       })
       .addCase(createTeam.fulfilled, (state, action) => {
