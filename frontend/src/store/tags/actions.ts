@@ -38,8 +38,6 @@ const requestAdd = createAsyncThunk(
   ActionType.ADD_TAG,
   async (name: string, { dispatch }): Promise<void> => {
     try {
-      // eslint-disable-next-line no-console
-      console.log(!noSingleSpecCharRegex.test(name));
       if (!noSingleSpecCharRegex.test(name)) {
         dispatch(actions.setAddTagError(TAG_SINGLE_SPEC_CHAR));
       } else if (name) {
