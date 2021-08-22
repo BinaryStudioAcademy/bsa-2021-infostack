@@ -17,5 +17,5 @@ export const createPageSchema = yup
         'title must consist min 1 up to 50 latin letters or numbers',
       )
       .required(),
-    content: yup.string().required(),
+    content: yup.string(),
   });
