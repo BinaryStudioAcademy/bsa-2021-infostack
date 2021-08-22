@@ -52,7 +52,7 @@ export const TagAdd: React.FC<{
           target.value = target.value.trim();
           dispatch(tagActions.setAddName(target.value));
         }}
-        onChange={(_evt): void => {
+        onChange={(): void => {
           if (error) dispatch(tagActions.setAddTagError(null));
         }}
         className={getAllowedClasses(styles.input)}

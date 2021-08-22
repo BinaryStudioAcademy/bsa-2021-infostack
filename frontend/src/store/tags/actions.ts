@@ -5,6 +5,8 @@ import { tagApi } from 'services';
 import { ITag } from 'common/interfaces/tag';
 
 const TAG_EMPTY_NAME = 'Empty tag name is not allowed';
+const TAG_SINGLE_SPEC_CHAR = 'Special characters are not allowed as tags';
+const noSingleSpecCharRegex = new RegExp(/(?:(?=.*[A-Za-zа-я\d]))/g);
 
 const loadTags = createAsyncThunk(
   ActionType.SET_TAGS,
@@ -36,7 +38,11 @@ const requestAdd = createAsyncThunk(
   ActionType.ADD_TAG,
   async (name: string, { dispatch }): Promise<void> => {
     try {
-      if (name) {
+      // eslint-disable-next-line no-console
+      console.log(!noSingleSpecCharRegex.test(name));
+      if (!noSingleSpecCharRegex.test(name)) {
+        dispatch(actions.setAddTagError(TAG_SINGLE_SPEC_CHAR));
+      } else if (name) {
         const response = await tagApi.add(name);
         dispatch(actions.addTag(response));
         dispatch(actions.setAddName(null));
