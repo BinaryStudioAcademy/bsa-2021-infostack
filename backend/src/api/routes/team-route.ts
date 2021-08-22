@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
   getAllByWorkspaceId,
+  getAllByUserId,
   getTeam,
   create,
   updateNameById,
@@ -21,6 +22,11 @@ router
   .get(
     '/:id',
     run((req) => getTeam(req.params.id, req.workspaceId)),
+  )
+
+  .get(
+    '/users/:id',
+    run((req) => getAllByUserId(req.params.id, req.workspaceId)),
   )
 
   .post(
