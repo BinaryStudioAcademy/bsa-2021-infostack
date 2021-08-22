@@ -11,17 +11,32 @@ import {
 } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { RoleType } from 'common/enums/enums';
 
 export const TeamSettings: React.FC = () => {
-  const { teams } = useAppSelector((state) => state.teams);
-
   const dispatch = useAppDispatch();
-
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const { teams } = useAppSelector((state) => state.teams);
+  const { userTeams } = useAppSelector((state) => state.teams);
+  const userId = useAppSelector((state) => state.auth?.user?.id);
+  const userRole = useAppSelector(
+    (state) => state.workspaces?.currentWorkspace?.role,
+  );
+
+  const teamsToRender = [];
+  for (let i = 0; i < teams.length; i++) {
+    if (userTeams.find((team) => teams[i].id === team.id)) {
+      teamsToRender.push(teams[i]);
+    }
+  }
 
   useEffect(() => {
-    dispatch(teamsActions.fetchTeams());
-  }, []);
+    if (userId) {
+      dispatch(teamsActions.fetchTeamsForUser(userId));
+    } else {
+      dispatch(teamsActions.fetchTeams());
+    }
+  }, [userRole]);
 
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
@@ -69,9 +84,13 @@ export const TeamSettings: React.FC = () => {
                   'd-flex flex-wrap py-2 w-100',
                 )}
               >
-                {teams.map((team: ITeam) => (
-                  <Item key={team.id} team={team} />
-                ))}
+                {userRole === RoleType.ADMIN
+                  ? teams.map((team: ITeam) => (
+                      <Item key={team.id} team={team} />
+                    ))
+                  : teamsToRender.map((team: ITeam) => (
+                      <Item key={team.id} team={team} />
+                    ))}
               </div>
             ))}
           <CreateTeamModal
