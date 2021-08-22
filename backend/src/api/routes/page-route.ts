@@ -3,6 +3,7 @@ import { run } from '../../common/helpers/route.helper';
 import {
   createPageSchema,
   setPermissionsSchema,
+  createCommentSchema,
 } from '../../common/validations';
 
 import {
@@ -95,6 +96,7 @@ router.get(
 
 router.post(
   '/:id/comments',
+  validationMiddleware(createCommentSchema),
   run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
 );
 

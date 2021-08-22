@@ -8,3 +8,4 @@ export { teamNameSchema } from './team-name-schema';
 export { workspaceSchema } from './workspace-schema';
 export { createPageSchema } from './create-page-schema';
 export { setPermissionsSchema } from './set-permissions-schema';
+export { createCommentSchema } from './create-comment-schema';
