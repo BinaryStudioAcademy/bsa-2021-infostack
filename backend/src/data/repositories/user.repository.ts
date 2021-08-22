@@ -36,6 +36,19 @@ class UserRepository extends Repository<User> {
     return this.findOne({ relations: ['teams'], where: { id: userId } });
   }
 
+  public findUserTeamsInWorkspace(
+    userId: string,
+    workspaceId: string,
+  ): Promise<User[]> {
+    return this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.teams', 'teams')
+      .leftJoinAndSelect('user.userWorkspaces', 'userWorkspaces')
+      .where('userWorkspaces.workspaceId = :workspaceId', { workspaceId })
+      .andWhere('teams.workspaceId = :workspaceId', { workspaceId })
+      .andWhere('user.id = :userId', { userId })
+      .getMany();
+  }
+
   public findUserPermissions(userId: string): Promise<User> {
     return this.findOne({
       relations: ['userPermissions'],
