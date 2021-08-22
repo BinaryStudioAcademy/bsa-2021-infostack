@@ -20,7 +20,7 @@ router
 
   .get(
     '/:id',
-    run((req) => getTeam(req.params.id)),
+    run((req) => getTeam(req.params.id, req.workspaceId)),
   )
 
   .post(
@@ -30,12 +30,12 @@ router
 
   .put(
     '/:id',
-    run((req) => updateNameById(req.params.id, req.body.name)),
+    run((req) => updateNameById(req.params.id, req.body.name, req.workspaceId)),
   )
 
   .delete(
     '/:id',
-    run((req) => deleteById(req.params.id)),
+    run((req) => deleteById(req.params.id, req.workspaceId)),
   )
 
   .post(
