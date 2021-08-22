@@ -12,6 +12,7 @@ import { FilterOption, FILTER_OPTIONS } from 'store/activities/slice';
 import { UserAvatar } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
+import ReactMarkdown from 'react-markdown';
 
 const Activities: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -149,7 +150,15 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
         {page.content && (
           <Card className={styles.contentContainer}>
             <Card.Body>
-              <span className={styles.content}>{page.content}</span>
+              <span className={styles.content}>
+                {type === 'page' ? (
+                  <ReactMarkdown className={styles.markdown}>
+                    {page.content}
+                  </ReactMarkdown>
+                ) : (
+                  page.content
+                )}
+              </span>
             </Card.Body>
           </Card>
         )}
