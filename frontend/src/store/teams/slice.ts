@@ -38,7 +38,7 @@ const { reducer, actions } = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchTeams.rejected, (state) => {
-        toast.error('Error happened while loading user teams.');
+        toast.error('Error happened while loading teams.');
         state.isLoading = false;
       })
       .addCase(fetchTeamsForUser.pending, (state) => {

@@ -36,7 +36,7 @@ export const TeamSettings: React.FC = () => {
     } else {
       dispatch(teamsActions.fetchTeams());
     }
-  }, [userRole]);
+  }, [userRole, teams]);
 
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
