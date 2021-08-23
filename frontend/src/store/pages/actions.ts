@@ -126,8 +126,6 @@ const unfollowPage = createAsyncThunk<
 const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
-    console.info(getPayload);
-
     dispatch(actions.toggleSpinner());
     const editContentResponse = await new PageApi().editPageContent(getPayload);
     dispatch(actions.getPage(editContentResponse));
