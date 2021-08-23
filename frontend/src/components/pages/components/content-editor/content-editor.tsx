@@ -61,27 +61,22 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
 
   useEffect(() => {
-    if (draftTitleInputValue === (titleInputValue || draftPageTitle)) {
-      setSaveDraftShown(false);
-      // setDraftTitleInputValue(undefined);
-    } else if (draftTitleInputValue) {
-      setTitleInputValue(draftTitleInputValue);
-      setSaveDraftShown(true);
-    }
-    console.info(draftTitleInputValue, titleInputValue, isSaveDraftShown);
-  }, [draftTitleInputValue]);
+    const checkDraftTitle =
+      draftTitleInputValue === titleInputValue ||
+      draftTitleInputValue === draftPageTitle;
+    const checkDraftContent =
+      draftMarkDownContent === markDownContent ||
+      draftMarkDownContent === draftPageContent;
 
-  useEffect(() => {
-    // draftTitleInputValue === (titleInputValue || draftPageTitle)
-    if (draftMarkDownContent === (markDownContent || draftPageContent)) {
+    if (checkDraftTitle && checkDraftContent) {
       setSaveDraftShown(false);
-      // setDraftMarkDownContent(undefined);
-    } else if (draftMarkDownContent) {
-      setMarkDownContent(draftMarkDownContent);
-      setSaveDraftShown(true);
+      return;
     }
-    console.info(draftMarkDownContent, markDownContent, isSaveDraftShown);
-  }, [draftMarkDownContent]);
+    setTitleInputValue(draftPageTitle);
+    setMarkDownContent(titleInputValue);
+
+    setSaveDraftShown(true);
+  }, [draftTitleInputValue, draftMarkDownContent]);
 
   useEffect(() => {
     if (draftPageTitle || draftPageContent) {
@@ -182,10 +177,6 @@ export const ContentEditor: React.FC = () => {
 
   const handleDeleteDraft = async (): Promise<void> => {
     if (draftTitleInputValue || draftMarkDownContent) {
-      setSaveDraftShown(false);
-      setDraftTitleInputValue(undefined);
-      setDraftMarkDownContent(undefined);
-
       await dispatch(pagesActions.deleteDraft(paramsId));
       history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
       toast.info('Draft has been deleted successfully.', {
@@ -193,8 +184,13 @@ export const ContentEditor: React.FC = () => {
         pauseOnHover: true,
       });
       setDeleteDraftShown(false);
-      // setDraftTitleInputValue(pageTitle);
-      // setDraftMarkDownContent(content);
+
+      setTitleInputValue(pageTitle);
+      setMarkDownContent(content);
+
+      setDraftTitleInputValue(pageTitle);
+      setDraftMarkDownContent(content);
+      setSaveDraftShown(false);
     }
   };
 
