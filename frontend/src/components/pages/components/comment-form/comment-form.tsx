@@ -6,6 +6,7 @@ import { getAllowedClasses } from 'helpers/helpers';
 import { commentsActions } from 'store/comments';
 import styles from './styles.module.scss';
 import { toast } from 'react-toastify';
+import { RecordVoice } from '../comment-record-voice/comment-record-voice';
 
 type Props = {
   pageId: string;
@@ -99,6 +100,7 @@ export const CommentForm: React.FC<Props> = ({
               >
                 Submit
               </Button>
+              <RecordVoice />
             </div>
           </div>
         </Form.Group>
