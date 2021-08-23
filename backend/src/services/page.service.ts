@@ -223,18 +223,9 @@ export const getPage = async (
   userId: string,
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const userRepository = getCustomRepository(UserRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
-  const { teams } = await userRepository.findUserTeams(userId);
-  const teamsIds = teams.map((team) => team.id);
 
-  const pageWithPermission = await addPermissionField<IPage>(
-    userId,
-    teamsIds,
-    mapPageToIPage(page),
-  );
-
-  return pageWithPermission;
+  return getPageWithPermission(userId, page);
 };
 
 export const getPageVersionContent = async (
@@ -243,17 +234,13 @@ export const getPageVersionContent = async (
   versionId: string,
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const userRepository = getCustomRepository(UserRepository);
   const pageWithVersionContent =
     await pageRepository.findByIdWithVersionContent(pageId, versionId);
-  const { teams } = await userRepository.findUserTeams(userId);
-  const teamsIds = teams.map((team) => team.id);
-
-  const pageWithPermission = await addPermissionField<IPage>(
+  const pageWithPermission = await getPageWithPermission(
     userId,
-    teamsIds,
-    mapPageToIPage(pageWithVersionContent),
+    pageWithVersionContent,
   );
+
   return { ...pageWithPermission, permission: PermissionType.ADMIN };
 };
 
@@ -456,18 +443,7 @@ export const updateContent = async (
   });
 
   const page = await pageRepository.findByIdWithContents(pageId);
-
-  const userRepository = getCustomRepository(UserRepository);
-
-  const { teams } = await userRepository.findUserTeams(userId);
-  const teamsIds = teams.map((team) => team.id);
-
-  const pageWithPermission = addPermissionField(
-    userId,
-    teamsIds,
-    mapPageToIPage(page),
-  );
-  return pageWithPermission;
+  return getPageWithPermission(userId, page);
 };
 
 export const getContributors = async (
