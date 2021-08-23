@@ -7,15 +7,12 @@ import {
 } from 'hooks/hooks';
 import { activitiesActions } from 'store/activities';
 import { IUserActivity } from 'common/interfaces/user';
-import {
-  getAllowedClasses,
-  replaceIdParam,
-  replacePageIdParamAndVersionId,
-} from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import { FilterOption, FILTER_OPTIONS } from 'store/activities/slice';
 import { UserAvatar } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
+import ReactMarkdown from 'react-markdown';
 
 const Activities: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -74,22 +71,10 @@ const Activities: React.FC = () => {
 
 const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
   const history = useHistory();
-  const { id, user, page, type, isNew, createdAtTimestamp } = activity;
+  const { user, page, type, isNew, createdAtTimestamp } = activity;
 
   const handleClick = (): void => {
-    let path: string;
-
-    if (type === 'comment') {
-      path = replaceIdParam(AppRoute.PAGE, page.id);
-    } else {
-      path = replacePageIdParamAndVersionId(
-        AppRoute.PAGE_PREVIOUS_VERSION,
-        page.id,
-        id,
-      );
-    }
-
-    history.push(path);
+    history.push(replaceIdParam(AppRoute.PAGE, page.id));
   };
 
   const getMessage = (): string => {
@@ -165,7 +150,15 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
         {page.content && (
           <Card className={styles.contentContainer}>
             <Card.Body>
-              <span className={styles.content}>{page.content}</span>
+              <span className={styles.content}>
+                {type === 'page' ? (
+                  <ReactMarkdown className={styles.markdown}>
+                    {page.content}
+                  </ReactMarkdown>
+                ) : (
+                  page.content
+                )}
+              </span>
             </Card.Body>
           </Card>
         )}

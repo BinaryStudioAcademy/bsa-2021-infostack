@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppRoute } from 'common/enums/enums';
 import { Sign, FormField } from 'components/common/common';
 import { useHistory, useForm, yupResolver, useEffect } from 'hooks/hooks';
-import { AuthApi, UserApi } from 'services';
+import { authApi, userApi } from 'services';
 import { signUpInviteSchema } from 'common/validations';
 import { IRegister, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
 import { DefaultUserName } from 'common/enums/enums';
@@ -18,7 +18,7 @@ const SignUpInvite: React.FC = () => {
   }
 
   const checkIfUserExistedBefore = async (): Promise<void> => {
-    const isUserNameDefault = await new UserApi().checkIfUserRegisteredOnInvite(
+    const isUserNameDefault = await userApi.checkIfUserRegisteredOnInvite(
       token,
     );
 
@@ -42,7 +42,7 @@ const SignUpInvite: React.FC = () => {
   ): Promise<void> => {
     const { password, fullName } = data;
 
-    await new AuthApi().updatePasswordAndFullName({
+    await authApi.updatePasswordAndFullName({
       token,
       password,
       fullName,

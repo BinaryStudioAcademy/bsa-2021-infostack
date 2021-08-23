@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { NotificationApi } from 'services';
+import { notificationApi } from 'services';
 import { IQuery } from 'common/interfaces/query';
 
 const loadNotifications = createAsyncThunk(
   ActionType.SET_NOTIFICATIONS,
   async (query: IQuery | undefined, { dispatch }) => {
-    const notifications = await new NotificationApi().get(query);
+    const notifications = await notificationApi.get(query);
     dispatch(actions.setNotifications(notifications));
   },
 );
@@ -15,7 +15,7 @@ const loadNotifications = createAsyncThunk(
 const loadMoreNotifications = createAsyncThunk(
   ActionType.ADD_NOTIFICATIONS,
   async (query: IQuery | undefined, { dispatch }) => {
-    const notifications = await new NotificationApi().get(query);
+    const notifications = await notificationApi.get(query);
     dispatch(actions.addNotifications(notifications));
   },
 );
@@ -23,7 +23,7 @@ const loadMoreNotifications = createAsyncThunk(
 const loadLastNotifications = createAsyncThunk(
   ActionType.ADD_NOTIFICATIONS_TO_TOP,
   async (query: IQuery | undefined, { dispatch }) => {
-    const notifications = await new NotificationApi().get(query);
+    const notifications = await notificationApi.get(query);
     dispatch(actions.addNotificationsToTop(notifications));
   },
 );
@@ -31,7 +31,7 @@ const loadLastNotifications = createAsyncThunk(
 const changeLastNotifications = createAsyncThunk(
   ActionType.CHANGE_NOTIFICATIONS_ON_TOP,
   async (query: IQuery | undefined, { dispatch }) => {
-    const notifications = await new NotificationApi().get(query);
+    const notifications = await notificationApi.get(query);
     dispatch(actions.changeNotificationsOnTop(notifications));
   },
 );
@@ -39,7 +39,7 @@ const changeLastNotifications = createAsyncThunk(
 const loadCount = createAsyncThunk(
   ActionType.SET_COUNT,
   async (_, { dispatch }) => {
-    const { count } = await new NotificationApi().getCount();
+    const { count } = await notificationApi.getCount();
     dispatch(actions.setCount(count));
   },
 );
@@ -47,7 +47,7 @@ const loadCount = createAsyncThunk(
 const readAllNotifications = createAsyncThunk(
   ActionType.SET_NOTIFICATIONS,
   async (_, { dispatch }) => {
-    const notifications = await new NotificationApi().readAll();
+    const notifications = await notificationApi.readAll();
     dispatch(actions.setNotifications(notifications));
     dispatch(actions.setCount(0));
   },
@@ -56,7 +56,7 @@ const readAllNotifications = createAsyncThunk(
 const readNotification = createAsyncThunk(
   ActionType.UPDATE_NOTIFICATION,
   async (id: string, { dispatch }) => {
-    const notification = await new NotificationApi().read(id);
+    const notification = await notificationApi.read(id);
     dispatch(actions.updateNotification(notification));
     dispatch(actions.decrementCount());
   },

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
-import { signUpSchema } from '../../common/validations';
+import { signUpSchema, loginSchema } from '../../common/validations';
 import {
   login,
   register,
@@ -13,7 +13,6 @@ import {
   getLoginGoogleUrl,
 } from '../../services/auth.service';
 import { validationMiddleware } from '../middlewares';
-
 const router: Router = Router();
 
 router.post(
@@ -24,6 +23,7 @@ router.post(
 
 router.post(
   '/login',
+  validationMiddleware(loginSchema),
   run((req) => login(req.body)),
 );
 
@@ -36,6 +36,7 @@ router.post(
   '/set-password',
   run((req) => setPassword(req.body)),
 );
+
 router.post(
   '/update-password-and-fullname',
   run((req) => updatePasswordAndFullName(req.body)),
@@ -51,14 +52,14 @@ router.post(
   run((req) => logout(req.body)),
 );
 
-router.get(
-  '/login/google',
-  run((_) => getLoginGoogleUrl()),
-);
-
 router.post(
   '/login/google',
   run((req) => loginGoogle(req.body.code)),
+);
+
+router.get(
+  '/login/google',
+  run((_) => getLoginGoogleUrl()),
 );
 
 export default router;

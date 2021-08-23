@@ -10,14 +10,13 @@ import { Badge, Button, Card } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
 import { CSSObject } from '@emotion/serialize';
 import { OptionsType } from 'react-select';
-import { PageApi, TagApi } from 'services';
+import { pageApi, tagApi } from 'services';
 import { tagActions } from 'store/tags';
 import './page-tags.scss';
 import { PermissionType } from 'common/enums/enums';
 import { toast } from 'react-toastify';
 
 const PageTags: React.FC = () => {
-  const tagApi = new TagApi();
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const [allTags, setAllTags] = useState<ITagSelect[]>([]);
@@ -78,7 +77,7 @@ const PageTags: React.FC = () => {
       (item) => item.value,
     );
 
-    new PageApi()
+    pageApi
       .savePageTags(currentPage?.id, tagsRequest)
       .then((tags) => {
         const newPageTags = tags.map((tag) => {
@@ -92,7 +91,7 @@ const PageTags: React.FC = () => {
 
   useEffect(() => {
     if (currentPage) {
-      new PageApi().getPageTags(currentPage?.id).then((tags) => {
+      pageApi.getPageTags(currentPage?.id).then((tags) => {
         const newPageTags = tags.map((tag) => {
           const { id, name } = tag;
           return { ...tag, value: id, label: name } as ITagSelect;

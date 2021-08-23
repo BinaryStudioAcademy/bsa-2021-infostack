@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ActionType } from './common';
-import { UserApi } from 'services';
+import { userApi } from 'services';
 import { actions } from './slice';
 import { RootState } from 'common/types/types';
 import { IUserActivity } from 'common/interfaces/user';
@@ -17,9 +17,9 @@ const fetchActivities = createAsyncThunk(
     let result: IPaginated<IUserActivity>;
 
     if (filter === 'All') {
-      result = await new UserApi().getActivities({ ...pagination, skip: 0 });
+      result = await userApi.getActivities({ ...pagination, skip: 0 });
     } else {
-      result = await new UserApi().getUserActivities({
+      result = await userApi.getUserActivities({
         userId: user?.id || '',
         ...pagination,
         skip: 0,
@@ -44,9 +44,9 @@ const loadMoreActivities = createAsyncThunk(
     let result: IPaginated<IUserActivity>;
 
     if (filter === 'All') {
-      result = await new UserApi().getActivities(pagination);
+      result = await userApi.getActivities(pagination);
     } else {
-      result = await new UserApi().getUserActivities({
+      result = await userApi.getUserActivities({
         userId: user?.id || '',
         ...pagination,
       });

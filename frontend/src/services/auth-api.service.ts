@@ -8,7 +8,7 @@ import {
   ILogin,
   IRegister,
 } from 'common/interfaces/auth';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class AuthApi {
   private http = http;
@@ -89,4 +89,4 @@ class AuthApi {
   }
 }
 
-export { AuthApi };
+export const authApi = new AuthApi();

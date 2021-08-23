@@ -9,10 +9,10 @@ import {
   IPageTableOfContents,
   IPageContributor,
 } from 'common/interfaces/pages';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 import { ITag } from 'common/interfaces/tag';
 
-export class PageApi {
+class PageApi {
   private http = http;
   private BASE = '/api/pages';
 
@@ -184,3 +184,5 @@ export class PageApi {
     });
   }
 }
+
+export const pageApi = new PageApi();

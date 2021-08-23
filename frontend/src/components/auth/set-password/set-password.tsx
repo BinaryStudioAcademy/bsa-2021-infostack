@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { Sign, FormField } from 'components/common/common';
-import { AuthApi } from 'services';
+import { authApi } from 'services';
 import { AppRoute } from 'common/enums/enums';
 import { ToastContent } from './components/components';
 import { setPasswordSchema } from 'common/validations';
@@ -30,7 +30,7 @@ const SetPassword: React.FC = () => {
   ): Promise<void> => {
     const { password } = data;
 
-    await new AuthApi().setPassword({
+    await authApi.setPassword({
       password,
       token,
     });

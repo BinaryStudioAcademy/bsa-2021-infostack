@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { Sign, FormField } from 'components/common/common';
-import { AuthApi } from 'services';
+import { authApi } from 'services';
 import { resetPasswordSchema } from 'common/validations';
 import { useForm, useState, yupResolver } from 'hooks/hooks';
 import { IResetPassword } from 'common/interfaces/auth';
@@ -18,7 +18,7 @@ const ResetPassword: React.FC = () => {
 
     setIsSendingMail(true);
 
-    await new AuthApi().resetPassword({ email });
+    await authApi.resetPassword({ email });
 
     toast.info(
       'We sent you an email to reset your password. Please check your mailbox.',
