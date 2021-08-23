@@ -23,21 +23,19 @@ export const TeamSettings: React.FC = () => {
     (state) => state.workspaces?.currentWorkspace?.role,
   );
 
+  useEffect(() => {
+    if (userId) {
+      dispatch(teamsActions.fetchTeamsForUser(userId));
+    }
+    dispatch(teamsActions.fetchTeams());
+  }, []);
+
   const teamsToRender = [];
   for (let i = 0; i < teams.length; i++) {
     if (userTeams.find((team) => teams[i].id === team.id)) {
       teamsToRender.push(teams[i]);
     }
   }
-
-  useEffect(() => {
-    if (userId) {
-      dispatch(teamsActions.fetchTeamsForUser(userId));
-    } else {
-      dispatch(teamsActions.fetchTeams());
-    }
-  }, [userRole, teams]);
-
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
   };

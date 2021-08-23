@@ -34,10 +34,11 @@ export const getAllByUserId = async (
   userId: string,
   workspaceId: string,
 ): Promise<Team[]> => {
-  const { teams } = await getCustomRepository(
+  const user = await getCustomRepository(
     UserRepository,
   ).findUserTeamsInWorkspace(userId, workspaceId);
-  return teams;
+
+  return user?.teams ? user.teams : [];
 };
 
 export const getTeam = async (
