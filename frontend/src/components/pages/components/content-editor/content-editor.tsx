@@ -109,6 +109,13 @@ export const ContentEditor: React.FC = () => {
     });
   };
 
+  const onCancel = (): void => {
+    if (isSaveDraftShown) {
+      handleSaveAsDraftConfirm();
+    }
+    handleCancel();
+  };
+
   const handleCancel = (): void => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   };
@@ -248,7 +255,7 @@ export const ContentEditor: React.FC = () => {
                 Delete Draft
               </Button>
             ) : null}
-            <Button onClick={handleCancel} variant="warning" size="sm">
+            <Button onClick={onCancel} variant="warning" size="sm">
               Cancel
             </Button>
           </Col>
