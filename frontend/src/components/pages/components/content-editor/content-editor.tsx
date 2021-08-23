@@ -61,21 +61,21 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
 
   useEffect(() => {
-    const checkDraftTitle =
-      draftTitleInputValue === pageTitle ||
-      draftTitleInputValue === draftPageTitle;
-    const checkDraftContent =
-      draftMarkDownContent === content ||
-      draftMarkDownContent === draftPageContent;
+    const isTitleNotChanged = draftTitleInputValue === pageTitle;
+    const isDraftTitleNotChanged = draftTitleInputValue === draftPageTitle;
+
+    const checkDraftTitle = isTitleNotChanged || isDraftTitleNotChanged;
+
+    const isContentNotChanged = draftMarkDownContent === content;
+    const isDraftContentNotChanged = draftMarkDownContent === draftPageContent;
+
+    const checkDraftContent = isContentNotChanged || isDraftContentNotChanged;
 
     if (checkDraftTitle && checkDraftContent) {
       setSaveDraftShown(false);
       return;
     }
     setSaveDraftShown(true);
-  }, [titleInputValue, markDownContent]);
-
-  useEffect(() => {
     setTitleInputValue(draftTitleInputValue);
     setMarkDownContent(draftMarkDownContent);
   }, [draftTitleInputValue, draftMarkDownContent]);
@@ -110,6 +110,18 @@ export const ContentEditor: React.FC = () => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   };
 
+  const showWarningOnTitle = (title: string | undefined): void => {
+    if (title?.trim().length === 0) {
+      toast.warning('Title could not be empty');
+      return;
+    }
+    toast.warning(
+      `Title could not be so long. Please delete ${
+        title && title?.length - PageTitle.MAX_PAGE_TITLE_LENGTH
+      } symbol(s)`,
+    );
+  };
+
   const handleSaveConfirm = (): void => {
     if (
       titleInputValue &&
@@ -127,16 +139,9 @@ export const ContentEditor: React.FC = () => {
           .then(handleCancel);
       }
       handleDeleteDraft();
-    } else if (titleInputValue?.trim().length === 0) {
-      toast.warning('Title could not be empty');
-    } else {
-      toast.warning(
-        `Title could not be so long. Please delete ${
-          titleInputValue &&
-          titleInputValue?.length - PageTitle.MAX_PAGE_TITLE_LENGTH
-        } symbol(s)`,
-      );
+      return;
     }
+    showWarningOnTitle(titleInputValue);
   };
 
   const handleSaveAsDraftConfirm = (): void => {
@@ -149,28 +154,18 @@ export const ContentEditor: React.FC = () => {
           pageId: paramsId,
           title: draftTitleInputValue.trim(),
           content:
-            !draftMarkDownContent || draftMarkDownContent.length === 0
-              ? ' '
-              : draftMarkDownContent,
+            draftMarkDownContent?.length === 0 ? ' ' : draftMarkDownContent,
         }),
       )
         .unwrap()
         .then(handleCancel);
-    } else if (draftTitleInputValue?.trim().length === 0) {
-      toast.warning('Title could not be empty');
-    } else {
-      toast.warning(
-        `Title could not be so long. Please delete ${
-          draftTitleInputValue &&
-          draftTitleInputValue?.length - PageTitle.MAX_PAGE_TITLE_LENGTH
-        } symbol(s)`,
-      );
+      return;
     }
+    showWarningOnTitle(draftTitleInputValue);
   };
 
   const handleDeleteDraft = async (): Promise<void> => {
     if (isDeleteDraftShown) {
-      history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
       await dispatch(pagesActions.deleteDraft(paramsId));
       toast.info('Draft has been deleted successfully.', {
         closeOnClick: false,
@@ -181,7 +176,6 @@ export const ContentEditor: React.FC = () => {
       setDraftMarkDownContent(content);
 
       setDeleteDraftShown(false);
-      setSaveDraftShown(false);
     }
   };
 
