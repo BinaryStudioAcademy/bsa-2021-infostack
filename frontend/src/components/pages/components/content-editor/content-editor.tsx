@@ -15,6 +15,7 @@ import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
 import { AppRoute, PageTitle } from 'common/enums/enums';
 import { pagesActions } from 'store/actions';
+import { ConfirmModal } from 'components/common/common';
 import {
   useState,
   useAppDispatch,
@@ -59,8 +60,13 @@ export const ContentEditor: React.FC = () => {
 
   const [isSaveDraftShown, setSaveDraftShown] = useState(false);
   const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
+    setSaveDraftShown(true);
+    setTitleInputValue(draftTitleInputValue);
+    setMarkDownContent(draftMarkDownContent);
+
     const isTitleNotChanged = draftTitleInputValue === pageTitle;
     const isDraftTitleNotChanged = draftTitleInputValue === draftPageTitle;
 
@@ -75,9 +81,6 @@ export const ContentEditor: React.FC = () => {
       setSaveDraftShown(false);
       return;
     }
-    setSaveDraftShown(true);
-    setTitleInputValue(draftTitleInputValue);
-    setMarkDownContent(draftMarkDownContent);
   }, [draftTitleInputValue, draftMarkDownContent]);
 
   useEffect(() => {
@@ -122,23 +125,22 @@ export const ContentEditor: React.FC = () => {
     );
   };
 
+  const isTitleLessThanMaxLength = (title: string): boolean => {
+    return title.trim().length <= PageTitle.MAX_PAGE_TITLE_LENGTH;
+  };
+
   const handleSaveConfirm = (): void => {
-    if (
-      titleInputValue &&
-      titleInputValue?.trim().length <= PageTitle.MAX_PAGE_TITLE_LENGTH
-    ) {
-      if (markDownContent || titleInputValue) {
-        dispatch(
-          pagesActions.editPageContent({
-            pageId: paramsId,
-            title: titleInputValue.trim(),
-            content: markDownContent?.length === 0 ? ' ' : markDownContent,
-          }),
-        )
-          .unwrap()
-          .then(handleCancel);
-      }
-      handleDeleteDraft();
+    if (titleInputValue && isTitleLessThanMaxLength(titleInputValue)) {
+      dispatch(
+        pagesActions.editPageContent({
+          pageId: paramsId,
+          title: titleInputValue.trim(),
+          content: markDownContent?.length === 0 ? ' ' : markDownContent,
+        }),
+      )
+        .unwrap()
+        .then(handleCancel);
+      dispatch(pagesActions.deleteDraft(paramsId));
       return;
     }
     showWarningOnTitle(titleInputValue);
@@ -147,7 +149,7 @@ export const ContentEditor: React.FC = () => {
   const handleSaveAsDraftConfirm = (): void => {
     if (
       draftTitleInputValue &&
-      draftTitleInputValue?.trim().length <= PageTitle.MAX_PAGE_TITLE_LENGTH
+      isTitleLessThanMaxLength(draftTitleInputValue)
     ) {
       dispatch(
         pagesActions.editDraft({
@@ -176,73 +178,96 @@ export const ContentEditor: React.FC = () => {
       setDraftMarkDownContent(content);
 
       setDeleteDraftShown(false);
+      handleDeleteCancel();
     }
   };
 
+  const handleDeleteCancel = (): void => {
+    setIsDeleteModalVisible(false);
+  };
+
+  const onDraftDelete = (): void => {
+    setIsDeleteModalVisible(true);
+  };
+
   return (
-    <div className="p-4">
-      <Row className="mb-4">
-        <Col className="d-flex justify-content-between">
-          <InputGroup>
-            <FormControl
-              value={draftTitleInputValue}
-              onChange={onInputChange}
-            />
-          </InputGroup>
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <Card border="light" className={getAllowedClasses(styles.content)}>
-            <Editor
-              value={draftMarkDownContent}
-              onChange={({ text }): void => setDraftMarkDownContent(text)}
-              onImageUpload={onImageUpload}
-              renderHTML={(text): JSX.Element => (
-                <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
-              )}
-              ref={editorRef}
-            />
-          </Card>
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <Button
-            onClick={handleSaveConfirm}
-            variant="success"
-            size="sm"
-            className="me-3"
-          >
-            Save
-          </Button>
-          {/* {draftTitleInputValue || draftMarkDownContent ? ( */}
-          {isSaveDraftShown ? (
+    <>
+      <div className="p-4">
+        <Row className="mb-4">
+          <Col className="d-flex justify-content-between">
+            <InputGroup>
+              <FormControl
+                value={draftTitleInputValue}
+                onChange={onInputChange}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <Card border="light" className={getAllowedClasses(styles.content)}>
+              <Editor
+                value={draftMarkDownContent}
+                onChange={({ text }): void => setDraftMarkDownContent(text)}
+                onImageUpload={onImageUpload}
+                renderHTML={(text): JSX.Element => (
+                  <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
+                )}
+                ref={editorRef}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
             <Button
-              onClick={handleSaveAsDraftConfirm}
+              onClick={handleSaveConfirm}
               variant="success"
               size="sm"
               className="me-3"
             >
-              Save as Draft
+              Save
             </Button>
-          ) : null}
-          {/* {draftPageTitle || draftPageContent ? ( */}
-          {isDeleteDraftShown ? (
-            <Button
-              onClick={handleDeleteDraft}
-              variant="danger"
-              size="sm"
-              className="me-3"
-            >
-              Delete Draft
+            {isSaveDraftShown ? (
+              <Button
+                onClick={handleSaveAsDraftConfirm}
+                variant="success"
+                size="sm"
+                className="me-3"
+              >
+                Save as Draft
+              </Button>
+            ) : null}
+            {isDeleteDraftShown ? (
+              <Button
+                onClick={onDraftDelete}
+                variant="danger"
+                size="sm"
+                className="me-3"
+              >
+                Delete Draft
+              </Button>
+            ) : null}
+            <Button onClick={handleCancel} variant="warning" size="sm">
+              Cancel
             </Button>
-          ) : null}
-          <Button onClick={handleCancel} variant="warning" size="sm">
-            Cancel
-          </Button>
-        </Col>
-      </Row>
-    </div>
+          </Col>
+        </Row>
+      </div>
+      <ConfirmModal
+        title="Delete confirmation"
+        showModal={isDeleteModalVisible}
+        modalText="Are you sure you want to delete the draft?"
+        confirmButton={{
+          text: 'Delete',
+          onClick: handleDeleteDraft,
+          variant: 'danger',
+        }}
+        cancelButton={{
+          text: 'Close',
+          onClick: handleDeleteCancel,
+        }}
+      />
+    </>
   );
 };
