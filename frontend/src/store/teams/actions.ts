@@ -8,6 +8,11 @@ export const fetchTeams = createAsyncThunk<ITeam[]>(
   () => teamApi.getTeams(),
 );
 
+export const fetchTeamsForUser = createAsyncThunk<ITeam[], string>(
+  ActionType.FETCH_TEAMS_FOR_USER,
+  (userId: string) => teamApi.getTeamsForUser(userId),
+);
+
 export const createTeam = createAsyncThunk<ITeam, string>(
   ActionType.CREATE_TEAM,
   (name) => teamApi.createTeam(name),
@@ -35,6 +40,7 @@ export const deleteUser = createAsyncThunk<ITeam[], ITeamAddUser>(
 
 const teamsActions = {
   fetchTeams,
+  fetchTeamsForUser,
   createTeam,
   updateTeam,
   deleteTeam,
