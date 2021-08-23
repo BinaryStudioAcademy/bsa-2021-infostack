@@ -154,7 +154,6 @@ const deleteDraft = createAsyncThunk(
   async (pageId: string, { dispatch }) => {
     dispatch(actions.toggleSpinner());
     await new PageApi().deleteDraft(pageId);
-    // dispatch(actions.deleteDraft());
     dispatch(getPagesAsync());
     dispatch(actions.toggleSpinner());
   },
