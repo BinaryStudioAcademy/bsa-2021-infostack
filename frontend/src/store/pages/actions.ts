@@ -126,6 +126,8 @@ const unfollowPage = createAsyncThunk<
 const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
+    console.info(getPayload);
+
     dispatch(actions.toggleSpinner());
     const editContentResponse = await new PageApi().editPageContent(getPayload);
     dispatch(actions.getPage(editContentResponse));
@@ -140,11 +142,22 @@ const editDraft = createAsyncThunk(
   ActionType.EDIT_DRAFT,
   async (getPayload: IEditPageContent, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const editDraftResponse = await new PageApi().editPageContent(getPayload);
+    const editDraftResponse = await new PageApi().editDraft(getPayload);
     dispatch(actions.getPage(editDraftResponse));
 
     const response = await new PageApi().getPages();
     dispatch(actions.setPages(response));
+    dispatch(actions.toggleSpinner());
+  },
+);
+
+const deleteDraft = createAsyncThunk(
+  ActionType.DELETE_DRAFT,
+  async (pageId: string, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    await new PageApi().deleteDraft(pageId);
+    // dispatch(actions.deleteDraft());
+    dispatch(getPagesAsync());
     dispatch(actions.toggleSpinner());
   },
 );
@@ -161,6 +174,7 @@ const pagesActions = {
   followPage,
   unfollowPage,
   editDraft,
+  deleteDraft,
 };
 
 export { pagesActions };

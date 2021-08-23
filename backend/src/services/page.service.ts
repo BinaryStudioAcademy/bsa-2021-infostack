@@ -7,6 +7,7 @@ import UserPermissionRepository from '../data/repositories/user-permission.repos
 import PageContentRepository from '../data/repositories/page-content.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import TagRepository from '../data/repositories/tag.repository';
+import DraftRepository from '../data/repositories/draft.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
 import { InviteStatus } from '../common/enums/invite-status';
@@ -567,4 +568,40 @@ export const savePageTags = async (
   await pageRepository.save(page);
 
   return tags;
+};
+
+export const updateDraft = async (
+  pageId: string,
+  userId: string,
+  body: IEditPageContent,
+): Promise<IPage> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findById(pageId);
+
+  const draftPageId = page.draft?.id;
+
+  const draftRepository = getCustomRepository(DraftRepository);
+  const newDraft = { ...body, id: draftPageId };
+  await draftRepository.save(newDraft);
+
+  const pageWithUpdatedDraft = await pageRepository.findByIdWithContents(
+    pageId,
+  );
+
+  const userRepository = getCustomRepository(UserRepository);
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+
+  const pageWithPermission = addPermissionField(
+    userId,
+    teamsIds,
+    mapPageToIPage(pageWithUpdatedDraft),
+  );
+  return pageWithPermission;
+};
+
+export const deleteDraft = async (pageId: string): Promise<void> => {
+  const draftRepository = getCustomRepository(DraftRepository);
+  const draft = await draftRepository.findOne({ where: { pageId } });
+  await draftRepository.remove(draft);
 };

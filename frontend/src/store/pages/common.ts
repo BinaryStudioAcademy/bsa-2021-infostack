@@ -9,6 +9,7 @@ enum ActionType {
   CLEAR_CURRENT_PAGE = 'clearCurrentPage',
   SET_CURRENT_PAGE_FOLLOWED = 'setCurrentPageFollowed',
   EDIT_DRAFT = 'editDraft',
+  DELETE_DRAFT = 'deleteDraft',
 }
 
 export { ActionType };

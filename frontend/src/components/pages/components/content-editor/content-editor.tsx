@@ -28,10 +28,9 @@ import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  // const pageTitle = currentPage?.pageContents[0].title;
-  // const content = currentPage?.pageContents[0].content;
-  const titleInputValue = currentPage?.pageContents[0].title;
-  const markDownContent = currentPage?.pageContents[0].content;
+
+  const pageTitle = currentPage?.pageContents[0].title;
+  const content = currentPage?.pageContents[0].content;
 
   const draftPageTitle = currentPage?.draft?.title;
   const draftPageContent = currentPage?.draft?.content;
@@ -48,30 +47,51 @@ export const ContentEditor: React.FC = () => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   }
 
-  // const [titleInputValue, setTitleInputValue] = useState(pageTitle);
-  // const [markDownContent, setMarkDownContent] = useState(content);
+  const [titleInputValue, setTitleInputValue] = useState(pageTitle);
+  const [markDownContent, setMarkDownContent] = useState(content);
 
-  const [draftTitleInputValue, setDraftTitleInputValue] =
-    useState(draftPageTitle);
-  const [draftMarkDownContent, setDraftMarkDownContent] =
-    useState(draftPageContent);
+  const [draftTitleInputValue, setDraftTitleInputValue] = useState(
+    draftPageTitle || pageTitle,
+  );
+  const [draftMarkDownContent, setDraftMarkDownContent] = useState(
+    draftPageContent || content,
+  );
+
+  const [isSaveDraftShown, setSaveDraftShown] = useState(false);
+  const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
 
   useEffect(() => {
-    if (draftTitleInputValue === titleInputValue) {
-      setDraftTitleInputValue(undefined);
+    if (draftTitleInputValue === (titleInputValue || draftPageTitle)) {
+      setSaveDraftShown(false);
+      // setDraftTitleInputValue(undefined);
+    } else if (draftTitleInputValue) {
+      setTitleInputValue(draftTitleInputValue);
+      setSaveDraftShown(true);
     }
+    console.info(draftTitleInputValue, titleInputValue, isSaveDraftShown);
   }, [draftTitleInputValue]);
 
   useEffect(() => {
-    if (draftMarkDownContent === markDownContent) {
-      setDraftMarkDownContent(undefined);
+    // draftTitleInputValue === (titleInputValue || draftPageTitle)
+    if (draftMarkDownContent === (markDownContent || draftPageContent)) {
+      setSaveDraftShown(false);
+      // setDraftMarkDownContent(undefined);
+    } else if (draftMarkDownContent) {
+      setMarkDownContent(draftMarkDownContent);
+      setSaveDraftShown(true);
     }
+    console.info(draftMarkDownContent, markDownContent, isSaveDraftShown);
   }, [draftMarkDownContent]);
+
+  useEffect(() => {
+    if (draftPageTitle || draftPageContent) {
+      setDeleteDraftShown(true);
+    }
+  }, [draftPageTitle, draftPageContent]);
 
   const onInputChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement>): void => {
-    // setTitleInputValue(target.value);
     setDraftTitleInputValue(target.value);
   };
 
@@ -109,9 +129,17 @@ export const ContentEditor: React.FC = () => {
           .unwrap()
           .then(handleCancel);
       }
+      // handleDeleteDraft();
+      // await dispatch(pagesActions.deleteDraft(paramsId));
     } else if (titleInputValue?.trim().length === 0) {
       toast.warning('Title could not be empty');
     } else {
+      console.info(
+        titleInputValue,
+        markDownContent,
+        draftPageTitle,
+        draftMarkDownContent,
+      );
       toast.warning(
         `Title could not be so long. Please delete ${
           titleInputValue &&
@@ -122,24 +150,52 @@ export const ContentEditor: React.FC = () => {
   };
 
   const handleSaveAsDraftConfirm = (): void => {
-    if (draftTitleInputValue && draftTitleInputValue?.trim().length !== 0) {
-      if (draftMarkDownContent || draftTitleInputValue) {
-        dispatch(
-          pagesActions.editPageContent({
-            pageId: paramsId,
-            title: draftTitleInputValue.trim(),
-            content:
-              draftMarkDownContent?.length === 0 ? ' ' : draftMarkDownContent,
-          }),
-        )
-          .unwrap()
-          .then(handleCancel);
-      }
+    if (
+      draftTitleInputValue &&
+      draftTitleInputValue?.trim().length <= PageTitle.MAX_PAGE_TITLE_LENGTH
+    ) {
+      // if (draftMarkDownContent || draftTitleInputValue) {
+      dispatch(
+        pagesActions.editDraft({
+          pageId: paramsId,
+          title: draftTitleInputValue?.trim(),
+          // title: draftTitleInputValue?.trim() || titleInputValue,
+          content:
+            !draftMarkDownContent || draftMarkDownContent.length === 0
+              ? ' '
+              : draftMarkDownContent,
+        }),
+      )
+        .unwrap()
+        .then(handleCancel);
+    } else if (draftTitleInputValue?.trim().length === 0) {
+      toast.warning('Title could not be empty');
+    } else {
+      toast.warning(
+        `Title could not be so long. Please delete ${
+          draftTitleInputValue &&
+          draftTitleInputValue?.length - PageTitle.MAX_PAGE_TITLE_LENGTH
+        } symbol(s)`,
+      );
     }
   };
 
-  const handleDeleteDraft = (): void => {
-    console.info('@to-do delete draft');
+  const handleDeleteDraft = async (): Promise<void> => {
+    if (draftTitleInputValue || draftMarkDownContent) {
+      setSaveDraftShown(false);
+      setDraftTitleInputValue(undefined);
+      setDraftMarkDownContent(undefined);
+
+      await dispatch(pagesActions.deleteDraft(paramsId));
+      history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
+      toast.info('Draft has been deleted successfully.', {
+        closeOnClick: false,
+        pauseOnHover: true,
+      });
+      setDeleteDraftShown(false);
+      // setDraftTitleInputValue(pageTitle);
+      // setDraftMarkDownContent(content);
+    }
   };
 
   return (
@@ -147,9 +203,8 @@ export const ContentEditor: React.FC = () => {
       <Row className="mb-4">
         <Col className="d-flex justify-content-between">
           <InputGroup>
-            {/* <FormControl value={titleInputValue} onChange={onInputChange} /> */}
             <FormControl
-              value={draftTitleInputValue || titleInputValue}
+              value={draftTitleInputValue}
               onChange={onInputChange}
             />
           </InputGroup>
@@ -159,9 +214,7 @@ export const ContentEditor: React.FC = () => {
         <Col>
           <Card border="light" className={getAllowedClasses(styles.content)}>
             <Editor
-              // value={markDownContent}
-              // onChange={({ text }): void => setMarkDownContent(text)}
-              value={draftMarkDownContent || markDownContent}
+              value={draftMarkDownContent}
               onChange={({ text }): void => setDraftMarkDownContent(text)}
               onImageUpload={onImageUpload}
               renderHTML={(text): JSX.Element => (
@@ -182,7 +235,8 @@ export const ContentEditor: React.FC = () => {
           >
             Save
           </Button>
-          {draftTitleInputValue || draftMarkDownContent ? (
+          {/* {draftTitleInputValue || draftMarkDownContent ? ( */}
+          {isSaveDraftShown ? (
             <Button
               onClick={handleSaveAsDraftConfirm}
               variant="success"
@@ -192,14 +246,17 @@ export const ContentEditor: React.FC = () => {
               Save as Draft
             </Button>
           ) : null}
-          <Button
-            onClick={handleDeleteDraft}
-            variant="danger"
-            size="sm"
-            className="me-3"
-          >
-            Delete Draft
-          </Button>
+          {/* {draftPageTitle || draftPageContent ? ( */}
+          {isDeleteDraftShown ? (
+            <Button
+              onClick={handleDeleteDraft}
+              variant="danger"
+              size="sm"
+              className="me-3"
+            >
+              Delete Draft
+            </Button>
+          ) : null}
           <Button onClick={handleCancel} variant="warning" size="sm">
             Cancel
           </Button>
