@@ -40,7 +40,6 @@ export const Popup: React.FC<Props> = ({
 
   useEffect(() => {
     dispatch(usersActions.loadUsers());
-    dispatch(teamsActions.fetchTeams());
   }, []);
 
   const handleSelectChange = (
