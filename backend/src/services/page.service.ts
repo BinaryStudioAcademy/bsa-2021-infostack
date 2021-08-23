@@ -570,38 +570,45 @@ export const savePageTags = async (
   return tags;
 };
 
-export const updateDraft = async (
-  pageId: string,
+export const getPageWithPermission = async (
   userId: string,
-  body: IEditPageContent,
+  page: Page,
 ): Promise<IPage> => {
-  const pageRepository = getCustomRepository(PageRepository);
-  const page = await pageRepository.findById(pageId);
-
-  const draftPageId = page.draft?.id;
-
-  const draftRepository = getCustomRepository(DraftRepository);
-  const newDraft = { ...body, id: draftPageId };
-  await draftRepository.save(newDraft);
-
-  const pageWithUpdatedDraft = await pageRepository.findByIdWithContents(
-    pageId,
-  );
-
   const userRepository = getCustomRepository(UserRepository);
+
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
 
   const pageWithPermission = addPermissionField(
     userId,
     teamsIds,
-    mapPageToIPage(pageWithUpdatedDraft),
+    mapPageToIPage(page),
   );
+
   return pageWithPermission;
+};
+
+export const updateDraft = async (
+  pageId: string,
+  userId: string,
+  draftPayload: IEditPageContent,
+): Promise<IPage> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const draftRepository = getCustomRepository(DraftRepository);
+
+  const { draft } = await pageRepository.findById(pageId);
+  const id = draft?.id;
+
+  await draftRepository.save({ ...draftPayload, id });
+
+  const pageWithUpdatedDraft = await pageRepository.findByIdWithContents(
+    pageId,
+  );
+
+  return getPageWithPermission(userId, pageWithUpdatedDraft);
 };
 
 export const deleteDraft = async (pageId: string): Promise<void> => {
   const draftRepository = getCustomRepository(DraftRepository);
-  const draft = await draftRepository.findOne({ where: { pageId } });
-  await draftRepository.remove(draft);
+  await draftRepository.delete({ pageId });
 };
