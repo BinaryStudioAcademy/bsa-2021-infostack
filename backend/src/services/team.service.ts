@@ -34,10 +34,9 @@ export const getAllByUserId = async (
   userId: string,
   workspaceId: string,
 ): Promise<Team[]> => {
-  const user = await getCustomRepository(
+  const { teams } = await getCustomRepository(
     UserRepository,
   ).findUserTeamsInWorkspace(userId, workspaceId);
-  const { teams } = user[0];
   return teams;
 };
 
