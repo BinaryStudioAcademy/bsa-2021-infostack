@@ -11,6 +11,7 @@ import {
   updatePasswordAndFullName,
   loginGoogle,
   getLoginGoogleUrl,
+  getLoginGitHubUrl,
 } from '../../services/auth.service';
 import { validationMiddleware } from '../middlewares';
 const router: Router = Router();
@@ -60,6 +61,11 @@ router.post(
 router.get(
   '/login/google',
   run((_) => getLoginGoogleUrl()),
+);
+
+router.get(
+  '/login/github',
+  run((_) => getLoginGitHubUrl()),
 );
 
 export default router;

@@ -45,4 +45,9 @@ export const env = {
     clientSecret: getOsEnv('GOOGLE_CLIENT_SECRET'),
     redirectUrl: getOsEnv('GOOGLE_REDIRECT_URL'),
   },
+  github: {
+    clientId: getOsEnv('GITHUB_CLIENT_ID'),
+    clientSecret: getOsEnv('GITHUB_CLIENT_SECRET'),
+    redirectUrl: getOsEnv('GITHUB_REDIRECT_URL'),
+  },
 } as const;

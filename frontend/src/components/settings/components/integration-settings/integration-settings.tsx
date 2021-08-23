@@ -1,11 +1,13 @@
 import { Card } from 'react-bootstrap';
 import { ConnectButton } from './components/components';
+import { authApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 export const IntegrationSettings: React.FC = () => {
-  const onConnectButtonClick = (): void => {
-    setIsPopUpVisible(true);
+  const onConnectButtonClick = async (): Promise<void> => {
+    const { url } = await authApi.getLoginGitHubUrl();
+    window.location.assign(url);
   };
 
   return (

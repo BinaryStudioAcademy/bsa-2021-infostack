@@ -15,6 +15,7 @@ import { ProtectedRoute, Route, Switch } from 'components/common/common';
 import {
   Login,
   LoginGoogle,
+  LoginGitHub,
   SignUp,
   SignUpInvite,
   SetPassword,
@@ -55,6 +56,7 @@ const App: React.FC = () => {
       <Switch>
         <Route path={AppRoute.LOGIN} component={Login} exact />
         <Route path={AppRoute.LOGIN_GOOGLE} component={LoginGoogle} exact />
+        <Route path={AppRoute.LOGIN_GITHUB} component={LoginGitHub} exact />
         <Route path={AppRoute.SIGN_UP} component={SignUp} exact />
         <Route path={AppRoute.INVITE} component={SignUpInvite} exact />
         <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
