@@ -8,6 +8,7 @@ import { tagReducer as tags } from './tags';
 import { participantsReducer as participants } from './participants';
 import { activitiesReducer as activities } from './activities';
 import { notificationsReducer as notifications } from './notifications';
+import { githubReducer as github } from './github';
 
 const rootReducer = {
   auth,
@@ -20,6 +21,7 @@ const rootReducer = {
   participants,
   activities,
   notifications,
+  github,
 };
 
 export { rootReducer };

@@ -27,6 +27,20 @@
   margin-bottom: 0;
 }
 
+.cardBody {
+  padding: 1.6rem 2rem;
+  font-size: 1.42rem;
+
+  .title {
+    margin: 0.5rem 0 1rem 0;
+    font-weight: 500;
+  }
+
+  .label {
+    margin-top: 0.5rem;
+  }
+}
+
 .teamsContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -1,5 +1,5 @@
 import { useHistory, useEffect } from 'hooks/hooks';
-import { AppRoute, LocalStorageVariable } from 'common/enums/enums';
+import { AppRoute } from 'common/enums/enums';
 import { githubApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
@@ -18,11 +18,7 @@ const LoginGitHub: React.FC = () => {
   }, []);
 
   const handleGitHub = async (code: string): Promise<void> => {
-    const { githubAccessToken } = await githubApi.getAccessToken(code);
-    localStorage.setItem(
-      LocalStorageVariable.GITHUB_ACCESS_TOKEN,
-      githubAccessToken,
-    );
+    await githubApi.addAccessToken(code);
     push(AppRoute.SETTINGS_INTEGRATIONS);
   };
 

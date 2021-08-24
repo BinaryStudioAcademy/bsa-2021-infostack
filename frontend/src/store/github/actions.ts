@@ -1,20 +1,52 @@
-export {};
-// import { createAsyncThunk } from '@reduxjs/toolkit';
-// import { actions } from './slice';
-// import { ActionType } from './common';
-// import { githubApi } from 'services';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { actions } from './slice';
+import { ActionType } from './common';
+import { githubApi } from 'services';
 
-// const loadAccessToken = createAsyncThunk(
-//   ActionType.SET_ACCESS_TOKEN,
-//   async (code: string, { dispatch }) => {
-//     const accessToken = await githubApi.getAccessToken(code);
-//     dispatch(actions.setAccessToken(accessToken));
-//   },
-// );
+const loadUsername = createAsyncThunk(
+  ActionType.SET_USERNAME,
+  async (_, { dispatch }) => {
+    const { username } = await githubApi.getUsername();
 
-// const githubActions = {
-//   ...actions,
-//   loadAccessToken,
-// };
+    dispatch(actions.setUsername(username));
+  },
+);
 
-// export { githubActions };
+const loadRepos = createAsyncThunk(
+  ActionType.SET_REPOS,
+  async (_, { dispatch }) => {
+    const { repos } = await githubApi.getRepos();
+    dispatch(actions.setRepos(repos));
+  },
+);
+
+const setCurrentRepo = createAsyncThunk(
+  ActionType.SET_CURRENT_REPO,
+  async (repo: string, { dispatch }) => {
+    await githubApi.addCurrentRepo(repo);
+    dispatch(actions.setCurrentRepo(repo));
+    dispatch(actions.removeRepos());
+  },
+);
+
+const loadCurrentRepo = createAsyncThunk(
+  ActionType.SET_CURRENT_REPO,
+  async (_, { dispatch }) => {
+    const { currentRepo } = await githubApi.getCurrentRepo();
+    if (!currentRepo) {
+      dispatch(loadRepos());
+      return;
+    }
+    dispatch(actions.setCurrentRepo(currentRepo));
+  },
+);
+
+const githubActions = {
+  ...actions,
+  loadUsername,
+  loadRepos,
+  setCurrentRepo,
+  loadCurrentRepo,
+};
+
+export { githubActions };

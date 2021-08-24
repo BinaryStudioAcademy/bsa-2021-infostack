@@ -1,16 +1,41 @@
-import axios from 'axios';
-import { env } from '../env';
+import {
+  getAccessToken,
+  getUser,
+  getRepositories,
+} from '../common/utils/github.util';
 
-export const getAccessToken = async (
-  code: string,
-): Promise<{ githubAccessToken: string }> => {
-  const { clientId, clientSecret } = env.github;
-  const response = await axios({
-    method: 'post',
-    url: `https://github.com/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${code}`,
-    headers: {
-      accept: 'application/json',
-    },
-  });
-  return { githubAccessToken: response.data.access_token };
+let accessToken: string;
+let currentRepo: string;
+let username: string;
+
+export const createAccessToken = async (code: string): Promise<void> => {
+  accessToken = await getAccessToken(code);
+};
+
+export const getUsername = async (): Promise<{ username: string }> => {
+  if (username) {
+    return { username };
+  }
+  if (!accessToken) {
+    return { username: undefined };
+  }
+  const user = await getUser(accessToken);
+
+  return { username: user.name };
+};
+
+export const getRepos = async (): Promise<{ repos: string[] }> => {
+  if (!accessToken) {
+    return { repos: undefined };
+  }
+  const repos = await getRepositories(accessToken);
+  return { repos: repos.map((repo: { name: string }) => repo.name) };
+};
+
+export const addCurrentRepo = async (repo: string): Promise<void> => {
+  currentRepo = repo;
+};
+
+export const getCurrentRepo = async (): Promise<{ currentRepo: string }> => {
+  return { currentRepo };
 };

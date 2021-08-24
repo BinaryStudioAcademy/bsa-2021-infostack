@@ -1,7 +1,8 @@
-export {};
-// enum ActionType {
-//   SET_ACCESS_TOKEN = 'setAccessToken',
-//   REMOVE_ACCESS_TOKEN = 'removeAccessToken',
-// }
+enum ActionType {
+  SET_USERNAME = 'setUsername',
+  SET_REPOS = 'setRepos',
+  REMOVE_REPOS = 'removeRepos',
+  SET_CURRENT_REPO = 'setCurrentRepo',
+}
 
-// export { ActionType };
+export { ActionType };
