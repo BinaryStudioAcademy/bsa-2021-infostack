@@ -21,7 +21,7 @@ import { SocketEvents } from '../common/enums/socket';
 import { NotificationType } from '../common/enums/notification-type';
 import { HttpError } from '../common/errors/http-error';
 import { sendMail } from '../common/utils/mailer.util';
-import { isNotify } from '../common/helpers/isNotify.helper';
+import { isNotify } from '../common/helpers/is-notify.helper';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,

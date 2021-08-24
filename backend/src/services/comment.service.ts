@@ -17,7 +17,7 @@ import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
 import { NotificationType } from '../common/enums/notification-type';
-import { isNotify } from '../common/helpers/isNotify.helper';
+import { isNotify } from '../common/helpers/is-notify.helper';
 import { HttpError } from '../common/errors/http-error';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
