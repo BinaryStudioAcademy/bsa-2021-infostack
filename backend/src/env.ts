@@ -45,4 +45,8 @@ export const env = {
     clientSecret: getOsEnv('GOOGLE_CLIENT_SECRET'),
     redirectUrl: getOsEnv('GOOGLE_REDIRECT_URL'),
   },
+  elasticsearch: {
+    node: getOsEnv('ELASTICSEARCH_NODE'),
+    index: getOsEnv('ELASTICSEARCH_INDEX'),
+  },
 } as const;
