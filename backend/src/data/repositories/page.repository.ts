@@ -1,6 +1,7 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
+import { User } from '../entities/user';
 
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
@@ -136,6 +137,13 @@ class PageRepository extends Repository<Page> {
       .relation('followingUsers')
       .of(pageIds)
       .remove(userId);
+  }
+
+  public findFollowers(id: string): Promise<User[]> {
+    return this.createQueryBuilder()
+      .relation(Page, 'followingUsers')
+      .of(id)
+      .loadMany();
   }
 
   public deleteById(id: string): Promise<DeleteResult> {

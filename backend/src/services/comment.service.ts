@@ -18,9 +18,10 @@ import CommentReactionRepository from '../data/repositories/comment-reaction.rep
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
-import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
+import PageRepository from '../data/repositories/page.repository';
+import { commentNotification, commentMail, replyMail } from '../common/utils';
 
 export const getComments = async (
   pageId: string,
@@ -40,73 +41,71 @@ export const notifyUsers = async (
   comment: IComment,
   io: Server,
 ): Promise<void> => {
-  const { app } = env;
-  const url = app.url;
+  const { pageId, text, parentCommentId, author } = comment;
+  const { fullName, id: authorId } = author;
+  const { url } = env.app;
 
-  const commentRepository = getCustomRepository(CommentRepository);
-  const { page } = await commentRepository.findPageByCommentId(comment.id);
-  const { followingUsers } = page;
+  const followingUsers = await getCustomRepository(
+    PageRepository,
+  ).findFollowers(pageId);
   const notificationRepository = getCustomRepository(NotificationRepository);
-  const title = `A new comment from ${comment.author.fullName}`;
-  const body = comment.text.slice(0, MAX_NOTIFICATION_TITLE_LENGTH);
+
+  const [title, body] = commentNotification(fullName, text);
 
   if (comment.parentCommentId) {
-    const { author } = await commentRepository.findById(
-      comment.parentCommentId,
+    const author = await getCustomRepository(CommentRepository).findAuthor(
+      parentCommentId,
     );
-    if (author.id !== comment.author.id) {
-      io.to(author.id).emit(SocketEvents.NOTIFICATION_NEW);
-      await notificationRepository.createAndSave(
-        title,
-        body,
-        EntityType.COMMENT,
-        comment.id,
-        author.id,
-        false,
-      );
 
-      await sendMail({
-        to: author.email,
-        subject: 'A new response to your comment',
-        text: `
-        Hello,
-
-        You received a response from ${comment.author.fullName} to your comment:
-
-        "${comment.text}"
-
-        ${url}`,
-      });
+    if (author.id === comment.author.id) {
+      return;
     }
-  } else {
-    for (const followingUser of followingUsers) {
-      if (followingUser.id !== comment.author.id) {
-        const { id, email } = followingUser;
-        io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
-        await notificationRepository.createAndSave(
-          title,
-          body,
-          EntityType.COMMENT,
-          comment.id,
-          id,
-          false,
-        );
 
-        await sendMail({
-          to: email,
-          subject: 'A new comment to the page you are following',
-          text: `
-          Hello,
+    io.to(author.id).emit(SocketEvents.NOTIFICATION_NEW);
 
-          A page you are following received a new comment from ${comment.author.fullName}:
+    await notificationRepository.createAndSave(
+      title,
+      body,
+      EntityType.COMMENT,
+      comment.id,
+      author.id,
+      false,
+    );
 
-          "${comment.text}"
+    const [subject, emailText] = replyMail(author.fullName, text, url);
+    await sendMail({
+      to: author.email,
+      subject,
+      text: emailText,
+    });
 
-          ${url}`,
-        });
-      }
-    }
+    return;
   }
+
+  const followers = followingUsers.filter(
+    (follower) => follower.id !== authorId,
+  );
+
+  const notifications = followingUsers.map((follower) => ({
+    title,
+    body,
+    type: EntityType.COMMENT,
+    entityTypeId: comment.id,
+    userId: follower.id,
+    read: false,
+  }));
+  await notificationRepository.createAndSaveMultiple(notifications);
+
+  const followerIds = followers.map((follower) => follower.id);
+  io.to(followerIds).emit(SocketEvents.NOTIFICATION_NEW);
+
+  const followerEmails = followers.map((follower) => follower.email);
+  const [subject, emailText] = commentMail(fullName, text, url);
+  await sendMail({
+    bcc: followerEmails,
+    subject,
+    text: emailText,
+  });
 };
 
 export const addComment = async (
