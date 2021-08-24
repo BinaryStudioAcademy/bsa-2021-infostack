@@ -105,7 +105,6 @@ const ProfileInfo: React.FC = () => {
 
   const onPageUnfollow = async (pageId: string): Promise<void> => {
     setCurrentPageId(pageId);
-    console.info(childPages);
   };
 
   return (
