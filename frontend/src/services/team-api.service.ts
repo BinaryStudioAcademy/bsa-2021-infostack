@@ -12,6 +12,12 @@ class TeamApi {
     });
   }
 
+  public getTeamsForUser(userId: string): Promise<ITeam[]> {
+    return this.http.load(`${this.BASE}/users/${userId}`, {
+      contentType: ContentType.JSON,
+    });
+  }
+
   public createTeam(name: string): Promise<ITeam> {
     return this.http.load(this.BASE, {
       method: HttpMethod.POST,

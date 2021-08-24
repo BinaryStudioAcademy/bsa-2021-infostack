@@ -45,13 +45,16 @@ router
   .get(
     '/activities',
     run((req) =>
-      getActivities(req.userId, { skip: req.query.skip, take: req.query.take }),
+      getActivities(req.userId, req.workspaceId, {
+        skip: req.query.skip,
+        take: req.query.take,
+      }),
     ),
   )
   .get(
     '/:id/activities',
     run((req) =>
-      getUserActivities({
+      getUserActivities(req.workspaceId, {
         skip: req.query.skip,
         take: req.query.take,
         userId: req.userId,

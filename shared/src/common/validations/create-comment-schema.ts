@@ -7,4 +7,5 @@ export const createCommentSchema = yup
   .noUnknown(true)
   .shape({
     text: yup.string().min(1).required(),
+    parentCommentId: yup.string().uuid(),
   });
