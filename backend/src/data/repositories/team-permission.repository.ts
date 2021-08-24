@@ -50,6 +50,16 @@ class TeamPermissionRepository extends Repository<TeamPermission> {
       .where('teamId = :teamId', { teamId })
       .execute();
   }
+
+  public findByPagesAndUserId(pageIds: string[], userId: string) {
+    return this.createQueryBuilder('team_permission')
+      .leftJoin('team_permission.team', 'team')
+      .leftJoinAndSelect('team_permission.page', 'page')
+      .leftJoin('team.users', 'team_users')
+      .where('team_users.id = :id', { id: userId })
+      .andWhere('team_permission."pageId" IN (:...ids)', { ids: pageIds })
+      .getMany();
+  }
 }
 
 export default TeamPermissionRepository;
