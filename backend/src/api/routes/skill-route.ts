@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
-import { getAllSkills, addNewSkill } from '../../services/skill.service';
+import { getAllByWorkspaceId, create } from '../../services/skill.service';
 
 const router: Router = Router();
 
 router.get(
   '/',
-  run(() => getAllSkills()),
+  run((req) => getAllByWorkspaceId(req.workspaceId)),
 );
 
 router.post(
   '/',
-  run((req) => addNewSkill(req.body.name)),
+  run((req) => create(req.workspaceId, req.body.name)),
 );
 
 export default router;
