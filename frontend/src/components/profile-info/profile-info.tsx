@@ -83,12 +83,12 @@ const ProfileInfo: React.FC = () => {
 
     if (childPages && childPages.length && followedChildPages?.length) {
       setIsFollowModalVisible(true);
-    } else {
-      if (currentPageId) {
-        handlePageUnfollow()(false);
-      }
+      return;
     }
-  }, [childPages]);
+    if (currentPageId) {
+      handlePageUnfollow()(false);
+    }
+  }, [currentPageId]);
 
   const handlePageUnfollow =
     () =>
@@ -105,6 +105,7 @@ const ProfileInfo: React.FC = () => {
 
   const onPageUnfollow = async (pageId: string): Promise<void> => {
     setCurrentPageId(pageId);
+    console.info(childPages);
   };
 
   return (
