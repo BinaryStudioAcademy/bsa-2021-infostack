@@ -18,4 +18,5 @@ export const createPageSchema = yup
       )
       .required(),
     content: yup.string(),
+    parentPageId: yup.string().uuid(),
   });

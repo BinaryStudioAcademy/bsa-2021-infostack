@@ -174,6 +174,20 @@ class PageApi {
   public async searchPageContent(query: string): Promise<IFoundPageContent[]> {
     return this.http.load(`${this.BASE}/search?query=${query}`);
   }
+
+  public async editDraft(payload: IEditPageContent): Promise<IPage> {
+    return this.http.load(`${this.BASE}/${payload.pageId}/draft`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  public async deleteDraft(id: string): Promise<void> {
+    return this.http.load(`${this.BASE}/${id}/draft`, {
+      method: HttpMethod.DELETE,
+    });
+  }
 }
 
 export const pageApi = new PageApi();
