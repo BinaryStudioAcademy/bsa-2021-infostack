@@ -16,6 +16,7 @@ import PageTagSeeder from './seeders/page-tag.seeder';
 import PageContentSeeder from './seeders/page-content.seeder';
 import UserPermissionSeeder from './seeders/user-permission.seeder';
 import NotificationSeeder from './seeders/notification.seeder';
+import DraftSeeder from './seeders/draft.seeder';
 
 const seeders = async (): Promise<void> => {
   await createConnection(ormconfig);
@@ -50,6 +51,8 @@ const seeders = async (): Promise<void> => {
   await UserFollowingPagesSeeder.execute();
   logger.info('Seeding notifications');
   await NotificationSeeder.execute();
+  logger.info('Seeding drafts');
+  await DraftSeeder.execute();
   logger.info('Seeding finished');
 };
 

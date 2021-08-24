@@ -5,6 +5,7 @@ import {
   OneToMany,
   RelationId,
   ManyToMany,
+  OneToOne,
   JoinTable,
 } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
@@ -15,6 +16,7 @@ import { TeamPermission } from './team-permission';
 import { PageContent } from './page-content';
 import { Comment } from './comment';
 import { Tag } from './tag';
+import { Draft } from './draft';
 
 @Entity()
 export class Page extends AbstractEntity {
@@ -69,4 +71,7 @@ export class Page extends AbstractEntity {
 
   @OneToMany(() => Comment, (Comment) => Comment.page)
   comments: Comment[];
+
+  @OneToOne(() => Draft, (Draft) => Draft.page)
+  draft: Draft;
 }
