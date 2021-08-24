@@ -9,7 +9,7 @@ import elasticPageContentRepository from '../repositories/page-content.repositor
 class ElasticPageContentSeeder {
   private static _insertedPageIds = new Set<string>();
 
-  public static async execute() {
+  public static async execute(): Promise<void> {
     await asyncForEach(async ({ id, title, content, pageId }) => {
       if (this._insertedPageIds.has(pageId)) {
         return;

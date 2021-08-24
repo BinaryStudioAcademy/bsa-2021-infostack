@@ -51,7 +51,10 @@ class TeamPermissionRepository extends Repository<TeamPermission> {
       .execute();
   }
 
-  public findByPagesAndUserId(pageIds: string[], userId: string) {
+  public findByPagesAndUserId(
+    pageIds: string[],
+    userId: string,
+  ): Promise<TeamPermission[]> {
     return this.createQueryBuilder('team_permission')
       .leftJoin('team_permission.team', 'team')
       .leftJoinAndSelect('team_permission.page', 'page')
