@@ -25,6 +25,7 @@ import {
   savePageTags,
   getTableOfContentsByPageId,
   getTableOfContentsByPageIdAndVersionId,
+  searchPage,
 } from '../../services/page.service';
 import {
   getComments,
@@ -34,6 +35,11 @@ import {
 import { validationMiddleware } from '../middlewares';
 
 const router: Router = Router();
+
+router.get(
+  '/search',
+  run((req) => searchPage(req.query.query, req.userId, req.workspaceId)),
+);
 
 router.post(
   '/',
