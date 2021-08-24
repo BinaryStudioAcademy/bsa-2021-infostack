@@ -1,7 +1,7 @@
 import { getAllowedClasses } from 'helpers/helpers';
 import { useState } from 'hooks/hooks';
 import { Button, Modal } from 'react-bootstrap';
-// import { commentApi } from 'services';
+import { commentApi } from 'services';
 import styles from './styles.module.scss';
 
 type ModalProps = {
@@ -12,7 +12,7 @@ type ModalProps = {
 };
 
 const RecordModal: React.FC<ModalProps> = (modalProps) => {
-  const { onHide } = modalProps;
+  const { onHide, pageid } = modalProps;
   const [isRocording, setIsRecording] = useState(false);
 
   const handleSuccess = (stream: MediaStream): void => {
@@ -35,12 +35,16 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
       downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
       downloadLink.download = 'acetest.webm';
 
-      // const audioFile = new File(recordedChunks, `${new Date().toString()}.webm`,{
-      //   type: 'audio/webm; codecs=opus',
-      // });
+      const audioFile = new File(
+        recordedChunks,
+        `${new Date().toString()}.webm`,
+        {
+          type: 'audio/webm; codecs=opus',
+        },
+      );
 
       stream.getTracks().forEach((track) => track.stop());
-      // commentApi.uploadAudioComment(pageid, audioFile, audioFile.name);
+      commentApi.uploadAudioComment(pageid, audioFile, audioFile.name);
     });
 
     stopButton?.addEventListener('click', function () {

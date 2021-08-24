@@ -211,10 +211,11 @@ export const uploadAudioComment = async (
   file: Express.Multer.File,
 ): Promise<any> => {
   const uploadedFile = await uploadFile(file);
-  unlinkFile(file.path);
+  const comment = await transcriptAudio(file);
   const { Location } = uploadedFile;
+  unlinkFile(file.path);
   console.log(Location);
-  const comment = await transcriptAudio(Location);
+  console.log(comment);
 
   return { location: Location, comment };
 };
