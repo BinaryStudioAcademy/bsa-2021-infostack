@@ -1,11 +1,14 @@
 import { Form, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions';
+
 import { useState, useAppSelector, useAppDispatch } from 'hooks/hooks';
 import { RequestStatus } from 'common/enums/enums';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import { commentsActions } from 'store/comments';
+
 import styles from './styles.module.scss';
-import { toast } from 'react-toastify';
 
 type Props = {
   pageId: string;
@@ -29,11 +32,13 @@ export const CommentForm: React.FC<Props> = ({
   const { createStatus, fetchStatus, deleteStatus } = useAppSelector(
     (state) => state.comments,
   );
+  const mentions = useAppSelector((state) =>
+    state.users.users.map(({ id, fullName }) => ({ id, display: fullName })),
+  );
   const dispatch = useAppDispatch();
 
-  const handleChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>): void => setText(value);
+  const handleChange: OnChangeHandlerFunc = ({ target: { value } }): void =>
+    setText(value);
 
   const handleSubmit = async (): Promise<void> => {
     try {
@@ -75,14 +80,24 @@ export const CommentForm: React.FC<Props> = ({
               className={getAllowedClasses(styles.avatar)}
             />
             <div className="flex-grow-1 ms-3">
-              <Form.Control
+              <MentionsInput
                 disabled={isFieldDisabled}
-                as="textarea"
                 placeholder={placeholder}
                 value={text}
-                className={getAllowedClasses('mb-2', styles.text)}
+                className="mentions"
+                classNames={styles}
                 onChange={handleChange}
-              />
+              >
+                <Mention
+                  trigger="@"
+                  data={mentions}
+                  style={{
+                    backgroundColor: 'rgb(63 128 234 / 0.25)',
+                    color: 'rgb(63 128 234)',
+                  }}
+                  displayTransform={(_, display): string => `@${display}`}
+                />
+              </MentionsInput>
               <Button
                 disabled={isCancelDisabled}
                 onClick={handleCancel}
@@ -97,7 +112,7 @@ export const CommentForm: React.FC<Props> = ({
                 className={getAllowedClasses('ms-2', styles.text)}
                 variant="success"
               >
-                Submit
+                Comment
               </Button>
             </div>
           </div>

@@ -1,4 +1,6 @@
 import { Card } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+
 import {
   useAppDispatch,
   useAppSelector,
@@ -7,16 +9,13 @@ import {
   useState,
 } from 'hooks/hooks';
 import { SocketContext } from 'context/socket';
-import { commentsActions } from 'store/actions';
+import { commentsActions, usersActions } from 'store/actions';
 import { IComment } from 'common/interfaces/comment';
 import { SocketEvents } from 'common/enums/enums';
-import { CommentForm } from '../components';
+import { getAllowedClasses } from 'helpers/helpers';
+import { CommentList, CommentForm, DeleteModal } from './components';
 
 import styles from './styles.module.scss';
-import { getAllowedClasses } from 'helpers/helpers';
-import { CommentList } from '../comment-list/comment-list';
-import { DeleteModal } from '../delete-modal/delete-modal';
-import { toast } from 'react-toastify';
 
 type Props = {
   pageId: string;
@@ -24,6 +23,7 @@ type Props = {
 
 export const CommentSection: React.FC<Props> = ({ pageId }) => {
   const user = useAppSelector((state) => state.auth.user);
+  const users = useAppSelector((state) => state.users.users);
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -65,6 +65,10 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
       setIsModalDisabled(false);
     }
   };
+
+  if (!users.length) {
+    dispatch(usersActions.loadUsers());
+  }
 
   useEffect(() => {
     dispatch(commentsActions.fetchComments(pageId));
