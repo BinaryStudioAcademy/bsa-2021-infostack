@@ -169,6 +169,20 @@ class PageApi {
       `${this.BASE}/${id}/version/${versionId}/table-of-contents`,
     );
   }
+
+  public async editDraft(payload: IEditPageContent): Promise<IPage> {
+    return this.http.load(`${this.BASE}/${payload.pageId}/draft`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  public async deleteDraft(id: string): Promise<void> {
+    return this.http.load(`${this.BASE}/${id}/draft`, {
+      method: HttpMethod.DELETE,
+    });
+  }
 }
 
 export const pageApi = new PageApi();
