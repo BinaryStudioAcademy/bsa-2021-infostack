@@ -41,6 +41,7 @@
     "tscpaths": "0.0.9"
   },
   "dependencies": {
+    "@google-cloud/speech": "4.7.0",
     "aws-sdk": "2.955.0",
     "cookie-parser": "1.4.5",
     "cors": "2.8.5",

@@ -100,7 +100,7 @@ export const CommentForm: React.FC<Props> = ({
               >
                 Submit
               </Button>
-              <RecordVoice />
+              <RecordVoice pageId={pageId} />
             </div>
           </div>
         </Form.Group>

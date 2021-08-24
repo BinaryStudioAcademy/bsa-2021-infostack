@@ -9,9 +9,14 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: (err: Error, result: boolean) => void,
 ): void => {
-  if (['image/jpeg', 'image/png', 'image/gif'].includes(file.mimetype)) {
+  if (
+    ['image/jpeg', 'image/png', 'image/gif', 'audio/webm'].includes(
+      file.mimetype,
+    )
+  ) {
     cb(null, true);
   } else {
+    console.log(file.mimetype);
     cb(new Error('Invalid file type, only jpg, png and gif allowed'), false);
   }
 };

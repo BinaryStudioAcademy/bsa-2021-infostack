@@ -30,6 +30,20 @@ class CommentApi {
       method: HttpMethod.DELETE,
     });
   }
+
+  public uploadAudioComment(
+    pageId: string,
+    file: File,
+    fileName: string,
+  ): Promise<void> {
+    const fd = new FormData();
+    fd.append('audio', file, fileName);
+
+    return this._httpService.load(`${this.BASE}/${pageId}/audio-comments`, {
+      method: HttpMethod.PUT,
+      payload: fd,
+    });
+  }
 }
 
 export const commentApi = new CommentApi();

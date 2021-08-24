@@ -21,6 +21,9 @@ import { env } from '../env';
 import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
+import { uploadFile } from '../common/helpers/s3-file-storage.helper';
+import { unlinkFile } from '../common/helpers/multer.helper';
+import { transcriptAudio } from '../common/helpers/google-speach.helper';
 
 export const getComments = async (
   pageId: string,
@@ -202,4 +205,16 @@ export const getAllCommentReactions = async (
   const reactions = await commentReactionRepository.find({ commentId });
 
   return reactions;
+};
+
+export const uploadAudioComment = async (
+  file: Express.Multer.File,
+): Promise<any> => {
+  const uploadedFile = await uploadFile(file);
+  unlinkFile(file.path);
+  const { Location } = uploadedFile;
+  console.log(Location);
+  const comment = await transcriptAudio(Location);
+
+  return { location: Location, comment };
 };

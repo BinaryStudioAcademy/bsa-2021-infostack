@@ -30,8 +30,10 @@ import {
   getComments,
   addComment,
   deleteComment,
+  uploadAudioComment,
 } from '../../services/comment.service';
 import { validationMiddleware } from '../middlewares';
+import { upload } from '../../common/helpers/multer.helper';
 
 const router: Router = Router();
 
@@ -157,6 +159,12 @@ router.get(
   run((req) =>
     getTableOfContentsByPageIdAndVersionId(req.params.id, req.params.versionId),
   ),
+);
+
+router.put(
+  '/:id/audio-comments',
+  upload().single('audio'),
+  run((req) => uploadAudioComment(req.file)),
 );
 
 export default router;
