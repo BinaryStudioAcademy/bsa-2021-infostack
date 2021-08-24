@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
-export class CommentRepository extends Repository<Comment> {
+class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
     'comment.createdAt',
@@ -48,3 +48,5 @@ export class CommentRepository extends Repository<Comment> {
     );
   }
 }
+
+export default CommentRepository;

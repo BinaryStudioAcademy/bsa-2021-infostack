@@ -9,3 +9,4 @@ export { TeamApi } from './team-api/team-api.service';
 export { SkillApi } from './skill-api/skill-api.service';
 export { CommentReactionApi } from './comment-reaction-api/comment-reaction-api.service';
 export { NotificationApi } from './notification-api/notification-api.service';
+export { NotificationSettingsApi } from './notification-settings-api/notification-settings-api.service';

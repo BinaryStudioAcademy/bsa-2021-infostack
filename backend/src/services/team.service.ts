@@ -1,22 +1,26 @@
 import { getCustomRepository } from 'typeorm';
-import UserRepository from '../data/repositories/user.repository';
+import { Server } from 'socket.io';
+import {
+  UserRepository,
+  UserWorkspaceRepository,
+  NotificationRepository,
+  WorkspaceRepository,
+  TeamPermissionRepository,
+  TeamRepository,
+} from '../data/repositories';
+import { User } from '../data/entities/user';
+import { Team } from '../data/entities/team';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
-import TeamRepository from '../data/repositories/team.repository';
-import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { HttpError } from '../common/errors/http-error';
+import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
-import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import { sendMail } from '../common/utils/mailer.util';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
-import { Server } from 'socket.io';
-import { User } from '../data/entities/user';
-import NotificationRepository from '../data/repositories/notification.repository';
-import { Team } from '../data/entities/team';
-import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
-import WorkspaceRepository from '../data/repositories/workspace.repository';
+import { NotificationType } from '../common/enums/notification-type';
+import { HttpError } from '../common/errors/http-error';
+import { sendMail } from '../common/utils/mailer.util';
+import { isNotify } from '../common/helpers/isNotify.helper';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -180,19 +184,28 @@ export const notifyUser = async (
   const title = `You have been ${reason} team.`;
   const body = `You have been ${reason} team -- "${team.name}".`;
 
-  io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
-  await notificationRepository.createAndSave(
-    body,
-    null,
-    EntityType.TEAM,
-    team.id,
+  const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
+  const isNotifyTeamEmail = await isNotify(
     user.id,
-    false,
+    NotificationType.TEAM_EMAIL,
   );
 
-  await sendMail({
-    to: user.email,
-    subject: title,
-    text: body,
-  });
+  if (isNotifyTeam) {
+    io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+    await notificationRepository.createAndSave(
+      body,
+      null,
+      EntityType.TEAM,
+      team.id,
+      user.id,
+      false,
+    );
+  }
+  if (isNotifyTeamEmail) {
+    await sendMail({
+      to: user.email,
+      subject: title,
+      text: body,
+    });
+  }
 };
