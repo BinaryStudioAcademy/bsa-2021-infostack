@@ -499,10 +499,8 @@ export const getPagesFollowedByUser = async (
 export const followPage = async (
   userId: string,
   pageId: string,
-): Promise<void> => {
-  const pageRepository = getCustomRepository(PageRepository);
-  await pageRepository.followPage(userId, pageId);
-};
+): Promise<void> =>
+  getCustomRepository(PageRepository).followPage(userId, pageId);
 
 export const followPages = async (
   userId: string,
@@ -520,18 +518,14 @@ export const followPages = async (
 export const unfollowPage = async (
   userId: string,
   pageId: string,
-): Promise<void> => {
-  const pageRepository = getCustomRepository(PageRepository);
-  await pageRepository.unfollowPage(userId, pageId);
-};
+): Promise<void> =>
+  getCustomRepository(PageRepository).unfollowPage(userId, pageId);
 
 export const unfollowPages = async (
   userId: string,
   pageIds: string[],
-): Promise<void> => {
-  const pageRepository = getCustomRepository(PageRepository);
-  await pageRepository.unfollowPages(userId, pageIds);
-};
+): Promise<void> =>
+  getCustomRepository(PageRepository).unfollowPages(userId, pageIds);
 
 export const getTags = async (pageId: string): Promise<ITag[]> => {
   const pageRepository = getCustomRepository(PageRepository);
