@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
+  createPageSchema,
+  setPermissionsSchema,
+  createCommentSchema,
+} from '../../common/validations';
+
+import {
   createPage,
   deletePage,
   getPages,
@@ -19,17 +25,21 @@ import {
   savePageTags,
   getTableOfContentsByPageId,
   getTableOfContentsByPageIdAndVersionId,
+  updateDraft,
+  deleteDraft,
 } from '../../services/page.service';
 import {
   getComments,
   addComment,
   deleteComment,
 } from '../../services/comment.service';
+import { validationMiddleware } from '../middlewares';
 
 const router: Router = Router();
 
 router.post(
   '/',
+  validationMiddleware(createPageSchema),
   run((req) => createPage(req.userId, req.workspaceId, req.body)),
 );
 
@@ -55,6 +65,7 @@ router.get(
 
 router.post(
   '/:id/permissions',
+  validationMiddleware(setPermissionsSchema),
   run((req) => setPermission(req.workspaceId, req.params.id, req.body)),
 );
 
@@ -87,6 +98,7 @@ router.get(
 
 router.post(
   '/:id/comments',
+  validationMiddleware(createCommentSchema),
   run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
 );
 
@@ -147,6 +159,16 @@ router.get(
   run((req) =>
     getTableOfContentsByPageIdAndVersionId(req.params.id, req.params.versionId),
   ),
+);
+
+router.post(
+  '/:id/draft',
+  run((req) => updateDraft(req.params.id, req.userId, req.body)),
+);
+
+router.delete(
+  '/:id/draft',
+  run((req) => deleteDraft(req.params.id)),
 );
 
 export default router;

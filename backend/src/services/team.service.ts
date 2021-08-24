@@ -13,6 +13,7 @@ import { Team } from '../data/entities/team';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
+import { mapTeamToITeamWithoutRoles } from '../common/mappers/team/map-team-to-iteam-without-roles';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { EntityType } from '../common/enums/entity-type';
@@ -25,16 +26,33 @@ import { isNotify } from '../common/helpers/isNotify.helper';
 export const getAllByWorkspaceId = async (
   workspaceId: string,
 ): Promise<ITeam[]> => {
-  const teamRepository = getCustomRepository(TeamRepository);
-  const teams = await teamRepository.findAllByWorkspaceId(workspaceId);
+  const teams = await getCustomRepository(TeamRepository).findAllByWorkspaceId(
+    workspaceId,
+  );
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
   return teamsWithUsersRoles;
 };
 
-export const getTeam = async (teamId: string): Promise<ITeam> => {
-  const pageRepository = getCustomRepository(TeamRepository);
-  const team = await pageRepository.findByIdWithUsers(teamId);
+export const getAllByUserId = async (
+  userId: string,
+  workspaceId: string,
+): Promise<Team[]> => {
+  const user = await getCustomRepository(
+    UserRepository,
+  ).findUserTeamsInWorkspace(userId, workspaceId);
+
+  return user?.teams ? user.teams : [];
+};
+
+export const getTeam = async (
+  teamId: string,
+  workspaceId: string,
+): Promise<ITeam> => {
+  const team = await getCustomRepository(TeamRepository).findByIdWithUsers(
+    teamId,
+    workspaceId,
+  );
   const teamWithUsersRoles = mapTeamToITeam(team);
 
   return teamWithUsersRoles;
@@ -52,7 +70,10 @@ export const create = async (
     });
   }
   const teamRepository = getCustomRepository(TeamRepository);
-  const isNameUsed = await teamRepository.findByName(newTeam.name);
+  const isNameUsed = await teamRepository.findByNameInWorkspace(
+    newTeam.name,
+    workspaceId,
+  );
 
   if (isNameUsed) {
     throw new HttpError({
@@ -65,7 +86,10 @@ export const create = async (
     workspaceId,
     name: team.name,
   });
-  const newTeamDetails = await teamRepository.findByName(team.name);
+  const newTeamDetails = await teamRepository.findByNameInWorkspace(
+    team.name,
+    workspaceId,
+  );
 
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findUserTeams(userId);
@@ -73,12 +97,9 @@ export const create = async (
   user.teams.push(newTeamDetails);
   userRepository.save(user);
 
-  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspace =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
-      userId,
-      workspaceId,
-    );
+  const userWorkspace = await getCustomRepository(
+    UserWorkspaceRepository,
+  ).findByUserIdAndWorkspaceIdDetailed(userId, workspaceId);
 
   const users = [
     {
@@ -95,6 +116,7 @@ export const create = async (
 export const updateNameById = async (
   teamId: string,
   newName: string,
+  workspaceId: string,
 ): Promise<ITeam> => {
   if (!newName) {
     throw new HttpError({
@@ -103,8 +125,14 @@ export const updateNameById = async (
     });
   }
   const teamRepository = getCustomRepository(TeamRepository);
-  const isNameUsed = await teamRepository.findByName(newName);
-  const teamToUpdate = await teamRepository.findByIdWithUsers(teamId);
+  const isNameUsed = await teamRepository.findByNameInWorkspace(
+    newName,
+    workspaceId,
+  );
+  const teamToUpdate = await teamRepository.findByIdWithUsers(
+    teamId,
+    workspaceId,
+  );
 
   if (isNameUsed && isNameUsed.name != teamToUpdate.name) {
     throw new HttpError({
@@ -115,12 +143,16 @@ export const updateNameById = async (
 
   teamToUpdate.name = newName || teamToUpdate.name;
   const team = await teamRepository.save(teamToUpdate);
-  return mapTeamToITeam(team);
+
+  return mapTeamToITeamWithoutRoles(team);
 };
 
-export const deleteById = async (id: string): Promise<void> => {
+export const deleteById = async (
+  id: string,
+  workspaceId: string,
+): Promise<void> => {
   await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
-  await getCustomRepository(TeamRepository).deleteById(id);
+  await getCustomRepository(TeamRepository).deleteById(id, workspaceId);
 };
 
 export const addUser = async (
@@ -132,7 +164,7 @@ export const addUser = async (
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
-  const team = await teamRepository.findByIdWithUsers(teamId);
+  const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findById(workspaceId);
 
@@ -155,9 +187,8 @@ export const deleteUser = async (
   io: Server,
 ): Promise<ITeam[]> => {
   const teamRepository = getCustomRepository(TeamRepository);
-  const team = await teamRepository.findByIdWithUsers(teamId);
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(userId);
+  const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
+  const user = await getCustomRepository(UserRepository).findById(userId);
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findById(workspaceId);
 
@@ -179,8 +210,6 @@ export const notifyUser = async (
   reason: string,
   io: Server,
 ): Promise<void> => {
-  const notificationRepository = getCustomRepository(NotificationRepository);
-
   const title = `You have been ${reason} team.`;
   const body = `You have been ${reason} team -- "${team.name}".`;
 
@@ -192,7 +221,7 @@ export const notifyUser = async (
 
   if (isNotifyTeam) {
     io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
-    await notificationRepository.createAndSave(
+    await getCustomRepository(NotificationRepository).createAndSave(
       body,
       null,
       EntityType.TEAM,

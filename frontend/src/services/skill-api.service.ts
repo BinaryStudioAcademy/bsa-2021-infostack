@@ -1,6 +1,6 @@
 import { ISkill } from 'common/interfaces/skill';
 import { HttpMethod, ContentType } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class SkillApi {
   private http = http;
@@ -19,4 +19,4 @@ class SkillApi {
   }
 }
 
-export { SkillApi };
+export const skillApi = new SkillApi();

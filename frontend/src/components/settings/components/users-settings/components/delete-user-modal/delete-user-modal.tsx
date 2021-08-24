@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { WorkspaceApi } from 'services';
+import { workspaceApi } from 'services';
 import { useAppDispatch, useState } from 'hooks/hooks';
 import { usersActions } from 'store/users';
 import { ConfirmModal } from 'components/common/common';
@@ -23,7 +23,7 @@ export const DeleteUserModal: React.FC<Props> = ({
   const handleDelete = async (): Promise<void> => {
     setDeleteDisabled(true);
 
-    await new WorkspaceApi().deleteUserFromWorkspace(id);
+    await workspaceApi.deleteUserFromWorkspace(id);
 
     onModalClose();
     toast.info('User was deleted');

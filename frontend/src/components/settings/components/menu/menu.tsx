@@ -23,6 +23,15 @@ export const Menu: React.FC = () => {
         >
           Account
         </ListGroup.Item>
+        <ListGroup.Item
+          action
+          as={Link}
+          to={AppRoute.SETTINGS_TEAMS}
+          eventKey="teams"
+          className={getAllowedClasses(styles.menuItem)}
+        >
+          Teams
+        </ListGroup.Item>
         {role === RoleType.ADMIN && (
           <>
             <ListGroup.Item
@@ -33,15 +42,6 @@ export const Menu: React.FC = () => {
               className={getAllowedClasses(styles.menuItem)}
             >
               Users
-            </ListGroup.Item>
-            <ListGroup.Item
-              action
-              as={Link}
-              to={AppRoute.SETTINGS_TEAMS}
-              eventKey="teams"
-              className={getAllowedClasses(styles.menuItem)}
-            >
-              Teams
             </ListGroup.Item>
             <ListGroup.Item
               action

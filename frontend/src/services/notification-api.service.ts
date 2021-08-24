@@ -1,4 +1,4 @@
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 import { INotification } from 'common/interfaces/notification';
 import { ContentType, HttpMethod } from 'common/enums/enums';
 import { getStringifiedQuery } from 'helpers/helpers';
@@ -35,4 +35,4 @@ class NotificationApi {
   }
 }
 
-export { NotificationApi };
+export const notificationApi = new NotificationApi();

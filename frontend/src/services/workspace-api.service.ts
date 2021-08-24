@@ -5,7 +5,7 @@ import {
   IWorkspaceUser,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class WorkspaceApi {
   private http = http;
@@ -76,4 +76,4 @@ class WorkspaceApi {
     return updateResponse;
   }
 }
-export { WorkspaceApi };
+export const workspaceApi = new WorkspaceApi();
