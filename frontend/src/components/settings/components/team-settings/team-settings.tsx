@@ -88,10 +88,10 @@ export const TeamSettings: React.FC = () => {
               >
                 {userRole === RoleType.ADMIN
                   ? teams.map((team: ITeam) => (
-                      <Item key={team.id} team={team} />
+                      <Item key={team.id} team={team} admin={true} />
                     ))
                   : teamsToRender.map((team: ITeam) => (
-                      <Item key={team.id} team={team} />
+                      <Item key={team.id} team={team} admin={false} />
                     ))}
               </div>
             ))}
