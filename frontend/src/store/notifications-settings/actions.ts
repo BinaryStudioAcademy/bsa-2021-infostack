@@ -1,10 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
-import { NotificationSettingsApi } from 'services';
+import { notificationSettingsApi } from 'services';
 import { NotificationType } from 'common/enums/enums';
-
-const notificationSettingsApi = new NotificationSettingsApi();
 
 const loadNotifications = createAsyncThunk(
   ActionType.SET_NOTIFICATIONS_SETTINGS,

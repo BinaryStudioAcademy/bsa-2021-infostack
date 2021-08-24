@@ -1,4 +1,4 @@
-import { http } from 'services/http/http.service';
+import { http } from 'services';
 import { ContentType, NotificationType, HttpMethod } from 'common/enums/enums';
 
 class NotificationSettingsApi {
@@ -30,4 +30,4 @@ class NotificationSettingsApi {
   }
 }
 
-export { NotificationSettingsApi };
+export const notificationSettingsApi = new NotificationSettingsApi();
