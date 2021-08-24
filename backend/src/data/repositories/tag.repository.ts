@@ -11,6 +11,7 @@ class TagRepository extends Repository<Tag> {
     return this.createQueryBuilder('tag')
       .select('tag.id')
       .addSelect('tag.name')
+      .addSelect('tag.type')
       .where('tag.workspaceId= :workspaceId', { workspaceId })
       .orderBy('tag.name', 'ASC')
       .getMany();

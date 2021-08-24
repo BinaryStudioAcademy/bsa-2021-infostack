@@ -36,4 +36,19 @@ const getRepositories = async (accessToken: string): Promise<any> => {
   return response.data;
 };
 
-export { getAccessToken, getUser, getRepositories };
+const getRepoLabels = async (
+  user: string,
+  repo: string,
+  accessToken: string,
+): Promise<any> => {
+  const response = await axios({
+    method: 'get',
+    url: `https://api.github.com/repos/${user}/${repo}/labels`,
+    headers: {
+      Authorization: 'token ' + accessToken,
+    },
+  });
+  return response.data;
+};
+
+export { getAccessToken, getUser, getRepositories, getRepoLabels };

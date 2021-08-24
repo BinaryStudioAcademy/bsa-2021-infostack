@@ -1,14 +1,16 @@
 import { Button } from 'react-bootstrap';
 import { useAppDispatch } from 'hooks/hooks';
 import { tagActions } from 'store/tags';
+import { TagType } from 'common/enums/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from '../../styles.module.scss';
 
 export const TagItem: React.FC<{
   id: string;
   name: string;
+  type: TagType;
   newTagInputRef: React.RefObject<HTMLInputElement>;
-}> = ({ id, name, newTagInputRef }) => {
+}> = ({ id, name, type, newTagInputRef }) => {
   const dispatch = useAppDispatch();
 
   const handleDelete = async (): Promise<void> => {
@@ -22,7 +24,10 @@ export const TagItem: React.FC<{
 
   return (
     <tr className={getAllowedClasses(styles.tr)}>
-      <td className={getAllowedClasses(styles.td)}>{name}</td>
+      <td className={getAllowedClasses(styles.td)}>
+        {name}
+        {type === TagType.GITHUB && <i className="bi bi-github ms-2"></i>}
+      </td>
       <td className={getAllowedClasses(styles.tdButton)}>
         <Button onClick={handleEdit} variant="warning" size="sm">
           Rename

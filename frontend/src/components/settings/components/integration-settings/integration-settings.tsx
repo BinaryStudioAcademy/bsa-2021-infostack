@@ -4,6 +4,7 @@ import { authApi } from 'services';
 import { useAppSelector, useAppDispatch, useEffect } from 'hooks/hooks';
 import { githubActions } from 'store/actions';
 import { IOption } from 'common/interfaces/components/select';
+import { Spinner } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
@@ -60,7 +61,7 @@ export const IntegrationSettings: React.FC = () => {
         {!username && <ConnectButton onClick={onConnectButtonClick} />}
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody, 'text-dark')}>
-        {username && (repos || currentRepo) && (
+        {username && (repos || currentRepo) ? (
           <>
             <hr />
             <div className={getAllowedClasses(styles.title)}>Github</div>
@@ -85,6 +86,8 @@ export const IntegrationSettings: React.FC = () => {
             )}
             <hr />
           </>
+        ) : (
+          <Spinner />
         )}
       </Card.Body>
     </Card>

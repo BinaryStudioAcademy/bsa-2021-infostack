@@ -10,4 +10,5 @@ export { InviteStatus } from './status';
 export { DefaultUserName } from './default-username';
 export { EntityType } from './entity-type';
 export { PageTitle } from './page-content';
-export * from './socket';
+export { TagType } from './tag-type';
+export { SocketEvents } from './socket';

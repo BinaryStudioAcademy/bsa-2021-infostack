@@ -11,27 +11,27 @@ const router: Router = Router();
 
 router.post(
   '/access-token',
-  run((req) => createAccessToken(req.body.code)),
+  run((req) => createAccessToken(req.workspaceId, req.body.code)),
 );
 
 router.get(
   '/username',
-  run(() => getUsername()),
+  run((req) => getUsername(req.workspaceId)),
 );
 
 router.get(
   '/repos',
-  run(() => getRepos()),
+  run((req) => getRepos(req.workspaceId)),
 );
 
 router.post(
   '/current-repo',
-  run((req) => addCurrentRepo(req.body.repo)),
+  run((req) => addCurrentRepo(req.workspaceId, req.body.repo)),
 );
 
 router.get(
   '/current-repo',
-  run(() => getCurrentRepo()),
+  run((req) => getCurrentRepo(req.workspaceId)),
 );
 
 export default router;
