@@ -1,6 +1,11 @@
 import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions';
+import {
+  MentionsInput,
+  Mention,
+  OnChangeHandlerFunc,
+  MentionItem,
+} from 'react-mentions';
 
 import { useState, useAppSelector, useAppDispatch } from 'hooks/hooks';
 import { RequestStatus } from 'common/enums/enums';
@@ -27,7 +32,13 @@ export const CommentForm: React.FC<Props> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [text, setText] = useState('');
+  const [formState, setFormState] = useState<{
+    text: string;
+    mentions: MentionItem[];
+  }>({
+    text: '',
+    mentions: [],
+  });
   const user = useAppSelector((state) => state.auth.user);
   const { createStatus, fetchStatus, deleteStatus } = useAppSelector(
     (state) => state.comments,
@@ -37,18 +48,28 @@ export const CommentForm: React.FC<Props> = ({
   );
   const dispatch = useAppDispatch();
 
-  const handleChange: OnChangeHandlerFunc = ({ target: { value } }): void =>
-    setText(value);
+  const handleChange: OnChangeHandlerFunc = (_, text, __, mentions): void => {
+    setFormState({
+      text,
+      mentions,
+    });
+  };
 
   const handleSubmit = async (): Promise<void> => {
     try {
+      const { text, mentions } = formState;
+      const mentionIds = mentions.map((mention) => mention.id);
+
       await dispatch(
         commentsActions.createComment({
           pageId,
-          payload: { text, parentCommentId },
+          payload: { text, mentionIds, parentCommentId },
         }),
       ).unwrap();
-      setText('');
+      setFormState({
+        text: '',
+        mentions: [],
+      });
       onSubmit?.();
     } catch {
       toast.error('Could not add comment');
@@ -56,7 +77,10 @@ export const CommentForm: React.FC<Props> = ({
   };
 
   const handleCancel = (): void => {
-    setText('');
+    setFormState({
+      text: '',
+      mentions: [],
+    });
     onCancel?.();
   };
 
@@ -66,6 +90,8 @@ export const CommentForm: React.FC<Props> = ({
     deleteStatus === RequestStatus.LOADING;
   const isCancelDisabled = createStatus === RequestStatus.LOADING;
   const isFieldDisabled = isCancelDisabled;
+
+  const { text } = formState;
 
   return (
     <>

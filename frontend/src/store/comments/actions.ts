@@ -26,7 +26,7 @@ export const createComment = createAsyncThunk<
   IComment,
   { pageId: string; payload: ICommentRequest }
 >(ActionType.CREATE_COMMENT, ({ pageId, payload }) =>
-  commentApi.addComment(pageId, payload),
+  commentApi.add(pageId, payload),
 );
 
 export const deleteComment = createAsyncThunk<
@@ -35,9 +35,7 @@ export const deleteComment = createAsyncThunk<
     id: string;
     pageId: string;
   }
->(ActionType.DELETE_COMMENT, ({ id, pageId }) =>
-  commentApi.deleteComment(id, pageId),
-);
+>(ActionType.DELETE_COMMENT, ({ id, pageId }) => commentApi.delete(id, pageId));
 
 export const asyncActions = {
   fetchComments,
