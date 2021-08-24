@@ -25,6 +25,8 @@ import {
   savePageTags,
   getTableOfContentsByPageId,
   getTableOfContentsByPageIdAndVersionId,
+  updateDraft,
+  deleteDraft,
 } from '../../services/page.service';
 import {
   getComments,
@@ -157,6 +159,16 @@ router.get(
   run((req) =>
     getTableOfContentsByPageIdAndVersionId(req.params.id, req.params.versionId),
   ),
+);
+
+router.post(
+  '/:id/draft',
+  run((req) => updateDraft(req.params.id, req.userId, req.body)),
+);
+
+router.delete(
+  '/:id/draft',
+  run((req) => deleteDraft(req.params.id)),
 );
 
 export default router;
