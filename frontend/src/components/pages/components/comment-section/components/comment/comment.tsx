@@ -12,6 +12,7 @@ import { CommentForm } from '../comment-form/comment-form';
 import { Emoji } from '../emoji/emoji';
 
 import styles from './styles.module.scss';
+import { parseTags } from 'helpers/parse-tags.helper';
 
 type Props = {
   id: string;
@@ -48,8 +49,8 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
 
   const isOwnComment = user?.id === authorId;
   const isAnimated = isThisMinute(new Date(createdAt));
-  // eslint-disable-next-line no-console
-  console.log(isAnimated);
+
+  const content = parseTags(text);
 
   return (
     <Collapse in appear={isAnimated}>
@@ -67,7 +68,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
           <span className={styles.metadata}>
             <TimeAgo timestamp={createdAt} />
           </span>
-          <div className={styles.text}>{text}</div>
+          <div className={styles.text}>{content}</div>
           <Emoji reactions={reactions} commentId={id} />
           <div className={styles.actions}>
             <a className={styles.action} onClick={toggleField}>
