@@ -1,10 +1,11 @@
+import { Button } from 'react-bootstrap';
+
 import { RequestStatus } from 'common/enums/app';
 import { Spinner } from 'components/common/common';
 import { useAppSelector, useAppDispatch } from 'hooks/hooks';
-import { Button } from 'react-bootstrap';
 import { commentsActions } from 'store/comments';
 import { selectRootIds } from 'store/comments/slice';
-import { Comment } from '../components';
+import { Comment } from '../comment/comment';
 
 import styles from './styles.module.scss';
 
@@ -27,12 +28,21 @@ export const CommentList: React.FC<Props> = ({ pageId, handleDelete }) => {
   if (fetchStatus === RequestStatus.LOADING) {
     content = <Spinner />;
   } else if (fetchStatus === RequestStatus.SUCCEEDED) {
-    content = comments.map((id) => (
-      <Comment key={id} id={id} handleDelete={handleDelete} />
-    ));
+    content = comments.length ? (
+      comments.map((id) => (
+        <Comment key={id} id={id} handleDelete={handleDelete} />
+      ))
+    ) : (
+      <div className={styles.placeholder}>
+        <p>
+          There are currently no comments on this page, you can be the first to
+          leave one
+        </p>
+      </div>
+    );
   } else if (fetchStatus === RequestStatus.FAILED) {
     content = (
-      <div className={styles.error}>
+      <div className={styles.placeholder}>
         <p>Could not load comments</p>
         <Button variant="success" onClick={handleClick}>
           Retry

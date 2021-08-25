@@ -1,6 +1,8 @@
 import { Modal as BSModal, Button } from 'react-bootstrap';
+
 import { getAllowedClasses } from 'helpers/dom/dom';
 import { Child } from 'common/types/types';
+
 import styles from './styles.module.scss';
 
 type Props = {
@@ -27,7 +29,7 @@ export const Modal: React.FC<Props> = ({
   <BSModal
     show={show}
     contentClassName="border-0"
-    className="d-flex align-items-center"
+    centered
   >
     <BSModal.Header className={styles.header}>
       <BSModal.Title className={getAllowedClasses('h5 m-0', styles.title)}>
@@ -45,6 +47,7 @@ export const Modal: React.FC<Props> = ({
             variant={buttonVariant}
             onClick={handler}
             disabled={isDisabled}
+            className={styles.button}
           >
             {text}
           </Button>
