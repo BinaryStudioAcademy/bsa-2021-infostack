@@ -268,7 +268,6 @@ export const ProfileSettings: React.FC = () => {
                   </Form.Label>
                   <Form.Control
                     {...register('fullName')}
-                    // value={userFullName ? userFullName : ''}
                     className={getAllowedClasses(styles.cardInput)}
                     type="text"
                     placeholder="Full name"
