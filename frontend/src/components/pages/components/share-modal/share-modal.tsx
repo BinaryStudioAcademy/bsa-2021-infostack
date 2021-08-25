@@ -140,26 +140,11 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            marginBottom: '1rem',
-          }}
-        >
+        <div className={getAllowedClasses(styles.creationContainer)}>
           <h5>Create new link</h5>
           <div>
             <Form.Label>Set expiration time:</Form.Label>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: '30rem',
-                marginBottom: '0.5rem',
-              }}
-            >
+            <div className={getAllowedClasses(styles.timeSettingsContainer)}>
               <Form.Select
                 size="sm"
                 style={{ marginRight: '2rem' }}
@@ -183,13 +168,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
               </Form.Select>
             </div>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
+          <div>
             <div>
               <Form.Label>Name the link (optional):</Form.Label>
               <FormControl
@@ -211,13 +190,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
           </Button>
         </div>
         {sharedLink.length > 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <div className={getAllowedClasses(styles.createdLinkContainer)}>
             <div>
               <Form.Label>Link</Form.Label>
               <InputGroup className="mb-3" style={{ width: '30rem' }}>
@@ -240,14 +213,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
                 </Button>
               </InputGroup>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: '30rem',
-              }}
-            >
+            <div className={getAllowedClasses(styles.emailContainer)}>
               <InputGroup className="mb-3">
                 <FormField
                   label="Share by email"
@@ -262,11 +228,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
               <Button
                 variant="success"
                 onClick={handleSubmit(shareByEmail)}
-                style={{
-                  alignSelf: 'center',
-                  width: '10rem',
-                  marginTop: '1rem',
-                }}
+                className={getAllowedClasses(styles.sendButton)}
                 disabled={isSendDisabled}
               >
                 Send
