@@ -1,6 +1,8 @@
 import { getFormattedLinkDate } from 'helpers/helpers';
 import { useState } from 'hooks/hooks';
 import { Button, Form } from 'react-bootstrap';
+import { getAllowedClasses } from 'helpers/dom/dom';
+import styles from './styles.module.scss';
 
 type Props = {
   id: string;
@@ -98,14 +100,7 @@ export const LinkItem: React.FC<Props> = ({
         </Button>
         {isExtended && (
           <>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginBottom: '1rem',
-                marginTop: '1rem',
-              }}
-            >
+            <div className={getAllowedClasses(styles.extendContainer)}>
               <Form.Select
                 size="sm"
                 style={{ marginRight: '2rem' }}
@@ -154,13 +149,7 @@ export const LinkItem: React.FC<Props> = ({
         {isDeleted && (
           <div>
             Confirm deactivation:
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginBottom: '1rem',
-              }}
-            >
+            <div className={getAllowedClasses(styles.deleteContainer)}>
               <Button
                 size="sm"
                 variant="warning"
