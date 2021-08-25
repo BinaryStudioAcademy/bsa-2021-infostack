@@ -1,2 +1,2 @@
 # Ignore migration folders
-**/migrations
+**/migrations/*
