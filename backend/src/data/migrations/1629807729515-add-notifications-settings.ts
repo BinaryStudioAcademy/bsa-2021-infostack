@@ -7,7 +7,7 @@ export class addNotificationsSettings1629807729515
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      "CREATE TYPE \"notification_settings_notificationtype_enum\" AS ENUM('team', 'teamEmail', 'comment', 'commentEmail')",
+      'CREATE TYPE "notification_settings_notificationtype_enum" AS ENUM(\'team\', \'teamEmail\', \'comment\', \'commentEmail\')',
     );
     await queryRunner.query(
       'CREATE TABLE "notification_settings" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "userId" uuid NOT NULL, "notificationType" "notification_settings_notificationtype_enum" NOT NULL, CONSTRAINT "PK_55650b3389b1bfbb05ddad26b80" PRIMARY KEY ("id", "userId", "notificationType"))',

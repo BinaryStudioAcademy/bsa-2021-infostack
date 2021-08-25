@@ -8,7 +8,7 @@ export class addEntityTypeTeam1629292188397 implements MigrationInterface {
       'ALTER TYPE "notification_type_enum" RENAME TO "notification_type_enum_old"',
     );
     await queryRunner.query(
-      "CREATE TYPE \"notification_type_enum\" AS ENUM('comment', 'team')",
+      'CREATE TYPE "notification_type_enum" AS ENUM(\'comment\', \'team\')',
     );
     await queryRunner.query(
       'ALTER TABLE "notification" ALTER COLUMN "type" DROP DEFAULT',
