@@ -1,8 +1,10 @@
+import { MailGen } from '../../types';
+
 export const replyMail = (
   author: string,
   commentText: string,
   url: string,
-): [string, string] => {
+): MailGen => {
   const subject = 'A new response to your comment';
   const text = `
   Hello,
@@ -13,5 +15,5 @@ export const replyMail = (
 
   ${url}`;
 
-  return [subject, text];
+  return { subject, text };
 };

@@ -65,7 +65,7 @@ export const notifyUsers = async (
   const notificationRepository = getCustomRepository(NotificationRepository);
 
   if (mentionIds.length) {
-    const [title, body] = mentionNotification(fullName, text);
+    const { title, body } = mentionNotification(fullName, text);
     const mentions = mentionIds.filter((mention) => mention !== authorId);
 
     const notifications = mentions.map((mention) => ({
@@ -81,7 +81,7 @@ export const notifyUsers = async (
     io.to(mentions).emit(SocketEvents.NOTIFICATION_NEW);
   }
 
-  const [title, body] = commentNotification(fullName, text);
+  const { title, body } = commentNotification(fullName, text);
 
   if (comment.parentCommentId) {
     const parentAuthor = await getCustomRepository(
@@ -117,7 +117,11 @@ export const notifyUsers = async (
     }
 
     if (isNotifyEmail) {
-      const [subject, emailText] = replyMail(parentAuthor.fullName, text, url);
+      const { subject, text: emailText } = replyMail(
+        parentAuthor.fullName,
+        text,
+        url,
+      );
       await sendMail({
         to: parentAuthor.email,
         subject,
@@ -163,7 +167,7 @@ export const notifyUsers = async (
   );
 
   const followerEmails = emailNotifications.map((follower) => follower.email);
-  const [subject, emailText] = commentMail(fullName, text, url);
+  const { subject, text: emailText } = commentMail(fullName, text, url);
   await sendMail({
     bcc: followerEmails,
     subject,
