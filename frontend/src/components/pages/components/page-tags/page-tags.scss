@@ -22,9 +22,14 @@
   background-color: #f2f8ff;
 }
 
-.btn-manage {
-  font-size: 1.4rem;
-  cursor: pointer;
+.tags-edit {
+  padding: 0 10px;
+  margin-right: -10px;
+  font-size: 1.5rem;
+
+  &:hover {
+    color: #495057;
+  }
 }
 
 .btn-done {
