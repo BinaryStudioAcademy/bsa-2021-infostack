@@ -26,7 +26,7 @@ type participantOption = {
   roleInWorkspace: RoleType;
 };
 
-const TABLE_HEADERS = ['Name', 'Access', 'Delete'];
+const TABLE_HEADERS = ['Name', 'Workspace Role', 'Actions'];
 
 export const Popup: React.FC<Props> = ({
   teamId,
