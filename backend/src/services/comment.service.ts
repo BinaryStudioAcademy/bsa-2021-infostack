@@ -21,7 +21,13 @@ import { env } from '../env';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
 import PageRepository from '../data/repositories/page.repository';
-import { commentNotification, commentMail, replyMail } from '../common/utils';
+import {
+  commentNotification,
+  commentMail,
+  replyMail,
+  mentionNotification,
+  parseMentions,
+} from '../common/utils';
 
 export const getComments = async (
   pageId: string,
@@ -39,42 +45,68 @@ export const getComments = async (
 
 export const notifyUsers = async (
   comment: IComment,
+  mentionIds: string[],
   io: Server,
 ): Promise<void> => {
-  const { pageId, text, parentCommentId, author } = comment;
+  const { pageId, parentCommentId, author } = comment;
   const { fullName, id: authorId } = author;
   const { url } = env.app;
+  let { text } = comment;
+
+  if (mentionIds) {
+    text = parseMentions(text);
+  }
 
   const followingUsers = await getCustomRepository(
     PageRepository,
   ).findFollowers(pageId);
   const notificationRepository = getCustomRepository(NotificationRepository);
 
+  if (mentionIds.length) {
+    const [title, body] = mentionNotification(fullName, text);
+    const mentions = mentionIds.filter((mention) => mention !== authorId);
+
+    const notifications = mentions.map((mention) => ({
+      title,
+      body,
+      type: EntityType.COMMENT,
+      entityTypeId: comment.id,
+      userId: mention,
+      read: false,
+    }));
+    await notificationRepository.createAndSaveMultiple(notifications);
+
+    io.to(mentions).emit(SocketEvents.NOTIFICATION_NEW);
+  }
+
   const [title, body] = commentNotification(fullName, text);
 
   if (comment.parentCommentId) {
-    const author = await getCustomRepository(CommentRepository).findAuthor(
-      parentCommentId,
-    );
+    const parentAuthor = await getCustomRepository(
+      CommentRepository,
+    ).findAuthor(parentCommentId);
 
-    if (author.id === comment.author.id) {
+    if (
+      parentAuthor.id === comment.author.id ||
+      mentionIds.includes(parentAuthor.id)
+    ) {
       return;
     }
 
-    io.to(author.id).emit(SocketEvents.NOTIFICATION_NEW);
+    io.to(parentAuthor.id).emit(SocketEvents.NOTIFICATION_NEW);
 
     await notificationRepository.createAndSave(
       title,
       body,
       EntityType.COMMENT,
       comment.id,
-      author.id,
+      parentAuthor.id,
       false,
     );
 
-    const [subject, emailText] = replyMail(author.fullName, text, url);
+    const [subject, emailText] = replyMail(parentAuthor.fullName, text, url);
     await sendMail({
-      to: author.email,
+      to: parentAuthor.email,
       subject,
       text: emailText,
     });
@@ -83,7 +115,7 @@ export const notifyUsers = async (
   }
 
   const followers = followingUsers.filter(
-    (follower) => follower.id !== authorId,
+    ({ id }) => id !== authorId && !mentionIds.includes(id),
   );
 
   const notifications = followingUsers.map((follower) => ({
@@ -111,7 +143,7 @@ export const notifyUsers = async (
 export const addComment = async (
   userId: string,
   pageId: string,
-  { text, parentCommentId }: ICommentRequest,
+  { text, mentionIds, parentCommentId }: ICommentRequest,
   io: Server,
 ): Promise<IComment> => {
   const commentRepository = getCustomRepository(CommentRepository);
@@ -144,7 +176,7 @@ export const addComment = async (
   };
 
   io.to(pageId).emit(SocketEvents.PAGE_NEW_COMMENT, response);
-  notifyUsers(response, io);
+  notifyUsers(response, mentionIds, io);
 
   return response;
 };

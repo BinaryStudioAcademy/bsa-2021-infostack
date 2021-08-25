@@ -10,3 +10,4 @@ export {
   generateInviteToken,
   generateTokens,
 } from './tokens.util';
+export { parseMentions } from './mention.util';
