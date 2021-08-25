@@ -95,6 +95,19 @@ class ElasticPageContentRepository {
       },
     });
   }
+
+  public async deleteByPageId(
+    pageId: string,
+  ): Promise<ApiResponse<IElasticPageContent, unknown>> {
+    return elasticsearchClient.deleteByQuery<IElasticPageContent>({
+      index,
+      body: {
+        query: {
+          match: { pageId },
+        },
+      },
+    });
+  }
 }
 
 const elasticPageContentRepository = new ElasticPageContentRepository();
