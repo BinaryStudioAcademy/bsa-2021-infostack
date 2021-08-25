@@ -4,7 +4,7 @@ import { ActionType } from './common';
 import { notificationSettingsApi } from 'services';
 import { NotificationType } from 'common/enums/enums';
 
-const loadNotifications = createAsyncThunk(
+const loadNotificationsSettings = createAsyncThunk(
   ActionType.SET_NOTIFICATIONS_SETTINGS,
   async (payload: undefined, { dispatch }) => {
     const notifications =
@@ -34,7 +34,7 @@ const deleteNotificationSetting = createAsyncThunk(
 
 const notificationsSettingsActions = {
   ...actions,
-  loadNotifications,
+  loadNotificationsSettings,
   createNotificationSetting,
   deleteNotificationSetting,
 };

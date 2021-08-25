@@ -18,7 +18,7 @@ export const NotificationsSettings: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(notificationsSettingsActions.loadNotifications());
+    dispatch(notificationsSettingsActions.loadNotificationsSettings());
   }, []);
 
   return (
