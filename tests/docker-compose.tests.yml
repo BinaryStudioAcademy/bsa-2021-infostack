@@ -44,6 +44,8 @@ services:
       GOOGLE_CLIENT_ID: fake
       GOOGLE_CLIENT_SECRET: fake
       GOOGLE_REDIRECT_URL: fake
+      ELASTICSEARCH_NODE: http://localhost
+      ELASTICSEARCH_INDEX: infostack
     ports:
       - 3001:3001
     depends_on:
