@@ -48,8 +48,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
   const onTimeTypeChange = (
     event: React.FormEvent<HTMLSelectElement>,
   ): void => {
-    //eslint-disable-next-line
-    if ((event.target as any).value === 'Hours') {
+    if (event.currentTarget.value === 'Hours') {
       setSelectHours(true);
     } else {
       setSelectHours(false);
@@ -62,13 +61,11 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
   const onTimeValueChange = (
     event: React.FormEvent<HTMLSelectElement>,
   ): void => {
-    //eslint-disable-next-line
-    setExpirationTime(+(event.target as any).value);
+    setExpirationTime(+event.currentTarget.value);
   };
 
-  const onNameChange = (event: React.FormEvent<HTMLInputElement>): void => {
-    //eslint-disable-next-line
-    setLinkName((event.target as any).value);
+  const onNameChange = (value: string): void => {
+    setLinkName(value);
   };
 
   const onCreateLink = async (): Promise<void> => {
@@ -172,8 +169,9 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
                 placeholder="Name"
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
-                //eslint-disable-next-line
-                onChange={(event): void => onNameChange(event as any)}
+                onChange={(event): void =>
+                  onNameChange(event.currentTarget.value)
+                }
                 style={{ width: '30rem' }}
               />
             </div>

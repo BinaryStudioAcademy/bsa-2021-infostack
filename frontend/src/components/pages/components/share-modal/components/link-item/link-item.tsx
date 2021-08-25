@@ -31,8 +31,7 @@ export const LinkItem: React.FC<Props> = ({
   const onTimeTypeChange = (
     event: React.FormEvent<HTMLSelectElement>,
   ): void => {
-    //eslint-disable-next-line
-    if ((event.target as any).value === 'Hours') {
+    if (event.currentTarget.value === 'Hours') {
       setSelectHours(true);
     } else {
       setSelectHours(false);
@@ -45,8 +44,7 @@ export const LinkItem: React.FC<Props> = ({
   const onTimeValueChange = (
     event: React.FormEvent<HTMLSelectElement>,
   ): void => {
-    //eslint-disable-next-line
-    setExpirationTime(+(event.target as any).value);
+    setExpirationTime(+event.currentTarget.value);
   };
 
   const onDeactivateLink = (): void => {
