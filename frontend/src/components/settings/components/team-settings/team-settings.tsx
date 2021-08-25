@@ -61,7 +61,9 @@ export const TeamSettings: React.FC = () => {
         <Card.Title as="h5" className={getAllowedClasses(styles.cardTitle)}>
           Teams
         </Card.Title>
-        <CreateButton onClick={onCreateTeamButtonClick} />
+        {userRole === RoleType.ADMIN && (
+          <CreateButton onClick={onCreateTeamButtonClick} />
+        )}
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <div
