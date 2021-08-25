@@ -6,16 +6,18 @@ import fs from 'fs';
 const client = new speech.SpeechClient();
 
 export async function transcriptAudio(file: Express.Multer.File) {
-  // The path to the remote LINEAR16 file
-
   // The audio file's encoding, sample rate in hertz, and BCP-47 language code
   const audio = {
     content: fs.readFileSync(file.path).toString('base64'),
   };
+
   const config = {
     sampleRateHertz: 48000,
     languageCode: 'en-US',
+    model: 'video',
+    enableAutomaticPunctuation: true,
   };
+
   const request = {
     audio: audio,
     config: config,

@@ -1,8 +1,13 @@
 import { getAllowedClasses } from 'helpers/helpers';
 import { useState } from 'hooks/hooks';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { commentApi } from 'services';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 import styles from './styles.module.scss';
+import useCountDown from 'react-countdown-hook';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 type ModalProps = {
   show: boolean;
@@ -13,14 +18,29 @@ type ModalProps = {
 
 const RecordModal: React.FC<ModalProps> = (modalProps) => {
   const { onHide, pageid } = modalProps;
-  const [isRocording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isCompleteRecord, setIsCompleteRecord] = useState(false);
+  const [audioUrl, setAudioUrl] = useState('');
+  const [
+    timeLeft,
+    {
+      start: startTimer,
+      pause: pauseTimer,
+      resume: resumeTimer,
+      reset: resetTimer,
+    },
+  ] = useCountDown(5000, 1000);
+  const stopButton = useRef<HTMLButtonElement>(null);
+  const pauseButton = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (timeLeft <= 1000) {
+      stopButton.current && stopButton.current.click();
+    }
+  }, [timeLeft]);
 
   const handleSuccess = (stream: MediaStream): void => {
-    const stopButton = document.getElementById('stopRecord');
-    const downloadLink = document.getElementById(
-      'download',
-    ) as HTMLAnchorElement;
-
     const options = { mimeType: 'audio/webm; codecs=opus' };
     const recordedChunks: BlobPart[] | undefined = [];
     const mediaRecorder = new MediaRecorder(stream, options);
@@ -32,8 +52,9 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
     });
 
     mediaRecorder.addEventListener('stop', function () {
-      downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
-      downloadLink.download = 'acetest.webm';
+      const url = URL.createObjectURL(new Blob(recordedChunks));
+      setAudioUrl(url);
+      setIsCompleteRecord(true);
 
       const audioFile = new File(
         recordedChunks,
@@ -44,27 +65,54 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
       );
 
       stream.getTracks().forEach((track) => track.stop());
-      commentApi.uploadAudioComment(pageid, audioFile, audioFile.name);
+      commentApi
+        .uploadAudioComment(pageid, audioFile, audioFile.name)
+        .then((res) => {
+          console.log(res);
+        });
     });
 
-    stopButton?.addEventListener('click', function () {
-      console.log('STOPRECORD');
-      mediaRecorder.stop();
-      setIsRecording(false);
-    });
+    stopButton.current &&
+      stopButton.current.addEventListener('click', function () {
+        console.log('STOPRECORD');
+        mediaRecorder.stop();
+        setIsPaused(false);
+        setIsRecording(false);
+        resetTimer();
+      });
 
-    mediaRecorder.start(1000);
+    pauseButton.current &&
+      pauseButton.current.addEventListener('click', function () {
+        if (mediaRecorder.state === 'recording') {
+          pauseTimer();
+          mediaRecorder.pause();
+          setIsPaused(true);
+          console.log('PAUSERECORD');
+        } else if (mediaRecorder.state === 'paused') {
+          resumeTimer();
+          mediaRecorder.resume();
+          console.log('RESUMERECORD');
+          setIsPaused(false);
+        }
+      });
+
+    mediaRecorder.start();
+    startTimer();
   };
 
   const onStartRecord = (): void => {
     setIsRecording(true);
+    setIsCompleteRecord(false);
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: false })
       .then(handleSuccess);
   };
 
   const onCancel = (): void => {
+    setIsPaused(false);
     setIsRecording(false);
+    setIsCompleteRecord(false);
+
     onHide();
   };
 
@@ -80,7 +128,23 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
           Voice Record
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>Recording</Modal.Body>
+      <Modal.Body className="text-center">
+        {isCompleteRecord && (
+          <AudioPlayer
+            src={audioUrl}
+            autoPlayAfterSrcChange={false}
+            customAdditionalControls={[]}
+          />
+        )}
+        {isRecording && (
+          <>
+            <Spinner as="span" animation="grow" variant="danger" />
+            {!isPaused ? 'Recording' : 'On pause'}
+            <div>{`${timeLeft / 1000}sec`}</div>
+          </>
+        )}
+        {!isRecording && !isCompleteRecord && 'Press start to record'}
+      </Modal.Body>
       <Modal.Footer>
         <Button
           onClick={(): void => onCancel()}
@@ -89,23 +153,40 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
         >
           Cancel
         </Button>
-        {!isRocording && (
+        {!isRecording && (
           <Button
             onClick={onStartRecord}
             className={styles.text}
             variant="success"
           >
-            Start
+            🔴Start
           </Button>
         )}
-        {isRocording && (
-          <Button id="stopRecord" className={styles.text} variant="success">
-            Stop
+        {isRecording && (
+          <>
+            <Button
+              id="stopRecord"
+              ref={stopButton}
+              className={styles.text}
+              variant="success"
+            >
+              ⏹Stop
+            </Button>
+            <Button
+              id="pauseRecord"
+              ref={pauseButton}
+              className={styles.text}
+              variant="success"
+            >
+              {!isPaused ? '⏸Pause' : '⏺Resume record'}
+            </Button>
+          </>
+        )}
+        {isCompleteRecord && (
+          <Button id="publishRecord" className={styles.text} variant="success">
+            Publish record
           </Button>
         )}
-        <a href="#" download="#" id="download">
-          Download
-        </a>
       </Modal.Footer>
     </Modal>
   );
