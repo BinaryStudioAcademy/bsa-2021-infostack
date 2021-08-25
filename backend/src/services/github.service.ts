@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCustomRepository } from 'typeorm';
+import { Server } from 'socket.io';
 import TagRepository from '../data/repositories/tag.repository';
 import GitHubRepository from '../data/repositories/github.repository';
+import PageRepository from '../data/repositories/page.repository';
+import { NotificationRepository } from '../data/repositories';
 import {
   getAccessToken,
   getUser,
@@ -12,7 +17,17 @@ import {
   generateGithubAccessToken,
   decodeToken,
 } from '../common/utils/tokens.util';
+import {
+  getSubjectPRMerged,
+  getTextPRMerged,
+  getBodyPRMerged,
+} from '../common/utils/mail-text.util';
+import { sendMail } from '../common/utils/mailer.util';
 import { TagType } from '../common/enums/tag-type';
+import { HttpCode } from '../common/enums/http-code';
+import { EntityType } from '../common/enums/entity-type';
+import { SocketEvents } from '../common/enums/socket';
+import { env } from '../env';
 
 export const createAccessToken = async (
   workspaceId: string,
@@ -66,9 +81,10 @@ export const addCurrentRepo = async (
     return;
   }
 
+  const { token } = decodeToken(github.token) as { token: string };
+
   await gitHubRepository.update({ workspaceId }, { repo: currentRepo });
 
-  const { token } = decodeToken(github.token) as { token: string };
   const labels = await getRepoLabels(github.username, currentRepo, token);
   const tagRepository = getCustomRepository(TagRepository);
   const tags = await tagRepository.findAllByWorkspaceId(workspaceId);
@@ -83,13 +99,126 @@ export const addCurrentRepo = async (
     }));
   await tagRepository.save(mappedLabels);
 
-  await createWebhook(github.username, currentRepo, token);
+  try {
+    await createWebhook(github.username, currentRepo, token, 'pull_request');
+    await createWebhook(github.username, currentRepo, token, 'label');
+  } catch (e) {
+    if (e.response.status !== HttpCode.UNPROCESSABLE_ENTITY) {
+      throw e;
+    }
+  }
 };
 
 export const getCurrentRepo = async (
   workspaceId: string,
 ): Promise<{ currentRepo: string }> => {
   const gitHubRepository = getCustomRepository(GitHubRepository);
-  const { repo } = await gitHubRepository.findByWorkspaceId(workspaceId);
-  return { currentRepo: repo };
+  const github = await gitHubRepository.findByWorkspaceId(workspaceId);
+  return { currentRepo: github?.repo };
+};
+
+export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
+  if (
+    !pr?.merged_at ||
+    !pr?.labels?.length ||
+    !pr?.user?.login ||
+    !pr?.repo?.name
+  ) {
+    return;
+  }
+
+  const gitHubRepository = getCustomRepository(GitHubRepository);
+  const pageRepository = getCustomRepository(PageRepository);
+  const notificationRepository = getCustomRepository(NotificationRepository);
+
+  const { app } = env;
+  const url = app.url;
+
+  const labelsNames = pr.labels.map((label: any) => label.name);
+
+  const githubIntegrations = await gitHubRepository.findByUsernameAndRepo(
+    pr.user.login,
+    pr.repo.name,
+  );
+  for (const integration of githubIntegrations) {
+    const pages = await pageRepository.findByWorkspaceIdWithTagsAndFollowers(
+      integration.workspaceId,
+    );
+    const filteredPages = pages.filter((page) => {
+      const tagsNames = page.tags.map((tag) => tag.name);
+      return tagsNames.some((tag) => labelsNames.includes(tag));
+    });
+    for (const page of filteredPages) {
+      const { followingUsers } = page;
+      const title = getSubjectPRMerged();
+      const body = getBodyPRMerged();
+      for (const followingUser of followingUsers) {
+        const { id, email } = followingUser;
+        io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
+        await notificationRepository.createAndSave(
+          title,
+          body,
+          EntityType.PAGE,
+          page.id,
+          id,
+          false,
+        );
+
+        await sendMail({
+          to: email,
+          subject: getSubjectPRMerged(),
+          text: getTextPRMerged(url),
+        });
+      }
+    }
+  }
+};
+
+export const labelWebhookHandler = async (body: any): Promise<void> => {
+  // eslint-disable-next-line no-console
+  console.log(body);
+  // if (!pr?.merged_at || !pr?.labels?.length || !pr?.user?.login || !pr?.repo?.name) {
+  //   return;
+  // }
+
+  // const gitHubRepository = getCustomRepository(GitHubRepository);
+  // const pageRepository = getCustomRepository(PageRepository);
+  // const notificationRepository = getCustomRepository(NotificationRepository);
+
+  // const { app } = env;
+  // const url = app.url;
+
+  // const labelsNames = pr.labels.map((label: any) => label.name);
+
+  // const githubIntegrations = await gitHubRepository.findByUsernameAndRepo(pr.user.login, pr.repo.name);
+  // for (const integration of githubIntegrations) {
+  //   const pages = await pageRepository.findByWorkspaceIdWithTagsAndFollowers(integration.workspaceId);
+  //   const filteredPages = pages.filter(page => {
+  //     const tagsNames = page.tags.map((tag) => tag.name);
+  //     return tagsNames.some(tag => labelsNames.includes(tag));
+  //   });
+  //   for (const page of filteredPages) {
+  //     const { followingUsers } = page;
+  //     const title = getSubjectPRMerged();
+  //     const body = getBodyPRMerged();
+  //     for (const followingUser of followingUsers) {
+  //       const { id, email } = followingUser;
+  //       io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
+  //       await notificationRepository.createAndSave(
+  //         title,
+  //         body,
+  //         EntityType.PAGE,
+  //         page.id,
+  //         id,
+  //         false,
+  //       );
+
+  //       await sendMail({
+  //         to: email,
+  //         subject: getSubjectPRMerged(),
+  //         text: getTextPRMerged(url),
+  //       });
+  //     }
+  //   }
+  // }
 };

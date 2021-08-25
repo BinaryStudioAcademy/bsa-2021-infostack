@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
@@ -6,6 +7,8 @@ import {
   getRepos,
   addCurrentRepo,
   getCurrentRepo,
+  prWebhookHandler,
+  labelWebhookHandler,
 } from '../../services/github.service';
 const router: Router = Router();
 
@@ -32,6 +35,16 @@ router.post(
 router.get(
   '/current-repo',
   run((req) => getCurrentRepo(req.workspaceId)),
+);
+
+router.post(
+  '/webhooks/pr',
+  run((req) => prWebhookHandler(req.io, req.body.pull_request)),
+);
+
+router.post(
+  '/webhooks/label',
+  run((req) => labelWebhookHandler(req.body)),
 );
 
 export default router;

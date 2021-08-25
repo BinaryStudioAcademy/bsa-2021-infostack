@@ -19,9 +19,18 @@ class GitHubRepository extends Repository<Github> {
     return this.manager.save(github);
   }
 
-  public findByWorkspaceId(workspaceId: string): Promise<Github> {
+  public findByWorkspaceId(workspaceId: string): Promise<Github | undefined> {
     return this.findOne({
       where: { workspaceId },
+    });
+  }
+
+  public findByUsernameAndRepo(
+    username: string,
+    repo: string,
+  ): Promise<Github[] | []> {
+    return this.find({
+      where: { username, repo },
     });
   }
 }
