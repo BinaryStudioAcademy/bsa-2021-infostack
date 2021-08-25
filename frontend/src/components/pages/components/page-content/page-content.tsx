@@ -277,7 +277,12 @@ export const PageContent: React.FC = () => {
               <Row className="mb-4">
                 <Col>
                   <Card border="light" className={styles.card}>
-                    <Card.Body className={getAllowedClasses(styles.content)}>
+                    <Card.Body
+                      className={getAllowedClasses(
+                        styles.content,
+                        'custom-html-style',
+                      )}
+                    >
                       {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
                       <ReactMarkdown remarkPlugins={[slug, gfm]}>
                         {content?.trim() || 'Empty page'}

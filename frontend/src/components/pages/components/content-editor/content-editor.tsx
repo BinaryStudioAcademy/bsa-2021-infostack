@@ -1,4 +1,3 @@
-import 'react-markdown-editor-lite/lib/index.css';
 import {
   InputGroup,
   FormControl,
