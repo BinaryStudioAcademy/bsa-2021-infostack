@@ -1,5 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
+import { ICommentReaction } from '../common/interfaces/comment-reaction';
+import { IRequestWithUser } from '../common/interfaces/http/request-with-user.interface';
 import {
   IComment,
   ICommentRequest,
@@ -8,13 +10,15 @@ import {
 import {
   CommentRepository,
   NotificationRepository,
+  CommentReactionRepository,
 } from '../data/repositories';
-import { ICommentReaction } from '../common/interfaces/comment-reaction';
-import { IRequestWithUser } from '../common/interfaces/http/request-with-user.interface';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
+import { EntityType } from '../common/enums/entity-type';
+import { SocketEvents } from '../common/enums/socket';
+import { NotificationType } from '../common/enums/notification-type';
+import { isNotify } from '../common/helpers/is-notify.helper';
 import { HttpError } from '../common/errors/http-error';
-import CommentReactionRepository from '../data/repositories/comment-reaction.repository';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';

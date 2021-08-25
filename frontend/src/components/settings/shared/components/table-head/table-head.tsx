@@ -1,5 +1,5 @@
 import { getAllowedClasses } from 'helpers/helpers';
-import styles from '../../styles.module.scss';
+import styles from './styles.module.scss';
 
 interface ITableHeadProps {
   headers: string[];
