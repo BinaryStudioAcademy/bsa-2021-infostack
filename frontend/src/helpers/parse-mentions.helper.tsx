@@ -1,13 +1,11 @@
 import { AppRoute } from 'common/enums/app';
+import { MENTION_REGEX, MENTION_CONTENTS_REGEX } from 'common/regex';
 import { Link } from 'components/common/common';
 import { replaceIdParam } from './route/route';
 
-const TAG_REGEX = new RegExp(/(@.*?\))/g);
-const TAG_CONTENTS_REGEX = new RegExp(/@\[(.*?)\]\((.*?)\)/);
-
-export const parseTags = (rawText: string): (string | JSX.Element)[] =>
-  rawText.split(TAG_REGEX).map((string) => {
-    const result = string.match(TAG_CONTENTS_REGEX);
+export const parseMentions = (rawText: string): (string | JSX.Element)[] =>
+  rawText.split(new RegExp(MENTION_REGEX, 'g')).map((string) => {
+    const result = string.match(MENTION_CONTENTS_REGEX);
 
     if (result) {
       const [, name, id] = result;

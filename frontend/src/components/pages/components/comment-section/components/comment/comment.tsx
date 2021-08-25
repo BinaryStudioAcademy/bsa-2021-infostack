@@ -12,7 +12,7 @@ import { CommentForm } from '../comment-form/comment-form';
 import { Emoji } from '../emoji/emoji';
 
 import styles from './styles.module.scss';
-import { parseTags } from 'helpers/parse-tags.helper';
+import { parseMentions } from 'helpers/parse-mentions.helper';
 
 type Props = {
   id: string;
@@ -50,7 +50,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
   const isOwnComment = user?.id === authorId;
   const isAnimated = isThisMinute(new Date(createdAt));
 
-  const content = parseTags(text);
+  const content = parseMentions(text);
 
   return (
     <Collapse in appear={isAnimated}>
