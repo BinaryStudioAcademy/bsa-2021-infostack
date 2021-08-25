@@ -5,10 +5,7 @@ import { UserAvatar } from 'components/common/avatar/avatar';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-export const Item: React.FC<{ team: ITeam; admin: boolean }> = ({
-  team,
-  admin,
-}) => {
+export const Item: React.FC<{ team: ITeam }> = ({ team }) => {
   return (
     <Card
       className={getAllowedClasses(
@@ -23,7 +20,7 @@ export const Item: React.FC<{ team: ITeam; admin: boolean }> = ({
         )}
       >
         {team.name}
-        {admin && <DropDown team={team} />}
+        <DropDown team={team} />
       </Card.Title>
       <Card.Body className="d-flex flex-wrap card-body">
         {team.users &&

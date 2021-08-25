@@ -85,6 +85,7 @@ export const create = async (
   const { id, name } = await teamRepository.save({
     workspaceId,
     name: team.name,
+    //teamOwner: userId
   });
   const newTeamDetails = await teamRepository.findByNameInWorkspace(
     team.name,
@@ -161,12 +162,12 @@ export const addUser = async (
   workspaceId: string,
   io: Server,
 ): Promise<ITeam[]> => {
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
+  const user = await getCustomRepository(UserRepository).findById(userId);
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
   const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findById(workspaceId);
 
   team.users.push(user);
   await teamRepository.save(team);
@@ -189,8 +190,9 @@ export const deleteUser = async (
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
   const user = await getCustomRepository(UserRepository).findById(userId);
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findById(workspaceId);
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
 
   team.users = team.users.filter((user) => user.id !== userId);
   await teamRepository.save(team);

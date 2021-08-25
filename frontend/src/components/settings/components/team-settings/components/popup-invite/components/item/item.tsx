@@ -1,5 +1,4 @@
-import { getAllowedClasses } from 'helpers/helpers';
-import styles from '../styles.module.scss';
+import { Button } from 'react-bootstrap';
 import { ITeamUser } from 'common/interfaces/team';
 
 type Props = {
@@ -15,10 +14,9 @@ export const Item: React.FC<Props> = ({ participant, onDelete }) => {
       <td>{participant.fullName}</td>
       <td>{participant.roleInWorkspace}</td>
       <td>
-        <i
-          className={getAllowedClasses('bi-trash', styles.trashIcon)}
-          onClick={onParticipantDelete}
-        />
+        <Button className="btn-danger" onClick={onParticipantDelete}>
+          Delete
+        </Button>
       </td>
     </tr>
   );
