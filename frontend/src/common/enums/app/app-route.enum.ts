@@ -16,6 +16,7 @@ enum AppRoute {
   SETTINGS_TAGS = '/settings/tags',
   CONTENT_SETTING = '/page/:id/editor',
   SETTINGS_TEAMS = '/settings/teams',
+  SETTINGS_NOTIFICATIONS = '/settings/notifications',
 }
 
 export { AppRoute };
