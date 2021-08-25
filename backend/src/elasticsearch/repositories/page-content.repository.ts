@@ -17,7 +17,7 @@ class ElasticPageContentRepository {
   private _type = 'pageContent';
 
   public async upsert(
-    pageContent: Partial<IElasticPageContent>,
+    pageContent: IElasticPageContent,
   ): Promise<ApiResponse<IElasticPageContent, unknown>> {
     return elasticsearchClient.update<IElasticPageContent>({
       index,
