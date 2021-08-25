@@ -30,7 +30,6 @@ export const Modal: React.FC<Props> = ({
     show={show}
     contentClassName="border-0"
     centered
-    // className="d-flex align-items-center"
   >
     <BSModal.Header className={styles.header}>
       <BSModal.Title className={getAllowedClasses('h5 m-0', styles.title)}>
