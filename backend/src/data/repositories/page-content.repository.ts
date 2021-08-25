@@ -15,5 +15,11 @@ class PageContentRepository extends Repository<PageContent> {
       },
     });
   }
+
+  public findByIdAndPageId(id: string, pageId: string): Promise<PageContent> {
+    return this.findOne({
+      where: { pageId, id },
+    });
+  }
 }
 export default PageContentRepository;

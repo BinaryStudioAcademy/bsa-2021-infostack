@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
+  createPageSchema,
+  setPermissionsSchema,
+  createCommentSchema,
+} from '../../common/validations';
+
+import {
   createPage,
   deletePage,
   getPages,
@@ -22,17 +28,29 @@ import {
   shareLinkByEmail,
   getPageShared,
   getTableOfContentsShared,
+  getTableOfContentsByPageId,
+  getTableOfContentsByPageIdAndVersionId,
+  searchPage,
+  updateDraft,
+  deleteDraft,
 } from '../../services/page.service';
 import {
   getComments,
   addComment,
   deleteComment,
 } from '../../services/comment.service';
+import { validationMiddleware } from '../middlewares';
 
 const router: Router = Router();
 
+router.get(
+  '/search',
+  run((req) => searchPage(req.query.query, req.userId, req.workspaceId)),
+);
+
 router.post(
   '/',
+  validationMiddleware(createPageSchema),
   run((req) => createPage(req.userId, req.workspaceId, req.body)),
 );
 
@@ -58,6 +76,7 @@ router.get(
 
 router.post(
   '/:id/permissions',
+  validationMiddleware(setPermissionsSchema),
   run((req) => setPermission(req.workspaceId, req.params.id, req.body)),
 );
 
@@ -90,6 +109,7 @@ router.get(
 
 router.post(
   '/:id/comments',
+  validationMiddleware(createCommentSchema),
   run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
 );
 
@@ -142,7 +162,24 @@ router.post(
 
 router.get(
   '/:id/table-of-contents',
-  run((req) => getTableOfContents(req.params.id)),
+  run((req) => getTableOfContentsByPageId(req.params.id)),
+);
+
+router.get(
+  '/:id/version/:versionId/table-of-contents',
+  run((req) =>
+    getTableOfContentsByPageIdAndVersionId(req.params.id, req.params.versionId),
+  ),
+);
+
+router.post(
+  '/:id/draft',
+  run((req) => updateDraft(req.params.id, req.userId, req.body)),
+);
+
+router.delete(
+  '/:id/draft',
+  run((req) => deleteDraft(req.params.id)),
 );
 
 router.post(

@@ -9,6 +9,7 @@ import skillRoute from './skill-route';
 import commentReactionRoute from './comment-route';
 import notificationRoute from './notification-route';
 import linkRoute from './link-route';
+import notificationSettingsRoute from './notification-settings-route';
 
 const routes = (app: Express): void => {
   app.use('/api/users', userRoute);
@@ -21,5 +22,6 @@ const routes = (app: Express): void => {
   app.use('/api/comments', commentReactionRoute);
   app.use('/api/notifications', notificationRoute);
   app.use('/api/links', linkRoute);
+  app.use('/api/notifications-settings', notificationSettingsRoute);
 };
 export default routes;

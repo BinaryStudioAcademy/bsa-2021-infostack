@@ -40,7 +40,6 @@ export const Popup: React.FC<Props> = ({
 
   useEffect(() => {
     dispatch(usersActions.loadUsers());
-    dispatch(teamsActions.fetchTeams());
   }, []);
 
   const handleSelectChange = (
@@ -62,7 +61,7 @@ export const Popup: React.FC<Props> = ({
 
   const handleDeleteItem = (id: string): void => {
     if (teamId) {
-      const adminsInTeam = teamUsers.map(
+      const adminsInTeam = teamUsers.filter(
         (user) => user.roleInWorkspace === RoleType.ADMIN,
       );
       if (adminsInTeam && adminsInTeam.length > 1) {

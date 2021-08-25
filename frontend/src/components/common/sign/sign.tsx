@@ -3,7 +3,7 @@ import GoogleButton from 'react-google-button';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
-import { AuthApi } from 'services';
+import { authApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import logo from 'assets/img/logo_dark.svg';
 import styles from './styles.module.scss';
@@ -34,7 +34,7 @@ export const Sign: React.FC<Props> = ({
   altRoute,
 }) => {
   const googleSignIn = async (): Promise<void> => {
-    const { url } = await new AuthApi().getLoginGoogleUrl();
+    const { url } = await authApi.getLoginGoogleUrl();
     window.location.assign(url);
   };
 

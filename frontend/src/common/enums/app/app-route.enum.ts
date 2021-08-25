@@ -17,6 +17,7 @@ enum AppRoute {
   CONTENT_SETTING = '/page/:id/editor',
   SETTINGS_TEAMS = '/settings/teams',
   SHARE = '/share',
+  SETTINGS_NOTIFICATIONS = '/settings/notifications',
 }
 
 export { AppRoute };

@@ -12,6 +12,7 @@ import {
   TeamSettings,
   UsersSettings,
   TagSettings,
+  NotificationsSettings,
 } from './components/components';
 import { AppRoute } from 'common/enums/enums';
 import { getAllowedClasses } from 'helpers/helpers';
@@ -57,6 +58,11 @@ const Settings: React.FC = () => {
                   <Route
                     path={AppRoute.SETTINGS_TAGS}
                     component={TagSettings}
+                    exact
+                  />
+                  <Route
+                    path={AppRoute.SETTINGS_NOTIFICATIONS}
+                    component={NotificationsSettings}
                     exact
                   />
                   <Route path={match.path}>

@@ -9,4 +9,5 @@ export type {
   IPageTableOfContents,
   IShareLink,
   IPageShare,
+  IFoundPageContent,
 } from 'infostack-shared/common/interfaces';

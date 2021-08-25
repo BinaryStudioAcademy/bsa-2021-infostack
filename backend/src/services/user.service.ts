@@ -157,28 +157,39 @@ export const deleteAvatar = async (id: string): Promise<void> => {
 
 export const getActivities = async (
   userId: string,
+  workspaceId: string,
   data: IGetActivities,
 ): Promise<IPaginated<IUserActivity>> => {
   const { take, skip } = data;
   const activityRepository = new ActivityRepository();
-  const activities = await activityRepository.getAll({ take, skip, userId });
-  const totalItems = await activityRepository.countAll(userId);
+  const activities = await activityRepository.getAll({
+    take,
+    skip,
+    userId,
+    workspaceId,
+  });
+  const totalItems = await activityRepository.countAll(userId, workspaceId);
 
   return { items: activities, totalItems };
 };
 
 export const getUserActivities = async (
+  workspaceId: string,
   data: IGetUserActivities,
 ): Promise<IPaginated<IUserActivity>> => {
   const { take, skip, userId } = data;
 
   const activityRepository = new ActivityRepository();
-  const activities = await activityRepository.getByUserId({
+  const activities = await activityRepository.getCreatedByUserId({
     userId,
+    workspaceId,
     take,
     skip,
   });
-  const totalItems = await activityRepository.countByUserId(userId);
+  const totalItems = await activityRepository.countCreatedByUserId(
+    userId,
+    workspaceId,
+  );
 
   return { items: activities, totalItems };
 };

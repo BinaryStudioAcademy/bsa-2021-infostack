@@ -5,6 +5,7 @@ import {
   OneToMany,
   RelationId,
   ManyToMany,
+  OneToOne,
   JoinTable,
 } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
@@ -16,6 +17,7 @@ import { PageContent } from './page-content';
 import { Comment } from './comment';
 import { Tag } from './tag';
 import { PageShareLink } from './page-share-link';
+import { Draft } from './draft';
 
 @Entity()
 export class Page extends AbstractEntity {
@@ -73,4 +75,6 @@ export class Page extends AbstractEntity {
 
   @OneToMany(() => PageShareLink, (ShareLink) => ShareLink.page)
   links: PageShareLink[];
+  @OneToOne(() => Draft, (Draft) => Draft.page)
+  draft: Draft;
 }

@@ -11,4 +11,5 @@ export type {
   IPageTableOfContentsHeading,
   IShareLink,
   IPageShare,
+  IFoundPageContent,
 } from 'infostack-shared/common/interfaces';

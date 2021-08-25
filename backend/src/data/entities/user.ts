@@ -10,6 +10,7 @@ import { Team } from './team';
 import { Skill } from './skill';
 import { Reaction } from './reaction';
 import { PageShareLink } from './page-share-link';
+import { NotificationSettings } from './notification-settings';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -60,4 +61,9 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => PageShareLink, (ShareLink) => ShareLink.user)
   links: PageShareLink[];
+  @OneToMany(
+    () => NotificationSettings,
+    (notificationSettings) => notificationSettings.user,
+  )
+  notificationSettings: NotificationSettings[];
 }
