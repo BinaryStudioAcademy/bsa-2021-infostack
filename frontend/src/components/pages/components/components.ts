@@ -1,5 +1,3 @@
-export { Comment } from './comment/comment';
-export { CommentForm } from './comment-form/comment-form';
 export { CommentSection } from './comment-section/comment-section';
 export { ContentEditor } from './content-editor/content-editor';
 export { PageContent } from './page-content/page-content';
