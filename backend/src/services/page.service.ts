@@ -458,6 +458,7 @@ export const updateContent = async (
     title: contentToUpdate.title,
     content: contentToUpdate.content,
     pageId,
+    workspaceId: pageToUpdate.workspaceId,
   });
 
   const page = await pageRepository.findByIdWithContents(pageId);
