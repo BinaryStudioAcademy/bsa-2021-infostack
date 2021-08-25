@@ -4,7 +4,7 @@ WORKDIR /app
 COPY /tsconfig.json /app/tsconfig.json
 
 COPY /backend /app/backend
-COPY /__tests__/scripts/backend.entry.sh /app/backend
+COPY /tests/scripts/backend.entry.sh /app/backend
 COPY /shared/build /app/shared/build
 COPY /shared/src /app/shared/src
 

@@ -23,6 +23,6 @@ jobs:
 
       - name: Run API tests
         run: |
-          bash ./__tests__/start.all.sh
+          bash ./tests/start.all.sh
         env:
           FORCE_COLOR: 1

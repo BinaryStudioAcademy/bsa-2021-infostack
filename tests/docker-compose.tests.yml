@@ -27,9 +27,9 @@ services:
       TYPEORM_USERNAME: postgres
       TYPEORM_PASSWORD: postgres
       TYPEORM_DATABASE: infostack_test
-      TYPEORM_LOGGING: "false"
-      TYPEORM_SYNCHRONIZE: "false"
-      TYPEORM_MIGRATIONS_RUN: "true"
+      TYPEORM_LOGGING: 'false'
+      TYPEORM_SYNCHRONIZE: 'false'
+      TYPEORM_MIGRATIONS_RUN: 'true'
       TYPEORM_MIGRATIONS: src/data/migrations/*.ts
       TYPEORM_MIGRATIONS_DIR: src/data/migrations/
       TYPEORM_ENTITIES: src/data/entities/**/*.ts
