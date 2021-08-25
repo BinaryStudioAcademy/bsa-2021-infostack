@@ -42,7 +42,7 @@ export class Comment extends AbstractEntity {
   @TreeChildren()
   childComments: Comment[];
 
-  @TreeParent()
+  @TreeParent({ onDelete: 'CASCADE' })
   parentComment: Comment;
 
   @OneToMany(() => Reaction, (reaction) => reaction.comment)
