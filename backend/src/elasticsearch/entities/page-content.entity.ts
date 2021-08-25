@@ -1,5 +1,4 @@
 interface IElasticPageContent {
-  id: string;
   title: string;
   content: string;
   workspaceId: string;

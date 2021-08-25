@@ -14,51 +14,16 @@ const {
 } = env;
 
 class ElasticPageContentRepository {
-  public async index(
-    body: IElasticPageContent,
-  ): Promise<
-    TransportRequestPromise<
-      ApiResponse<estypes.IndexRequest<IElasticPageContent>, unknown>
-    >
-  > {
-    return elasticsearchClient.index<estypes.IndexRequest<IElasticPageContent>>(
-      {
-        index,
-        body,
-      },
-    );
-  }
+  private _type = 'pageContent';
 
-  public async updateByPageId(
-    pageId: string,
-    {
-      id,
-      title,
-      content,
-    }: Pick<IElasticPageContent, 'id' | 'title' | 'content'>,
-  ): Promise<ApiResponse<Record<string, any>, unknown>> {
-    return elasticsearchClient.updateByQuery({
-      index: env.elasticsearch.index,
+  public async upsert(pageContent: Partial<IElasticPageContent>) {
+    return elasticsearchClient.update({
+      index,
+      type: this._type,
+      id: pageContent.pageId,
       body: {
-        query: {
-          bool: {
-            must: {
-              match: {
-                pageId,
-              },
-            },
-          },
-        },
-        script: {
-          params: {
-            id,
-            title,
-            content,
-          },
-          source:
-            "ctx._source.id = params['id']; ctx._source.title = params['title']; ctx._source.content = params['content'];",
-          lang: 'painless',
-        },
+        doc: pageContent,
+        doc_as_upsert: true,
       },
     });
   }
@@ -73,6 +38,7 @@ class ElasticPageContentRepository {
   > {
     return elasticsearchClient.search<SearchResponse<IElasticPageContent>>({
       index: env.elasticsearch.index,
+      type: this._type,
       body: {
         query: {
           bool: {
@@ -99,13 +65,10 @@ class ElasticPageContentRepository {
   public async deleteByPageId(
     pageId: string,
   ): Promise<ApiResponse<IElasticPageContent, unknown>> {
-    return elasticsearchClient.deleteByQuery<IElasticPageContent>({
+    return elasticsearchClient.delete<IElasticPageContent>({
       index,
-      body: {
-        query: {
-          match: { pageId },
-        },
-      },
+      type: this._type,
+      id: pageId,
     });
   }
 }

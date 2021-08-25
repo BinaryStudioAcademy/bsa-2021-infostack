@@ -64,15 +64,14 @@ export const createPage = async (
     const user = await userRepository.findById(userId);
 
     const pageContentRepository = getCustomRepository(PageContentRepository);
-    const { id: pageContentId } = await pageContentRepository.save({
+    await pageContentRepository.save({
       title,
       content,
       authorId: userId,
       pageId: id,
     });
 
-    await elasticPageContentRepository.index({
-      id: pageContentId,
+    await elasticPageContentRepository.upsert({
       title,
       content,
       pageId: id,
@@ -448,17 +447,17 @@ export const updateContent = async (
   contentToUpdate.content = data.content || oldContent;
   contentToUpdate.title = data.title || oldTitle;
 
-  const { id } = await pageContentRepository.save({
+  await pageContentRepository.save({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
     authorId: userId,
     pageId: pageId,
   });
 
-  await elasticPageContentRepository.updateByPageId(pageId, {
-    id,
+  await elasticPageContentRepository.upsert({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
+    pageId,
   });
 
   const page = await pageRepository.findByIdWithContents(pageId);

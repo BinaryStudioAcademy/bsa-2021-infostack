@@ -10,7 +10,7 @@ class ElasticPageContentSeeder {
   private static _insertedPageIds = new Set<string>();
 
   public static async execute(): Promise<void> {
-    await asyncForEach(async ({ id, title, content, pageId }) => {
+    await asyncForEach(async ({ title, content, pageId }) => {
       if (this._insertedPageIds.has(pageId)) {
         return;
       }
@@ -18,8 +18,7 @@ class ElasticPageContentSeeder {
       const pageRepository = getCustomRepository(PageRepository);
       const { workspaceId } = await pageRepository.findById(pageId);
 
-      await elasticPageContentRepository.index({
-        id,
+      await elasticPageContentRepository.upsert({
         title,
         content,
         pageId,
