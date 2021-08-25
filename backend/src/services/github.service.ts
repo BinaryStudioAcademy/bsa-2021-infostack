@@ -76,6 +76,8 @@ export const addCurrentRepo = async (
   currentRepo: string,
 ): Promise<void> => {
   const gitHubRepository = getCustomRepository(GitHubRepository);
+  const tagRepository = getCustomRepository(TagRepository);
+
   const github = await gitHubRepository.findByWorkspaceId(workspaceId);
   if (!github?.token || !github?.username) {
     return;
@@ -86,7 +88,6 @@ export const addCurrentRepo = async (
   await gitHubRepository.update({ workspaceId }, { repo: currentRepo });
 
   const labels = await getRepoLabels(github.username, currentRepo, token);
-  const tagRepository = getCustomRepository(TagRepository);
   const tags = await tagRepository.findAllByWorkspaceId(workspaceId);
   const tagsNames = tags.map((tag) => tag.name);
   const mappedLabels = labels
@@ -174,51 +175,29 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
   }
 };
 
-export const labelWebhookHandler = async (body: any): Promise<void> => {
-  // eslint-disable-next-line no-console
-  console.log(body);
-  // if (!pr?.merged_at || !pr?.labels?.length || !pr?.user?.login || !pr?.repo?.name) {
-  //   return;
-  // }
+export const labelWebhookHandler = async (payload: any): Promise<void> => {
+  if (payload?.action !== 'created') {
+    return;
+  }
 
-  // const gitHubRepository = getCustomRepository(GitHubRepository);
-  // const pageRepository = getCustomRepository(PageRepository);
-  // const notificationRepository = getCustomRepository(NotificationRepository);
+  const gitHubRepository = getCustomRepository(GitHubRepository);
+  const tagRepository = getCustomRepository(TagRepository);
 
-  // const { app } = env;
-  // const url = app.url;
+  const githubIntegrations = await gitHubRepository.findByUsernameAndRepo(
+    payload.repository.owner.login,
+    payload.repository.name,
+  );
+  for (const integration of githubIntegrations) {
+    const { workspaceId } = integration;
 
-  // const labelsNames = pr.labels.map((label: any) => label.name);
-
-  // const githubIntegrations = await gitHubRepository.findByUsernameAndRepo(pr.user.login, pr.repo.name);
-  // for (const integration of githubIntegrations) {
-  //   const pages = await pageRepository.findByWorkspaceIdWithTagsAndFollowers(integration.workspaceId);
-  //   const filteredPages = pages.filter(page => {
-  //     const tagsNames = page.tags.map((tag) => tag.name);
-  //     return tagsNames.some(tag => labelsNames.includes(tag));
-  //   });
-  //   for (const page of filteredPages) {
-  //     const { followingUsers } = page;
-  //     const title = getSubjectPRMerged();
-  //     const body = getBodyPRMerged();
-  //     for (const followingUser of followingUsers) {
-  //       const { id, email } = followingUser;
-  //       io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
-  //       await notificationRepository.createAndSave(
-  //         title,
-  //         body,
-  //         EntityType.PAGE,
-  //         page.id,
-  //         id,
-  //         false,
-  //       );
-
-  //       await sendMail({
-  //         to: email,
-  //         subject: getSubjectPRMerged(),
-  //         text: getTextPRMerged(url),
-  //       });
-  //     }
-  //   }
-  // }
+    const tags = await tagRepository.findAllByWorkspaceId(workspaceId);
+    const tagsNames = tags.map((tag) => tag.name);
+    if (!tagsNames.includes(payload.label.name)) {
+      await tagRepository.save({
+        name: payload.label.name,
+        workspaceId,
+        type: TagType.GITHUB,
+      });
+    }
+  }
 };

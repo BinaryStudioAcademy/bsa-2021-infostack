@@ -9,5 +9,6 @@ export default [
   '/auth/logout',
   '/auth/update-password-and-fullname',
   '/users/check-user-registration',
-  '/github/webhooks',
+  '/github/webhooks/pr',
+  '/github/webhooks/label',
 ];
