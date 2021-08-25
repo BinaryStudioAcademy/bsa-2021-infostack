@@ -14,10 +14,8 @@ import {
 } from '../data/repositories';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { EntityType } from '../common/enums/entity-type';
-import { SocketEvents } from '../common/enums/socket';
 import { NotificationType } from '../common/enums/notification-type';
-import { isNotify } from '../common/helpers/is-notify.helper';
+import { isNotify, isNotifyMany } from '../common/helpers/is-notify.helper';
 import { HttpError } from '../common/errors/http-error';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
@@ -97,23 +95,35 @@ export const notifyUsers = async (
       return;
     }
 
-    io.to(parentAuthor.id).emit(SocketEvents.NOTIFICATION_NEW);
-
-    await notificationRepository.createAndSave(
-      title,
-      body,
-      EntityType.COMMENT,
-      comment.id,
+    const isNotifyComment = await isNotify(
       parentAuthor.id,
-      false,
+      NotificationType.COMMENT,
+    );
+    const isNotifyEmail = await isNotify(
+      parentAuthor.id,
+      NotificationType.COMMENT_EMAIL,
     );
 
-    const [subject, emailText] = replyMail(parentAuthor.fullName, text, url);
-    await sendMail({
-      to: parentAuthor.email,
-      subject,
-      text: emailText,
-    });
+    if (isNotifyComment) {
+      io.to(parentAuthor.id).emit(SocketEvents.NOTIFICATION_NEW);
+      await notificationRepository.createAndSave(
+        title,
+        body,
+        EntityType.COMMENT,
+        comment.id,
+        parentAuthor.id,
+        false,
+      );
+    }
+
+    if (isNotifyEmail) {
+      const [subject, emailText] = replyMail(parentAuthor.fullName, text, url);
+      await sendMail({
+        to: parentAuthor.email,
+        subject,
+        text: emailText,
+      });
+    }
 
     return;
   }
@@ -121,8 +131,18 @@ export const notifyUsers = async (
   const followers = followingUsers.filter(
     ({ id }) => id !== authorId && !mentionIds.includes(id),
   );
+  const followerIds = followers.map((follower) => follower.id);
 
-  const notifications = followingUsers.map((follower) => ({
+  const isNotifyCommentIds = await isNotifyMany(
+    followerIds,
+    NotificationType.COMMENT,
+  );
+  const commentNotifications = followers.filter(
+    ({ id }) => !isNotifyCommentIds.includes(id),
+  );
+  const commentNotificationIds = commentNotifications.map(({ id }) => id);
+
+  const notifications = commentNotifications.map((follower) => ({
     title,
     body,
     type: EntityType.COMMENT,
@@ -132,10 +152,17 @@ export const notifyUsers = async (
   }));
   await notificationRepository.createAndSaveMultiple(notifications);
 
-  const followerIds = followers.map((follower) => follower.id);
-  io.to(followerIds).emit(SocketEvents.NOTIFICATION_NEW);
+  io.to(commentNotificationIds).emit(SocketEvents.NOTIFICATION_NEW);
 
-  const followerEmails = followers.map((follower) => follower.email);
+  const isNotifyEmailIds = await isNotifyMany(
+    followerIds,
+    NotificationType.COMMENT_EMAIL,
+  );
+  const emailNotifications = followers.filter(
+    ({ id }) => !isNotifyEmailIds.includes(id),
+  );
+
+  const followerEmails = emailNotifications.map((follower) => follower.email);
   const [subject, emailText] = commentMail(fullName, text, url);
   await sendMail({
     bcc: followerEmails,
