@@ -26,7 +26,7 @@ export const TagItem: React.FC<{
     <tr className={getAllowedClasses(styles.tr)}>
       <td className={getAllowedClasses(styles.td)}>
         {name}
-        {type === TagType.GITHUB && <i className="bi bi-github ms-2"></i>}
+        {type === TagType.GITHUB && <i className="bi bi-github ms-2" />}
       </td>
       <td className={getAllowedClasses(styles.tdButton)}>
         <Button onClick={handleEdit} variant="warning" size="sm">

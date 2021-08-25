@@ -12,8 +12,6 @@ const loadTags = createAsyncThunk(
   ActionType.SET_TAGS,
   async (_, { dispatch }): Promise<ITag[]> => {
     const response = await tagApi.getAll();
-    // eslint-disable-next-line no-console
-    console.log(response);
     dispatch(actions.setTags(response));
     return response;
   },
