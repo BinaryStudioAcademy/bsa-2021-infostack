@@ -26,7 +26,6 @@ router
   )
   .get(
     '/current/users',
-    permit(RoleType.ADMIN),
     run((req) => getWorkspaceUsers(req.workspaceId)),
   )
   .put(

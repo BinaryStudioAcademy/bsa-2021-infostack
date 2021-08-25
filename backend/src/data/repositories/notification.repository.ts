@@ -24,6 +24,14 @@ class NotificationRepository extends Repository<Notification> {
     return this.manager.save(notification);
   }
 
+  public createAndSaveMultiple(
+    notifications: Partial<Notification>[],
+  ): Promise<Notification[]> {
+    const created = this.create(notifications);
+
+    return this.manager.save(created);
+  }
+
   public findAllByEntityTypeId(entityTypeId: string): Promise<Notification[]> {
     return this.find({
       where: { entityTypeId },
