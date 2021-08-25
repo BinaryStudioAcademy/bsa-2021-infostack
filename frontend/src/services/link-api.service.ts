@@ -8,7 +8,7 @@ class ShareLinkApi {
 
   public async getLinksByIds(
     pageId: string,
-    userId: string | undefined,
+    userId?: string,
   ): Promise<ILinkShareable[]> {
     return this.http.load(`${this.BASE}/page/${pageId}/user/${userId}`, {
       method: HttpMethod.GET,

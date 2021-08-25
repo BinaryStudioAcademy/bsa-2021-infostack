@@ -61,6 +61,7 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => PageShareLink, (ShareLink) => ShareLink.user)
   links: PageShareLink[];
+
   @OneToMany(
     () => NotificationSettings,
     (notificationSettings) => notificationSettings.user,
