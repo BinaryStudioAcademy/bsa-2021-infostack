@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
 import { Badge, Button, Card } from 'react-bootstrap';
 import CreatableSelect from 'react-select/creatable';
@@ -33,10 +34,12 @@ const PageTags: React.FC = () => {
     </Option>
   );
 
-  const CustomSelectValue = (props: any): JSX.Element => (
+  const CustomSelectMultiValueLabel = (props: any): JSX.Element => (
     <div>
       {props.data.label}
-      <i className={`${props.data.icon} ms-2`} />
+      <span className="input-select-icon">
+        <i className={`${props.data.icon} ms-2`} />
+      </span>
     </div>
   );
 
@@ -160,7 +163,7 @@ const PageTags: React.FC = () => {
         options={allTags}
         components={{
           Option: CustomSelectOption,
-          SingleValue: CustomSelectValue,
+          MultiValueLabel: CustomSelectMultiValueLabel,
         }}
         styles={{
           option: (styles): CSSObject => ({
@@ -173,7 +176,7 @@ const PageTags: React.FC = () => {
           }),
           multiValueLabel: (styles): CSSObject => ({
             ...styles,
-            fontSize: '1.2rem',
+            fontSize: '1rem',
           }),
           input: (styles): CSSObject => ({
             ...styles,
