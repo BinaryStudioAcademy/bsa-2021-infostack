@@ -108,6 +108,8 @@ export const NavNotification: React.FC = () => {
                 <NotificationItem
                   key={notification.id}
                   id={notification.id}
+                  entityTypeId={notification.entityTypeId}
+                  type={notification.type}
                   icon={
                     notification.type === EntityType.COMMENT
                       ? 'bi bi-chat-left'

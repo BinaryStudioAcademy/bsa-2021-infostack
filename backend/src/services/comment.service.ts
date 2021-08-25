@@ -72,7 +72,7 @@ export const notifyUsers = async (
           title,
           body,
           EntityType.COMMENT,
-          comment.id,
+          page.id,
           author.id,
           false,
         );
@@ -105,13 +105,13 @@ export const notifyUsers = async (
         );
 
         if (isNotifyComment) {
-          io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
+          io.to(id).emit(SocketEvents.NOTIFICATION_NEW, page.id);
 
           await notificationRepository.createAndSave(
             title,
             body,
             EntityType.COMMENT,
-            comment.id,
+            page.id,
             id,
             false,
           );
