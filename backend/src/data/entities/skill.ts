@@ -1,6 +1,14 @@
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Entity,
+  Column,
+  JoinTable,
+  RelationId,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { User } from './user';
+import { Workspace } from './workspace';
 
 @Entity()
 export class Skill extends AbstractEntity {
@@ -10,4 +18,11 @@ export class Skill extends AbstractEntity {
   @ManyToMany(() => User, (user) => user.skills, { cascade: true })
   @JoinTable({ name: 'user_skills' })
   users: User[];
+
+  @RelationId((skill: Skill) => skill.workspace)
+  @Column()
+  readonly workspaceId: string;
+
+  @ManyToOne(() => Workspace, (workspace) => workspace.skills)
+  workspace: Workspace;
 }
