@@ -54,6 +54,15 @@ export const Menu: React.FC = () => {
             </ListGroup.Item>
           </>
         )}
+        <ListGroup.Item
+          action
+          as={Link}
+          to={AppRoute.SETTINGS_NOTIFICATIONS}
+          eventKey="notifications"
+          className={getAllowedClasses(styles.menuItem)}
+        >
+          Notifications
+        </ListGroup.Item>
       </ListGroup>
     </Card>
   );
