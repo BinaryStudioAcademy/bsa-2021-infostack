@@ -8,3 +8,4 @@ export * from './page-contributor.interface';
 export * from './page-nav.interface';
 export * from './page-table-of-contents-heading.interface';
 export * from './page-table-of-contents.interface';
+export * from './found-page-content.interface';

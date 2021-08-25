@@ -38,12 +38,10 @@
 }
 
 :global(.accordion-body) {
-  padding-left: 10px;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0 0 0 10px;
   font-size: medium;
   background-color: #293042;
-  padding-right: 0;
+  line-height: 1.2;
 }
 
 :global(.accordion-header),
@@ -53,10 +51,7 @@
 }
 
 :global(.accordion-button) {
-  padding-top: 0px;
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: 0px;
+  padding: 0;
   margin-left: -1.25rem;
 }
 

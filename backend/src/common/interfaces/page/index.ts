@@ -7,4 +7,5 @@ export type {
   IEditPageContent,
   IPageTableOfContentsHeading,
   IPageTableOfContents,
+  IFoundPageContent,
 } from 'infostack-shared/common/interfaces';
