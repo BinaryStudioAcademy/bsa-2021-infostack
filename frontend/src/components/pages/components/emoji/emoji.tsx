@@ -2,7 +2,7 @@ import Picker from 'emoji-picker-react';
 import { MutableRefObject, SyntheticEvent } from 'react';
 import { Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useAppSelector, useEffect, useState, useRef } from 'hooks/hooks';
-import { CommentReactionApi } from 'services';
+import { commentReactionApi } from 'services';
 import { ICommentReaction } from 'common/interfaces/comment-reaction';
 import { IEmoji } from 'common/interfaces/emoji';
 import './styles.scss';
@@ -15,7 +15,6 @@ type Props = {
 export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
   const [chosenEmoji, setChosenEmoji] = useState<IEmoji[]>([]);
   const [isDropdownShown, setIsDropdownShown] = useState(false);
-  const commentReactionApi = new CommentReactionApi();
   const user = useAppSelector((store) => store.auth.user);
   const dropdownRef = useRef() as MutableRefObject<HTMLInputElement>;
 

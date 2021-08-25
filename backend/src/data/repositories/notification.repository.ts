@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Notification } from '../entities/notification';
 import { EntityType } from '../../common/enums/entity-type';
 
@@ -22,6 +22,12 @@ class NotificationRepository extends Repository<Notification> {
     });
 
     return this.manager.save(notification);
+  }
+
+  public findAllByEntityTypeId(entityTypeId: string): Promise<Notification[]> {
+    return this.find({
+      where: { entityTypeId },
+    });
   }
 
   public findAllByUserId(userId: string): Promise<Notification[]> {
@@ -60,6 +66,13 @@ class NotificationRepository extends Repository<Notification> {
 
   public findById(id: string): Promise<Notification> {
     return this.findOne({ id });
+  }
+
+  public deleteById(id: string): Promise<DeleteResult> {
+    return this.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
   }
 }
 

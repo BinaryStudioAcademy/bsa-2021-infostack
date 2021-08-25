@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Row, Popover, OverlayTrigger } from 'react-bootstrap';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -16,7 +16,7 @@ import {
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums/enums';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
 import { ConfirmModal, InviteModal, Spinner } from 'components/common/common';
@@ -114,7 +114,6 @@ export const PageContent: React.FC = () => {
 
       getPageById(paramsId);
 
-      const pageApi = new PageApi();
       const contributorsPromise = pageApi.getPageContributors(paramsId);
       let TOCPromise: Promise<IPageTableOfContents>;
 
@@ -227,8 +226,8 @@ export const PageContent: React.FC = () => {
     <div className="p-4">
       {canView ? (
         <>
-          <Row>
-            <Col xs={2}>
+          <Row className="gx-5">
+            <Col xs={12} lg={3} xl={2}>
               <PageTableOfContents headings={TOCHeadings} />
               <PageTags />
               <PageContributors className="mt-4" contributors={contributors} />
@@ -237,10 +236,26 @@ export const PageContent: React.FC = () => {
                 followers={currentPage?.followingUsers}
               />
             </Col>
-            <Col>
+            <Col xs={12} lg={9} xl={10}>
               <Row>
                 <Col className="d-flex justify-content-between mb-4 align-items-center">
-                  <h1 className="h3">{pageTitle || 'New Page'}</h1>
+                  <OverlayTrigger
+                    trigger="hover"
+                    placement="bottom"
+                    overlay={
+                      <Popover id="popover-positioned-bottom">
+                        <Popover.Body
+                          className={getAllowedClasses(styles.popoverText)}
+                        >
+                          {pageTitle || 'New Page'}
+                        </Popover.Body>
+                      </Popover>
+                    }
+                  >
+                    <h1 className={getAllowedClasses(styles.pageHeading, 'h3')}>
+                      {pageTitle || 'New Page'}
+                    </h1>
+                  </OverlayTrigger>
                   <div className="d-flex align-items-center">
                     {canRead && (
                       <VersionDropdown
@@ -262,7 +277,12 @@ export const PageContent: React.FC = () => {
               <Row className="mb-4">
                 <Col>
                   <Card border="light" className={styles.card}>
-                    <Card.Body className={getAllowedClasses(styles.content)}>
+                    <Card.Body
+                      className={getAllowedClasses(
+                        styles.content,
+                        'custom-html-style',
+                      )}
+                    >
                       {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
                       <ReactMarkdown remarkPlugins={[slug, gfm]}>
                         {content?.trim() || 'Empty page'}

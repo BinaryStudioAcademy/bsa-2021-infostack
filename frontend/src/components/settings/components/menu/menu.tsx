@@ -23,6 +23,15 @@ export const Menu: React.FC = () => {
         >
           Account
         </ListGroup.Item>
+        <ListGroup.Item
+          action
+          as={Link}
+          to={AppRoute.SETTINGS_TEAMS}
+          eventKey="teams"
+          className={getAllowedClasses(styles.menuItem)}
+        >
+          Teams
+        </ListGroup.Item>
         {role === RoleType.ADMIN && (
           <>
             <ListGroup.Item
@@ -37,15 +46,6 @@ export const Menu: React.FC = () => {
             <ListGroup.Item
               action
               as={Link}
-              to={AppRoute.SETTINGS_TEAMS}
-              eventKey="teams"
-              className={getAllowedClasses(styles.menuItem)}
-            >
-              Teams
-            </ListGroup.Item>
-            <ListGroup.Item
-              action
-              as={Link}
               to={AppRoute.SETTINGS_TAGS}
               eventKey="tags"
               className={getAllowedClasses(styles.menuItem)}
@@ -54,6 +54,15 @@ export const Menu: React.FC = () => {
             </ListGroup.Item>
           </>
         )}
+        <ListGroup.Item
+          action
+          as={Link}
+          to={AppRoute.SETTINGS_NOTIFICATIONS}
+          eventKey="notifications"
+          className={getAllowedClasses(styles.menuItem)}
+        >
+          Notifications
+        </ListGroup.Item>
       </ListGroup>
     </Card>
   );

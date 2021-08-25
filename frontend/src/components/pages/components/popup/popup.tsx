@@ -32,7 +32,7 @@ type Props = {
 
 type participantOption = IOption & IParticipant;
 
-const TABLE_HEADERS = ['Name', 'Participant or Team', 'Acces', ''];
+const TABLE_HEADERS = ['Name', 'User or Team', 'Access', ''];
 
 const OPTIONS = [
   { label: PermissionType.ADMIN, value: PermissionType.ADMIN },

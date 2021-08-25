@@ -36,6 +36,7 @@ export const UserAvatar: React.FC<Props> = ({
         <Avatar
           size={size}
           name={name}
+          title={' '}
           src={src}
           round={round}
           className={className}

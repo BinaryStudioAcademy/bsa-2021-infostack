@@ -1,8 +1,8 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Comment } from '../entities/comment';
 
 @EntityRepository(Comment)
-export class CommentRepository extends Repository<Comment> {
+class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
     'comment.createdAt',
@@ -26,7 +26,7 @@ export class CommentRepository extends Repository<Comment> {
       .getMany();
   }
 
-  public findOneById(id: string): Promise<Comment> {
+  public findById(id: string): Promise<Comment> {
     return this.createQueryBuilder('comment')
       .where('comment.id = :id', { id })
       .innerJoinAndSelect('comment.author', 'author')
@@ -35,8 +35,11 @@ export class CommentRepository extends Repository<Comment> {
       .getOne();
   }
 
-  public async deleteById(id: string): Promise<void> {
-    this.delete(id);
+  public deleteById(id: string): Promise<DeleteResult> {
+    return this.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
   }
 
   public async findPageByCommentId(id: string): Promise<Comment> {
@@ -48,3 +51,5 @@ export class CommentRepository extends Repository<Comment> {
     );
   }
 }
+
+export default CommentRepository;

@@ -9,6 +9,7 @@ import { Comment } from './comment';
 import { Team } from './team';
 import { Skill } from './skill';
 import { Reaction } from './reaction';
+import { NotificationSettings } from './notification-settings';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -56,4 +57,10 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Reaction, (reaction) => reaction.user)
   reactions: Reaction[];
+
+  @OneToMany(
+    () => NotificationSettings,
+    (notificationSettings) => notificationSettings.user,
+  )
+  notificationSettings: NotificationSettings[];
 }

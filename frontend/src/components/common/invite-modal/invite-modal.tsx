@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector, useForm, useState } from 'hooks/hooks';
 import { yupResolver } from 'hooks/hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'common/validations';
-import { WorkspaceApi } from 'services';
+import { workspaceApi } from 'services';
 import { IRegister } from 'common/interfaces/auth';
 import { usersActions } from 'store/users';
 import { InputModal } from '../input-modal/input-modal';
@@ -46,7 +46,7 @@ export const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
       }
       if (shouldEmailBeSent) {
         setSubmitDisabled(true);
-        await new WorkspaceApi().inviteToWorkspace(data);
+        await workspaceApi.inviteToWorkspace(data);
 
         onModalClose();
         toast.info('Email with an invitation is sent');

@@ -23,23 +23,27 @@ class TeamRepository extends Repository<Team> {
       .getMany();
   }
 
-  public findByIdWithUsers(id: string): Promise<Team> {
+  public findByIdWithUsers(id: string, workspaceId: string): Promise<Team> {
     return this.findOne(
-      { id },
+      { id, workspaceId },
       {
         relations: ['users'],
       },
     );
   }
 
-  public findByName(name: string): Promise<Team> {
-    return this.findOne({ name });
+  public findByNameInWorkspace(
+    name: string,
+    workspaceId: string,
+  ): Promise<Team> {
+    return this.findOne({ name, workspaceId });
   }
 
-  public deleteById(id: string): Promise<DeleteResult> {
+  public deleteById(id: string, workspaceId: string): Promise<DeleteResult> {
     return this.createQueryBuilder()
       .delete()
       .where('id = :id', { id })
+      .andWhere('workspaceId = :workspaceId', { workspaceId })
       .execute();
   }
 }
