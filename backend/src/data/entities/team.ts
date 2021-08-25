@@ -33,4 +33,7 @@ export class Team extends AbstractEntity {
 
   @Column({ length: 50 })
   name: string;
+
+  @Column({ default: 'c5fa3b2f-c4de-4dda-84e7-714ee852627e' })
+  owner: string;
 }
