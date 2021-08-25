@@ -14,15 +14,22 @@ import {
 } from '../data/repositories';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { EntityType } from '../common/enums/entity-type';
-import { SocketEvents } from '../common/enums/socket';
 import { NotificationType } from '../common/enums/notification-type';
-import { isNotify } from '../common/helpers/is-notify.helper';
+import { isNotify, isNotifyMany } from '../common/helpers/is-notify.helper';
 import { HttpError } from '../common/errors/http-error';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
-import { MAX_NOTIFICATION_TITLE_LENGTH } from '../common/constants/notification';
+import { EntityType } from '../common/enums/entity-type';
+import { SocketEvents } from '../common/enums/socket';
+import PageRepository from '../data/repositories/page.repository';
+import {
+  commentNotification,
+  commentMail,
+  replyMail,
+  mentionNotification,
+  parseMentions,
+} from '../common/utils';
 
 export const getComments = async (
   pageId: string,
@@ -40,106 +47,138 @@ export const getComments = async (
 
 export const notifyUsers = async (
   comment: IComment,
+  mentionIds: string[],
   io: Server,
 ): Promise<void> => {
-  const { app } = env;
-  const url = app.url;
+  const { pageId, parentCommentId, author } = comment;
+  const { fullName, id: authorId } = author;
+  const { url } = env.app;
+  let { text } = comment;
 
-  const commentRepository = getCustomRepository(CommentRepository);
+  if (mentionIds) {
+    text = parseMentions(text);
+  }
+
+  const followingUsers = await getCustomRepository(
+    PageRepository,
+  ).findFollowers(pageId);
   const notificationRepository = getCustomRepository(NotificationRepository);
 
-  const { page } = await commentRepository.findPageByCommentId(comment.id);
-  const { followingUsers } = page;
-  const title = `A new comment from ${comment.author.fullName}`;
-  const body = comment.text.slice(0, MAX_NOTIFICATION_TITLE_LENGTH);
+  if (mentionIds.length) {
+    const { title, body } = mentionNotification(fullName, text);
+    const mentions = mentionIds.filter((mention) => mention !== authorId);
+
+    const notifications = mentions.map((mention) => ({
+      title,
+      body,
+      type: EntityType.COMMENT,
+      entityTypeId: comment.id,
+      userId: mention,
+      read: false,
+    }));
+    await notificationRepository.createAndSaveMultiple(notifications);
+
+    io.to(mentions).emit(SocketEvents.NOTIFICATION_NEW);
+  }
+
+  const { title, body } = commentNotification(fullName, text);
 
   if (comment.parentCommentId) {
-    const { author } = await commentRepository.findById(
-      comment.parentCommentId,
-    );
+    const parentAuthor = await getCustomRepository(
+      CommentRepository,
+    ).findAuthor(parentCommentId);
 
-    const isNotifyComment = await isNotify(author.id, NotificationType.COMMENT);
-    const isNotifyCommentEmail = await isNotify(
-      author.id,
+    if (
+      parentAuthor.id === comment.author.id ||
+      mentionIds.includes(parentAuthor.id)
+    ) {
+      return;
+    }
+
+    const isNotifyComment = await isNotify(
+      parentAuthor.id,
+      NotificationType.COMMENT,
+    );
+    const isNotifyEmail = await isNotify(
+      parentAuthor.id,
       NotificationType.COMMENT_EMAIL,
     );
 
-    if (author.id !== comment.author.id) {
-      if (isNotifyComment) {
-        io.to(author.id).emit(SocketEvents.NOTIFICATION_NEW);
-
-        await notificationRepository.createAndSave(
-          title,
-          body,
-          EntityType.COMMENT,
-          comment.id,
-          author.id,
-          false,
-        );
-      }
-
-      if (isNotifyCommentEmail) {
-        await sendMail({
-          to: author.email,
-          subject: 'A new response to your comment',
-          text: `
-        Hello,
-
-        You received a response from ${comment.author.fullName} to your comment:
-
-        "${comment.text}"
-
-        ${url}`,
-        });
-      }
+    if (isNotifyComment) {
+      io.to(parentAuthor.id).emit(SocketEvents.NOTIFICATION_NEW);
+      await notificationRepository.createAndSave(
+        title,
+        body,
+        EntityType.COMMENT,
+        comment.id,
+        parentAuthor.id,
+        false,
+      );
     }
-  } else {
-    for (const followingUser of followingUsers) {
-      if (followingUser.id !== comment.author.id) {
-        const { id, email } = followingUser;
 
-        const isNotifyComment = await isNotify(id, NotificationType.COMMENT);
-        const isNotifyCommentEmail = await isNotify(
-          id,
-          NotificationType.COMMENT_EMAIL,
-        );
-
-        if (isNotifyComment) {
-          io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
-
-          await notificationRepository.createAndSave(
-            title,
-            body,
-            EntityType.COMMENT,
-            comment.id,
-            id,
-            false,
-          );
-        }
-
-        if (isNotifyCommentEmail) {
-          await sendMail({
-            to: email,
-            subject: 'A new comment to the page you are following',
-            text: `
-          Hello,
-
-          A page you are following received a new comment from ${comment.author.fullName}:
-
-          "${comment.text}"
-
-          ${url}`,
-          });
-        }
-      }
+    if (isNotifyEmail) {
+      const { subject, text: emailText } = replyMail(
+        parentAuthor.fullName,
+        text,
+        url,
+      );
+      await sendMail({
+        to: parentAuthor.email,
+        subject,
+        text: emailText,
+      });
     }
+
+    return;
   }
+
+  const followers = followingUsers.filter(
+    ({ id }) => id !== authorId && !mentionIds.includes(id),
+  );
+  const followerIds = followers.map((follower) => follower.id);
+
+  const isNotifyCommentIds = await isNotifyMany(
+    followerIds,
+    NotificationType.COMMENT,
+  );
+  const commentNotifications = followers.filter(
+    ({ id }) => !isNotifyCommentIds.includes(id),
+  );
+  const commentNotificationIds = commentNotifications.map(({ id }) => id);
+
+  const notifications = commentNotifications.map((follower) => ({
+    title,
+    body,
+    type: EntityType.COMMENT,
+    entityTypeId: comment.id,
+    userId: follower.id,
+    read: false,
+  }));
+  await notificationRepository.createAndSaveMultiple(notifications);
+
+  io.to(commentNotificationIds).emit(SocketEvents.NOTIFICATION_NEW);
+
+  const isNotifyEmailIds = await isNotifyMany(
+    followerIds,
+    NotificationType.COMMENT_EMAIL,
+  );
+  const emailNotifications = followers.filter(
+    ({ id }) => !isNotifyEmailIds.includes(id),
+  );
+
+  const followerEmails = emailNotifications.map((follower) => follower.email);
+  const { subject, text: emailText } = commentMail(fullName, text, url);
+  await sendMail({
+    bcc: followerEmails,
+    subject,
+    text: emailText,
+  });
 };
 
 export const addComment = async (
   userId: string,
   pageId: string,
-  { text, parentCommentId }: ICommentRequest,
+  { text, mentionIds, parentCommentId }: ICommentRequest,
   io: Server,
 ): Promise<IComment> => {
   const commentRepository = getCustomRepository(CommentRepository);
@@ -172,7 +211,7 @@ export const addComment = async (
   };
 
   io.to(pageId).emit(SocketEvents.PAGE_NEW_COMMENT, response);
-  notifyUsers(response, io);
+  notifyUsers(response, mentionIds, io);
 
   return response;
 };

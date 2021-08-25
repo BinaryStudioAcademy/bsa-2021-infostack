@@ -19,3 +19,20 @@ export const isNotify = async (
 
   return isNotify;
 };
+
+export const isNotifyMany = async (
+  userIds: string[],
+  notificationType: NotificationType,
+): Promise<string[]> => {
+  const notificationsSettingsRepository = getCustomRepository(
+    NotificationSettingsRepository,
+  );
+
+  const disabledNotifications =
+    await notificationsSettingsRepository.findByUserIdsAndType(
+      userIds,
+      notificationType,
+    );
+
+  return disabledNotifications.map((setting) => setting.userId);
+};
