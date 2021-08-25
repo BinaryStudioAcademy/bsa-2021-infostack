@@ -14,7 +14,7 @@ export class addNotifications1629138247028 implements MigrationInterface {
       'ALTER TABLE "user_workspace" DROP COLUMN "status"',
     );
     await queryRunner.query(
-      "CREATE TYPE \"user_workspace_status_enum\" AS ENUM('Joined', 'Declined', 'Pending')",
+      'CREATE TYPE "user_workspace_status_enum" AS ENUM(\'Joined\', \'Declined\', \'Pending\')',
     );
     await queryRunner.query(
       'ALTER TABLE "user_workspace" ADD "status" "user_workspace_status_enum"',
