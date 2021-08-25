@@ -20,6 +20,7 @@ import {
   IPageFollowed,
   IEditPageContent,
   IPageTableOfContents,
+  IFoundPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
@@ -32,6 +33,8 @@ import { parseHeadings } from '../common/utils/markdown.util';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
+import elasticPageContentRepository from '../elasticsearch/repositories/page-content.repository';
+import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
 
 export const createPage = async (
   userId: string,
@@ -66,6 +69,13 @@ export const createPage = async (
       content,
       authorId: userId,
       pageId: id,
+    });
+
+    await elasticPageContentRepository.upsert({
+      title,
+      content,
+      pageId: id,
+      workspaceId,
     });
 
     const page = await pageRepository.findByIdWithContents(id);
@@ -126,7 +136,9 @@ export const createPage = async (
 
 export const deletePage = async (pageId: string): Promise<void> => {
   const pageRepository = getCustomRepository(PageRepository);
+
   await pageRepository.deleteById(pageId);
+  await elasticPageContentRepository.deleteByPageId(pageId);
 };
 
 const addPermissionField = async <T extends { id?: string }>(
@@ -419,9 +431,9 @@ export const deletePermission = async (
 
 export const updateContent = async (
   userId: string,
-  body: IEditPageContent,
+  data: IEditPageContent,
 ): Promise<IPage> => {
-  const pageId = body.pageId;
+  const pageId = data.pageId;
   const pageRepository = getCustomRepository(PageRepository);
   const pageToUpdate = await pageRepository.findByIdWithLastContent(pageId);
 
@@ -432,14 +444,20 @@ export const updateContent = async (
   const oldContent = pageToUpdate.pageContents[0].content;
   const oldTitle = pageToUpdate.pageContents[0].title;
 
-  contentToUpdate.content = body.content || oldContent;
-  contentToUpdate.title = body.title || oldTitle;
+  contentToUpdate.content = data.content || oldContent;
+  contentToUpdate.title = data.title || oldTitle;
 
   await pageContentRepository.save({
     title: contentToUpdate.title,
     content: contentToUpdate.content,
     authorId: userId,
     pageId: pageId,
+  });
+
+  await elasticPageContentRepository.upsert({
+    title: contentToUpdate.title,
+    content: contentToUpdate.content,
+    pageId,
   });
 
   const page = await pageRepository.findByIdWithContents(pageId);
@@ -507,10 +525,12 @@ export const followPages = async (
   pageIds: string[],
 ): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
+  const pageRepository = getCustomRepository(PageRepository);
+
   const { followingPages } = await userRepository.findById(userId);
   const followedIds = followingPages.map((page) => page.id);
   const filteredIds = pageIds.filter((id) => !followedIds.includes(id));
-  getCustomRepository(PageRepository).followPages(userId, filteredIds);
+  await pageRepository.followPages(userId, filteredIds);
 };
 
 export const unfollowPage = async (
@@ -544,6 +564,53 @@ export const savePageTags = async (
   await pageRepository.save(page);
 
   return tags;
+};
+
+export const searchPage = async (
+  query: string,
+  userId: string,
+  workspaceId: string,
+): Promise<IFoundPageContent[]> => {
+  const userPermissionRepository = getCustomRepository(
+    UserPermissionRepository,
+  );
+  const teamPermissionRepository = getCustomRepository(
+    TeamPermissionRepository,
+  );
+
+  const {
+    body: {
+      hits: { hits },
+    },
+  } = await elasticPageContentRepository.search(query, workspaceId);
+  if (!hits.length) {
+    return [];
+  }
+
+  const hitPagesId = hits.map(({ _source: { pageId } }) => pageId);
+
+  const userPermissions = await userPermissionRepository.findByUserAndPageIds(
+    userId,
+    hitPagesId,
+  );
+  const teamPermissions = await teamPermissionRepository.findByPagesAndUserId(
+    hitPagesId,
+    userId,
+  );
+
+  const userPermissionsPageIds = userPermissions.map(({ page: { id } }) => id);
+  const teamPermissionsPageIds = teamPermissions.map(({ page: { id } }) => id);
+  const haveAccessToPageIds = [
+    ...new Set([...userPermissionsPageIds, ...teamPermissionsPageIds]),
+  ];
+
+  const hitsToWhichUserHaveAccess = hits.filter(({ _source: { pageId } }) =>
+    haveAccessToPageIds.includes(pageId),
+  );
+
+  return mapSearchHitElasticPageContentToFoundPageContent(
+    hitsToWhichUserHaveAccess,
+  );
 };
 
 export const getPageWithPermission = async (
