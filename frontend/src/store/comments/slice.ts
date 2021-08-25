@@ -42,7 +42,7 @@ const addComment = (
     });
   }
 
-  commentsAdapter.addOne(state, comment);
+  commentsAdapter.upsertOne(state, comment);
 };
 
 const removeComment = (
