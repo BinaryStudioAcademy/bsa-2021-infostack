@@ -51,4 +51,36 @@ const getRepoLabels = async (
   return response.data;
 };
 
-export { getAccessToken, getUser, getRepositories, getRepoLabels };
+const createWebhook = async (
+  user: string,
+  repo: string,
+  accessToken: string,
+): Promise<any> => {
+  const { webhooksCallbackUrl } = env.github;
+
+  const response = await axios({
+    method: 'post',
+    url: `https://api.github.com/repos/${user}/${repo}/hooks`,
+    data: {
+      name: 'web',
+      config: {
+        url: webhooksCallbackUrl,
+        content_type: 'json',
+      },
+      events: ['pull_request'],
+    },
+    headers: {
+      Authorization: 'token ' + accessToken,
+      Accept: 'application/vnd.github.v3+json',
+    },
+  });
+  return response;
+};
+
+export {
+  getAccessToken,
+  getUser,
+  getRepositories,
+  getRepoLabels,
+  createWebhook,
+};

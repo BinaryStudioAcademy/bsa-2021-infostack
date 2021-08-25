@@ -49,5 +49,6 @@ export const env = {
     clientId: getOsEnv('GITHUB_CLIENT_ID'),
     clientSecret: getOsEnv('GITHUB_CLIENT_SECRET'),
     redirectUrl: getOsEnv('GITHUB_REDIRECT_URL'),
+    webhooksCallbackUrl: getOsEnv('GITHUB_WEBHOOKS_URL'),
   },
 } as const;

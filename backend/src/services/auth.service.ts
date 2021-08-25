@@ -229,7 +229,7 @@ export const loginGoogle = async (
 export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
   const { clientId, redirectUrl } = env.github;
   return {
-    url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}`,
+    url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
   };
 };
 

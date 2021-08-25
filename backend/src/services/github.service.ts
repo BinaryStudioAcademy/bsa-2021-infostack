@@ -6,7 +6,12 @@ import {
   getUser,
   getRepositories,
   getRepoLabels,
+  createWebhook,
 } from '../common/utils/github.util';
+import {
+  generateGithubAccessToken,
+  decodeToken,
+} from '../common/utils/tokens.util';
 import { TagType } from '../common/enums/tag-type';
 
 export const createAccessToken = async (
@@ -14,8 +19,9 @@ export const createAccessToken = async (
   code: string,
 ): Promise<void> => {
   const accessToken = await getAccessToken(code);
+  const hashedToken = await generateGithubAccessToken(accessToken);
   const gitHubRepository = getCustomRepository(GitHubRepository);
-  await gitHubRepository.createAndSave(workspaceId, accessToken);
+  await gitHubRepository.createAndSave(workspaceId, hashedToken);
 };
 
 export const getUsername = async (
@@ -23,14 +29,15 @@ export const getUsername = async (
 ): Promise<{ username: string }> => {
   const gitHubRepository = getCustomRepository(GitHubRepository);
   const github = await gitHubRepository.findByWorkspaceId(workspaceId);
-  if (github.username) {
+  if (github?.username) {
     return { username: github.username };
   }
-  if (!github.token) {
+  if (!github?.token) {
     return { username: undefined };
   }
 
-  const user = await getUser(github.token);
+  const { token } = decodeToken(github.token) as { token: string };
+  const user = await getUser(token);
   await gitHubRepository.update({ workspaceId }, { username: user.login });
 
   return { username: user.login };
@@ -40,10 +47,11 @@ export const getRepos = async (
   workspaceId: string,
 ): Promise<{ repos: string[] }> => {
   const gitHubRepository = getCustomRepository(GitHubRepository);
-  const { token } = await gitHubRepository.findByWorkspaceId(workspaceId);
-  if (!token) {
+  const github = await gitHubRepository.findByWorkspaceId(workspaceId);
+  if (!github?.token) {
     return { repos: undefined };
   }
+  const { token } = decodeToken(github.token) as { token: string };
   const repos = await getRepositories(token);
   return { repos: repos.map((repo: { name: string }) => repo.name) };
 };
@@ -53,16 +61,15 @@ export const addCurrentRepo = async (
   currentRepo: string,
 ): Promise<void> => {
   const gitHubRepository = getCustomRepository(GitHubRepository);
-  const { username, token } = await gitHubRepository.findByWorkspaceId(
-    workspaceId,
-  );
-  if (!token || !username) {
+  const github = await gitHubRepository.findByWorkspaceId(workspaceId);
+  if (!github?.token || !github?.username) {
     return;
   }
 
   await gitHubRepository.update({ workspaceId }, { repo: currentRepo });
 
-  const labels = await getRepoLabels(username, currentRepo, token);
+  const { token } = decodeToken(github.token) as { token: string };
+  const labels = await getRepoLabels(github.username, currentRepo, token);
   const tagRepository = getCustomRepository(TagRepository);
   const tags = await tagRepository.findAllByWorkspaceId(workspaceId);
   const tagsNames = tags.map((tag) => tag.name);
@@ -75,6 +82,8 @@ export const addCurrentRepo = async (
       type: TagType.GITHUB,
     }));
   await tagRepository.save(mappedLabels);
+
+  await createWebhook(github.username, currentRepo, token);
 };
 
 export const getCurrentRepo = async (

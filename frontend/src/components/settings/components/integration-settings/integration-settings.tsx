@@ -61,34 +61,35 @@ export const IntegrationSettings: React.FC = () => {
         {!username && <ConnectButton onClick={onConnectButtonClick} />}
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody, 'text-dark')}>
-        {username && (repos || currentRepo) ? (
-          <>
-            <hr />
-            <div className={getAllowedClasses(styles.title)}>Github</div>
-            <div
-              className={getAllowedClasses(styles.label)}
-            >{`Username:  ${username}`}</div>
-            {repos && !currentRepo && (
-              <>
-                <div className={getAllowedClasses(styles.label)}>
-                  Select repository:
-                </div>
-                <SelectRepo
-                  handleSelectChange={handleSelectChange}
-                  options={getOptions()}
-                />
-              </>
-            )}
-            {currentRepo && (
+        {username &&
+          (repos || currentRepo ? (
+            <>
+              <hr />
+              <div className={getAllowedClasses(styles.title)}>Github</div>
               <div
                 className={getAllowedClasses(styles.label)}
-              >{`Repository:  ${currentRepo}`}</div>
-            )}
-            <hr />
-          </>
-        ) : (
-          <Spinner />
-        )}
+              >{`Username:  ${username}`}</div>
+              {repos && !currentRepo && (
+                <>
+                  <div className={getAllowedClasses(styles.label)}>
+                    Select repository:
+                  </div>
+                  <SelectRepo
+                    handleSelectChange={handleSelectChange}
+                    options={getOptions()}
+                  />
+                </>
+              )}
+              {currentRepo && (
+                <div
+                  className={getAllowedClasses(styles.label)}
+                >{`Repository:  ${currentRepo}`}</div>
+              )}
+              <hr />
+            </>
+          ) : (
+            <Spinner />
+          ))}
       </Card.Body>
     </Card>
   );
