@@ -70,13 +70,13 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
 
   const onCreateLink = async (): Promise<void> => {
     const timeType = selectHours ? 'Hours' : 'Days';
-    const shareLink = await pageApi.createShareLink({
+    const { link } = await pageApi.createShareLink({
       id: pageId,
       expirationTime: expirationTime,
       timeType: timeType,
       name: linkName,
     });
-    setSharedLink(shareLink);
+    setSharedLink(link);
     getCurrentPageLinksShareable();
   };
 

@@ -576,7 +576,7 @@ export const savePageTags = async (
 export const createShareLink = async (
   userId: string,
   linkData: IShareLink,
-): Promise<string> => {
+): Promise<{ link: string }> => {
   const SECONDS_IN_HOUR = 3600;
   const SECONDS_IN_DAY = 86400;
   const MILLISECONDS_NUM = 1000;
@@ -606,7 +606,7 @@ export const createShareLink = async (
 
   const createdLink = `${app.url}/share?token=${encryptedId}`;
 
-  return JSON.stringify(createdLink);
+  return { link: createdLink };
 };
 
 export const shareLinkByEmail = async (

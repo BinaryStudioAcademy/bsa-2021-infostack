@@ -170,7 +170,7 @@ class PageApi {
     return this.http.load(`${this.BASE}/table-of-contents/share${query}`);
   }
 
-  public async createShareLink(payload: IShareLink): Promise<string> {
+  public async createShareLink(payload: IShareLink): Promise<{ link: string }> {
     return this.http.load(`${this.BASE}/share/${payload.id}`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
