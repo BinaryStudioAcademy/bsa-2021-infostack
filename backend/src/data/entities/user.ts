@@ -9,6 +9,7 @@ import { Comment } from './comment';
 import { Team } from './team';
 import { Skill } from './skill';
 import { Reaction } from './reaction';
+import { PageShareLink } from './page-share-link';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -56,4 +57,7 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Reaction, (reaction) => reaction.user)
   reactions: Reaction[];
+
+  @OneToMany(() => PageShareLink, (ShareLink) => ShareLink.user)
+  links: PageShareLink[];
 }

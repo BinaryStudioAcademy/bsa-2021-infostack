@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { store } from 'store/store';
+// import { store } from 'store/store';
 import { HttpError } from 'exceptions/exceptions';
 import {
   ContentType,
@@ -10,7 +10,7 @@ import {
   EmitterEvents,
 } from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
-import { authActions } from 'store/auth';
+// import { authActions } from 'store/auth';
 
 class Http {
   private areTokensRefreshing;
@@ -147,7 +147,7 @@ class Http {
         if (error.status === HttpCode.UNAUTHORIZED) {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
-          store.dispatch(authActions.toggleIsRefreshTokenExpired());
+          window.location.href = '/';
         }
         this.throwError(error);
       }

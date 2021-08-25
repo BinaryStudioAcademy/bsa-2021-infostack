@@ -34,6 +34,7 @@ import {
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
+import { ShareModal } from '../share-modal/share-modal';
 import PageTags from '../page-tags/page-tags';
 import styles from './styles.module.scss';
 
@@ -59,6 +60,7 @@ export const PageContent: React.FC = () => {
   const [isInviteModalVisible, setIsInviteModalVisible] = useState(false);
   const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isShareModalVisible, setIsShareModalVisible] = useState(false);
   const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
   const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
@@ -148,12 +150,20 @@ export const PageContent: React.FC = () => {
     setIsInviteModalVisible(false);
   };
 
+  const handleShareCancel = (): void => {
+    setIsShareModalVisible(false);
+  };
+
   const onEditing = (): void => {
     history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
   };
 
   const onDelete = (): void => {
     setIsDeleteModalVisible(true);
+  };
+
+  const onShare = (): void => {
+    setIsShareModalVisible(true);
   };
 
   const handleDeleteCancel = (): void => {
@@ -244,6 +254,7 @@ export const PageContent: React.FC = () => {
                       onEditing={onEditing}
                       onPageFollow={onPageFollow}
                       onDelete={onDelete}
+                      onShare={onShare}
                       isCurrentPageFollowed={isCurrentPageFollowed}
                     />
                   </div>
@@ -283,6 +294,11 @@ export const PageContent: React.FC = () => {
           <InviteModal
             onModalClose={handleIviteCancel}
             showModal={isInviteModalVisible}
+          />
+          <ShareModal
+            show={isShareModalVisible}
+            onModalClose={handleShareCancel}
+            pageId={paramsId}
           />
           <FollowModal
             show={isFollowModalVisible}

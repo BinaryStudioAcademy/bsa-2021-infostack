@@ -7,4 +7,6 @@ export type {
   IEditPageContent,
   IPageTableOfContentsHeading,
   IPageTableOfContents,
+  IShareLink,
+  IPageShare,
 } from 'infostack-shared/common/interfaces';

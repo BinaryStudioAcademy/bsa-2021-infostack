@@ -9,4 +9,6 @@ export default [
   '/auth/logout',
   '/auth/update-password-and-fullname',
   '/users/check-user-registration',
+  '/pages/share/link',
+  '/pages/table-of-contents/share',
 ];

@@ -8,3 +8,5 @@ export * from './page-contributor.interface';
 export * from './page-nav.interface';
 export * from './page-table-of-contents-heading.interface';
 export * from './page-table-of-contents.interface';
+export * from './share-link.interface';
+export * from './page-send-email-share.interface';
