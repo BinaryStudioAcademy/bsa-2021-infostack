@@ -14,7 +14,7 @@ import {
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums/enums';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import { Spinner } from 'components/common/common';
 import { PageTableOfContents } from '../pages/components/components';
@@ -48,9 +48,7 @@ export const SharedPage: React.FC = () => {
       setIsLeftBlockLoading(true);
       getPageById(location.search);
 
-      const TOCPromise = new PageApi().getPageTableOfContentsShared(
-        location.search,
-      );
+      const TOCPromise = pageApi.getPageTableOfContentsShared(location.search);
 
       Promise.all([TOCPromise]).then(([TOC]) => {
         if (TOC) {

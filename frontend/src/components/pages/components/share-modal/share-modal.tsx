@@ -10,16 +10,16 @@ import { getAllowedClasses } from 'helpers/dom/dom';
 import { toast } from 'react-toastify';
 import styles from './styles.module.scss';
 import { useAppSelector, useForm, useState, yupResolver } from 'hooks/hooks';
-import { PageApi } from 'services';
+import { pageApi } from 'services';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'common/validations';
 import { FormField } from 'components/common/common';
 import { IRegister } from 'common/interfaces/auth';
 import { ILinkShareable } from 'common/interfaces/links';
-import { TableHead } from 'components/settings/components/users-settings/components/components';
 import { LinkItem } from './components/link-item/link-item';
 import { useEffect } from 'react';
 import { ShareLinkApi } from 'services/link-api/link.service';
+import { TableHead } from 'components/settings/shared/components/components';
 
 type Props = {
   show: boolean;
@@ -73,7 +73,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
 
   const onCreateLink = async (): Promise<void> => {
     const timeType = selectHours ? 'Hours' : 'Days';
-    const shareLink = await new PageApi().createShareLink({
+    const shareLink = await pageApi.createShareLink({
       id: pageId,
       expirationTime: expirationTime,
       timeType: timeType,
@@ -92,7 +92,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
 
   const shareByEmail = async (data: IRegister): Promise<void> => {
     setSendDisabled(true);
-    await new PageApi().sendSharedLinkByEmail({
+    await pageApi.sendSharedLinkByEmail({
       ...data,
       link: sharedLink,
       name: linkName,

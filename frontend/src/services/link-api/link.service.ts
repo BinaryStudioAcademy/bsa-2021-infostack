@@ -1,6 +1,6 @@
 import { ILinkShareable } from 'common/interfaces/links';
 import { ContentType, HttpMethod } from 'common/enums/enums';
-import { http } from 'services/http/http.service';
+import { http } from 'services/http.service';
 
 class ShareLinkApi {
   private http = http;
