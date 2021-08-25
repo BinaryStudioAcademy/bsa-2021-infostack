@@ -1,10 +1,10 @@
-import { SearchHit } from '@elastic/elasticsearch/api/types';
+import { Hit } from '@elastic/elasticsearch/api/types';
 
 import { IElasticPageContent } from '../../../elasticsearch';
 import { IFoundPageContent } from '../../interfaces/page';
 
 const mapSearchHitElasticPageContentToFoundPageContent = (
-  hits: SearchHit<IElasticPageContent>[],
+  hits: Hit<IElasticPageContent>[],
 ): IFoundPageContent[] => {
   return hits.map(({ highlight, _source }) => {
     return {
