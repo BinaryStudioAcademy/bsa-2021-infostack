@@ -23,7 +23,6 @@ import {
   updateContent,
   getTags,
   savePageTags,
-  getTableOfContents,
   createShareLink,
   shareLinkByEmail,
   getPageShared,

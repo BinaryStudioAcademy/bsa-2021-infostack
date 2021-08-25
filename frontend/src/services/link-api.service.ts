@@ -34,4 +34,4 @@ class ShareLinkApi {
   }
 }
 
-export { ShareLinkApi };
+export const shareLinkApi = new ShareLinkApi();

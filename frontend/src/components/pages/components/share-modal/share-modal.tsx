@@ -18,7 +18,7 @@ import { IRegister } from 'common/interfaces/auth';
 import { ILinkShareable } from 'common/interfaces/links';
 import { LinkItem } from './components/link-item/link-item';
 import { useEffect } from 'react';
-import { ShareLinkApi } from 'services/link-api/link.service';
+import { shareLinkApi } from 'services/index';
 import { TableHead } from 'components/settings/shared/components/components';
 
 type Props = {
@@ -105,15 +105,12 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
   };
 
   const getCurrentPageLinksShareable = async (): Promise<void> => {
-    const linksShareable = await new ShareLinkApi().getLinksByIds(
-      pageId,
-      user?.id,
-    );
+    const linksShareable = await shareLinkApi.getLinksByIds(pageId, user?.id);
     setLinks(linksShareable);
   };
 
   const onLinkDeactivate = async (id: string): Promise<void> => {
-    await new ShareLinkApi().deactivateLinkById(id);
+    await shareLinkApi.deactivateLinkById(id);
     getCurrentPageLinksShareable();
   };
 
@@ -122,7 +119,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
     type: string,
     time: number,
   ): Promise<void> => {
-    await new ShareLinkApi().extendLinkById(id, type, time);
+    await shareLinkApi.extendLinkById(id, type, time);
     getCurrentPageLinksShareable();
   };
 
