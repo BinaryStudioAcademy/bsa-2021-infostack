@@ -526,10 +526,12 @@ export const followPages = async (
   pageIds: string[],
 ): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
+  const pageRepository = getCustomRepository(PageRepository);
+
   const { followingPages } = await userRepository.findById(userId);
   const followedIds = followingPages.map((page) => page.id);
   const filteredIds = pageIds.filter((id) => !followedIds.includes(id));
-  getCustomRepository(PageRepository).followPages(userId, filteredIds);
+  await pageRepository.followPages(userId, filteredIds);
 };
 
 export const unfollowPage = async (
