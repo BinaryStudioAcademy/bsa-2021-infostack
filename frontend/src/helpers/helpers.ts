@@ -5,6 +5,7 @@ export { sortObjByName } from './array/array';
 export { getAllowedClasses } from './dom/dom';
 export { isHaveCurPage } from './toolbar/toolbar';
 export { getFormattedVersionDate } from './version-date/version-date';
+export { getFormattedLinkDate } from './link-date/link-date';
 export { toDayJS } from './date/date';
 export { getStringifiedQuery } from './http/http';
 export { bytesToMegabytes, canvasToBlob, canvasToDataURL } from './file/file';

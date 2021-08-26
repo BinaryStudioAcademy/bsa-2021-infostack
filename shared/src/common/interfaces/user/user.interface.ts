@@ -1,5 +1,6 @@
 import { IPage } from '../pages/page.interface';
 import { ISkill } from '../skill/skill.interface';
+import { ILink } from '../links/link.interface';
 
 interface IUser {
   id: string;
@@ -9,6 +10,7 @@ interface IUser {
   skills?: ISkill[];
   avatar: string;
   followingPages?: IPage[];
+  links?: ILink[];
 }
 
 export type { IUser };

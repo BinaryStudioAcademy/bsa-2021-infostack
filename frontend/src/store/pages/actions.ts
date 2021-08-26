@@ -54,6 +54,16 @@ const getPage = createAsyncThunk(
   },
 );
 
+const getPageShared = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (getPayload: string | undefined, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    const pageResponse = await pageApi.getPageShared(getPayload);
+    dispatch(actions.getPage(pageResponse));
+    dispatch(actions.toggleSpinner());
+  },
+);
+
 const setPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
@@ -172,6 +182,7 @@ const pagesActions = {
   editPageContent,
   followPage,
   unfollowPage,
+  getPageShared,
   editDraft,
   deleteDraft,
 };

@@ -16,6 +16,7 @@ import { TeamPermission } from './team-permission';
 import { PageContent } from './page-content';
 import { Comment } from './comment';
 import { Tag } from './tag';
+import { PageShareLink } from './page-share-link';
 import { Draft } from './draft';
 
 @Entity()
@@ -72,6 +73,8 @@ export class Page extends AbstractEntity {
   @OneToMany(() => Comment, (Comment) => Comment.page)
   comments: Comment[];
 
+  @OneToMany(() => PageShareLink, (ShareLink) => ShareLink.page)
+  links: PageShareLink[];
   @OneToOne(() => Draft, (Draft) => Draft.page)
   draft: Draft;
 }
