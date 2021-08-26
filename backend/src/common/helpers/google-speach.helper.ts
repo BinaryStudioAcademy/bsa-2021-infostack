@@ -3,7 +3,9 @@ import fs from 'fs';
 
 const client = new speech.SpeechClient();
 
-export async function transcriptAudio(file: Express.Multer.File) {
+export async function transcriptAudio(
+  file: Express.Multer.File,
+): Promise<string> {
   const audio = {
     content: fs.readFileSync(file.path).toString('base64'),
   };
