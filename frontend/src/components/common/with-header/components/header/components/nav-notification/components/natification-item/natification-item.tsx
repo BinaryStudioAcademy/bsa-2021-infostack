@@ -6,11 +6,11 @@ import styles from './styles.module.scss';
 
 type Props = {
   id: string;
-  entityTypeId: string;
   type: EntityType;
   icon: string;
   title: string;
   subtitle?: string;
+  subtitleId?: string | undefined;
   body?: string;
   read: boolean;
   time: string;
@@ -19,11 +19,11 @@ type Props = {
 
 export const NotificationItem: React.FC<Props> = ({
   id,
-  entityTypeId,
   type,
   icon,
   title,
   subtitle,
+  subtitleId,
   body,
   read,
   time,
@@ -33,7 +33,7 @@ export const NotificationItem: React.FC<Props> = ({
     switch (entityType) {
       case EntityType.COMMENT: {
         return (
-          <Link to={`/page/${entityTypeId}`}>
+          <Link to={`/page/${subtitleId}`}>
             <span
               className={getAllowedClasses(styles.textMiddle, 'text-break')}
             >
