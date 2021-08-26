@@ -16,6 +16,7 @@ class CommentRepository extends Repository<Comment> {
     'author.fullName',
     'author.email',
     'reactions',
+    'user.fullName',
   ];
 
   public findByPageId(pageId: string): Promise<Comment[]> {
@@ -23,6 +24,7 @@ class CommentRepository extends Repository<Comment> {
       .where('comment.pageId = :pageId', { pageId })
       .innerJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('comment.reactions', 'reactions')
+      .leftJoinAndSelect('reactions.user', 'user')
       .select(this.SELECTION)
       .orderBy('comment.createdAt', 'DESC')
       .getMany();
@@ -33,6 +35,7 @@ class CommentRepository extends Repository<Comment> {
       .where('comment.id = :id', { id })
       .innerJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('comment.reactions', 'reactions')
+      .leftJoinAndSelect('reactions.user', 'user')
       .select(this.SELECTION)
       .getOne();
   }

@@ -7,6 +7,7 @@ import UserPermissionRepository from '../data/repositories/user-permission.repos
 import PageContentRepository from '../data/repositories/page-content.repository';
 import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
 import TagRepository from '../data/repositories/tag.repository';
+import PageShareLinkRepository from '../data/repositories/share-link.repository';
 import DraftRepository from '../data/repositories/draft.repository';
 import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
@@ -20,6 +21,8 @@ import {
   IPageFollowed,
   IEditPageContent,
   IPageTableOfContents,
+  IShareLink,
+  IPageShare,
   IFoundPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
@@ -33,6 +36,9 @@ import { parseHeadings } from '../common/utils/markdown.util';
 import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
+import { decrypt, encrypt } from '../common/helpers/crypto.helper';
+import { env } from '../env';
+import { sendMail } from '../common/utils/mailer.util';
 import elasticPageContentRepository from '../elasticsearch/repositories/page-content.repository';
 import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
 
@@ -565,6 +571,106 @@ export const savePageTags = async (
   await pageRepository.save(page);
 
   return tags;
+};
+
+export const createShareLink = async (
+  userId: string,
+  linkData: IShareLink,
+): Promise<{ link: string }> => {
+  const SECONDS_IN_HOUR = 3600;
+  const SECONDS_IN_DAY = 86400;
+  const MILLISECONDS_NUM = 1000;
+
+  const pageShareLinkRepository = getCustomRepository(PageShareLinkRepository);
+  const { app } = env;
+
+  const now = Date.now();
+  let expirationDate;
+
+  if (linkData.timeType === 'Hours') {
+    expirationDate = new Date(
+      now + linkData.expirationTime * SECONDS_IN_HOUR * MILLISECONDS_NUM,
+    );
+  } else {
+    expirationDate = new Date(
+      now + linkData.expirationTime * SECONDS_IN_DAY * MILLISECONDS_NUM,
+    );
+  }
+  const link = await pageShareLinkRepository.save({
+    pageId: linkData.id,
+    userId,
+    expireAt: expirationDate,
+    name: linkData.name ? linkData.name : null,
+  });
+  const encryptedId = encrypt(link.id);
+
+  const createdLink = `${app.url}/share?token=${encryptedId}`;
+
+  return { link: createdLink };
+};
+
+export const shareLinkByEmail = async (
+  body: IPageShare,
+  userId: string,
+): Promise<void> => {
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findById(userId);
+  await sendMail({
+    to: body.email,
+    subject: `${user.fullName} shared an Infostack page with you`,
+    text: body.link,
+  });
+};
+
+export const getPageShared = async (token: string): Promise<IPage> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const pageShareLinkRepository = getCustomRepository(PageShareLinkRepository);
+  if (token) {
+    const id = decrypt(token);
+    const link = await pageShareLinkRepository.findById(id);
+    if (link) {
+      const expirationTime = link.expireAt.getTime();
+      if (expirationTime > Date.now()) {
+        const page = await pageRepository.findByIdWithContentsShared(
+          link.pageId,
+        );
+        const mappedPage = mapPageToIPage(page);
+        return mappedPage;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+};
+
+export const getTableOfContentsShared = async (
+  token: string,
+): Promise<IPageTableOfContents> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const pageShareLinkRepository = getCustomRepository(PageShareLinkRepository);
+  if (token) {
+    const id = decrypt(token);
+    const link = await pageShareLinkRepository.findById(id);
+    if (link) {
+      const expirationTime = link.expireAt.getTime();
+      if (expirationTime > Date.now()) {
+        const { pageContents } = await pageRepository.findByIdWithLastContent(
+          link.pageId,
+        );
+        return { headings: parseHeadings(pageContents[0].content) };
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
 };
 
 export const searchPage = async (

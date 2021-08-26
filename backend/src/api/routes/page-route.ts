@@ -23,6 +23,10 @@ import {
   updateContent,
   getTags,
   savePageTags,
+  createShareLink,
+  shareLinkByEmail,
+  getPageShared,
+  getTableOfContentsShared,
   getTableOfContentsByPageId,
   getTableOfContentsByPageIdAndVersionId,
   searchPage,
@@ -190,6 +194,26 @@ router.post(
 router.delete(
   '/:id/draft',
   run((req) => deleteDraft(req.params.id)),
+);
+
+router.post(
+  '/share/:id',
+  run((req) => createShareLink(req.userId, req.body)),
+);
+
+router.post(
+  '/share-by-email',
+  run((req) => shareLinkByEmail(req.body, req.userId)),
+);
+
+router.get(
+  '/share/link',
+  run((req) => getPageShared(req.query.token)),
+);
+
+router.get(
+  '/table-of-contents/share',
+  run((req) => getTableOfContentsShared(req.query.token)),
 );
 
 export default router;
