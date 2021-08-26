@@ -44,6 +44,7 @@ const Activities: React.FC = () => {
           id="activity-filter"
           size="sm"
           variant="success"
+          className={styles.menu}
         >
           {FILTER_OPTIONS.map((option) => {
             return (

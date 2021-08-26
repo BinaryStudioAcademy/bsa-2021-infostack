@@ -1,6 +1,14 @@
 .title {
   display: flex;
   justify-content: space-between;
+
+  .menu {
+    button {
+      &::after {
+        margin-left: 0.5em;
+      }
+    }
+  }
 }
 
 .container {
