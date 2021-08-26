@@ -138,12 +138,18 @@ export const notifyUsers = async (
   const followers = followingUsers.filter(
     ({ id }) => id !== authorId && !mentionIds.includes(id),
   );
+
+  if (!followers || !followers.length) {
+    return;
+  }
+
   const followerIds = followers.map((follower) => follower.id);
 
   const isNotifyCommentIds = await isNotifyMany(
     followerIds,
     NotificationType.COMMENT,
   );
+
   const commentNotifications = followers.filter(
     ({ id }) => !isNotifyCommentIds.includes(id),
   );
