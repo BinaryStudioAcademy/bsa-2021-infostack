@@ -1,3 +1,30 @@
+.tableRow {
+  font-size: 1.4rem;
+
+  td,
+  span {
+    color: #737373;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+
+  td {
+    max-width: 7vw;
+  }
+
+  span {
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    margin-right: auto;
+    width: 75%;
+  }
+}
+
 .extendContainer {
   display: flex;
   flex-direction: row;
@@ -8,4 +35,10 @@
 .deleteContainer {
   display: flex;
   flex-direction: row;
+}
+
+.popoverText {
+  font-size: 1.32rem;
+  color: #737373;
+  font-family: 'Poppins', sans-serif;
 }

@@ -1,6 +1,6 @@
-import { getFormattedLinkDate } from 'helpers/helpers';
+import { Button, Form, Popover, OverlayTrigger } from 'react-bootstrap';
 import { useState } from 'hooks/hooks';
-import { Button, Form } from 'react-bootstrap';
+import { getFormattedLinkDate } from 'helpers/helpers';
 import { getAllowedClasses } from 'helpers/dom/dom';
 import styles from './styles.module.scss';
 
@@ -60,20 +60,46 @@ export const LinkItem: React.FC<Props> = ({
   };
 
   return (
-    <tr>
-      <td>
-        {`${link.slice(0, 20)}...  `}
-        <Button
-          variant="success"
-          size="sm"
-          onClick={(): void => {
-            navigator.clipboard.writeText(link);
-          }}
-        >
-          <i className="bi bi-clipboard" style={{ color: 'white' }}></i>
-        </Button>
-      </td>
-      <td>{name ? name : 'unnamed'}</td>
+    <tr className={getAllowedClasses(styles.tableRow)}>
+      <OverlayTrigger
+        trigger="hover"
+        placement="bottom"
+        overlay={
+          <Popover id="popover-positioned-bottom">
+            <Popover.Body className={getAllowedClasses(styles.popoverText)}>
+              {link}
+            </Popover.Body>
+          </Popover>
+        }
+      >
+        <td>
+          <span>{link}</span>
+          <Button
+            className="ms-1"
+            variant="success"
+            size="sm"
+            onClick={(): void => {
+              navigator.clipboard.writeText(link);
+            }}
+          >
+            <i className="bi bi-clipboard" style={{ color: 'white' }}></i>
+          </Button>
+        </td>
+      </OverlayTrigger>
+      <OverlayTrigger
+        trigger="hover"
+        placement="bottom"
+        overlay={
+          <Popover id="popover-positioned-bottom">
+            <Popover.Body className={getAllowedClasses(styles.popoverText)}>
+              {name ? name : 'unnamed'}
+            </Popover.Body>
+          </Popover>
+        }
+      >
+        <td>{name ? name : 'unnamed'}</td>
+      </OverlayTrigger>
+
       <td>{getFormattedLinkDate(createdAt)}</td>
       <td>{getFormattedLinkDate(expireAt)}</td>
       <td>
