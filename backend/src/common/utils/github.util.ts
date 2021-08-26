@@ -56,16 +56,15 @@ const createWebhook = async (
   repo: string,
   accessToken: string,
   type: string,
+  url: string,
 ): Promise<any> => {
-  const { prWebhookCallbackUrl } = env.github;
-
   const response = await axios({
     method: 'post',
     url: `https://api.github.com/repos/${user}/${repo}/hooks`,
     data: {
       name: 'web',
       config: {
-        url: prWebhookCallbackUrl,
+        url: url,
         content_type: 'json',
       },
       events: [type],

@@ -100,9 +100,22 @@ export const addCurrentRepo = async (
     }));
   await tagRepository.save(mappedLabels);
 
+  const { prWebhookCallbackUrl, labelWebhookCallbackUrl } = env.github;
   try {
-    await createWebhook(github.username, currentRepo, token, 'pull_request');
-    await createWebhook(github.username, currentRepo, token, 'label');
+    await createWebhook(
+      github.username,
+      currentRepo,
+      token,
+      'pull_request',
+      prWebhookCallbackUrl,
+    );
+    await createWebhook(
+      github.username,
+      currentRepo,
+      token,
+      'label',
+      labelWebhookCallbackUrl,
+    );
   } catch (e) {
     if (e.response.status !== HttpCode.UNPROCESSABLE_ENTITY) {
       throw e;
@@ -123,7 +136,7 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
     !pr?.merged_at ||
     !pr?.labels?.length ||
     !pr?.user?.login ||
-    !pr?.repo?.name
+    !pr?.head?.repo?.name
   ) {
     return;
   }
@@ -139,7 +152,7 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
 
   const githubIntegrations = await gitHubRepository.findByUsernameAndRepo(
     pr.user.login,
-    pr.repo.name,
+    pr.head.repo.name,
   );
   for (const integration of githubIntegrations) {
     const pages = await pageRepository.findByWorkspaceIdWithTagsAndFollowers(
@@ -176,7 +189,11 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
 };
 
 export const labelWebhookHandler = async (payload: any): Promise<void> => {
-  if (payload?.action !== 'created') {
+  if (
+    payload?.action !== 'created' ||
+    !payload?.repository?.name ||
+    !payload?.repository?.owner?.login
+  ) {
     return;
   }
 

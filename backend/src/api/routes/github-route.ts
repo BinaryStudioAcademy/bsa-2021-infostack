@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
