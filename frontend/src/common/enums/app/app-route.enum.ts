@@ -2,6 +2,7 @@ enum AppRoute {
   ROOT = '/',
   LOGIN = '/login',
   LOGIN_GOOGLE = '/login-google',
+  LOGIN_GITHUB = '/login-github',
   SIGN_UP = '/signup',
   INVITE = '/invite',
   RESET_PASSWORD = '/reset-password',
@@ -16,6 +17,8 @@ enum AppRoute {
   SETTINGS_TAGS = '/settings/tags',
   CONTENT_SETTING = '/page/:id/editor',
   SETTINGS_TEAMS = '/settings/teams',
+  SETTINGS_INTEGRATIONS = '/settings/integrations',
+  SHARE = '/share',
   SETTINGS_NOTIFICATIONS = '/settings/notifications',
 }
 

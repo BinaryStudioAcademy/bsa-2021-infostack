@@ -9,7 +9,7 @@ import PageRepository from '../data/repositories/page.repository';
 import { mapNotificationToINotification } from '../common/mappers/notification/map-notification-to-inotification';
 import { Notification } from '../data/entities/notification';
 
-const setSubtitle = async (
+const setSubtitleToComment = async (
   notification: Notification,
 ): Promise<INotification> => {
   const commentRepository = getCustomRepository(CommentRepository);
@@ -20,6 +20,19 @@ const setSubtitle = async (
     ...mapNotificationToINotification(notification),
     subtitle: page.pageContents[0].title,
     subtitleId: page.id,
+  };
+};
+
+const setSubtitleToPage = async (
+  notification: Notification,
+): Promise<INotification> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(
+    notification.entityTypeId,
+  );
+  return {
+    ...mapNotificationToINotification(notification),
+    subtitle: page.pageContents[0].title,
   };
 };
 
@@ -39,14 +52,25 @@ export const getNotifications = async (
   const commentNotifications = notifications.filter(
     (notification) => notification.type === EntityType.COMMENT,
   );
-  if (!commentNotifications.length) {
+  const pageNotifications = notifications.filter(
+    (notification) => notification.type === EntityType.PAGE,
+  );
+  if (!commentNotifications.length && !pageNotifications.length) {
     return notifications.map(mapNotificationToINotification);
   } else {
     const expandedNotifications = notifications
-      .filter((notification) => notification.type !== 'comment')
+      .filter(
+        (notification) =>
+          notification.type !== EntityType.COMMENT &&
+          notification.type !== EntityType.PAGE,
+      )
       .map(mapNotificationToINotification);
     for (const notification of commentNotifications) {
-      const expandedNotification = await setSubtitle(notification);
+      const expandedNotification = await setSubtitleToComment(notification);
+      expandedNotifications.push(expandedNotification);
+    }
+    for (const notification of pageNotifications) {
+      const expandedNotification = await setSubtitleToPage(notification);
       expandedNotifications.push(expandedNotification);
     }
     return expandedNotifications;
@@ -72,7 +96,10 @@ export const updateRead = async (
   await notificationRepository.update({ id: notificationId }, body);
   const notification = await notificationRepository.findById(notificationId);
   if (notification.type === EntityType.COMMENT) {
-    const expandedNotification = await setSubtitle(notification);
+    const expandedNotification = await setSubtitleToComment(notification);
+    return expandedNotification;
+  } else if (notification.type === EntityType.PAGE) {
+    const expandedNotification = await setSubtitleToPage(notification);
     return expandedNotification;
   } else {
     return mapNotificationToINotification(notification);

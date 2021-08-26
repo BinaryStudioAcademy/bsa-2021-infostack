@@ -80,6 +80,10 @@ class AuthApi {
     return this.http.load(`${this.BASE}/login/google`);
   }
 
+  public async getLoginGitHubUrl(): Promise<{ url: string }> {
+    return this.http.load(`${this.BASE}/login/github`);
+  }
+
   public async loginGoogle(code: string): Promise<IUserWithTokens> {
     return this.http.load(`${this.BASE}/login/google`, {
       method: HttpMethod.POST,
