@@ -8,6 +8,8 @@ import {
   IPageNav,
   IPageTableOfContents,
   IPageContributor,
+  IShareLink,
+  IPageShare,
   IFoundPageContent,
 } from 'common/interfaces/pages';
 import { http } from 'services/http.service';
@@ -162,6 +164,27 @@ class PageApi {
     return this.http.load(`${this.BASE}/${id}/table-of-contents`);
   }
 
+  public async getPageTableOfContentsShared(
+    query: string,
+  ): Promise<IPageTableOfContents> {
+    return this.http.load(`${this.BASE}/table-of-contents/share${query}`);
+  }
+
+  public async createShareLink(payload: IShareLink): Promise<{ link: string }> {
+    return this.http.load(`${this.BASE}/share/${payload.id}`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
+
+  public async sendSharedLinkByEmail(payload: IPageShare): Promise<void> {
+    return this.http.load(`${this.BASE}/share-by-email`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify(payload),
+    });
+  }
   public async getPageVersionTableOfContents(
     id: string,
     versionId: string,
@@ -180,6 +203,12 @@ class PageApi {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
       payload: JSON.stringify(payload),
+    });
+  }
+
+  public async getPageShared(query?: string): Promise<IPage> {
+    return this.http.load(`${this.BASE}/share/link${query}`, {
+      method: HttpMethod.GET,
     });
   }
 

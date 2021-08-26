@@ -54,6 +54,13 @@ class PageRepository extends Repository<Page> {
       .getOne();
   }
 
+  public findByIdWithContentsShared(id: string): Promise<Page> {
+    return this.createQueryBuilder('page')
+      .leftJoinAndSelect('page.pageContents', 'pageContents')
+      .where('page.id = :id', { id: id })
+      .orderBy('pageContents.createdAt', 'DESC')
+      .getOne();
+  }
   public findWithLastContent(): Promise<Page[]> {
     return this.createQueryBuilder('page')
       .leftJoin(

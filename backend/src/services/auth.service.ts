@@ -25,6 +25,7 @@ import { env } from '../env';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { google } from 'googleapis';
 import { User } from '~/data/entities/user';
+import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
 const setTokens = async (user: IUser): Promise<ITokens> => {
   const tokens = generateTokens(user.id);
@@ -161,9 +162,13 @@ export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
     const newFollowingPages = userRefreshToken.user.followingPages?.map(
       (page) => mapPageToIPage(page),
     );
+    const newLinks = userRefreshToken.user.links?.map((link) =>
+      mapLinkToILink(link),
+    );
     const userWithMappedPages = {
       ...userRefreshToken.user,
       followingPages: newFollowingPages,
+      links: newLinks,
     };
     const tokens = await setTokens(userWithMappedPages);
     return tokens;
@@ -232,9 +237,14 @@ const getIUserWithTokens = async (
   const newFollowingPages = user.followingPages?.map((page) =>
     mapPageToIPage(page),
   );
-  const userWithMappedPages = { ...user, followingPages: newFollowingPages };
+  const newLinks = user.links?.map((link) => mapLinkToILink(link));
+  const userWithMappedPages = {
+    ...user,
+    followingPages: newFollowingPages,
+    links: newLinks,
+  };
   const tokens = await setTokens(userWithMappedPages);
-  const { id, fullName, email, avatar, title, skills, followingPages } =
+  const { id, fullName, email, avatar, title, skills, followingPages, links } =
     userWithMappedPages;
   return {
     id,
@@ -244,6 +254,7 @@ const getIUserWithTokens = async (
     title,
     skills,
     followingPages,
+    links,
     ...tokens,
   };
 };

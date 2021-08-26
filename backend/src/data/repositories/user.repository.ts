@@ -13,6 +13,7 @@ class UserRepository extends Repository<User> {
       .leftJoinAndSelect('user.skills', 'skills')
       .leftJoinAndSelect('user.teams', 'teams')
       .leftJoinAndSelect('user.followingPages', 'pages')
+      .leftJoinAndSelect('user.links', 'links')
       .leftJoin(
         (qb) =>
           qb
