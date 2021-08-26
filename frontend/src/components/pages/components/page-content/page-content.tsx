@@ -57,11 +57,6 @@ export const PageContent: React.FC = () => {
         ...user.followingPages?.find((page) => child.id === page.id),
         ...child,
       }));
-
-      // const pages = user.followingPages.map((child) => ({
-      //   ...childPages.find((page) => child.id === page.id),
-      //   ...child,
-      // }));
       return pages;
     }
   }) as IPageNav[];
@@ -71,14 +66,16 @@ export const PageContent: React.FC = () => {
   );
   const { user } = useAppSelector((state) => state.auth);
 
-  // const followedChildPages = followedUserPages?.filter(
-  //   (page) => currentPage?.id === page.parentPageId,
-  // ) as IPageNav[];
-
-  const notFollowedChildPages = childPages?.filter(
-    (child) =>
-      user?.followingPages?.map((page) => page.id).indexOf(child.id) === -1,
-  );
+  const notFollowedUserPages = useAppSelector((state) => {
+    const { user } = state.auth;
+    if (user && user.followingPages && childPages) {
+      const pages = childPages?.filter(
+        (child) =>
+          user?.followingPages?.map((page) => page.id).indexOf(child.id) === -1,
+      );
+      return pages;
+    }
+  }) as IPageNav[];
 
   const [currContent, setCurrContent] = useState<IPageContent | undefined>();
   const [isPermissionsModalVisible, setIsPermissionsModalVisible] =
@@ -91,13 +88,6 @@ export const PageContent: React.FC = () => {
   const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
     [],
   );
-
-  const [childPagesToFollow, setChildPagesToFollow] = useState<
-    IPageNav[] | null | undefined
-  >(notFollowedChildPages);
-  const [childPagesToUnfollow, setChildPagesToUnfollow] = useState<
-    IPageNav[] | null | undefined
-  >(followedUserPages);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -118,25 +108,6 @@ export const PageContent: React.FC = () => {
     currentPage?.permission === PermissionType.READ ||
     currentPage?.permission === PermissionType.WRITE ||
     currentPage?.permission === PermissionType.ADMIN;
-
-  useEffect(() => {
-    if (user && user.followingPages && followedUserPages && childPages) {
-      console.info('THERERE', followedUserPages);
-
-      const followedPages = followedUserPages.filter(
-        (page) => currentPage?.id === page.parentPageId,
-      ) as IPageNav[];
-
-      const unfollowedPages = childPages.filter(
-        (childPage) =>
-          user?.followingPages?.map((page) => page.id).indexOf(childPage.id) ===
-          -1,
-      );
-
-      setChildPagesToUnfollow(followedPages);
-      setChildPagesToFollow(unfollowedPages);
-    }
-  }, [user]);
 
   useEffect(() => {
     if (paramsVersionId) {
@@ -258,19 +229,21 @@ export const PageContent: React.FC = () => {
     };
 
   const onPageFollow = (): void => {
-    console.info(followedUserPages);
+    const isFollowedPageHasFollowedPages =
+      isCurrentPageFollowed && followedUserPages?.length;
+    const isNotFollowedPageHasNotFollowedPages =
+      !isCurrentPageFollowed && notFollowedUserPages?.length;
 
-    // if (childPages && childPages.length) {
     if (
-      (childPagesToUnfollow && childPagesToUnfollow.length > 0) ||
-      (childPagesToFollow && childPagesToFollow.length > 0)
+      isFollowedPageHasFollowedPages ||
+      isNotFollowedPageHasNotFollowedPages
     ) {
       setIsFollowModalVisible(true);
-    } else {
-      isCurrentPageFollowed
-        ? handlePageUnfollow(paramsId)(undefined)
-        : handlePageFollow(paramsId)(undefined);
+      return;
     }
+    isCurrentPageFollowed
+      ? handlePageUnfollow(paramsId)(undefined)
+      : handlePageFollow(paramsId)(undefined);
   };
 
   useEffect(() => {
@@ -378,7 +351,7 @@ export const PageContent: React.FC = () => {
             show={isFollowModalVisible}
             isFollowing={isCurrentPageFollowed}
             childPages={
-              isCurrentPageFollowed ? childPagesToUnfollow : childPagesToFollow
+              isCurrentPageFollowed ? followedUserPages : notFollowedUserPages
             }
             handler={
               isCurrentPageFollowed
