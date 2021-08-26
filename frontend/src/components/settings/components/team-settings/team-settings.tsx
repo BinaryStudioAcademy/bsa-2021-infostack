@@ -11,7 +11,6 @@ import {
 } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { RoleType } from 'common/enums/enums';
 
 export const TeamSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -19,10 +18,7 @@ export const TeamSettings: React.FC = () => {
   const [isUserTeamsMapped, setUserTeamsMapped] = useState(false);
   const { teams } = useAppSelector((state) => state.teams);
   const { userTeams } = useAppSelector((state) => state.teams);
-  const userId = useAppSelector((state) => state.auth?.user?.id);
-  const userRole = useAppSelector(
-    (state) => state.workspaces?.currentWorkspace?.role,
-  );
+  const userId = useAppSelector((state) => state.auth?.user?.id as string);
 
   useEffect(() => {
     if (userId) {
@@ -38,6 +34,7 @@ export const TeamSettings: React.FC = () => {
       teamsToRender.push(teams[i]);
     }
   }
+
   const onCreateTeamButtonClick = (): void => {
     setIsPopUpVisible(true);
   };
@@ -66,35 +63,29 @@ export const TeamSettings: React.FC = () => {
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <div
           className={`text-secondary d-flex flex-column align-items-start p-4${
-            !teams ? ' vh-91' : ''
+            !userTeams ? ' vh-91' : ''
           }`}
         >
-          {!teams ||
+          {!userTeams ||
             (!isUserTeamsMapped && (
               <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
                 <Spinner animation="border" variant="secondary" />
               </div>
             ))}
-          {teams &&
-            ((userRole === RoleType.ADMIN && teams.length === 0) ||
-            (userRole === RoleType.USER && userTeams.length === 0) ? (
-              <div>There is no teams in this workspace. Start adding</div>
-            ) : (
-              <div
-                className={getAllowedClasses(
-                  styles.teamsContainer,
-                  'd-flex flex-wrap py-2 w-100',
-                )}
-              >
-                {userRole === RoleType.ADMIN
-                  ? teams.map((team: ITeam) => (
-                      <Item key={team.id} team={team} />
-                    ))
-                  : teamsToRender.map((team: ITeam) => (
-                      <Item key={team.id} team={team} />
-                    ))}
-              </div>
-            ))}
+          {userTeams && userTeams.length === 0 ? (
+            <div>There is no teams in this workspace. Start adding</div>
+          ) : (
+            <div
+              className={getAllowedClasses(
+                styles.teamsContainer,
+                'd-flex flex-wrap py-2 w-100',
+              )}
+            >
+              {teamsToRender.map((team: ITeam) => (
+                <Item key={team.id} team={team} userId={userId} />
+              ))}
+            </div>
+          )}
           <CreateTeamModal
             showModal={isPopUpVisible}
             onModalClose={handleCreationCancel}
