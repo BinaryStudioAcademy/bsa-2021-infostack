@@ -1,6 +1,14 @@
 .title {
   display: flex;
   justify-content: space-between;
+
+  .menu {
+    button {
+      &::after {
+        margin-left: 0.5em;
+      }
+    }
+  }
 }
 
 .container {
@@ -33,6 +41,10 @@
     width: 90%;
 
     margin-left: 0.8rem;
+
+    .heading {
+      font-size: 1.25rem;
+    }
 
     .createdAt {
       font-size: 1.25rem;

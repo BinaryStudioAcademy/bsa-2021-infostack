@@ -52,6 +52,15 @@ export const Menu: React.FC = () => {
             >
               Tags
             </ListGroup.Item>
+            <ListGroup.Item
+              action
+              as={Link}
+              to={AppRoute.SETTINGS_INTEGRATIONS}
+              eventKey="integrations"
+              className={getAllowedClasses(styles.menuItem)}
+            >
+              Integrations
+            </ListGroup.Item>
           </>
         )}
         <ListGroup.Item

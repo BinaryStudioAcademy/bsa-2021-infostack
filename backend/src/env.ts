@@ -45,6 +45,13 @@ export const env = {
     clientSecret: getOsEnv('GOOGLE_CLIENT_SECRET'),
     redirectUrl: getOsEnv('GOOGLE_REDIRECT_URL'),
   },
+  github: {
+    clientId: getOsEnv('GITHUB_CLIENT_ID'),
+    clientSecret: getOsEnv('GITHUB_CLIENT_SECRET'),
+    redirectUrl: getOsEnv('GITHUB_REDIRECT_URL'),
+    prWebhookCallbackUrl: getOsEnv('GITHUB_PR_WEBHOOK_URL'),
+    labelWebhookCallbackUrl: getOsEnv('GITHUB_LABEL_WEBHOOK_URL'),
+  },
   elasticsearch: {
     node: getOsEnv('ELASTICSEARCH_NODE'),
     index: getOsEnv('ELASTICSEARCH_INDEX'),

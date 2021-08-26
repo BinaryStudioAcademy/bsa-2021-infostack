@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from 'react-toastify';
+import { Badge, Button, Card } from 'react-bootstrap';
+import CreatableSelect from 'react-select/creatable';
+import { CSSObject } from '@emotion/serialize';
+import { OptionsType, components } from 'react-select';
 import { ITagSelect } from 'common/interfaces/tag';
 import { RootState } from 'common/types/types';
 import {
@@ -6,15 +12,11 @@ import {
   useEffect,
   useState,
 } from 'hooks/hooks';
-import { Badge, Button, Card } from 'react-bootstrap';
-import CreatableSelect from 'react-select/creatable';
-import { CSSObject } from '@emotion/serialize';
-import { OptionsType } from 'react-select';
 import { pageApi, tagApi } from 'services';
 import { tagActions } from 'store/tags';
-import './page-tags.scss';
 import { PermissionType } from 'common/enums/enums';
-import { toast } from 'react-toastify';
+import { TagType } from 'common/enums/enums';
+import './page-tags.scss';
 
 const PageTags: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,23 @@ const PageTags: React.FC = () => {
   const [pageTags, setPageTags] = useState<ITagSelect[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const isCanManage = currentPage?.permission !== PermissionType.READ;
+
+  const { Option } = components;
+  const CustomSelectOption = (props: any): JSX.Element => (
+    <Option {...props}>
+      {props.data.label}
+      <i className={`${props.data.icon} ms-2`} />
+    </Option>
+  );
+
+  const CustomSelectMultiValueLabel = (props: any): JSX.Element => (
+    <div>
+      {props.data.label}
+      <span className="input-select-icon">
+        <i className={`${props.data.icon} ms-2`} />
+      </span>
+    </div>
+  );
 
   const handleInputChange = (inputValue: OptionsType<ITagSelect>): void => {
     const lastTag = inputValue[inputValue.length - 1];
@@ -81,7 +100,15 @@ const PageTags: React.FC = () => {
       .savePageTags(currentPage?.id, tagsRequest)
       .then((tags) => {
         const newPageTags = tags.map((tag) => {
-          const { id, name } = tag;
+          const { id, name, type } = tag;
+          if (type === TagType.GITHUB) {
+            return {
+              ...tag,
+              value: id,
+              label: name,
+              icon: 'bi bi-github',
+            } as ITagSelect;
+          }
           return { ...tag, value: id, label: name } as ITagSelect;
         });
         setPageTags(newPageTags);
@@ -93,7 +120,15 @@ const PageTags: React.FC = () => {
     if (currentPage) {
       pageApi.getPageTags(currentPage?.id).then((tags) => {
         const newPageTags = tags.map((tag) => {
-          const { id, name } = tag;
+          const { id, name, type } = tag;
+          if (type === TagType.GITHUB) {
+            return {
+              ...tag,
+              value: id,
+              label: name,
+              icon: 'bi bi-github',
+            } as ITagSelect;
+          }
           return { ...tag, value: id, label: name } as ITagSelect;
         });
         setPageTags(newPageTags);
@@ -103,7 +138,15 @@ const PageTags: React.FC = () => {
         .unwrap()
         .then((tags) => {
           const optionTags = tags.map((tag) => {
-            const { id, name } = tag;
+            const { id, name, type } = tag;
+            if (type === TagType.GITHUB) {
+              return {
+                ...tag,
+                value: id,
+                label: name,
+                icon: 'bi bi-github',
+              } as ITagSelect;
+            }
             return { ...tag, value: id, label: name } as ITagSelect;
           });
           setAllTags(optionTags as ITagSelect[]);
@@ -118,6 +161,10 @@ const PageTags: React.FC = () => {
         onChange={handleInputChange}
         value={pageTags}
         options={allTags}
+        components={{
+          Option: CustomSelectOption,
+          MultiValueLabel: CustomSelectMultiValueLabel,
+        }}
         styles={{
           option: (styles): CSSObject => ({
             ...styles,
@@ -129,7 +176,7 @@ const PageTags: React.FC = () => {
           }),
           multiValueLabel: (styles): CSSObject => ({
             ...styles,
-            fontSize: '1.2rem',
+            fontSize: '1rem',
           }),
           input: (styles): CSSObject => ({
             ...styles,
@@ -161,9 +208,12 @@ const PageTags: React.FC = () => {
         {!isEditMode ? (
           pageTags?.length ? (
             <div className="d-flex align-items-start flex-wrap">
-              {pageTags.map(({ id, name }) => (
+              {pageTags.map(({ id, name, type }) => (
                 <Badge pill text="primary" className="tag-badge" key={id}>
                   {name}
+                  {type === TagType.GITHUB && (
+                    <i className="bi bi-github ms-2" />
+                  )}
                 </Badge>
               ))}
             </div>

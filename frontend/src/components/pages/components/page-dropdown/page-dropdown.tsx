@@ -11,6 +11,7 @@ interface Props {
   onEditing(): void;
   onPageFollow(): void;
   onDelete(): void;
+  onShare(): void;
   isCurrentPageFollowed: boolean;
 }
 
@@ -20,6 +21,7 @@ export const PageActionsDropdown: React.FC<Props> = ({
   onEditing,
   onPageFollow,
   onDelete,
+  onShare,
   isCurrentPageFollowed,
 }) => {
   const currentPage = useAppSelector(
@@ -56,6 +58,12 @@ export const PageActionsDropdown: React.FC<Props> = ({
           onClick={onPageFollow}
         >
           {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
+        </Dropdown.Item>
+        <Dropdown.Item
+          className={getAllowedClasses(styles.dropdownItem)}
+          onClick={onShare}
+        >
+          Share
         </Dropdown.Item>
         {canEdit && (
           <>

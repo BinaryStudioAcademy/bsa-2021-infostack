@@ -12,5 +12,6 @@ export interface IComment {
     email: string;
   };
   parentCommentId: string | null;
+  voiceRecord: string | null;
   reactions?: ICommentReaction[];
 }
