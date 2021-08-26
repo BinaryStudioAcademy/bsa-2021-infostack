@@ -27,6 +27,7 @@ export const LinkItem: React.FC<Props> = ({
   const [isDeleted, setIsDeleted] = useState(false);
   const [selectHours, setSelectHours] = useState(true);
   const [expirationTime, setExpirationTime] = useState(1);
+  const [isCopied, setIsCopied] = useState(false);
 
   const onTimeTypeChange = (
     event: React.FormEvent<HTMLSelectElement>,
@@ -80,9 +81,13 @@ export const LinkItem: React.FC<Props> = ({
             size="sm"
             onClick={(): void => {
               navigator.clipboard.writeText(link);
+              setIsCopied(true);
             }}
           >
-            <i className="bi bi-clipboard" style={{ color: 'white' }}></i>
+            <i
+              className={isCopied ? 'bi bi-check2' : 'bi bi-clipboard'}
+              style={{ color: 'white' }}
+            ></i>
           </Button>
         </td>
       </OverlayTrigger>
