@@ -5,7 +5,7 @@
   "private": true,
   "main": "./src/server.ts",
   "scripts": {
-    "start": "node --max-old-space-size=512 ./server.js",
+    "start": "node --max-old-space-size=1024 ./server.js",
     "start:dev": "ts-node-dev ./src/server.ts",
     "start:fast": "ts-node-dev --respawn --type-check --notify=false --clear ./src/server.ts",
     "lint:start": "nodemon -r ./src/server.ts --exec \"npm run linter && ts-node\"",
