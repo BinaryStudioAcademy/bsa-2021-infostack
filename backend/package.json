@@ -17,6 +17,7 @@
     "generate-seed": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:create -d ./src/data/seeders -n",
     "seed": "node_modules/.bin/ts-node ./src/data/seeders && npm run seed:elastic",
     "seed:elastic": "node_modules/.bin/ts-node ./src/elasticsearch/seeders/seeders",
+    "sync-elastic-with-db": "node_modules/.bin/ts-node ./src/elasticsearch/synchronizers/synchronizers",
     "build:ts": "tsc && tscpaths -p tsconfig.json --src . --out build",
     "build:copy": "cp -r public package.json package-lock.json build",
     "build": "npm run build:ts && npm run build:copy",

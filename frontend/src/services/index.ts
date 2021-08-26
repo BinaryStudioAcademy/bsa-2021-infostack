@@ -11,3 +11,4 @@ export { commentReactionApi } from './comment-reaction-api.service';
 export { notificationApi } from './notification-api.service';
 export { githubApi } from './github-api.service';
 export { notificationSettingsApi } from './notification-settings-api/notification-settings-api.service';
+export { shareLinkApi } from './link-api.service';

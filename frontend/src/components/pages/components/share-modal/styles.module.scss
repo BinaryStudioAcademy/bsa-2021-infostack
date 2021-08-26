@@ -1,0 +1,38 @@
+.title {
+  font-size: 1.52rem;
+  line-height: 1.625;
+}
+
+.creationContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.timeSettingsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30rem;
+  margin-bottom: 0.5rem;
+}
+
+.createdLinkContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emailContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30rem;
+}
+
+.sendButton {
+  align-self: center;
+  width: 10rem;
+  margin-top: 1rem;
+}
