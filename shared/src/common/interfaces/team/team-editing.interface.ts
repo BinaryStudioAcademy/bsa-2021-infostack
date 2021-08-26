@@ -1,6 +1,7 @@
 interface ITeamEditing {
   id: string;
-  name: string;
+  name?: string;
+  owner?: string;
 }
 
 export type { ITeamEditing };

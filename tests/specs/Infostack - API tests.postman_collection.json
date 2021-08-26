@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "7846a5a7-d7be-4610-92a0-06bcabcbf74c",
-    "name": "Infostack - API tests Copy",
+    "_postman_id": "26682ed5-dd7e-4e10-b111-9d56a4e12318",
+    "name": "Infostack - API tests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -337,21 +337,17 @@
           "listen": "test",
           "script": {
             "exec": [
-              "const expectedMessage  = 'Invalid password';\r",
+              "pm.test('Response validation', () => {\r",
+              "    const jsonResponse = pm.response.json();\r",
               "\r",
-              "const jsonResponse = pm.response.json();\r",
+              "    tests['Status code is 400'] = pm.expect(pm.response.to.have.status(400));\r",
               "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
+              "    tests['Response to have body'] = pm.expect(pm.response.to.have.jsonBody());\r",
+              "\r",
+              "    tests['Error message should be correct'] =\r",
+              "        pm.expect(jsonResponse.error).to.eql('Invalid password');\r",
               "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})"
+              ""
             ],
             "type": "text/javascript"
           }
@@ -429,7 +425,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"123456\",\r\n  \"hgffgf\": \"2\"\r\n}",
+          "raw": "{ \r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"123456\",\r\n  \"hgffgf\": \"2\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -870,6 +866,226 @@
           "raw": "{{app_url}}/api/workspaces/current/users",
           "host": ["{{app_url}}"],
           "path": ["api", "workspaces", "current", "users"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create parent page",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"object\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"authorId\": { \"type\": \"string\" },\r",
+              "        \"parentPageId\": { \"type\": [\"string\",\"null\"] },\r",
+              "        \"pageContents\": { \"type\": \"array\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",       \r",
+              "        \"authorId\",    \r",
+              "        \"parentPageId\",\r",
+              "        \"pageContents\"\r",
+              "    ]\r",
+              "};\r",
+              "const responseJson = pm.response.json()\r",
+              "\r",
+              "pm.environment.set(\"parentPageId\", responseJson.id);\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create parent page (empty title)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const expectedMessage  = 'title must be at least 1 characters';\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test('Response should have status code 400', () => {\r",
+              "    pm.expect(pm.response).to.have.status(400);        \r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should contain correct error message', () => {\r",
+              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create child page",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"object\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"authorId\": { \"type\": \"string\" },\r",
+              "        \"parentPageId\": { \"type\": [\"string\",\"null\"] },\r",
+              "        \"pageContents\": { \"type\": \"array\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",       \r",
+              "        \"authorId\",    \r",
+              "        \"parentPageId\",\r",
+              "        \"pageContents\"\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const responseJson = pm.response.json()\r",
+              "\r",
+              "pm.environment.set(\"parentPageId\", responseJson.id);\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages"]
         }
       },
       "response": []
@@ -1775,6 +1991,455 @@
           "raw": "{{app_url}}/api/teams/{{teamId}}",
           "host": ["{{app_url}}"],
           "path": ["api", "teams", "{{teamId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create comments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"object\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"text\": { \"type\": \"string\" },\r",
+              "        \"pageId\": { \"type\": \"string\" },\r",
+              "        \"parentCommentId\": { \"type\": [\"null\",\"string\"] },\r",
+              "        \"author\": { \"type\": [\"object\",\"string\"] }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",\r",
+              "        \"text\",\r",
+              "        \"pageId\",\r",
+              "        \"parentCommentId\",\r",
+              "        \"author\"\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const responseJson = pm.response.json()\r",
+              "\r",
+              "pm.environment.set(\"commentId\", responseJson.id);\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Cookie",
+            "type": "text",
+            "value": "workspaceId={{workspaceId}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"text\": \"{{$randomLoremText}}\",\r\n    \"mentionIds\": []\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "{{parentPageId}}", "comments"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create comments ( invalid - empty string)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const expectedMessage  = 'text must be at least 1 characters';\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test('Response should have status code 400', () => {\r",
+              "    pm.expect(pm.response).to.have.status(400);        \r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should contain correct error message', () => {\r",
+              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"text\": \"\",\r\n    \"mentionIds\": []\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "{{parentPageId}}", "comments"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get comments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"array\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"text\": { \"type\": \"string\" },\r",
+              "        \"pageId\": { \"type\": \"string\" },\r",
+              "        \"parentCommentId\": { \"type\": [\"null\",\"string\"] },\r",
+              "        \"author\": { \"type\": \"array\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",\r",
+              "        \"text\",\r",
+              "        \"pageId\",\r",
+              "        \"parentCommentId\",\r",
+              "        \"author\"\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "{{parentPageId}}", "comments"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create permissions",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"object\",\r",
+              "    \"properties\": {\r",
+              "        \"name\": { \"type\": \"string\" },\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"type\": { \"type\": \"string\" },\r",
+              "        \"role\": { \"type\": \"string\" },\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"name\",\r",
+              "        \"id\",\r",
+              "        \"type\",\r",
+              "        \"role\",\r",
+              "\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": \"{{userId}}\",\r\n    \"name\": \"{{userName}}\",    \r\n    \"type\": \"user\",\r\n    \"role\": \"admin\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "{{parentPageId}}", "permissions"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create permissions (without role)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const expectedMessage  = 'role must be one of the following values: read, write, admin';\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test('Response should have status code 400', () => {\r",
+              "    pm.expect(pm.response).to.have.status(400);        \r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should contain correct error message', () => {\r",
+              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": \"{{userId}}\",\r\n    \"name\": \"{{userName}}\",    \r\n    \"type\": \"\",\r\n    \"role\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "{{parentPageId}}", "permissions"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get permissions",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"array\",\r",
+              "    \"properties\": {\r",
+              "        \"name\": { \"type\": \"string\" },\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"type\": { \"type\": \"string\" },\r",
+              "        \"role\": { \"type\": \"string\" },\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"name\",\r",
+              "        \"id\",\r",
+              "        \"type\",\r",
+              "        \"role\",\r",
+              "\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "{{parentPageId}}", "permissions"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete permissions",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Response should have status code 204', () => {\r",
+              "    pm.expect(pm.response).to.have.status(204);        \r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions/user/{{userId}}",
+          "host": ["{{app_url}}"],
+          "path": [
+            "api",
+            "pages",
+            "{{parentPageId}}",
+            "permissions",
+            "user",
+            "{{userId}}"
+          ]
         }
       },
       "response": []

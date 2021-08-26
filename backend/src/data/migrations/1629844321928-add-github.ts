@@ -11,7 +11,7 @@ export class addGithub1629844321928 implements MigrationInterface {
       'CREATE TABLE "github" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "workspaceId" uuid NOT NULL, "username" character varying NOT NULL, "repo" character varying NOT NULL, "token" character varying NOT NULL, CONSTRAINT "PK_d56780d391da316e085474c73c3" PRIMARY KEY ("id"))',
     );
     await queryRunner.query(
-      "CREATE TYPE \"tag_type_enum\" AS ENUM('github', 'app')",
+      'CREATE TYPE "tag_type_enum" AS ENUM(\'github\', \'app\')',
     );
     await queryRunner.query(
       'ALTER TABLE "tag" ADD "type" "tag_type_enum" NOT NULL DEFAULT \'app\'',

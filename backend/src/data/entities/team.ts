@@ -33,4 +33,7 @@ export class Team extends AbstractEntity {
 
   @Column({ length: 50 })
   name: string;
+
+  @Column()
+  owner: string;
 }

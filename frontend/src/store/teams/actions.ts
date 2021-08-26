@@ -23,6 +23,11 @@ export const updateTeam = createAsyncThunk<ITeam, ITeamEditing>(
   (payload) => teamApi.updateTeam(payload),
 );
 
+export const setNewTeamOwner = createAsyncThunk<ITeam, ITeamEditing>(
+  ActionType.UPDATE_TEAM,
+  (payload) => teamApi.updateTeamOwner(payload),
+);
+
 export const deleteTeam = createAsyncThunk<void, string>(
   ActionType.DELETE_TEAM,
   (id) => teamApi.deleteTeam(id),
@@ -46,6 +51,7 @@ const teamsActions = {
   deleteTeam,
   addUser,
   deleteUser,
+  setNewTeamOwner,
 };
 
 export { teamsActions };
