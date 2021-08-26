@@ -29,7 +29,7 @@ export const TableRow: React.FC<Props> = ({
 
   const dispatch = useAppDispatch();
 
-  const { disabledNotificationTypes } = useAppSelector(
+  const { disabledNotificationTypes, isPending } = useAppSelector(
     (state: RootState) => state.notificationsSettings,
   );
 
@@ -145,6 +145,7 @@ export const TableRow: React.FC<Props> = ({
           checked={checkedSystem}
           onChange={handleSystemNotification}
           name={notificationTypeSystem}
+          disabled={isPending}
         />
       </td>
       <td>
@@ -155,6 +156,7 @@ export const TableRow: React.FC<Props> = ({
           checked={checkedEmail}
           onChange={handleEmailNotification}
           name={notificationTypeEmail}
+          disabled={isPending}
         />
       </td>
     </tr>

@@ -19,6 +19,7 @@ const setSubtitleToComment = async (
   return {
     ...mapNotificationToINotification(notification),
     subtitle: page.pageContents[0].title,
+    subtitleId: page.id,
   };
 };
 
@@ -32,6 +33,7 @@ const setSubtitleToPage = async (
   return {
     ...mapNotificationToINotification(notification),
     subtitle: page.pageContents[0].title,
+    subtitleId: page.id,
   };
 };
 
@@ -65,12 +67,20 @@ export const getNotifications = async (
       )
       .map(mapNotificationToINotification);
     for (const notification of commentNotifications) {
-      const expandedNotification = await setSubtitleToComment(notification);
-      expandedNotifications.push(expandedNotification);
+      try {
+        const expandedNotification = await setSubtitleToComment(notification);
+        expandedNotifications.push(expandedNotification);
+      } catch {
+        notificationRepository.delete(notification);
+      }
     }
     for (const notification of pageNotifications) {
-      const expandedNotification = await setSubtitleToPage(notification);
-      expandedNotifications.push(expandedNotification);
+      try {
+        const expandedNotification = await setSubtitleToPage(notification);
+        expandedNotifications.push(expandedNotification);
+      } catch {
+        notificationRepository.delete(notification);
+      }
     }
     return expandedNotifications;
   }

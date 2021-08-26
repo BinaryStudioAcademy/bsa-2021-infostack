@@ -1,5 +1,6 @@
-import { Modal, Table } from 'react-bootstrap';
 import Select from 'react-select';
+import { Modal, Table } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { IButton } from 'common/interfaces/components/button';
 import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { usersActions, teamsActions } from 'store/actions';
@@ -8,10 +9,10 @@ import { InviteStatus, RoleType } from 'common/enums/enums';
 import { sortObjByName } from 'helpers/helpers';
 import { ITeamUser } from 'common/interfaces/team';
 import selectParticipantStyles from './select-participant-styles';
-import { toast } from 'react-toastify';
 
 type Props = {
   teamId: string;
+  owner: string;
   teamUsers: ITeamUser[];
   query: string;
   isVisible: boolean;
@@ -26,9 +27,10 @@ type participantOption = {
   roleInWorkspace: RoleType;
 };
 
-const TABLE_HEADERS = ['Name', 'Access', 'Delete'];
+const TABLE_HEADERS = ['Name', 'Workspace Role', 'Actions'];
 
 export const Popup: React.FC<Props> = ({
+  owner,
   teamId,
   teamUsers,
   query,
@@ -59,17 +61,22 @@ export const Popup: React.FC<Props> = ({
     }
   };
 
-  const handleDeleteItem = (id: string): void => {
+  const handleDeleteItem = (userIdToDelete: string): void => {
     if (teamId) {
-      const adminsInTeam = teamUsers.filter(
-        (user) => user.roleInWorkspace === RoleType.ADMIN,
-      );
-      if (adminsInTeam && adminsInTeam.length > 1) {
-        dispatch(teamsActions.deleteUser({ userId: id, teamId: teamId }));
+      if (userIdToDelete != owner) {
+        dispatch(
+          teamsActions.deleteUser({ userId: userIdToDelete, teamId: teamId }),
+        );
       } else {
-        toast.error('Error: you can\'t delete last "admin" in the team');
+        toast.error('Error: you can\'t delete "owner" of the team');
       }
     }
+  };
+
+  const handleUpdateTeamOwner = (userIdToSetOwnership: string): void => {
+    dispatch(
+      teamsActions.setNewTeamOwner({ id: teamId, owner: userIdToSetOwnership }),
+    );
   };
 
   const getOptions = (): participantOption[] => {
@@ -123,9 +130,11 @@ export const Popup: React.FC<Props> = ({
             {teamUsers?.map((user) => {
               return (
                 <Item
+                  owner={owner}
                   key={user.id}
                   participant={user}
                   onDelete={handleDeleteItem}
+                  setTeamOwner={handleUpdateTeamOwner}
                 />
               );
             })}
