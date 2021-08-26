@@ -50,21 +50,35 @@ export const PageContent: React.FC = () => {
     }
   });
 
-  const followedChildPages = useAppSelector((state) => {
+  const followedUserPages = useAppSelector((state) => {
     const { user } = state.auth;
     if (user && user.followingPages && childPages) {
-      const followedPages = user.followingPages.map((child) => ({
-        ...childPages.find((page) => child.id === page.id),
+      const pages = childPages.map((child) => ({
+        ...user.followingPages?.find((page) => child.id === page.id),
         ...child,
       }));
-      return followedPages;
+
+      // const pages = user.followingPages.map((child) => ({
+      //   ...childPages.find((page) => child.id === page.id),
+      //   ...child,
+      // }));
+      return pages;
     }
-  });
+  }) as IPageNav[];
 
   const { isCurrentPageFollowed } = useAppSelector(
     (state: RootState) => state.pages,
   );
   const { user } = useAppSelector((state) => state.auth);
+
+  // const followedChildPages = followedUserPages?.filter(
+  //   (page) => currentPage?.id === page.parentPageId,
+  // ) as IPageNav[];
+
+  const notFollowedChildPages = childPages?.filter(
+    (child) =>
+      user?.followingPages?.map((page) => page.id).indexOf(child.id) === -1,
+  );
 
   const [currContent, setCurrContent] = useState<IPageContent | undefined>();
   const [isPermissionsModalVisible, setIsPermissionsModalVisible] =
@@ -80,10 +94,10 @@ export const PageContent: React.FC = () => {
 
   const [childPagesToFollow, setChildPagesToFollow] = useState<
     IPageNav[] | null | undefined
-  >();
+  >(notFollowedChildPages);
   const [childPagesToUnfollow, setChildPagesToUnfollow] = useState<
     IPageNav[] | null | undefined
-  >();
+  >(followedUserPages);
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -106,13 +120,17 @@ export const PageContent: React.FC = () => {
     currentPage?.permission === PermissionType.ADMIN;
 
   useEffect(() => {
-    if (user && user.followingPages && followedChildPages && childPages) {
-      const followedPages = followedChildPages.filter(
+    if (user && user.followingPages && followedUserPages && childPages) {
+      console.info('THERERE', followedUserPages);
+
+      const followedPages = followedUserPages.filter(
         (page) => currentPage?.id === page.parentPageId,
       ) as IPageNav[];
 
       const unfollowedPages = childPages.filter(
-        (o1) => user?.followingPages?.map((o2) => o2.id).indexOf(o1.id) === -1,
+        (childPage) =>
+          user?.followingPages?.map((page) => page.id).indexOf(childPage.id) ===
+          -1,
       );
 
       setChildPagesToUnfollow(followedPages);
@@ -203,8 +221,6 @@ export const PageContent: React.FC = () => {
   };
 
   const onEditing = (): void => {
-    setChildPagesToFollow(null);
-    setChildPagesToUnfollow(null);
     history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
   };
 
@@ -242,8 +258,13 @@ export const PageContent: React.FC = () => {
     };
 
   const onPageFollow = (): void => {
-    console.info(paramsId, isCurrentPageFollowed);
-    if (childPages && childPages.length) {
+    console.info(followedUserPages);
+
+    // if (childPages && childPages.length) {
+    if (
+      (childPagesToUnfollow && childPagesToUnfollow.length > 0) ||
+      (childPagesToFollow && childPagesToFollow.length > 0)
+    ) {
       setIsFollowModalVisible(true);
     } else {
       isCurrentPageFollowed
