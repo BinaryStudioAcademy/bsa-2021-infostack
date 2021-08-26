@@ -2,7 +2,7 @@ import {
   useState,
   useEffect,
   useParams,
-  useAppDispatch,
+  // useAppDispatch,
   useAppSelector,
 } from 'hooks/hooks';
 import {
@@ -18,7 +18,7 @@ import { Link, UserAvatar } from 'components/common/common';
 import { userApi } from 'services';
 import { IUser } from 'common/interfaces/user';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
-import { pagesActions } from 'store/actions';
+// import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums/enums';
 import './profile-info.scss';
 import { replaceIdParam } from 'helpers/helpers';
@@ -62,7 +62,7 @@ const ProfileInfo: React.FC = () => {
     };
   }, [id]);
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
 
   const childPages = useAppSelector((state) => {
@@ -92,22 +92,31 @@ const ProfileInfo: React.FC = () => {
       return;
     }
     if (currentPageId) {
-      handlePageUnfollow()(false);
+      handlePageUnfollow()(undefined);
     }
   }, [currentPageId]);
 
   const handlePageUnfollow =
     () =>
-    async (withChildren: boolean): Promise<void> => {
+    async (ids: string[] | undefined): Promise<void> => {
       setIsFollowModalVisible(false);
-
-      if (currentPageId) {
-        await dispatch(
-          pagesActions.unfollowPage({ pageId: currentPageId, withChildren }),
-        );
-        await userApi.getUserInfo(id).then((user) => setUser(user));
-      }
+      console.info(ids);
+      // await dispatch(pagesActions.unfollowPage({ pageId, ids }));
     };
+
+  // const handlePageUnfollow =
+  //   () =>
+  //   async (withChildren: boolean): Promise<void> => {
+  //     setIsFollowModalVisible(false);
+  //     console.info(withChildren);
+
+  //     // if (currentPageId) {
+  //     //   await dispatch(
+  //     //     pagesActions.unfollowPage({ pageId: currentPageId, withChildren }),
+  //     //   );
+  //     //   await userApi.getUserInfo(id).then((user) => setUser(user));
+  //     // }
+  //   };
 
   const onPageUnfollow = async (pageId: string): Promise<void> => {
     setCurrentPageId(pageId);

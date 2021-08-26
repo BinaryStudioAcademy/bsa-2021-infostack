@@ -1,14 +1,12 @@
-import { Form } from 'react-bootstrap';
-import { Modal } from 'components/common/modal/modal';
-// import { IPage } from 'common/interfaces/pages';
+import { Form, Modal, Button } from 'react-bootstrap';
+import { useState, useEffect } from 'hooks/hooks';
 import { IPageNav } from 'common/interfaces/pages';
 
 type Props = {
   show: boolean;
   isFollowing: boolean;
-  // childPages: IPage[] | null | undefined;
   childPages: IPageNav[] | null | undefined;
-  handler: (withChildren: boolean) => void;
+  handler: (pagesId: string[] | undefined) => void;
 };
 
 export const FollowModal: React.FC<Props> = ({
@@ -17,46 +15,71 @@ export const FollowModal: React.FC<Props> = ({
   childPages,
   handler,
 }) => {
+  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
+  const [pagesId, setPagesId] = useState<string[]>([]);
   const followText = isFollowing ? 'unfollow' : 'follow';
+
+  useEffect(() => {
+    if (pagesId.length > 0) {
+      setSubmitDisabled(false);
+      return;
+    }
+    setSubmitDisabled(true);
+  }, [pagesId]);
+
+  const addPage = async (
+    event: React.MouseEvent<HTMLElement>,
+    id: string,
+  ): Promise<void> => {
+    event.stopPropagation();
+    pagesId.includes(id)
+      ? setPagesId(pagesId.filter((pageId) => pageId !== id))
+      : setPagesId((pagesId) => [...pagesId, id]);
+  };
+
+  const onClick = async (): Promise<void> => {
+    setPagesId([]);
+    handler(pagesId);
+  };
 
   return (
     <Modal
+      className="d-flex align-items-center"
+      dialogClassName="w-25 rounded"
       show={show}
-      title={'Confirm'}
-      actions={[
-        {
-          text: 'No',
-          buttonVariant: 'warning',
-          handler: (): void => handler(false),
-        },
-        {
-          text: 'Yes',
-          buttonVariant: isFollowing ? 'danger' : 'success',
-          handler: (): void => handler(true),
-        },
-      ]}
+      backdrop="static"
+      keyboard={false}
     >
-      Do you want to {followText} the child pages of this page as well?
-      <Form.Group controlId="childPagesCheckbox" className="mt-3">
-        {childPages?.length &&
-          // childPages.map((child) =>
-          childPages.map(({ id, title }) => (
-            // <PageItem id={child.id} key={id} title={title} childPages={childPages} />
-
-            <Form.Check
-              key={id}
-              // key={child.id}
-              // className={styles.checkItemContainer}
-              type="checkbox"
-              // id="preferencesAudioRadioDefault"
-              // checked={isUserAudioDefault}
-              // onChange={() => setUserAudioDefault(true)}
-              name="childPageName"
-              // label={child.pageContents[0].title}
-              label={title}
-            />
-          ))}
-      </Form.Group>
+      <Modal.Header>
+        <Modal.Title className="fs-6">Confirm</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        Do you want to {followText} the child pages of this page as well?
+        <Form.Group controlId="childPagesCheckbox" className="mt-3">
+          {childPages?.length &&
+            childPages.map(({ id, title }) => (
+              <Form.Check
+                key={id}
+                type="checkbox"
+                onClick={(event): Promise<void> => addPage(event, id)}
+                name="childPageName"
+                label={title}
+              />
+            ))}
+        </Form.Group>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="warning" onClick={(): void => handler(undefined)}>
+          No
+        </Button>
+        <Button
+          variant={isFollowing ? 'danger' : 'success'}
+          onClick={onClick}
+          disabled={isSubmitDisabled}
+        >
+          Yes
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
