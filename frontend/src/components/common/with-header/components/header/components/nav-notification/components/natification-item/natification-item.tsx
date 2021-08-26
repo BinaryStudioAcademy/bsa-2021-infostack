@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { getAllowedClasses } from 'helpers/helpers';
-import { EntityType } from 'common/enums/entity-type/entity-type';
+import { Link } from 'components/common/common';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { EntityType, AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -29,22 +29,48 @@ export const NotificationItem: React.FC<Props> = ({
   time,
   onRead,
 }) => {
-  const link = (entityType: EntityType): ReturnType<Link> => {
+  const link = (entityType: EntityType): JSX.Element => {
     switch (entityType) {
       case EntityType.COMMENT: {
-        return (
-          <Link to={`/page/${subtitleId}`}>
-            <span
-              className={getAllowedClasses(styles.textMiddle, 'text-break')}
+        if (subtitleId) {
+          return (
+            <Link
+              to={replaceIdParam(AppRoute.PAGE, subtitleId)}
+              className={getAllowedClasses(styles.link)}
             >
-              {title}
-            </span>
-          </Link>
-        );
+              <span
+                className={getAllowedClasses(styles.textMiddle, 'text-break')}
+              >
+                {title}
+              </span>
+            </Link>
+          );
+        }
+        break;
+      }
+      case EntityType.PAGE: {
+        if (subtitleId) {
+          return (
+            <Link
+              to={replaceIdParam(AppRoute.PAGE, subtitleId)}
+              className={getAllowedClasses(styles.link)}
+            >
+              <span
+                className={getAllowedClasses(styles.textMiddle, 'text-break')}
+              >
+                {title}
+              </span>
+            </Link>
+          );
+        }
+        break;
       }
       case EntityType.TEAM: {
         return (
-          <Link to={'/settings/teams'}>
+          <Link
+            to={AppRoute.SETTINGS_TEAMS}
+            className={getAllowedClasses(styles.link)}
+          >
             <span
               className={getAllowedClasses(styles.textMiddle, 'text-break')}
             >
@@ -54,6 +80,12 @@ export const NotificationItem: React.FC<Props> = ({
         );
       }
     }
+
+    return (
+      <span className={getAllowedClasses(styles.textMiddle, 'text-break')}>
+        {title}
+      </span>
+    );
   };
 
   return (

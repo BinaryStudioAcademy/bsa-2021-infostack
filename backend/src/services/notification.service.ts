@@ -33,6 +33,7 @@ const setSubtitleToPage = async (
   return {
     ...mapNotificationToINotification(notification),
     subtitle: page.pageContents[0].title,
+    subtitleId: page.id,
   };
 };
 
