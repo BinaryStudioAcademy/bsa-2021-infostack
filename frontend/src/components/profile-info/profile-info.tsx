@@ -2,7 +2,7 @@ import {
   useState,
   useEffect,
   useParams,
-  // useAppDispatch,
+  useAppDispatch,
   useAppSelector,
 } from 'hooks/hooks';
 import {
@@ -15,111 +15,73 @@ import {
   Button,
 } from 'react-bootstrap';
 import { Link, UserAvatar } from 'components/common/common';
-import { userApi } from 'services';
-import { IUser } from 'common/interfaces/user';
+import { IPageNav } from 'common/interfaces/pages';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
-// import { pagesActions } from 'store/actions';
+import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums/enums';
 import './profile-info.scss';
 import { replaceIdParam } from 'helpers/helpers';
 import { Activities } from './components/components';
 
 const ProfileInfo: React.FC = () => {
-  const [user, setUser] = useState<IUser>({
-    id: '',
-    avatar: '',
-    fullName: '',
-    email: '',
-    title: '',
-    skills: [],
-    followingPages: [],
-  });
+  const { user } = useAppSelector((state) => state.auth);
+
   const [permission, setPermission] = useState(true);
-  const [currentPageId, setCurrentPageId] = useState<string>();
+  const [pageId, setPageId] = useState<string>();
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
-    let mounted = true;
-    const getUser = async (): Promise<void> => {
-      await userApi.getUserInfo(id).then((user) => {
-        if (user.id.length > 0) {
-          if (mounted) {
-            setPermission(true);
-            setUser(user);
-          }
-        } else {
-          if (mounted) {
-            setPermission(false);
-          }
-        }
-      });
-    };
-
-    getUser();
-
-    return (): void => {
-      mounted = false;
-    };
+    if (user && user.id.length > 0) {
+      setPermission(true);
+      return;
+    }
+    setPermission(false);
   }, [id]);
 
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
 
   const childPages = useAppSelector((state) => {
     const { pages } = state.pages;
 
-    if (pages && currentPageId) {
-      const page = pages.find((page) => page.id === currentPageId);
+    if (pages && pageId) {
+      const page = pages?.find((page) => page.id === pageId);
       return page ? page.childPages : null;
     }
   });
 
-  const followedChildPages = childPages
-    ? childPages.map((childPage) =>
-        user?.followingPages?.filter((page) => page.id === childPage.id),
-      )[0]
-    : null;
+  const followedUserPages = useAppSelector((state) => {
+    const { user } = state.auth;
+    if (user && user.followingPages && childPages) {
+      const pages = childPages.filter((child) =>
+        user.followingPages?.find((page) => child.id === page.id),
+      );
+      return pages;
+    }
+  }) as IPageNav[];
 
   useEffect(() => {
-    // const followedChildPages = childPages
-    //   ? childPages.map((childPage) =>
-    //       user?.followingPages?.filter((page) => page.id === childPage.id),
-    //     )[0]
-    //   : null;
-
-    if (childPages && childPages.length && followedChildPages?.length) {
+    console.info(childPages, user?.followingPages, followedUserPages);
+    if (childPages && childPages.length && followedUserPages) {
       setIsFollowModalVisible(true);
       return;
     }
-    if (currentPageId) {
+    if (pageId) {
       handlePageUnfollow()(undefined);
     }
-  }, [currentPageId]);
+  }, [pageId]);
 
   const handlePageUnfollow =
     () =>
     async (ids: string[] | undefined): Promise<void> => {
       setIsFollowModalVisible(false);
-      console.info(ids);
-      // await dispatch(pagesActions.unfollowPage({ pageId, ids }));
+      if (pageId) {
+        await dispatch(pagesActions.unfollowPage({ pageId, ids }));
+      }
     };
 
-  // const handlePageUnfollow =
-  //   () =>
-  //   async (withChildren: boolean): Promise<void> => {
-  //     setIsFollowModalVisible(false);
-  //     console.info(withChildren);
-
-  //     // if (currentPageId) {
-  //     //   await dispatch(
-  //     //     pagesActions.unfollowPage({ pageId: currentPageId, withChildren }),
-  //     //   );
-  //     //   await userApi.getUserInfo(id).then((user) => setUser(user));
-  //     // }
-  //   };
-
   const onPageUnfollow = async (pageId: string): Promise<void> => {
-    setCurrentPageId(pageId);
+    setPageId(pageId);
   };
 
   return (
@@ -212,8 +174,7 @@ const ProfileInfo: React.FC = () => {
                                       <FollowModal
                                         show={isFollowModalVisible}
                                         isFollowing={true}
-                                        // childPages={followedChildPages}
-                                        childPages={childPages}
+                                        childPages={followedUserPages}
                                         handler={handlePageUnfollow()}
                                       />
                                     </div>
