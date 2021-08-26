@@ -74,12 +74,18 @@ const ProfileInfo: React.FC = () => {
     }
   });
 
+  const followedChildPages = childPages
+    ? childPages.map((childPage) =>
+        user?.followingPages?.filter((page) => page.id === childPage.id),
+      )[0]
+    : null;
+
   useEffect(() => {
-    const followedChildPages = childPages
-      ? childPages.map((childPage) =>
-          user?.followingPages?.filter((page) => page.id === childPage.id),
-        )[0]
-      : null;
+    // const followedChildPages = childPages
+    //   ? childPages.map((childPage) =>
+    //       user?.followingPages?.filter((page) => page.id === childPage.id),
+    //     )[0]
+    //   : null;
 
     if (childPages && childPages.length && followedChildPages?.length) {
       setIsFollowModalVisible(true);
@@ -197,6 +203,8 @@ const ProfileInfo: React.FC = () => {
                                       <FollowModal
                                         show={isFollowModalVisible}
                                         isFollowing={true}
+                                        // childPages={followedChildPages}
+                                        childPages={childPages}
                                         handler={handlePageUnfollow()}
                                       />
                                     </div>

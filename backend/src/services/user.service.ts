@@ -18,14 +18,14 @@ import { IPaginated } from '../common/interfaces/common';
 import { env } from '../env';
 import SkillRepository from '../data/repositories/skill.repository';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
+import { mapUserToIUser } from '../common/mappers/user/map-user-to-iuser';
 import ActivityRepository from '../data/repositories/activity.repository';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar, title, skills } =
-    await userRepository.findById(id);
+  const user = await userRepository.findById(id);
 
-  return { id, fullName, email, avatar, title, skills };
+  return mapUserToIUser(user);
 };
 
 export const getInviteUserById = async (token: string): Promise<string> => {
@@ -108,11 +108,22 @@ export const updateUserInfo = async (
   const foundSkills = await skillRepository.getSkillsById(body.skills);
   userToUpdate.skills = foundSkills;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(
-    userToUpdate,
+  const { fullName, email, avatar, title, skills, followingPages } =
+    await userRepository.save(userToUpdate);
+
+  const mappedFollowingPages = followingPages.map((page) =>
+    mapPageToIPage(page),
   );
 
-  return { id, fullName, email, avatar, title, skills };
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages: mappedFollowingPages,
+  };
 };
 
 export const updateAvatar = async (
@@ -136,11 +147,21 @@ export const updateAvatar = async (
 
   userToUpdate.avatar = Location || userToUpdate.avatar;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(
-    userToUpdate,
+  const { fullName, email, avatar, title, skills, followingPages } =
+    await userRepository.save(userToUpdate);
+  const mappedFollowingPages = followingPages?.map((page) =>
+    mapPageToIPage(page),
   );
 
-  return { id, fullName, email, avatar, title, skills };
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages: mappedFollowingPages,
+  };
 };
 
 export const deleteAvatar = async (id: string): Promise<void> => {

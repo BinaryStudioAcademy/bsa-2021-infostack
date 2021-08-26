@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { pageApi } from 'services';
+import { authActions } from 'store/actions';
 import {
   IPageNav,
   IPageRequest,
@@ -99,6 +100,7 @@ const followPage = createAsyncThunk<
 
     const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
+    dispatch(authActions.loadUser());
   },
 );
 
@@ -120,6 +122,7 @@ const unfollowPage = createAsyncThunk<
 
     const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
+    dispatch(authActions.loadUser());
   },
 );
 

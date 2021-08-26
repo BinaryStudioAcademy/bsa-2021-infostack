@@ -95,6 +95,7 @@ export const ProfileSettings: React.FC = () => {
 
   const handleSaveChanges = async (): Promise<void> => {
     if (user) {
+      console.info('USER', user);
       setIsUploading(true);
       const skills = userSkills.map(({ value }) => value) as ISkill[];
 
@@ -141,6 +142,7 @@ export const ProfileSettings: React.FC = () => {
             email: updatedUser.email,
             title: updatedUser.title,
             skills: updatedUser.skills,
+            followingPages: updatedUser.followingPages,
           }),
         );
 
