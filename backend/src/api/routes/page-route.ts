@@ -25,6 +25,9 @@ import {
   savePageTags,
   getTableOfContentsByPageId,
   getTableOfContentsByPageIdAndVersionId,
+  searchPage,
+  updateDraft,
+  deleteDraft,
 } from '../../services/page.service';
 import {
   getComments,
@@ -34,6 +37,11 @@ import {
 import { validationMiddleware } from '../middlewares';
 
 const router: Router = Router();
+
+router.get(
+  '/search',
+  run((req) => searchPage(req.query.query, req.userId, req.workspaceId)),
+);
 
 router.post(
   '/',
@@ -157,6 +165,16 @@ router.get(
   run((req) =>
     getTableOfContentsByPageIdAndVersionId(req.params.id, req.params.versionId),
   ),
+);
+
+router.post(
+  '/:id/draft',
+  run((req) => updateDraft(req.params.id, req.userId, req.body)),
+);
+
+router.delete(
+  '/:id/draft',
+  run((req) => deleteDraft(req.params.id)),
 );
 
 export default router;

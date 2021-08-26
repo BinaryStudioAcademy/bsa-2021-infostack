@@ -52,4 +52,8 @@ export const env = {
     prWebhookCallbackUrl: getOsEnv('GITHUB_PR_WEBHOOK_URL'),
     labelWebhookCallbackUrl: getOsEnv('GITHUB_LABEL_WEBHOOK_URL'),
   },
+  elasticsearch: {
+    node: getOsEnv('ELASTICSEARCH_NODE'),
+    index: getOsEnv('ELASTICSEARCH_INDEX'),
+  },
 } as const;

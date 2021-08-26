@@ -16,6 +16,7 @@ import { RoleType } from 'common/enums/enums';
 export const TeamSettings: React.FC = () => {
   const dispatch = useAppDispatch();
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [isUserTeamsMapped, setUserTeamsMapped] = useState(false);
   const { teams } = useAppSelector((state) => state.teams);
   const { userTeams } = useAppSelector((state) => state.teams);
   const userId = useAppSelector((state) => state.auth?.user?.id);
@@ -26,9 +27,10 @@ export const TeamSettings: React.FC = () => {
   useEffect(() => {
     if (userId) {
       dispatch(teamsActions.fetchTeamsForUser(userId));
+      setUserTeamsMapped(true);
     }
     dispatch(teamsActions.fetchTeams());
-  }, []);
+  }, [userId, teams]);
 
   const teamsToRender = [];
   for (let i = 0; i < teams.length; i++) {
@@ -59,7 +61,9 @@ export const TeamSettings: React.FC = () => {
         <Card.Title as="h5" className={getAllowedClasses(styles.cardTitle)}>
           Teams
         </Card.Title>
-        <CreateButton onClick={onCreateTeamButtonClick} />
+        {userRole === RoleType.ADMIN && (
+          <CreateButton onClick={onCreateTeamButtonClick} />
+        )}
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         <div
@@ -67,13 +71,15 @@ export const TeamSettings: React.FC = () => {
             !teams ? ' vh-91' : ''
           }`}
         >
-          {!teams && (
-            <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
-              <Spinner animation="border" variant="secondary" />
-            </div>
-          )}
+          {!teams ||
+            (!isUserTeamsMapped && (
+              <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
+                <Spinner animation="border" variant="secondary" />
+              </div>
+            ))}
           {teams &&
-            (teams.length === 0 ? (
+            ((userRole === RoleType.ADMIN && teams.length === 0) ||
+            (userRole === RoleType.USER && userTeams.length === 0) ? (
               <div>There is no teams in this workspace. Start adding</div>
             ) : (
               <div
@@ -84,10 +90,10 @@ export const TeamSettings: React.FC = () => {
               >
                 {userRole === RoleType.ADMIN
                   ? teams.map((team: ITeam) => (
-                      <Item key={team.id} team={team} />
+                      <Item key={team.id} team={team} admin={true} />
                     ))
                   : teamsToRender.map((team: ITeam) => (
-                      <Item key={team.id} team={team} />
+                      <Item key={team.id} team={team} admin={false} />
                     ))}
               </div>
             ))}

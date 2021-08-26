@@ -136,6 +136,31 @@ const editPageContent = createAsyncThunk(
   },
 );
 
+const editDraft = createAsyncThunk(
+  ActionType.EDIT_DRAFT,
+  async (getPayload: IEditPageContent, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+    const editDraftResponse = await pageApi.editDraft(getPayload);
+    dispatch(actions.getPage(editDraftResponse));
+
+    const response = await pageApi.getPages();
+    dispatch(actions.setPages(response));
+    dispatch(actions.toggleSpinner());
+  },
+);
+
+const deleteDraft = createAsyncThunk(
+  ActionType.DELETE_DRAFT,
+  async (pageId: string, { dispatch }) => {
+    dispatch(actions.toggleSpinner());
+
+    await pageApi.deleteDraft(pageId);
+    const response = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(response));
+    dispatch(actions.toggleSpinner());
+  },
+);
+
 const pagesActions = {
   ...actions,
   createPage,
@@ -147,6 +172,8 @@ const pagesActions = {
   editPageContent,
   followPage,
   unfollowPage,
+  editDraft,
+  deleteDraft,
 };
 
 export { pagesActions };

@@ -193,9 +193,7 @@ const PageTags: React.FC = () => {
         Tags
         {isCanManage &&
           (!isEditMode ? (
-            <span className="btn-manage text-success" onClick={handleManage}>
-              manage
-            </span>
+            <i className="bi bi-pencil tags-edit" onClick={handleManage}></i>
           ) : (
             <Button
               variant="success"

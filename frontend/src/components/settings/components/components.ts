@@ -4,3 +4,4 @@ export { TagSettings } from './tag-settings/tag-settings';
 export { TeamSettings } from './team-settings/team-settings';
 export { UsersSettings } from './users-settings/users-settings';
 export { IntegrationSettings } from './integration-settings/integration-settings';
+export { NotificationsSettings } from './notifications-settings/notifications-settings';

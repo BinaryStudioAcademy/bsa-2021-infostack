@@ -9,3 +9,4 @@ export { commentsActions } from './comments';
 export { activitiesActions } from './activities';
 export { notificationsActions } from './notifications';
 export { githubActions } from './github';
+export { notificationsSettingsActions } from './notifications-settings';
