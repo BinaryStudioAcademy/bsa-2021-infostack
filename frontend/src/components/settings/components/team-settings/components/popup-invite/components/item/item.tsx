@@ -73,7 +73,7 @@ export const Item: React.FC<Props> = ({
         }}
         cancelButton={{
           text: 'No',
-          onClick: (): void => setShowDeleteUserModal(false),
+          onClick: (): void => setshowSetOwnerModal(false),
         }}
       />
     </>
