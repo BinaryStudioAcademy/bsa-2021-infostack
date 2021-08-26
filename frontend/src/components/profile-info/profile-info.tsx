@@ -61,7 +61,6 @@ const ProfileInfo: React.FC = () => {
   }) as IPageNav[];
 
   useEffect(() => {
-    console.info(childPages, user?.followingPages, followedUserPages);
     if (childPages && childPages.length && followedUserPages) {
       setIsFollowModalVisible(true);
       return;
