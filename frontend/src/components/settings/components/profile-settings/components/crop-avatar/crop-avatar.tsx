@@ -95,10 +95,10 @@ export const CropAvatar: React.FC<Props> = ({
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="warning" onClick={handleClose}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={onSave}>
+        <Button variant="success" onClick={onSave}>
           Save
         </Button>
       </Modal.Footer>

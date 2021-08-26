@@ -8,6 +8,8 @@ enum ActionType {
   EDIT_PAGE_CONTENT = 'editPageContent',
   CLEAR_CURRENT_PAGE = 'clearCurrentPage',
   SET_CURRENT_PAGE_FOLLOWED = 'setCurrentPageFollowed',
+  EDIT_DRAFT = 'editDraft',
+  DELETE_DRAFT = 'deleteDraft',
 }
 
 export { ActionType };

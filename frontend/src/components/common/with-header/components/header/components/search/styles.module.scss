@@ -1,0 +1,58 @@
+.form {
+  width: 27rem;
+}
+
+.foundList {
+  width: 27rem;
+  min-height: 4rem;
+
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  background-color: white;
+
+  color: #6c757d;
+
+  border: 1px solid rgb(206, 212, 218);
+  border-top: none;
+
+  z-index: 999;
+
+  .nothingFound {
+    color: #ffc107;
+    padding: 1.4rem;
+  }
+
+  .foundItem {
+    padding: 1.4rem;
+    cursor: pointer;
+
+    .title {
+      display: block;
+      color: #495057;
+      font-weight: 500;
+    }
+
+    .content {
+      display: inline-block;
+      width: 24.2rem;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    mark {
+      background-color: yellow;
+    }
+
+    &:hover {
+      background-color: #f4f7f9;
+    }
+  }
+}

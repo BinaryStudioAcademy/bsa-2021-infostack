@@ -1,11 +1,15 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
+import { User } from '../entities/user';
 
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
   public findById(id: string): Promise<Page> {
-    return this.findOne({ relations: ['followingUsers'], where: { id } });
+    return this.findOne({
+      relations: ['followingUsers', 'draft'],
+      where: { id },
+    });
   }
 
   public findPages(workspaceId: string): Promise<Page[]> {
@@ -44,6 +48,7 @@ class PageRepository extends Repository<Page> {
     return this.createQueryBuilder('page')
       .leftJoinAndSelect('page.pageContents', 'pageContents')
       .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+      .leftJoinAndSelect('page.draft', 'draft')
       .where('page.id = :id', { id: id })
       .orderBy('pageContents.createdAt', 'DESC')
       .getOne();
@@ -136,6 +141,13 @@ class PageRepository extends Repository<Page> {
       .relation('followingUsers')
       .of(pageIds)
       .remove(userId);
+  }
+
+  public findFollowers(id: string): Promise<User[]> {
+    return this.createQueryBuilder()
+      .relation(Page, 'followingUsers')
+      .of(id)
+      .loadMany();
   }
 
   public deleteById(id: string): Promise<DeleteResult> {

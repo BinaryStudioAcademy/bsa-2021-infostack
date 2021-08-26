@@ -15,7 +15,8 @@
     "migrate": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:run",
     "migration-revert": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:revert",
     "generate-seed": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:create -d ./src/data/seeders -n",
-    "seed": "node_modules/.bin/ts-node ./src/data/seeders",
+    "seed": "node_modules/.bin/ts-node ./src/data/seeders && npm run seed:elastic",
+    "seed:elastic": "node_modules/.bin/ts-node ./src/elasticsearch/seeders/seeders",
     "build:ts": "tsc && tscpaths -p tsconfig.json --src . --out build",
     "build:copy": "cp -r public package.json package-lock.json build",
     "build": "npm run build:ts && npm run build:copy",
@@ -42,6 +43,7 @@
   },
   "dependencies": {
     "@google-cloud/speech": "4.7.0",
+    "@elastic/elasticsearch": "7.13.0",
     "aws-sdk": "2.955.0",
     "cookie-parser": "1.4.5",
     "cors": "2.8.5",

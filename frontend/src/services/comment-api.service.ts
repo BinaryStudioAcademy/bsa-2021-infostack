@@ -14,10 +14,7 @@ class CommentApi {
     return this._httpService.load(`${this.BASE}/${pageId}/comments`);
   }
 
-  public addComment(
-    pageId: string,
-    payload: ICommentRequest,
-  ): Promise<IComment> {
+  public add(pageId: string, payload: ICommentRequest): Promise<IComment> {
     return this._httpService.load(`${this.BASE}/${pageId}/comments`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -25,7 +22,7 @@ class CommentApi {
     });
   }
 
-  public deleteComment(id: string, pageId: string): Promise<void> {
+  public delete(id: string, pageId: string): Promise<void> {
     return this._httpService.load(`${this.BASE}/${pageId}/comments/${id}`, {
       method: HttpMethod.DELETE,
     });
