@@ -65,6 +65,11 @@ class Http {
         return null as unknown as T;
       }
 
+      const resContentType = response.headers.get('content-type');
+      if (resContentType && resContentType.includes(ContentType.TEXT)) {
+        return response.text() as unknown as T;
+      }
+
       return this.parseJSON<T>(response);
     } catch (err) {
       this.throwError(err);
