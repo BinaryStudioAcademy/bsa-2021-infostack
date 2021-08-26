@@ -143,6 +143,15 @@ class PageRepository extends Repository<Page> {
     });
   }
 
+  public findByWorkspaceIdWithTagsAndFollowers(
+    workspaceId: string,
+  ): Promise<Page[] | []> {
+    return this.find({
+      relations: ['tags', 'followingUsers'],
+      where: { workspaceId },
+    });
+  }
+
   public followPage(userId: string, pageId: string): Promise<void> {
     return this.createQueryBuilder()
       .relation('followingUsers')

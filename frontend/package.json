@@ -18,7 +18,7 @@
     "@reduxjs/toolkit": "1.6.0",
     "bootstrap": "5.0.2",
     "clsx": "1.1.1",
-    "date-fns": "^2.23.0",
+    "date-fns": "2.23.0",
     "dayjs": "1.10.6",
     "emoji-picker-react": "3.4.8",
     "infostack-shared": "file:../shared/build",

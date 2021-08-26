@@ -231,6 +231,38 @@ export const loginGoogle = async (
   return getIUserWithTokens(newUser);
 };
 
+export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
+  const { clientId, redirectUrl } = env.github;
+  return {
+    url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+  };
+};
+
+export const loginGithub = async (
+  code: string,
+): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
+  const { clientId, clientSecret, redirectUrl } = env.google;
+  const oauth2Client = new google.auth.OAuth2(
+    clientId,
+    clientSecret,
+    redirectUrl,
+  );
+  const { tokens } = await oauth2Client.getToken(code);
+  const decodeToken = jwt.decode(tokens.id_token, { json: true });
+  const { email, name, picture } = decodeToken;
+  const userRepository = getCustomRepository(UserRepository);
+  const user = await userRepository.findByEmail(email);
+  if (user) {
+    return getIUserWithTokens(user);
+  }
+  const newUser = await userRepository.save({
+    email,
+    fullName: name,
+    avatar: picture,
+  });
+  return getIUserWithTokens(newUser);
+};
+
 const getIUserWithTokens = async (
   user: User,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
