@@ -19,6 +19,9 @@ export class Comment extends AbstractEntity {
   @Column()
   text: string;
 
+  @Column({ nullable: true })
+  voiceRecord: string;
+
   @RelationId((comment: Comment) => comment.author)
   @Column()
   readonly authorId: string;

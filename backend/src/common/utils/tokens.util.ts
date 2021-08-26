@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt from 'jsonwebtoken';
 import { env } from '../../env';
 import {
@@ -27,9 +28,17 @@ const generateTokens = (userId: string): ITokens => {
   };
 };
 
+const generateGithubAccessToken = (token: string): string =>
+  jwt.sign({ token }, secretKey);
+
+const decodeToken = (token: string): any =>
+  jwt.verify(token, env.app.secretKey);
+
 export {
   generateAccessToken,
   generateRefreshToken,
   generateTokens,
   generateInviteToken,
+  generateGithubAccessToken,
+  decodeToken,
 };

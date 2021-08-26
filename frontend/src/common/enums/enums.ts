@@ -12,5 +12,6 @@ export { PageTitle } from './page-content/page-title';
 export { SocketEvents } from './socket/soket';
 export { InviteStatus } from './invite-status/invite-status';
 export { EntityType } from './entity-type/entity-type';
+export { TagType } from './tag-type';
 export { NotificationType } from './notification-type/notification-type';
 export { GeneralNotificationType } from './general-notification-type/general-notification-type';

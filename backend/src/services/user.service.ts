@@ -19,13 +19,14 @@ import { env } from '../env';
 import SkillRepository from '../data/repositories/skill.repository';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import ActivityRepository from '../data/repositories/activity.repository';
+import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar, title, skills } =
+  const { fullName, email, avatar, title, skills, links } =
     await userRepository.findById(id);
-
-  return { id, fullName, email, avatar, title, skills };
+  const mappedLinks = links.map((link) => mapLinkToILink(link));
+  return { id, fullName, email, avatar, title, skills, links: mappedLinks };
 };
 
 export const getInviteUserById = async (token: string): Promise<string> => {

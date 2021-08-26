@@ -44,6 +44,7 @@ const Activities: React.FC = () => {
           id="activity-filter"
           size="sm"
           variant="success"
+          className={styles.menu}
         >
           {FILTER_OPTIONS.map((option) => {
             return (
@@ -155,7 +156,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
       />
 
       <div className={styles.infoContainer}>
-        <span className={styles.fullName}>
+        <span className={styles.heading}>
           <b>{user.fullName}</b>
           {getMessage()}
           <b>{page.title}</b>
@@ -163,7 +164,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
         </span>
         <span className={styles.createdAt}>{getDate()}</span>
 
-        {page.content && (
+        {page.content.trim() && (
           <Card className={styles.contentContainer}>
             <Card.Body>
               <span className={styles.content}>
