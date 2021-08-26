@@ -1,16 +1,5 @@
 import { ToastContainer } from 'react-toastify';
-import {
-  useLocation,
-  useAppSelector,
-  useEffect,
-  useHistory,
-  useCookies,
-} from 'hooks/hooks';
-import {
-  AppRoute,
-  LocalStorageVariable,
-  CookieVariable,
-} from 'common/enums/enums';
+import { AppRoute } from 'common/enums/enums';
 import { ProtectedRoute, Route, Switch } from 'components/common/common';
 import {
   Login,
@@ -23,33 +12,9 @@ import {
 import Workspaces from 'components/workspaces/workspaces';
 import Main from 'components/main/main';
 import NotFound from 'components/not-found/not-found';
+import { SharedPage } from 'components/shared-page/shared-page';
 
 const App: React.FC = () => {
-  const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);
-  const { pathname } = useLocation();
-  const isAuth = ([AppRoute.LOGIN, AppRoute.SIGN_UP] as string[]).includes(
-    pathname,
-  );
-  const { isRefreshTokenExpired } = useAppSelector((state) => state.auth);
-  const history = useHistory();
-  const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
-
-  useEffect(() => {
-    if (token && isAuth) {
-      if (cookies[CookieVariable.WORKSPACE_ID]) {
-        history.push(AppRoute.ROOT);
-      } else {
-        history.push(AppRoute.WORKSPACES);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isRefreshTokenExpired) {
-      history.push(AppRoute.LOGIN);
-    }
-  }, [isRefreshTokenExpired]);
-
   return (
     <>
       <Switch>
@@ -59,6 +24,7 @@ const App: React.FC = () => {
         <Route path={AppRoute.INVITE} component={SignUpInvite} exact />
         <Route path={AppRoute.RESET_PASSWORD} component={ResetPassword} exact />
         <Route path={AppRoute.SET_PASSWORD} component={SetPassword} exact />
+        <Route path={AppRoute.SHARE} component={SharedPage} />
         <ProtectedRoute
           path={AppRoute.WORKSPACES}
           component={Workspaces}

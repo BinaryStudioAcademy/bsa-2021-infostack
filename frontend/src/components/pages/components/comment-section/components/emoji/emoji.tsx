@@ -46,12 +46,21 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
         ) !== -1
       );
 
+      const users = reactions
+        .filter((item) => {
+          return item.reaction === reaction;
+        })
+        .map((reaction) => {
+          return reaction.user?.fullName;
+        }) as string[];
+
       return {
         unified: reaction,
         emoji: String.fromCodePoint(...emoji),
         id: reaction,
         counter,
         isActive,
+        users,
       };
     });
 
@@ -93,15 +102,25 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
     <div className="emoji">
       {chosenEmoji && (
         <div className="emoji__container">
-          {chosenEmoji.map(({ id, emoji, counter, isActive }) => (
-            <div
-              className={`emoji__item ${isActive ? 'active' : ''}`}
+          {chosenEmoji.map(({ id, emoji, counter, isActive, users = [] }) => (
+            <OverlayTrigger
+              placement="top"
+              trigger={['hover', 'click']}
+              overlay={
+                <Tooltip id="users-tooltip" className="emoji__users">
+                  {users ? users.join(', ') : ''}
+                </Tooltip>
+              }
               key={id}
-              onClick={(event): void => onEmojiClick(event, { unified: id })}
             >
-              <span className="emoji__symbol">{emoji}</span>{' '}
-              <span className="emoji__counter">{counter}</span>
-            </div>
+              <div
+                className={`emoji__item ${isActive ? 'active' : ''}`}
+                onClick={(event): void => onEmojiClick(event, { unified: id })}
+              >
+                <span className="emoji__symbol">{emoji}</span>{' '}
+                <span className="emoji__counter">{counter}</span>
+              </div>
+            </OverlayTrigger>
           ))}
 
           <Dropdown
@@ -113,7 +132,7 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
             <OverlayTrigger
               placement="top"
               trigger={['hover', 'click']}
-              overlay={<Tooltip id="test">Add reaction...</Tooltip>}
+              overlay={<Tooltip id="reaction-tooltip">Add reaction...</Tooltip>}
             >
               <Dropdown.Toggle
                 onClick={(): void => setIsDropdownShown(!isDropdownShown)}

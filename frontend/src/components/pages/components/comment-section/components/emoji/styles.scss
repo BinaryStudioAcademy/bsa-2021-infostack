@@ -36,6 +36,13 @@
     font-size: 12px;
   }
 
+  &__users {
+    .tooltip-inner {
+      max-width: 500px;
+      margin: auto;
+    }
+  }
+
   .dropdown-menu {
     padding: 0;
     background: transparent;
