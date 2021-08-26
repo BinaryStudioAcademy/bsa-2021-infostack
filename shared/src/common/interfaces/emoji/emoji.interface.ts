@@ -3,6 +3,7 @@ interface IEmoji {
   emoji?: string;
   counter?: number;
   isActive?: boolean;
+  users?: string[];
 }
 
 export type { IEmoji };

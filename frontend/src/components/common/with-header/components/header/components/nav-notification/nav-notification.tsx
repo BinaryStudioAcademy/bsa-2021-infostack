@@ -113,6 +113,8 @@ export const NavNotification: React.FC = () => {
                       ? 'bi bi-chat-left'
                       : notification.type === EntityType.TEAM
                       ? 'bi bi-people'
+                      : notification.type === EntityType.PAGE
+                      ? 'bi bi-file-text-fill'
                       : 'bi bi-info-circle'
                   }
                   title={notification.title}

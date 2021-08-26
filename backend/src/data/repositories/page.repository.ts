@@ -54,6 +54,34 @@ class PageRepository extends Repository<Page> {
       .getOne();
   }
 
+  public findByIdWithContentsShared(id: string): Promise<Page> {
+    return this.createQueryBuilder('page')
+      .leftJoinAndSelect('page.pageContents', 'pageContents')
+      .where('page.id = :id', { id: id })
+      .orderBy('pageContents.createdAt', 'DESC')
+      .getOne();
+  }
+  public findWithLastContent(): Promise<Page[]> {
+    return this.createQueryBuilder('page')
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('MAX("content"."createdAt")', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = page.id',
+      )
+      .leftJoinAndSelect(
+        'page.pageContents',
+        'pageContents',
+        '"pageContents"."createdAt" = "last_version"."created_at"',
+      )
+      .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+      .getMany();
+  }
+
   public findByIdWithLastContent(id: string): Promise<Page> {
     return this.createQueryBuilder('page')
       .leftJoin(
@@ -112,6 +140,15 @@ class PageRepository extends Repository<Page> {
   public findByIdWithTags(id: string): Promise<Page> {
     return this.findOne(id, {
       relations: ['tags'],
+    });
+  }
+
+  public findByWorkspaceIdWithTagsAndFollowers(
+    workspaceId: string,
+  ): Promise<Page[] | []> {
+    return this.find({
+      relations: ['tags', 'followingUsers'],
+      where: { workspaceId },
     });
   }
 

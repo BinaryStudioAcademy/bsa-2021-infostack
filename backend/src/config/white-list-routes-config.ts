@@ -9,4 +9,8 @@ export default [
   '/auth/logout',
   '/auth/update-password-and-fullname',
   '/users/check-user-registration',
+  '/github/webhooks/pr',
+  '/github/webhooks/label',
+  '/pages/share/link',
+  '/pages/table-of-contents/share',
 ];

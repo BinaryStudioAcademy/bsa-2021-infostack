@@ -12,4 +12,5 @@ export { EntityType } from './entity-type';
 export { NotificationType } from './notification-type';
 export { GeneralNotificationType } from './general-notification-type';
 export { PageTitle } from './page-content';
-export * from './socket';
+export { TagType } from './tag-type';
+export { SocketEvents } from './socket';
