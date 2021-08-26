@@ -22,10 +22,12 @@ import {
   getTextPRMerged,
   getBodyPRMerged,
 } from '../common/utils/mail-text.util';
+import { isNotify } from '../common/helpers/is-notify.helper';
 import { sendMail } from '../common/utils/mailer.util';
 import { TagType } from '../common/enums/tag-type';
 import { HttpCode } from '../common/enums/http-code';
 import { EntityType } from '../common/enums/entity-type';
+import { NotificationType } from '../common/enums/notification-type';
 import { SocketEvents } from '../common/enums/socket';
 import { env } from '../env';
 
@@ -168,21 +170,28 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
       const body = getBodyPRMerged();
       for (const followingUser of followingUsers) {
         const { id, email } = followingUser;
-        io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
-        await notificationRepository.createAndSave(
-          title,
-          body,
-          EntityType.PAGE,
-          page.id,
-          id,
-          false,
-        );
 
-        await sendMail({
-          to: email,
-          subject: getSubjectPRMerged(),
-          text: getTextPRMerged(url),
-        });
+        const isNotifyPage = await isNotify(id, NotificationType.PAGE);
+        const isNotifyEmail = await isNotify(id, NotificationType.PAGE_EMAIL);
+        if (isNotifyPage) {
+          io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
+          await notificationRepository.createAndSave(
+            title,
+            body,
+            EntityType.PAGE,
+            page.id,
+            id,
+            false,
+          );
+        }
+
+        if (isNotifyEmail) {
+          await sendMail({
+            to: email,
+            subject: getSubjectPRMerged(),
+            text: getTextPRMerged(url),
+          });
+        }
       }
     }
   }

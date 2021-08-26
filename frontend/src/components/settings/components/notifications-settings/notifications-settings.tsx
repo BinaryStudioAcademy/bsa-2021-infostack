@@ -58,6 +58,12 @@ export const NotificationsSettings: React.FC = () => {
                 notificationTypeSystem={NotificationType.COMMENT}
                 notificationTypeEmail={NotificationType.COMMENT_EMAIL}
               />
+              <TableRow
+                heading="Page"
+                description="Receiving notifications about a possible need to update the page"
+                notificationTypeSystem={NotificationType.PAGE}
+                notificationTypeEmail={NotificationType.PAGE_EMAIL}
+              />
             </tbody>
           </Table>
         )}
