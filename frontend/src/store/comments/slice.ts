@@ -34,10 +34,12 @@ const addComment = (
   if (parentCommentId !== null) {
     const parent = state.entities[parentCommentId] as ICommentNormalized;
 
+    const children = parent.children?.filter((child) => child !== id) || [];
+
     commentsAdapter.updateOne(state, {
       id: parentCommentId,
       changes: {
-        children: [id, ...(parent.children || [])],
+        children: [id, ...(children || [])],
       },
     });
   }
