@@ -5,8 +5,8 @@ import { teamsActions } from 'store/actions';
 import { useState, useAppDispatch } from 'hooks/hooks';
 import { Popup } from '../popup-invite/popup-invite';
 import { getAllowedClasses } from 'helpers/helpers';
-import styles from './styles.module.scss';
 import { ConfirmModal } from 'components/common/common';
+import styles from './styles.module.scss';
 
 type Props = {
   team: ITeam;
@@ -96,6 +96,7 @@ export const DropDown: React.FC<Props> = ({ team }) => {
         }}
       />
       <Popup
+        owner={team.owner}
         teamId={team.id}
         teamUsers={team.users}
         query={team.name}
