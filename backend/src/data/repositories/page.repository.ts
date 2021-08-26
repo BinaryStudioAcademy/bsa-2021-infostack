@@ -1,6 +1,7 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
+import { User } from '../entities/user';
 
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
@@ -51,6 +52,27 @@ class PageRepository extends Repository<Page> {
       .where('page.id = :id', { id: id })
       .orderBy('pageContents.createdAt', 'DESC')
       .getOne();
+  }
+
+  public findWithLastContent(): Promise<Page[]> {
+    return this.createQueryBuilder('page')
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('MAX("content"."createdAt")', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = page.id',
+      )
+      .leftJoinAndSelect(
+        'page.pageContents',
+        'pageContents',
+        '"pageContents"."createdAt" = "last_version"."created_at"',
+      )
+      .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+      .getMany();
   }
 
   public findByIdWithLastContent(id: string): Promise<Page> {
@@ -140,6 +162,13 @@ class PageRepository extends Repository<Page> {
       .relation('followingUsers')
       .of(pageIds)
       .remove(userId);
+  }
+
+  public findFollowers(id: string): Promise<User[]> {
+    return this.createQueryBuilder()
+      .relation(Page, 'followingUsers')
+      .of(id)
+      .loadMany();
   }
 
   public deleteById(id: string): Promise<DeleteResult> {

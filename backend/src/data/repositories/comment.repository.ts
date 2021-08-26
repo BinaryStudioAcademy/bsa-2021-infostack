@@ -1,5 +1,6 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Comment } from '../entities/comment';
+import { User } from '../entities/user';
 
 @EntityRepository(Comment)
 class CommentRepository extends Repository<Comment> {
@@ -36,6 +37,13 @@ class CommentRepository extends Repository<Comment> {
       .leftJoinAndSelect('reactions.user', 'user')
       .select(this.SELECTION)
       .getOne();
+  }
+
+  public findAuthor(id: string): Promise<User> {
+    return this.createQueryBuilder()
+      .relation(Comment, 'author')
+      .of(id)
+      .loadOne();
   }
 
   public deleteById(id: string): Promise<DeleteResult> {

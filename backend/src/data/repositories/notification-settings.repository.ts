@@ -25,6 +25,16 @@ class NotificationSettingsRepository extends Repository<NotificationSettings> {
     });
   }
 
+  findByUserIdsAndType(
+    userIds: string[],
+    type: NotificationType,
+  ): Promise<NotificationSettings[]> {
+    return this.createQueryBuilder()
+      .where('"notificationType" = :type', { type })
+      .andWhere('"userId" IN (:...ids)', { ids: userIds })
+      .getMany();
+  }
+
   public deleteByUserIdAndNotificationType(
     userId: string,
     notificationType: NotificationType,

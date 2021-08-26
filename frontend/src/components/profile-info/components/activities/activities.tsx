@@ -39,7 +39,12 @@ const Activities: React.FC = () => {
       >
         <span>Activities</span>
 
-        <DropdownButton title={filter} id="activity-filter" size="sm">
+        <DropdownButton
+          title={filter}
+          id="activity-filter"
+          size="sm"
+          variant="success"
+        >
           {FILTER_OPTIONS.map((option) => {
             return (
               <Dropdown.Item
@@ -64,7 +69,11 @@ const Activities: React.FC = () => {
 
             {totalItems > activities.length && (
               <>
-                <Button className={styles.loadMore} onClick={loadMore}>
+                <Button
+                  variant="success"
+                  className={styles.loadMore}
+                  onClick={loadMore}
+                >
                   {isLoading ? 'Loading...' : 'Load more'}
                 </Button>
               </>
