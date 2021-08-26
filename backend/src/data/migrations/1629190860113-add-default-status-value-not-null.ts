@@ -17,7 +17,7 @@ export class addDefaultStatusValueNotNull1629190860113
       'ALTER TABLE "user_workspace" DROP COLUMN "status"',
     );
     await queryRunner.query(
-      "CREATE TYPE \"user_workspace_status_enum\" AS ENUM('Joined', 'Declined', 'Pending')",
+      'CREATE TYPE "user_workspace_status_enum" AS ENUM(\'Joined\', \'Declined\', \'Pending\')',
     );
     await queryRunner.query(
       'ALTER TABLE "user_workspace" ADD "status" "user_workspace_status_enum"',

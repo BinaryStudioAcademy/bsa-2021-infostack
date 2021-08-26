@@ -18,14 +18,27 @@ import { IPaginated } from '../common/interfaces/common';
 import { env } from '../env';
 import SkillRepository from '../data/repositories/skill.repository';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
-import { mapUserToIUser } from '../common/mappers/user/map-user-to-iuser';
 import ActivityRepository from '../data/repositories/activity.repository';
+import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(id);
-
-  return mapUserToIUser(user);
+  const { fullName, email, avatar, title, skills, links, followingPages } =
+    await userRepository.findById(id);
+  const mappedLinks = links.map((link) => mapLinkToILink(link));
+  const mappedFollowingPages = followingPages?.map((page) =>
+    mapPageToIPage(page),
+  );
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    links: mappedLinks,
+    followingPages: mappedFollowingPages,
+  };
 };
 
 export const getInviteUserById = async (token: string): Promise<string> => {

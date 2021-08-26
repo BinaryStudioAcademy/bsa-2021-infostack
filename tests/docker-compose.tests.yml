@@ -1,0 +1,72 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: infostack_test
+
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data:rw
+
+  elasticsearch:
+    image: elasticsearch:7.14.0
+    container_name: elasticsearch
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - cluster.name=infostack
+    ports:
+      - 9200:9200
+      - 9300:9300
+    mem_limit: 2g
+  backend:
+    image: backend:latest
+    container_name: backend
+    environment:
+      PORT: 3001
+      SOCKET_PORT: 3002
+      APP_SECRET: secret_key
+      APP_URL: http://localhost:3000
+      TYPEORM_CONNECTION: postgres
+      TYPEORM_HOST: db
+      TYPEORM_PORT: 5432
+      TYPEORM_USERNAME: postgres
+      TYPEORM_PASSWORD: postgres
+      TYPEORM_DATABASE: infostack_test
+      TYPEORM_LOGGING: 'false'
+      TYPEORM_SYNCHRONIZE: 'false'
+      TYPEORM_MIGRATIONS_RUN: 'true'
+      TYPEORM_MIGRATIONS: src/data/migrations/*.ts
+      TYPEORM_MIGRATIONS_DIR: src/data/migrations/
+      TYPEORM_ENTITIES: src/data/entities/**/*.ts
+      AWS_BUCKET_NAME: fake
+      AWS_ACCESS_KEY: fake
+      AWS_SECRET_KEY: fake
+      MAILER_SERVICE: Gmail
+      MAILER_AUTH_USER: user@gmail.com
+      MAILER_AUTH_CLIENT_ID: fake
+      MAILER_AUTH_CLIENT_SECRET: fake
+      MAILER_AUTH_REFRESH_TOKEN: fake
+      GOOGLE_CLIENT_ID: fake
+      GOOGLE_CLIENT_SECRET: fake
+      GOOGLE_REDIRECT_URL: fake
+      ELASTICSEARCH_NODE: http://elasticsearch:9200
+      ELASTICSEARCH_INDEX: infostack
+    ports:
+      - 3001:3001
+    depends_on:
+      - db
+      - elasticsearch
+
+volumes:
+  pg_data:
+    driver: local
+  elasticsearch-data:
+    driver: local

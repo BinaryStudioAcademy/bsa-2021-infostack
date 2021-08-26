@@ -63,16 +63,21 @@ export const ProfileSettings: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    setValue('fullName', userFullName);
+  }, [userFullName]);
+
+  useEffect(() => {
+    setValue('title', userTitle);
+  }, [userTitle]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IUserAccount>({
     resolver: yupResolver(accountInfoSchema),
-    defaultValues: {
-      fullName: user?.fullName,
-      title: user?.title,
-    },
   });
 
   const handleRemove = (): void => {

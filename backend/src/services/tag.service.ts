@@ -33,8 +33,8 @@ export const create = async (
     });
   }
   const tag = { name, workspaceId };
-  const { id } = await tagRepository.save(tag);
-  return { id, name };
+  const { id, type } = await tagRepository.save(tag);
+  return { id, name, type };
 };
 
 export const deleteById = async (id: string): Promise<void> => {

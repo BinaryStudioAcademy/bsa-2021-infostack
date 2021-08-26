@@ -1,23 +1,27 @@
 import { getCustomRepository } from 'typeorm';
-import UserRepository from '../data/repositories/user.repository';
+import { Server } from 'socket.io';
+import {
+  UserRepository,
+  UserWorkspaceRepository,
+  NotificationRepository,
+  WorkspaceRepository,
+  TeamPermissionRepository,
+  TeamRepository,
+} from '../data/repositories';
+import { User } from '../data/entities/user';
+import { Team } from '../data/entities/team';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
+import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
 import { mapTeamToITeamWithoutRoles } from '../common/mappers/team/map-team-to-iteam-without-roles';
-import TeamRepository from '../data/repositories/team.repository';
-import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import { HttpError } from '../common/errors/http-error';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
-import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import { sendMail } from '../common/utils/mailer.util';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
-import { Server } from 'socket.io';
-import { User } from '../data/entities/user';
-import NotificationRepository from '../data/repositories/notification.repository';
-import { Team } from '../data/entities/team';
-import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
-import WorkspaceRepository from '../data/repositories/workspace.repository';
+import { NotificationType } from '../common/enums/notification-type';
+import { HttpError } from '../common/errors/http-error';
+import { sendMail } from '../common/utils/mailer.util';
+import { isNotify } from '../common/helpers/is-notify.helper';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -30,7 +34,7 @@ export const getAllByWorkspaceId = async (
   return teamsWithUsersRoles;
 };
 
-export const getAllByUserId = async (
+export const getAllByUserIdAndWorkspaceId = async (
   userId: string,
   workspaceId: string,
 ): Promise<Team[]> => {
@@ -78,9 +82,10 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  const { id, name } = await teamRepository.save({
+  const { id, name, owner } = await teamRepository.save({
     workspaceId,
     name: team.name,
+    owner: userId,
   });
   const newTeamDetails = await teamRepository.findByNameInWorkspace(
     team.name,
@@ -105,8 +110,7 @@ export const create = async (
       roleInWorkspace: userWorkspace.role,
     },
   ];
-
-  return { id: id, name: name, users };
+  return { id: id, name: name, owner, users };
 };
 
 export const updateNameById = async (
@@ -143,6 +147,29 @@ export const updateNameById = async (
   return mapTeamToITeamWithoutRoles(team);
 };
 
+export const updateTeamRole = async (
+  teamId: string,
+  userId: string,
+  workspaceId: string,
+): Promise<ITeam> => {
+  if (!userId) {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.TEAM_EMPTY_STRING,
+    });
+  }
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teamToUpdate = await teamRepository.findByIdWithUsers(
+    teamId,
+    workspaceId,
+  );
+
+  teamToUpdate.owner = userId;
+  const team = await teamRepository.save(teamToUpdate);
+
+  return mapTeamToITeamWithoutRoles(team);
+};
+
 export const deleteById = async (
   id: string,
   workspaceId: string,
@@ -157,12 +184,12 @@ export const addUser = async (
   workspaceId: string,
   io: Server,
 ): Promise<ITeam[]> => {
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
+  const user = await getCustomRepository(UserRepository).findById(userId);
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
   const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findById(workspaceId);
 
   team.users.push(user);
   await teamRepository.save(team);
@@ -185,8 +212,9 @@ export const deleteUser = async (
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
   const user = await getCustomRepository(UserRepository).findById(userId);
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findById(workspaceId);
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
 
   team.users = team.users.filter((user) => user.id !== userId);
   await teamRepository.save(team);
@@ -209,19 +237,28 @@ export const notifyUser = async (
   const title = `You have been ${reason} team.`;
   const body = `You have been ${reason} team -- "${team.name}".`;
 
-  io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
-  await getCustomRepository(NotificationRepository).createAndSave(
-    body,
-    null,
-    EntityType.TEAM,
-    team.id,
+  const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
+  const isNotifyTeamEmail = await isNotify(
     user.id,
-    false,
+    NotificationType.TEAM_EMAIL,
   );
 
-  await sendMail({
-    to: user.email,
-    subject: title,
-    text: body,
-  });
+  if (isNotifyTeam) {
+    io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+    await getCustomRepository(NotificationRepository).createAndSave(
+      body,
+      null,
+      EntityType.TEAM,
+      team.id,
+      user.id,
+      false,
+    );
+  }
+  if (isNotifyTeamEmail) {
+    await sendMail({
+      to: user.email,
+      subject: title,
+      text: body,
+    });
+  }
 };

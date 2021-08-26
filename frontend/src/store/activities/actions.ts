@@ -10,6 +10,7 @@ const fetchActivities = createAsyncThunk(
   ActionType.FETCH_ACTIVITIES,
   async (_, { dispatch, getState }): Promise<void> => {
     dispatch(actions.toggleIsLoading());
+    dispatch(actions.setActivities([]));
 
     const state = getState() as RootState;
     const { user } = state.auth;

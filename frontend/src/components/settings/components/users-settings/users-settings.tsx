@@ -1,5 +1,6 @@
 import { Button, Card, Table } from 'react-bootstrap';
-import { TableHead, UserItem, DeleteUserModal } from './components/components';
+import { UserItem, DeleteUserModal } from './components/components';
+import { TableHead } from '../../shared/components/components';
 import {
   useEffect,
   useAppDispatch,

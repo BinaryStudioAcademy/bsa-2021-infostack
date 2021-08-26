@@ -9,6 +9,7 @@ enum ReducerName {
   TEAMS = 'teams',
   ACTIVITIES = 'activities',
   NOTIFICATIONS = 'notifications',
+  NOTIFICATIONS_SETTINGS = 'notificationsSettings',
   USERS = 'users',
   PARTICIPANTS = 'participants',
 }

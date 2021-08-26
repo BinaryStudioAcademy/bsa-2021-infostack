@@ -5,7 +5,7 @@
   "private": true,
   "main": "./src/server.ts",
   "scripts": {
-    "start": "node ./server.js",
+    "start": "node --max-old-space-size=1024 ./server.js",
     "start:dev": "ts-node-dev ./src/server.ts",
     "start:fast": "ts-node-dev --respawn --type-check --notify=false --clear ./src/server.ts",
     "lint:start": "nodemon -r ./src/server.ts --exec \"npm run linter && ts-node\"",
@@ -15,7 +15,9 @@
     "migrate": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:run",
     "migration-revert": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:revert",
     "generate-seed": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:create -d ./src/data/seeders -n",
-    "seed": "node_modules/.bin/ts-node ./src/data/seeders",
+    "seed": "node_modules/.bin/ts-node ./src/data/seeders && npm run seed:elastic",
+    "seed:elastic": "node_modules/.bin/ts-node ./src/elasticsearch/seeders/seeders",
+    "sync-elastic-with-db": "node_modules/.bin/ts-node ./src/elasticsearch/synchronizers/synchronizers",
     "build:ts": "tsc && tscpaths -p tsconfig.json --src . --out build",
     "build:copy": "cp -r public package.json package-lock.json build",
     "build": "npm run build:ts && npm run build:copy",
@@ -41,7 +43,10 @@
     "tscpaths": "0.0.9"
   },
   "dependencies": {
+    "@google-cloud/speech": "4.7.0",
+    "@elastic/elasticsearch": "7.13.0",
     "aws-sdk": "2.955.0",
+    "axios": "0.21.1",
     "cookie-parser": "1.4.5",
     "cors": "2.8.5",
     "crypto-random-string": "3.3.0",

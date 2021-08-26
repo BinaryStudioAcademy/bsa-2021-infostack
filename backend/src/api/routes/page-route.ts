@@ -23,8 +23,13 @@ import {
   updateContent,
   getTags,
   savePageTags,
+  createShareLink,
+  shareLinkByEmail,
+  getPageShared,
+  getTableOfContentsShared,
   getTableOfContentsByPageId,
   getTableOfContentsByPageIdAndVersionId,
+  searchPage,
   updateDraft,
   deleteDraft,
 } from '../../services/page.service';
@@ -32,10 +37,18 @@ import {
   getComments,
   addComment,
   deleteComment,
+  uploadAudioComment,
+  transcriptAudioComment,
 } from '../../services/comment.service';
 import { validationMiddleware } from '../middlewares';
+import { upload } from '../../common/helpers/multer.helper';
 
 const router: Router = Router();
+
+router.get(
+  '/search',
+  run((req) => searchPage(req.query.query, req.userId, req.workspaceId)),
+);
 
 router.post(
   '/',
@@ -162,6 +175,18 @@ router.get(
 );
 
 router.post(
+  '/:id/upload-audio-comments',
+  upload().single('audio'),
+  run((req) => uploadAudioComment(req.file)),
+);
+
+router.post(
+  '/transcript-comments',
+  upload().single('audio'),
+  run((req) => transcriptAudioComment(req.file)),
+);
+
+router.post(
   '/:id/draft',
   run((req) => updateDraft(req.params.id, req.userId, req.body)),
 );
@@ -169,6 +194,26 @@ router.post(
 router.delete(
   '/:id/draft',
   run((req) => deleteDraft(req.params.id)),
+);
+
+router.post(
+  '/share/:id',
+  run((req) => createShareLink(req.userId, req.body)),
+);
+
+router.post(
+  '/share-by-email',
+  run((req) => shareLinkByEmail(req.body, req.userId)),
+);
+
+router.get(
+  '/share/link',
+  run((req) => getPageShared(req.query.token)),
+);
+
+router.get(
+  '/table-of-contents/share',
+  run((req) => getTableOfContentsShared(req.query.token)),
 );
 
 export default router;

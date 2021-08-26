@@ -3,7 +3,7 @@ import { Team } from '../../../data/entities/team';
 
 export const mapTeamsToITeams = (teams: Team[]): ITeam[] => {
   const teamsWithRoles = teams.map((team) => {
-    const { id, name, users } = team;
+    const { id, name, users, owner } = team;
 
     const mappedUsers = users.map(
       ({ id, fullName, avatar, userWorkspaces }) => ({
@@ -13,7 +13,7 @@ export const mapTeamsToITeams = (teams: Team[]): ITeam[] => {
         roleInWorkspace: userWorkspaces[0].role,
       }),
     );
-    return { id, name, users: mappedUsers };
+    return { id, name, owner, users: mappedUsers };
   });
 
   return teamsWithRoles;

@@ -1,19 +1,22 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Comment } from '../entities/comment';
+import { User } from '../entities/user';
 
 @EntityRepository(Comment)
-export class CommentRepository extends Repository<Comment> {
+class CommentRepository extends Repository<Comment> {
   private readonly SELECTION = [
     'comment.id',
     'comment.createdAt',
     'comment.text',
     'comment.pageId',
     'comment.parentCommentId',
+    'comment.voiceRecord',
     'author.avatar',
     'author.id',
     'author.fullName',
     'author.email',
     'reactions',
+    'user.fullName',
   ];
 
   public findByPageId(pageId: string): Promise<Comment[]> {
@@ -21,6 +24,7 @@ export class CommentRepository extends Repository<Comment> {
       .where('comment.pageId = :pageId', { pageId })
       .innerJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('comment.reactions', 'reactions')
+      .leftJoinAndSelect('reactions.user', 'user')
       .select(this.SELECTION)
       .orderBy('comment.createdAt', 'DESC')
       .getMany();
@@ -31,8 +35,16 @@ export class CommentRepository extends Repository<Comment> {
       .where('comment.id = :id', { id })
       .innerJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('comment.reactions', 'reactions')
+      .leftJoinAndSelect('reactions.user', 'user')
       .select(this.SELECTION)
       .getOne();
+  }
+
+  public findAuthor(id: string): Promise<User> {
+    return this.createQueryBuilder()
+      .relation(Comment, 'author')
+      .of(id)
+      .loadOne();
   }
 
   public deleteById(id: string): Promise<DeleteResult> {
@@ -51,3 +63,5 @@ export class CommentRepository extends Repository<Comment> {
     );
   }
 }
+
+export default CommentRepository;

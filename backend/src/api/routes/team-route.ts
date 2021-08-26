@@ -2,12 +2,13 @@ import { Router } from 'express';
 import { run } from '../../common/helpers/route.helper';
 import {
   getAllByWorkspaceId,
-  getAllByUserId,
+  getAllByUserIdAndWorkspaceId,
   getTeam,
   create,
   updateNameById,
   deleteById,
   addUser,
+  updateTeamRole,
   deleteUser,
 } from '../../services/team.service';
 
@@ -26,7 +27,7 @@ router
 
   .get(
     '/users/:id',
-    run((req) => getAllByUserId(req.params.id, req.workspaceId)),
+    run((req) => getAllByUserIdAndWorkspaceId(req.params.id, req.workspaceId)),
   )
 
   .post(
@@ -37,6 +38,13 @@ router
   .put(
     '/:id',
     run((req) => updateNameById(req.params.id, req.body.name, req.workspaceId)),
+  )
+
+  .put(
+    '/:id/owner/:owner',
+    run((req) =>
+      updateTeamRole(req.params.id, req.params.owner, req.workspaceId),
+    ),
   )
 
   .delete(

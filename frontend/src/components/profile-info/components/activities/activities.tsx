@@ -9,14 +9,14 @@ import { activitiesActions } from 'store/activities';
 import { IUserActivity } from 'common/interfaces/user';
 import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import { FilterOption, FILTER_OPTIONS } from 'store/activities/slice';
-import { UserAvatar } from 'components/common/common';
+import { Spinner, UserAvatar } from 'components/common/common';
 import { AppRoute } from 'common/enums/enums';
 import styles from './styles.module.scss';
 import ReactMarkdown from 'react-markdown';
 
 const Activities: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { activities, filter, totalItems } = useAppSelector(
+  const { activities, filter, totalItems, isLoading } = useAppSelector(
     (state) => state.activities,
   );
 
@@ -39,12 +39,17 @@ const Activities: React.FC = () => {
       >
         <span>Activities</span>
 
-        <DropdownButton title={filter} id="activity-filter" size="sm">
+        <DropdownButton
+          title={filter}
+          id="activity-filter"
+          size="sm"
+          variant="success"
+          className={styles.menu}
+        >
           {FILTER_OPTIONS.map((option) => {
             return (
               <Dropdown.Item
                 key={option}
-                active={filter === option}
                 onClick={(): void => updateFilter(option)}
               >
                 {option}
@@ -55,14 +60,26 @@ const Activities: React.FC = () => {
       </Card.Title>
 
       <div className={styles.container}>
-        {activities.map((activity) => {
-          return <Activity key={activity.id} activity={activity} />;
-        })}
+        {isLoading && !activities.length ? (
+          <Spinner />
+        ) : (
+          <>
+            {activities.map((activity) => {
+              return <Activity key={activity.id} activity={activity} />;
+            })}
 
-        {totalItems > activities.length && (
-          <Button className={styles.loadMore} onClick={loadMore}>
-            Load more
-          </Button>
+            {totalItems > activities.length && (
+              <>
+                <Button
+                  variant="success"
+                  className={styles.loadMore}
+                  onClick={loadMore}
+                >
+                  {isLoading ? 'Loading...' : 'Load more'}
+                </Button>
+              </>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -139,7 +156,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
       />
 
       <div className={styles.infoContainer}>
-        <span className={styles.fullName}>
+        <span className={styles.heading}>
           <b>{user.fullName}</b>
           {getMessage()}
           <b>{page.title}</b>
@@ -147,7 +164,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
         </span>
         <span className={styles.createdAt}>{getDate()}</span>
 
-        {page.content && (
+        {page.content.trim() && (
           <Card className={styles.contentContainer}>
             <Card.Body>
               <span className={styles.content}>

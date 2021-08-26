@@ -108,15 +108,19 @@ export const NavNotification: React.FC = () => {
                 <NotificationItem
                   key={notification.id}
                   id={notification.id}
+                  type={notification.type}
                   icon={
                     notification.type === EntityType.COMMENT
                       ? 'bi bi-chat-left'
                       : notification.type === EntityType.TEAM
                       ? 'bi bi-people'
+                      : notification.type === EntityType.PAGE
+                      ? 'bi bi-file-text-fill'
                       : 'bi bi-info-circle'
                   }
                   title={notification.title}
                   subtitle={notification.subtitle}
+                  subtitleId={notification.subtitleId}
                   body={notification.body}
                   read={notification.read}
                   time={toDayJS(notification.createdAt).fromNow()}

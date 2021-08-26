@@ -19,6 +19,9 @@ export class Comment extends AbstractEntity {
   @Column()
   text: string;
 
+  @Column({ nullable: true })
+  voiceRecord: string;
+
   @RelationId((comment: Comment) => comment.author)
   @Column()
   readonly authorId: string;
@@ -42,7 +45,7 @@ export class Comment extends AbstractEntity {
   @TreeChildren()
   childComments: Comment[];
 
-  @TreeParent()
+  @TreeParent({ onDelete: 'CASCADE' })
   parentComment: Comment;
 
   @OneToMany(() => Reaction, (reaction) => reaction.comment)

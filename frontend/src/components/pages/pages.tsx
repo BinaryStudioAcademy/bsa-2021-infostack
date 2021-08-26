@@ -23,7 +23,7 @@ const Pages: React.FC = () => {
           <div
             className={getAllowedClasses(
               styles.welcomeText,
-              'd-flex flex-column align-items-center',
+              'd-flex flex-column align-items-center  text-center',
             )}
           >
             <h1 className="my-3">{`Welcome to ${currentWorkspace?.title}`}</h1>

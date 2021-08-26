@@ -1,6 +1,6 @@
 interface IUserAccount {
   fullName: string;
-  title: string;
+  title?: string;
 }
 
 export type { IUserAccount };
