@@ -156,7 +156,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
       />
 
       <div className={styles.infoContainer}>
-        <span className={styles.fullName}>
+        <span className={styles.heading}>
           <b>{user.fullName}</b>
           {getMessage()}
           <b>{page.title}</b>
