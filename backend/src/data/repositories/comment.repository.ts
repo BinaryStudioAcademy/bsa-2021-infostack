@@ -9,6 +9,7 @@ export class CommentRepository extends Repository<Comment> {
     'comment.text',
     'comment.pageId',
     'comment.parentCommentId',
+    'comment.voiceRecord',
     'author.avatar',
     'author.id',
     'author.fullName',

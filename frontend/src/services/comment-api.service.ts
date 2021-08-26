@@ -32,15 +32,27 @@ class CommentApi {
   }
 
   public uploadAudioComment(
-    pageId: string,
     file: File,
-    fileName: string,
-  ): Promise<void> {
+    pageId: string,
+  ): Promise<{ url: string }> {
     const fd = new FormData();
-    fd.append('audio', file, fileName);
+    fd.append('audio', file, file.name);
 
-    return this._httpService.load(`${this.BASE}/${pageId}/audio-comments`, {
-      method: HttpMethod.PUT,
+    return this._httpService.load(
+      `${this.BASE}/${pageId}/upload-audio-comments`,
+      {
+        method: HttpMethod.POST,
+        payload: fd,
+      },
+    );
+  }
+
+  public transcriptAudioComment(file: File): Promise<{ comment: string }> {
+    const fd = new FormData();
+    fd.append('audio', file, file.name);
+
+    return this._httpService.load(`${this.BASE}/transcript-comments`, {
+      method: HttpMethod.POST,
       payload: fd,
     });
   }

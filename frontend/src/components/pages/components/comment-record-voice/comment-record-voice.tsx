@@ -1,7 +1,6 @@
 import { getAllowedClasses } from 'helpers/helpers';
 import { useState } from 'hooks/hooks';
 import { Button, Modal, Spinner } from 'react-bootstrap';
-import { commentApi } from 'services';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import styles from './styles.module.scss';
@@ -12,16 +11,16 @@ import { useEffect } from 'react';
 type ModalProps = {
   show: boolean;
   onHide: () => void;
-  pageid: string;
-  parentcommentid?: string;
+  completerecord: (file: File) => void;
 };
 
 const RecordModal: React.FC<ModalProps> = (modalProps) => {
-  const { onHide, pageid } = modalProps;
+  const { onHide, completerecord } = modalProps;
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleteRecord, setIsCompleteRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState('');
+  const [audioFile, setAudioFile] = useState<File>();
   const [
     timeLeft,
     {
@@ -33,6 +32,11 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
   ] = useCountDown(5000, 1000);
   const stopButton = useRef<HTMLButtonElement>(null);
   const pauseButton = useRef<HTMLButtonElement>(null);
+
+  const onPublish = (): void => {
+    completerecord(audioFile as File);
+    onCancel();
+  };
 
   useEffect(() => {
     if (timeLeft <= 1000) {
@@ -53,10 +57,8 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
 
     mediaRecorder.addEventListener('stop', function () {
       const url = URL.createObjectURL(new Blob(recordedChunks));
-      setAudioUrl(url);
-      setIsCompleteRecord(true);
 
-      const audioFile = new File(
+      const recordFile = new File(
         recordedChunks,
         `${new Date().toString()}.webm`,
         {
@@ -64,17 +66,15 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
         },
       );
 
+      setAudioUrl(url);
+      setIsCompleteRecord(true);
+      setAudioFile(recordFile);
+
       stream.getTracks().forEach((track) => track.stop());
-      commentApi
-        .uploadAudioComment(pageid, audioFile, audioFile.name)
-        .then((res) => {
-          console.log(res);
-        });
     });
 
     stopButton.current &&
-      stopButton.current.addEventListener('click', function () {
-        console.log('STOPRECORD');
+      stopButton.current.addEventListener('click', () => {
         mediaRecorder.stop();
         setIsPaused(false);
         setIsRecording(false);
@@ -82,16 +82,14 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
       });
 
     pauseButton.current &&
-      pauseButton.current.addEventListener('click', function () {
+      pauseButton.current.addEventListener('click', () => {
         if (mediaRecorder.state === 'recording') {
           pauseTimer();
           mediaRecorder.pause();
           setIsPaused(true);
-          console.log('PAUSERECORD');
         } else if (mediaRecorder.state === 'paused') {
           resumeTimer();
           mediaRecorder.resume();
-          console.log('RESUMERECORD');
           setIsPaused(false);
         }
       });
@@ -164,26 +162,16 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
         )}
         {isRecording && (
           <>
-            <Button
-              id="stopRecord"
-              ref={stopButton}
-              className={styles.text}
-              variant="success"
-            >
+            <Button ref={stopButton} className={styles.text} variant="success">
               ⏹Stop
             </Button>
-            <Button
-              id="pauseRecord"
-              ref={pauseButton}
-              className={styles.text}
-              variant="success"
-            >
+            <Button ref={pauseButton} className={styles.text} variant="success">
               {!isPaused ? '⏸Pause' : '⏺Resume record'}
             </Button>
           </>
         )}
         {isCompleteRecord && (
-          <Button id="publishRecord" className={styles.text} variant="success">
+          <Button onClick={onPublish} className={styles.text} variant="success">
             Publish record
           </Button>
         )}
@@ -193,11 +181,10 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
 };
 
 type Props = {
-  pageId: string;
-  parentCommentId?: string;
+  handleRecord: (file: File) => void;
 };
 
-export const RecordVoice: React.FC<Props> = ({ pageId, parentCommentId }) => {
+export const RecordVoice: React.FC<Props> = ({ handleRecord }) => {
   const [modalShow, setModalShow] = useState(false);
 
   return (
@@ -208,13 +195,13 @@ export const RecordVoice: React.FC<Props> = ({ pageId, parentCommentId }) => {
           'bi bi-mic',
           'btn btn-success',
           styles.mic,
+          'ms-2',
         )}
       >
         Record voice
       </i>
       <RecordModal
-        pageid={pageId}
-        parentcommentid={parentCommentId}
+        completerecord={handleRecord}
         show={modalShow}
         onHide={(): void => setModalShow(false)}
       />

@@ -7,6 +7,7 @@ import { commentsActions } from 'store/comments';
 import styles from './styles.module.scss';
 import { toast } from 'react-toastify';
 import { RecordVoice } from '../comment-record-voice/comment-record-voice';
+import { commentApi } from 'services';
 
 type Props = {
   pageId: string;
@@ -31,23 +32,50 @@ export const CommentForm: React.FC<Props> = ({
     (state) => state.comments,
   );
   const dispatch = useAppDispatch();
+  const [rawAudio, setRawAudio] = useState<File>();
+  const [realAudioUrl, setRealAudioUrl] = useState<string>();
 
   const handleChange = ({
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>): void => setText(value);
 
   const handleSubmit = async (): Promise<void> => {
-    try {
-      await dispatch(
-        commentsActions.createComment({
-          pageId,
-          payload: { text, parentCommentId },
-        }),
-      ).unwrap();
-      setText('');
-      onSubmit?.();
-    } catch {
-      toast.error('Could not add comment');
+    if (rawAudio) {
+      try {
+        await commentApi
+          .uploadAudioComment(rawAudio, pageId)
+          .then((res) => res.url)
+          .then((url) => {
+            dispatch(
+              commentsActions.createComment({
+                pageId,
+                payload: { text, parentCommentId, voiceRecord: url },
+              }),
+            ).unwrap();
+          });
+
+        setText('');
+        setRawAudio(undefined);
+        setRealAudioUrl(undefined);
+        onSubmit?.();
+      } catch {
+        toast.error('Could not upload audio');
+      }
+    } else {
+      try {
+        await dispatch(
+          commentsActions.createComment({
+            pageId,
+            payload: { text, parentCommentId, voiceRecord: realAudioUrl },
+          }),
+        ).unwrap();
+        setText('');
+        setRawAudio(undefined);
+        setRealAudioUrl(undefined);
+        onSubmit?.();
+      } catch {
+        toast.error('Could not add comment');
+      }
     }
   };
 
@@ -62,6 +90,13 @@ export const CommentForm: React.FC<Props> = ({
     deleteStatus === RequestStatus.LOADING;
   const isCancelDisabled = createStatus === RequestStatus.LOADING;
   const isFieldDisabled = isCancelDisabled;
+
+  const completeRecord = (audioFile: File): void => {
+    setRawAudio(audioFile);
+    commentApi.transcriptAudioComment(audioFile).then((res) => {
+      setText(res.comment);
+    });
+  };
 
   return (
     <>
@@ -100,7 +135,7 @@ export const CommentForm: React.FC<Props> = ({
               >
                 Submit
               </Button>
-              <RecordVoice pageId={pageId} />
+              <RecordVoice handleRecord={completeRecord} />
             </div>
           </div>
         </Form.Group>

@@ -115,7 +115,7 @@ export const notifyUsers = async (
 export const addComment = async (
   userId: string,
   pageId: string,
-  { text, parentCommentId }: ICommentRequest,
+  { text, parentCommentId, voiceRecord }: ICommentRequest,
   io: Server,
 ): Promise<IComment> => {
   const commentRepository = getCustomRepository(CommentRepository);
@@ -138,6 +138,7 @@ export const addComment = async (
     pageId,
     text,
     parentCommentId,
+    voiceRecord,
   });
 
   const comment = await commentRepository.findById(id);
@@ -209,13 +210,19 @@ export const getAllCommentReactions = async (
 
 export const uploadAudioComment = async (
   file: Express.Multer.File,
-): Promise<any> => {
+): Promise<{ url: string }> => {
   const uploadedFile = await uploadFile(file);
-  const comment = await transcriptAudio(file);
   const { Location } = uploadedFile;
   unlinkFile(file.path);
-  console.log(Location);
-  console.log(comment);
 
-  return { location: Location, comment };
+  return { url: Location };
+};
+
+export const transcriptAudioComment = async (
+  file: Express.Multer.File,
+): Promise<{ comment: string }> => {
+  const comment = await transcriptAudio(file);
+  unlinkFile(file.path);
+
+  return { comment };
 };

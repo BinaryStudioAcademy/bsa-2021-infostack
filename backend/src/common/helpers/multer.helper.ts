@@ -16,7 +16,6 @@ const fileFilter = (
   ) {
     cb(null, true);
   } else {
-    console.log(file.mimetype);
     cb(new Error('Invalid file type, only jpg, png and gif allowed'), false);
   }
 };

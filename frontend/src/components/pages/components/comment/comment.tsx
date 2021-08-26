@@ -1,4 +1,5 @@
 import { ListGroup } from 'react-bootstrap';
+import AudioPlayer from 'react-h5-audio-player';
 import { useState, useHistory, useAppSelector } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
 import { AppRoute } from 'common/enums/enums';
@@ -27,6 +28,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
     children,
     createdAt,
     author: { id: authorId, fullName: name, avatar },
+    voiceRecord,
     reactions,
   } = comment;
 
@@ -61,6 +63,14 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
           <TimeAgo timestamp={createdAt} />
         </span>
         <div className={styles.text}>{text}</div>
+        {voiceRecord && (
+          <AudioPlayer
+            src={voiceRecord as string}
+            layout="horizontal-reverse"
+            customAdditionalControls={[]}
+            showJumpControls={false}
+          />
+        )}
         <Emoji reactions={reactions} commentId={id} />
         <div className={styles.actions}>
           <a className={styles.action} onClick={toggleField}>

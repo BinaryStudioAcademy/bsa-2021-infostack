@@ -31,6 +31,7 @@ import {
   addComment,
   deleteComment,
   uploadAudioComment,
+  transcriptAudioComment,
 } from '../../services/comment.service';
 import { validationMiddleware } from '../middlewares';
 import { upload } from '../../common/helpers/multer.helper';
@@ -161,10 +162,16 @@ router.get(
   ),
 );
 
-router.put(
-  '/:id/audio-comments',
+router.post(
+  '/:id/upload-audio-comments',
   upload().single('audio'),
   run((req) => uploadAudioComment(req.file)),
+);
+
+router.post(
+  '/transcript-comments',
+  upload().single('audio'),
+  run((req) => transcriptAudioComment(req.file)),
 );
 
 export default router;
