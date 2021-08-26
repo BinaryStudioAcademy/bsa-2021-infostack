@@ -108,6 +108,7 @@ const RecordModal: React.FC<Props> = (props) => {
 
   const onPublish = (): void => {
     completerecord(audioFile as File);
+    URL.revokeObjectURL(audioUrl);
     onCancel();
   };
 
