@@ -14,7 +14,6 @@ import { getAllowedClasses } from 'helpers/helpers';
 import { commentsActions } from 'store/comments';
 
 import styles from './styles.module.scss';
-import { toast } from 'react-toastify';
 import { RecordVoice } from '../comment-record-voice/comment-record-voice';
 import { commentApi } from 'services';
 
@@ -139,7 +138,7 @@ export const CommentForm: React.FC<Props> = ({
     setRawAudio(audioFile);
     commentApi.transcriptAudioComment(audioFile).then((res) => {
       setFormState({
-        text: '',
+        text: res.comment,
         mentions: [],
       });
     });

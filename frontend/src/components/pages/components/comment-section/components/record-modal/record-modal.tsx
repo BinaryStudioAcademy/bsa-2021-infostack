@@ -1,26 +1,26 @@
-import { getAllowedClasses } from 'helpers/helpers';
-import { useState } from 'hooks/hooks';
 import { Button, Modal, Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
-import styles from './styles.module.scss';
 import useCountDown from 'react-countdown-hook';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import 'react-h5-audio-player/lib/styles.css';
+import { useState, useRef, useEffect } from 'hooks/hooks';
+import styles from './styles.module.scss';
 
-type ModalProps = {
+type Props = {
   show: boolean;
-  onHide: () => void;
+  hide: () => void;
   completerecord: (file: File) => void;
 };
 
-const RecordModal: React.FC<ModalProps> = (modalProps) => {
-  const { onHide, completerecord } = modalProps;
+const RecordModal: React.FC<Props> = (props) => {
+  const { hide, completerecord, show } = props;
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleteRecord, setIsCompleteRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState('');
   const [audioFile, setAudioFile] = useState<File>();
+  const stopButton = useRef<HTMLButtonElement>(null);
+  const pauseButton = useRef<HTMLButtonElement>(null);
   const [
     timeLeft,
     {
@@ -29,20 +29,24 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
       resume: resumeTimer,
       reset: resetTimer,
     },
-  ] = useCountDown(5000, 1000);
-  const stopButton = useRef<HTMLButtonElement>(null);
-  const pauseButton = useRef<HTMLButtonElement>(null);
+  ] = useCountDown(60000, 1000);
 
-  const onPublish = (): void => {
-    completerecord(audioFile as File);
-    onCancel();
+  const onStartRecord = (): void => {
+    setIsRecording(true);
+    setIsCompleteRecord(false);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: false })
+      .then(handleSuccess)
+      .catch(() => {
+        navigator.permissions.query({ name: 'microphone' }).then((result) => {
+          if (result.state == 'granted') {
+            toast.error('Could not start record');
+          }
+
+          toast.error('You must enable audio recording');
+        });
+      });
   };
-
-  useEffect(() => {
-    if (timeLeft <= 1000) {
-      stopButton.current && stopButton.current.click();
-    }
-  }, [timeLeft]);
 
   const handleSuccess = (stream: MediaStream): void => {
     const options = { mimeType: 'audio/webm; codecs=opus' };
@@ -51,13 +55,11 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
 
     mediaRecorder.addEventListener('dataavailable', function (e) {
       if (typeof e.data === 'undefined' || e.data.size === 0) return;
-
       recordedChunks.push(e.data);
     });
 
     mediaRecorder.addEventListener('stop', function () {
       const url = URL.createObjectURL(new Blob(recordedChunks));
-
       const recordFile = new File(
         recordedChunks,
         `${new Date().toString()}.webm`,
@@ -67,7 +69,7 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
       );
 
       setAudioUrl(url);
-      setIsCompleteRecord(true);
+      show && setIsCompleteRecord(true);
       setAudioFile(recordFile);
 
       stream.getTracks().forEach((track) => track.stop());
@@ -98,25 +100,27 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
     startTimer();
   };
 
-  const onStartRecord = (): void => {
-    setIsRecording(true);
-    setIsCompleteRecord(false);
-    navigator.mediaDevices
-      .getUserMedia({ audio: true, video: false })
-      .then(handleSuccess);
-  };
-
   const onCancel = (): void => {
-    setIsPaused(false);
-    setIsRecording(false);
+    hide();
+    stopButton?.current?.click();
     setIsCompleteRecord(false);
-
-    onHide();
   };
+
+  const onPublish = (): void => {
+    completerecord(audioFile as File);
+    onCancel();
+  };
+
+  useEffect(() => {
+    if (timeLeft <= 1000) {
+      stopButton.current && stopButton.current.click();
+    }
+  }, [timeLeft]);
 
   return (
     <Modal
-      {...modalProps}
+      {...props}
+      onHide={onCancel}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -132,6 +136,7 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
             src={audioUrl}
             autoPlayAfterSrcChange={false}
             customAdditionalControls={[]}
+            defaultDuration="Loading..."
           />
         )}
         {isRecording && (
@@ -157,16 +162,16 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
             className={styles.text}
             variant="success"
           >
-            🔴Start
+            🔴 Start
           </Button>
         )}
         {isRecording && (
           <>
             <Button ref={stopButton} className={styles.text} variant="success">
-              ⏹Stop
+              ⏹ Stop
             </Button>
             <Button ref={pauseButton} className={styles.text} variant="success">
-              {!isPaused ? '⏸Pause' : '⏺Resume record'}
+              {!isPaused ? '⏸ Pause' : '⏺ Resume record'}
             </Button>
           </>
         )}
@@ -180,31 +185,4 @@ const RecordModal: React.FC<ModalProps> = (modalProps) => {
   );
 };
 
-type Props = {
-  handleRecord: (file: File) => void;
-};
-
-export const RecordVoice: React.FC<Props> = ({ handleRecord }) => {
-  const [modalShow, setModalShow] = useState(false);
-
-  return (
-    <>
-      <i
-        onClick={(): void => setModalShow(true)}
-        className={getAllowedClasses(
-          'bi bi-mic',
-          'btn btn-success',
-          styles.mic,
-          'ms-2',
-        )}
-      >
-        Record voice
-      </i>
-      <RecordModal
-        completerecord={handleRecord}
-        show={modalShow}
-        onHide={(): void => setModalShow(false)}
-      />
-    </>
-  );
-};
+export default RecordModal;
