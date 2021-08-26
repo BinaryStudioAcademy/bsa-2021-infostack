@@ -34,6 +34,14 @@ class TeamApi {
     });
   }
 
+  public updateTeamOwner(payload: ITeamEditing): Promise<ITeam> {
+    return this.http.load(`${this.BASE}/${payload.id}/owner/${payload.owner}`, {
+      method: HttpMethod.PUT,
+      payload: JSON.stringify(payload),
+      contentType: ContentType.JSON,
+    });
+  }
+
   public async deleteTeam(payload: string): Promise<void> {
     return this.http.load(`${this.BASE}/${payload}`, {
       method: HttpMethod.DELETE,

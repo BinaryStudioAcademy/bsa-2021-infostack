@@ -4,6 +4,7 @@ interface INotification {
   id: string;
   title: string;
   subtitle?: string;
+  subtitleId?: string;
   body?: string;
   type: EntityType;
   read: boolean;

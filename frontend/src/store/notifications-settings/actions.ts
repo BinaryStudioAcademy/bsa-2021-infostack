@@ -24,7 +24,7 @@ const createNotificationSetting = createAsyncThunk(
 );
 
 const deleteNotificationSetting = createAsyncThunk(
-  ActionType.CREATE_NOTIFICATION_SETTING,
+  ActionType.DELETE_NOTIFICATION_SETTING,
   async (notificationType: NotificationType, { dispatch }) => {
     await notificationSettingsApi.deleteNotificationSettings(notificationType);
 

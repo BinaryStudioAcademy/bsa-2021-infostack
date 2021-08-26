@@ -1,15 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  isFulfilled,
+  isPending,
+  isRejected,
+  PayloadAction,
+  isAnyOf,
+} from '@reduxjs/toolkit';
 import { ReducerName } from 'common/enums/app/reducer-name.enum';
 import { ActionType } from './common';
 
 type State = {
   disabledNotificationTypes: string[];
   isLoading: boolean;
+  isPending: boolean;
 };
 
 const initialState: State = {
   disabledNotificationTypes: [],
   isLoading: true,
+  isPending: false,
 };
 
 export const { reducer, actions } = createSlice({
@@ -37,5 +46,14 @@ export const { reducer, actions } = createSlice({
         (item) => item !== action.payload,
       );
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(isPending, (state) => {
+        state.isPending = true;
+      })
+      .addMatcher(isAnyOf(isFulfilled, isRejected), (state) => {
+        state.isPending = false;
+      });
   },
 });
