@@ -5,6 +5,7 @@ import { teamsActions } from 'store/actions';
 import { useState, useAppDispatch } from 'hooks/hooks';
 import { Popup } from '../popup-invite/popup-invite';
 import { getAllowedClasses } from 'helpers/helpers';
+import { ConfirmModal } from 'components/common/common';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -15,6 +16,7 @@ export const DropDown: React.FC<Props> = ({ team }) => {
   const dispatch = useAppDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [showDeleteTeamModal, setshowDeleteTeamModal] = useState(false);
 
   const onEditTeamButtonClick = (): void => {
     setIsModalVisible(true);
@@ -63,11 +65,11 @@ export const DropDown: React.FC<Props> = ({ team }) => {
             className={getAllowedClasses(styles.teamSettingsItem)}
             onClick={showInvitePopup}
           >
-            Invite user
+            Manage users
           </Dropdown.Item>
           <Dropdown.Item
             className={getAllowedClasses(styles.teamSettingsItem)}
-            onClick={handleDeleting}
+            onClick={(): void => setshowDeleteTeamModal(true)}
           >
             Delete
           </Dropdown.Item>
@@ -79,7 +81,22 @@ export const DropDown: React.FC<Props> = ({ team }) => {
         onModalClose={handleEditingCancel}
         inputValue={team.name}
       />
+      <ConfirmModal
+        title="Delete confirmation"
+        showModal={showDeleteTeamModal}
+        modalText={`Are you sure you want to delete team ${team.name}?`}
+        confirmButton={{
+          text: 'Yes',
+          onClick: handleDeleting,
+          variant: 'danger',
+        }}
+        cancelButton={{
+          text: 'No',
+          onClick: (): void => setshowDeleteTeamModal(false),
+        }}
+      />
       <Popup
+        owner={team.owner}
         teamId={team.id}
         teamUsers={team.users}
         query={team.name}

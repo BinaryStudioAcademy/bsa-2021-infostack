@@ -34,7 +34,7 @@ export const getAllByWorkspaceId = async (
   return teamsWithUsersRoles;
 };
 
-export const getAllByUserId = async (
+export const getAllByUserIdAndWorkspaceId = async (
   userId: string,
   workspaceId: string,
 ): Promise<Team[]> => {
@@ -82,9 +82,10 @@ export const create = async (
     });
   }
   const team = teamRepository.create(newTeam);
-  const { id, name } = await teamRepository.save({
+  const { id, name, owner } = await teamRepository.save({
     workspaceId,
     name: team.name,
+    owner: userId,
   });
   const newTeamDetails = await teamRepository.findByNameInWorkspace(
     team.name,
@@ -109,8 +110,7 @@ export const create = async (
       roleInWorkspace: userWorkspace.role,
     },
   ];
-
-  return { id: id, name: name, users };
+  return { id: id, name: name, owner, users };
 };
 
 export const updateNameById = async (
@@ -147,6 +147,29 @@ export const updateNameById = async (
   return mapTeamToITeamWithoutRoles(team);
 };
 
+export const updateTeamRole = async (
+  teamId: string,
+  userId: string,
+  workspaceId: string,
+): Promise<ITeam> => {
+  if (!userId) {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.TEAM_EMPTY_STRING,
+    });
+  }
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teamToUpdate = await teamRepository.findByIdWithUsers(
+    teamId,
+    workspaceId,
+  );
+
+  teamToUpdate.owner = userId;
+  const team = await teamRepository.save(teamToUpdate);
+
+  return mapTeamToITeamWithoutRoles(team);
+};
+
 export const deleteById = async (
   id: string,
   workspaceId: string,
@@ -161,12 +184,12 @@ export const addUser = async (
   workspaceId: string,
   io: Server,
 ): Promise<ITeam[]> => {
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findById(userId);
   const teamRepository = getCustomRepository(TeamRepository);
+  const user = await getCustomRepository(UserRepository).findById(userId);
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
   const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findById(workspaceId);
 
   team.users.push(user);
   await teamRepository.save(team);
@@ -189,8 +212,9 @@ export const deleteUser = async (
   const teamRepository = getCustomRepository(TeamRepository);
   const team = await teamRepository.findByIdWithUsers(teamId, workspaceId);
   const user = await getCustomRepository(UserRepository).findById(userId);
-  const workspaceRepository = getCustomRepository(WorkspaceRepository);
-  const workspace = await workspaceRepository.findById(workspaceId);
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
 
   team.users = team.users.filter((user) => user.id !== userId);
   await teamRepository.save(team);
