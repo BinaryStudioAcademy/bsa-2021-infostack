@@ -164,7 +164,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
         </span>
         <span className={styles.createdAt}>{getDate()}</span>
 
-        {page.content && (
+        {page.content.trim() && (
           <Card className={styles.contentContainer}>
             <Card.Body>
               <span className={styles.content}>
