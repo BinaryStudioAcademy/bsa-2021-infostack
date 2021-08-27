@@ -29,14 +29,16 @@ export const mapPageToIPage = (page: Page): IPage => {
     };
   });
 
-  const mappedPinnedUsers = pinnedUsers?.map((user) => {
-    return {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      avatar: user.avatar,
-    };
-  });
+  const mappedPinnedUsers = pinnedUsers?.map(
+    ({ id, fullName, email, avatar }) => {
+      return {
+        id,
+        fullName,
+        email,
+        avatar,
+      };
+    },
+  );
 
   const mappedDraft = {
     id: draft?.id,
