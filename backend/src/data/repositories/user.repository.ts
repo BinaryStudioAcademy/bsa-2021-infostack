@@ -33,6 +33,10 @@ class UserRepository extends Repository<User> {
       .getOne();
   }
 
+  public findUsersByIds(ids: string[]): Promise<User[]> {
+    return this.findByIds(ids);
+  }
+
   public findUserTeams(userId: string): Promise<User> {
     return this.findOne({ relations: ['teams'], where: { id: userId } });
   }
