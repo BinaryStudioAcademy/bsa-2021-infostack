@@ -44,6 +44,14 @@ const getPagesAsync = createAsyncThunk(
   },
 );
 
+const getPinnedPagesAsync = createAsyncThunk(
+  ActionType.SET_PINNED_PAGES,
+  async (payload: undefined, { dispatch }) => {
+    const response = await pageApi.getPinnedPages();
+    dispatch(actions.setPinnedPages(response));
+  },
+);
+
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (pageId: string | undefined, { dispatch }) => {
@@ -133,6 +141,24 @@ const unfollowPage = createAsyncThunk<
   },
 );
 
+const pinPage = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (pageId: string, { dispatch }) => {
+    await pageApi.pinPage(pageId);
+    const response = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(response));
+  },
+);
+
+const unpinPage = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (pageId: string, { dispatch }) => {
+    await pageApi.unpinPage(pageId);
+    const response = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(response));
+  },
+);
+
 const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
@@ -177,11 +203,14 @@ const pagesActions = {
   deletePage,
   createVersionPage,
   getPagesAsync,
+  getPinnedPagesAsync,
   getPage,
   setPage,
   editPageContent,
   followPage,
   unfollowPage,
+  pinPage,
+  unpinPage,
   getPageShared,
   editDraft,
   deleteDraft,
