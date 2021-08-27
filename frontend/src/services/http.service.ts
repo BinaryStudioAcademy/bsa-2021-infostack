@@ -1,5 +1,4 @@
 import EventEmitter from 'events';
-import { store } from 'store/store';
 import { HttpError } from 'exceptions/exceptions';
 import {
   ContentType,
@@ -10,7 +9,6 @@ import {
   EmitterEvents,
 } from 'common/enums/enums';
 import { HttpOptions } from 'common/types/types';
-import { authActions } from 'store/auth';
 
 class Http {
   private areTokensRefreshing;
@@ -63,6 +61,11 @@ class Http {
 
       if (response.status === HttpCode.NO_CONTENT) {
         return null as unknown as T;
+      }
+
+      const resContentType = response.headers.get('content-type');
+      if (resContentType && resContentType.includes(ContentType.TEXT)) {
+        return response.text() as unknown as T;
       }
 
       return this.parseJSON<T>(response);
@@ -147,7 +150,7 @@ class Http {
         if (error.status === HttpCode.UNAUTHORIZED) {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
-          store.dispatch(authActions.toggleIsRefreshTokenExpired());
+          window.location.href = '/';
         }
         this.throwError(error);
       }

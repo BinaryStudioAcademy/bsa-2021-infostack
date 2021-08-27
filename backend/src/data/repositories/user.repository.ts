@@ -13,6 +13,7 @@ class UserRepository extends Repository<User> {
       .leftJoinAndSelect('user.skills', 'skills')
       .leftJoinAndSelect('user.teams', 'teams')
       .leftJoinAndSelect('user.followingPages', 'pages')
+      .leftJoinAndSelect('user.links', 'links')
       .leftJoin(
         (qb) =>
           qb
@@ -30,6 +31,10 @@ class UserRepository extends Repository<User> {
       )
       .where('user.id = :id', { id })
       .getOne();
+  }
+
+  public findUsersByIds(ids: string[]): Promise<User[]> {
+    return this.findByIds(ids);
   }
 
   public findUserTeams(userId: string): Promise<User> {

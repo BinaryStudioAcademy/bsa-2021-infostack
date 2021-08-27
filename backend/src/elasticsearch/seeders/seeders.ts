@@ -15,17 +15,22 @@ const seeders = async (): Promise<void> => {
   await createConnection(ormconfig);
   logger.info('Connection created');
 
-  logger.info('Checking if elastic index exist');
-  const { body } = await elasticsearchClient.indices.get({
-    index: env.elasticsearch.index,
-  });
-
-  if (!body[index]) {
-    logger.info('Creating elastic index');
-
-    await elasticsearchClient.indices.create({
-      index: env.elasticsearch.index,
+  logger.info('Checking if index exist in elastic');
+  try {
+    await elasticsearchClient.indices.get({
+      index,
     });
+  } catch (err) {
+    const { message } = err;
+    if (message.includes('index_not_found_exception')) {
+      logger.info('Creating elastic index');
+
+      await elasticsearchClient.indices.create({
+        index,
+      });
+    } else {
+      return logger.error(err);
+    }
   }
 
   logger.info('Seeding elastic page contents');

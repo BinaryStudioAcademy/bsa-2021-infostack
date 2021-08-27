@@ -12,6 +12,7 @@ import {
   TeamSettings,
   UsersSettings,
   TagSettings,
+  IntegrationSettings,
   NotificationsSettings,
 } from './components/components';
 import { AppRoute } from 'common/enums/enums';
@@ -64,6 +65,11 @@ const Settings: React.FC = () => {
                   <Route
                     path={AppRoute.SETTINGS_TAGS}
                     component={TagSettings}
+                    exact
+                  />
+                  <Route
+                    path={AppRoute.SETTINGS_INTEGRATIONS}
+                    component={IntegrationSettings}
                     exact
                   />
                   <Route
