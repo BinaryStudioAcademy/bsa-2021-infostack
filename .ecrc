@@ -1,3 +1,0 @@
-{
-  "Exclude": ["tests/specs", "mobile/ios", "mobile/android"]
-}
