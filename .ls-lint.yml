@@ -15,3 +15,5 @@ ignore:
   - .git
   - .husky
   - backend/src/data/migrations
+  - mobile/ios
+  - mobile/android
