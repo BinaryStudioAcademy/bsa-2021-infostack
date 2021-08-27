@@ -243,8 +243,9 @@ export const getPinnedPages = async (
   userId: string,
   workspaceId: string,
 ): Promise<IPageNav[]> => {
-  const userRepository = getCustomRepository(UserRepository);
-  const { pinnedPages } = await userRepository.findById(userId);
+  const { pinnedPages } = await getCustomRepository(UserRepository).findById(
+    userId,
+  );
   const filteredPages = pinnedPages.filter(
     (page) => page.workspaceId === workspaceId,
   );
