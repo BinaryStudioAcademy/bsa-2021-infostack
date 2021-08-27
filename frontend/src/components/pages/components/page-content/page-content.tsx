@@ -1,10 +1,19 @@
-import { Card, Col, Row, Popover, OverlayTrigger } from 'react-bootstrap';
-import React from 'react';
+import {
+  Card,
+  Col,
+  Row,
+  Popover,
+  OverlayTrigger,
+  Button,
+} from 'react-bootstrap';
+import React, { useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import { toast } from 'react-toastify';
+import { SocketContext } from 'context/socket';
+import { SocketEvents } from 'common/enums/enums';
 import {
   useAppDispatch,
   useAppSelector,
@@ -40,6 +49,7 @@ import PageTags from '../page-tags/page-tags';
 import styles from './styles.module.scss';
 
 export const PageContent: React.FC = () => {
+  const socket = useContext(SocketContext);
   const { isSpinner } = useAppSelector((state: RootState) => state.pages);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const childPages = useAppSelector((state) => {
@@ -63,6 +73,7 @@ export const PageContent: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
   const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
+  const [isRefreshButtonShowed, setIsRefreshButton] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
   const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
     [],
@@ -98,6 +109,25 @@ export const PageContent: React.FC = () => {
     }
     return;
   };
+
+  const onContentChange = (): void => {
+    setIsRefreshButton(true);
+  };
+
+  const onRefresh = (pageId: string): void => {
+    setIsRefreshButton(false);
+    dispatch(pagesActions.getPage(pageId));
+  };
+
+  useEffect(() => {
+    if (currentPage) {
+      socket.emit(SocketEvents.PAGE_JOIN, currentPage.id);
+      socket.on(SocketEvents.PAGE_NEW_CONTENT, onContentChange);
+    }
+    return (): void => {
+      socket.off(SocketEvents.PAGE_NEW_CONTENT, onContentChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (paramsVersionId) {
@@ -262,9 +292,26 @@ export const PageContent: React.FC = () => {
                       </Popover>
                     }
                   >
-                    <h1 className={getAllowedClasses(styles.pageHeading, 'h3')}>
-                      {pageTitle || 'New Page'}
-                    </h1>
+                    <>
+                      <div className="d-flex align-items-center">
+                        <h1
+                          className={getAllowedClasses(
+                            styles.pageHeading,
+                            'h3',
+                          )}
+                        >
+                          {pageTitle || 'New Page'}
+                        </h1>
+                        {isRefreshButtonShowed && (
+                          <Button
+                            className="btn-success ms-2"
+                            onClick={(): void => onRefresh(paramsId)}
+                          >
+                            Refresh
+                          </Button>
+                        )}
+                      </div>
+                    </>
                   </OverlayTrigger>
                   <div className="d-flex align-items-center">
                     {canRead && (
