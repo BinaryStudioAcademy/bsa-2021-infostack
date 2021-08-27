@@ -110,7 +110,7 @@ class PageApi {
   }
 
   public async followPage(pageId: string | undefined): Promise<void> {
-    return this.http.load(`${this.BASE}/follow/${pageId}`, {
+    return this.http.load(`${this.BASE}/${pageId}/follow`, {
       method: HttpMethod.POST,
     });
   }
@@ -124,7 +124,7 @@ class PageApi {
   }
 
   public async unfollowPage(pageId: string | undefined): Promise<void> {
-    return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
+    return this.http.load(`${this.BASE}/${pageId}/unfollow`, {
       method: HttpMethod.POST,
     });
   }
@@ -225,13 +225,13 @@ class PageApi {
   }
 
   public async pinPage(pageId: string | undefined): Promise<void> {
-    return this.http.load(`${this.BASE}/pin/${pageId}`, {
+    return this.http.load(`${this.BASE}/${pageId}/pin`, {
       method: HttpMethod.POST,
     });
   }
 
   public async unpinPage(pageId: string | undefined): Promise<void> {
-    return this.http.load(`${this.BASE}/unpin/${pageId}`, {
+    return this.http.load(`${this.BASE}/${pageId}/unpin`, {
       method: HttpMethod.POST,
     });
   }

@@ -136,7 +136,7 @@ router.get(
 );
 
 router.post(
-  '/follow/:id',
+  '/:id/follow',
   run((req) => followPage(req.userId, req.params.id)),
 );
 
@@ -146,7 +146,7 @@ router.post(
 );
 
 router.post(
-  '/unfollow/:id',
+  '/:id/unfollow',
   run((req) => unfollowPage(req.userId, req.params.id)),
 );
 
@@ -225,12 +225,12 @@ router.get(
 );
 
 router.post(
-  '/pin/:id',
+  '/:id/pin',
   run((req) => pinPage(req.userId, req.params.id)),
 );
 
 router.post(
-  '/unpin/:id',
+  '/:id/unpin',
   run((req) => unpinPage(req.userId, req.params.id)),
 );
 
