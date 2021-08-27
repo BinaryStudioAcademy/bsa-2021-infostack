@@ -48,6 +48,7 @@ class PageRepository extends Repository<Page> {
     return this.createQueryBuilder('page')
       .leftJoinAndSelect('page.pageContents', 'pageContents')
       .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+      .leftJoinAndSelect('page.pinnedUsers', 'pinnedUsers')
       .leftJoinAndSelect('page.draft', 'draft')
       .where('page.id = :id', { id: id })
       .orderBy('pageContents.createdAt', 'DESC')
@@ -192,6 +193,20 @@ class PageRepository extends Repository<Page> {
       .delete()
       .where('id = :id', { id })
       .execute();
+  }
+
+  public pinPage(userId: string, pageId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('pinnedUsers')
+      .of(pageId)
+      .add(userId);
+  }
+
+  public unpinPage(userId: string, pageId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('pinnedUsers')
+      .of(pageId)
+      .remove(userId);
   }
 }
 

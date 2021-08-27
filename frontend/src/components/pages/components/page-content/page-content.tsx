@@ -50,7 +50,7 @@ export const PageContent: React.FC = () => {
       return page ? page.childPages : null;
     }
   });
-  const { isCurrentPageFollowed } = useAppSelector(
+  const { isCurrentPageFollowed, isCurrentPagePinned } = useAppSelector(
     (state: RootState) => state.pages,
   );
   const { user } = useAppSelector((state) => state.auth);
@@ -200,6 +200,16 @@ export const PageContent: React.FC = () => {
     }
   };
 
+  const isPagePinned = async (): Promise<void> => {
+    if (currentPage?.pinnedUsers) {
+      currentPage.pinnedUsers.map((pinner) => {
+        if (pinner.id === user?.id) {
+          dispatch(pagesActions.setCurrentPagePinned(true));
+        }
+      });
+    }
+  };
+
   const handlePageFollow =
     (pageId: string) =>
     async (withChildren: boolean): Promise<void> => {
@@ -224,9 +234,27 @@ export const PageContent: React.FC = () => {
     }
   };
 
+  const onPagePin = (): void => {
+    isCurrentPagePinned ? handlePageUnpin(paramsId) : handlePagePin(paramsId);
+  };
+
+  const handlePagePin = async (pageId: string): Promise<void> => {
+    await dispatch(pagesActions.pinPage(pageId));
+    await dispatch(pagesActions.getPinnedPagesAsync());
+  };
+
+  const handlePageUnpin = async (pageId: string): Promise<void> => {
+    await dispatch(pagesActions.unpinPage(pageId));
+    await dispatch(pagesActions.getPinnedPagesAsync());
+  };
+
   useEffect(() => {
     isPageFollowed();
   }, [isPageFollowed]);
+
+  useEffect(() => {
+    isPagePinned();
+  }, [isPagePinned]);
 
   if (isSpinner || isLeftBlockLoading) {
     return <Spinner />;
@@ -278,9 +306,11 @@ export const PageContent: React.FC = () => {
                       onAssign={onAssign}
                       onEditing={onEditing}
                       onPageFollow={onPageFollow}
+                      onPagePin={onPagePin}
                       onDelete={onDelete}
                       onShare={onShare}
                       isCurrentPageFollowed={isCurrentPageFollowed}
+                      isCurrentPagePinned={isCurrentPagePinned}
                     />
                   </div>
                 </Col>

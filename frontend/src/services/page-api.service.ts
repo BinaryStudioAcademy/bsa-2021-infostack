@@ -47,6 +47,12 @@ class PageApi {
     });
   }
 
+  public async getPinnedPages(): Promise<IPageNav[]> {
+    return this.http.load(`${this.BASE}/pinned`, {
+      method: HttpMethod.GET,
+    });
+  }
+
   public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
@@ -215,6 +221,18 @@ class PageApi {
   public async deleteDraft(id: string): Promise<void> {
     return this.http.load(`${this.BASE}/${id}/draft`, {
       method: HttpMethod.DELETE,
+    });
+  }
+
+  public async pinPage(pageId: string | undefined): Promise<void> {
+    return this.http.load(`${this.BASE}/pin/${pageId}`, {
+      method: HttpMethod.POST,
+    });
+  }
+
+  public async unpinPage(pageId: string | undefined): Promise<void> {
+    return this.http.load(`${this.BASE}/unpin/${pageId}`, {
+      method: HttpMethod.POST,
     });
   }
 }
