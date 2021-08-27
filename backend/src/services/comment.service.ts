@@ -11,6 +11,7 @@ import {
   CommentRepository,
   NotificationRepository,
   CommentReactionRepository,
+  UserRepository,
 } from '../data/repositories';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -22,6 +23,9 @@ import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
 import { EntityType } from '../common/enums/entity-type';
 import { SocketEvents } from '../common/enums/socket';
+import { uploadFile } from '../common/helpers/s3-file-storage.helper';
+import { unlinkFile } from '../common/helpers/multer.helper';
+import { transcriptAudio } from '../common/helpers/google-speach.helper';
 import PageRepository from '../data/repositories/page.repository';
 import {
   commentNotification,
@@ -29,6 +33,7 @@ import {
   replyMail,
   mentionNotification,
   parseMentions,
+  mentionMail,
 } from '../common/utils';
 
 export const getComments = async (
@@ -68,7 +73,15 @@ export const notifyUsers = async (
     const { title, body } = mentionNotification(fullName, text);
     const mentions = mentionIds.filter((mention) => mention !== authorId);
 
-    const notifications = mentions.map((mention) => ({
+    const isNotifyCommentIds = await isNotifyMany(
+      mentions,
+      NotificationType.COMMENT,
+    );
+    const commentNotifications = mentions.filter(
+      (mention) => !isNotifyCommentIds.includes(mention),
+    );
+
+    const notifications = commentNotifications.map((mention) => ({
       title,
       body,
       type: EntityType.COMMENT,
@@ -79,6 +92,27 @@ export const notifyUsers = async (
     await notificationRepository.createAndSaveMultiple(notifications);
 
     io.to(mentions).emit(SocketEvents.NOTIFICATION_NEW);
+
+    const isNotifyEmailIds = await isNotifyMany(
+      mentions,
+      NotificationType.COMMENT_EMAIL,
+    );
+
+    const users = await getCustomRepository(UserRepository).findUsersByIds(
+      mentions,
+    );
+
+    const emailNotifications = users.filter(
+      ({ id }) => !isNotifyEmailIds.includes(id),
+    );
+
+    const mentionEmails = emailNotifications.map(({ email }) => email);
+    const { subject, text: emailText } = mentionMail(fullName, text, url);
+    await sendMail({
+      bcc: mentionEmails,
+      subject,
+      text: emailText,
+    });
   }
 
   const { title, body } = commentNotification(fullName, text);
@@ -135,12 +169,18 @@ export const notifyUsers = async (
   const followers = followingUsers.filter(
     ({ id }) => id !== authorId && !mentionIds.includes(id),
   );
+
+  if (!followers || !followers.length) {
+    return;
+  }
+
   const followerIds = followers.map((follower) => follower.id);
 
   const isNotifyCommentIds = await isNotifyMany(
     followerIds,
     NotificationType.COMMENT,
   );
+
   const commentNotifications = followers.filter(
     ({ id }) => !isNotifyCommentIds.includes(id),
   );
@@ -178,7 +218,7 @@ export const notifyUsers = async (
 export const addComment = async (
   userId: string,
   pageId: string,
-  { text, mentionIds, parentCommentId }: ICommentRequest,
+  { text, mentionIds, parentCommentId, voiceRecord }: ICommentRequest,
   io: Server,
 ): Promise<IComment> => {
   const commentRepository = getCustomRepository(CommentRepository);
@@ -201,6 +241,7 @@ export const addComment = async (
     pageId,
     text,
     parentCommentId,
+    voiceRecord,
   });
 
   const comment = await commentRepository.findById(id);
@@ -268,4 +309,23 @@ export const getAllCommentReactions = async (
   const reactions = await commentReactionRepository.find({ commentId });
 
   return reactions;
+};
+
+export const uploadAudioComment = async (
+  file: Express.Multer.File,
+): Promise<{ url: string }> => {
+  const uploadedFile = await uploadFile(file);
+  const { Location } = uploadedFile;
+  unlinkFile(file.path);
+
+  return { url: Location };
+};
+
+export const transcriptAudioComment = async (
+  file: Express.Multer.File,
+): Promise<{ comment: string }> => {
+  const comment = await transcriptAudio(file);
+  unlinkFile(file.path);
+
+  return { comment };
 };

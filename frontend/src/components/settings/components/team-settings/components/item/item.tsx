@@ -5,9 +5,10 @@ import { UserAvatar } from 'components/common/avatar/avatar';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-export const Item: React.FC<{ team: ITeam; admin: boolean }> = ({
+export const Item: React.FC<{ team: ITeam; userId: string }> = ({
+  userId,
   team,
-  admin,
+  team: { name, users, owner },
 }) => {
   return (
     <Card
@@ -22,17 +23,17 @@ export const Item: React.FC<{ team: ITeam; admin: boolean }> = ({
           'd-flex justify-content-between m-0 p-3',
         )}
       >
-        {team.name}
-        {admin && <DropDown team={team} />}
+        {name}
+        {userId === owner ? <DropDown team={team} /> : null}
       </Card.Title>
       <Card.Body className="d-flex flex-wrap card-body">
-        {team.users &&
-          team.users.map((user) => (
+        {users &&
+          users.map(({ id, fullName, avatar }) => (
             <UserAvatar
-              key={user.id}
+              key={id}
               size="40"
-              name={user.fullName}
-              src={user.avatar}
+              name={fullName}
+              src={avatar}
               round={true}
               className={getAllowedClasses(styles.userAvatar)}
             />

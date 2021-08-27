@@ -26,11 +26,7 @@ export const Modal: React.FC<Props> = ({
   actions,
   isDisabled = false,
 }) => (
-  <BSModal
-    show={show}
-    contentClassName="border-0"
-    centered
-  >
+  <BSModal show={show} contentClassName="border-0" centered>
     <BSModal.Header className={styles.header}>
       <BSModal.Title className={getAllowedClasses('h5 m-0', styles.title)}>
         {title}

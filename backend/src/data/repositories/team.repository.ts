@@ -11,8 +11,8 @@ class TeamRepository extends Repository<Team> {
     return this.createQueryBuilder('team')
       .leftJoinAndSelect('team.users', 'users')
       .leftJoinAndSelect('users.userWorkspaces', 'users.userWorkspaces')
-      .where('users.userWorkspaces.workspaceId = :id', { id: workspaceId })
-      .where('team.workspaceId = :id', { id: workspaceId })
+      .where('users.userWorkspaces.workspaceId = :workspaceId', { workspaceId })
+      .andWhere('team.workspaceId = :id', { id: workspaceId })
       .getMany();
   }
 
