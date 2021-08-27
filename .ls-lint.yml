@@ -12,8 +12,9 @@ ignore:
   - frontend/node_modules
   - backend/build
   - backend/node_modules
-  - .git
-  - .husky
   - backend/src/data/migrations
   - mobile/ios
   - mobile/android
+  - mobile/node_modules
+  - .git
+  - .husky
