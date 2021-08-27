@@ -157,7 +157,7 @@ router.post(
 
 router.post(
   '/:id/version',
-  run((req) => updateContent(req.userId, req.body)),
+  run((req) => updateContent(req.userId, req.body, req.io)),
 );
 
 router.get(

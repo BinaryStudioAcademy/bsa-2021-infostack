@@ -54,10 +54,10 @@ const getPinnedPagesAsync = createAsyncThunk(
 
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
-  async (getPayload: string | undefined, { dispatch }) => {
+  async (pageId: string | undefined, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const createPageResponse = await pageApi.getPage(getPayload);
-    dispatch(actions.getPage(createPageResponse));
+    const getPageResponse = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(getPageResponse));
     dispatch(actions.toggleSpinner());
   },
 );
