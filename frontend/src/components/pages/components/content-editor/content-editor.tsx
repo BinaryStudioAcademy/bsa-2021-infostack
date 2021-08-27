@@ -79,6 +79,12 @@ export const ContentEditor: React.FC = () => {
     if (checkDraftTitle && checkDraftContent) {
       setSaveDraftShown(false);
       return;
+    } else {
+      const timeoutId = setTimeout(() => {
+        handleAutosaveAsDraft();
+        setDeleteDraftShown(true);
+      }, 10000);
+      return (): void => clearTimeout(timeoutId);
     }
   }, [draftTitleInputValue, draftMarkDownContent]);
 
@@ -194,6 +200,26 @@ export const ContentEditor: React.FC = () => {
 
   const onDraftDelete = (): void => {
     setIsDeleteModalVisible(true);
+  };
+
+  const handleAutosaveAsDraft = (): void => {
+    if (
+      draftTitleInputValue &&
+      isTitleLessThanMaxLength(draftTitleInputValue)
+    ) {
+      dispatch(
+        pagesActions.editDraft({
+          pageId: paramsId,
+          title: draftTitleInputValue.trim(),
+          content:
+            draftMarkDownContent?.length === 0 ? ' ' : draftMarkDownContent,
+        }),
+      )
+        .unwrap()
+        .then(() => toast.info('Draft has been autosaved'));
+      return;
+    }
+    showWarningOnTitle(draftTitleInputValue);
   };
 
   return (

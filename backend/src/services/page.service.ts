@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import { Server } from 'socket.io';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import TeamRepository from '../data/repositories/team.repository';
@@ -9,6 +10,7 @@ import UserWorkspaceRepository from '../data/repositories/user-workspace.reposit
 import TagRepository from '../data/repositories/tag.repository';
 import PageShareLinkRepository from '../data/repositories/share-link.repository';
 import DraftRepository from '../data/repositories/draft.repository';
+import { SocketEvents } from '../common/enums/socket';
 import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
 import { InviteStatus } from '../common/enums/invite-status';
@@ -26,6 +28,7 @@ import {
   IFoundPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
+import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { mapPermissionstoParticipants } from '../common/mappers/page/map-permissions-to-participants';
 import { maximum } from '../common/helpers/permissions.helper';
@@ -236,6 +239,21 @@ export const getPages = async (
   return finalPages;
 };
 
+export const getPinnedPages = async (
+  userId: string,
+  workspaceId: string,
+): Promise<IPageNav[]> => {
+  const { pinnedPages } = await getCustomRepository(UserRepository).findById(
+    userId,
+  );
+  const filteredPages = pinnedPages.filter(
+    (page) => page.workspaceId === workspaceId,
+  );
+  const pagesToShow = mapPagesToPagesNavWithoutChildren(filteredPages);
+
+  return pagesToShow;
+};
+
 export const getPage = async (
   pageId: string,
   userId: string,
@@ -438,6 +456,7 @@ export const deletePermission = async (
 export const updateContent = async (
   userId: string,
   data: IEditPageContent,
+  io: Server,
 ): Promise<IPage> => {
   const pageId = data.pageId;
   const pageRepository = getCustomRepository(PageRepository);
@@ -468,6 +487,9 @@ export const updateContent = async (
   });
 
   const page = await pageRepository.findByIdWithContents(pageId);
+
+  io.to(pageId).emit(SocketEvents.PAGE_NEW_CONTENT, pageId);
+
   return getPageWithPermission(userId, page);
 };
 
@@ -762,3 +784,12 @@ export const deleteDraft = async (pageId: string): Promise<void> => {
   const draftRepository = getCustomRepository(DraftRepository);
   await draftRepository.delete({ pageId });
 };
+
+export const pinPage = async (userId: string, pageId: string): Promise<void> =>
+  getCustomRepository(PageRepository).pinPage(userId, pageId);
+
+export const unpinPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> =>
+  getCustomRepository(PageRepository).unpinPage(userId, pageId);

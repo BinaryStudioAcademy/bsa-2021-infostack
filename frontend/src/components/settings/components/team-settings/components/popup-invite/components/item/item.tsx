@@ -17,11 +17,11 @@ export const Item: React.FC<Props> = ({
   setTeamOwner,
 }) => {
   const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
-  const [showSetOwnerModal, setshowSetOwnerModal] = useState(false);
+  const [showSetOwnerModal, setShowSetOwnerModal] = useState(false);
 
   const isUserTeamOwner = id === owner;
   const openSetOwnerModal = (): void => {
-    setshowSetOwnerModal(true);
+    setShowSetOwnerModal(true);
   };
 
   return (
@@ -73,7 +73,7 @@ export const Item: React.FC<Props> = ({
         }}
         cancelButton={{
           text: 'No',
-          onClick: (): void => setShowDeleteUserModal(false),
+          onClick: (): void => setShowSetOwnerModal(false),
         }}
       />
     </>

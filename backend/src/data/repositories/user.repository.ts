@@ -13,6 +13,7 @@ class UserRepository extends Repository<User> {
       .leftJoinAndSelect('user.skills', 'skills')
       .leftJoinAndSelect('user.teams', 'teams')
       .leftJoinAndSelect('user.followingPages', 'pages')
+      .leftJoinAndSelect('user.pinnedPages', 'pinnedPages')
       .leftJoinAndSelect('user.links', 'links')
       .leftJoin(
         (qb) =>
@@ -29,8 +30,17 @@ class UserRepository extends Repository<User> {
         'pageContents',
         '"pageContents"."createdAt" = "last_version"."created_at"',
       )
+      .leftJoinAndSelect(
+        'pinnedPages.pageContents',
+        'pinnedPageContents',
+        '"pinnedPageContents"."createdAt" = "last_version"."created_at"',
+      )
       .where('user.id = :id', { id })
       .getOne();
+  }
+
+  public findUsersByIds(ids: string[]): Promise<User[]> {
+    return this.findByIds(ids);
   }
 
   public findUserTeams(userId: string): Promise<User> {
