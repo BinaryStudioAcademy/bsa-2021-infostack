@@ -293,7 +293,7 @@ export const updateById = async (
   };
 };
 
-export const deleteLogoById = async (id: string) => {
+export const deleteLogoById = async (id: string): Promise<void> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findById(id);
 
