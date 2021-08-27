@@ -1,6 +1,6 @@
 interface IWorkspaceUpdate {
   title: string;
-  logo?: string;
+  logo?: string | Blob;
 }
 
 export type { IWorkspaceUpdate };
