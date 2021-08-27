@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import { Server } from 'socket.io';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import TeamRepository from '../data/repositories/team.repository';
@@ -9,6 +10,7 @@ import UserWorkspaceRepository from '../data/repositories/user-workspace.reposit
 import TagRepository from '../data/repositories/tag.repository';
 import PageShareLinkRepository from '../data/repositories/share-link.repository';
 import DraftRepository from '../data/repositories/draft.repository';
+import { SocketEvents } from '../common/enums/socket';
 import { PermissionType } from '../common/enums/permission-type';
 import { ParticipantType } from '../common/enums/participant-type';
 import { InviteStatus } from '../common/enums/invite-status';
@@ -438,6 +440,7 @@ export const deletePermission = async (
 export const updateContent = async (
   userId: string,
   data: IEditPageContent,
+  io: Server,
 ): Promise<IPage> => {
   const pageId = data.pageId;
   const pageRepository = getCustomRepository(PageRepository);
@@ -468,6 +471,9 @@ export const updateContent = async (
   });
 
   const page = await pageRepository.findByIdWithContents(pageId);
+
+  io.to(pageId).emit(SocketEvents.PAGE_NEW_CONTENT, pageId);
+
   return getPageWithPermission(userId, page);
 };
 
