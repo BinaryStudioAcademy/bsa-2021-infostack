@@ -73,6 +73,7 @@ export const PageContent: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
   const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
+  const [isRefreshButtonShowed, setIsRefreshButton] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
   const [TOCHeadings, setTOCHeadings] = useState<IPageTableOfContentsHeading[]>(
     [],
@@ -109,13 +110,26 @@ export const PageContent: React.FC = () => {
     return;
   };
 
-  const onContentChange = (pageId: string): void => {
+  const onContentChange = (): void => {
+    setIsRefreshButton(true);
+  };
+
+  const onRefresh = (pageId: string): void => {
+    setIsRefreshButton(false);
     dispatch(pagesActions.getPage(pageId));
   };
 
   useEffect(() => {
-    socket.emit(SocketEvents.PAGE_JOIN, currentPage?.id);
-    socket.on(SocketEvents.CONTENT_NEW, onContentChange);
+    if (currentPage) {
+      socket.emit(SocketEvents.PAGE_JOIN, currentPage.id);
+      socket.on(SocketEvents.PAGE_NEW_CONTENT, onContentChange);
+    }
+    return (): void => {
+      socket.off(SocketEvents.PAGE_NEW_CONTENT, onContentChange);
+    };
+  }, []);
+
+  useEffect(() => {
     if (paramsVersionId) {
       const currentContent = currentPage?.pageContents.find(
         (content) => content.id === paramsVersionId,
@@ -288,12 +302,14 @@ export const PageContent: React.FC = () => {
                         >
                           {pageTitle || 'New Page'}
                         </h1>
-                        <Button
-                          className="btn-success ms-2"
-                          onClick={(event): void => console.log(event.target)}
-                        >
-                          Refresh
-                        </Button>
+                        {isRefreshButtonShowed && (
+                          <Button
+                            className="btn-success ms-2"
+                            onClick={(): void => onRefresh(paramsId)}
+                          >
+                            Refresh
+                          </Button>
+                        )}
                       </div>
                     </>
                   </OverlayTrigger>
