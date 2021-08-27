@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
-import { Badge, Button, Card } from 'react-bootstrap';
-import CreatableSelect from 'react-select/creatable';
-import { CSSObject } from '@emotion/serialize';
-import { OptionsType, components } from 'react-select';
+import { Badge, Card } from 'react-bootstrap';
+import { OptionsType } from 'react-select';
 import { ITagSelect } from 'common/interfaces/tag';
 import { RootState } from 'common/types/types';
 import {
@@ -12,6 +9,7 @@ import {
   useEffect,
   useState,
 } from 'hooks/hooks';
+import { EditModal } from './components/components';
 import { pageApi, tagApi } from 'services';
 import { tagActions } from 'store/tags';
 import { PermissionType } from 'common/enums/enums';
@@ -25,23 +23,6 @@ const PageTags: React.FC = () => {
   const [pageTags, setPageTags] = useState<ITagSelect[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const isCanManage = currentPage?.permission !== PermissionType.READ;
-
-  const { Option } = components;
-  const CustomSelectOption = (props: any): JSX.Element => (
-    <Option {...props}>
-      {props.data.label}
-      <i className={`${props.data.icon} ms-2`} />
-    </Option>
-  );
-
-  const CustomSelectMultiValueLabel = (props: any): JSX.Element => (
-    <div>
-      {props.data.label}
-      <span className="input-select-icon">
-        <i className={`${props.data.icon} ms-2`} />
-      </span>
-    </div>
-  );
 
   const handleInputChange = (inputValue: OptionsType<ITagSelect>): void => {
     const lastTag = inputValue[inputValue.length - 1];
@@ -154,75 +135,42 @@ const PageTags: React.FC = () => {
     }
   }, []);
 
-  const PageTagSelect: React.FC = () => {
-    return (
-      <CreatableSelect
-        isMulti
-        onChange={handleInputChange}
-        value={pageTags}
-        options={allTags}
-        components={{
-          Option: CustomSelectOption,
-          MultiValueLabel: CustomSelectMultiValueLabel,
-        }}
-        styles={{
-          option: (styles): CSSObject => ({
-            ...styles,
-            fontSize: '1.2rem',
-          }),
-          placeholder: (styles): CSSObject => ({
-            ...styles,
-            fontSize: '1.3rem',
-          }),
-          multiValueLabel: (styles): CSSObject => ({
-            ...styles,
-            fontSize: '1rem',
-          }),
-          input: (styles): CSSObject => ({
-            ...styles,
-            fontSize: '1.3rem',
-          }),
-        }}
-      />
-    );
-  };
-
   return (
     <Card border="light" className="card">
       <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
         Tags
-        {isCanManage &&
-          (!isEditMode ? (
-            <i className="bi bi-pencil tags-edit" onClick={handleManage}></i>
-          ) : (
-            <Button
-              variant="success"
-              className="btn-done p-1 text-white"
-              onClick={handleDone}
-            >
-              done
-            </Button>
-          ))}
+        {isCanManage && (
+          <i className="bi bi-pencil tags-edit" onClick={handleManage}></i>
+        )}
       </Card.Header>
       <Card.Body>
-        {!isEditMode ? (
-          pageTags?.length ? (
-            <div className="d-flex align-items-start flex-wrap">
-              {pageTags.map(({ id, name, type }) => (
-                <Badge pill text="primary" className="tag-badge" key={id}>
-                  {name}
-                  {type === TagType.GITHUB && (
-                    <i className="bi bi-github ms-2" />
-                  )}
-                </Badge>
-              ))}
-            </div>
-          ) : (
-            <span className="text-warning">no tags</span>
-          )
+        {pageTags?.length ? (
+          <div className="d-flex align-items-start flex-wrap">
+            {pageTags.map(({ id, name, type }) => (
+              <Badge pill text="primary" className="tag-badge" key={id}>
+                {name}
+                {type === TagType.GITHUB && <i className="bi bi-github ms-2" />}
+              </Badge>
+            ))}
+          </div>
         ) : (
-          <PageTagSelect />
+          <span className="text-warning">no tags</span>
         )}
+        <EditModal
+          title="Edit tags modal"
+          showModal={isEditMode}
+          value={pageTags}
+          options={allTags}
+          confirmButton={{
+            text: 'Save',
+            onClick: handleDone,
+          }}
+          cancelButton={{
+            text: 'Cancel',
+            onClick: handleManage,
+          }}
+          handleInputChange={handleInputChange}
+        />
       </Card.Body>
     </Card>
   );
