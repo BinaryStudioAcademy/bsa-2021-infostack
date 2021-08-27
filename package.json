@@ -32,7 +32,8 @@
     "start": "cd build && npm run start",
     "prepare": "husky install",
     "heroku-prebuild": "npm run install:all",
-    "heroku-postbuild": "npm run build && npm run move:deploy"
+    "heroku-postbuild": "npm run build && npm run move:deploy",
+    "sync-elastic-with-db:js": "node ./build/elasticsearch/synchronizers/synchronizers.js"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "1.9.2",
