@@ -23,10 +23,22 @@ import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { fullName, email, avatar, title, skills, links } =
+  const { fullName, email, avatar, title, skills, links, followingPages } =
     await userRepository.findById(id);
   const mappedLinks = links.map((link) => mapLinkToILink(link));
-  return { id, fullName, email, avatar, title, skills, links: mappedLinks };
+  const mappedFollowingPages = followingPages?.map((page) =>
+    mapPageToIPage(page),
+  );
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    links: mappedLinks,
+    followingPages: mappedFollowingPages,
+  };
 };
 
 export const getInviteUserById = async (token: string): Promise<string> => {
@@ -109,11 +121,22 @@ export const updateUserInfo = async (
   const foundSkills = await skillRepository.getSkillsById(body.skills);
   userToUpdate.skills = foundSkills;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(
-    userToUpdate,
+  const { fullName, email, avatar, title, skills, followingPages } =
+    await userRepository.save(userToUpdate);
+
+  const mappedFollowingPages = followingPages.map((page) =>
+    mapPageToIPage(page),
   );
 
-  return { id, fullName, email, avatar, title, skills };
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages: mappedFollowingPages,
+  };
 };
 
 export const updateAvatar = async (
@@ -137,11 +160,21 @@ export const updateAvatar = async (
 
   userToUpdate.avatar = Location || userToUpdate.avatar;
 
-  const { fullName, email, avatar, title, skills } = await userRepository.save(
-    userToUpdate,
+  const { fullName, email, avatar, title, skills, followingPages } =
+    await userRepository.save(userToUpdate);
+  const mappedFollowingPages = followingPages?.map((page) =>
+    mapPageToIPage(page),
   );
 
-  return { id, fullName, email, avatar, title, skills };
+  return {
+    id,
+    fullName,
+    email,
+    avatar,
+    title,
+    skills,
+    followingPages: mappedFollowingPages,
+  };
 };
 
 export const deleteAvatar = async (id: string): Promise<void> => {
