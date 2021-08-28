@@ -254,16 +254,6 @@ export const PageContent: React.FC = () => {
     }
   };
 
-  const isPageFollowed = async (): Promise<void> => {
-    if (currentPage?.followingUsers) {
-      currentPage.followingUsers.map((follower) => {
-        if (follower.id === user?.id) {
-          dispatch(pagesActions.setCurrentPageFollowed(true));
-        }
-      });
-    }
-  };
-
   const isPagePinned = async (): Promise<void> => {
     if (currentPage?.pinnedUsers) {
       currentPage.pinnedUsers.map((pinner) => {
