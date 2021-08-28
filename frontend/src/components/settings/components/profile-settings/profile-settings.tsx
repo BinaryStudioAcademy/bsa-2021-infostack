@@ -146,6 +146,7 @@ export const ProfileSettings: React.FC = () => {
             email: updatedUser.email,
             title: updatedUser.title,
             skills: updatedUser.skills,
+            followingPages: updatedUser.followingPages,
           }),
         );
 

@@ -47,6 +47,12 @@ class PageApi {
     });
   }
 
+  public async getPinnedPages(): Promise<IPageNav[]> {
+    return this.http.load(`${this.BASE}/pinned`, {
+      method: HttpMethod.GET,
+    });
+  }
+
   public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
@@ -104,7 +110,7 @@ class PageApi {
   }
 
   public async followPage(pageId: string | undefined): Promise<void> {
-    return this.http.load(`${this.BASE}/follow/${pageId}`, {
+    return this.http.load(`${this.BASE}/${pageId}/follow`, {
       method: HttpMethod.POST,
     });
   }
@@ -118,7 +124,7 @@ class PageApi {
   }
 
   public async unfollowPage(pageId: string | undefined): Promise<void> {
-    return this.http.load(`${this.BASE}/unfollow/${pageId}`, {
+    return this.http.load(`${this.BASE}/${pageId}/unfollow`, {
       method: HttpMethod.POST,
     });
   }
@@ -215,6 +221,18 @@ class PageApi {
   public async deleteDraft(id: string): Promise<void> {
     return this.http.load(`${this.BASE}/${id}/draft`, {
       method: HttpMethod.DELETE,
+    });
+  }
+
+  public async pinPage(pageId: string | undefined): Promise<void> {
+    return this.http.load(`${this.BASE}/${pageId}/pin`, {
+      method: HttpMethod.POST,
+    });
+  }
+
+  public async unpinPage(pageId: string | undefined): Promise<void> {
+    return this.http.load(`${this.BASE}/${pageId}/unpin`, {
+      method: HttpMethod.POST,
     });
   }
 }

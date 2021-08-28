@@ -10,6 +10,7 @@ import {
   createPage,
   deletePage,
   getPages,
+  getPinnedPages,
   getPage,
   getPermissions,
   setPermission,
@@ -32,6 +33,8 @@ import {
   searchPage,
   updateDraft,
   deleteDraft,
+  pinPage,
+  unpinPage,
 } from '../../services/page.service';
 import {
   getComments,
@@ -54,6 +57,11 @@ router.post(
   '/',
   validationMiddleware(createPageSchema),
   run((req) => createPage(req.userId, req.workspaceId, req.body)),
+);
+
+router.get(
+  '/pinned',
+  run((req) => getPinnedPages(req.userId, req.workspaceId)),
 );
 
 router.get(
@@ -128,7 +136,7 @@ router.get(
 );
 
 router.post(
-  '/follow/:id',
+  '/:id/follow',
   run((req) => followPage(req.userId, req.params.id)),
 );
 
@@ -138,7 +146,7 @@ router.post(
 );
 
 router.post(
-  '/unfollow/:id',
+  '/:id/unfollow',
   run((req) => unfollowPage(req.userId, req.params.id)),
 );
 
@@ -149,7 +157,7 @@ router.post(
 
 router.post(
   '/:id/version',
-  run((req) => updateContent(req.userId, req.body)),
+  run((req) => updateContent(req.userId, req.body, req.io)),
 );
 
 router.get(
@@ -214,6 +222,16 @@ router.get(
 router.get(
   '/table-of-contents/share',
   run((req) => getTableOfContentsShared(req.query.token)),
+);
+
+router.post(
+  '/:id/pin',
+  run((req) => pinPage(req.userId, req.params.id)),
+);
+
+router.post(
+  '/:id/unpin',
+  run((req) => unpinPage(req.userId, req.params.id)),
 );
 
 export default router;
