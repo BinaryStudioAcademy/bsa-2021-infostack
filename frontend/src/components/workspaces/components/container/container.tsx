@@ -1,6 +1,6 @@
 import { CreateButton, Item, InviteItem } from '../components';
 import { IWorkspace } from 'common/interfaces/workspace';
-import { InviteStatus } from 'common/enums/enums';
+import { InviteStatus } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 

@@ -8,7 +8,7 @@ import {
 } from 'react-mentions';
 
 import { useState, useAppSelector, useAppDispatch } from 'hooks/hooks';
-import { RequestStatus } from 'common/enums/enums';
+import { RequestStatus } from 'common/enums';
 import { UserAvatar } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import { commentsActions } from 'store/comments';

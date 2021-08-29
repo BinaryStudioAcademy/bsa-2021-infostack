@@ -1,5 +1,6 @@
 import Select from 'react-select';
-import { IOption } from 'common/interfaces/components/select';
+
+import { IOption } from 'common/interfaces';
 import selectRepoStyles from './select-repo-styles';
 
 type Props = {

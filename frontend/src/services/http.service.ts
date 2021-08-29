@@ -7,7 +7,7 @@ import {
   LocalStorageVariable,
   HttpCode,
   EmitterEvents,
-} from 'common/enums/enums';
+} from 'common/enums';
 import { HttpOptions } from 'common/types/types';
 
 class Http {

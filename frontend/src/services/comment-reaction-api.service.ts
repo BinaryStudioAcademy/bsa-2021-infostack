@@ -1,6 +1,6 @@
-import { ICommentReaction } from 'common/interfaces/comment-reaction';
-import { HttpMethod, ContentType } from 'common/enums/enums';
-import { http } from 'services/http.service';
+import { http } from 'services';
+import { ICommentReaction } from 'common/interfaces';
+import { HttpMethod, ContentType } from 'common/enums';
 
 class CommentReactionApi {
   private http = http;

@@ -1,1 +1,1 @@
-export type { IParticipant } from 'infostack-shared/common/interfaces';
+export type { IParticipant } from 'infostack-shared';

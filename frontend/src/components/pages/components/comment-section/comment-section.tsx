@@ -11,7 +11,7 @@ import {
 import { SocketContext } from 'context/socket';
 import { commentsActions, usersActions } from 'store/actions';
 import { IComment } from 'common/interfaces/comment';
-import { SocketEvents } from 'common/enums/enums';
+import { SocketEvents } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import { CommentList, CommentForm, DeleteModal } from './components';
 
@@ -66,12 +66,12 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
     }
   };
 
-  if (!users.length) {
-    dispatch(usersActions.loadUsers());
-  }
-
   useEffect(() => {
     dispatch(commentsActions.fetchComments(pageId));
+    if (!users.length) {
+      dispatch(usersActions.fetchUsers());
+    }
+
     socket.on(SocketEvents.PAGE_NEW_COMMENT, onComment);
     socket.on(SocketEvents.PAGE_DELETE_COMMENT, onDelete);
 

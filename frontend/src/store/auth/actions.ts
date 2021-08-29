@@ -3,7 +3,7 @@ import { actions } from './slice';
 import { ActionType } from './common';
 import { authApi, userApi } from 'services';
 import { ILogin, IRegister } from 'common/interfaces/auth';
-import { LocalStorageVariable } from 'common/enums/enums';
+import { LocalStorageVariable } from 'common/enums';
 
 const login = createAsyncThunk(
   ActionType.SET_USER,

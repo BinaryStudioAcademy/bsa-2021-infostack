@@ -1,5 +1,5 @@
 import { useHistory, useEffect } from 'hooks/hooks';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { githubApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';

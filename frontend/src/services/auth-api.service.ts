@@ -1,5 +1,5 @@
 import { IUserWithTokens } from 'common/interfaces/user';
-import { HttpMethod, ContentType } from 'common/enums/enums';
+import { HttpMethod, ContentType } from 'common/enums';
 import {
   IResetPassword,
   ISetPassword,

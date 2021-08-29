@@ -8,7 +8,7 @@ import {
   replaceIdParam,
   getFormattedVersionDate,
 } from 'helpers/helpers';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { useHistory } from 'react-router-dom';
 import {
   IPageContributor,

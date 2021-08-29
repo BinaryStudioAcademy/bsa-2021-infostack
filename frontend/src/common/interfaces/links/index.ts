@@ -1,1 +1,1 @@
-export type { ILink, ILinkShareable } from 'infostack-shared/common/interfaces';
+export type { ILink, ILinkShareable } from 'infostack-shared';

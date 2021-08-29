@@ -1,1 +1,1 @@
-export type { INotification } from 'infostack-shared/common/interfaces';
+export type { INotification } from 'infostack-shared';
