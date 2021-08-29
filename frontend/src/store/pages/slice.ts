@@ -75,6 +75,9 @@ const { reducer, actions } = createSlice({
     ) => {
       state.isCurrentPagePinned = action.payload;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 

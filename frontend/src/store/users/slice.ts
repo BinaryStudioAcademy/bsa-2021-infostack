@@ -21,6 +21,9 @@ const { reducer, actions } = createSlice({
     ) => {
       state.users = action.payload;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 

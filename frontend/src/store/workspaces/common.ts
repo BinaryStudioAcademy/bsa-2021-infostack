@@ -8,6 +8,7 @@ enum ActionType {
   TOGGLE_IS_UPDATING_CURRENT_WORKSPACE = 'toggleIsUpdatingCurrentWorkspace',
   DELETE_CURRENT_WORKSPACE_LOGO = 'deleteCurrentWorkspaceLogo',
   TOGGLE_IS_DELETING_CURRENT_WORKSPACE_LOGO = 'toggleIsDeletingCurrentWorkspaceLogo',
+  RESET = 'reset',
 }
 
 export { ActionType };

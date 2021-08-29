@@ -62,5 +62,8 @@ export const { reducer, actions } = createSlice({
     [ActionType.SET_IS_EXPANDED]: (state, action: PayloadAction<boolean>) => {
       state.isExpanded = action.payload;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });

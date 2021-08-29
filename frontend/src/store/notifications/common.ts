@@ -10,6 +10,7 @@ enum ActionType {
   DECREMENT_COUNT = 'decrementCount',
   TOGGLE_IS_EXPANDED = 'toggleIsExpanded',
   SET_IS_EXPANDED = 'setIsExpanded',
+  RESET = 'reset',
 }
 
 export { ActionType };
