@@ -31,18 +31,6 @@ export const { reducer, actions } = createSlice({
     ) => {
       state.notifications = [...state.notifications, ...action.payload];
     },
-    [ActionType.ADD_NOTIFICATIONS_TO_TOP]: (
-      state,
-      action: PayloadAction<INotification[]>,
-    ) => {
-      state.notifications = [...action.payload, ...state.notifications];
-    },
-    [ActionType.CHANGE_NOTIFICATIONS_ON_TOP]: (
-      state,
-      action: PayloadAction<INotification[]>,
-    ) => {
-      state.notifications.splice(0, action.payload.length, ...action.payload);
-    },
     [ActionType.UPDATE_NOTIFICATION]: (
       state,
       action: PayloadAction<INotification>,

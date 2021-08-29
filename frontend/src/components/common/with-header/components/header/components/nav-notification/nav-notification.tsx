@@ -10,8 +10,7 @@ import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums/enums';
 import { notificationsActions } from 'store/actions';
 import { EntityType } from 'common/enums/enums';
-import { toDayJS } from 'helpers/helpers';
-import { getAllowedClasses } from 'helpers/helpers';
+import { toDayJS, sortObjByDate, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 const NOTIFICATIONS_LIMIT = 4;
@@ -25,9 +24,9 @@ export const NavNotification: React.FC = () => {
 
   const onNotificationNew = (): void => {
     if (isExpanded) {
-      dispatch(notificationsActions.loadLastNotifications({ limit: 1 }));
+      dispatch(notificationsActions.loadMoreNotifications({ limit: 1 }));
     } else {
-      dispatch(notificationsActions.changeLastNotifications({ limit: 1 }));
+      dispatch(notificationsActions.loadMoreNotifications({ limit: 1 }));
     }
     dispatch(notificationsActions.incrementCount());
   };
@@ -102,30 +101,32 @@ export const NavNotification: React.FC = () => {
           </Dropdown.Header>
           <Dropdown.Divider className="mb-0" />
           <div className={getAllowedClasses(isExpanded ? styles.expanded : '')}>
-            {notifications.map((notification, i) => (
+            {[...notifications].sort(sortObjByDate).map((notification, i) => (
               <>
                 {!!i && <Dropdown.Divider className="my-0" />}
-                <NotificationItem
-                  key={notification.id}
-                  id={notification.id}
-                  type={notification.type}
-                  icon={
-                    notification.type === EntityType.COMMENT
-                      ? 'bi bi-chat-left'
-                      : notification.type === EntityType.TEAM
-                      ? 'bi bi-people'
-                      : notification.type === EntityType.PAGE
-                      ? 'bi bi-file-text-fill'
-                      : 'bi bi-info-circle'
-                  }
-                  title={notification.title}
-                  subtitle={notification.subtitle}
-                  subtitleId={notification.subtitleId}
-                  body={notification.body}
-                  read={notification.read}
-                  time={toDayJS(notification.createdAt).fromNow()}
-                  onRead={onRead}
-                />
+                {((!isExpanded && i < 4) || isExpanded) && (
+                  <NotificationItem
+                    key={notification.id}
+                    id={notification.id}
+                    type={notification.type}
+                    icon={
+                      notification.type === EntityType.COMMENT
+                        ? 'bi bi-chat-left'
+                        : notification.type === EntityType.TEAM
+                        ? 'bi bi-people'
+                        : notification.type === EntityType.PAGE
+                        ? 'bi bi-file-text-fill'
+                        : 'bi bi-info-circle'
+                    }
+                    title={notification.title}
+                    subtitle={notification.subtitle}
+                    subtitleId={notification.subtitleId}
+                    body={notification.body}
+                    read={notification.read}
+                    time={toDayJS(notification.createdAt).fromNow()}
+                    onRead={onRead}
+                  />
+                )}
               </>
             ))}
           </div>
