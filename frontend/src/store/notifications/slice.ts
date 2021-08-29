@@ -52,7 +52,9 @@ export const { reducer, actions } = createSlice({
       state.count += 1;
     },
     [ActionType.DECREMENT_COUNT]: (state) => {
-      state.count -= 1;
+      if (state.count > 0) {
+        state.count -= 1;
+      }
     },
     [ActionType.TOGGLE_IS_EXPANDED]: (state) => {
       state.isExpanded = !state.isExpanded;
