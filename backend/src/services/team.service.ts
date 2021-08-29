@@ -8,7 +8,6 @@ import {
   TeamPermissionRepository,
   TeamRepository,
 } from '../data/repositories';
-import { User } from '../data/entities/user';
 import { Team } from '../data/entities/team';
 import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
@@ -21,7 +20,18 @@ import { SocketEvents } from '../common/enums/socket';
 import { NotificationType } from '../common/enums/notification-type';
 import { HttpError } from '../common/errors/http-error';
 import { sendMail } from '../common/utils/mailer.util';
+import {
+  teamNotificationAddUser,
+  teamNotificationDeleteUser,
+  teamNotificationDelete,
+} from '../common/utils/notifications';
+import {
+  teamMailAddUser,
+  teamMailDeleteUser,
+  teamMailDelete,
+} from '../common/utils/mail';
 import { isNotify } from '../common/helpers/is-notify.helper';
+import { env } from '../env';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,
@@ -170,12 +180,65 @@ export const updateTeamRole = async (
   return mapTeamToITeamWithoutRoles(team);
 };
 
-export const deleteById = async (
+export const remove = async (
   id: string,
   workspaceId: string,
+  io: Server,
 ): Promise<void> => {
-  await getCustomRepository(TeamPermissionRepository).deleteByTeamId(id);
-  await getCustomRepository(TeamRepository).deleteById(id, workspaceId);
+  const teamRepository = getCustomRepository(TeamRepository);
+  const teamPermissionRepository = getCustomRepository(
+    TeamPermissionRepository,
+  );
+  const workspace = await getCustomRepository(WorkspaceRepository).findById(
+    workspaceId,
+  );
+  const team = await teamRepository.findByIdWithUsers(id, workspaceId);
+
+  if (!team) {
+    return;
+  }
+  await teamPermissionRepository.deleteByTeamId(id);
+  await teamRepository.deleteById(id, workspaceId);
+  const { users } = team;
+  console.log(team.owner);
+  for (const user of users) {
+    console.log(user.fullName);
+    if (user.id === team.owner) {
+      continue;
+    }
+    console.log(user.fullName);
+    const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
+    const isNotifyTeamEmail = await isNotify(
+      user.id,
+      NotificationType.TEAM_EMAIL,
+    );
+
+    if (isNotifyTeam) {
+      io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+      const { title } = teamNotificationDelete(workspace.name, team.name);
+      await getCustomRepository(NotificationRepository).createAndSave(
+        title,
+        null,
+        EntityType.TEAM,
+        team.id,
+        user.id,
+        false,
+      );
+    }
+    if (isNotifyTeamEmail) {
+      const { app } = env;
+      const { subject, text } = teamMailDelete(
+        workspace.name,
+        team.name,
+        app.url,
+      );
+      await sendMail({
+        to: user.email,
+        subject: subject,
+        text: text,
+      });
+    }
+  }
 };
 
 export const addUser = async (
@@ -198,7 +261,37 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, `added to ${workspace.name}`, io);
+  const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
+  const isNotifyTeamEmail = await isNotify(
+    user.id,
+    NotificationType.TEAM_EMAIL,
+  );
+
+  if (isNotifyTeam) {
+    io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+    const { title } = teamNotificationAddUser(workspace.name, team.name);
+    await getCustomRepository(NotificationRepository).createAndSave(
+      title,
+      null,
+      EntityType.TEAM,
+      team.id,
+      user.id,
+      false,
+    );
+  }
+  if (isNotifyTeamEmail) {
+    const { app } = env;
+    const { subject, text } = teamMailAddUser(
+      workspace.name,
+      team.name,
+      app.url,
+    );
+    await sendMail({
+      to: user.email,
+      subject: subject,
+      text: text,
+    });
+  }
 
   return teamsWithUsersRoles;
 };
@@ -223,20 +316,6 @@ export const deleteUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  notifyUser(team, user, `deleted from ${workspace.name}`, io);
-
-  return teamsWithUsersRoles;
-};
-
-export const notifyUser = async (
-  team: Team,
-  user: User,
-  reason: string,
-  io: Server,
-): Promise<void> => {
-  const title = `You have been ${reason} team.`;
-  const body = `You have been ${reason} team -- "${team.name}".`;
-
   const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
   const isNotifyTeamEmail = await isNotify(
     user.id,
@@ -245,8 +324,9 @@ export const notifyUser = async (
 
   if (isNotifyTeam) {
     io.to(user.id).emit(SocketEvents.NOTIFICATION_NEW);
+    const { title } = teamNotificationDeleteUser(workspace.name, team.name);
     await getCustomRepository(NotificationRepository).createAndSave(
-      body,
+      title,
       null,
       EntityType.TEAM,
       team.id,
@@ -255,10 +335,18 @@ export const notifyUser = async (
     );
   }
   if (isNotifyTeamEmail) {
+    const { app } = env;
+    const { subject, text } = teamMailDeleteUser(
+      workspace.name,
+      team.name,
+      app.url,
+    );
     await sendMail({
       to: user.email,
-      subject: title,
-      text: body,
+      subject: subject,
+      text: text,
     });
   }
+
+  return teamsWithUsersRoles;
 };

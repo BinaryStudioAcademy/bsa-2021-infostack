@@ -17,11 +17,8 @@ import {
   generateGithubAccessToken,
   decodeToken,
 } from '../common/utils/tokens.util';
-import {
-  getSubjectPRMerged,
-  getTextPRMerged,
-  getBodyPRMerged,
-} from '../common/utils/mail-text.util';
+import { prNotification } from '../common/utils/notifications';
+import { prMail } from '../common/utils/mail';
 import { isNotify } from '../common/helpers/is-notify.helper';
 import { sendMail } from '../common/utils/mailer.util';
 import { TagType } from '../common/enums/tag-type';
@@ -147,9 +144,6 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
   const pageRepository = getCustomRepository(PageRepository);
   const notificationRepository = getCustomRepository(NotificationRepository);
 
-  const { app } = env;
-  const url = app.url;
-
   const labelsNames = pr.labels.map((label: any) => label.name);
 
   const githubIntegrations = await gitHubRepository.findByUsernameAndRepo(
@@ -166,8 +160,6 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
     });
     for (const page of filteredPages) {
       const { followingUsers } = page;
-      const title = getSubjectPRMerged();
-      const body = getBodyPRMerged();
       for (const followingUser of followingUsers) {
         const { id, email } = followingUser;
 
@@ -175,6 +167,7 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
         const isNotifyEmail = await isNotify(id, NotificationType.PAGE_EMAIL);
         if (isNotifyPage) {
           io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
+          const { title, body } = prNotification(pr.title);
           await notificationRepository.createAndSave(
             title,
             body,
@@ -186,10 +179,12 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
         }
 
         if (isNotifyEmail) {
+          const { app } = env;
+          const { text, subject } = prMail(pr.title, app.url);
           await sendMail({
             to: email,
-            subject: getSubjectPRMerged(),
-            text: getTextPRMerged(url),
+            subject: subject,
+            text: text,
           });
         }
       }
