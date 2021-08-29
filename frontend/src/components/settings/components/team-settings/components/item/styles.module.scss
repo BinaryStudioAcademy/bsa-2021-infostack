@@ -4,8 +4,21 @@
   box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 15%) !important;
 }
 
-.card-body {
-  gap: 1rem;
+:global {
+  .card-body {
+    padding-left: 30px;
+    gap: 1rem 0;
+
+    .sb-avatar__image,
+    .sb-avatar__text {
+      border: 2px solid #fff;
+      background: #fff;
+    }
+
+    > div {
+      margin-left: -20px;
+    }
+  }
 }
 
 .teamName {

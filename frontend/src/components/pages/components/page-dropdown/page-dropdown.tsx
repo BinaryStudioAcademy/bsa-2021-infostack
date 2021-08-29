@@ -10,9 +10,11 @@ interface Props {
   onAssign(): void;
   onEditing(): void;
   onPageFollow(): void;
+  onPagePin(): void;
   onDelete(): void;
   onShare(): void;
   isCurrentPageFollowed: boolean;
+  isCurrentPagePinned: boolean;
 }
 
 export const PageActionsDropdown: React.FC<Props> = ({
@@ -20,9 +22,11 @@ export const PageActionsDropdown: React.FC<Props> = ({
   onAssign,
   onEditing,
   onPageFollow,
+  onPagePin,
   onDelete,
   onShare,
   isCurrentPageFollowed,
+  isCurrentPagePinned,
 }) => {
   const currentPage = useAppSelector(
     (state: RootState) => state.pages.currentPage,
@@ -58,6 +62,12 @@ export const PageActionsDropdown: React.FC<Props> = ({
           onClick={onPageFollow}
         >
           {isCurrentPageFollowed ? 'Unfollow' : 'Follow'}
+        </Dropdown.Item>
+        <Dropdown.Item
+          className={getAllowedClasses(styles.dropdownItem)}
+          onClick={onPagePin}
+        >
+          {isCurrentPagePinned ? 'Unpin' : 'Pin'}
         </Dropdown.Item>
         <Dropdown.Item
           className={getAllowedClasses(styles.dropdownItem)}

@@ -5,16 +5,20 @@ import { ActionType } from './common';
 
 type State = {
   pages: IPageNav[] | null;
+  pinnedPages: IPageNav[] | null;
   currentPage: IPage | null;
   isSpinner: boolean;
   isCurrentPageFollowed: boolean;
+  isCurrentPagePinned: boolean;
 };
 
 const initialState: State = {
   pages: null,
+  pinnedPages: null,
   currentPage: null,
   isSpinner: false,
   isCurrentPageFollowed: false,
+  isCurrentPagePinned: false,
 };
 
 const { reducer, actions } = createSlice({
@@ -37,12 +41,19 @@ const { reducer, actions } = createSlice({
     [ActionType.SET_PAGES]: (state, action: PayloadAction<IPageNav[]>) => {
       state.pages = action.payload;
     },
+    [ActionType.SET_PINNED_PAGES]: (
+      state,
+      action: PayloadAction<IPageNav[]>,
+    ) => {
+      state.pinnedPages = action.payload;
+    },
     [ActionType.DELETE_PAGE]: (state) => {
       state.currentPage = null;
     },
     [ActionType.GET_PAGE]: (state, action: PayloadAction<IPage>) => {
       state.currentPage = action.payload;
       state.isCurrentPageFollowed = false;
+      state.isCurrentPagePinned = false;
     },
     [ActionType.TOGGLE_SPINNER]: (state) => {
       state.isSpinner = !state.isSpinner;
@@ -50,12 +61,19 @@ const { reducer, actions } = createSlice({
     [ActionType.CLEAR_CURRENT_PAGE]: (state) => {
       state.currentPage = null;
       state.isCurrentPageFollowed = false;
+      state.isCurrentPagePinned = false;
     },
     [ActionType.SET_CURRENT_PAGE_FOLLOWED]: (
       state,
       action: PayloadAction<boolean>,
     ) => {
       state.isCurrentPageFollowed = action.payload;
+    },
+    [ActionType.SET_CURRENT_PAGE_PINNED]: (
+      state,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.isCurrentPagePinned = action.payload;
     },
   },
 });
