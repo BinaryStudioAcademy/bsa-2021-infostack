@@ -11,6 +11,7 @@ interface IPage {
   pageContents: IPageContent[];
   permission?: PermissionType;
   followingUsers?: IUser[];
+  pinnedUsers?: IUser[];
   draft?: IDraft;
 }
 

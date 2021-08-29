@@ -42,6 +42,7 @@ import {
   IPageContributor,
   IPageTableOfContents,
   IPageTableOfContentsHeading,
+  IPageNav,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
 import { ShareModal } from '../share-modal/share-modal';
@@ -54,16 +55,38 @@ export const PageContent: React.FC = () => {
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const childPages = useAppSelector((state) => {
     const { pages, currentPage } = state.pages;
-
     if (pages && currentPage) {
       const page = pages.find((page) => page.id === currentPage.id);
       return page ? page.childPages : null;
     }
   });
-  const { isCurrentPageFollowed } = useAppSelector(
+
+  const followedUserPages = useAppSelector((state) => {
+    const { user } = state.auth;
+    if (user && user.followingPages && childPages) {
+      const pages = childPages.map((child) => ({
+        ...user.followingPages?.find((page) => child.id === page.id),
+        ...child,
+      }));
+      return pages;
+    }
+  }) as IPageNav[];
+
+  const { isCurrentPageFollowed, isCurrentPagePinned } = useAppSelector(
     (state: RootState) => state.pages,
   );
   const { user } = useAppSelector((state) => state.auth);
+
+  const notFollowedUserPages = useAppSelector((state) => {
+    const { user } = state.auth;
+    if (user && user.followingPages && childPages) {
+      const pages = childPages?.filter(
+        (child) =>
+          user?.followingPages?.map((page) => page.id).indexOf(child.id) === -1,
+      );
+      return pages;
+    }
+  }) as IPageNav[];
 
   const [currContent, setCurrContent] = useState<IPageContent | undefined>();
   const [isPermissionsModalVisible, setIsPermissionsModalVisible] =
@@ -98,6 +121,17 @@ export const PageContent: React.FC = () => {
     currentPage?.permission === PermissionType.READ ||
     currentPage?.permission === PermissionType.WRITE ||
     currentPage?.permission === PermissionType.ADMIN;
+
+  useEffect(() => {
+    if (paramsVersionId) {
+      const currentContent = currentPage?.pageContents.find(
+        (content) => content.id === paramsVersionId,
+      );
+      if (currentContent) {
+        setCurrContent(currentContent);
+      }
+    }
+  }, [paramsVersionId]);
 
   const getPageById = async (id?: string): Promise<void> => {
     const payload: string | undefined = id;
@@ -220,11 +254,11 @@ export const PageContent: React.FC = () => {
     }
   };
 
-  const isPageFollowed = async (): Promise<void> => {
-    if (currentPage?.followingUsers) {
-      currentPage.followingUsers.map((follower) => {
-        if (follower.id === user?.id) {
-          dispatch(pagesActions.setCurrentPageFollowed(true));
+  const isPagePinned = async (): Promise<void> => {
+    if (currentPage?.pinnedUsers) {
+      currentPage.pinnedUsers.map((pinner) => {
+        if (pinner.id === user?.id) {
+          dispatch(pagesActions.setCurrentPagePinned(true));
         }
       });
     }
@@ -232,31 +266,63 @@ export const PageContent: React.FC = () => {
 
   const handlePageFollow =
     (pageId: string) =>
-    async (withChildren: boolean): Promise<void> => {
+    async (ids: string[] | undefined): Promise<void> => {
       setIsFollowModalVisible(false);
-      await dispatch(pagesActions.followPage({ pageId, withChildren }));
+      await dispatch(pagesActions.followPage({ pageId, ids }));
     };
 
   const handlePageUnfollow =
     (pageId: string) =>
-    async (withChildren: boolean): Promise<void> => {
+    async (ids: string[] | undefined): Promise<void> => {
       setIsFollowModalVisible(false);
-      await dispatch(pagesActions.unfollowPage({ pageId, withChildren }));
+      await dispatch(pagesActions.unfollowPage({ pageId, ids }));
     };
 
   const onPageFollow = (): void => {
-    if (childPages && childPages.length) {
+    const isFollowedPageHasFollowedPages =
+      isCurrentPageFollowed && followedUserPages?.length;
+    const isNotFollowedPageHasNotFollowedPages =
+      !isCurrentPageFollowed && notFollowedUserPages?.length;
+
+    if (
+      isFollowedPageHasFollowedPages ||
+      isNotFollowedPageHasNotFollowedPages
+    ) {
       setIsFollowModalVisible(true);
-    } else {
-      isCurrentPageFollowed
-        ? handlePageUnfollow(paramsId)(false)
-        : handlePageFollow(paramsId)(false);
+      return;
     }
+    isCurrentPageFollowed
+      ? handlePageUnfollow(paramsId)(undefined)
+      : handlePageFollow(paramsId)(undefined);
+  };
+
+  const onPagePin = (): void => {
+    isCurrentPagePinned ? handlePageUnpin(paramsId) : handlePagePin(paramsId);
+  };
+
+  const handlePagePin = async (pageId: string): Promise<void> => {
+    await dispatch(pagesActions.pinPage(pageId));
+    await dispatch(pagesActions.getPinnedPagesAsync());
+  };
+
+  const handlePageUnpin = async (pageId: string): Promise<void> => {
+    await dispatch(pagesActions.unpinPage(pageId));
+    await dispatch(pagesActions.getPinnedPagesAsync());
   };
 
   useEffect(() => {
-    isPageFollowed();
-  }, [isPageFollowed]);
+    if (currentPage?.followingUsers) {
+      currentPage.followingUsers.map((follower) => {
+        if (follower.id === user?.id) {
+          dispatch(pagesActions.setCurrentPageFollowed(true));
+        }
+      });
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    isPagePinned();
+  }, [isPagePinned]);
 
   if (isSpinner || isLeftBlockLoading) {
     return <Spinner />;
@@ -325,9 +391,11 @@ export const PageContent: React.FC = () => {
                       onAssign={onAssign}
                       onEditing={onEditing}
                       onPageFollow={onPageFollow}
+                      onPagePin={onPagePin}
                       onDelete={onDelete}
                       onShare={onShare}
                       isCurrentPageFollowed={isCurrentPageFollowed}
+                      isCurrentPagePinned={isCurrentPagePinned}
                     />
                   </div>
                 </Col>
@@ -380,6 +448,9 @@ export const PageContent: React.FC = () => {
           <FollowModal
             show={isFollowModalVisible}
             isFollowing={isCurrentPageFollowed}
+            childPages={
+              isCurrentPageFollowed ? followedUserPages : notFollowedUserPages
+            }
             handler={
               isCurrentPageFollowed
                 ? handlePageUnfollow(paramsId)

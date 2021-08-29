@@ -28,6 +28,7 @@ import {
   IFoundPageContent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
+import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { mapPermissionstoParticipants } from '../common/mappers/page/map-permissions-to-participants';
 import { maximum } from '../common/helpers/permissions.helper';
@@ -236,6 +237,21 @@ export const getPages = async (
   const finalPages = pagesWithPermissions.filter((page) => page.permission);
 
   return finalPages;
+};
+
+export const getPinnedPages = async (
+  userId: string,
+  workspaceId: string,
+): Promise<IPageNav[]> => {
+  const { pinnedPages } = await getCustomRepository(UserRepository).findById(
+    userId,
+  );
+  const filteredPages = pinnedPages.filter(
+    (page) => page.workspaceId === workspaceId,
+  );
+  const pagesToShow = mapPagesToPagesNavWithoutChildren(filteredPages);
+
+  return pagesToShow;
 };
 
 export const getPage = async (
@@ -768,3 +784,12 @@ export const deleteDraft = async (pageId: string): Promise<void> => {
   const draftRepository = getCustomRepository(DraftRepository);
   await draftRepository.delete({ pageId });
 };
+
+export const pinPage = async (userId: string, pageId: string): Promise<void> =>
+  getCustomRepository(PageRepository).pinPage(userId, pageId);
+
+export const unpinPage = async (
+  userId: string,
+  pageId: string,
+): Promise<void> =>
+  getCustomRepository(PageRepository).unpinPage(userId, pageId);

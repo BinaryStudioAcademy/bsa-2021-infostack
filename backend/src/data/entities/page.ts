@@ -65,6 +65,10 @@ export class Page extends AbstractEntity {
   @JoinTable({ name: 'user_followedPages' })
   followingUsers: User[];
 
+  @ManyToMany(() => User, (user) => user.pinnedPages, { cascade: true })
+  @JoinTable({ name: 'user_pinnedPages' })
+  pinnedUsers: User[];
+
   @OneToMany(() => PageContent, (PageContent) => PageContent.page, {
     onDelete: 'CASCADE',
   })

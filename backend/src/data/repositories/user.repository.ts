@@ -13,6 +13,7 @@ class UserRepository extends Repository<User> {
       .leftJoinAndSelect('user.skills', 'skills')
       .leftJoinAndSelect('user.teams', 'teams')
       .leftJoinAndSelect('user.followingPages', 'pages')
+      .leftJoinAndSelect('user.pinnedPages', 'pinnedPages')
       .leftJoinAndSelect('user.links', 'links')
       .leftJoin(
         (qb) =>
@@ -28,6 +29,11 @@ class UserRepository extends Repository<User> {
         'pages.pageContents',
         'pageContents',
         '"pageContents"."createdAt" = "last_version"."created_at"',
+      )
+      .leftJoinAndSelect(
+        'pinnedPages.pageContents',
+        'pinnedPageContents',
+        '"pinnedPageContents"."createdAt" = "last_version"."created_at"',
       )
       .where('user.id = :id', { id })
       .getOne();
