@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "src": ["src/*"]
+      "*": ["src/*"]
     },
     "target": "es6",
     "lib": ["esnext"],

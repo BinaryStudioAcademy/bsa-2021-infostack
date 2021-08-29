@@ -1,4 +1,4 @@
-import { IPageNav } from 'src/common/interfaces';
+import { IPageNav } from 'common/interfaces';
 
 class PageService {
   getAll(): Promise<IPageNav[]> {

@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ReducerName } from 'src/common/enums';
-import { IPage, IPageNav } from 'src/common/interfaces';
-import { RequestStatus } from 'src/common/enums';
+import { ReducerName } from 'common/enums';
+import { IPage, IPageNav } from 'common/interfaces';
+import { RequestStatus } from 'common/enums';
 import { fetchPages } from './async-actions';
 
 type State = {

@@ -1,3 +1,3 @@
-import { store } from 'src/store';
+import { store } from 'store';
 
 export type AppDispatch = typeof store.dispatch;
