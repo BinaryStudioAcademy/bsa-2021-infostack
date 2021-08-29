@@ -155,7 +155,7 @@ export const updateTeamRole = async (
   if (!userId) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.TEAM_EMPTY_STRING,
+      message: HttpErrorMessage.TEAM_OWNER_ID,
     });
   }
   const teamRepository = getCustomRepository(TeamRepository);

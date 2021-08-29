@@ -3,11 +3,8 @@ import { toast } from 'react-toastify';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { pageApi } from 'services';
-import {
-  IPageNav,
-  IPageRequest,
-  IEditPageContent,
-} from 'common/interfaces/pages';
+import { authActions } from 'store/actions';
+import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
 import { RootState } from 'common/types/types';
 
 const createPage = createAsyncThunk(
@@ -44,12 +41,20 @@ const getPagesAsync = createAsyncThunk(
   },
 );
 
+const getPinnedPagesAsync = createAsyncThunk(
+  ActionType.SET_PINNED_PAGES,
+  async (payload: undefined, { dispatch }) => {
+    const response = await pageApi.getPinnedPages();
+    dispatch(actions.setPinnedPages(response));
+  },
+);
+
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
-  async (getPayload: string | undefined, { dispatch }) => {
+  async (pageId: string | undefined, { dispatch }) => {
     dispatch(actions.toggleSpinner());
-    const createPageResponse = await pageApi.getPage(getPayload);
-    dispatch(actions.getPage(createPageResponse));
+    const getPageResponse = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(getPageResponse));
     dispatch(actions.toggleSpinner());
   },
 );
@@ -85,49 +90,53 @@ const deletePage = createAsyncThunk(
 
 type FollowPayload = {
   pageId: string;
-  withChildren: boolean;
+  ids: string[] | undefined;
 };
-
-const getPagesIds = ({ id, childPages }: IPageNav): string[] =>
-  childPages ? [id, ...childPages.flatMap(getPagesIds)] : [id];
 
 const followPage = createAsyncThunk<
   Promise<void>,
   FollowPayload,
   { state: RootState }
->(
-  ActionType.GET_PAGE,
-  async ({ pageId, withChildren }, { dispatch, getState }) => {
-    if (withChildren) {
-      const pages = getState().pages.pages as IPageNav[];
-      const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
-      const ids = getPagesIds(currentPage);
-      await pageApi.followPages(ids);
-    } else {
-      await pageApi.followPage(pageId);
-    }
+>(ActionType.GET_PAGE, async ({ pageId, ids }, { dispatch }) => {
+  if (ids) {
+    await pageApi.followPages(ids);
+  }
+  await pageApi.followPage(pageId);
 
-    const response = await pageApi.getPage(pageId);
-    dispatch(actions.getPage(response));
-  },
-);
+  const response = await pageApi.getPage(pageId);
+  dispatch(actions.getPage(response));
+  dispatch(actions.setCurrentPageFollowed(true));
+  dispatch(authActions.loadUser());
+});
 
 const unfollowPage = createAsyncThunk<
   Promise<void>,
   FollowPayload,
   { state: RootState }
->(
-  ActionType.GET_PAGE,
-  async ({ pageId, withChildren }, { dispatch, getState }) => {
-    if (withChildren) {
-      const pages = getState().pages.pages as IPageNav[];
-      const currentPage = pages.find(({ id }) => id === pageId) as IPageNav;
-      const ids = getPagesIds(currentPage);
-      await pageApi.unfollowPages(ids);
-    } else {
-      await pageApi.unfollowPage(pageId);
-    }
+>(ActionType.GET_PAGE, async ({ pageId, ids }, { dispatch }) => {
+  if (ids) {
+    await pageApi.unfollowPages(ids);
+  }
+  await pageApi.unfollowPage(pageId);
+  dispatch(actions.setCurrentPageFollowed(false));
+  const response = await pageApi.getPage(pageId);
+  dispatch(actions.getPage(response));
+  dispatch(authActions.loadUser());
+});
 
+const pinPage = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (pageId: string, { dispatch }) => {
+    await pageApi.pinPage(pageId);
+    const response = await pageApi.getPage(pageId);
+    dispatch(actions.getPage(response));
+  },
+);
+
+const unpinPage = createAsyncThunk(
+  ActionType.GET_PAGE,
+  async (pageId: string, { dispatch }) => {
+    await pageApi.unpinPage(pageId);
     const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
   },
@@ -177,11 +186,14 @@ const pagesActions = {
   deletePage,
   createVersionPage,
   getPagesAsync,
+  getPinnedPagesAsync,
   getPage,
   setPage,
   editPageContent,
   followPage,
   unfollowPage,
+  pinPage,
+  unpinPage,
   getPageShared,
   editDraft,
   deleteDraft,

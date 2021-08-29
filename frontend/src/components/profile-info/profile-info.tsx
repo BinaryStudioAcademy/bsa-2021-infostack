@@ -15,8 +15,7 @@ import {
   Button,
 } from 'react-bootstrap';
 import { Link, UserAvatar } from 'components/common/common';
-import { userApi } from 'services';
-import { IUser } from 'common/interfaces/user';
+import { IPageNav } from 'common/interfaces/pages';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
 import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums/enums';
@@ -25,41 +24,18 @@ import { replaceIdParam } from 'helpers/helpers';
 import { Activities } from './components/components';
 
 const ProfileInfo: React.FC = () => {
-  const [user, setUser] = useState<IUser>({
-    id: '',
-    avatar: '',
-    fullName: '',
-    email: '',
-    title: '',
-    skills: [],
-    followingPages: [],
-  });
+  const { user } = useAppSelector((state) => state.auth);
+
   const [permission, setPermission] = useState(true);
-  const [currentPageId, setCurrentPageId] = useState<string>();
+  const [pageId, setPageId] = useState<string>();
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
-    let mounted = true;
-    const getUser = async (): Promise<void> => {
-      await userApi.getUserInfo(id).then((user) => {
-        if (user.id.length > 0) {
-          if (mounted) {
-            setPermission(true);
-            setUser(user);
-          }
-        } else {
-          if (mounted) {
-            setPermission(false);
-          }
-        }
-      });
-    };
-
-    getUser();
-
-    return (): void => {
-      mounted = false;
-    };
+    if (user && user.id.length > 0) {
+      setPermission(true);
+      return;
+    }
+    setPermission(false);
   }, [id]);
 
   const dispatch = useAppDispatch();
@@ -68,43 +44,43 @@ const ProfileInfo: React.FC = () => {
   const childPages = useAppSelector((state) => {
     const { pages } = state.pages;
 
-    if (pages && currentPageId) {
-      const page = pages.find((page) => page.id === currentPageId);
+    if (pages && pageId) {
+      const page = pages?.find((page) => page.id === pageId);
       return page ? page.childPages : null;
     }
   });
 
-  useEffect(() => {
-    const followedChildPages = childPages
-      ? childPages.map((childPage) =>
-          user?.followingPages?.filter((page) => page.id === childPage.id),
-        )[0]
-      : null;
+  const followedUserPages = useAppSelector((state) => {
+    const { user } = state.auth;
+    if (user && user.followingPages && childPages) {
+      const pages = childPages.filter((child) =>
+        user.followingPages?.find((page) => child.id === page.id),
+      );
+      return pages;
+    }
+  }) as IPageNav[];
 
-    if (childPages && childPages.length && followedChildPages?.length) {
+  useEffect(() => {
+    if (followedUserPages?.length) {
       setIsFollowModalVisible(true);
       return;
     }
-    if (currentPageId) {
-      handlePageUnfollow()(false);
+    if (pageId) {
+      handlePageUnfollow()(undefined);
     }
-  }, [currentPageId]);
+  }, [pageId]);
 
   const handlePageUnfollow =
     () =>
-    async (withChildren: boolean): Promise<void> => {
+    async (ids: string[] | undefined): Promise<void> => {
       setIsFollowModalVisible(false);
-
-      if (currentPageId) {
-        await dispatch(
-          pagesActions.unfollowPage({ pageId: currentPageId, withChildren }),
-        );
-        await userApi.getUserInfo(id).then((user) => setUser(user));
+      if (pageId) {
+        await dispatch(pagesActions.unfollowPage({ pageId, ids }));
       }
     };
 
   const onPageUnfollow = async (pageId: string): Promise<void> => {
-    setCurrentPageId(pageId);
+    setPageId(pageId);
   };
 
   return (
@@ -197,6 +173,7 @@ const ProfileInfo: React.FC = () => {
                                       <FollowModal
                                         show={isFollowModalVisible}
                                         isFollowing={true}
+                                        childPages={followedUserPages}
                                         handler={handlePageUnfollow()}
                                       />
                                     </div>

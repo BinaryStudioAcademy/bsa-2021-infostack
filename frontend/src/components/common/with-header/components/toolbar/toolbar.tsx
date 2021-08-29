@@ -31,6 +31,7 @@ export const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
 
   useEffect(() => {
     dispatch(pagesActions.getPagesAsync());
+    dispatch(pagesActions.getPinnedPagesAsync());
   }, []);
 
   const addPage = async (): Promise<void> => {
@@ -67,6 +68,20 @@ export const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
         {title}
       </h1>
       <div className="pt-3 w-100">
+        {pages.pinnedPages && pages.pinnedPages.length > 0 && (
+          <>
+            <div className="pt-3 w-100 pt-3 w-100 d-flex justify-content-between align-items-center">
+              <SectionName name="Pinned pages" />
+              <span
+                onClick={addPage}
+                className={getAllowedClasses('px-0', styles.plusRoot)}
+              ></span>
+            </div>
+            <Accordion className={styles.accordion} defaultActiveKey="1" flush>
+              <PagesList pages={pages.pinnedPages} />
+            </Accordion>
+          </>
+        )}
         <div className="pt-3 w-100 pt-3 w-100 d-flex justify-content-between align-items-center">
           <SectionName name="Pages" />
           <span

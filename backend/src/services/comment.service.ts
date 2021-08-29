@@ -11,6 +11,7 @@ import {
   CommentRepository,
   NotificationRepository,
   CommentReactionRepository,
+  UserRepository,
 } from '../data/repositories';
 import { HttpCode } from '../common/enums/http-code';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
@@ -32,6 +33,7 @@ import {
   replyMail,
   mentionNotification,
   parseMentions,
+  mentionMail,
 } from '../common/utils';
 
 export const getComments = async (
@@ -71,7 +73,15 @@ export const notifyUsers = async (
     const { title, body } = mentionNotification(fullName, text);
     const mentions = mentionIds.filter((mention) => mention !== authorId);
 
-    const notifications = mentions.map((mention) => ({
+    const isNotifyCommentIds = await isNotifyMany(
+      mentions,
+      NotificationType.COMMENT,
+    );
+    const commentNotifications = mentions.filter(
+      (mention) => !isNotifyCommentIds.includes(mention),
+    );
+
+    const notifications = commentNotifications.map((mention) => ({
       title,
       body,
       type: EntityType.COMMENT,
@@ -82,6 +92,27 @@ export const notifyUsers = async (
     await notificationRepository.createAndSaveMultiple(notifications);
 
     io.to(mentions).emit(SocketEvents.NOTIFICATION_NEW);
+
+    const isNotifyEmailIds = await isNotifyMany(
+      mentions,
+      NotificationType.COMMENT_EMAIL,
+    );
+
+    const users = await getCustomRepository(UserRepository).findUsersByIds(
+      mentions,
+    );
+
+    const emailNotifications = users.filter(
+      ({ id }) => !isNotifyEmailIds.includes(id),
+    );
+
+    const mentionEmails = emailNotifications.map(({ email }) => email);
+    const { subject, text: emailText } = mentionMail(fullName, text, url);
+    await sendMail({
+      bcc: mentionEmails,
+      subject,
+      text: emailText,
+    });
   }
 
   const { title, body } = commentNotification(fullName, text);

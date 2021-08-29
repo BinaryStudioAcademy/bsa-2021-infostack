@@ -9,6 +9,7 @@ export const mapPageToIPage = (page: Page): IPage => {
     childPages,
     pageContents,
     followingUsers,
+    pinnedUsers,
     draft,
   } = page;
 
@@ -19,14 +20,27 @@ export const mapPageToIPage = (page: Page): IPage => {
     updatedAt: content.updatedAt?.toISOString(),
     deletedAt: content.deletedAt?.toISOString(),
   }));
-  const mappedFollowingUsers = followingUsers?.map((user) => {
-    return {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      avatar: user.avatar,
-    };
-  });
+  const mappedFollowingUsers = followingUsers?.map(
+    ({ id, fullName, email, avatar }) => {
+      return {
+        id,
+        fullName,
+        email,
+        avatar,
+      };
+    },
+  );
+
+  const mappedPinnedUsers = pinnedUsers?.map(
+    ({ id, fullName, email, avatar }) => {
+      return {
+        id,
+        fullName,
+        email,
+        avatar,
+      };
+    },
+  );
 
   const mappedDraft = {
     id: draft?.id,
@@ -42,6 +56,7 @@ export const mapPageToIPage = (page: Page): IPage => {
     childPages: mappedChildren,
     pageContents: mappedpageContents,
     followingUsers: mappedFollowingUsers,
+    pinnedUsers: mappedPinnedUsers,
     draft: mappedDraft,
   };
 };
