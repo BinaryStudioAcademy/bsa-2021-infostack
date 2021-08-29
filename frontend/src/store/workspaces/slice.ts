@@ -6,12 +6,16 @@ import { ActionType } from './common';
 type State = {
   workspaces: IWorkspace[] | null;
   currentWorkspace: IWorkspace | null;
+  isUpdatingCurrentWorkspace: boolean;
+  isDeletingCurrentWorkspaceLogo: boolean;
   creatingError: string;
 };
 
 const initialState: State = {
   workspaces: null,
   currentWorkspace: null,
+  isUpdatingCurrentWorkspace: false,
+  isDeletingCurrentWorkspaceLogo: false,
   creatingError: '',
 };
 
@@ -39,6 +43,13 @@ const { reducer, actions } = createSlice({
     },
     [ActionType.REMOVE_CREATING_ERROR]: (state) => {
       state.creatingError = '';
+    },
+    [ActionType.TOGGLE_IS_UPDATING_CURRENT_WORKSPACE]: (state) => {
+      state.isUpdatingCurrentWorkspace = !state.isUpdatingCurrentWorkspace;
+    },
+    [ActionType.TOGGLE_IS_DELETING_CURRENT_WORKSPACE_LOGO]: (state) => {
+      state.isDeletingCurrentWorkspaceLogo =
+        !state.isDeletingCurrentWorkspaceLogo;
     },
   },
 });

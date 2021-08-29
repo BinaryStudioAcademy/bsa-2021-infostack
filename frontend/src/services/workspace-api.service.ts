@@ -2,6 +2,7 @@ import {
   IWorkspace,
   IWorkspaceCreation,
   IWorkspaceInvite,
+  IWorkspaceUpdate,
   IWorkspaceUser,
 } from 'common/interfaces/workspace';
 import { ContentType, HttpMethod } from 'common/enums/enums';
@@ -75,5 +76,33 @@ class WorkspaceApi {
 
     return updateResponse;
   }
+
+  public async updateWorkspaceById(
+    id: string,
+    data: IWorkspaceUpdate,
+  ): Promise<IWorkspace> {
+    const formData = new FormData();
+
+    for (const prop in data) {
+      if (Object.prototype.hasOwnProperty.call(data, prop)) {
+        const value = data[prop as keyof IWorkspaceUpdate];
+        if (value) {
+          formData.append(prop, value);
+        }
+      }
+    }
+
+    return this.http.load(`${this.BASE}/${id}`, {
+      method: HttpMethod.PUT,
+      payload: formData,
+    });
+  }
+
+  public async deleteLogo(id: string): Promise<void> {
+    return this.http.load(`${this.BASE}/${id}/logo`, {
+      method: HttpMethod.DELETE,
+    });
+  }
 }
+
 export const workspaceApi = new WorkspaceApi();

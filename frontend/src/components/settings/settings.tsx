@@ -18,6 +18,7 @@ import {
 import { AppRoute } from 'common/enums/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { WorkspaceSettings } from './components/workspace-settings/workspace-settings';
 
 const Settings: React.FC = () => {
   const match = useRouteMatch();
@@ -44,6 +45,11 @@ const Settings: React.FC = () => {
                   <Route
                     path={AppRoute.SETTINGS_PROFILE}
                     component={ProfileSettings}
+                    exact
+                  />
+                  <Route
+                    path={AppRoute.SETTINGS_WORKSPACE}
+                    component={WorkspaceSettings}
                     exact
                   />
                   <Route
