@@ -10,6 +10,7 @@ class NotificationRepository extends Repository<Notification> {
     type: EntityType,
     entityTypeId: string,
     userId: string,
+    workspaceId: string,
     read: boolean,
   ): Promise<Notification> {
     const notification = this.create({
@@ -18,6 +19,7 @@ class NotificationRepository extends Repository<Notification> {
       type,
       entityTypeId,
       userId,
+      workspaceId,
       read,
     });
 
@@ -38,23 +40,27 @@ class NotificationRepository extends Repository<Notification> {
     });
   }
 
-  public findAllByUserId(userId: string): Promise<Notification[]> {
+  public findAllByUserIdAndWorkspaceId(
+    userId: string,
+    workspaceId: string,
+  ): Promise<Notification[]> {
     return this.find({
-      where: { userId },
+      where: { userId, workspaceId },
       order: {
         createdAt: 'DESC',
       },
     });
   }
 
-  public findSomeByUserId(
+  public findSomeByUserIdAndWorkspaceId(
     userId: string,
+    workspaceId: string,
     skip: number,
     limit: number,
   ): Promise<Notification[]> {
     if (limit) {
       return this.find({
-        where: { userId },
+        where: { userId, workspaceId },
         skip: skip,
         take: limit,
         order: {
@@ -63,7 +69,7 @@ class NotificationRepository extends Repository<Notification> {
       });
     } else {
       return this.find({
-        where: { userId },
+        where: { userId, workspaceId },
         skip: skip,
         order: {
           createdAt: 'DESC',

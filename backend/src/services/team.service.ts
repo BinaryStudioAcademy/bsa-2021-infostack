@@ -200,13 +200,10 @@ export const remove = async (
   await teamPermissionRepository.deleteByTeamId(id);
   await teamRepository.deleteById(id, workspaceId);
   const { users } = team;
-  console.log(team.owner);
   for (const user of users) {
-    console.log(user.fullName);
     if (user.id === team.owner) {
       continue;
     }
-    console.log(user.fullName);
     const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
     const isNotifyTeamEmail = await isNotify(
       user.id,
@@ -222,6 +219,7 @@ export const remove = async (
         EntityType.TEAM,
         team.id,
         user.id,
+        workspaceId,
         false,
       );
     }
@@ -276,6 +274,7 @@ export const addUser = async (
       EntityType.TEAM,
       team.id,
       user.id,
+      workspaceId,
       false,
     );
   }
@@ -331,6 +330,7 @@ export const deleteUser = async (
       EntityType.TEAM,
       team.id,
       user.id,
+      workspaceId,
       false,
     );
   }

@@ -11,12 +11,19 @@ const router: Router = Router();
 
 router.get(
   '/',
-  run((req) => getNotifications(req.userId, req.query.limit, req.query.from)),
+  run((req) =>
+    getNotifications(
+      req.userId,
+      req.workspaceId,
+      req.query.limit,
+      req.query.from,
+    ),
+  ),
 );
 
 router.get(
   '/count',
-  run((req) => getNotificationsCount(req.userId)),
+  run((req) => getNotificationsCount(req.userId, req.workspaceId)),
 );
 
 router.put(
@@ -26,7 +33,7 @@ router.put(
 
 router.put(
   '/',
-  run((req) => updateReadForAll(req.userId, req.body)),
+  run((req) => updateReadForAll(req.userId, req.workspaceId, req.body)),
 );
 
 export default router;

@@ -53,6 +53,7 @@ export const getComments = async (
 export const notifyUsers = async (
   comment: IComment,
   mentionIds: string[],
+  workspaceId: string,
   io: Server,
 ): Promise<void> => {
   const { pageId, parentCommentId, author } = comment;
@@ -87,6 +88,7 @@ export const notifyUsers = async (
       type: EntityType.COMMENT,
       entityTypeId: comment.id,
       userId: mention,
+      workspaceId,
       read: false,
     }));
     await notificationRepository.createAndSaveMultiple(notifications);
@@ -146,6 +148,7 @@ export const notifyUsers = async (
         EntityType.COMMENT,
         comment.id,
         parentAuthor.id,
+        workspaceId,
         false,
       );
     }
@@ -218,6 +221,7 @@ export const notifyUsers = async (
 export const addComment = async (
   userId: string,
   pageId: string,
+  workspaceId: string,
   { text, mentionIds, parentCommentId, voiceRecord }: ICommentRequest,
   io: Server,
 ): Promise<IComment> => {
@@ -252,7 +256,7 @@ export const addComment = async (
   };
 
   io.to(pageId).emit(SocketEvents.PAGE_NEW_COMMENT, response);
-  notifyUsers(response, mentionIds, io);
+  notifyUsers(response, mentionIds, workspaceId, io);
 
   return response;
 };

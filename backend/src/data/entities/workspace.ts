@@ -5,6 +5,7 @@ import { Team } from './team';
 import { Page } from './page';
 import { Tag } from './tag';
 import { Skill } from './skill';
+import { Notification } from './notification';
 
 @Entity()
 export class Workspace extends AbstractEntity {
@@ -22,6 +23,9 @@ export class Workspace extends AbstractEntity {
 
   @OneToMany(() => Page, (Page) => Page.workspace)
   pages: Page[];
+
+  @OneToMany(() => Notification, (Notification) => Notification.workspace)
+  notifications: Notification[];
 
   @OneToMany(() => Tag, (Tag) => Tag.workspace)
   tags: Tag[];

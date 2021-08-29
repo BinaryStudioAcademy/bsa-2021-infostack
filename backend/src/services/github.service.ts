@@ -174,6 +174,7 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
             EntityType.PAGE,
             page.id,
             id,
+            integration.workspaceId,
             false,
           );
         }
