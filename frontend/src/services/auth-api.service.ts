@@ -91,6 +91,14 @@ class AuthApi {
       contentType: ContentType.JSON,
     });
   }
+
+  public async loginGithub(code: string): Promise<IUserWithTokens> {
+    return this.http.load(`${this.BASE}/login/github`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify({ code }),
+      contentType: ContentType.JSON,
+    });
+  }
 }
 
 export const authApi = new AuthApi();

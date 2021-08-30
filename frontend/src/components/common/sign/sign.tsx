@@ -38,6 +38,11 @@ export const Sign: React.FC<Props> = ({
     window.location.assign(url);
   };
 
+  const githubSignIn = async (): Promise<void> => {
+    const { url } = await authApi.getLoginGitHubUrl();
+    window.location.assign(url);
+  };
+
   return (
     <div className="vh-100 vw-100 d-flex flex-column justify-content-center align-items-center bg-light text-center">
       <img src={logo} alt="Infostack logo" className={styles.logo}></img>
@@ -75,6 +80,15 @@ export const Sign: React.FC<Props> = ({
               type="light"
               className="mx-auto"
             />
+            <Button
+              onClick={githubSignIn}
+              className={getAllowedClasses('mx-auto mt-4', styles.github)}
+            >
+              <div>
+                <i className="bi bi-github" />
+              </div>
+              <span>Sign in with Github</span>
+            </Button>
           </div>
         </Form>
       </div>
