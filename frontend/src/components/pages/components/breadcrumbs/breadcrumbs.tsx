@@ -50,7 +50,6 @@ export const Breadcrumbs: React.FC = () => {
     if (pages) {
       const breadcrumbs = [] as Breadcrumb[];
       getBreadcrumbs(breadcrumbs, pages, paramsId);
-      console.log(breadcrumbs);
       setBreadcrumbs(breadcrumbs);
     }
   }, []);
