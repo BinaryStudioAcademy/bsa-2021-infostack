@@ -1,0 +1,7 @@
+.breadcrumb {
+  ol {
+    li + li:before {
+      content: var(--bs-breadcrumb-divider, '>') !important;
+    }
+  }
+}
