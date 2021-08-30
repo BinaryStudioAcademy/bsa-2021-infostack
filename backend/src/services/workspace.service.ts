@@ -211,15 +211,13 @@ export const getUserWorkspaces = async (
   );
   const workspaces = [] as IWorkspace[];
   for (const userWorkspace of usersWorkspaces) {
-    if (userWorkspace.status !== InviteStatus.DELETED) {
-      const workspace = userWorkspace.workspace;
-      workspaces.push({
-        id: workspace.id,
-        title: workspace.name,
-        status: userWorkspace.status,
-        logo: workspace.logo,
-      });
-    }
+    const workspace = userWorkspace.workspace;
+    workspaces.push({
+      id: workspace.id,
+      title: workspace.name,
+      status: userWorkspace.status,
+      logo: workspace.logo,
+    });
   }
   return workspaces;
 };
