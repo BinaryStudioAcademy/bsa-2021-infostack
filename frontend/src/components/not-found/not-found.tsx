@@ -1,7 +1,7 @@
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import styles from './styles.module.scss';
 
 const NotFound: React.FC = () => {

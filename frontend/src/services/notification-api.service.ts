@@ -1,6 +1,6 @@
 import { http } from 'services/http.service';
 import { INotification } from 'common/interfaces/notification';
-import { ContentType, HttpMethod } from 'common/enums/enums';
+import { ContentType, HttpMethod } from 'common/enums';
 import { getStringifiedQuery } from 'helpers/helpers';
 import { IQuery } from 'common/interfaces/query';
 

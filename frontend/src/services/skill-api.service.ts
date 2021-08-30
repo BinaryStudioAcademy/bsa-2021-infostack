@@ -1,5 +1,5 @@
 import { ISkill } from 'common/interfaces/skill';
-import { HttpMethod, ContentType } from 'common/enums/enums';
+import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
 
 class SkillApi {

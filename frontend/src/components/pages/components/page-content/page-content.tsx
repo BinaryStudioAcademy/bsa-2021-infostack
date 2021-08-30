@@ -13,7 +13,7 @@ import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import { toast } from 'react-toastify';
 import { SocketContext } from 'context/socket';
-import { SocketEvents } from 'common/enums/enums';
+import { SocketEvents } from 'common/enums';
 import {
   useAppDispatch,
   useAppSelector,
@@ -24,7 +24,7 @@ import {
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
-import { AppRoute, PermissionType } from 'common/enums/enums';
+import { AppRoute, PermissionType } from 'common/enums';
 import { pageApi } from 'services';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';

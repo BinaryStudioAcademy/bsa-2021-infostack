@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { authApi, userApi } from 'services';
 import { ILogin, IRegister } from 'common/interfaces/auth';
-import { LocalStorageVariable } from 'common/enums/enums';
+import { LocalStorageVariable } from 'common/enums';
 
 const login = createAsyncThunk(
   ActionType.SET_USER,
@@ -56,6 +57,19 @@ const loginGoogle = createAsyncThunk(
   },
 );
 
+const loginGithub = createAsyncThunk(
+  ActionType.SET_USER,
+  async (code: string, { dispatch }): Promise<void> => {
+    try {
+      const loginResponse = await authApi.loginGithub(code);
+      setTokensLocalStorage(loginResponse);
+      dispatch(actions.setUser(loginResponse));
+    } catch (e) {
+      toast.error(e.message);
+    }
+  },
+);
+
 const setTokensLocalStorage = ({
   accessToken,
   refreshToken,
@@ -74,6 +88,7 @@ const authActions = {
   logout,
   loadUser,
   loginGoogle,
+  loginGithub,
 };
 
 export { authActions };

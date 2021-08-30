@@ -1,5 +1,3 @@
-enum ActionType {
-  SET_USERS = 'setUsers',
+export enum ActionType {
+  FETCH_USERS = 'fetchUsers',
 }
-
-export { ActionType };

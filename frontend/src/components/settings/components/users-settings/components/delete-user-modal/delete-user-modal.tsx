@@ -29,7 +29,7 @@ export const DeleteUserModal: React.FC<Props> = ({
     toast.info('User was deleted');
 
     setDeleteDisabled(false);
-    dispatch(usersActions.loadUsers());
+    dispatch(usersActions.fetchUsers());
   };
 
   return (

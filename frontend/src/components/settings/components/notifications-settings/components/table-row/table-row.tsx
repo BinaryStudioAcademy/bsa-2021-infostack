@@ -6,7 +6,7 @@ import {
   useAppSelector,
 } from 'hooks/hooks';
 import { notificationsSettingsActions } from 'store/actions';
-import { NotificationType, GeneralNotificationType } from 'common/enums/enums';
+import { NotificationType, GeneralNotificationType } from 'common/enums';
 import { RootState } from 'common/types/types';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';

@@ -5,7 +5,7 @@ import {
   EntityState,
 } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
-import { ReducerName, RequestStatus } from 'common/enums/enums';
+import { ReducerName, RequestStatus } from 'common/enums';
 import { ICommentNormalized } from 'common/interfaces/comment';
 import { RootState } from 'common/types/types';
 import { fetchComments, createComment, deleteComment } from './actions';
