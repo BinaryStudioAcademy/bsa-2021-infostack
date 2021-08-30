@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import { SocketContext } from 'context/socket';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
-import { AppRoute, PageTitle, SocketEvents } from 'common/enums/enums';
+import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
 // import { IUser } from 'common/interfaces/user';
@@ -28,12 +28,13 @@ import {
 } from 'hooks/hooks';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { IUser } from 'common/interfaces';
 
 export const ContentEditor: React.FC = () => {
   const socket = useContext(SocketContext);
-  // const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  const [editors, setEditors] = useState(false);
+  // const [editors, setEditors] = useState(false);
   // const [editors, setEditors] = useState<IUser[]>([]);
   // const { editors } = useAppSelector((state: RootState) => state.pages);
 
@@ -70,33 +71,34 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
 
-  const onEditTogether = (userId: string): void => {
-    console.info('THRERER!!))', userId);
-    // setIsCollabModalVisible(true);
+  const onEditTogether = (userInEditor: IUser): void => {
+    console.info('THRERER!!))', userInEditor.id, user?.id);
+    if (userInEditor.id !== user?.id) {
+      setIsCollabModalVisible(true);
+    }
   };
 
   useEffect(() => {
-    console.info('editors', editors);
-  }, [editors]);
-
-  useEffect(() => {
-    socket.on(SocketEvents.PAGE_EDIT, onEditTogether);
+    // socket.on(SocketEvents.PAGE_EDIT, onEditTogether);
     // if (user) {
     // setEditors(editors => [...editors, user]);
     // }
-
-    // console.info(' ', editors);
-    // if (editors.length > 1) {
-    // if (editors > 1) {
-    if (editors) {
-      setIsCollabModalVisible(true);
-      setEditors(true);
+    // if (editors) {
+    //   setIsCollabModalVisible(true);
+    //   setEditors(true);
+    // }
+    if (currentPage?.pageContents[0]) {
+      socket.emit(
+        SocketEvents.EDITOR_JOIN,
+        currentPage?.pageContents[0].id,
+        user,
+      );
+      socket.on(SocketEvents.EDITOR_JOIN, onEditTogether);
     }
-
     return (): void => {
-      socket.off(SocketEvents.PAGE_EDIT, onEditTogether);
+      socket.off(SocketEvents.EDITOR_JOIN, onEditTogether);
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setSaveDraftShown(true);
