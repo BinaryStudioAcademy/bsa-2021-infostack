@@ -254,16 +254,6 @@ export const PageContent: React.FC = () => {
     }
   };
 
-  const isPagePinned = async (): Promise<void> => {
-    if (currentPage?.pinnedUsers) {
-      currentPage.pinnedUsers.map((pinner) => {
-        if (pinner.id === user?.id) {
-          dispatch(pagesActions.setCurrentPagePinned(true));
-        }
-      });
-    }
-  };
-
   const handlePageFollow =
     (pageId: string) =>
     async (ids: string[] | undefined): Promise<void> => {
@@ -318,11 +308,14 @@ export const PageContent: React.FC = () => {
         }
       });
     }
+    if (currentPage?.pinnedUsers) {
+      currentPage.pinnedUsers.map((pinner) => {
+        if (pinner.id === user?.id) {
+          dispatch(pagesActions.setCurrentPagePinned(true));
+        }
+      });
+    }
   }, [currentPage]);
-
-  useEffect(() => {
-    isPagePinned();
-  }, [isPagePinned]);
 
   if (isSpinner || isLeftBlockLoading) {
     return <Spinner />;
