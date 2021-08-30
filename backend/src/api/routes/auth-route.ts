@@ -11,6 +11,7 @@ import {
   updatePasswordAndFullName,
   loginGoogle,
   getLoginGoogleUrl,
+  loginGithub,
   getLoginGitHubUrl,
 } from '../../services/auth.service';
 import { validationMiddleware } from '../middlewares';
@@ -61,6 +62,11 @@ router.post(
 router.get(
   '/login/google',
   run((_) => getLoginGoogleUrl()),
+);
+
+router.post(
+  '/login/github',
+  run((req) => loginGithub(req.body.code)),
 );
 
 router.get(
