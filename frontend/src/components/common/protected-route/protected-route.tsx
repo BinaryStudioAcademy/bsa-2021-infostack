@@ -1,9 +1,5 @@
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import {
-  AppRoute,
-  LocalStorageVariable,
-  CookieVariable,
-} from 'common/enums/enums';
+import { AppRoute, LocalStorageVariable, CookieVariable } from 'common/enums';
 import {
   useLocation,
   useAppSelector,

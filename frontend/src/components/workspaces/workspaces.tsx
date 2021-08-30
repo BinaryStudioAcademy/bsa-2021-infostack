@@ -1,6 +1,6 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
 import { Spinner } from 'components/common/common';
-import { AppRoute, CookieVariable } from 'common/enums/enums';
+import { AppRoute, CookieVariable } from 'common/enums';
 import { workspacesActions } from 'store/actions';
 import {
   useState,

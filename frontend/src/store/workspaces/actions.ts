@@ -6,7 +6,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
-import { HttpCode } from 'common/enums/enums';
+import { HttpCode } from 'common/enums';
 import { RootState } from 'common/types/types';
 
 const loadWorkspaces = createAsyncThunk(

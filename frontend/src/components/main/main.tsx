@@ -1,8 +1,4 @@
-import {
-  AppRoute,
-  CookieVariable,
-  LocalStorageVariable,
-} from 'common/enums/enums';
+import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
 import { Route, Switch, WithHeader } from 'components/common/common';
 import NotFound from 'components/not-found/not-found';
 import Pages from 'components/pages/pages';
@@ -19,7 +15,7 @@ import {
   useContext,
 } from 'hooks/hooks';
 import { SocketContext } from 'context/socket';
-import { SocketEvents } from 'common/enums/enums';
+import { SocketEvents } from 'common/enums';
 import {
   authActions,
   workspacesActions,

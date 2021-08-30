@@ -1,19 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { actions } from './slice';
+import { IWorkspaceUser } from 'common/interfaces';
+import { RootState } from 'common/types/types';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
+import { RequestStatus } from 'common/enums';
 
-const loadUsers = createAsyncThunk(
-  ActionType.SET_USERS,
-  async (_, { dispatch }): Promise<void> => {
-    const response = await workspaceApi.getUsers();
-    dispatch(actions.setUsers(response));
+export const fetchUsers = createAsyncThunk<
+  IWorkspaceUser[],
+  void,
+  { state: RootState }
+>(ActionType.FETCH_USERS, () => workspaceApi.getUsers(), {
+  condition: (_, { getState }) => {
+    const {
+      users: { status },
+    } = getState();
+
+    if (status === RequestStatus.LOADING) {
+      return false;
+    }
   },
-);
-
-const usersActions = {
-  ...actions,
-  loadUsers,
-};
-
-export { usersActions };
+});

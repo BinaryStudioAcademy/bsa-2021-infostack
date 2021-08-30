@@ -4,7 +4,7 @@ import { TableRow } from './components/components';
 import { TableHead } from '../../shared/components/components';
 import { notificationsSettingsActions } from 'store/actions';
 import { RootState } from 'common/types/types';
-import { NotificationType } from 'common/enums/enums';
+import { NotificationType } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 

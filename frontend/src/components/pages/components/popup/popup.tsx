@@ -1,8 +1,8 @@
-import { Modal, Button, Table } from 'react-bootstrap';
 import Select from 'react-select';
-import { IButton } from 'common/interfaces/components/button';
-import { IParticipant } from 'common/interfaces/participant';
-import { IOption } from 'common/interfaces/components/select';
+import { Modal, Button, Table } from 'react-bootstrap';
+import { IButton, IParticipant, IOption } from 'common/interfaces';
+import { sortObjByName } from 'helpers/helpers';
+import { InviteStatus, ParticipantType, PermissionType } from 'common/enums';
 import {
   useEffect,
   useAppDispatch,
@@ -15,13 +15,7 @@ import {
   Item,
   DeleteParticipantModal,
 } from './components/components';
-import {
-  InviteStatus,
-  ParticipantType,
-  PermissionType,
-} from 'common/enums/enums';
 import selectParticipantStyles from './select-participant-styles';
-import { sortObjByName } from 'helpers/helpers';
 
 type Props = {
   query: string;
@@ -57,7 +51,7 @@ export const Popup: React.FC<Props> = ({
     useState<IParticipant>();
 
   useEffect(() => {
-    dispatch(usersActions.loadUsers());
+    dispatch(usersActions.fetchUsers());
     dispatch(teamsActions.fetchTeams());
     if (currentPage?.id) {
       dispatch(participantsActions.loadParticipants(currentPage?.id));

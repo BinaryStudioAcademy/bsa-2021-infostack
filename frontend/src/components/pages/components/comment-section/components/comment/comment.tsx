@@ -3,7 +3,7 @@ import { isThisMinute } from 'date-fns/esm';
 import AudioPlayer from 'react-h5-audio-player';
 import { useState, useHistory, useAppSelector } from 'hooks/hooks';
 import { replaceIdParam } from 'helpers/helpers';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { UserAvatar } from 'components/common/common';
 import { ICommentNormalized } from 'common/interfaces/comment';
 import { TimeAgo } from 'components/common/time-ago/time-ago';

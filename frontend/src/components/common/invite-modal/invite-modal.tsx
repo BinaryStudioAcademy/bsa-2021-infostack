@@ -52,7 +52,7 @@ export const InviteModal: React.FC<Props> = ({ showModal, onModalClose }) => {
         toast.info('Email with an invitation is sent');
 
         setSubmitDisabled(false);
-        dispatch(usersActions.loadUsers());
+        dispatch(usersActions.fetchUsers());
         reset({ email: '' });
       } else {
         toast.error(

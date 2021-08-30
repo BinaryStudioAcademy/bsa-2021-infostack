@@ -1,5 +1,5 @@
 enum ActionType {
-  SET_USERS = 'setUsers',
+  FETCH_USERS = 'fetchUsers',
   RESET = 'reset',
 }
 

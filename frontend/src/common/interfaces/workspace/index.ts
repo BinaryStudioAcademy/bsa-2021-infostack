@@ -3,5 +3,6 @@ export type {
   IWorkspace,
   IWorkspaceCreation,
   IWorkspaceInvite,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';
+
 export type { IWorkspaceUpdate } from './workspace-update.interface';

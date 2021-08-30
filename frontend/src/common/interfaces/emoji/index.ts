@@ -1,1 +1,1 @@
-export type { IEmoji } from 'infostack-shared/common/interfaces';
+export type { IEmoji } from 'infostack-shared';

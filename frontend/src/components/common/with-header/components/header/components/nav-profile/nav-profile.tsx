@@ -16,11 +16,7 @@ import {
 import { ProfileItem } from './components/components';
 import { replaceIdParam } from 'helpers/helpers';
 import { UserAvatar } from 'components/common/common';
-import {
-  AppRoute,
-  CookieVariable,
-  LocalStorageVariable,
-} from 'common/enums/enums';
+import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
 import './styles.scss';
 
 type Props = {

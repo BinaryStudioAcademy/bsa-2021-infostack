@@ -1,30 +1,38 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { IWorkspaceUser } from 'common/interfaces/workspace';
+import { createSlice } from '@reduxjs/toolkit';
 import { ActionType } from './common';
+import { ReducerName, RequestStatus } from 'common/enums';
+import { IWorkspaceUser } from 'common/interfaces';
+import { fetchUsers } from './actions';
 
 type State = {
   users: IWorkspaceUser[];
+  status: RequestStatus;
 };
 
 const initialState: State = {
   users: [],
+  status: RequestStatus.IDLE,
 };
 
-const { reducer, actions } = createSlice({
+export const { reducer, actions } = createSlice({
   name: ReducerName.USERS,
   initialState,
   reducers: {
-    [ActionType.SET_USERS]: (
-      state,
-      action: PayloadAction<IWorkspaceUser[]>,
-    ) => {
-      state.users = action.payload;
-    },
     [ActionType.RESET]: (state) => {
       Object.assign(state, initialState);
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.status = RequestStatus.LOADING;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+        state.status = RequestStatus.LOADING;
+      })
+      .addCase(fetchUsers.rejected, (state) => {
+        state.status = RequestStatus.FAILED;
+      });
+  },
 });
-
-export { reducer, actions };

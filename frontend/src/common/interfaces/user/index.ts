@@ -5,4 +5,4 @@ export type {
   IUserActivity,
   IGetActivities,
   IGetUserActivities,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';

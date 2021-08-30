@@ -12,7 +12,7 @@ import { pagesActions } from 'store/actions';
 import { PagesList, PlusButtonRoot } from './components/components';
 import { IPageRequest } from 'common/interfaces/pages';
 import { replaceIdParam } from 'helpers/helpers';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 

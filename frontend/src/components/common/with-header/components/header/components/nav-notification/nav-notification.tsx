@@ -7,9 +7,9 @@ import {
   useEffect,
 } from 'hooks/hooks';
 import { SocketContext } from 'context/socket';
-import { SocketEvents } from 'common/enums/enums';
+import { SocketEvents } from 'common/enums';
 import { notificationsActions } from 'store/actions';
-import { EntityType } from 'common/enums/enums';
+import { EntityType } from 'common/enums';
 import { toDayJS, sortObjByDate, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
