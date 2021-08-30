@@ -11,6 +11,9 @@ export class Workspace extends AbstractEntity {
   @Column({ length: 50 })
   name: string;
 
+  @Column({ nullable: true })
+  logo?: string;
+
   @OneToMany(() => UserWorkspace, (userWorkspace) => userWorkspace.workspace)
   userWorkspaces!: UserWorkspace[];
 

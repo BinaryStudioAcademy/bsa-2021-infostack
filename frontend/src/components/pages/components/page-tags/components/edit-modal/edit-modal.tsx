@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Modal } from 'react-bootstrap';
-import { OptionsType, components } from 'react-select';
-import { IButton } from 'common/interfaces/components/button';
-import { ITagSelect } from 'common/interfaces/tag';
 import CreatableSelect from 'react-select/creatable';
+import { OptionsType, components } from 'react-select';
 import { CSSObject } from '@emotion/serialize';
+
+import { IButton, ITagSelect } from 'common/interfaces';
 
 type Props = {
   title: string;

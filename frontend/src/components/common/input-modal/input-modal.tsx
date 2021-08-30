@@ -3,7 +3,7 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import { FieldError } from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
 import { FormField } from '../form-field/form-field';
-import { IButton } from 'common/interfaces/components/button';
+import { IButton } from 'common/interfaces';
 
 type Props = {
   title: string;

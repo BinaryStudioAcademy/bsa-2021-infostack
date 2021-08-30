@@ -13,6 +13,7 @@ enum AppRoute {
   PROFILE = '/users/profile/:id',
   SETTINGS = '/settings',
   SETTINGS_PROFILE = '/settings/profile',
+  SETTINGS_WORKSPACE = '/settings/workspace',
   SETTINGS_USERS = '/settings/users',
   SETTINGS_TAGS = '/settings/tags',
   CONTENT_SETTING = '/page/:id/editor',

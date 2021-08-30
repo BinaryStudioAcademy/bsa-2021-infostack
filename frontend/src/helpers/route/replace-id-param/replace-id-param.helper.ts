@@ -1,4 +1,4 @@
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 
 const replaceIdParam = (route: AppRoute, id: string): string =>
   route.replace(':id', id);

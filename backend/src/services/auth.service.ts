@@ -12,6 +12,7 @@ import RefreshTokenRepository from '../data/repositories/refresh-token.repositor
 import { hash, verify } from '../common/utils/hash.util';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
+import { getAccessToken, getUser } from '../common/utils/github.util';
 import {
   IResetPassword,
   IRegister,
@@ -191,6 +192,25 @@ export const logout = async (body: IRefreshToken): Promise<void> => {
   }
 };
 
+const loginOtherService = async (
+  fullName: string,
+  email: string,
+  avatar: string,
+): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
+  const userRepository = getCustomRepository(UserRepository);
+
+  const user = await userRepository.findByEmail(email);
+  if (user) {
+    return getIUserWithTokens(user);
+  }
+  const newUser = await userRepository.save({
+    email,
+    fullName,
+    avatar,
+  });
+  return getIUserWithTokens(newUser);
+};
+
 export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
   const { clientId, clientSecret, redirectUrl } = env.google;
   const oauth2Client = new google.auth.OAuth2(
@@ -218,17 +238,7 @@ export const loginGoogle = async (
   const { tokens } = await oauth2Client.getToken(code);
   const decodeToken = jwt.decode(tokens.id_token, { json: true });
   const { email, name, picture } = decodeToken;
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findByEmail(email);
-  if (user) {
-    return getIUserWithTokens(user);
-  }
-  const newUser = await userRepository.save({
-    email,
-    fullName: name,
-    avatar: picture,
-  });
-  return getIUserWithTokens(newUser);
+  return await loginOtherService(name, email, picture);
 };
 
 export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
@@ -241,26 +251,19 @@ export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
 export const loginGithub = async (
   code: string,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
-  const { clientId, clientSecret, redirectUrl } = env.google;
-  const oauth2Client = new google.auth.OAuth2(
-    clientId,
-    clientSecret,
-    redirectUrl,
-  );
-  const { tokens } = await oauth2Client.getToken(code);
-  const decodeToken = jwt.decode(tokens.id_token, { json: true });
-  const { email, name, picture } = decodeToken;
-  const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findByEmail(email);
-  if (user) {
-    return getIUserWithTokens(user);
+  const accessToken = await getAccessToken(code);
+  const githubUser = await getUser(accessToken);
+  console.log(githubUser);
+  const { email, name, login, avatar_url } = githubUser;
+
+  if (!email) {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.NO_EMAIL,
+    });
   }
-  const newUser = await userRepository.save({
-    email,
-    fullName: name,
-    avatar: picture,
-  });
-  return getIUserWithTokens(newUser);
+
+  return await loginOtherService(name || login, email, avatar_url);
 };
 
 const getIUserWithTokens = async (

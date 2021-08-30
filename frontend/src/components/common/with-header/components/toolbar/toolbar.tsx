@@ -12,16 +12,13 @@ import { pagesActions } from 'store/actions';
 import { PagesList, PlusButtonRoot } from './components/components';
 import { IPageRequest } from 'common/interfaces/pages';
 import { replaceIdParam } from 'helpers/helpers';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
-type Props = {
-  title?: string;
-};
-
-export const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
+export const Toolbar: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { currentWorkspace } = useAppSelector((state) => state.workspaces);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
   const paramsId = useParams<{ id: string }>().id;
   const url = useLocation().pathname;
@@ -65,7 +62,11 @@ export const Toolbar: React.FC<Props> = ({ title = 'Untitled' }) => {
       )}
     >
       <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-break">
-        {title}
+        {currentWorkspace?.logo ? (
+          <img className={styles.logo} src={currentWorkspace.logo} />
+        ) : (
+          currentWorkspace?.title || 'Untitled'
+        )}
       </h1>
       <div className="pt-3 w-100">
         {pages.pinnedPages && pages.pinnedPages.length > 0 && (

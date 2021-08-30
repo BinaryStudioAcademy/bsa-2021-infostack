@@ -2,7 +2,7 @@ import React from 'react';
 import GoogleButton from 'react-google-button';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'components/common/common';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { authApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import logo from 'assets/img/logo_dark.svg';
@@ -35,6 +35,11 @@ export const Sign: React.FC<Props> = ({
 }) => {
   const googleSignIn = async (): Promise<void> => {
     const { url } = await authApi.getLoginGoogleUrl();
+    window.location.assign(url);
+  };
+
+  const githubSignIn = async (): Promise<void> => {
+    const { url } = await authApi.getLoginGitHubUrl();
     window.location.assign(url);
   };
 
@@ -75,6 +80,15 @@ export const Sign: React.FC<Props> = ({
               type="light"
               className="mx-auto"
             />
+            <Button
+              onClick={githubSignIn}
+              className={getAllowedClasses('mx-auto mt-4', styles.github)}
+            >
+              <div>
+                <i className="bi bi-github" />
+              </div>
+              <span>Sign in with Github</span>
+            </Button>
           </div>
         </Form>
       </div>

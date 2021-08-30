@@ -13,7 +13,7 @@ import {
 } from 'hooks/hooks';
 import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { pageApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import { Spinner } from 'components/common/common';

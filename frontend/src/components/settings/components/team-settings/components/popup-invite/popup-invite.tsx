@@ -1,11 +1,12 @@
 import Select from 'react-select';
 import { Modal, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { IButton } from 'common/interfaces/components/button';
+
+import { IButton } from 'common/interfaces';
 import { useEffect, useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { usersActions, teamsActions } from 'store/actions';
 import { TableHead, Item } from './components/components';
-import { InviteStatus, RoleType } from 'common/enums/enums';
+import { InviteStatus, RoleType } from 'common/enums';
 import { sortObjByName } from 'helpers/helpers';
 import { ITeamUser } from 'common/interfaces/team';
 import selectParticipantStyles from './select-participant-styles';
@@ -41,7 +42,7 @@ export const Popup: React.FC<Props> = ({
   const { users } = useAppSelector((state) => state.users);
 
   useEffect(() => {
-    dispatch(usersActions.loadUsers());
+    dispatch(usersActions.fetchUsers());
   }, []);
 
   const handleSelectChange = (

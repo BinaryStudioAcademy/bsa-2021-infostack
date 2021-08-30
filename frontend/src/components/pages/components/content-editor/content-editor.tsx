@@ -12,7 +12,7 @@ import gfm from 'remark-gfm';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
-import { AppRoute, PageTitle } from 'common/enums/enums';
+import { AppRoute, PageTitle } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
 import {

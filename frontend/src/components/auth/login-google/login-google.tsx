@@ -1,6 +1,6 @@
 import { useAppDispatch, useHistory, useEffect } from 'hooks/hooks';
 import { authActions } from 'store/auth';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 

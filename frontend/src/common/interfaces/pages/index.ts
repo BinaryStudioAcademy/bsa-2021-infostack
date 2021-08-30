@@ -12,4 +12,4 @@ export type {
   IShareLink,
   IPageShare,
   IFoundPageContent,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';
