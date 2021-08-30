@@ -29,7 +29,7 @@ export const { reducer, actions } = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.users = action.payload;
-        state.status = RequestStatus.LOADING;
+        state.status = RequestStatus.SUCCEEDED;
       })
       .addCase(fetchUsers.rejected, (state) => {
         state.status = RequestStatus.FAILED;
