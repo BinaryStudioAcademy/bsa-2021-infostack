@@ -1,7 +1,7 @@
 import { Accordion } from 'react-bootstrap';
 import { Link } from 'components/common/common';
 import { IPageNav } from 'common/interfaces/pages';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import {
   useAppDispatch,
   useAppSelector,

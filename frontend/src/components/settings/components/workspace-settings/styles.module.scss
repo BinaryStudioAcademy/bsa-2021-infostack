@@ -1,4 +1,4 @@
-.cardItem {
+.card {
   box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
   margin-bottom: 200px;
   word-wrap: break-word;
@@ -12,16 +12,23 @@
   position: relative;
   min-height: 32.5rem;
 
-  .cardBody {
-    flex: 1 1 auto;
-    padding: 2rem;
-  }
-
-  .cardHeader {
+  .header {
     background-color: #fff;
     border-bottom: 0 solid transparent;
     margin-bottom: 0;
     padding: 1.6rem 2rem;
+
+    .title {
+      font-size: 1.52rem;
+      margin-bottom: 0;
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+    }
+  }
+
+  .cardBody {
+    flex: 1 1 auto;
+    padding: 2rem;
   }
 
   .cardButton {
@@ -33,16 +40,21 @@
     margin-top: 3rem;
   }
 
-  .cardTitle {
-    font-size: 1.52rem;
-    margin-bottom: 0;
-
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
-  }
-
   .cardInputLabel {
     font-size: 1.32rem;
+  }
+
+  .avatarControlButton {
+    width: 9.5rem;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.32rem;
+    padding: 0.4rem 1.12rem;
+    border-radius: 0.2rem;
   }
 
   .cardInput {
@@ -60,19 +72,8 @@
     width: 100%;
   }
 
-  .cardImage {
-    object-fit: cover;
-  }
-
-  .uploadLabel {
-    display: flex;
-    align-items: center;
-  }
-
-  .uploadText {
-    display: inline-block;
-    font-size: 1.2rem;
-    line-height: 2.3rem;
+  .spaceBetween {
+    justify-content: space-between;
   }
 
   .uploadIcon {
@@ -80,20 +81,48 @@
     max-height: 100%;
   }
 
-  .avatarControlButton {
-    width: 9.5rem;
-    height: 36px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 1.32rem;
-    padding: 0.4rem 1.12rem;
-    border-radius: 0.2rem;
+  .uploadText {
+    display: inline-block;
+    font-size: 1.2rem;
+    line-height: 2.3rem;
   }
+}
 
-  .spaceBetween {
-    justify-content: space-between;
-  }
+.logoImgContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1.25rem;
+
+  border: 1px solid #ced4da;
+  border-radius: 0.4rem;
+
+  min-height: 8rem;
+  min-width: 8rem;
+}
+
+.logoImg {
+  display: block;
+
+  height: 100%;
+
+  max-width: 20rem;
+  max-height: 20rem;
+}
+
+.logoControls {
+  display: flex;
+}
+
+.avatarRemoveButton {
+  margin-right: 2rem;
+}
+
+.saveButton {
+  margin-top: 15rem;
+}
+
+.noLogo {
+  color: #ffc107;
 }

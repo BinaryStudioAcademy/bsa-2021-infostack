@@ -1,4 +1,4 @@
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 
 const replacePageIdParamAndVersionId = (
   route: AppRoute,

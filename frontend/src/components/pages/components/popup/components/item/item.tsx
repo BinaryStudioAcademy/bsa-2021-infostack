@@ -1,10 +1,11 @@
 import Select from 'react-select';
 import Badge from 'react-bootstrap/Badge';
-import { IParticipant } from 'common/interfaces/participant';
-import { IOption } from 'common/interfaces/components/select';
+
+import { IParticipant, IOption } from 'common/interfaces';
 import { useRef } from 'hooks/hooks';
-import selectRoleStyles from './select-role-styles';
 import { getAllowedClasses } from 'helpers/helpers';
+import selectRoleStyles from './select-role-styles';
+
 import styles from '../styles.module.scss';
 
 type Props = {

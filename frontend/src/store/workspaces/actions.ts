@@ -1,9 +1,13 @@
-import { IWorkspaceCreation } from 'common/interfaces/workspace';
+import {
+  IWorkspaceCreation,
+  IWorkspaceUpdate,
+} from 'common/interfaces/workspace';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
-import { HttpCode } from 'common/enums/enums';
+import { HttpCode } from 'common/enums';
+import { RootState } from 'common/types/types';
 
 const loadWorkspaces = createAsyncThunk(
   ActionType.SET_WORKSPACES,
@@ -36,11 +40,44 @@ const loadWorkspace = createAsyncThunk(
   },
 );
 
+const updateWorkspace = createAsyncThunk(
+  ActionType.UPDATE_CURRENT_WORKSPACE,
+  async (payload: IWorkspaceUpdate & { id: string }, { dispatch }) => {
+    const { id, ...data } = payload;
+    dispatch(actions.toggleIsUpdatingCurrentWorkspace());
+
+    const updatedWorkspace = await workspaceApi.updateWorkspaceById(id, data);
+    dispatch(actions.setCurrentWorkspace(updatedWorkspace));
+
+    dispatch(actions.toggleIsUpdatingCurrentWorkspace());
+  },
+);
+
+const deleteWorkspaceLogo = createAsyncThunk(
+  ActionType.DELETE_CURRENT_WORKSPACE_LOGO,
+  async (id: string, { dispatch, getState }) => {
+    dispatch(actions.toggleIsDeletingCurrentWorkspaceLogo());
+
+    await workspaceApi.deleteLogo(id);
+    const {
+      workspaces: { currentWorkspace },
+    } = getState() as RootState;
+
+    if (currentWorkspace) {
+      dispatch(actions.setCurrentWorkspace({ ...currentWorkspace, logo: '' }));
+    }
+
+    dispatch(actions.toggleIsDeletingCurrentWorkspaceLogo());
+  },
+);
+
 const workspacesActions = {
   ...actions,
   loadWorkspaces,
   loadWorkspace,
   createWorkspace,
+  updateWorkspace,
+  deleteWorkspaceLogo,
 };
 
 export { workspacesActions };

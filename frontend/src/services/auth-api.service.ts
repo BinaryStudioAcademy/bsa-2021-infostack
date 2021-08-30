@@ -1,5 +1,5 @@
 import { IUserWithTokens } from 'common/interfaces/user';
-import { HttpMethod, ContentType } from 'common/enums/enums';
+import { HttpMethod, ContentType } from 'common/enums';
 import {
   IResetPassword,
   ISetPassword,
@@ -86,6 +86,14 @@ class AuthApi {
 
   public async loginGoogle(code: string): Promise<IUserWithTokens> {
     return this.http.load(`${this.BASE}/login/google`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify({ code }),
+      contentType: ContentType.JSON,
+    });
+  }
+
+  public async loginGithub(code: string): Promise<IUserWithTokens> {
+    return this.http.load(`${this.BASE}/login/github`, {
       method: HttpMethod.POST,
       payload: JSON.stringify({ code }),
       contentType: ContentType.JSON,

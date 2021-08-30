@@ -1,7 +1,7 @@
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { useAppSelector } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/helpers';
-import { InviteStatus } from 'common/enums/enums';
+import { InviteStatus } from 'common/enums';
 import { IWorkspaceUser } from 'common/interfaces/workspace';
 import styles from './styles.module.scss';
 

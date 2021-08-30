@@ -1,6 +1,6 @@
 import { Dropdown, NavLink } from 'react-bootstrap';
 import { useAppSelector } from 'hooks/hooks';
-import { PermissionType } from 'common/enums/enums';
+import { PermissionType } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import { RootState } from 'common/types/types';
 import styles from './styles.module.scss';

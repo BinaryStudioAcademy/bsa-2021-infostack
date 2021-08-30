@@ -1,6 +1,6 @@
 import Image from 'react-bootstrap/Image';
 import { PageContent } from './components/components';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { Switch } from 'components/common/common';
 import { ProtectedRoute } from 'components/common/common';
 import { useAppSelector, useParams } from 'hooks/hooks';

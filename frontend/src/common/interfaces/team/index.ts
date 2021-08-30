@@ -4,4 +4,4 @@ export type {
   ITeamCreation,
   ITeamUser,
   ITeamAddUser,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';

@@ -3,6 +3,7 @@ import {
   IWorkspace,
   IWorkspaceUser,
   IWorkspaceCreation,
+  IWorkspaceUpdate,
 } from '../common/interfaces/workspace';
 import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
 import WorkspaceRepository from '../data/repositories/workspace.repository';
@@ -21,6 +22,12 @@ import { DefaultUserName } from '../common/enums/default-username';
 import { generateInviteToken } from '../common/utils/tokens.util';
 import { env } from '../env';
 import TeamRepository from '../data/repositories/team.repository';
+import {
+  deleteFile,
+  isFileExists,
+  uploadFile,
+} from '../common/helpers/s3-file-storage.helper';
+import { unlinkFile } from '../common/helpers/multer.helper';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -187,7 +194,12 @@ export const getWorkspace = async (
     );
   const { workspace } = userWorkspace;
 
-  return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
+  return {
+    id: workspace.id,
+    title: workspace.name,
+    logo: workspace.logo,
+    role: userWorkspace.role,
+  };
 };
 
 export const getUserWorkspaces = async (
@@ -205,6 +217,7 @@ export const getUserWorkspaces = async (
         id: workspace.id,
         title: workspace.name,
         status: userWorkspace.status,
+        logo: workspace.logo,
       });
     }
   }
@@ -236,4 +249,57 @@ export const create = async (
   });
   await userWorkspaceRepository.save(userWorkspace);
   return { id: workspace.id, title: workspace.name, role: userWorkspace.role };
+};
+
+export const updateById = async (
+  id: string,
+  userId: string,
+  data: IWorkspaceUpdate,
+  logo: Express.Multer.File,
+): Promise<IWorkspace> => {
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+      userId,
+      id,
+    );
+  const { workspace } = userWorkspace;
+
+  if (logo) {
+    if (workspace.logo) {
+      const fileName = workspace.logo.split('/').pop();
+      const isExistsAvatar = await isFileExists(fileName);
+      if (isExistsAvatar) {
+        await deleteFile(workspace.logo);
+      }
+    }
+
+    const uploadedFile = await uploadFile(logo);
+    await unlinkFile(logo.path);
+    data.logo = uploadedFile.Location;
+  }
+
+  workspace.name = data.title;
+  workspace.logo = data.logo;
+
+  const updatedWorkspace = await workspaceRepository.save(workspace);
+
+  return {
+    id: updatedWorkspace.id,
+    title: updatedWorkspace.name,
+    logo: updatedWorkspace.logo,
+    role: userWorkspace.role,
+  };
+};
+
+export const deleteLogoById = async (id: string): Promise<void> => {
+  const workspaceRepository = getCustomRepository(WorkspaceRepository);
+  const workspace = await workspaceRepository.findById(id);
+
+  if (workspace?.logo) {
+    await deleteFile(workspace.logo);
+
+    await workspaceRepository.save({ id, logo: '' });
+  }
 };

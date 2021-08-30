@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { useAppDispatch } from 'hooks/hooks';
 import { tagActions } from 'store/tags';
-import { TagType } from 'common/enums/enums';
+import { TagType } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from '../../styles.module.scss';
 
