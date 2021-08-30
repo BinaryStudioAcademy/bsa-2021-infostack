@@ -48,6 +48,7 @@ import { FollowModal } from '../follow-modal/follow-modal';
 import { ShareModal } from '../share-modal/share-modal';
 import PageTags from '../page-tags/page-tags';
 import styles from './styles.module.scss';
+import ContextMenu from '../context-menu/context-menu';
 
 export const PageContent: React.FC = () => {
   const socket = useContext(SocketContext);
@@ -424,6 +425,7 @@ export const PageContent: React.FC = () => {
               </Row>
             </Col>
           </Row>
+          <ContextMenu />
           <Popup
             query="Users & Teams"
             isVisible={isPermissionsModalVisible}
