@@ -11,9 +11,8 @@ import {
 import { pagesActions } from 'store/actions';
 import { PagesList, PlusButtonRoot } from './components/components';
 import { IPageRequest } from 'common/interfaces/pages';
-import { replaceIdParam } from 'helpers/helpers';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import { AppRoute } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 import { Link } from 'components/common/common';
 
