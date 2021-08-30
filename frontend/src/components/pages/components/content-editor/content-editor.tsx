@@ -6,15 +6,18 @@ import {
   Col,
   Row,
 } from 'react-bootstrap';
+import { useContext } from 'react';
 import Editor, { Plugins } from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { toast } from 'react-toastify';
+import { SocketContext } from 'context/socket';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
-import { AppRoute, PageTitle } from 'common/enums/enums';
+import { AppRoute, PageTitle, SocketEvents } from 'common/enums/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
+// import { IUser } from 'common/interfaces/user';
 import {
   useState,
   useAppDispatch,
@@ -27,7 +30,12 @@ import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {
+  const socket = useContext(SocketContext);
+  // const { user } = useAppSelector((state) => state.auth);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
+  const [editors, setEditors] = useState(false);
+  // const [editors, setEditors] = useState<IUser[]>([]);
+  // const { editors } = useAppSelector((state: RootState) => state.pages);
 
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
@@ -60,6 +68,35 @@ export const ContentEditor: React.FC = () => {
   const [isSaveDraftShown, setSaveDraftShown] = useState(false);
   const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
+
+  const onEditTogether = (userId: string): void => {
+    console.info('THRERER!!))', userId);
+    // setIsCollabModalVisible(true);
+  };
+
+  useEffect(() => {
+    console.info('editors', editors);
+  }, [editors]);
+
+  useEffect(() => {
+    socket.on(SocketEvents.PAGE_EDIT, onEditTogether);
+    // if (user) {
+    // setEditors(editors => [...editors, user]);
+    // }
+
+    // console.info(' ', editors);
+    // if (editors.length > 1) {
+    // if (editors > 1) {
+    if (editors) {
+      setIsCollabModalVisible(true);
+      setEditors(true);
+    }
+
+    return (): void => {
+      socket.off(SocketEvents.PAGE_EDIT, onEditTogether);
+    };
+  }, []);
 
   useEffect(() => {
     setSaveDraftShown(true);
@@ -97,6 +134,8 @@ export const ContentEditor: React.FC = () => {
   const onInputChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement>): void => {
+    // socket.emit(SocketEvents.PAGE_EDIT, user?.id || '');
+    // socket.emit(SocketEvents.PAGE_EDIT);
     setDraftTitleInputValue(target.value);
   };
 
@@ -119,10 +158,20 @@ export const ContentEditor: React.FC = () => {
       handleSaveAsDraftConfirm();
     }
     handleCancel();
+    // console.info('there', editors);
+    deleteEditor();
   };
 
   const handleCancel = (): void => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
+  };
+
+  const deleteEditor = (): void => {
+    // console.info(user);
+    // if (user) {
+    //   dispatch(pagesActions.deleteEditor(user));
+    // }
+    // console.info(editors);
   };
 
   const showWarningOnTitle = (title: string | undefined): void => {
@@ -153,6 +202,7 @@ export const ContentEditor: React.FC = () => {
         .unwrap()
         .then(handleCancel);
       dispatch(pagesActions.deleteDraft(paramsId));
+      deleteEditor();
       return;
     }
     showWarningOnTitle(titleInputValue);
@@ -196,6 +246,15 @@ export const ContentEditor: React.FC = () => {
 
   const handleDeleteCancel = (): void => {
     setIsDeleteModalVisible(false);
+  };
+
+  const handleUsualMode = (): void => {
+    setIsCollabModalVisible(false);
+    deleteEditor();
+  };
+
+  const handleLifeMode = (): void => {
+    setIsCollabModalVisible(false);
   };
 
   const onDraftDelete = (): void => {
@@ -298,6 +357,19 @@ export const ContentEditor: React.FC = () => {
         cancelButton={{
           text: 'Close',
           onClick: handleDeleteCancel,
+        }}
+      />
+      <ConfirmModal
+        title="Choose mode"
+        showModal={isCollabModalVisible}
+        modalText="Choose the mode:"
+        confirmButton={{
+          text: 'Usual',
+          onClick: handleUsualMode,
+        }}
+        cancelButton={{
+          text: 'Live',
+          onClick: handleLifeMode,
         }}
       />
     </>

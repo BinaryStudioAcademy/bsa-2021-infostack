@@ -156,6 +156,7 @@ export const PageContent: React.FC = () => {
   useEffect(() => {
     if (currentPage) {
       socket.emit(SocketEvents.PAGE_JOIN, currentPage.id);
+      socket.emit(SocketEvents.PAGE_EDIT, currentPage.id);
       socket.on(SocketEvents.PAGE_NEW_CONTENT, onContentChange);
     }
     return (): void => {
@@ -228,6 +229,11 @@ export const PageContent: React.FC = () => {
   };
 
   const onEditing = (): void => {
+    // socket.emit(SocketEvents.PAGE_EDIT, user?.id || '');
+    // console.info(user);
+    // if (user) {
+    //   dispatch(pagesActions.addEditor(user));
+    // }
     history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
   };
 
