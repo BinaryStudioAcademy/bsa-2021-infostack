@@ -105,6 +105,9 @@ const { reducer, actions } = createSlice({
     ) => {
       state.tagEditName = action.payload;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 

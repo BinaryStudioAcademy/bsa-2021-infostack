@@ -120,7 +120,9 @@ router.get(
 router.post(
   '/:id/comments',
   validationMiddleware(createCommentSchema),
-  run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
+  run((req) =>
+    addComment(req.userId, req.params.id, req.workspaceId, req.body, req.io),
+  ),
 );
 
 router.delete(

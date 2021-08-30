@@ -32,6 +32,9 @@ const { reducer, actions } = createSlice({
     [ActionType.TOGGLE_REFRESH_TOKEN_EXPIRED]: (state) => {
       state.isRefreshTokenExpired = !state.isRefreshTokenExpired;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
