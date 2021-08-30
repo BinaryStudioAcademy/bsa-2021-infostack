@@ -106,14 +106,11 @@ export const deleteUserFromWorkspace = async (
   workspaceId: string,
 ): Promise<void> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspaceToUpdate =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
-      userId,
-      workspaceId,
-    );
-  const userWorkspaceUpdated = { ...userWorkspaceToUpdate };
-  userWorkspaceUpdated.status = InviteStatus.DELETED;
-  await userWorkspaceRepository.save(userWorkspaceUpdated);
+
+  await userWorkspaceRepository.deleteByUserIdAndWorkspaceId(
+    userId,
+    workspaceId,
+  );
 
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
