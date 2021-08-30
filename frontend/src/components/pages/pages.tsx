@@ -7,7 +7,7 @@ import { useAppSelector, useParams } from 'hooks/hooks';
 import Logo from 'assets/img/workspace-welcome-logo.png';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { PagesRecent } from './components/pages-recent/pages-recent';
+// import { PagesRecent } from './components/pages-recent/pages-recent';
 
 const Pages: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
@@ -18,7 +18,7 @@ const Pages: React.FC = () => {
       <Switch>
         <ProtectedRoute path={AppRoute.PAGE} component={PageContent} exact />
       </Switch>
-      <PagesRecent recentPages={[]} />
+      {/* <PagesRecent recentPages={[]} /> */}
       {!paramsId && (
         <div className="d-flex flex-column justify-content-around align-items-center h-100">
           <Image src={Logo} />

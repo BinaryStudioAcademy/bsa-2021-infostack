@@ -81,4 +81,7 @@ export class Page extends AbstractEntity {
   links: PageShareLink[];
   @OneToOne(() => Draft, (Draft) => Draft.page)
   draft: Draft;
+
+  @ManyToMany(() => User, (user) => user.recentPages, { cascade: true })
+  recentUsers: User[];
 }
