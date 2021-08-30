@@ -208,6 +208,13 @@ class PageRepository extends Repository<Page> {
       .of(pageId)
       .remove(userId);
   }
+
+  public unpinPages(userId: string, pageIds: string[]): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('pinnedUsers')
+      .of(pageIds)
+      .remove(userId);
+  }
 }
 
 export default PageRepository;
