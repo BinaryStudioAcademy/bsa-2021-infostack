@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { InviteStatus } from '../../common/enums/invite-status';
 import { RoleType } from '../../common/enums/role-type';
 import { UserWorkspace } from '../entities/user-workspace';
@@ -45,6 +45,16 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
         role: RoleType.ADMIN,
       })
       .getMany();
+  }
+
+  public deleteByUserIdAndWorkspaceId(
+    userId: string,
+    workspaceId: string,
+  ): Promise<DeleteResult> {
+    return this.delete({
+      user: { id: userId },
+      workspace: { id: workspaceId },
+    });
   }
 }
 
