@@ -1,6 +1,6 @@
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import {
   getAllowedClasses,
   replaceIdParam,

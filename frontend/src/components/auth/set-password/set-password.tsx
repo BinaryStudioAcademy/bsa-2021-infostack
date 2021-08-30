@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { Sign, FormField } from 'components/common/common';
 import { authApi } from 'services';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { ToastContent } from './components/components';
 import { setPasswordSchema } from 'common/validations';
 import { useForm, useHistory, yupResolver } from 'hooks/hooks';

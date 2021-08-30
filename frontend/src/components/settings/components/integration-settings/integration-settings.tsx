@@ -1,11 +1,13 @@
 import { Card } from 'react-bootstrap';
-import { ConnectButton, SelectRepo } from './components/components';
+
 import { authApi } from 'services';
-import { useAppSelector, useAppDispatch, useEffect } from 'hooks/hooks';
+import { IOption } from 'common/interfaces';
 import { githubActions } from 'store/actions';
-import { IOption } from 'common/interfaces/components/select';
 import { Spinner } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
+import { useAppSelector, useAppDispatch, useEffect } from 'hooks/hooks';
+import { ConnectButton, SelectRepo } from './components/components';
+
 import styles from './styles.module.scss';
 
 export const IntegrationSettings: React.FC = () => {

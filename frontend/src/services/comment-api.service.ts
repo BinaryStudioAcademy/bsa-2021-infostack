@@ -4,7 +4,7 @@ import {
   ICommentRequest,
   ICommentResponse,
 } from 'common/interfaces/comment';
-import { ContentType, HttpMethod } from 'common/enums/enums';
+import { ContentType, HttpMethod } from 'common/enums';
 
 class CommentApi {
   private readonly BASE = '/api/pages';

@@ -15,7 +15,7 @@ import {
   IntegrationSettings,
   NotificationsSettings,
 } from './components/components';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 import { WorkspaceSettings } from './components/workspace-settings/workspace-settings';

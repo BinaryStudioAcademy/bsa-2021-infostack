@@ -5,7 +5,7 @@ import {
   IWorkspaceUpdate,
   IWorkspaceUser,
 } from 'common/interfaces/workspace';
-import { ContentType, HttpMethod } from 'common/enums/enums';
+import { ContentType, HttpMethod } from 'common/enums';
 import { http } from 'services/http.service';
 
 class WorkspaceApi {

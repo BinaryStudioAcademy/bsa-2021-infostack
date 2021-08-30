@@ -1,5 +1,5 @@
 import { ToastContainer } from 'react-toastify';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { ProtectedRoute, Route, Switch } from 'components/common/common';
 import {
   Login,

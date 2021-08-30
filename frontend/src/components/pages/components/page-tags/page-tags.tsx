@@ -12,8 +12,8 @@ import {
 import { EditModal } from './components/components';
 import { pageApi, tagApi } from 'services';
 import { tagActions } from 'store/tags';
-import { PermissionType } from 'common/enums/enums';
-import { TagType } from 'common/enums/enums';
+import { PermissionType } from 'common/enums';
+import { TagType } from 'common/enums';
 import './page-tags.scss';
 
 const PageTags: React.FC = () => {

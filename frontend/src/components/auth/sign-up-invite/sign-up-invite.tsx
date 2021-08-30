@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { Sign, FormField } from 'components/common/common';
 import { useHistory, useForm, yupResolver, useEffect } from 'hooks/hooks';
 import { authApi, userApi } from 'services';
 import { signUpInviteSchema } from 'common/validations';
 import { IRegister, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
-import { DefaultUserName } from 'common/enums/enums';
+import { DefaultUserName } from 'common/enums';
 
 const SignUpInvite: React.FC = () => {
   const history = useHistory();

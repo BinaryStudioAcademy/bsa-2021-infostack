@@ -1,5 +1,5 @@
 import { http } from 'services';
-import { ContentType, NotificationType, HttpMethod } from 'common/enums/enums';
+import { ContentType, NotificationType, HttpMethod } from 'common/enums';
 
 class NotificationSettingsApi {
   private readonly BASE = '/api/notifications-settings';

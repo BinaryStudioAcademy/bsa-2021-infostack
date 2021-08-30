@@ -1,5 +1,5 @@
 import { ITag } from 'common/interfaces/tag';
-import { HttpMethod, ContentType } from 'common/enums/enums';
+import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
 
 class TagApi {

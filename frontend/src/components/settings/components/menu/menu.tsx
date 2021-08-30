@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'components/common/common';
-import { AppRoute, RoleType } from 'common/enums/enums';
+import { AppRoute, RoleType } from 'common/enums';
 import { useAppSelector } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';

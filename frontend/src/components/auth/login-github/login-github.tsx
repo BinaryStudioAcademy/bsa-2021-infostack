@@ -4,7 +4,7 @@ import {
   useAppSelector,
   useAppDispatch,
 } from 'hooks/hooks';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { githubApi } from 'services';
 import { authActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/helpers';

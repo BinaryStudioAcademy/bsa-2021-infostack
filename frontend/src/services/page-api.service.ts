@@ -1,5 +1,5 @@
 import { IParticipant } from 'common/interfaces/participant';
-import { ContentType, HttpMethod } from 'common/enums/enums';
+import { ContentType, HttpMethod } from 'common/enums';
 import {
   IPage,
   IPageRequest,
