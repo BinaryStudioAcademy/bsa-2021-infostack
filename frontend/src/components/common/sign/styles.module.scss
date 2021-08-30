@@ -24,3 +24,44 @@
   width: 10%;
   margin: 1rem 0;
 }
+
+.github {
+  background-color: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.54);
+  height: 50px;
+  width: 240px;
+  padding: 0;
+  border: none;
+  text-align: center;
+  box-shadow: rgb(0 0 0 / 25%) 0px 2px 4px 0px;
+  line-height: 48px;
+  display: block;
+  border-radius: 1px;
+  transition: background-color 0.218s ease 0s, border-color 0.218s ease 0s,
+    box-shadow 0.218s ease 0s;
+  font-family: Roboto, arial, sans-serif;
+  user-select: none;
+
+  div {
+    width: 48px;
+    height: 48px;
+    margin-top: 1px;
+    margin-left: 1px;
+    float: left;
+
+    i {
+      font-size: 20px;
+      color: #000;
+    }
+  }
+
+  span {
+    font-size: 16px;
+  }
+}
+
+.github:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.54);
+  box-shadow: rgb(66 133 244 / 30%) 0px 0px 3px 3px;
+}

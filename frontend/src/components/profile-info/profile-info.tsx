@@ -18,7 +18,7 @@ import { Link, UserAvatar } from 'components/common/common';
 import { IPageNav } from 'common/interfaces/pages';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
 import { pagesActions } from 'store/actions';
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import './profile-info.scss';
 import { replaceIdParam } from 'helpers/helpers';
 import { Activities } from './components/components';

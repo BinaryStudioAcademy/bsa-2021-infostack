@@ -5,7 +5,7 @@ import {
   IUserActivity,
   IUserWithTokens,
 } from 'common/interfaces/user';
-import { HttpMethod, ContentType } from 'common/enums/enums';
+import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
 import { IPaginated } from 'common/interfaces/common';
 

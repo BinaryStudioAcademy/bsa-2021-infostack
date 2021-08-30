@@ -1,5 +1,1 @@
-export type {
-  ITag,
-  ITagCreation,
-  ITagSelect,
-} from 'infostack-shared/common/interfaces';
+export type { ITag, ITagCreation, ITagSelect } from 'infostack-shared';

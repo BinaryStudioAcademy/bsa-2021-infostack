@@ -1,4 +1,4 @@
-import { AppRoute } from 'common/enums/enums';
+import { AppRoute } from 'common/enums';
 import { FormField, Link, Sign } from 'components/common/common';
 import { loginSchema } from 'common/validations';
 import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';

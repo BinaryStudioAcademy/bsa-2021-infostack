@@ -25,7 +25,7 @@ export const UsersSettings: React.FC = () => {
   const { users } = useAppSelector((state) => state.users);
 
   useEffect(() => {
-    dispatch(usersActions.loadUsers());
+    dispatch(usersActions.fetchUsers());
   }, []);
 
   const [isModalShowed, setModalShowed] = useState(false);

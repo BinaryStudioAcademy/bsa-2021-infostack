@@ -4,7 +4,7 @@ import { authActions } from 'store/actions';
 import { ProfileItem } from './components/components';
 import { replaceIdParam } from 'helpers/helpers';
 import { UserAvatar } from 'components/common/common';
-import { AppRoute, CookieVariable } from 'common/enums/enums';
+import { AppRoute, CookieVariable } from 'common/enums';
 import './styles.scss';
 
 type Props = {

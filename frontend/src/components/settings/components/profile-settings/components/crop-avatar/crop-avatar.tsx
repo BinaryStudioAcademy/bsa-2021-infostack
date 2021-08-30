@@ -2,8 +2,9 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+
 import { useState } from 'hooks/hooks';
-import { ICropData } from 'common/interfaces/components/crop-data';
+import { ICropData } from 'common/interfaces';
 
 type Props = {
   isShown: boolean;
