@@ -14,6 +14,7 @@ enum HttpErrorMessage {
   TEAM_EMPTY_STRING = 'Team with empty string is not allowed',
   TEAM_OWNER_ID = 'UserId is required to change Team owner',
   DELETED_FROM_WORKSPACE = 'You was deleted from this workspace',
+  NO_EMAIL = 'You should have email to login',
 }
 
 export { HttpErrorMessage };
