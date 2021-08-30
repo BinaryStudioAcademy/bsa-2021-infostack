@@ -12,6 +12,7 @@ enum ActionType {
   SET_CURRENT_PAGE_PINNED = 'setCurrentPagePinned',
   EDIT_DRAFT = 'editDraft',
   DELETE_DRAFT = 'deleteDraft',
+  RESET = 'reset',
 }
 
 export { ActionType };

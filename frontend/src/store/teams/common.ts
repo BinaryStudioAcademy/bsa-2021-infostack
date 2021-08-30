@@ -6,6 +6,7 @@ enum ActionType {
   DELETE_TEAM = 'deleteTeam',
   ADD_USER = 'addUser',
   DELETE_USER = 'deleteUser',
+  RESET = 'reset',
 }
 
 export { ActionType };

@@ -30,5 +30,8 @@ export const { reducer, actions } = createSlice({
     [ActionType.SET_CURRENT_REPO]: (state, action: PayloadAction<string>) => {
       state.currentRepo = action.payload;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });

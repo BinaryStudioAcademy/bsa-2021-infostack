@@ -6,7 +6,7 @@ import {
   getTeam,
   create,
   updateNameById,
-  deleteById,
+  remove,
   addUser,
   updateTeamRole,
   deleteUser,
@@ -49,7 +49,7 @@ router
 
   .delete(
     '/:id',
-    run((req) => deleteById(req.params.id, req.workspaceId)),
+    run((req) => remove(req.params.id, req.workspaceId, req.io)),
   )
 
   .post(
