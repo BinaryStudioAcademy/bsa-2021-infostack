@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, FlatList } from 'react-native';
+import { Text, FlatList, StyleSheet } from 'react-native';
 
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { selectPages, pagesActions } from 'store';
@@ -15,8 +15,15 @@ export const PageList: React.FC = () => {
   return (
     <FlatList
       data={pages}
-      renderItem={({ item }) => <Text>{item.title}</Text>}
+      renderItem={({ item }) => <Text style={styles.row}>{item.title}</Text>}
       keyExtractor={(item) => item.id}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  row: {
+    padding: 15,
+    marginTop: 5,
+  },
+});

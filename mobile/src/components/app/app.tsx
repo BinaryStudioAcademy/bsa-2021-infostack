@@ -9,7 +9,13 @@ import { PageList } from '../page-list/page-list';
 export const App: React.FC = () => (
   <Provider store={store}>
     <NavigationContainer>
-      <Root.Navigator>
+      <Root.Navigator
+        initialRouteName="Pages"
+        screenOptions={{
+          headerTintColor: '#fff',
+          headerStyle: { backgroundColor: '#4bba73' },
+        }}
+      >
         <Root.Screen name="Pages" component={PageList} />
       </Root.Navigator>
     </NavigationContainer>
