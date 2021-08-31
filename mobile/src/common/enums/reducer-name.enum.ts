@@ -1,3 +1,5 @@
-export enum ReducerName {
-  PAGES = 'pages',
-}
+export { ReducerName } from 'infostack-shared';
+
+// export enum ReducerName {
+//   PAGES = 'pages',
+// }
