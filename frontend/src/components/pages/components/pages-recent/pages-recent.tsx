@@ -1,9 +1,9 @@
 import { Card } from 'react-bootstrap';
 import { AppRoute } from 'common/enums';
 import { Link } from 'components/common/common';
+import { IPageRecent } from 'common/interfaces';
 import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { IPageRecent } from 'common/interfaces';
 
 interface Props {
   className?: string;
@@ -19,7 +19,6 @@ export const PagesRecent: React.FC<Props> = ({ pages, className }) => {
       <Card.Body>
         {pages &&
           pages.map(({ pageId, title, visited }) => (
-            // <div key={id}>
             <Link
               key={pageId}
               to={replaceIdParam(AppRoute.PAGE, pageId || '') as AppRoute}
@@ -39,7 +38,6 @@ export const PagesRecent: React.FC<Props> = ({ pages, className }) => {
               </div>
               <div className={getAllowedClasses(styles.visited)}>{visited}</div>
             </Link>
-            // </div>
           ))}
       </Card.Body>
     </Card>

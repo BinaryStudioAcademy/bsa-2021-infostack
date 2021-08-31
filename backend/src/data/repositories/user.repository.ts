@@ -74,10 +74,6 @@ class UserRepository extends Repository<User> {
   public updateAvatarById(id: string, avatar: string): Promise<User> {
     return this.save({ id, avatar });
   }
-
-  public findByIdWithRecentPages(userId: string): Promise<User> {
-    return this.findOne({ relations: ['recentPages'], where: { id: userId } });
-  }
 }
 
 export default UserRepository;

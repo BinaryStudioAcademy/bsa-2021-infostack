@@ -1,16 +1,15 @@
-import Image from 'react-bootstrap/Image';
-import { PageContent } from './components/components';
-import { AppRoute } from 'common/enums';
-import { Switch } from 'components/common/common';
-import { ProtectedRoute } from 'components/common/common';
-import { useAppSelector, useEffect, useParams, useState } from 'hooks/hooks';
-import Logo from 'assets/img/workspace-welcome-logo.png';
-import { getAllowedClasses } from 'helpers/helpers';
-import styles from './styles.module.scss';
-import { userApi } from 'services';
-import { PagesRecent } from './components/pages-recent/pages-recent';
-import { IPageRecent } from 'common/interfaces';
 import { toast } from 'react-toastify';
+import Image from 'react-bootstrap/Image';
+import { userApi } from 'services';
+import { useAppSelector, useEffect, useParams, useState } from 'hooks/hooks';
+import { getAllowedClasses } from 'helpers/helpers';
+import { AppRoute } from 'common/enums';
+import { IPageRecent } from 'common/interfaces';
+import { PageContent } from './components/components';
+import { Switch, ProtectedRoute } from 'components/common/common';
+import { PagesRecent } from './components/pages-recent/pages-recent';
+import Logo from 'assets/img/workspace-welcome-logo.png';
+import styles from './styles.module.scss';
 
 const Pages: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
