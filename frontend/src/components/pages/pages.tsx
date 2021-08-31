@@ -10,6 +10,7 @@ import styles from './styles.module.scss';
 import { userApi } from 'services';
 import { PagesRecent } from './components/pages-recent/pages-recent';
 import { IPageRecent } from 'common/interfaces';
+import { toast } from 'react-toastify';
 
 const Pages: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
@@ -23,8 +24,8 @@ const Pages: React.FC = () => {
       .then((res) => {
         setRecentPages(res);
       })
-      .catch((err) => {
-        console.log('EROR', err);
+      .catch(() => {
+        toast.error('Can not get recent pages');
       });
 
   useEffect(() => {
