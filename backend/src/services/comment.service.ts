@@ -142,6 +142,11 @@ export const notifyUsers = async (
 
     if (isNotifyComment) {
       io.to(parentAuthor.id).emit(SocketEvents.NOTIFICATION_NEW);
+      console.log({
+        title,
+        body,
+        workspaceId,
+      });
       await notificationRepository.createAndSave(
         title,
         body,
@@ -195,6 +200,7 @@ export const notifyUsers = async (
     type: EntityType.COMMENT,
     entityTypeId: comment.id,
     userId: follower.id,
+    workspaceId,
     read: false,
   }));
   await notificationRepository.createAndSaveMultiple(notifications);
