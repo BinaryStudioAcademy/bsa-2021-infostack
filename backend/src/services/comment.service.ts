@@ -142,11 +142,6 @@ export const notifyUsers = async (
 
     if (isNotifyComment) {
       io.to(parentAuthor.id).emit(SocketEvents.NOTIFICATION_NEW);
-      console.log({
-        title,
-        body,
-        workspaceId,
-      });
       await notificationRepository.createAndSave(
         title,
         body,
