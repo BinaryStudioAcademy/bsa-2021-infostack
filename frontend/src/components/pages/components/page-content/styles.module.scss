@@ -54,6 +54,15 @@
   padding: 2px 0;
 }
 
+:global(.example-multiple-targets::after) {
+  content: attr(data-count);
+  display: block;
+}
+
+:global(.react-contextmenu-item.react-contextmenu-submenu) {
+  padding: 0;
+}
+
 :global(.react-contextmenu.react-contextmenu--visible) {
   opacity: 1;
   pointer-events: auto;
@@ -78,15 +87,6 @@
 .react-contextmenu-item--divider:hover {
   background-color: transparent;
   border-color: rgba(0, 0, 0, 0.15);
-}
-
-:global(.react-contextmenu-item.react-contextmenu-submenu) {
-  padding: 0;
-}
-
-:global(.example-multiple-targets::after) {
-  content: attr(data-count);
-  display: block;
 }
 
 :global(.react-contextmenu-item.react-contextmenu-submenu
