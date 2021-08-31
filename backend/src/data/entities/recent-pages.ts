@@ -1,10 +1,10 @@
 import {
   Entity,
   RelationId,
-  ManyToMany,
   BaseEntity,
   CreateDateColumn,
   PrimaryColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Page } from './page';
 import { User } from './user';
@@ -14,17 +14,17 @@ export class RecentPage extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @RelationId((recentPage: RecentPage) => recentPage.users)
+  @RelationId((recentPage: RecentPage) => recentPage.user)
   @PrimaryColumn()
   readonly userId: string;
 
-  @RelationId((recentPage: RecentPage) => recentPage.pages)
+  @RelationId((recentPage: RecentPage) => recentPage.page)
   @PrimaryColumn()
   readonly pageId: string;
 
-  @ManyToMany(() => User, (user) => user.recentPages)
-  users: User[];
+  @ManyToOne(() => User, (user) => user.recentPages)
+  user: User;
 
-  @ManyToMany(() => Page, (page) => page.recentUsers)
-  pages: Page[];
+  @ManyToOne(() => Page, (page) => page.recentPages)
+  page: Page;
 }

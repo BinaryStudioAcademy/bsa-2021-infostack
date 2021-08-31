@@ -3,27 +3,43 @@ import { AppRoute } from 'common/enums';
 import { Link } from 'components/common/common';
 import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { IPageNav } from 'common/interfaces';
+import { IPageRecent } from 'common/interfaces';
 
 interface Props {
   className?: string;
-  recentPages: IPageNav[];
+  pages: IPageRecent[] | undefined;
 }
 
-export const PagesRecent: React.FC<Props> = ({ recentPages, className }) => {
+export const PagesRecent: React.FC<Props> = ({ pages, className }) => {
   return (
     <Card border="light" className={getAllowedClasses(styles.card, className)}>
       <Card.Header className="bg-white border-0 d-flex align-items-center">
         Recent pages
       </Card.Header>
       <Card.Body>
-        {recentPages &&
-          recentPages.map(({ id, title }) => (
-            <div key={id}>
-              <Link to={replaceIdParam(AppRoute.PAGE, id || '') as AppRoute}>
-                <div>{title}</div>
-              </Link>
-            </div>
+        {pages &&
+          pages.map(({ pageId, title, visited }) => (
+            // <div key={id}>
+            <Link
+              key={pageId}
+              to={replaceIdParam(AppRoute.PAGE, pageId || '') as AppRoute}
+              className={getAllowedClasses(
+                styles.recentlink,
+                'text-decoration-none',
+              )}
+            >
+              <div className={getAllowedClasses(styles.recentItem)}>
+                <i
+                  className={getAllowedClasses(
+                    styles.recentIcon,
+                    'bi bi-file-text',
+                  )}
+                ></i>
+                {title}
+              </div>
+              <div className={getAllowedClasses(styles.visited)}>{visited}</div>
+            </Link>
+            // </div>
           ))}
       </Card.Body>
     </Card>

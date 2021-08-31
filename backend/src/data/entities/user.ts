@@ -70,7 +70,7 @@ export class User extends AbstractEntity {
     () => NotificationSettings,
     (notificationSettings) => notificationSettings.user,
   )
-  @ManyToMany(() => RecentPage, (recentPage) => recentPage.users)
+  @OneToMany(() => RecentPage, (recentPage) => recentPage.user)
   recentPages: RecentPage[];
 
   notificationSettings: NotificationSettings[];

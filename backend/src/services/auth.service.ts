@@ -253,7 +253,7 @@ export const loginGithub = async (
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const accessToken = await getAccessToken(code);
   const githubUser = await getUser(accessToken);
-  console.log(githubUser);
+
   const { email, name, login, avatar_url } = githubUser;
 
   if (!email) {

@@ -18,6 +18,7 @@ import { Comment } from './comment';
 import { Tag } from './tag';
 import { PageShareLink } from './page-share-link';
 import { Draft } from './draft';
+import { RecentPage } from './recent-pages';
 
 @Entity()
 export class Page extends AbstractEntity {
@@ -82,6 +83,8 @@ export class Page extends AbstractEntity {
   @OneToOne(() => Draft, (Draft) => Draft.page)
   draft: Draft;
 
-  @ManyToMany(() => User, (user) => user.recentPages, { cascade: true })
-  recentUsers: User[];
+  @OneToMany(() => RecentPage, (recentPage) => recentPage.page, {
+    cascade: true,
+  })
+  recentPages: RecentPage[];
 }
