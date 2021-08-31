@@ -12,6 +12,7 @@ import {
   TeamSettings,
   UsersSettings,
   TagSettings,
+  SkillSettings,
   IntegrationSettings,
   NotificationsSettings,
 } from './components/components';
@@ -65,6 +66,11 @@ const Settings: React.FC = () => {
                   <Route
                     path={AppRoute.SETTINGS_TAGS}
                     component={TagSettings}
+                    exact
+                  />
+                  <Route
+                    path={AppRoute.SETTINGS_SKILLS}
+                    component={SkillSettings}
                     exact
                   />
                   <Route
