@@ -11,10 +11,10 @@ import {
 import { pagesActions } from 'store/actions';
 import { PagesList, PlusButtonRoot } from './components/components';
 import { IPageRequest } from 'common/interfaces/pages';
-import { replaceIdParam } from 'helpers/helpers';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import { AppRoute } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { Link } from 'components/common/common';
 
 export const Toolbar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -61,13 +61,16 @@ export const Toolbar: React.FC = () => {
         styles.navbar,
       )}
     >
-      <h1 className="h5 mt-5 mb-5 text-light text-center w-100 text-break">
+      <Link
+        to={AppRoute.ROOT}
+        className="h5 mt-5 mb-5 text-light text-center w-100 text-break"
+      >
         {currentWorkspace?.logo ? (
           <img className={styles.logo} src={currentWorkspace.logo} />
         ) : (
           currentWorkspace?.title || 'Untitled'
         )}
-      </h1>
+      </Link>
       <div className="pt-3 w-100">
         {pages.pinnedPages && pages.pinnedPages.length > 0 && (
           <>
