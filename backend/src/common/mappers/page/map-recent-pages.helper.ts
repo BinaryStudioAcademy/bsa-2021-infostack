@@ -23,5 +23,5 @@ export const mapToRecentPage = (recentPages: RecentPage[]): IPageRecent[] => {
     }),
   );
 
-  return mappedRecentPages as unknown as IPageRecent[];
+  return mappedRecentPages;
 };
