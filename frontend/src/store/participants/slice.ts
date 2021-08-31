@@ -43,6 +43,9 @@ const { reducer, actions } = createSlice({
         (participant) => participant.id !== action.payload,
       );
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 

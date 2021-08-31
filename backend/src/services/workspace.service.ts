@@ -106,14 +106,11 @@ export const deleteUserFromWorkspace = async (
   workspaceId: string,
 ): Promise<void> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspaceToUpdate =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
-      userId,
-      workspaceId,
-    );
-  const userWorkspaceUpdated = { ...userWorkspaceToUpdate };
-  userWorkspaceUpdated.status = InviteStatus.DELETED;
-  await userWorkspaceRepository.save(userWorkspaceUpdated);
+
+  await userWorkspaceRepository.deleteByUserIdAndWorkspaceId(
+    userId,
+    workspaceId,
+  );
 
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
@@ -211,15 +208,13 @@ export const getUserWorkspaces = async (
   );
   const workspaces = [] as IWorkspace[];
   for (const userWorkspace of usersWorkspaces) {
-    if (userWorkspace.status !== InviteStatus.DELETED) {
-      const workspace = userWorkspace.workspace;
-      workspaces.push({
-        id: workspace.id,
-        title: workspace.name,
-        status: userWorkspace.status,
-        logo: workspace.logo,
-      });
-    }
+    const workspace = userWorkspace.workspace;
+    workspaces.push({
+      id: workspace.id,
+      title: workspace.name,
+      status: userWorkspace.status,
+      logo: workspace.logo,
+    });
   }
   return workspaces;
 };

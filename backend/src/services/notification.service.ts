@@ -39,16 +39,19 @@ const setSubtitleToPage = async (
 
 export const getNotifications = async (
   userId: string,
+  workspaceId: string,
   limit?: number,
   from?: number,
 ): Promise<INotification[]> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
   const start = from || 0;
-  const notifications = await notificationRepository.findSomeByUserId(
-    userId,
-    start,
-    limit,
-  );
+  const notifications =
+    await notificationRepository.findSomeByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+      start,
+      limit,
+    );
 
   const commentNotifications = notifications.filter(
     (notification) => notification.type === EntityType.COMMENT,
@@ -88,9 +91,14 @@ export const getNotifications = async (
 
 export const getNotificationsCount = async (
   userId: string,
+  workspaceId: string,
 ): Promise<{ count: number }> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
-  const notifications = await notificationRepository.findAllByUserId(userId);
+  const notifications =
+    await notificationRepository.findAllByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
   const count = notifications.filter(
     (notification) => !notification.read,
   ).length;
@@ -117,12 +125,17 @@ export const updateRead = async (
 
 export const updateReadForAll = async (
   userId: string,
+  workspaceId: string,
   body: { read: boolean },
 ): Promise<INotification[]> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
-  const notifications = await notificationRepository.findAllByUserId(userId);
+  const notifications =
+    await notificationRepository.findAllByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
   for (const notification of notifications) {
     await notificationRepository.update({ id: notification.id }, body);
   }
-  return await getNotifications(userId);
+  return await getNotifications(userId, workspaceId);
 };

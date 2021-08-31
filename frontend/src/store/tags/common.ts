@@ -9,6 +9,7 @@ enum ActionType {
   SET_ADD_NAME = 'setAddName',
   SET_EDIT_TAG_ERROR = 'setEditTagError',
   SET_EDIT_NAME = 'setEditName',
+  RESET = 'reset',
 }
 
 export { ActionType };

@@ -51,6 +51,9 @@ const { reducer, actions } = createSlice({
       state.isDeletingCurrentWorkspaceLogo =
         !state.isDeletingCurrentWorkspaceLogo;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
