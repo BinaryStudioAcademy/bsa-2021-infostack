@@ -1,9 +1,10 @@
+import { IPageRecent } from '../../../common/interfaces/page';
 import { RecentPage } from '../../../data/entities/recent-pages';
 
-export const mapToRecentPage = (recentPages: RecentPage[]) => {
+export const mapToRecentPage = (recentPages: RecentPage[]): IPageRecent[] => {
   const cutRecentPages = [];
   if (recentPages.length <= 5) {
-    for (let item of recentPages) {
+    for (const item of recentPages) {
       cutRecentPages.push(item);
     }
   } else {
