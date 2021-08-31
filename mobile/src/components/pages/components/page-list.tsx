@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
 
 import { IPageNav } from 'common/interfaces';
 import { PageListItem } from './page-list-item';
@@ -11,7 +11,6 @@ type Props = {
 
 export const PageList: React.FC<Props> = ({ pages, onItemClick }) => (
   <FlatList
-    style={styles.list}
     data={pages}
     renderItem={({ item }) => (
       <PageListItem
@@ -23,9 +22,3 @@ export const PageList: React.FC<Props> = ({ pages, onItemClick }) => (
     keyExtractor={(item) => item.id}
   />
 );
-
-const styles = StyleSheet.create({
-  list: {
-    paddingTop: 15,
-  },
-});
