@@ -1,15 +1,17 @@
 import * as React from 'react';
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { store } from 'store';
+import { Root } from 'navigation/root-stack';
 import { PageList } from '../page-list/page-list';
 
-const Stack = createNativeStackNavigator();
-
 export const App: React.FC = () => (
-  <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen name="Page List" component={PageList} />
-    </Stack.Navigator>
-  </NavigationContainer>
+  <Provider store={store}>
+    <NavigationContainer>
+      <Root.Navigator>
+        <Root.Screen name="Pages" component={PageList} />
+      </Root.Navigator>
+    </NavigationContainer>
+  </Provider>
 );
