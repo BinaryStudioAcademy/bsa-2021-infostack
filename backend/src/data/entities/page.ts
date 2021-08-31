@@ -79,6 +79,7 @@ export class Page extends AbstractEntity {
 
   @OneToMany(() => PageShareLink, (ShareLink) => ShareLink.page)
   links: PageShareLink[];
+
   @OneToOne(() => Draft, (Draft) => Draft.page)
   draft: Draft;
 }

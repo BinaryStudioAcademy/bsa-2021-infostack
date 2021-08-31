@@ -17,7 +17,7 @@ import { RootState } from 'common/types/types';
 import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
-// import { IUser } from 'common/interfaces/user';
+import { IPageContributor } from 'common/interfaces/pages';
 import {
   useState,
   useAppDispatch,
@@ -28,15 +28,11 @@ import {
 } from 'hooks/hooks';
 import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { IUser } from 'common/interfaces';
 
 export const ContentEditor: React.FC = () => {
   const socket = useContext(SocketContext);
   const { user } = useAppSelector((state) => state.auth);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
-  // const [editors, setEditors] = useState(false);
-  // const [editors, setEditors] = useState<IUser[]>([]);
-  // const { editors } = useAppSelector((state: RootState) => state.pages);
 
   const pageTitle = currentPage?.pageContents[0].title;
   const content = currentPage?.pageContents[0].content;
@@ -71,32 +67,30 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
 
-  const onEditTogether = (userInEditor: IUser): void => {
-    console.info('THRERER!!))', userInEditor.id, user?.id);
-    if (userInEditor.id !== user?.id) {
+  // const [isLiveMode, setIsLiveMode] = useState(false);
+
+  const onEditTogether = (editors: IPageContributor[]): void => {
+    if (editors.length > 1) {
       setIsCollabModalVisible(true);
     }
   };
 
   useEffect(() => {
-    // socket.on(SocketEvents.PAGE_EDIT, onEditTogether);
-    // if (user) {
-    // setEditors(editors => [...editors, user]);
-    // }
-    // if (editors) {
-    //   setIsCollabModalVisible(true);
-    //   setEditors(true);
-    // }
-    if (currentPage?.pageContents[0]) {
+    if (user && currentPage?.pageContents[0]) {
       socket.emit(
         SocketEvents.EDITOR_JOIN,
         currentPage?.pageContents[0].id,
-        user,
+        user.id,
       );
       socket.on(SocketEvents.EDITOR_JOIN, onEditTogether);
     }
     return (): void => {
       socket.off(SocketEvents.EDITOR_JOIN, onEditTogether);
+      socket.emit(
+        SocketEvents.EDITOR_LEFT,
+        currentPage?.pageContents[0].id,
+        user?.id,
+      );
     };
   }, [user]);
 
@@ -160,20 +154,10 @@ export const ContentEditor: React.FC = () => {
       handleSaveAsDraftConfirm();
     }
     handleCancel();
-    // console.info('there', editors);
-    deleteEditor();
   };
 
   const handleCancel = (): void => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
-  };
-
-  const deleteEditor = (): void => {
-    // console.info(user);
-    // if (user) {
-    //   dispatch(pagesActions.deleteEditor(user));
-    // }
-    // console.info(editors);
   };
 
   const showWarningOnTitle = (title: string | undefined): void => {
@@ -204,7 +188,6 @@ export const ContentEditor: React.FC = () => {
         .unwrap()
         .then(handleCancel);
       dispatch(pagesActions.deleteDraft(paramsId));
-      deleteEditor();
       return;
     }
     showWarningOnTitle(titleInputValue);
@@ -252,7 +235,6 @@ export const ContentEditor: React.FC = () => {
 
   const handleUsualMode = (): void => {
     setIsCollabModalVisible(false);
-    deleteEditor();
   };
 
   const handleLifeMode = (): void => {

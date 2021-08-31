@@ -1,4 +1,11 @@
-import { Entity, Column, ManyToOne, RelationId } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  RelationId,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { User } from './user';
@@ -26,4 +33,8 @@ export class PageContent extends AbstractEntity {
 
   @ManyToOne(() => User, (user) => user.pageContents)
   author: User;
+
+  @ManyToMany(() => User, (user) => user.editingContents)
+  @JoinTable({ name: 'content_editor' })
+  editors: User[];
 }
