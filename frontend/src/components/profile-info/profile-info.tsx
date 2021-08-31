@@ -77,13 +77,15 @@ const ProfileInfo: React.FC = () => {
     }
   });
 
-  let followedUserPages = [] as IPageNav[];
-  if (user && user.followingPages && childPages) {
-    const pages = childPages.filter((child) =>
-      user.followingPages?.find((page) => child.id === page.id),
-    );
-    followedUserPages = pages;
-  }
+  const followedUserPages = useAppSelector((state) => {
+    const { user } = state.auth;
+    if (user && user.followingPages && childPages) {
+      const pages = childPages.filter((child) =>
+        user.followingPages?.find((page) => child.id === page.id),
+      );
+      return pages;
+    }
+  }) as IPageNav[];
 
   useEffect(() => {
     if (followedUserPages?.length) {
