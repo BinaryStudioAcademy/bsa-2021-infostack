@@ -29,3 +29,11 @@ export const deleteEditor = async (
   const pageContentRepository = getCustomRepository(PageContentRepository);
   await pageContentRepository.deleteEditor(pageContentId, userId);
 };
+
+export const getByUserId = async (userId: string): Promise<string> => {
+  const pageContentRepository = getCustomRepository(PageContentRepository);
+  const pageContent = await pageContentRepository.getByUserId(userId);
+  console.info(pageContent.id);
+  // const { id } = await pageContentRepository.getByUserId(userId);
+  return pageContent.id;
+};

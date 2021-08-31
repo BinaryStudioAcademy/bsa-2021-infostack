@@ -43,5 +43,30 @@ class PageContentRepository extends Repository<PageContent> {
       .of(pageContentId)
       .remove(userId);
   }
+
+  public getByUserId(userId: string): Promise<PageContent> {
+    // const user = this.createQueryBuilder('pageContent')
+    // .leftJoinAndSelect('page.followingUsers', 'followingUsers')
+    // .where('page.id = :id', { id: id })
+    // .andWhere('page.id =  :id', { id: id })
+    // .getOne();
+
+    const user = this.createQueryBuilder('pageContent')
+      .leftJoinAndSelect('pageContent.editors', 'editors')
+      .where('editors.userId = :id', { id: userId })
+      .getOne();
+
+    // const user = this.createQueryBuilder('pageContent')
+    // .leftJoin("editors", 'editors."userId" = :userId', userId)
+    // .getSql();
+
+    const page = this.createQueryBuilder('pageContent')
+      .leftJoin('editors', 'editors."userId" = :userId', userId)
+      .getOne();
+
+    console.info(user);
+
+    return page;
+  }
 }
 export default PageContentRepository;

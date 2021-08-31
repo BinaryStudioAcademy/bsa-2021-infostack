@@ -9,4 +9,5 @@ export enum SocketEvents {
   NOTIFICATION_DELETE = 'notification/delete',
   EDITOR_JOIN = 'editor/join',
   EDITOR_LEFT = 'editor/left',
+  EDITOR_NEW_CONTENT = 'editor/newContent',
 }

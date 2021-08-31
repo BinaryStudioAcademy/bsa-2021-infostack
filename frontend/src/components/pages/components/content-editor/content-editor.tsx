@@ -75,6 +75,28 @@ export const ContentEditor: React.FC = () => {
     }
   };
 
+  // useEffect(() => {
+  //   socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+
+  //   return (): void => {
+  //     socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+  //   };
+  // }, [socket]);
+
+  const synchronizeChange = (title: string, content: string): void => {
+    // console.info(title, content);
+    setDraftTitleInputValue(title);
+    setDraftMarkDownContent(content);
+  };
+
+  useEffect(() => {
+    socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+
+    return (): void => {
+      socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+    };
+  }, []);
+
   useEffect(() => {
     if (user && currentPage?.pageContents[0]) {
       socket.emit(
@@ -95,6 +117,7 @@ export const ContentEditor: React.FC = () => {
   }, [user]);
 
   useEffect(() => {
+    // socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
     setSaveDraftShown(true);
     setTitleInputValue(draftTitleInputValue);
     setMarkDownContent(draftMarkDownContent);
@@ -117,6 +140,13 @@ export const ContentEditor: React.FC = () => {
         handleAutosaveAsDraft();
         setDeleteDraftShown(true);
       }, 10000);
+
+      socket.emit(
+        SocketEvents.EDITOR_NEW_CONTENT,
+        user?.id,
+        draftTitleInputValue,
+        draftMarkDownContent,
+      );
       return (): void => clearTimeout(timeoutId);
     }
   }, [draftTitleInputValue, draftMarkDownContent]);

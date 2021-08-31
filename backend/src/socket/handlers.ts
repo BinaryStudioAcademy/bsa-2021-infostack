@@ -5,6 +5,7 @@ import {
   getEditors,
   addEditor,
   deleteEditor,
+  // getByUserId
 } from '../services/page-content.service';
 
 export const handlers = (socket: Socket): void => {
@@ -31,6 +32,20 @@ export const handlers = (socket: Socket): void => {
     async (pageContentId: string, userId: string) => {
       socket.leave(pageContentId);
       await deleteEditor(pageContentId, userId);
+    },
+  );
+  socket.on(
+    SocketEvents.EDITOR_NEW_CONTENT,
+    async (userId: string, title: string, content: string) => {
+      // const pageContentId = await getByUserId(userId);
+      console.info(userId);
+      // const pageContentId = 'f2f42def-4279-4cbd-a9de-8112f6f102f4';
+      socket
+        .in('f2f42def-4279-4cbd-a9de-8112f6f102f4')
+        .emit(SocketEvents.EDITOR_NEW_CONTENT, title, content);
+      // socket.emit(SocketEvents.EDITOR_NEW_CONTENT, title, content);
+      // console.info(title, content);
+      // socket.to(socket.id).emit(SocketEvents.EDITOR_NEW_CONTENT, title, content);
     },
   );
 };
