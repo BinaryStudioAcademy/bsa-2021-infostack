@@ -39,7 +39,7 @@ const { row, text } = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 20,
   },
   text: {

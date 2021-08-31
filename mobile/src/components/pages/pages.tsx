@@ -46,9 +46,7 @@ export const Pages: React.FC = () => {
       <PageListStack.Screen
         name="ExpandedPage"
         component={ExpandedPage}
-        options={{
-          title: 'Pages Expanded',
-        }}
+        options={({ route }) => ({ title: route.params.page.title })}
       />
     </PageListStack.Navigator>
   );
