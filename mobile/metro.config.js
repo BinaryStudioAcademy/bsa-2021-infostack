@@ -18,11 +18,13 @@ module.exports = {
   },
   resolver: {
     extraNodeModules: {
-      'infostack-shared': path.resolve(__dirname + '/../shared/build'),
+      'infostack-shared': path.resolve(
+        path.join(__dirname, '/../shared/build'),
+      ),
     },
   },
   watchFolders: [
     path.resolve(__dirname, './node_modules'),
-    path.resolve(__dirname + '/../shared/build'),
+    path.resolve(path.join(__dirname, '/../shared/build')),
   ],
 };

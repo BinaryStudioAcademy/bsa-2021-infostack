@@ -29,6 +29,7 @@ export const Pages: React.FC = () => {
     <PageListStack.Navigator
       initialRouteName="RootPages"
       screenOptions={{
+        headerTitleAlign: 'center',
         headerTintColor: '#fff',
         headerStyle: { backgroundColor: Color.PRIMARY },
       }}
