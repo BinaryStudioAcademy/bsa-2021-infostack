@@ -35,6 +35,7 @@ import {
   parseMentions,
   mentionMail,
 } from '../common/utils';
+import elasticCommentRepository from '../elasticsearch/repositories/comments.repository';
 
 export const getComments = async (
   pageId: string,
@@ -248,6 +249,13 @@ export const addComment = async (
     voiceRecord,
   });
 
+  await elasticCommentRepository.upsert({
+    id,
+    text,
+    pageId,
+    workspaceId,
+  });
+
   const comment = await commentRepository.findById(id);
 
   const response = {
@@ -275,6 +283,7 @@ export const deleteComment = async (
     io.to(notification.userId).emit(SocketEvents.NOTIFICATION_DELETE);
   }
   io.to(pageId).emit(SocketEvents.PAGE_DELETE_COMMENT, { id, sender: userId });
+  await elasticCommentRepository.deleteById(id);
 };
 
 export const handleCommentReaction = async (
