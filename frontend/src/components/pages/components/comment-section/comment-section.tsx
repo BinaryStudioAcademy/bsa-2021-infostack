@@ -1,6 +1,6 @@
 import { Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-
+import { MentionItem } from 'react-mentions';
 import {
   useAppDispatch,
   useAppSelector,
@@ -19,9 +19,22 @@ import styles from './styles.module.scss';
 
 type Props = {
   pageId: string;
+  commentsRef: React.RefObject<HTMLElement>;
+  formState: { text: string; mentions: MentionItem[] };
+  setFormState: React.Dispatch<
+    React.SetStateAction<{
+      text: string;
+      mentions: MentionItem[];
+    }>
+  >;
 };
 
-export const CommentSection: React.FC<Props> = ({ pageId }) => {
+export const CommentSection: React.FC<Props> = ({
+  pageId,
+  commentsRef,
+  formState,
+  setFormState,
+}) => {
   const user = useAppSelector((state) => state.auth.user);
   const users = useAppSelector((state) => state.users.users);
   const dispatch = useAppDispatch();
@@ -82,7 +95,7 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
   }, []);
 
   return (
-    <>
+    <div ref={commentsRef as React.RefObject<HTMLDivElement>}>
       <Card border="light" className={styles.card}>
         <Card.Header className={getAllowedClasses('bg-white', styles.header)}>
           Comments
@@ -92,6 +105,8 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
             pageId={pageId}
             className="m-0"
             placeholder="Add a comment"
+            formState={formState}
+            setFormState={setFormState}
           />
           <CommentList pageId={pageId} handleDelete={handleDelete} />
         </Card.Body>
@@ -101,6 +116,6 @@ export const CommentSection: React.FC<Props> = ({ pageId }) => {
         handler={modalHandler}
         isDisabled={isModalDisabled}
       />
-    </>
+    </div>
   );
 };
