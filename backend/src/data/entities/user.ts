@@ -11,6 +11,7 @@ import { Skill } from './skill';
 import { Reaction } from './reaction';
 import { PageShareLink } from './page-share-link';
 import { NotificationSettings } from './notification-settings';
+import { RecentPage } from './recent-pages';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -69,5 +70,8 @@ export class User extends AbstractEntity {
     () => NotificationSettings,
     (notificationSettings) => notificationSettings.user,
   )
+  @OneToMany(() => RecentPage, (recentPage) => recentPage.user)
+  recentPages: RecentPage[];
+
   notificationSettings: NotificationSettings[];
 }
