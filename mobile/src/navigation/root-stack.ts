@@ -1,3 +1,3 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export const Root = createNativeStackNavigator();
+export const RootStack = createNativeStackNavigator();
