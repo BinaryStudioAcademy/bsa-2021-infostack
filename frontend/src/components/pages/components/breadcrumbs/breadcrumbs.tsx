@@ -27,6 +27,7 @@ export const Breadcrumbs: React.FC = () => {
       for (const page of pages) {
         getBreadcrumbs(breadcrumbs, page.childPages, id);
         if (
+          breadcrumbs.length &&
           page.childPages
             .map((child) => child.id)
             .includes(breadcrumbs[breadcrumbs.length - 1].id)
@@ -47,7 +48,7 @@ export const Breadcrumbs: React.FC = () => {
   };
 
   useEffect(() => {
-    if (pages) {
+    if (pages?.length) {
       const breadcrumbs = [] as Breadcrumb[];
       getBreadcrumbs(breadcrumbs, pages, paramsId);
       setBreadcrumbs(breadcrumbs);
