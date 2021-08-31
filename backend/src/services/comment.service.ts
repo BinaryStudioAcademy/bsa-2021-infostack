@@ -195,6 +195,7 @@ export const notifyUsers = async (
     type: EntityType.COMMENT,
     entityTypeId: comment.id,
     userId: follower.id,
+    workspaceId,
     read: false,
   }));
   await notificationRepository.createAndSaveMultiple(notifications);
