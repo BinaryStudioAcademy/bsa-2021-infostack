@@ -1,8 +1,10 @@
-interface IElasticPageContent {
-  title: string;
-  content: string;
+interface IElasticPageContentAndComments {
+  id?: string;
+  title?: string;
+  content?: string;
+  text?: string;
   workspaceId: string;
   pageId: string;
 }
 
-export type { IElasticPageContent };
+export type { IElasticPageContentAndComments };
