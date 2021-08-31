@@ -45,13 +45,11 @@ const ProfileInfo: React.FC = () => {
     let mounted = true;
     const getUser = async (): Promise<void> => {
       await userApi.getUserInfo(id).then((user) => {
-        if (user.id.length > 0) {
-          if (mounted) {
+        if (mounted) {
+          if (user.id) {
             setPermission(true);
             setUser(user);
-          }
-        } else {
-          if (mounted) {
+          } else {
             setPermission(false);
           }
         }
