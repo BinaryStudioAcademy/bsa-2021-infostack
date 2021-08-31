@@ -2,8 +2,8 @@ import { Button, Form } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector, useRef, useState } from 'hooks/hooks';
 import { skillActions } from 'store/skills';
 import { getAllowedClasses } from 'helpers/helpers';
-import styles from '../../styles.module.scss';
 import { authActions } from 'store/auth';
+import styles from '../../styles.module.scss';
 
 export const SkillEdit: React.FC<{
   newSkillInputRef: React.RefObject<HTMLInputElement>;
