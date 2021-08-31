@@ -22,20 +22,47 @@ import { AppRoute } from 'common/enums';
 import './profile-info.scss';
 import { replaceIdParam } from 'helpers/helpers';
 import { Activities } from './components/components';
+import { IUser } from 'common/interfaces';
+import { userApi } from 'services';
 
 const ProfileInfo: React.FC = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const [user, setUser] = useState<IUser>({
+    id: '',
+    avatar: '',
+    fullName: '',
+    email: '',
+    title: '',
+    skills: [],
+    followingPages: [],
+  });
+  const { user: currentUser } = useAppSelector((state) => state.auth);
 
   const [permission, setPermission] = useState(true);
   const [pageId, setPageId] = useState<string>();
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
-    if (user && user.id.length > 0) {
-      setPermission(true);
-      return;
-    }
-    setPermission(false);
+    let mounted = true;
+    const getUser = async (): Promise<void> => {
+      await userApi.getUserInfo(id).then((user) => {
+        if (user.id.length > 0) {
+          if (mounted) {
+            setPermission(true);
+            setUser(user);
+          }
+        } else {
+          if (mounted) {
+            setPermission(false);
+          }
+        }
+      });
+    };
+
+    getUser();
+
+    return (): void => {
+      mounted = false;
+    };
   }, [id]);
 
   const dispatch = useAppDispatch();
@@ -50,15 +77,13 @@ const ProfileInfo: React.FC = () => {
     }
   });
 
-  const followedUserPages = useAppSelector((state) => {
-    const { user } = state.auth;
-    if (user && user.followingPages && childPages) {
-      const pages = childPages.filter((child) =>
-        user.followingPages?.find((page) => child.id === page.id),
-      );
-      return pages;
-    }
-  }) as IPageNav[];
+  let followedUserPages = [] as IPageNav[];
+  if (user && user.followingPages && childPages) {
+    const pages = childPages.filter((child) =>
+      user.followingPages?.find((page) => child.id === page.id),
+    );
+    followedUserPages = pages;
+  }
 
   useEffect(() => {
     if (followedUserPages?.length) {
@@ -159,16 +184,18 @@ const ProfileInfo: React.FC = () => {
                                           <i className="bi bi-file-text-fill"></i>
                                           {page.pageContents[0].title}
                                         </Link>
-                                        <Button
-                                          variant="danger"
-                                          className="ms-3"
-                                          size="sm"
-                                          onClick={(): Promise<void> =>
-                                            onPageUnfollow(page.id)
-                                          }
-                                        >
-                                          Unfollow
-                                        </Button>
+                                        {currentUser?.id === id && (
+                                          <Button
+                                            variant="danger"
+                                            className="ms-3"
+                                            size="sm"
+                                            onClick={(): Promise<void> =>
+                                              onPageUnfollow(page.id)
+                                            }
+                                          >
+                                            Unfollow
+                                          </Button>
+                                        )}
                                       </div>
                                       <FollowModal
                                         show={isFollowModalVisible}
