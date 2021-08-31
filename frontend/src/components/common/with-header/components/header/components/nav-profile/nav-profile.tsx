@@ -1,10 +1,22 @@
 import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
 import { useAppDispatch, useCookies, useHistory } from 'hooks/hooks';
-import { authActions } from 'store/actions';
+import {
+  activitiesActions,
+  authActions,
+  githubActions,
+  notificationsActions,
+  notificationsSettingsActions,
+  pagesActions,
+  participantsActions,
+  tagActions,
+  teamsActions,
+  usersActions,
+  workspacesActions,
+} from 'store/actions';
 import { ProfileItem } from './components/components';
 import { replaceIdParam } from 'helpers/helpers';
 import { UserAvatar } from 'components/common/common';
-import { AppRoute, CookieVariable } from 'common/enums';
+import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
 import './styles.scss';
 
 type Props = {
@@ -23,13 +35,35 @@ export const NavProfile: React.FC<Props> = ({
 
   const [cookies, , removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
 
+  const cleanWorkspaceStore = (): void => {
+    dispatch(activitiesActions.reset());
+    dispatch(githubActions.reset());
+    dispatch(notificationsActions.reset());
+    dispatch(notificationsSettingsActions.reset());
+    dispatch(pagesActions.reset());
+    dispatch(participantsActions.reset());
+    dispatch(tagActions.reset());
+    dispatch(teamsActions.reset());
+    dispatch(usersActions.reset());
+  };
+
   const onLogout = (): void => {
+    cleanWorkspaceStore();
+    dispatch(authActions.reset());
+    dispatch(workspacesActions.reset());
     dispatch(authActions.logout());
     if (cookies[CookieVariable.WORKSPACE_ID]) {
       removeCookie(CookieVariable.WORKSPACE_ID);
     }
+    localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
+    localStorage.removeItem(LocalStorageVariable.GITHUB_ACCESS_TOKEN);
+    localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
     history.push(AppRoute.LOGIN);
-    location.reload();
+  };
+
+  const onSelectWorkspace = (): void => {
+    cleanWorkspaceStore();
+    history.push(AppRoute.WORKSPACES);
   };
 
   return (
@@ -51,7 +85,7 @@ export const NavProfile: React.FC<Props> = ({
           Profile
         </ProfileItem>
         <Dropdown.Divider />
-        <ProfileItem to={AppRoute.WORKSPACES}>Select Workspace</ProfileItem>
+        <ProfileItem onClick={onSelectWorkspace}>Select Workspace</ProfileItem>
         <ProfileItem to={AppRoute.SETTINGS}>Settings</ProfileItem>
         <ProfileItem onClick={onLogout}>Sign out</ProfileItem>
       </Dropdown.Menu>

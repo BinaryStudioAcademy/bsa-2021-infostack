@@ -47,11 +47,7 @@ export const UserItem: React.FC<IUserItemProps> = ({
           onClick={onDeleteUser}
           variant="danger"
           size="sm"
-          disabled={
-            status === InviteStatus.DELETED ||
-            status === InviteStatus.DECLINED ||
-            id === user?.id
-          }
+          disabled={status === InviteStatus.DECLINED || id === user?.id}
         >
           Delete
         </Button>

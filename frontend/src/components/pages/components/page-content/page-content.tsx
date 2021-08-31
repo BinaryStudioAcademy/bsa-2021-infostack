@@ -49,6 +49,7 @@ import {
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
 import { ShareModal } from '../share-modal/share-modal';
+import { Breadcrumbs } from '../breadcrumbs/breadcrumbs';
 import PageTags from '../page-tags/page-tags';
 import styles from './styles.module.scss';
 
@@ -277,16 +278,6 @@ export const PageContent: React.FC = () => {
     }
   };
 
-  const isPagePinned = async (): Promise<void> => {
-    if (currentPage?.pinnedUsers) {
-      currentPage.pinnedUsers.map((pinner) => {
-        if (pinner.id === user?.id) {
-          dispatch(pagesActions.setCurrentPagePinned(true));
-        }
-      });
-    }
-  };
-
   const handlePageFollow =
     (pageId: string) =>
     async (ids: string[] | undefined): Promise<void> => {
@@ -349,11 +340,14 @@ export const PageContent: React.FC = () => {
         }
       });
     }
+    if (currentPage?.pinnedUsers) {
+      currentPage.pinnedUsers.map((pinner) => {
+        if (pinner.id === user?.id) {
+          dispatch(pagesActions.setCurrentPagePinned(true));
+        }
+      });
+    }
   }, [currentPage]);
-
-  useEffect(() => {
-    isPagePinned();
-  }, [isPagePinned]);
 
   if (isSpinner || isLeftBlockLoading) {
     return <Spinner />;
@@ -378,6 +372,11 @@ export const PageContent: React.FC = () => {
                 />
               </Col>
               <Col xs={12} lg={9} xl={10}>
+                <Row>
+                  <div className="my-2">
+                    <Breadcrumbs />
+                  </div>
+                </Row>
                 <Row>
                   <Col className="d-flex justify-content-between mb-4 align-items-center">
                     <OverlayTrigger

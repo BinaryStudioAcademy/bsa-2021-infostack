@@ -1,6 +1,7 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, RelationId, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { EntityType } from '../../common/enums/entity-type';
+import { Workspace } from './workspace';
 import { MAX_NOTIFICATION_TITLE_LENGTH } from '../../common/constants/constants';
 
 @Entity()
@@ -26,6 +27,13 @@ export class Notification extends AbstractEntity {
 
   @Column()
   userId: string;
+
+  @RelationId((notification: Notification) => notification.workspace)
+  @Column()
+  readonly workspaceId: string;
+
+  @ManyToOne(() => Workspace, (workspace) => workspace.notifications)
+  workspace: Workspace;
 
   @Column()
   read: boolean;

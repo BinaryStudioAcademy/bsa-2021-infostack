@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const Item: React.FC<Props> = ({ workspace, onClick }) => (
-  <Card className="shadow-sm rounded border-0">
+  <Card className="shadow-sm rounded border-0 p-0">
     <Button
       variant="light"
       className="bg-white h-100"

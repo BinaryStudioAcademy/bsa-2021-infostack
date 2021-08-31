@@ -64,6 +64,9 @@ const { reducer, actions } = createSlice({
     [ActionType.UPDATE_TOTAL_ITEMS]: (state, action: PayloadAction<number>) => {
       state.totalItems = action.payload;
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 

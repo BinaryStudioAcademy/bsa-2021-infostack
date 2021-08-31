@@ -46,6 +46,9 @@ export const { reducer, actions } = createSlice({
         (item) => item !== action.payload,
       );
     },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
   },
   extraReducers: (builder) => {
     builder

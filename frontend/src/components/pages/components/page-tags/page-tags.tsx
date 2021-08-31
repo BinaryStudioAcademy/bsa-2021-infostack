@@ -12,8 +12,7 @@ import {
 import { EditModal } from './components/components';
 import { pageApi, tagApi } from 'services';
 import { tagActions } from 'store/tags';
-import { PermissionType } from 'common/enums';
-import { TagType } from 'common/enums';
+import { PermissionType, RoleType, TagType } from 'common/enums';
 import './page-tags.scss';
 
 const PageTags: React.FC = () => {
@@ -23,6 +22,9 @@ const PageTags: React.FC = () => {
   const [pageTags, setPageTags] = useState<ITagSelect[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const isCanManage = currentPage?.permission !== PermissionType.READ;
+  const workspaceRole = useAppSelector(
+    (state: RootState) => state.workspaces.currentWorkspace?.role,
+  );
 
   const handleInputChange = (inputValue: OptionsType<ITagSelect>): void => {
     const lastTag = inputValue[inputValue.length - 1];
@@ -30,23 +32,23 @@ const PageTags: React.FC = () => {
     if (lastTag) {
       const lastTagName = lastTag.value ?? '';
 
-      if (
-        currentPage?.permission === PermissionType.ADMIN &&
-        lastTag.__isNew__
-      ) {
-        tagApi.add(lastTagName).then((response: ITagSelect) => {
-          setAllTags((oldTags) => {
-            const newTags = [...oldTags];
-            inputValue[inputValue.length - 1].value = response.id;
-            const addedTag = {
-              value: response.id,
-              label: response.name,
-            } as ITagSelect;
-            newTags[newTags.length] = addedTag;
+      if (workspaceRole === RoleType.ADMIN && lastTag.__isNew__) {
+        tagApi
+          .add(lastTagName)
+          .then((response: ITagSelect) => {
+            setAllTags((oldTags) => {
+              const newTags = [...oldTags];
+              inputValue[inputValue.length - 1].value = response.id;
+              const addedTag = {
+                value: response.id,
+                label: response.name,
+              } as ITagSelect;
+              newTags[newTags.length] = addedTag;
 
-            return newTags;
-          });
-        });
+              return newTags;
+            });
+          })
+          .catch(() => toast.error('Error: could not add tags.'));
       }
 
       const result = inputValue.map((item: ITagSelect) => item);
@@ -62,7 +64,7 @@ const PageTags: React.FC = () => {
   };
 
   const handleDone = (): void => {
-    if (currentPage?.permission !== PermissionType.ADMIN) {
+    if (workspaceRole !== RoleType.ADMIN) {
       const allTagsIds = allTags.map((tag) => tag.id);
       const pageTagsIds = pageTags.map((tag) => tag.id);
 
