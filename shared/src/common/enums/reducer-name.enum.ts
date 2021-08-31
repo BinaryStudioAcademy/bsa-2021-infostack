@@ -6,6 +6,7 @@ enum ReducerName {
   WORKSPACE = 'workspace',
   WORKSPACES = 'workspaces',
   TAGS = 'tags',
+  SKILLS = 'skills',
   TEAMS = 'teams',
   ACTIVITIES = 'activities',
   NOTIFICATIONS = 'notifications',

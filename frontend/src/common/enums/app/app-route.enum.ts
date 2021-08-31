@@ -16,6 +16,7 @@ enum AppRoute {
   SETTINGS_WORKSPACE = '/settings/workspace',
   SETTINGS_USERS = '/settings/users',
   SETTINGS_TAGS = '/settings/tags',
+  SETTINGS_SKILLS = '/settings/skills',
   CONTENT_SETTING = '/page/:id/editor',
   SETTINGS_TEAMS = '/settings/teams',
   SETTINGS_INTEGRATIONS = '/settings/integrations',
