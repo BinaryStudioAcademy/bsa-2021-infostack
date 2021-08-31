@@ -17,6 +17,7 @@
     "react-native": "0.65.1",
     "react-native-safe-area-context": "3.3.0",
     "react-native-screens": "3.6.0",
+    "react-native-vector-icons": "^8.1.0",
     "react-redux": "7.2.4"
   },
   "devDependencies": {
@@ -25,12 +26,13 @@
     "@react-native-community/eslint-config": "2.0.0",
     "@types/jest": "26.0.23",
     "@types/react-native": "0.64.5",
+    "@types/react-native-vector-icons": "^6.4.8",
     "@types/react-redux": "7.1.18",
     "@types/react-test-renderer": "16.9.2",
-    "infostack-shared": "file:../shared/build",
     "babel-jest": "26.6.3",
     "babel-plugin-module-resolver": "4.1.0",
     "eslint": "7.14.0",
+    "infostack-shared": "file:../shared/build",
     "jest": "26.6.3",
     "metro-react-native-babel-preset": "0.66.0",
     "react-native-codegen": "0.0.7",
