@@ -1,0 +1,3 @@
+{
+  "plugins": ["stylelint-react-native"],
+}
