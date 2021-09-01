@@ -21,6 +21,7 @@ enum HttpErrorMessage {
   TEAM_OWNER_ID = 'UserId is required to change Team owner',
   DELETED_FROM_WORKSPACE = 'You were deleted from this workspace',
   NO_EMAIL = 'You should have email to login',
+  NO_PAGE_WITH_SUCH_ID = 'No page with such id',
 }
 
 export { HttpErrorMessage };
