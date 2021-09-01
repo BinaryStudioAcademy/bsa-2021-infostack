@@ -84,7 +84,7 @@ export class Page extends AbstractEntity {
   draft: Draft;
 
   @OneToMany(() => RecentPage, (recentPage) => recentPage.page, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   recentPages: RecentPage[];
 }
