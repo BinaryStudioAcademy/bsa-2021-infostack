@@ -25,6 +25,8 @@ export class RecentPage extends BaseEntity {
   @ManyToOne(() => User, (user) => user.recentPages)
   user: User;
 
-  @ManyToOne(() => Page, (page) => page.recentPages)
+  @ManyToOne(() => Page, (page) => page.recentPages, {
+    onDelete: 'CASCADE',
+  })
   page: Page;
 }

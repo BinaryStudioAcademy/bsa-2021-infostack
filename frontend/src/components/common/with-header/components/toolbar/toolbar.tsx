@@ -82,7 +82,7 @@ export const Toolbar: React.FC = () => {
               ></span>
             </div>
             <Accordion className={styles.accordion} defaultActiveKey="1" flush>
-              <PagesList pages={pages.pinnedPages} />
+              <PagesList pages={pages.pinnedPages} allowSubPageAdd={false} />
             </Accordion>
           </>
         )}
@@ -96,7 +96,7 @@ export const Toolbar: React.FC = () => {
           </span>
         </div>
         <Accordion className={styles.accordion} defaultActiveKey="1" flush>
-          <PagesList pages={pages.pages} />
+          <PagesList pages={pages.pages} allowSubPageAdd={true} />
         </Accordion>
       </div>
     </Navbar>
