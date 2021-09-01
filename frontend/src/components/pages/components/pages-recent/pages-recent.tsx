@@ -27,13 +27,9 @@ export const PagesRecent: React.FC<Props> = ({ pages, className }) => {
                 'text-decoration-none',
               )}
             >
-              <div className={getAllowedClasses(styles.recentItem)}>
-                <i
-                  className={getAllowedClasses(
-                    styles.recentIcon,
-                    'bi bi-file-text',
-                  )}
-                ></i>
+              <div
+                className={getAllowedClasses(styles.recentItem, 'text-break')}
+              >
                 {title}
               </div>
               <div className={getAllowedClasses(styles.visited)}>{visited}</div>
