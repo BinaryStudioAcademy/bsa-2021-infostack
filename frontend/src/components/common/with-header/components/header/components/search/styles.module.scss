@@ -3,7 +3,7 @@
 }
 
 .foundList {
-  width: 33rem;
+  width: calc(33rem - 1px);
   min-height: 4rem;
   position: absolute;
   display: flex;
