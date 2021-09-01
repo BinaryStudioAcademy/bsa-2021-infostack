@@ -30,10 +30,20 @@ class UserRepository extends Repository<User> {
         'pageContents',
         '"pageContents"."createdAt" = "last_version"."created_at"',
       )
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'contentPinned')
+            .select('MAX("contentPinned"."createdAt")', 'created_at')
+            .addSelect('"contentPinned"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version_pinned',
+        '"last_version_pinned"."page_id" = pinnedPages.id',
+      )
       .leftJoinAndSelect(
         'pinnedPages.pageContents',
         'pinnedPageContents',
-        '"pinnedPageContents"."createdAt" = "last_version"."created_at"',
+        '"pinnedPageContents"."createdAt" = "last_version_pinned"."created_at"',
       )
       .where('user.id = :id', { id })
       .getOne();
