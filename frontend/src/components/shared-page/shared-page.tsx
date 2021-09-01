@@ -66,7 +66,7 @@ export const SharedPage: React.FC = () => {
   }, [location]);
 
   if (isSpinner || isLeftBlockLoading) {
-    return <Spinner />;
+    return <Spinner height={'12rem'} width={'12rem'} />;
   }
 
   return (
