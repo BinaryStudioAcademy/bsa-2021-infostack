@@ -22,6 +22,13 @@ type Props = {
   parentCommentId?: string;
   className?: string;
   placeholder?: string;
+  formState: { text: string; mentions: MentionItem[] };
+  setFormState: React.Dispatch<
+    React.SetStateAction<{
+      text: string;
+      mentions: MentionItem[];
+    }>
+  >;
   onSubmit?: () => void;
   onCancel?: () => void;
 };
@@ -31,16 +38,11 @@ export const CommentForm: React.FC<Props> = ({
   parentCommentId,
   className,
   placeholder,
+  formState,
+  setFormState,
   onSubmit,
   onCancel,
 }) => {
-  const [formState, setFormState] = useState<{
-    text: string;
-    mentions: MentionItem[];
-  }>({
-    text: '',
-    mentions: [],
-  });
   const user = useAppSelector((state) => state.auth.user);
   const { createStatus, fetchStatus, deleteStatus } = useAppSelector(
     (state) => state.comments,

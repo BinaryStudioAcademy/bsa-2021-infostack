@@ -17,6 +17,22 @@ class SkillApi {
       contentType: ContentType.JSON,
     });
   }
+
+  public async delete(id: string): Promise<string> {
+    const response: string = await this.http.load(`${this.BASE}/${id}`, {
+      method: HttpMethod.DELETE,
+    });
+    return response;
+  }
+
+  public async update(id: string, name: string): Promise<ISkill> {
+    const response: ISkill = await this.http.load(`${this.BASE}/${id}`, {
+      method: HttpMethod.PUT,
+      payload: JSON.stringify({ name }),
+      contentType: ContentType.JSON,
+    });
+    return response;
+  }
 }
 
 export const skillApi = new SkillApi();
