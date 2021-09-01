@@ -41,8 +41,11 @@ const Pages: React.FC = () => {
             <PagesRecent pages={recentPages} className="col-xl-3 col-md-3" />
           )
         : !paramsId && (
-            <div className="d-flex flex-column justify-content-around align-items-center h-100">
-              <Image src={Logo} />
+            <div className="d-flex flex-column justify-content-evenly align-items-center h-100">
+              <Image
+                src={Logo}
+                className={getAllowedClasses(styles.templateImage)}
+              />
               <div
                 className={getAllowedClasses(
                   styles.welcomeText,
