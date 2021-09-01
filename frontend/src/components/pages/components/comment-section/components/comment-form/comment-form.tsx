@@ -127,6 +127,7 @@ export const CommentForm: React.FC<Props> = ({
       text: '',
       mentions: [],
     });
+    setRawAudio(undefined);
     onCancel?.();
   };
 
@@ -200,12 +201,14 @@ export const CommentForm: React.FC<Props> = ({
                     Cancel
                   </Button>
                   <Button
-                    disabled={isSubmitDisabled || text.trim() === ''}
+                    disabled={
+                      isSubmitDisabled || (text.trim() === '' && !rawAudio)
+                    }
                     onClick={handleSubmit}
                     className={getAllowedClasses('ms-2', styles.text)}
                     variant="success"
                   >
-                    Comment
+                    Comment{rawAudio && ' with audio'}
                   </Button>
                   <RecordVoice handleRecord={completeRecord} />
                 </div>
