@@ -11,3 +11,4 @@ export * from './page-table-of-contents.interface';
 export * from './share-link.interface';
 export * from './page-send-email-share.interface';
 export * from './found-page-content.interface';
+export * from './page-export-pdf.interface';

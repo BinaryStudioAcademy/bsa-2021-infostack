@@ -10,4 +10,5 @@ export type {
   IShareLink,
   IPageShare,
   IFoundPageContent,
+  IExportPDF,
 } from 'infostack-shared/common/interfaces';

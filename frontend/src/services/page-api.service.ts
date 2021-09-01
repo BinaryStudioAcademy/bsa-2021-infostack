@@ -11,6 +11,7 @@ import {
   IShareLink,
   IPageShare,
   IFoundPageContent,
+  IExportPDF,
 } from 'common/interfaces/pages';
 import { http } from 'services/http.service';
 import { ITag } from 'common/interfaces/tag';
@@ -233,6 +234,21 @@ class PageApi {
   public async unpinPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/${pageId}/unpin`, {
       method: HttpMethod.POST,
+    });
+  }
+
+  public async downloadPDF(pageId: IExportPDF): Promise<Blob> {
+    return this.http.load(`${this.BASE}/${pageId}/download-pdf`, {
+      method: HttpMethod.POST,
+    });
+  }
+
+  public async sendPDF(payload: IExportPDF): Promise<void> {
+    const { pageId, email } = payload;
+    return this.http.load(`${this.BASE}/${pageId}/send-pdf`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify({ email }),
     });
   }
 }
