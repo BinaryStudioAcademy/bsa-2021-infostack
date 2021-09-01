@@ -2,7 +2,7 @@ enum HttpErrorMessage {
   NO_SUCH_EMAIL = 'No user with such email',
   EMAIL_ALREADY_EXISTS = 'User with such email already exists',
   INVALID_PASSWORD = 'Invalid password',
-  NOT_ACTIVATED = 'This account is not activated',
+  NOT_ACTIVATED = 'This account is not activated, check your email for an invite link',
   INTERNAL_SERVER_ERROR = 'Internal Server Error',
   INVALID_TOKEN = 'Invalid token',
   NO_SUCH_PARENT_COMMENT = 'No parent comment with such id',
