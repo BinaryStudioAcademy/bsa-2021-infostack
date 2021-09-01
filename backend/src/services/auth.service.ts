@@ -55,7 +55,7 @@ export const register = async (
 
   const hashedPassword = await hash(body.password);
   const user =
-    existingUser.password === null
+    existingUser?.password === null
       ? await userRepository.save({
           ...existingUser,
           ...body,
