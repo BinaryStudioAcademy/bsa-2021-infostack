@@ -714,7 +714,7 @@ export const searchPage = async (
   query: string,
   userId: string,
   workspaceId: string,
-): Promise<IFoundPageContent[]> => {
+): Promise<Partial<IFoundPageContent>[]> => {
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
   );
@@ -811,9 +811,13 @@ export const unpinPage = async (
 
 export const getRecentPages = async (
   userId: string,
+  workspaceId: string,
 ): Promise<IPageRecent[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findAllByUserId(userId);
+  const recentPages = await recentPagesRepository.findAllByUserId(
+    userId,
+    workspaceId,
+  );
 
   return mapToRecentPage(recentPages);
 };

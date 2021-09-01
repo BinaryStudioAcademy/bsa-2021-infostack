@@ -54,17 +54,19 @@ export const register = async (
   }
 
   const hashedPassword = await hash(body.password);
+  const userData = {
+    ...body,
+    email: body.email.toLowerCase(),
+    password: hashedPassword,
+  };
+
   const user =
     existingUser?.password === null
       ? await userRepository.save({
           ...existingUser,
-          ...body,
-          password: hashedPassword,
+          ...userData,
         })
-      : await userRepository.save({
-          ...body,
-          password: hashedPassword,
-        });
+      : await userRepository.save(userData);
 
   return getIUserWithTokens(user);
 };
@@ -74,7 +76,7 @@ export const login = async (
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
 
-  const user = await userRepository.findByEmail(body.email);
+  const user = await userRepository.findByEmail(body.email.toLowerCase());
   if (!user) {
     throw new HttpError({
       status: HttpCode.NOT_FOUND,
@@ -102,7 +104,7 @@ export const login = async (
 
 export const resetPassword = async (body: IResetPassword): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findByEmail(body.email);
+  const user = await userRepository.findByEmail(body.email.toLowerCase());
   if (!user) {
     throw new HttpError({
       status: HttpCode.NOT_FOUND,

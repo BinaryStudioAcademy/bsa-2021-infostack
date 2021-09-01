@@ -14,5 +14,5 @@ export { GeneralNotificationType } from './general-notification-type';
 export { PageTitle } from './page-content';
 export { TagType } from './tag-type';
 export { SocketEvents } from './socket';
-export { ReducerName } from './reducer-name.enum';
-export { RequestStatus } from './request-status.enum';
+export { ReducerName } from './reducer-name';
+export { RequestStatus } from './request-status';
