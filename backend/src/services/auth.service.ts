@@ -56,7 +56,11 @@ export const register = async (
   const hashedPassword = await hash(body.password);
   const user =
     existingUser.password === null
-      ? await userRepository.save(Object.assign(existingUser, body))
+      ? await userRepository.save({
+          ...existingUser,
+          ...body,
+          password: hashedPassword,
+        })
       : await userRepository.save({
           ...body,
           password: hashedPassword,
