@@ -67,17 +67,17 @@ export const Search: React.FC = () => {
           <p className={getAllowedClasses(styles.resultCount, 'ms-2')}>
             {pages.length} results
           </p>
-          {pages.map((page) => {
+          {pages.map(({ content, text, id, pageId, title }) => {
             const splittedQuery = query.split(' ');
 
             return (
               <>
                 <div
                   className={styles.foundItem}
-                  key={page.id}
-                  onClick={handleClick.bind(null, page.pageId)}
+                  key={id}
+                  onClick={handleClick.bind(null, pageId)}
                 >
-                  {page.title || page.content ? (
+                  {title || content ? (
                     <i
                       className={getAllowedClasses('bi bi-clipboard me-3 mt-1')}
                     ></i>
@@ -86,12 +86,30 @@ export const Search: React.FC = () => {
                       className={getAllowedClasses('bi-chat-square-text me-3')}
                     ></i>
                   )}
-                  <Highlighter
-                    className={styles.content}
-                    searchWords={splittedQuery}
-                    autoEscape={true}
-                    textToHighlight={page.title || page.content || page.text}
-                  />
+                  {title && (
+                    <Highlighter
+                      className={styles.content}
+                      searchWords={splittedQuery}
+                      autoEscape={true}
+                      textToHighlight={title}
+                    />
+                  )}
+                  {content && (
+                    <Highlighter
+                      className={styles.content}
+                      searchWords={splittedQuery}
+                      autoEscape={true}
+                      textToHighlight={content}
+                    />
+                  )}
+                  {text && (
+                    <Highlighter
+                      className={styles.content}
+                      searchWords={splittedQuery}
+                      autoEscape={true}
+                      textToHighlight={text}
+                    />
+                  )}
                 </div>
               </>
             );
