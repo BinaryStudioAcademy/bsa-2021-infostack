@@ -64,7 +64,7 @@ router
   )
   .get(
     '/:id/recent-pages',
-    run((req) => getRecentPages(req.userId)),
+    run((req) => getRecentPages(req.userId, req.workspaceId)),
   );
 
 export default router;

@@ -804,9 +804,13 @@ export const unpinPage = async (
 
 export const getRecentPages = async (
   userId: string,
+  workspaceId: string,
 ): Promise<IPageRecent[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findAllByUserId(userId);
+  const recentPages = await recentPagesRepository.findAllByUserId(
+    userId,
+    workspaceId,
+  );
 
   return mapToRecentPage(recentPages);
 };
