@@ -5,6 +5,7 @@ import { logger } from '../../common/utils/logger.util';
 import ormconfig from '../../config/ormconfig';
 import { env } from '../../env';
 import elasticsearchClient from '../elasticsearch';
+import ElasticCommentSeeder from './comment.seeder';
 import ElasticPageContentSeeder from './page-content.seeder';
 
 const {
@@ -35,6 +36,9 @@ const seeders = async (): Promise<void> => {
 
   logger.info('Seeding elastic page contents');
   await ElasticPageContentSeeder.execute();
+
+  logger.info('Seeding elastic comments');
+  await ElasticCommentSeeder.execute();
 
   logger.info('Seeding finished');
 };

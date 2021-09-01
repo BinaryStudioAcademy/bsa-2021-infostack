@@ -3,6 +3,7 @@ interface IFoundPageContent {
   pageId: string;
   title: string;
   content: string;
+  text: string;
 }
 
 export type { IFoundPageContent };
