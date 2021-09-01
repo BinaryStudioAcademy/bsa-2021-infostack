@@ -74,6 +74,15 @@ export const Menu: React.FC = () => {
             <ListGroup.Item
               action
               as={Link}
+              to={AppRoute.SETTINGS_SKILLS}
+              eventKey="skills"
+              className={getAllowedClasses(styles.menuItem)}
+            >
+              Skills
+            </ListGroup.Item>
+            <ListGroup.Item
+              action
+              as={Link}
               to={AppRoute.SETTINGS_INTEGRATIONS}
               eventKey="integrations"
               className={getAllowedClasses(styles.menuItem)}

@@ -151,6 +151,8 @@ const editPageContent = createAsyncThunk(
 
     const response = await pageApi.getPages();
     dispatch(actions.setPages(response));
+    const responsePinned = await pageApi.getPinnedPages();
+    dispatch(actions.setPinnedPages(responsePinned));
     dispatch(actions.toggleSpinner());
   },
 );

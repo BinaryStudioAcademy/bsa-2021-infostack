@@ -28,6 +28,7 @@ import {
   IPageShare,
   IFoundPageContent,
   IExportPDF,
+  IPageRecent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
@@ -46,6 +47,8 @@ import { env } from '../env';
 import { sendMail } from '../common/utils/mailer.util';
 import elasticPageContentRepository from '../elasticsearch/repositories/page-content.repository';
 import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
+import { RecentPagesRepository } from '../data/repositories';
+import { mapToRecentPage } from '../common/mappers/page/map-recent-pages.helper';
 
 export const createPage = async (
   userId: string,
@@ -262,6 +265,11 @@ export const getPage = async (
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
+
+  const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+  await recentPagesRepository
+    .deleteOne(userId, pageId)
+    .then(() => recentPagesRepository.save({ userId, pageId }));
 
   return getPageWithPermission(userId, page);
 };
@@ -701,7 +709,7 @@ export const searchPage = async (
   query: string,
   userId: string,
   workspaceId: string,
-): Promise<IFoundPageContent[]> => {
+): Promise<Partial<IFoundPageContent>[]> => {
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
   );
@@ -826,4 +834,15 @@ export const sendPDF = async (
       },
     ],
   });
+export const getRecentPages = async (
+  userId: string,
+  workspaceId: string,
+): Promise<IPageRecent[]> => {
+  const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+  const recentPages = await recentPagesRepository.findAllByUserId(
+    userId,
+    workspaceId,
+  );
+
+  return mapToRecentPage(recentPages);
 };
