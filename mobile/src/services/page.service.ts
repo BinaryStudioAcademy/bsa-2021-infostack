@@ -2,7 +2,7 @@ import { IPageNav } from 'common/interfaces';
 
 class PageService {
   getAll(): Promise<IPageNav[]> {
-    return Promise.resolve([
+    const res = [
       {
         id: '1',
         title: 'first page',
@@ -19,7 +19,13 @@ class PageService {
           },
         ],
       },
-    ]);
+    ];
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(res);
+      }, 3000);
+    });
   }
 }
 
