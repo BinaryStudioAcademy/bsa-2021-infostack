@@ -15,9 +15,11 @@ const Pages: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
   const paramsId = useParams<{ id: string }>().id;
   const [recentPages, setRecentPages] = useState<IPageRecent[]>();
+  const [recentPagesLoading, setRecentPagesLoading] = useState(false);
 
   const userId = useAppSelector((state) => state.auth.user?.id);
-  const getRecentPages = async (): Promise<void> =>
+  const getRecentPages = async (): Promise<void> => {
+    setRecentPagesLoading(true);
     await userApi
       .getRecentPages(userId as string)
       .then((res) => {
@@ -26,6 +28,8 @@ const Pages: React.FC = () => {
       .catch(() => {
         toast.error('Can not get recent pages');
       });
+    setRecentPagesLoading(false);
+  };
 
   useEffect(() => {
     getRecentPages();
@@ -40,7 +44,8 @@ const Pages: React.FC = () => {
         ? !paramsId && (
             <PagesRecent pages={recentPages} className="col-xl-3 col-md-3" />
           )
-        : !paramsId && (
+        : !paramsId &&
+          !recentPagesLoading && (
             <div className="d-flex flex-column justify-content-evenly align-items-center h-100">
               <Image
                 src={Logo}
