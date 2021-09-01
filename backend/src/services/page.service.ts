@@ -834,6 +834,8 @@ export const sendPDF = async (
       },
     ],
   });
+};
+
 export const getRecentPages = async (
   userId: string,
   workspaceId: string,
