@@ -24,12 +24,14 @@ type Props = {
   title?: string;
   id?: string;
   childPages?: IPageNav[];
+  allowSubPageAdd: boolean;
 };
 
 export const PageItem: React.FC<Props> = ({
   title = 'New Page',
   id,
   childPages,
+  allowSubPageAdd,
 }) => {
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -82,7 +84,9 @@ export const PageItem: React.FC<Props> = ({
           `${isSelected}`,
         )}
       >
-        <div className="text-break">{title}</div>
+        <div className={allowSubPageAdd ? 'text-break' : 'text-break my-2'}>
+          {title}
+        </div>
       </Link>
     );
   };
@@ -130,6 +134,7 @@ export const PageItem: React.FC<Props> = ({
                       key={id}
                       title={title}
                       childPages={childPages}
+                      allowSubPageAdd={allowSubPageAdd}
                     />
                   ))}
               </Accordion.Body>
@@ -142,12 +147,14 @@ export const PageItem: React.FC<Props> = ({
               )}
             >
               <LinkWithTitle id={id} />
-              <span
-                onClick={(event): Promise<void> => addSubPage(event, id)}
-                className={getAllowedClasses(styles.plus)}
-              >
-                <PlusButtonRoot />
-              </span>
+              {allowSubPageAdd && (
+                <span
+                  onClick={(event): Promise<void> => addSubPage(event, id)}
+                  className={getAllowedClasses(styles.plus)}
+                >
+                  <PlusButtonRoot />
+                </span>
+              )}
             </div>
           )}
         </Accordion.Item>
