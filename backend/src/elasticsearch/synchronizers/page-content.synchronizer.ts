@@ -11,9 +11,10 @@ class ElasticPageContentSynchronizer {
     const pages = await pageRepository.findWithLastContent();
 
     await asyncForEach(async ({ id: pageId, workspaceId, pageContents }) => {
-      const { title, content } = pageContents[0];
+      const { title, content, id } = pageContents[0];
 
       await elasticPageContentRepository.upsert({
+        id,
         title,
         content,
         pageId,
