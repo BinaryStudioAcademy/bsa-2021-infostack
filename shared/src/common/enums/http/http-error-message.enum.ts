@@ -2,6 +2,7 @@ enum HttpErrorMessage {
   NO_SUCH_EMAIL = 'No user with such email',
   EMAIL_ALREADY_EXISTS = 'User with such email already exists',
   INVALID_PASSWORD = 'Invalid password',
+  NOT_ACTIVATED = 'This account is not activated',
   INTERNAL_SERVER_ERROR = 'Internal Server Error',
   INVALID_TOKEN = 'Invalid token',
   NO_SUCH_PARENT_COMMENT = 'No parent comment with such id',
@@ -16,7 +17,7 @@ enum HttpErrorMessage {
   TEAM_NAME_ALREADY_EXISTS = 'Team with such name already exists',
   TEAM_EMPTY_STRING = 'Team with empty string is not allowed',
   TEAM_OWNER_ID = 'UserId is required to change Team owner',
-  DELETED_FROM_WORKSPACE = 'You was deleted from this workspace',
+  DELETED_FROM_WORKSPACE = 'You were deleted from this workspace',
   NO_EMAIL = 'You should have email to login',
 }
 
