@@ -5,7 +5,7 @@ import {
   TransportRequestPromise,
 } from '@elastic/elasticsearch/lib/Transport';
 
-import { IElasticPageContent } from '../entities';
+import { IElasticPageContentAndComments } from '../entities';
 import elasticsearchClient from '../elasticsearch';
 import { env } from '../../env';
 
@@ -14,14 +14,11 @@ const {
 } = env;
 
 class ElasticPageContentRepository {
-  private _type = 'pageContent';
-
   public async upsert(
-    pageContent: IElasticPageContent,
-  ): Promise<ApiResponse<IElasticPageContent, unknown>> {
-    return elasticsearchClient.update<IElasticPageContent>({
+    pageContent: IElasticPageContentAndComments,
+  ): Promise<ApiResponse<IElasticPageContentAndComments, unknown>> {
+    return elasticsearchClient.update<IElasticPageContentAndComments>({
       index,
-      type: this._type,
       id: pageContent.pageId,
       body: {
         doc: pageContent,
@@ -35,17 +32,26 @@ class ElasticPageContentRepository {
     workspaceId: string,
   ): Promise<
     TransportRequestPromise<
-      ApiResponse<estypes.SearchResponse<IElasticPageContent>, unknown>
+      ApiResponse<
+        estypes.SearchResponse<IElasticPageContentAndComments>,
+        unknown
+      >
     >
   > {
-    return elasticsearchClient.search<SearchResponse<IElasticPageContent>>({
+    return elasticsearchClient.search<
+      SearchResponse<IElasticPageContentAndComments>
+    >({
       index: env.elasticsearch.index,
-      type: this._type,
       body: {
         query: {
           bool: {
             must: [
-              { multi_match: { query, fields: ['title', 'content'] } },
+              {
+                query_string: {
+                  query: `*${query}*`,
+                  fields: ['title', 'content', 'text'],
+                },
+              },
               {
                 match: {
                   workspaceId,
@@ -56,8 +62,9 @@ class ElasticPageContentRepository {
         },
         highlight: {
           fields: {
-            title: { pre_tags: [''], post_tags: [''], 'fragment_size': 15 },
-            content: { pre_tags: [''], post_tags: [''], 'fragment_size': 15 },
+            title: { pre_tags: [''], post_tags: [''], 'fragment_size': 35 },
+            content: { pre_tags: [''], post_tags: [''], 'fragment_size': 35 },
+            text: { pre_tags: [''], post_tags: [''], 'fragment_size': 35 },
           },
         },
       },
@@ -66,10 +73,9 @@ class ElasticPageContentRepository {
 
   public async deleteByPageId(
     pageId: string,
-  ): Promise<ApiResponse<IElasticPageContent, unknown>> {
-    return elasticsearchClient.delete<IElasticPageContent>({
+  ): Promise<ApiResponse<IElasticPageContentAndComments, unknown>> {
+    return elasticsearchClient.delete<IElasticPageContentAndComments>({
       index,
-      type: this._type,
       id: pageId,
     });
   }
