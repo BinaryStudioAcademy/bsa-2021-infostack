@@ -3,7 +3,7 @@ import { RecentPage } from '../entities/recent-pages';
 
 @EntityRepository(RecentPage)
 class RecentPagesRepository extends Repository<RecentPage> {
-  public findAllByUserId(
+  public findAllByUserIdandWorkspaceId(
     userId: string,
     workspaceId: string,
   ): Promise<RecentPage[]> {

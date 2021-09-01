@@ -61,7 +61,7 @@ const Activities: React.FC = () => {
 
       <div className={styles.container}>
         {isLoading && !activities.length ? (
-          <Spinner />
+          <Spinner height={'8rem'} width={'8rem'} />
         ) : (
           <>
             {activities.map((activity) => {

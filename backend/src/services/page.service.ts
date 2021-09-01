@@ -807,7 +807,7 @@ export const getRecentPages = async (
   workspaceId: string,
 ): Promise<IPageRecent[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findAllByUserId(
+  const recentPages = await recentPagesRepository.findAllByUserIdandWorkspaceId(
     userId,
     workspaceId,
   );

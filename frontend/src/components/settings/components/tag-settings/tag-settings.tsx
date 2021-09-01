@@ -1,8 +1,9 @@
-import { Card, Table, Spinner } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks/hooks';
 import { tagActions } from 'store/tags';
 import { getAllowedClasses } from 'helpers/helpers';
 import { TagAdd, TagItem, TagEdit } from './components/components';
+import { Spinner } from 'components/common/common';
 import styles from './styles.module.scss';
 
 export const TagSettings: React.FC = () => {
@@ -61,9 +62,7 @@ export const TagSettings: React.FC = () => {
           )
         ) : (
           <div className="text-center">
-            <Spinner animation="border" variant="secondary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
+            <Spinner height={'6rem'} width={'6rem'} />
           </div>
         )}
       </Card.Body>
