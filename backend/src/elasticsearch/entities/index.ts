@@ -1,1 +1,1 @@
-export * from './page-content.entity';
+export { IElasticPageContentAndComments } from './page-content-and-comment.entity';

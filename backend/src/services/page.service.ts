@@ -707,7 +707,7 @@ export const searchPage = async (
   query: string,
   userId: string,
   workspaceId: string,
-): Promise<IFoundPageContent[]> => {
+): Promise<Partial<IFoundPageContent>[]> => {
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
   );
