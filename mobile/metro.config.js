@@ -5,13 +5,24 @@
  * @format
  */
 
+const path = require('path');
+
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: true,
+        inlineRequires: false,
       },
     }),
   },
+  resolver: {
+    extraNodeModules: {
+      'infostack-shared': path.resolve(__dirname + '/../shared/build'),
+    },
+  },
+  watchFolders: [
+    path.resolve(__dirname, './node_modules'),
+    path.resolve(__dirname + '/../shared/build'),
+  ],
 };
