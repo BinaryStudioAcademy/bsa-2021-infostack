@@ -1,7 +1,8 @@
-import { Card, Table, Spinner } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import { useAppDispatch, useEffect, useAppSelector } from 'hooks/hooks';
 import { TableRow } from './components/components';
 import { TableHead } from '../../shared/components/components';
+import { Spinner } from 'components/common/common';
 import { notificationsSettingsActions } from 'store/actions';
 import { RootState } from 'common/types/types';
 import { NotificationType } from 'common/enums';
@@ -37,11 +38,7 @@ export const NotificationsSettings: React.FC = () => {
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.body)}>
         {isLoading ? (
-          <Spinner
-            animation="border"
-            variant="secondary"
-            role="status"
-          ></Spinner>
+          <Spinner height={'6rem'} width={'6rem'} />
         ) : (
           <Table hover>
             <TableHead headers={TABLE_HEADERS} />
