@@ -1,6 +1,5 @@
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import SVG from 'react-inlinesvg';
 
 import { bytesToMegabytes, getAllowedClasses } from 'helpers/helpers';
 import {
@@ -144,20 +143,11 @@ export const WorkspaceSettings: React.FC = () => {
 
                 <div className={styles.logoImgContainer}>
                   {selectedImgURL || currentWorkspace?.logo ? (
-                    <>
-                      <SVG
-                        src={selectedImgURL || currentWorkspace?.logo}
-                        width={24}
-                        height="auto"
-                        title="logo"
-                      />
-                      {/* <SVG src="https://cdn.svgporn.com/logos/firefox.svg" /> */}
-                    </>
+                    <img
+                      className={styles.logoImg}
+                      src={selectedImgURL || currentWorkspace?.logo}
+                    />
                   ) : (
-                    // <img
-                    //   className={styles.logoImg}
-                    //   src={selectedImgURL || currentWorkspace?.logo}
-                    //   />
                     <span className={styles.noLogo}>no logo</span>
                   )}
                 </div>

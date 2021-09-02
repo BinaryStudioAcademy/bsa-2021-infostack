@@ -3,6 +3,7 @@ import S3 from 'aws-sdk/clients/s3';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/error';
 import { env } from '../../env';
+import mime from 'mime-types';
 
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
@@ -31,11 +32,15 @@ export const uploadFile = (
   file: Express.Multer.File,
 ): Promise<S3.ManagedUpload.SendData> => {
   const fileStream = fs.createReadStream(file.path);
+
+  const type = mime.contentType(file.path) as string;
+
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
     Key: file.filename,
     ACL: 'public-read',
+    ContentType: type,
   };
   return s3.upload(uploadParams).promise();
 };
