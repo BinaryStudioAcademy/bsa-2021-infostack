@@ -162,7 +162,7 @@ export const Popup: React.FC<Props> = ({
         onHide={cancelButton.onClick}
         dialogClassName="w-75 mw-100 rounded"
       >
-        <Modal.Header closeButton className="p-5 pb-3">
+        <Modal.Header closeButton>
           <div className="d-flex w-100 justify-content-between">
             <Modal.Title className="h5 m-0">{query}</Modal.Title>
             <Button
@@ -175,7 +175,7 @@ export const Popup: React.FC<Props> = ({
             </Button>
           </div>
         </Modal.Header>
-        <Modal.Body className="p-5 pt-3 mb-5">
+        <Modal.Body className="p-5 pt-3 mb-5 mx-0">
           <Select
             className="mt-4 mb-5"
             onChange={handleSelectChange}
