@@ -21,6 +21,7 @@ import {
   workspacesActions,
   notificationsActions,
 } from 'store/actions';
+import { toast } from 'react-toastify';
 
 const Main: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);
@@ -31,12 +32,32 @@ const Main: React.FC = () => {
   const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
 
+  const onDeleteUser = ({
+    workspaceId,
+    name,
+  }: {
+    workspaceId: string;
+    name: string;
+  }): void => {
+    if (workspaceId === cookies[CookieVariable.WORKSPACE_ID]) {
+      history.push(AppRoute.WORKSPACES);
+    }
+
+    toast.warning(`You have been deleted from the workspace "${name}".`);
+  };
+
   useEffect(() => {
     if (token && !user) {
       dispatch(authActions.loadUser());
     }
     socket.emit(SocketEvents.PAGE_JOIN, token);
     dispatch(notificationsActions.loadCount());
+
+    socket.on(SocketEvents.WORKSPACE_DELETE_USER, onDeleteUser);
+
+    return (): void => {
+      socket.off(SocketEvents.WORKSPACE_DELETE_USER, onDeleteUser);
+    };
   }, []);
 
   useEffect(() => {
