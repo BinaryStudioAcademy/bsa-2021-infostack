@@ -239,7 +239,7 @@ class PageApi {
 
   public async downloadPDF(pageId: IExportPDF): Promise<Blob> {
     return this.http.load(`${this.BASE}/${pageId}/download-pdf`, {
-      method: HttpMethod.POST,
+      method: HttpMethod.GET,
     });
   }
 
