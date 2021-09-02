@@ -1,16 +1,9 @@
 import { Card, Table } from 'react-bootstrap';
-import {
-  useAppDispatch,
-  useEffect,
-  useAppSelector,
-  useRef,
-  useHistory,
-} from 'hooks/hooks';
+import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks/hooks';
 import { tagActions } from 'store/tags';
 import { getAllowedClasses } from 'helpers/helpers';
 import { TagAdd, TagItem, TagEdit } from './components/components';
 import { Spinner } from 'components/common/common';
-import { RoleType } from 'common/enums';
 import styles from './styles.module.scss';
 
 export const TagSettings: React.FC = () => {
@@ -20,22 +13,12 @@ export const TagSettings: React.FC = () => {
   });
   const newTagInputRef = useRef<HTMLInputElement>(null);
 
-  const role = useAppSelector(
-    (state) => state.workspaces.currentWorkspace?.role,
-  );
-
   useEffect(() => {
     dispatch(tagActions.loadTags());
     return (): void => {
       dispatch(tagActions.resetTags());
     };
   }, []);
-
-  const history = useHistory();
-
-  if (role !== RoleType.ADMIN) {
-    history.push('/*');
-  }
 
   return (
     <Card

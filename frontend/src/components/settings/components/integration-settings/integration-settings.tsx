@@ -5,14 +5,8 @@ import { IOption } from 'common/interfaces';
 import { githubActions } from 'store/actions';
 import { Spinner } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
-import {
-  useAppSelector,
-  useAppDispatch,
-  useEffect,
-  useHistory,
-} from 'hooks/hooks';
+import { useAppSelector, useAppDispatch, useEffect } from 'hooks/hooks';
 import { ConnectButton, SelectRepo } from './components/components';
-import { RoleType } from 'common/enums';
 
 import styles from './styles.module.scss';
 
@@ -21,10 +15,6 @@ export const IntegrationSettings: React.FC = () => {
     (state) => state.github,
   );
   const dispatch = useAppDispatch();
-
-  const role = useAppSelector(
-    (state) => state.workspaces.currentWorkspace?.role,
-  );
 
   useEffect(() => {
     if (!username) {
@@ -37,12 +27,6 @@ export const IntegrationSettings: React.FC = () => {
       dispatch(githubActions.loadCurrentRepo());
     }
   }, [username]);
-
-  const history = useHistory();
-
-  if (role !== RoleType.ADMIN) {
-    history.push('/*');
-  }
 
   const onConnectButtonClick = async (): Promise<void> => {
     const { url } = await authApi.getLoginGitHubUrl();

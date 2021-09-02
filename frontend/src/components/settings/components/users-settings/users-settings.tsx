@@ -6,7 +6,6 @@ import {
   useAppDispatch,
   useAppSelector,
   useState,
-  useHistory,
 } from 'hooks/hooks';
 import { usersActions } from 'store/actions';
 import { InviteModal } from 'components/common/common';
@@ -30,10 +29,6 @@ const OPTIONS = [
 export const UsersSettings: React.FC = () => {
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state) => state.users);
-
-  const role = useAppSelector(
-    (state) => state.workspaces.currentWorkspace?.role,
-  );
 
   useEffect(() => {
     dispatch(usersActions.fetchUsers());
@@ -60,12 +55,6 @@ export const UsersSettings: React.FC = () => {
   const handleSelectChange = (userId: string, role: RoleType): void => {
     dispatch(usersActions.chageRole({ userId, role }));
   };
-
-  const history = useHistory();
-
-  if (role !== RoleType.ADMIN) {
-    history.push('/*');
-  }
 
   return (
     <>

@@ -18,6 +18,7 @@ import {
 } from './components/components';
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
+import { AdminRoute } from 'components/common/common';
 import styles from './styles.module.scss';
 import { WorkspaceSettings } from './components/workspace-settings/workspace-settings';
 
@@ -49,38 +50,38 @@ const Settings: React.FC = () => {
                     exact
                   />
                   <Route
-                    path={AppRoute.SETTINGS_WORKSPACE}
-                    component={WorkspaceSettings}
-                    exact
-                  />
-                  <Route
-                    path={AppRoute.SETTINGS_USERS}
-                    component={UsersSettings}
-                    exact
-                  />
-                  <Route
                     path={AppRoute.SETTINGS_TEAMS}
                     component={TeamSettings}
                     exact
                   />
                   <Route
+                    path={AppRoute.SETTINGS_NOTIFICATIONS}
+                    component={NotificationsSettings}
+                    exact
+                  />
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_WORKSPACE}
+                    component={WorkspaceSettings}
+                    exact
+                  />
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_USERS}
+                    component={UsersSettings}
+                    exact
+                  />
+                  <AdminRoute
                     path={AppRoute.SETTINGS_TAGS}
                     component={TagSettings}
                     exact
                   />
-                  <Route
+                  <AdminRoute
                     path={AppRoute.SETTINGS_SKILLS}
                     component={SkillSettings}
                     exact
                   />
-                  <Route
+                  <AdminRoute
                     path={AppRoute.SETTINGS_INTEGRATIONS}
                     component={IntegrationSettings}
-                    exact
-                  />
-                  <Route
-                    path={AppRoute.SETTINGS_NOTIFICATIONS}
-                    component={NotificationsSettings}
                     exact
                   />
                   <Route path={AppRoute.SETTINGS} exact>
