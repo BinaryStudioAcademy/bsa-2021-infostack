@@ -15,12 +15,12 @@ type Props = NativeStackScreenProps<RootParamList, 'Workspaces'>;
 export const Workspaces: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { workspaces, workspacesLoadingStatus } = useAppSelector(
-    ({ workspaces }) => workspaces,
+    (state) => state.workspaces,
   );
 
   useEffect(() => {
     dispatch(workspaceActions.fetchWorkspaces());
-  }, []);
+  }, [dispatch]);
 
   const handleClick = async (workspace: IWorkspace) => {
     await CookieManager.set('http://10.0.2.2:3001', {
