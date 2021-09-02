@@ -6,7 +6,6 @@ export const generatePDFUtil = async (
   title: string,
   content: string,
 ): Promise<Buffer> => {
-  const IS_PRODUCTION = process.env.NODE_ENV === 'production';
   const md = new MarkdownIt();
   const result = `<h1>${title}</h1>${md.render(content)}`;
 
@@ -14,9 +13,9 @@ export const generatePDFUtil = async (
   let file = null;
 
   try {
-    browser = await (IS_PRODUCTION
-      ? puppeteer.connect({ browserWSEndpoint: 'wss://chrome.browserless.io/' })
-      : puppeteer.launch());
+    browser = await puppeteer.connect({
+      browserWSEndpoint: 'wss://chrome.browserless.io/',
+    });
     const page = await browser.newPage();
 
     await page.setContent(result);

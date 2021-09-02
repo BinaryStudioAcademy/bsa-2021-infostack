@@ -238,7 +238,7 @@ router.post(
   run((req) => unpinPage(req.userId, req.params.id)),
 );
 
-router.post(
+router.get(
   '/:id/download-pdf',
   run((req) => downloadPDF(req.params.id)),
 );
