@@ -4,6 +4,7 @@ import {
   IUser,
   IUserActivity,
   IUserWithTokens,
+  IInviteUser,
 } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
@@ -24,7 +25,7 @@ class UserApi {
 
   public checkIfUserRegisteredOnInvite(
     token: string | undefined,
-  ): Promise<string> {
+  ): Promise<IInviteUser> {
     return this.http.load(
       `${this.BASE}/check-user-registration?token=${token}`,
     );

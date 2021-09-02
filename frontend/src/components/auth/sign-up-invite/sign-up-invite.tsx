@@ -18,11 +18,9 @@ const SignUpInvite: React.FC = () => {
   }
 
   const checkIfUserExistedBefore = async (): Promise<void> => {
-    const isUserNameDefault = await userApi.checkIfUserRegisteredOnInvite(
-      token,
-    );
+    const { fullName } = await userApi.checkIfUserRegisteredOnInvite(token);
 
-    if (!(isUserNameDefault === DefaultUserName.WAITING_FOR_JOIN)) {
+    if (!(fullName === DefaultUserName.WAITING_FOR_JOIN)) {
       history.push(AppRoute.LOGIN);
     }
   };
