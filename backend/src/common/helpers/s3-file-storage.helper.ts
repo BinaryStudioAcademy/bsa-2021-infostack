@@ -33,14 +33,14 @@ export const uploadFile = (
 ): Promise<S3.ManagedUpload.SendData> => {
   const fileStream = fs.createReadStream(file.path);
 
-  const type = mime.contentType(file.path) as string;
+  const type = mime.contentType(file.path);
 
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
     Key: file.filename,
     ACL: 'public-read',
-    ContentType: type,
+    ContentType: type || undefined,
   };
   return s3.upload(uploadParams).promise();
 };
