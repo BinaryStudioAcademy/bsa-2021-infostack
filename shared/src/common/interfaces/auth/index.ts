@@ -6,3 +6,4 @@ export * from './tokens.interface';
 export * from './refresh-tokens.interface';
 export * from './set-password-validation.interface';
 export * from './update-password-and-fullname.interface';
+export * from './invite-user.interface';
