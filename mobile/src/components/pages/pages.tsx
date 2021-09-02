@@ -8,6 +8,8 @@ import { PageListStack } from 'navigation/page-list-stack';
 import { ExpandedPage } from './screens/expanded-page';
 import { RootPages } from './screens/root-pages';
 import { StyleSheet } from 'react-native';
+import { Search } from 'components/search/search';
+import { SearchButton } from 'components/search/search-button';
 
 export const Pages: React.FC = () => {
   const pages = useAppSelector(selectPages);
@@ -28,11 +30,12 @@ export const Pages: React.FC = () => {
   return (
     <PageListStack.Navigator
       initialRouteName="RootPages"
-      screenOptions={{
+      screenOptions={(props) => ({
         headerTitleAlign: 'center',
         headerTintColor: '#fff',
         headerStyle: { backgroundColor: Color.PRIMARY },
-      }}
+        headerRight: () => <SearchButton {...props} />,
+      })}
     >
       <PageListStack.Screen
         name="RootPages"
@@ -48,6 +51,11 @@ export const Pages: React.FC = () => {
         name="ExpandedPage"
         component={ExpandedPage}
         options={({ route }) => ({ title: route.params.page.title })}
+      />
+      <PageListStack.Screen
+        name="Search"
+        component={Search}
+        options={{ animation: 'none', headerTitleAlign: 'left' }}
       />
     </PageListStack.Navigator>
   );
