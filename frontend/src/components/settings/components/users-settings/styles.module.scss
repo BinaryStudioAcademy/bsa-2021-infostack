@@ -43,6 +43,10 @@
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+
+      .selectContainer {
+        overflow: visible;
+      }
     }
     .tableHead {
       color: #737d85;

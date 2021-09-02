@@ -298,3 +298,17 @@ export const deleteLogoById = async (id: string): Promise<void> => {
     await workspaceRepository.save({ id, logo: '' });
   }
 };
+
+export const updateRoleByUserIdAndWorkspaceId = async (
+  userId: string,
+  workspaceId: string,
+  role: RoleType,
+): Promise<void> => {
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+
+  await userWorkspaceRepository.updateRoleByUserIdAndWorkspaceId(
+    userId,
+    workspaceId,
+    role,
+  );
+};
