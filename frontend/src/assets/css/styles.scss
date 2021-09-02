@@ -53,6 +53,10 @@ h6 {
   border-color: $success;
 }
 
+.btn {
+  font-size: 1.4rem;
+}
+
 .btn-success,
 .btn-success:hover,
 .btn-success:active,
@@ -69,4 +73,29 @@ h6 {
 
 .dropdown-item:active {
   background-color: $success;
+}
+
+.modal-header {
+  padding: 1.6rem 1.6rem;
+}
+
+.modal-body {
+  padding: 1.6rem;
+  font-size: 1.4rem !important;
+  margin: 1.6rem;
+}
+
+.modal-footer {
+  padding: 1.6rem;
+}
+
+.modal-title,
+.form-control,
+.form-label {
+  font-size: 1.4rem !important;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  align-self: center;
 }

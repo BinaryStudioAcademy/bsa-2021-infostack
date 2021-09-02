@@ -42,7 +42,7 @@ export const InputModal: React.FC<Props> = ({
       <Modal.Header closeButton>
         <Modal.Title className="fs-6">{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="mx-0">
         <FormField
           label={inputName[0].toUpperCase() + inputName.slice(1)}
           type={inputName}
@@ -59,6 +59,7 @@ export const InputModal: React.FC<Props> = ({
             variant="warning"
             onClick={cancelButton.onClick}
             disabled={cancelButton.disabled}
+            className="me-2"
           >
             {cancelButton.text}
           </Button>
