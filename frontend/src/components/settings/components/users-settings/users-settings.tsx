@@ -11,6 +11,7 @@ import { usersActions } from 'store/actions';
 import { InviteModal } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { RoleType } from 'common/enums';
 
 export const TABLE_HEADERS = [
   'Name',
@@ -18,6 +19,11 @@ export const TABLE_HEADERS = [
   'Team',
   'Status',
   'Actions',
+];
+
+const OPTIONS = [
+  { label: RoleType.USER, value: RoleType.USER },
+  { label: RoleType.ADMIN, value: RoleType.ADMIN },
 ];
 
 export const UsersSettings: React.FC = () => {
@@ -44,6 +50,10 @@ export const UsersSettings: React.FC = () => {
 
   const onUserDeleteClose = (): void => {
     setDeleteModalShown(false);
+  };
+
+  const handleSelectChange = (userId: string, role: RoleType): void => {
+    dispatch(usersActions.chageRole({ userId, role }));
   };
 
   return (
@@ -82,7 +92,14 @@ export const UsersSettings: React.FC = () => {
             <tbody>
               {users?.map((user) => {
                 return (
-                  <UserItem key={user.id} onDelete={onUserDelete} {...user} />
+                  <UserItem
+                    key={user.id}
+                    onDelete={onUserDelete}
+                    onChange={handleSelectChange}
+                    options={OPTIONS}
+                    className={getAllowedClasses(styles.selectContainer)}
+                    {...user}
+                  />
                 );
               })}
             </tbody>

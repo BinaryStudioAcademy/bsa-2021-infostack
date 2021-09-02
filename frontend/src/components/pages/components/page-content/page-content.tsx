@@ -46,9 +46,11 @@ import {
   IPageTableOfContents,
   IPageTableOfContentsHeading,
   IPageNav,
+  IExportPDF,
 } from 'common/interfaces/pages';
 import { FollowModal } from '../follow-modal/follow-modal';
 import { ShareModal } from '../share-modal/share-modal';
+import { ExportPDFModal } from '../export-pdf-modal/export-pdf-modal';
 import { Breadcrumbs } from '../breadcrumbs/breadcrumbs';
 import PageTags from '../page-tags/page-tags';
 import styles from './styles.module.scss';
@@ -99,6 +101,7 @@ export const PageContent: React.FC = () => {
   const [isFollowModalVisible, setIsFollowModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+  const [isExportModalVisible, setIsExportModalVisible] = useState(false);
   const [isLeftBlockLoading, setIsLeftBlockLoading] = useState(false);
   const [isRefreshButtonShowed, setIsRefreshButton] = useState(false);
   const [contributors, setContributors] = useState<IPageContributor[]>([]);
@@ -263,6 +266,14 @@ export const PageContent: React.FC = () => {
     setIsShareModalVisible(true);
   };
 
+  const onExportPDF = (): void => {
+    setIsExportModalVisible(true);
+  };
+
+  const handleExportPDFCancel = (): void => {
+    setIsExportModalVisible(false);
+  };
+
   const handleDeleteCancel = (): void => {
     setIsDeleteModalVisible(false);
   };
@@ -350,8 +361,38 @@ export const PageContent: React.FC = () => {
   }, [currentPage]);
 
   if (isSpinner || isLeftBlockLoading) {
-    return <Spinner />;
+    return <Spinner height={'6rem'} width={'6rem'} />;
   }
+
+  const handleDownloadPDF = async (): Promise<void> => {
+    const pageId = currentPage?.id as IExportPDF;
+    const fileName = pageTitle || 'New Page';
+
+    await pageApi.downloadPDF(pageId).then((response) => {
+      const file = new Blob([response], {
+        type: 'application/pdf',
+      });
+
+      const fileURL = URL.createObjectURL(file);
+      const link = document.createElement('a');
+
+      link.href = fileURL;
+      link.setAttribute('download', `${fileName}.pdf`);
+
+      document.body.appendChild(link);
+
+      link.click();
+      link.remove();
+    });
+  };
+
+  const handleSendPDF = async (email: string): Promise<void> => {
+    const pageId = currentPage?.id as string;
+
+    await pageApi.sendPDF({ pageId, email }).then(() => {
+      toast.info('PDF file was sent to the specified email');
+    });
+  };
 
   return (
     <>
@@ -428,6 +469,7 @@ export const PageContent: React.FC = () => {
                         onPagePin={onPagePin}
                         onDelete={onDelete}
                         onShare={onShare}
+                        onExportPDF={onExportPDF}
                         isCurrentPageFollowed={isCurrentPageFollowed}
                         isCurrentPagePinned={isCurrentPagePinned}
                       />
@@ -485,6 +527,12 @@ export const PageContent: React.FC = () => {
               show={isShareModalVisible}
               onModalClose={handleShareCancel}
               pageId={paramsId}
+            />
+            <ExportPDFModal
+              show={isExportModalVisible}
+              onModalClose={handleExportPDFCancel}
+              onDownloadPDF={handleDownloadPDF}
+              onSendPDF={handleSendPDF}
             />
             <FollowModal
               show={isFollowModalVisible}

@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
+import { generatePDFUtil } from '../common/utils/generate-pdf.util';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import TeamRepository from '../data/repositories/team.repository';
@@ -26,6 +27,7 @@ import {
   IShareLink,
   IPageShare,
   IFoundPageContent,
+  IExportPDF,
   IPageRecent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
@@ -507,6 +509,13 @@ export const getContributors = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
+  if (!page) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_PAGE_WITH_SUCH_ID,
+    });
+  }
+
   return mapPageToContributors(page);
 };
 
@@ -802,11 +811,47 @@ export const unpinPage = async (
 ): Promise<void> =>
   getCustomRepository(PageRepository).unpinPage(userId, pageId);
 
+export const downloadPDF = async (pageId: string): Promise<Buffer> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const { title, content } = page.pageContents[0];
+  const file = await generatePDFUtil(title, content);
+
+  return file;
+};
+
+export const sendPDF = async (
+  data: IExportPDF,
+  pageId: string,
+): Promise<void> => {
+  const { email } = data;
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const { title, content } = page.pageContents[0];
+
+  const file = await generatePDFUtil(title, content);
+
+  await sendMail({
+    to: email,
+    subject: `${title} pdf file`,
+    attachments: [
+      {
+        filename: `${title}.pdf`,
+        content: file,
+      },
+    ],
+  });
+};
+
 export const getRecentPages = async (
   userId: string,
+  workspaceId: string,
 ): Promise<IPageRecent[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findAllByUserId(userId);
+  const recentPages = await recentPagesRepository.findAllByUserIdandWorkspaceId(
+    userId,
+    workspaceId,
+  );
 
   return mapToRecentPage(recentPages);
 };

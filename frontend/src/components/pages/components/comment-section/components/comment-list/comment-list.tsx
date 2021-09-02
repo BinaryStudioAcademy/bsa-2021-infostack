@@ -26,7 +26,7 @@ export const CommentList: React.FC<Props> = ({ pageId, handleDelete }) => {
   let content;
 
   if (fetchStatus === RequestStatus.LOADING) {
-    content = <Spinner />;
+    content = <Spinner height={'6rem'} width={'6rem'} />;
   } else if (fetchStatus === RequestStatus.SUCCEEDED) {
     content = comments.length ? (
       comments.map((id) => (

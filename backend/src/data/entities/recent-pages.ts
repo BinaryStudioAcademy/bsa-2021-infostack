@@ -22,7 +22,7 @@ export class RecentPage extends BaseEntity {
   @PrimaryColumn()
   readonly pageId: string;
 
-  @ManyToOne(() => User, (user) => user.recentPages)
+  @ManyToOne(() => User, (user) => user.recentPages, { onDelete: 'CASCADE' })
   user: User;
 
   @ManyToOne(() => Page, (page) => page.recentPages, {
