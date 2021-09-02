@@ -50,4 +50,12 @@
       cursor: pointer;
     }
   }
+
+  .cardTitle {
+    justify-content: space-between;
+
+    :global(.bi-info-circle:hover) {
+      color: #495057;
+    }
+  }
 }
