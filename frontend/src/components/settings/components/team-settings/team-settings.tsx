@@ -1,5 +1,6 @@
 import { Card } from 'react-bootstrap';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
+import { RoleType } from 'common/enums';
 import { teamsActions } from 'store/teams';
 import { Spinner } from 'components/common/common';
 import { Item, CreateButton } from './components/components';
@@ -19,7 +20,13 @@ export const TeamSettings: React.FC = () => {
   const [isUserTeamsMapped, setUserTeamsMapped] = useState(false);
   const { teams } = useAppSelector((state) => state.teams);
   const { userTeams } = useAppSelector((state) => state.teams);
+  const role = useAppSelector(
+    (state) => state.workspaces.currentWorkspace?.role,
+  );
   const userId = useAppSelector((state) => state.auth?.user?.id as string);
+
+  const isShowTeams =
+    userTeams && userTeams.length === 0 && role !== RoleType.ADMIN;
 
   useEffect(() => {
     if (userId) {
@@ -29,10 +36,15 @@ export const TeamSettings: React.FC = () => {
     dispatch(teamsActions.fetchTeams());
   }, [userId, teams]);
 
-  const teamsToRender = [];
-  for (let i = 0; i < teams.length; i++) {
-    if (userTeams.find((team) => teams[i].id === team.id)) {
-      teamsToRender.push(teams[i]);
+  let teamsToRender = [];
+
+  if (role === RoleType.ADMIN) {
+    teamsToRender = [...teams];
+  } else {
+    for (let i = 0; i < teams.length; i++) {
+      if (userTeams.find((team) => teams[i].id === team.id)) {
+        teamsToRender.push(teams[i]);
+      }
     }
   }
 
@@ -73,7 +85,7 @@ export const TeamSettings: React.FC = () => {
                 <Spinner height={'6rem'} width={'6rem'} />
               </div>
             ))}
-          {userTeams && userTeams.length === 0 ? (
+          {isShowTeams ? (
             <div>There is no teams in this workspace. Start adding</div>
           ) : (
             <div
