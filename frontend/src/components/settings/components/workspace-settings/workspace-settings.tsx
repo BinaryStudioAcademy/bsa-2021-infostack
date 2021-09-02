@@ -16,8 +16,6 @@ import { workspaceSchema } from 'common/validations';
 import { workspacesActions } from 'store/workspaces';
 import { useEffect } from 'react';
 
-import noImage from 'assets/img/no-image.svg';
-
 import styles from './styles.module.scss';
 
 export const WorkspaceSettings: React.FC = () => {
@@ -150,11 +148,12 @@ export const WorkspaceSettings: React.FC = () => {
                       src={selectedImgURL || currentWorkspace?.logo}
                     />
                   ) : (
-                    <img
-                      src={noImage}
-                      alt="Infostack Empty Logo"
-                      className={styles.noLogo}
-                    />
+                    <i
+                      className={getAllowedClasses(
+                        'bi bi-card-image',
+                        styles.noLogo,
+                      )}
+                    ></i>
                   )}
                 </div>
 
