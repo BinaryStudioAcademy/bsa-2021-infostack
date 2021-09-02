@@ -28,6 +28,9 @@ import {
   uploadFile,
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
+import { Server } from 'socket.io';
+import { SocketEvents } from '../common/enums/socket';
+import { workspaceMailDeleteUser } from '../common/utils/mail/workspace-mail.util';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -104,8 +107,15 @@ export const updateInviteStatusDeclined = async (
 export const deleteUserFromWorkspace = async (
   userId: string,
   workspaceId: string,
+  io: Server,
 ): Promise<void> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const {
+    workspace: { name: workspaceName },
+  } = await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+    userId,
+    workspaceId,
+  );
 
   await userWorkspaceRepository.deleteByUserIdAndWorkspaceId(
     userId,
@@ -149,6 +159,20 @@ export const deleteUserFromWorkspace = async (
     return page.id;
   });
   await pageRepository.unfollowPages(userId, pageIds);
+
+  io.to(user.id).emit(SocketEvents.WORKSPACE_DELETE_USER, {
+    workspaceId,
+    workspaceName,
+  });
+
+  const { app } = env;
+  const { subject, text } = workspaceMailDeleteUser(workspaceName, app.url);
+
+  await sendMail({
+    to: user.email,
+    subject: subject,
+    text: text,
+  });
 };
 
 export const addUserToWorkspace = async (
