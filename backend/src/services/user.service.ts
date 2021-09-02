@@ -14,6 +14,7 @@ import {
   IGetUserActivities,
   IUserActivity,
 } from '../common/interfaces/user';
+import { IInviteUser } from '../common/interfaces/auth';
 import { IPaginated } from '../common/interfaces/common';
 import { env } from '../env';
 import SkillRepository from '../data/repositories/skill.repository';
@@ -41,7 +42,9 @@ export const getUserById = async (id: string): Promise<IUser> => {
   };
 };
 
-export const getInviteUserById = async (token: string): Promise<string> => {
+export const getInviteUserById = async (
+  token: string,
+): Promise<IInviteUser> => {
   const userRepository = getCustomRepository(UserRepository);
 
   const { app } = env;
@@ -51,7 +54,7 @@ export const getInviteUserById = async (token: string): Promise<string> => {
   };
   const { fullName } = await userRepository.findById(decoded.userId);
 
-  return JSON.stringify(fullName);
+  return { fullName };
 };
 
 export const getUserByIdWithWorkspace = async (
