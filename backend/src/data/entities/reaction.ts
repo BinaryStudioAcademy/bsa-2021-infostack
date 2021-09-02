@@ -19,6 +19,8 @@ export class Reaction extends AbstractEntity {
   @Column()
   readonly commentId: string;
 
-  @ManyToOne(() => Comment, (comment) => comment.reactions)
+  @ManyToOne(() => Comment, (comment) => comment.reactions, {
+    onDelete: 'CASCADE',
+  })
   comment: Comment;
 }

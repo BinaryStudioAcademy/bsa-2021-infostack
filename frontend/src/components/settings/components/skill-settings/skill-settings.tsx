@@ -1,8 +1,9 @@
-import { Card, Table, Spinner } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks/hooks';
 import { skillActions } from 'store/skills';
 import { getAllowedClasses } from 'helpers/helpers';
 import { SkillAdd, SkillItem, SkillEdit } from './components/components';
+import { Spinner } from 'components/common/common';
 import styles from './styles.module.scss';
 
 export const SkillSettings: React.FC = () => {
@@ -64,9 +65,7 @@ export const SkillSettings: React.FC = () => {
           )
         ) : (
           <div className="text-center">
-            <Spinner animation="border" variant="secondary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
+            <Spinner height={'6rem'} width={'6rem'} />
           </div>
         )}
       </Card.Body>

@@ -35,6 +35,8 @@ import {
   deleteDraft,
   pinPage,
   unpinPage,
+  downloadPDF,
+  sendPDF,
 } from '../../services/page.service';
 import {
   getComments,
@@ -234,6 +236,16 @@ router.post(
 router.post(
   '/:id/unpin',
   run((req) => unpinPage(req.userId, req.params.id)),
+);
+
+router.get(
+  '/:id/download-pdf',
+  run((req) => downloadPDF(req.params.id)),
+);
+
+router.post(
+  '/:id/send-pdf',
+  run((req) => sendPDF(req.body, req.params.id)),
 );
 
 export default router;

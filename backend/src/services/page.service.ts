@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
+import { generatePDFUtil } from '../common/utils/generate-pdf.util';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import TeamRepository from '../data/repositories/team.repository';
@@ -26,6 +27,7 @@ import {
   IShareLink,
   IPageShare,
   IFoundPageContent,
+  IExportPDF,
   IPageRecent,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
@@ -47,6 +49,7 @@ import elasticPageContentRepository from '../elasticsearch/repositories/page-con
 import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
 import { RecentPagesRepository } from '../data/repositories';
 import { mapToRecentPage } from '../common/mappers/page/map-recent-pages.helper';
+import { RoleType } from '../common/enums/role-type';
 
 export const createPage = async (
   userId: string,
@@ -212,6 +215,13 @@ export const getPages = async (
 ): Promise<IPageNav[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+
+  const { role: userRole } =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
 
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
@@ -238,6 +248,10 @@ export const getPages = async (
   }
 
   const finalPages = pagesWithPermissions.filter((page) => page.permission);
+
+  if (userRole === RoleType.ADMIN) {
+    return pagesToShow;
+  }
 
   return finalPages;
 };
@@ -506,6 +520,13 @@ export const getContributors = async (
 ): Promise<IPageContributor[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
+
+  if (!page) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_PAGE_WITH_SUCH_ID,
+    });
+  }
 
   return mapPageToContributors(page);
 };
@@ -802,12 +823,44 @@ export const unpinPage = async (
 ): Promise<void> =>
   getCustomRepository(PageRepository).unpinPage(userId, pageId);
 
+export const downloadPDF = async (pageId: string): Promise<Buffer> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const { title, content } = page.pageContents[0];
+  const file = await generatePDFUtil(title, content);
+
+  return file;
+};
+
+export const sendPDF = async (
+  data: IExportPDF,
+  pageId: string,
+): Promise<void> => {
+  const { email } = data;
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const { title, content } = page.pageContents[0];
+
+  const file = await generatePDFUtil(title, content);
+
+  await sendMail({
+    to: email,
+    subject: `${title} pdf file`,
+    attachments: [
+      {
+        filename: `${title}.pdf`,
+        content: file,
+      },
+    ],
+  });
+};
+
 export const getRecentPages = async (
   userId: string,
   workspaceId: string,
 ): Promise<IPageRecent[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findAllByUserId(
+  const recentPages = await recentPagesRepository.findAllByUserIdandWorkspaceId(
     userId,
     workspaceId,
   );

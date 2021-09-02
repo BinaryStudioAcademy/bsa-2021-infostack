@@ -95,7 +95,7 @@ const Workspaces: React.FC = () => {
             onClickDecline={handleInviteDeclined}
           />
         ) : (
-          <Spinner />
+          <Spinner height={'12rem'} width={'12rem'} />
         )}
         <CreateWorkspaceModal
           showModal={isModalVisible}

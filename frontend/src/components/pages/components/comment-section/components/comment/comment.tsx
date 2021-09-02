@@ -95,7 +95,8 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
               layout="horizontal-reverse"
               customAdditionalControls={[]}
               showJumpControls={false}
-              defaultDuration="Loading..."
+              preload="metadata"
+              timeFormat="mm:ss"
             />
           )}
           <Emoji reactions={reactions} commentId={id} />
