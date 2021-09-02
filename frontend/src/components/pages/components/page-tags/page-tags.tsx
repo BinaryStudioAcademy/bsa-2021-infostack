@@ -146,7 +146,7 @@ const PageTags: React.FC = () => {
         )}
       </Card.Header>
       <Card.Body>
-        {pageTags?.length ? (
+        {!!pageTags?.length && (
           <div className="d-flex align-items-start flex-wrap">
             {pageTags.map(({ id, name, type }) => (
               <Badge pill text="primary" className="tag-badge" key={id}>
@@ -155,8 +155,6 @@ const PageTags: React.FC = () => {
               </Badge>
             ))}
           </div>
-        ) : (
-          <span className="text-warning">no tags</span>
         )}
         <EditModal
           title="Edit tags modal"
