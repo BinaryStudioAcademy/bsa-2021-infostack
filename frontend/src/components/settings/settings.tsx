@@ -18,6 +18,7 @@ import {
 } from './components/components';
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
+import { AdminRoute } from 'components/common/common';
 import styles from './styles.module.scss';
 import { WorkspaceSettings } from './components/workspace-settings/workspace-settings';
 
@@ -49,33 +50,8 @@ const Settings: React.FC = () => {
                     exact
                   />
                   <Route
-                    path={AppRoute.SETTINGS_WORKSPACE}
-                    component={WorkspaceSettings}
-                    exact
-                  />
-                  <Route
-                    path={AppRoute.SETTINGS_USERS}
-                    component={UsersSettings}
-                    exact
-                  />
-                  <Route
                     path={AppRoute.SETTINGS_TEAMS}
                     component={TeamSettings}
-                    exact
-                  />
-                  <Route
-                    path={AppRoute.SETTINGS_TAGS}
-                    component={TagSettings}
-                    exact
-                  />
-                  <Route
-                    path={AppRoute.SETTINGS_SKILLS}
-                    component={SkillSettings}
-                    exact
-                  />
-                  <Route
-                    path={AppRoute.SETTINGS_INTEGRATIONS}
-                    component={IntegrationSettings}
                     exact
                   />
                   <Route
@@ -83,12 +59,40 @@ const Settings: React.FC = () => {
                     component={NotificationsSettings}
                     exact
                   />
-                  <Route path={match.path}>
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_WORKSPACE}
+                    component={WorkspaceSettings}
+                    exact
+                  />
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_USERS}
+                    component={UsersSettings}
+                    exact
+                  />
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_TAGS}
+                    component={TagSettings}
+                    exact
+                  />
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_SKILLS}
+                    component={SkillSettings}
+                    exact
+                  />
+                  <AdminRoute
+                    path={AppRoute.SETTINGS_INTEGRATIONS}
+                    component={IntegrationSettings}
+                    exact
+                  />
+                  <Route path={AppRoute.SETTINGS} exact>
                     <Redirect
                       from={AppRoute.SETTINGS}
                       to={AppRoute.SETTINGS_PROFILE}
                       push
                     />
+                  </Route>
+                  <Route path={match.path}>
+                    <Redirect from={AppRoute.SETTINGS} to={'/*'} push />
                   </Route>
                 </Switch>
               </Tab.Content>
