@@ -16,6 +16,8 @@ import { workspaceSchema } from 'common/validations';
 import { workspacesActions } from 'store/workspaces';
 import { useEffect } from 'react';
 
+import noImage from 'assets/img/no-image.svg';
+
 import styles from './styles.module.scss';
 
 export const WorkspaceSettings: React.FC = () => {
@@ -148,7 +150,11 @@ export const WorkspaceSettings: React.FC = () => {
                       src={selectedImgURL || currentWorkspace?.logo}
                     />
                   ) : (
-                    <span className={styles.noLogo}>no logo</span>
+                    <img
+                      src={noImage}
+                      alt="Infostack Empty Logo"
+                      className={styles.noLogo}
+                    />
                   )}
                 </div>
 
