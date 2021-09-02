@@ -18,6 +18,7 @@ import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
 import { IPageContributor } from 'common/interfaces/pages';
+import { CollabEditor } from '../collab-editor/collab-editor';
 import {
   useState,
   useAppDispatch,
@@ -31,6 +32,9 @@ import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {
   const socket = useContext(SocketContext);
+  // const connection = new Sharedb.Connection(socket);
+  // const doc = connection.get('documents', 'firstDocument');
+
   const { user } = useAppSelector((state) => state.auth);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
 
@@ -67,6 +71,7 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
 
+  const [isLiveMode, setIsLiveMode] = useState(true);
   // const [isLiveMode, setIsLiveMode] = useState(false);
 
   const onEditTogether = (editors: IPageContributor[]): void => {
@@ -82,20 +87,6 @@ export const ContentEditor: React.FC = () => {
   //     socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
   //   };
   // }, [socket]);
-
-  const synchronizeChange = (title: string, content: string): void => {
-    // console.info(title, content);
-    setDraftTitleInputValue(title);
-    setDraftMarkDownContent(content);
-  };
-
-  useEffect(() => {
-    socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
-
-    return (): void => {
-      socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
-    };
-  }, []);
 
   useEffect(() => {
     if (user && currentPage?.pageContents[0]) {
@@ -116,8 +107,19 @@ export const ContentEditor: React.FC = () => {
     };
   }, [user]);
 
+  const synchronizeChange = (title: string, content: string): void => {
+    setDraftTitleInputValue(title);
+    setDraftMarkDownContent(content);
+  };
+
   useEffect(() => {
-    // socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+    socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+    return (): void => {
+      socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
+    };
+  }, []);
+
+  useEffect(() => {
     setSaveDraftShown(true);
     setTitleInputValue(draftTitleInputValue);
     setMarkDownContent(draftMarkDownContent);
@@ -269,6 +271,7 @@ export const ContentEditor: React.FC = () => {
 
   const handleLifeMode = (): void => {
     setIsCollabModalVisible(false);
+    setIsLiveMode(true);
   };
 
   const onDraftDelete = (): void => {
@@ -298,66 +301,77 @@ export const ContentEditor: React.FC = () => {
   return (
     <>
       <div className="p-4">
-        <Row className="mb-4">
-          <Col className="d-flex justify-content-between">
-            <InputGroup>
-              <FormControl
-                value={draftTitleInputValue}
-                onChange={onInputChange}
-              />
-            </InputGroup>
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
-            <Card border="light" className={getAllowedClasses(styles.content)}>
-              <Editor
-                value={draftMarkDownContent}
-                onChange={({ text }): void => setDraftMarkDownContent(text)}
-                onImageUpload={onImageUpload}
-                renderHTML={(text): JSX.Element => (
-                  <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
-                )}
-                ref={editorRef}
-              />
-            </Card>
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
-            <Button
-              onClick={handleSaveConfirm}
-              variant="success"
-              size="sm"
-              className="me-3"
-            >
-              Save
-            </Button>
-            {isSaveDraftShown ? (
-              <Button
-                onClick={handleSaveAsDraftConfirm}
-                variant="success"
-                size="sm"
-                className="me-3"
-              >
-                Save as Draft
-              </Button>
-            ) : null}
-            {isDeleteDraftShown ? (
-              <Button
-                onClick={onDraftDelete}
-                variant="danger"
-                size="sm"
-                className="me-3"
-              >
-                Delete Draft
-              </Button>
-            ) : null}
-            <Button onClick={onCancel} variant="warning" size="sm">
-              Cancel
-            </Button>
-          </Col>
-        </Row>
+        {isLiveMode ? (
+          <CollabEditor />
+        ) : (
+          <>
+            <Row className="mb-4">
+              <Col className="d-flex justify-content-between">
+                <InputGroup>
+                  <FormControl
+                    value={draftTitleInputValue}
+                    onChange={onInputChange}
+                  />
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col>
+                <Card
+                  border="light"
+                  className={getAllowedClasses(styles.content)}
+                >
+                  <Editor
+                    value={draftMarkDownContent}
+                    onChange={({ text }): void => setDraftMarkDownContent(text)}
+                    onImageUpload={onImageUpload}
+                    renderHTML={(text): JSX.Element => (
+                      <ReactMarkdown remarkPlugins={[gfm]}>
+                        {text}
+                      </ReactMarkdown>
+                    )}
+                    ref={editorRef}
+                  />
+                </Card>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col>
+                <Button
+                  onClick={handleSaveConfirm}
+                  variant="success"
+                  size="sm"
+                  className="me-3"
+                >
+                  Save
+                </Button>
+                {isSaveDraftShown ? (
+                  <Button
+                    onClick={handleSaveAsDraftConfirm}
+                    variant="success"
+                    size="sm"
+                    className="me-3"
+                  >
+                    Save as Draft
+                  </Button>
+                ) : null}
+                {isDeleteDraftShown ? (
+                  <Button
+                    onClick={onDraftDelete}
+                    variant="danger"
+                    size="sm"
+                    className="me-3"
+                  >
+                    Delete Draft
+                  </Button>
+                ) : null}
+                <Button onClick={onCancel} variant="warning" size="sm">
+                  Cancel
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
       </div>
       <ConfirmModal
         title="Delete confirmation"
