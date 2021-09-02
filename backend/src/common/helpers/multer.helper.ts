@@ -10,13 +10,9 @@ const fileFilter = (
   cb: (err: Error, result: boolean) => void,
 ): void => {
   if (
-    [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/svg+xml',
-      'audio/webm',
-    ].includes(file.mimetype)
+    ['image/jpeg', 'image/png', 'image/gif', 'audio/webm'].includes(
+      file.mimetype,
+    )
   ) {
     cb(null, true);
   } else {

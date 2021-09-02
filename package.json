@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "nodemailer": "6.6.3",
-    "react-inlinesvg": "^2.3.0",
     "react-toastify": "7.0.4"
   },
   "lint-staged": {
