@@ -13,12 +13,25 @@ const SignUp: React.FC = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<IRegister>({ resolver: yupResolver(signUpSchema) });
 
   const handleSubmitForm = async (data: IRegister): Promise<void> => {
-    await dispatch(authActions.register(data));
-    push(AppRoute.ROOT);
+    try {
+      await dispatch(authActions.register(data)).unwrap();
+      push(AppRoute.ROOT);
+    } catch (err) {
+      if (err.message.toLowerCase().includes('email')) {
+        setError('email', err);
+      }
+      if (err.message.toLowerCase().includes('password')) {
+        setError('password', err);
+      }
+      if (err.message.toLowerCase().includes('name')) {
+        setError('fullName', err);
+      }
+    }
   };
 
   return (

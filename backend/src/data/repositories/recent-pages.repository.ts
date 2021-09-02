@@ -3,14 +3,17 @@ import { RecentPage } from '../entities/recent-pages';
 
 @EntityRepository(RecentPage)
 class RecentPagesRepository extends Repository<RecentPage> {
-  public findAllByUserId(userId: string): Promise<RecentPage[]> {
-    return this.find({
-      relations: ['page', 'page.pageContents'],
-      where: { userId },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+  public findAllByUserIdandWorkspaceId(
+    userId: string,
+    workspaceId: string,
+  ): Promise<RecentPage[]> {
+    return this.createQueryBuilder('recent_page')
+      .where({ userId })
+      .leftJoinAndSelect('recent_page.page', 'page')
+      .andWhere('page.workspaceId = :workspaceId', { workspaceId })
+      .leftJoinAndSelect('page.pageContents', 'pageContents')
+      .orderBy('recent_page.createdAt', 'DESC')
+      .getMany();
   }
 
   public deleteOne(userId: string, pageId: string): Promise<DeleteResult> {

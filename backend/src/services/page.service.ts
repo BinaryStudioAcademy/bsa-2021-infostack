@@ -507,6 +507,13 @@ export const getContributors = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
+  if (!page) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_PAGE_WITH_SUCH_ID,
+    });
+  }
+
   return mapPageToContributors(page);
 };
 
@@ -804,9 +811,13 @@ export const unpinPage = async (
 
 export const getRecentPages = async (
   userId: string,
+  workspaceId: string,
 ): Promise<IPageRecent[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findAllByUserId(userId);
+  const recentPages = await recentPagesRepository.findAllByUserIdandWorkspaceId(
+    userId,
+    workspaceId,
+  );
 
   return mapToRecentPage(recentPages);
 };

@@ -178,7 +178,7 @@ const RecordModal: React.FC<Props> = (props) => {
         )}
         {isCompleteRecord && (
           <Button onClick={onPublish} className={styles.text} variant="success">
-            Publish record
+            Attach audio
           </Button>
         )}
       </Modal.Footer>

@@ -6,6 +6,7 @@ import { authActions } from 'store/actions';
 import { ILogin } from 'common/interfaces/auth';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { HttpErrorMessage } from 'common/enums';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,9 @@ const Login: React.FC = () => {
       await dispatch(authActions.login(data)).unwrap();
       push(AppRoute.WORKSPACES);
     } catch (err) {
+      if (err.message === HttpErrorMessage.NOT_ACTIVATED) {
+        setError('email', err);
+      }
       if (err.message.toLowerCase().includes('email')) {
         setError('email', err);
       }
