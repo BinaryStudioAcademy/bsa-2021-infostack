@@ -1,19 +1,56 @@
 import { Hit } from '@elastic/elasticsearch/api/types';
 
-import { IElasticPageContent } from '../../../elasticsearch';
+import { IElasticPageContentAndComments } from '../../../elasticsearch';
 import { IFoundPageContent } from '../../interfaces/page';
 
 const mapSearchHitElasticPageContentToFoundPageContent = (
-  hits: Hit<IElasticPageContent>[],
-): IFoundPageContent[] => {
-  return hits.map(({ highlight, _source }) => {
-    return {
-      id: _source.pageId,
-      pageId: _source.pageId,
-      title: highlight?.title?.[0] || _source.title,
-      content: highlight?.content?.[0] || _source.content,
-    };
-  });
+  hits: Hit<IElasticPageContentAndComments>[],
+): Partial<IFoundPageContent>[] => {
+  return hits
+    .map(({ highlight, _source }) => {
+      const results: Partial<IFoundPageContent>[] = [];
+
+      if (highlight?.title?.length) {
+        const titles: Array<Partial<IFoundPageContent>> = highlight.title.map(
+          (title) => {
+            return {
+              id: _source.id,
+              pageId: _source.pageId,
+              title: title,
+            };
+          },
+        );
+
+        results.push(...titles);
+      }
+
+      if (highlight?.content?.length) {
+        const contents = highlight?.content.map((content) => {
+          return {
+            id: _source.id,
+            pageId: _source.pageId,
+            content: content,
+          };
+        });
+
+        results.push(...contents);
+      }
+
+      if (highlight?.text?.length) {
+        const comments = highlight?.text.map((text) => {
+          return {
+            id: _source.pageId,
+            pageId: _source.pageId,
+            text: text,
+          };
+        });
+
+        results.push(...comments);
+      }
+
+      return results;
+    })
+    .flat();
 };
 
 export default mapSearchHitElasticPageContentToFoundPageContent;

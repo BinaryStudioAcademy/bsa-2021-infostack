@@ -5,7 +5,7 @@ import {
   IWorkspaceUpdate,
   IWorkspaceUser,
 } from 'common/interfaces/workspace';
-import { ContentType, HttpMethod } from 'common/enums';
+import { ContentType, HttpMethod, RoleType } from 'common/enums';
 import { http } from 'services/http.service';
 
 class WorkspaceApi {
@@ -101,6 +101,17 @@ class WorkspaceApi {
   public async deleteLogo(id: string): Promise<void> {
     return this.http.load(`${this.BASE}/${id}/logo`, {
       method: HttpMethod.DELETE,
+    });
+  }
+
+  public async updateUserRoleByWorkspaceId(
+    userId: string,
+    role: RoleType,
+  ): Promise<void> {
+    return this.http.load(`${this.BASE}/current/update-user-role`, {
+      method: HttpMethod.PUT,
+      payload: JSON.stringify({ userId, role }),
+      contentType: ContentType.JSON,
     });
   }
 }

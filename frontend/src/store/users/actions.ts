@@ -3,7 +3,8 @@ import { IWorkspaceUser } from 'common/interfaces';
 import { RootState } from 'common/types/types';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
-import { RequestStatus } from 'common/enums';
+import { RequestStatus, RoleType } from 'common/enums';
+import { actions } from './slice';
 
 export const fetchUsers = createAsyncThunk<
   IWorkspaceUser[],
@@ -20,3 +21,16 @@ export const fetchUsers = createAsyncThunk<
     }
   },
 });
+
+export const chageRole = createAsyncThunk(
+  ActionType.CHANGE_ROLE,
+  async (
+    payload: { userId: string; role: RoleType },
+    { dispatch },
+  ): Promise<void> => {
+    const { userId, role } = payload;
+
+    await workspaceApi.updateUserRoleByWorkspaceId(userId, role);
+    dispatch(actions.changeRole({ userId, role }));
+  },
+);

@@ -176,6 +176,14 @@ export const getWorkspaceUsers = async (
 ): Promise<IWorkspaceUser[]> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findByIdWithUsers(workspaceId);
+
+  if (!workspace) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_WORKSPACE_WITH_SUCH_ID,
+    });
+  }
+
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
@@ -189,6 +197,14 @@ export const getWorkspace = async (
       userId,
       workspaceId,
     );
+
+  if (!userWorkspace) {
+    throw new HttpError({
+      status: HttpCode.FORBIDDEN,
+      message: HttpErrorMessage.NO_WORKSPACE_ACCESS,
+    });
+  }
+
   const { workspace } = userWorkspace;
 
   return {
@@ -297,4 +313,18 @@ export const deleteLogoById = async (id: string): Promise<void> => {
 
     await workspaceRepository.save({ id, logo: '' });
   }
+};
+
+export const updateRoleByUserIdAndWorkspaceId = async (
+  userId: string,
+  workspaceId: string,
+  role: RoleType,
+): Promise<void> => {
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+
+  await userWorkspaceRepository.updateRoleByUserIdAndWorkspaceId(
+    userId,
+    workspaceId,
+    role,
+  );
 };

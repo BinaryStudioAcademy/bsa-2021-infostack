@@ -5,5 +5,5 @@ export const pagesActions = {
   ...actions,
   ...asyncActions,
 };
-
 export const pagesReducer = reducer;
+export { selectPages } from './selectors';

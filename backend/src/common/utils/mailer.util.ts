@@ -28,7 +28,10 @@ const createTransport = async (): Promise<nodemailer.Transporter> => {
 };
 
 const sendMail = async (
-  options: Pick<Mail.Options, 'to' | 'bcc' | 'text' | 'subject'>,
+  options: Pick<
+    Mail.Options,
+    'to' | 'bcc' | 'text' | 'subject' | 'attachments'
+  >,
 ): Promise<void> => {
   const transporter = await createTransport();
 

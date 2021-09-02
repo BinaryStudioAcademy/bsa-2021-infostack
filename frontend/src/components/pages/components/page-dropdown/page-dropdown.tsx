@@ -13,6 +13,7 @@ interface Props {
   onPagePin(): void;
   onDelete(): void;
   onShare(): void;
+  onExportPDF(): void;
   isCurrentPageFollowed: boolean;
   isCurrentPagePinned: boolean;
 }
@@ -25,6 +26,7 @@ export const PageActionsDropdown: React.FC<Props> = ({
   onPagePin,
   onDelete,
   onShare,
+  onExportPDF,
   isCurrentPageFollowed,
   isCurrentPagePinned,
 }) => {
@@ -74,6 +76,12 @@ export const PageActionsDropdown: React.FC<Props> = ({
           onClick={onShare}
         >
           Share
+        </Dropdown.Item>
+        <Dropdown.Item
+          className={getAllowedClasses(styles.dropdownItem)}
+          onClick={onExportPDF}
+        >
+          Export PDF
         </Dropdown.Item>
         {canEdit && (
           <>
