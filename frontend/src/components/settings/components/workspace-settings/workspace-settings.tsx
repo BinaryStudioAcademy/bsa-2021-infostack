@@ -26,6 +26,7 @@ export const WorkspaceSettings: React.FC = () => {
     isUpdatingCurrentWorkspace,
     isDeletingCurrentWorkspaceLogo,
   } = useAppSelector((state) => state.workspaces);
+
   const [selectedImgURL, setSelectedImgURL] = useState('');
 
   const {
