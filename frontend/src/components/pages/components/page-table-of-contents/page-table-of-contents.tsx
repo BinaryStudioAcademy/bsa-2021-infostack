@@ -1,4 +1,10 @@
-import { Accordion, Card, useAccordionButton } from 'react-bootstrap';
+import {
+  Accordion,
+  Card,
+  useAccordionButton,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import { Link as ScrollLink } from 'react-scroll';
 import {
   IPageTableOfContents,
@@ -94,18 +100,34 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
 }) => {
   return (
     <Card border="light" className={styles.card}>
-      <Card.Header className="bg-white border-0 d-flex align-items-center">
+      <Card.Header
+        className={getAllowedClasses(
+          'bg-white border-0 d-flex align-items-center',
+          styles.cardTitle,
+        )}
+      >
         Table of contents
+        {!headings.length && (
+          <OverlayTrigger
+            placement="top"
+            trigger={['hover', 'click']}
+            overlay={
+              <Tooltip id="table-contents-tooltip">
+                Add headings to the page to see table of contents
+              </Tooltip>
+            }
+          >
+            <i className="bi bi-info-circle" />
+          </OverlayTrigger>
+        )}
       </Card.Header>
       <Card.Body className={styles.accordion}>
-        {headings.length ? (
+        {!!headings.length && (
           <Accordion flush>
             {headings.map((heading) => {
               return <MenuItem key={heading.slug} heading={heading} />;
             })}
           </Accordion>
-        ) : (
-          <span className="text-warning">no content</span>
         )}
       </Card.Body>
     </Card>
