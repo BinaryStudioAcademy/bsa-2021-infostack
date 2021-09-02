@@ -49,6 +49,7 @@ import elasticPageContentRepository from '../elasticsearch/repositories/page-con
 import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
 import { RecentPagesRepository } from '../data/repositories';
 import { mapToRecentPage } from '../common/mappers/page/map-recent-pages.helper';
+import { RoleType } from '../common/enums/role-type';
 
 export const createPage = async (
   userId: string,
@@ -214,6 +215,13 @@ export const getPages = async (
 ): Promise<IPageNav[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+
+  const { role: userRole } =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
 
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
@@ -240,6 +248,10 @@ export const getPages = async (
   }
 
   const finalPages = pagesWithPermissions.filter((page) => page.permission);
+
+  if (userRole === RoleType.ADMIN) {
+    return pagesToShow;
+  }
 
   return finalPages;
 };
