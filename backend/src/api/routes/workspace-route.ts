@@ -63,7 +63,9 @@ router
   .delete(
     '/users/:id',
     permit(RoleType.ADMIN),
-    run((req) => deleteUserFromWorkspace(req.params.id, req.workspaceId)),
+    run((req) =>
+      deleteUserFromWorkspace(req.params.id, req.workspaceId, req.io),
+    ),
   )
   .delete(
     '/:id/logo',
