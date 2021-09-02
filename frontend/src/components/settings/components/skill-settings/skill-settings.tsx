@@ -1,9 +1,16 @@
 import { Card, Table } from 'react-bootstrap';
-import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useEffect,
+  useAppSelector,
+  useRef,
+  useHistory,
+} from 'hooks/hooks';
 import { skillActions } from 'store/skills';
 import { getAllowedClasses } from 'helpers/helpers';
 import { SkillAdd, SkillItem, SkillEdit } from './components/components';
 import { Spinner } from 'components/common/common';
+import { RoleType } from 'common/enums';
 import styles from './styles.module.scss';
 
 export const SkillSettings: React.FC = () => {
@@ -13,12 +20,22 @@ export const SkillSettings: React.FC = () => {
   });
   const newSkillInputRef = useRef<HTMLInputElement>(null);
 
+  const role = useAppSelector(
+    (state) => state.workspaces.currentWorkspace?.role,
+  );
+
   useEffect(() => {
     dispatch(skillActions.loadSkills());
     return (): void => {
       dispatch(skillActions.resetSkills());
     };
   }, []);
+
+  const history = useHistory();
+
+  if (role !== RoleType.ADMIN) {
+    history.push('/*');
+  }
 
   return (
     <Card

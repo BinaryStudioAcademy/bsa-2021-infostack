@@ -9,7 +9,9 @@ import {
   useRef,
   yupResolver,
   useAppDispatch,
+  useHistory,
 } from 'hooks/hooks';
+import { RoleType } from 'common/enums';
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from 'common/constants/file';
 import { IWorkspaceUpdate } from 'common/interfaces/workspace';
 import { workspaceSchema } from 'common/validations';
@@ -26,6 +28,9 @@ export const WorkspaceSettings: React.FC = () => {
     isUpdatingCurrentWorkspace,
     isDeletingCurrentWorkspaceLogo,
   } = useAppSelector((state) => state.workspaces);
+  const role = useAppSelector(
+    (state) => state.workspaces.currentWorkspace?.role,
+  );
   const [selectedImgURL, setSelectedImgURL] = useState('');
 
   const {
@@ -38,6 +43,12 @@ export const WorkspaceSettings: React.FC = () => {
     resolver: yupResolver(workspaceSchema),
     defaultValues: { title: currentWorkspace?.title },
   });
+
+  const history = useHistory();
+
+  if (role !== RoleType.ADMIN) {
+    history.push('/*');
+  }
 
   useEffect(() => {
     const title = getValues('title');

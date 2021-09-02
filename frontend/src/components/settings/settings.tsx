@@ -83,12 +83,15 @@ const Settings: React.FC = () => {
                     component={NotificationsSettings}
                     exact
                   />
-                  <Route path={match.path}>
+                  <Route path={AppRoute.SETTINGS} exact>
                     <Redirect
                       from={AppRoute.SETTINGS}
                       to={AppRoute.SETTINGS_PROFILE}
                       push
                     />
+                  </Route>
+                  <Route path={match.path}>
+                    <Redirect from={AppRoute.SETTINGS} to={'/*'} push />
                   </Route>
                 </Switch>
               </Tab.Content>
