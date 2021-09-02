@@ -19,6 +19,19 @@ export const create = async (
   name: string,
 ): Promise<ISkill> => {
   const skillRepository = getCustomRepository(SkillRepository);
+  if (!name) {
+    throw new HttpError({
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.SKILL_EMPTY_NAME,
+    });
+  }
+  const skillsInDB = await skillRepository.find({ workspaceId, name });
+  if (skillsInDB.length) {
+    throw new HttpError({
+      status: HttpCode.CONFLICT,
+      message: HttpErrorMessage.SKILL_IN_WORKSPACE_ALREADY_EXISTS,
+    });
+  }
   const skill = await skillRepository.save({ name, workspaceId });
 
   return skill;
