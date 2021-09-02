@@ -1,41 +1,50 @@
 import * as React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import CookieManager from '@react-native-cookies/cookies';
+
 import { RootParamList } from 'navigation/root-stack';
 import { WorkspaceListItem } from './components/workspace-list-item';
+import { useAppDispatch, useAppSelector, useEffect } from 'hooks';
+import { workspaceActions } from 'store/workspaces';
+import { RequestStatus, CookieVariable } from 'common/enums';
+import { IWorkspace } from 'common/interfaces';
 
 type Props = NativeStackScreenProps<RootParamList, 'Workspaces'>;
 
-const data = [
-  {
-    id: '1',
-    name: 'Mock Workspace 1',
-  },
-  {
-    id: '2',
-    name: 'Mock Workspace 2',
-  },
-  {
-    id: '3',
-    name: 'Mock Workspace 3',
-  },
-  {
-    id: '4',
-    name: 'Mock Workspace 4',
-  },
-];
-
 export const Workspaces: React.FC<Props> = ({ navigation }) => {
-  const handleClick = () => {
+  const dispatch = useAppDispatch();
+  const { workspaces, workspacesLoadingStatus } = useAppSelector(
+    ({ workspaces }) => workspaces,
+  );
+
+  useEffect(() => {
+    dispatch(workspaceActions.fetchWorkspaces());
+  }, []);
+
+  const handleClick = async (workspace: IWorkspace) => {
+    await CookieManager.set('http://10.0.2.2:3001', {
+      name: CookieVariable.WORKSPACE_ID,
+      value: workspace.id,
+      path: '/',
+    });
+
     navigation.navigate('Pages');
   };
+
+  if (workspacesLoadingStatus === RequestStatus.LOADING) {
+    return <ActivityIndicator size="large" />;
+  }
 
   return (
     <FlatList
       style={list}
-      data={data}
+      data={workspaces}
       renderItem={({ item }) => (
-        <WorkspaceListItem onClick={handleClick} name={item.name} />
+        <WorkspaceListItem
+          onClick={handleClick.bind(null, item)}
+          name={item.title}
+        />
       )}
       keyExtractor={(item) => item.id}
     />
