@@ -148,7 +148,12 @@ export const WorkspaceSettings: React.FC = () => {
                       src={selectedImgURL || currentWorkspace?.logo}
                     />
                   ) : (
-                    <span className={styles.noLogo}>no logo</span>
+                    <i
+                      className={getAllowedClasses(
+                        'bi bi-card-image',
+                        styles.noLogo,
+                      )}
+                    ></i>
                   )}
                 </div>
 
