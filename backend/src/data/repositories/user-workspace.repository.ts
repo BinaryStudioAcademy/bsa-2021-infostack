@@ -56,6 +56,18 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
       workspace: { id: workspaceId },
     });
   }
+
+  public updateRoleByUserIdAndWorkspaceId(
+    userId: string,
+    workspaceId: string,
+    role: RoleType,
+  ): Promise<UserWorkspace> {
+    return this.save({
+      user: { id: userId },
+      workspace: { id: workspaceId },
+      role,
+    });
+  }
 }
 
 export default UserWorkspaceRepository;
