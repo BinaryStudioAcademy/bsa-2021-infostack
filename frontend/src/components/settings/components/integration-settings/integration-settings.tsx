@@ -90,7 +90,7 @@ export const IntegrationSettings: React.FC = () => {
               <hr />
             </>
           ) : (
-            <Spinner />
+            <Spinner height={'6rem'} width={'6rem'} />
           ))}
       </Card.Body>
     </Card>
