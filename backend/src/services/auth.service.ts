@@ -44,10 +44,9 @@ export const register = async (
   body: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-  const isEmailUsed = await userRepository.findByEmail(
-    body.email.toLowerCase(),
-  );
-  if (isEmailUsed) {
+  const existingUser = await userRepository.findByEmail(body.email);
+
+  if (existingUser && existingUser.password !== null) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: HttpErrorMessage.EMAIL_ALREADY_EXISTS,
@@ -55,11 +54,19 @@ export const register = async (
   }
 
   const hashedPassword = await hash(body.password);
-  const user = await userRepository.save({
+  const userData = {
     ...body,
     email: body.email.toLowerCase(),
     password: hashedPassword,
-  });
+  };
+
+  const user =
+    existingUser?.password === null
+      ? await userRepository.save({
+          ...existingUser,
+          ...userData,
+        })
+      : await userRepository.save(userData);
 
   return getIUserWithTokens(user);
 };
@@ -74,6 +81,13 @@ export const login = async (
     throw new HttpError({
       status: HttpCode.NOT_FOUND,
       message: HttpErrorMessage.NO_SUCH_EMAIL,
+    });
+  }
+
+  if (user.password === null) {
+    throw new HttpError({
+      status: HttpCode.UNAUTHORIZED,
+      message: HttpErrorMessage.NOT_ACTIVATED,
     });
   }
 

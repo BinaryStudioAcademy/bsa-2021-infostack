@@ -509,6 +509,13 @@ export const getContributors = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
+  if (!page) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_PAGE_WITH_SUCH_ID,
+    });
+  }
+
   return mapPageToContributors(page);
 };
 
