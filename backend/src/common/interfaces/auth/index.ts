@@ -6,4 +6,5 @@ export {
   IResetPassword,
   ISetPassword,
   ITokens,
+  IInviteUser,
 } from 'infostack-shared/common/interfaces';

@@ -5,4 +5,5 @@ export type {
   IUserActivity,
   IGetActivities,
   IGetUserActivities,
+  IInviteUser,
 } from 'infostack-shared';
