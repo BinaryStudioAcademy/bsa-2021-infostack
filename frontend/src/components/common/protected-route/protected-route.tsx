@@ -16,6 +16,7 @@ export const ProtectedRoute = ({ ...rest }: RouteProps): JSX.Element => {
   );
   const { isRefreshTokenExpired } = useAppSelector((state) => state.auth);
   const history = useHistory();
+  const location = useLocation();
   useEffect(() => {
     if (token && isAuth) {
       if (cookies[CookieVariable.WORKSPACE_ID]) {
@@ -35,6 +36,13 @@ export const ProtectedRoute = ({ ...rest }: RouteProps): JSX.Element => {
   if (token) {
     return <Route {...rest} />;
   } else {
-    return <Redirect to={{ pathname: AppRoute.LOGIN }} />;
+    return (
+      <Redirect
+        to={{
+          pathname: AppRoute.LOGIN,
+          state: { requestedPage: location.pathname },
+        }}
+      />
+    );
   }
 };

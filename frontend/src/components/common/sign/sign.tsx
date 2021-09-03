@@ -7,6 +7,8 @@ import { authApi } from 'services';
 import { getAllowedClasses } from 'helpers/helpers';
 import logo from 'assets/img/logo_dark.svg';
 import styles from './styles.module.scss';
+import { useLocation } from 'hooks/hooks';
+import { IPageRequested } from 'common/interfaces/pages';
 
 type AlternativeRoute = {
   question: string;
@@ -35,14 +37,26 @@ export const Sign: React.FC<Props> = ({
   altRoute,
   generalError,
 }) => {
+  const { state } = useLocation<IPageRequested | undefined>();
+
   const googleSignIn = async (): Promise<void> => {
-    const { url } = await authApi.getLoginGoogleUrl();
-    window.location.assign(url);
+    if (state) {
+      const { url } = await authApi.getLoginGoogleUrl(state.requestedPage);
+      window.location.assign(url);
+    } else {
+      const { url } = await authApi.getLoginGoogleUrl(null);
+      window.location.assign(url);
+    }
   };
 
   const githubSignIn = async (): Promise<void> => {
-    const { url } = await authApi.getLoginGitHubUrl();
-    window.location.assign(url);
+    if (state) {
+      const { url } = await authApi.getLoginGitHubUrl(state.requestedPage);
+      window.location.assign(url);
+    } else {
+      const { url } = await authApi.getLoginGitHubUrl(null);
+      window.location.assign(url);
+    }
   };
 
   return (
