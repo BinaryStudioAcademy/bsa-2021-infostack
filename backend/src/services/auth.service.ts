@@ -44,7 +44,9 @@ export const register = async (
   body: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-  const existingUser = await userRepository.findByEmail(body.email);
+  const existingUser = await userRepository.findByEmail(
+    body.email.toLowerCase(),
+  );
 
   if (existingUser && existingUser.password !== null) {
     throw new HttpError({
