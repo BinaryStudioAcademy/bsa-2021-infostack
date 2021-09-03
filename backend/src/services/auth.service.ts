@@ -77,17 +77,10 @@ export const login = async (
   const userRepository = getCustomRepository(UserRepository);
 
   const user = await userRepository.findByEmail(body.email.toLowerCase());
-  if (!user) {
+  if (!user || user.password === null) {
     throw new HttpError({
-      status: HttpCode.NOT_FOUND,
-      message: HttpErrorMessage.NO_SUCH_EMAIL,
-    });
-  }
-
-  if (user.password === null) {
-    throw new HttpError({
-      status: HttpCode.UNAUTHORIZED,
-      message: HttpErrorMessage.NOT_ACTIVATED,
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.INVALID_LOGIN_DATA,
     });
   }
 
@@ -95,7 +88,7 @@ export const login = async (
   if (!isPasswordCorrect) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.INVALID_PASSWORD,
+      message: HttpErrorMessage.INVALID_LOGIN_DATA,
     });
   }
 
@@ -107,7 +100,7 @@ export const resetPassword = async (body: IResetPassword): Promise<void> => {
   const user = await userRepository.findByEmail(body.email.toLowerCase());
   if (!user) {
     throw new HttpError({
-      status: HttpCode.NOT_FOUND,
+      status: HttpCode.BAD_REQUEST,
       message: HttpErrorMessage.NO_SUCH_EMAIL,
     });
   }

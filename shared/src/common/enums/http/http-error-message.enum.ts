@@ -1,8 +1,6 @@
 enum HttpErrorMessage {
-  NO_SUCH_EMAIL = 'No user with such email',
+  NO_SUCH_EMAIL = 'That address is either invalid or is not associated with a user account',
   EMAIL_ALREADY_EXISTS = 'User with such email already exists',
-  INVALID_PASSWORD = 'Invalid password',
-  NOT_ACTIVATED = 'This account is not activated, check your email for an invite link',
   INTERNAL_SERVER_ERROR = 'Internal Server Error',
   INVALID_TOKEN = 'Invalid token',
   NO_SUCH_PARENT_COMMENT = 'No parent comment with such id',
@@ -22,6 +20,7 @@ enum HttpErrorMessage {
   DELETED_FROM_WORKSPACE = 'You were deleted from this workspace',
   NO_EMAIL = 'You should have email to login',
   NO_PAGE_WITH_SUCH_ID = 'No page with such id',
+  INVALID_LOGIN_DATA = 'Incorrect email or password',
 }
 
 export { HttpErrorMessage };
