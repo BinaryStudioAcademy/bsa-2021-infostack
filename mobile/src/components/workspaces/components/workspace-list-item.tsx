@@ -1,3 +1,4 @@
+import { Color } from 'common/enums';
 import * as React from 'react';
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 
@@ -20,8 +21,9 @@ const { card, text } = StyleSheet.create({
     alignItems: 'center',
     height: 100,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: Color.BORDER,
     borderRadius: 4,
+    backgroundColor: Color.WHITE,
     marginBottom: 5,
   },
   text: {

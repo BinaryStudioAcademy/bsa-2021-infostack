@@ -8,6 +8,7 @@ import { useAppSelector } from 'hooks';
 import { Color } from 'common/enums';
 import { Pages } from 'components/pages/pages';
 import { Workspaces } from 'components/workspaces/workspaces';
+import { MyTheme } from 'common/constants/theme';
 
 export const App: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -16,12 +17,10 @@ export const App: React.FC = () => {
   return (
     <>
       <StatusBar backgroundColor={Color.PRIMARY_DARK} />
-      <NavigationContainer>
+      <NavigationContainer theme={MyTheme}>
         <RootStack.Navigator
           screenOptions={{
             headerTitleAlign: 'center',
-            headerTintColor: '#fff',
-            headerStyle: { backgroundColor: Color.PRIMARY },
           }}
         >
           {isSignedIn ? (
@@ -47,3 +46,9 @@ export const App: React.FC = () => {
     </>
   );
 };
+
+// const { main } = StyleSheet.create({
+//   main: {
+//     borderWidth: 1,
+//   },
+// });

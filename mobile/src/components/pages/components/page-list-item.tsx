@@ -19,10 +19,7 @@ export const PageListItem: React.FC<Props> = ({
   const hasChildPages = Boolean(childPages.length);
 
   return (
-    <TouchableNativeFeedback
-      onPress={onClick}
-      background={TouchableNativeFeedback.Ripple(Color.PRIMARY, false)}
-    >
+    <TouchableNativeFeedback onPress={onClick}>
       <View style={row}>
         <Text style={text}>{title}</Text>
         {hasChildPages && (

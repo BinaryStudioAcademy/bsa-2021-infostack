@@ -24,7 +24,7 @@ class PageService {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(res);
-      }, 3000);
+      }, 1000);
     });
   }
 }

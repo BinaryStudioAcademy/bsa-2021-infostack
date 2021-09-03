@@ -1,7 +1,12 @@
+import { Color } from 'common/enums';
 import * as React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
-export const SearchInput: React.FC = () => (
+type Props = {
+  onChange?: (newValue: string) => void;
+};
+
+export const SearchInput: React.FC<Props> = () => (
   <View style={view}>
     <TextInput style={input} />
   </View>
@@ -9,12 +14,12 @@ export const SearchInput: React.FC = () => (
 
 const { input, view } = StyleSheet.create({
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: Color.WHITE,
     borderRadius: 8,
     fontSize: 20,
+    elevation: 3,
   },
   view: {
-    width: '100%',
-    paddingRight: 140,
+    padding: 15,
   },
 });

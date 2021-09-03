@@ -30,32 +30,36 @@ export const Pages: React.FC = () => {
   return (
     <PageListStack.Navigator
       initialRouteName="RootPages"
-      screenOptions={(props) => ({
+      screenOptions={{
         headerTitleAlign: 'center',
-        headerTintColor: '#fff',
         headerStyle: { backgroundColor: Color.PRIMARY },
-        headerRight: () => <SearchButton {...props} />,
-      })}
+      }}
     >
-      <PageListStack.Screen
-        name="RootPages"
-        component={RootPages}
-        options={{
-          title: 'Pages',
-        }}
-        initialParams={{
-          pages,
-        }}
-      />
-      <PageListStack.Screen
-        name="ExpandedPage"
-        component={ExpandedPage}
-        options={({ route }) => ({ title: route.params.page.title })}
-      />
+      <PageListStack.Group
+        screenOptions={(props) => ({
+          headerRight: () => <SearchButton {...props} />,
+        })}
+      >
+        <PageListStack.Screen
+          name="RootPages"
+          component={RootPages}
+          options={{
+            title: 'Pages',
+          }}
+          initialParams={{
+            pages,
+          }}
+        />
+        <PageListStack.Screen
+          name="ExpandedPage"
+          component={ExpandedPage}
+          options={({ route }) => ({ title: route.params.page.title })}
+        />
+      </PageListStack.Group>
       <PageListStack.Screen
         name="Search"
         component={Search}
-        options={{ animation: 'none', headerTitleAlign: 'left' }}
+        options={{ animation: 'none' }}
       />
     </PageListStack.Navigator>
   );
