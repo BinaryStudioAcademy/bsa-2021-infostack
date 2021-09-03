@@ -1,20 +1,27 @@
 import { AppRoute } from 'common/enums';
 import { FormField, Link, Sign } from 'components/common/common';
 import { loginSchema } from 'common/validations';
-import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useHistory,
+  useForm,
+  yupResolver,
+  useState,
+} from 'hooks/hooks';
 import { authActions } from 'store/actions';
 import { ILogin } from 'common/interfaces/auth';
+import { HttpErrorMessage } from 'common/enums';
+import { HttpError } from 'exceptions/exceptions';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
-import { HttpErrorMessage } from 'common/enums';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { push } = useHistory();
+  const [generalError, setGeneralError] = useState('');
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<ILogin>({ resolver: yupResolver(loginSchema) });
 
@@ -23,20 +30,16 @@ const Login: React.FC = () => {
       await dispatch(authActions.login(data)).unwrap();
       push(AppRoute.WORKSPACES);
     } catch (err) {
-      if (err.message === HttpErrorMessage.NOT_ACTIVATED) {
-        setError('email', err);
-      }
-      if (err.message.toLowerCase().includes('email')) {
-        setError('email', err);
-      }
-      if (err.message.toLowerCase().includes('password')) {
-        setError('password', err);
+      const error = err as HttpError;
+      if (error.message === HttpErrorMessage.INVALID_LOGIN_DATA) {
+        setGeneralError(error.message);
       }
     }
   };
 
   return (
     <Sign
+      generalError={generalError}
       header="Welcome back"
       secondaryText="Sign in to your account to continue"
       submitText="Sign in"
