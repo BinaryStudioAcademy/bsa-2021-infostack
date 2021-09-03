@@ -121,15 +121,15 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
           </OverlayTrigger>
         )}
       </Card.Header>
-      <Card.Body className={styles.accordion}>
-        {!!headings.length && (
+      {!!headings.length && (
+        <Card.Body className={styles.accordion}>
           <Accordion flush>
             {headings.map((heading) => {
               return <MenuItem key={heading.slug} heading={heading} />;
             })}
           </Accordion>
-        )}
-      </Card.Body>
+        </Card.Body>
+      )}
     </Card>
   );
 };

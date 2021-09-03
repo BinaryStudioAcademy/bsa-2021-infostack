@@ -144,18 +144,6 @@ const PageTags: React.FC = () => {
         {isCanManage && (
           <i className="bi bi-pencil tags-edit" onClick={handleManage}></i>
         )}
-      </Card.Header>
-      <Card.Body>
-        {!!pageTags?.length && (
-          <div className="d-flex align-items-start flex-wrap">
-            {pageTags.map(({ id, name, type }) => (
-              <Badge pill text="primary" className="tag-badge" key={id}>
-                {name}
-                {type === TagType.GITHUB && <i className="bi bi-github ms-2" />}
-              </Badge>
-            ))}
-          </div>
-        )}
         <EditModal
           title="Edit tags modal"
           showModal={isEditMode}
@@ -171,7 +159,19 @@ const PageTags: React.FC = () => {
           }}
           handleInputChange={handleInputChange}
         />
-      </Card.Body>
+      </Card.Header>
+      {!!pageTags?.length && (
+        <Card.Body>
+          <div className="d-flex align-items-start flex-wrap">
+            {pageTags.map(({ id, name, type }) => (
+              <Badge pill text="primary" className="tag-badge" key={id}>
+                {name}
+                {type === TagType.GITHUB && <i className="bi bi-github ms-2" />}
+              </Badge>
+            ))}
+          </div>
+        </Card.Body>
+      )}
     </Card>
   );
 };

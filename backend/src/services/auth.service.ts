@@ -44,7 +44,9 @@ export const register = async (
   body: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-  const existingUser = await userRepository.findByEmail(body.email);
+  const existingUser = await userRepository.findByEmail(
+    body.email.toLowerCase(),
+  );
 
   if (existingUser && existingUser.password !== null) {
     throw new HttpError({
@@ -77,17 +79,10 @@ export const login = async (
   const userRepository = getCustomRepository(UserRepository);
 
   const user = await userRepository.findByEmail(body.email.toLowerCase());
-  if (!user) {
+  if (!user || user.password === null) {
     throw new HttpError({
-      status: HttpCode.NOT_FOUND,
-      message: HttpErrorMessage.NO_SUCH_EMAIL,
-    });
-  }
-
-  if (user.password === null) {
-    throw new HttpError({
-      status: HttpCode.UNAUTHORIZED,
-      message: HttpErrorMessage.NOT_ACTIVATED,
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.INVALID_LOGIN_DATA,
     });
   }
 
@@ -95,7 +90,7 @@ export const login = async (
   if (!isPasswordCorrect) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.INVALID_PASSWORD,
+      message: HttpErrorMessage.INVALID_LOGIN_DATA,
     });
   }
 
@@ -107,7 +102,7 @@ export const resetPassword = async (body: IResetPassword): Promise<void> => {
   const user = await userRepository.findByEmail(body.email.toLowerCase());
   if (!user) {
     throw new HttpError({
-      status: HttpCode.NOT_FOUND,
+      status: HttpCode.BAD_REQUEST,
       message: HttpErrorMessage.NO_SUCH_EMAIL,
     });
   }
@@ -228,7 +223,9 @@ const loginOtherService = async (
   return getIUserWithTokens(newUser);
 };
 
-export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
+export const getLoginGoogleUrl = async (
+  requestedPage: string | undefined,
+): Promise<{ url: string }> => {
   const { clientId, clientSecret, redirectUrl } = env.google;
   const oauth2Client = new google.auth.OAuth2(
     clientId,
@@ -239,6 +236,7 @@ export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
   return {
     url: oauth2Client.generateAuthUrl({
       scope: scopes,
+      state: requestedPage,
     }),
   };
 };
@@ -258,11 +256,19 @@ export const loginGoogle = async (
   return await loginOtherService(name, email, picture);
 };
 
-export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
+export const getLoginGitHubUrl = async (
+  requestedPage: string | undefined,
+): Promise<{ url: string }> => {
   const { clientId, redirectUrl } = env.github;
-  return {
-    url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
-  };
+  if (requestedPage) {
+    return {
+      url: `https://github.com/login/oauth/authorize?state=${requestedPage}&client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+    };
+  } else {
+    return {
+      url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+    };
+  }
 };
 
 export const loginGithub = async (
