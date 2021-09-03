@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { RootStack } from 'navigation/root-stack';
-import { Login } from 'components/auth';
+import { Login } from 'components/auth/login';
 import { useAppSelector } from 'hooks';
 import { Color } from 'common/enums';
 import { Pages } from 'components/pages/pages';

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 import { Controller } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import Logo from '../../../assets/svg/logo_dark.svg';
+import Logo from 'assets/svg/logo_dark.svg';
 import {
   useAppDispatch,
   useAppSelector,
