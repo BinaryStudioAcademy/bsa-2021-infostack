@@ -13,7 +13,7 @@ type Props = NativeStackScreenProps<PageListStackParamList, 'ExpandedPage'>;
 export const ExpandedPage: React.FC<Props> = ({ navigation, route }) => {
   const { title, childPages } = route.params.page;
 
-  const handleClick = (page: IPageNav) => {
+  const handleChevronClick = (page: IPageNav) => {
     const hasChildPages = Boolean(page.childPages.length);
 
     if (hasChildPages) {
@@ -27,7 +27,7 @@ export const ExpandedPage: React.FC<Props> = ({ navigation, route }) => {
         <Icon style={icon} name="file-text" size={28} color={Color.PRIMARY} />
         <Text style={text}>{title}</Text>
       </View>
-      <PageList pages={childPages} onItemClick={handleClick} />
+      <PageList pages={childPages} onItemChevronClick={handleChevronClick} />
     </View>
   );
 };

@@ -10,7 +10,7 @@ type Props = NativeStackScreenProps<PageListStackParamList, 'RootPages'>;
 export const RootPages: React.FC<Props> = ({ navigation, route }) => {
   const pages = route.params.pages;
 
-  const handleClick = (page: IPageNav) => {
+  const handleChevronClick = (page: IPageNav) => {
     const hasChildPages = Boolean(page.childPages.length);
 
     if (hasChildPages) {
@@ -18,5 +18,5 @@ export const RootPages: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  return <PageList pages={pages} onItemClick={handleClick} />;
+  return <PageList pages={pages} onItemChevronClick={handleChevronClick} />;
 };

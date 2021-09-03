@@ -6,15 +6,15 @@ import { PageListItem } from './page-list-item';
 
 type Props = {
   pages: IPageNav[];
-  onItemClick: (page: IPageNav) => void;
+  onItemChevronClick: (page: IPageNav) => void;
 };
 
-export const PageList: React.FC<Props> = ({ pages, onItemClick }) => (
+export const PageList: React.FC<Props> = ({ pages, onItemChevronClick }) => (
   <FlatList
     data={pages}
     renderItem={({ item }) => (
       <PageListItem
-        onClick={() => onItemClick(item)}
+        onChevronClick={() => onItemChevronClick(item)}
         title={item.title}
         childPages={item.childPages}
       />
