@@ -12,6 +12,7 @@ import { InviteModal } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 import { RoleType } from 'common/enums';
+import { toast } from 'react-toastify';
 
 export const TABLE_HEADERS = [
   'Name',
@@ -52,8 +53,14 @@ export const UsersSettings: React.FC = () => {
     setDeleteModalShown(false);
   };
 
-  const handleSelectChange = (userId: string, role: RoleType): void => {
-    dispatch(usersActions.chageRole({ userId, role }));
+  const handleSelectChange = (
+    userId: string,
+    role: RoleType,
+    fullname: string,
+  ): void => {
+    dispatch(usersActions.chageRole({ userId, role })).then(() => {
+      toast.info(`${fullname} role in the workplace has changed to ${role}`);
+    });
   };
 
   return (
