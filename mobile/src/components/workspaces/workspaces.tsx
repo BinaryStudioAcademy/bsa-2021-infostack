@@ -38,7 +38,6 @@ export const Workspaces: React.FC<Props> = ({ navigation }) => {
 
   return (
     <FlatList
-      style={list}
       data={workspaces}
       renderItem={({ item }) => (
         <WorkspaceListItem
@@ -47,6 +46,7 @@ export const Workspaces: React.FC<Props> = ({ navigation }) => {
         />
       )}
       keyExtractor={(item) => item.id}
+      contentContainerStyle={list}
     />
   );
 };

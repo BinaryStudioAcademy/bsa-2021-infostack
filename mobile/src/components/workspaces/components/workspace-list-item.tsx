@@ -20,10 +20,9 @@ const { card, text } = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 100,
-    borderWidth: 1,
-    borderColor: Color.BORDER,
     borderRadius: 4,
     backgroundColor: Color.WHITE,
+    elevation: 2,
     marginBottom: 5,
   },
   text: {

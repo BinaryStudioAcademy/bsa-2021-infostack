@@ -9,19 +9,20 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 
 type Props = {
-  onChange?: (newValue: string) => void;
+  text: string;
+  onChange: (newValue: string) => void;
+  onCancel: () => void;
 };
 
-export const SearchInput: React.FC<Props> = () => {
-  const [text, setText] = React.useState('');
-
-  const onChange = (value: string) => setText(value);
-
-  const onCancel = () => setText('');
-
+export const SearchInput: React.FC<Props> = ({ text, onChange, onCancel }) => {
   return (
     <View style={view}>
-      <TextInput style={input} value={text} onChangeText={onChange} />
+      <TextInput
+        style={input}
+        value={text}
+        onChangeText={onChange}
+        placeholder="Search"
+      />
       <TouchableNativeFeedback
         onPress={onCancel}
         background={TouchableNativeFeedback.SelectableBackgroundBorderless(20)}
