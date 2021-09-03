@@ -27,7 +27,7 @@ export const TeamSettings: React.FC = () => {
       setUserTeamsMapped(true);
     }
     dispatch(teamsActions.fetchTeams());
-  }, [userId, teams]);
+  }, [userId]);
 
   const teamsToRender = [];
   for (let i = 0; i < teams.length; i++) {
