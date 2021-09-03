@@ -22,6 +22,7 @@ type Props = {
   onSubmit: (e: React.SyntheticEvent) => void;
   isSubmitDisabled?: boolean;
   altRoute?: AlternativeRoute;
+  generalError?: string;
 };
 
 export const Sign: React.FC<Props> = ({
@@ -32,6 +33,7 @@ export const Sign: React.FC<Props> = ({
   onSubmit,
   isSubmitDisabled,
   altRoute,
+  generalError,
 }) => {
   const googleSignIn = async (): Promise<void> => {
     const { url } = await authApi.getLoginGoogleUrl();
@@ -47,9 +49,20 @@ export const Sign: React.FC<Props> = ({
     <div className="vh-100 vw-100 d-flex flex-column justify-content-center align-items-center bg-light text-center">
       <img src={logo} alt="Infostack logo" className={styles.logo}></img>
       <div className={styles.container}>
-        <h1 className={getAllowedClasses('h4', styles.header)}>{header}</h1>
+        <h2 className={getAllowedClasses('h4', styles.header)}>{header}</h2>
         <p className="text-secondary">{secondaryText}</p>
         <Form className="text-start text-secondary bg-white shadow-sm rounded p-5">
+          {generalError && (
+            <div
+              className={getAllowedClasses(
+                'alert alert-danger',
+                styles.errorMessage,
+              )}
+              role="alert"
+            >
+              {generalError}
+            </div>
+          )}
           {children}
           <div className="text-center">
             <Button
