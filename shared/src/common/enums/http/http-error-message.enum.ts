@@ -21,6 +21,7 @@ enum HttpErrorMessage {
   NO_EMAIL = 'You should have publics GitHub email to login',
   NO_PAGE_WITH_SUCH_ID = 'No page with such id',
   INVALID_LOGIN_DATA = 'Incorrect email or password',
+  INVALID_FILE_TYPE = 'Invalid file type',
 }
 
 export { HttpErrorMessage };
