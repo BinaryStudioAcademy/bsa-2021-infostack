@@ -77,12 +77,14 @@ export const Login: React.FC = () => {
                   value={value}
                   secureTextEntry={isPasswordHidden}
                 />
-                <Icon
-                  name={isPasswordHidden ? 'eye' : 'eye-off'}
-                  size={20}
-                  color="grey"
-                  onPress={toggleIsPasswordHidden}
-                />
+                {!!value.length && (
+                  <Icon
+                    name={isPasswordHidden ? 'eye' : 'eye-off'}
+                    size={20}
+                    color="grey"
+                    onPress={toggleIsPasswordHidden}
+                  />
+                )}
               </View>
             )}
             name="password"
