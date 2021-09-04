@@ -5,7 +5,7 @@ import {
   addEditor,
   deleteEditor,
   // getByUserId,
-} from '../services/page-content.service';
+} from '../services/page.service';
 
 export const handlers = (socket: Socket): void => {
   socket.on(SocketEvents.PAGE_JOIN, (pageId: string) => {
@@ -16,19 +16,19 @@ export const handlers = (socket: Socket): void => {
   });
   socket.on(
     SocketEvents.EDITOR_JOIN,
-    async (pageContentId: string, userId: string) => {
+    async (pageId: string, userId: string) => {
       console.info(userId);
-      await addEditor(pageContentId, userId);
-      const editors = await getEditors(pageContentId);
+      await addEditor(pageId, userId);
+      const editors = await getEditors(pageId);
       socket.emit(SocketEvents.EDITOR_JOIN, editors);
       // socket.in(pageContentId).emit(SocketEvents.EDITOR_JOIN, user);
     },
   );
   socket.on(
     SocketEvents.EDITOR_LEFT,
-    async (pageContentId: string, userId: string) => {
-      socket.leave(pageContentId);
-      await deleteEditor(pageContentId, userId);
+    async (pageId: string, userId: string) => {
+      socket.leave(pageId);
+      await deleteEditor(pageId, userId);
     },
   );
   socket.on(

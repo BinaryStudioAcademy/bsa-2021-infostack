@@ -82,4 +82,8 @@ export class Page extends AbstractEntity {
 
   @OneToOne(() => Draft, (Draft) => Draft.page)
   draft: Draft;
+
+  @ManyToMany(() => User, (User) => User.editingPage)
+  @JoinTable({ name: 'page_editor' })
+  editors: User[];
 }

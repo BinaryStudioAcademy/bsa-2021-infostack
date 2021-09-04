@@ -78,21 +78,13 @@ export const ContentEditor: React.FC = () => {
   };
 
   useEffect(() => {
-    if (user && currentPage?.pageContents[0]) {
-      socket.emit(
-        SocketEvents.EDITOR_JOIN,
-        currentPage?.pageContents[0].id,
-        user.id,
-      );
+    if (user && currentPage) {
+      socket.emit(SocketEvents.EDITOR_JOIN, currentPage.id, user.id);
       socket.on(SocketEvents.EDITOR_JOIN, onEditTogether);
     }
     return (): void => {
       socket.off(SocketEvents.EDITOR_JOIN, onEditTogether);
-      socket.emit(
-        SocketEvents.EDITOR_LEFT,
-        currentPage?.pageContents[0].id,
-        user?.id,
-      );
+      socket.emit(SocketEvents.EDITOR_LEFT, currentPage?.id, user?.id);
     };
   }, [user]);
 

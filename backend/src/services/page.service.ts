@@ -31,6 +31,7 @@ import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-na
 import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { mapPermissionstoParticipants } from '../common/mappers/page/map-permissions-to-participants';
+import { mapUsersToPageContributers } from '../common/mappers/user/map-users-to-page-contributors';
 import { maximum } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
@@ -793,3 +794,30 @@ export const unpinPage = async (
   pageId: string,
 ): Promise<void> =>
   getCustomRepository(PageRepository).unpinPage(userId, pageId);
+
+export const getEditors = async (
+  pageId: string,
+): Promise<IPageContributor[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const editors = await pageRepository.getEditors(pageId);
+  return mapUsersToPageContributers(editors);
+};
+
+export const addEditor = async (
+  pageId: string,
+  userId: string,
+  // io: Server,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  await pageRepository.addEditor(pageId, userId);
+  // await pageContentRepository.save({ pageContentId, userId});
+};
+
+export const deleteEditor = async (
+  pageId: string,
+  userId: string,
+  // io: Server,
+): Promise<void> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  await pageRepository.deleteEditor(pageId, userId);
+};
