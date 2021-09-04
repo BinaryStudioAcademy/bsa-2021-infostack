@@ -1,14 +1,14 @@
 import * as React from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { useDebouncedCallback } from 'use-debounce';
 
-import { DEBOUNCE_DELAY_MS, MINIMUM_QUERY_LENGTH } from 'common/constants';
-import { IFoundPageContent } from 'common/interfaces';
 import { pageService } from 'services/index';
+import { IFoundPageContent } from 'common/interfaces';
+import { DEBOUNCE_DELAY_MS, MINIMUM_QUERY_LENGTH } from 'common/constants';
 import { PageListStackParamList } from 'navigation/page-list-stack';
-import { SearchInput } from './components/search-input';
 import { SearchItem } from './components/search-item';
+import { SearchInput } from './components/search-input';
 import { EmptyListPlaceholder } from './components/empty-list-placeholder';
 
 type Props = NativeStackScreenProps<PageListStackParamList, 'Search'>;

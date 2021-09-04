@@ -1,7 +1,6 @@
-import { IUserWithTokens } from 'common/interfaces';
+import { http } from 'services';
 import { HttpMethod, ContentType } from 'common/enums';
-import { ILogin } from 'common/interfaces';
-import { http } from 'services/http.service';
+import { ILogin, IUserWithTokens } from 'common/interfaces';
 
 class AuthService {
   private _http = http;

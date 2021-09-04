@@ -1,6 +1,7 @@
-import { Color } from 'common/enums';
 import * as React from 'react';
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
+
+import { Color } from 'common/enums';
 
 type Props = {
   name: string;

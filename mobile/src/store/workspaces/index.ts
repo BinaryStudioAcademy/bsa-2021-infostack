@@ -1,9 +1,10 @@
 import { reducer as workspaceReducer, actions } from './slice';
 import * as asyncActions from './async-actions';
 
-const workspaceActions = {
+const workspacesActions = {
   ...actions,
   ...asyncActions,
 };
 
-export { workspaceReducer, workspaceActions };
+export { workspaceReducer, workspacesActions };
+export { selectWorkspaces } from './selectors';

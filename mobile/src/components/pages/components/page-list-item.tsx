@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { StyleSheet, View, Text, TouchableNativeFeedback } from 'react-native';
 
-import { IPageNav } from 'common/interfaces';
 import { Color } from 'common/enums';
+import { IPageNav } from 'common/interfaces';
 
 type Props = {
   title: string;

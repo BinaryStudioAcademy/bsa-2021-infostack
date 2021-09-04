@@ -1,6 +1,5 @@
-import { IPageNav } from 'common/interfaces';
-import { IFoundPageContent } from 'infostack-shared';
-import { http } from './http.service';
+import { http } from 'services';
+import { IPageNav, IFoundPageContent } from 'common/interfaces';
 
 class PageService {
   private readonly _http = http;

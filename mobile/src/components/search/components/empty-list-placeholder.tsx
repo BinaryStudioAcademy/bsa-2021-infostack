@@ -1,6 +1,7 @@
-import { Color } from 'common/enums';
 import * as React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+
+import { Color } from 'common/enums';
 
 type Props = {
   isLoading: boolean;
@@ -11,13 +12,11 @@ export const EmptyListPlaceholder: React.FC<Props> = ({
   isLoading,
   placeholderText,
 }) => {
-  let content;
-
-  if (isLoading) {
-    content = <ActivityIndicator size="large" color={Color.PRIMARY} />;
-  } else {
-    content = <Text style={text}>{placeholderText}</Text>;
-  }
+  let content = isLoading ? (
+    <ActivityIndicator size="large" color={Color.PRIMARY} />
+  ) : (
+    <Text style={text}>{placeholderText}</Text>
+  );
 
   return <View style={container}>{content}</View>;
 };

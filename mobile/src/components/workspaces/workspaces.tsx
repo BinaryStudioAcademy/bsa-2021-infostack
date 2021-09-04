@@ -1,14 +1,14 @@
 import * as React from 'react';
+import CookieManager from '@react-native-cookies/cookies';
 import { FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import CookieManager from '@react-native-cookies/cookies';
 
+import { workspacesActions } from 'store';
+import { useAppDispatch, useAppSelector, useEffect } from 'hooks';
+import { IWorkspace } from 'common/interfaces';
+import { RequestStatus, CookieVariable } from 'common/enums';
 import { RootParamList } from 'navigation/root-stack';
 import { WorkspaceListItem } from './components/workspace-list-item';
-import { useAppDispatch, useAppSelector, useEffect } from 'hooks';
-import { workspaceActions } from 'store/workspaces';
-import { RequestStatus, CookieVariable } from 'common/enums';
-import { IWorkspace } from 'common/interfaces';
 
 type Props = NativeStackScreenProps<RootParamList, 'Workspaces'>;
 
@@ -19,7 +19,7 @@ export const Workspaces: React.FC<Props> = ({ navigation }) => {
   );
 
   useEffect(() => {
-    dispatch(workspaceActions.fetchWorkspaces());
+    dispatch(workspacesActions.fetchWorkspaces());
   }, [dispatch]);
 
   const handleClick = async (workspace: IWorkspace) => {

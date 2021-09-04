@@ -1,7 +1,7 @@
 import * as React from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 import { TouchableNativeFeedback, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/Feather';
 
 import { Color } from 'common/enums';
 import { PageListStackParamList } from 'navigation/page-list-stack';

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 import { Controller } from 'react-hook-form';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
+import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 
-import Logo from 'assets/svg/logo_dark.svg';
+import { authActions } from 'store';
 import {
   useAppDispatch,
   useAppSelector,
@@ -11,10 +11,10 @@ import {
   yupResolver,
   useForm,
 } from 'hooks';
-import { authActions } from 'store';
-import { Color, RequestStatus } from 'common/enums';
 import { ILogin } from 'common/interfaces';
 import { loginSchema } from 'common/validations';
+import { Color, RequestStatus } from 'common/enums';
+import Logo from 'assets/svg/logo_dark.svg';
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();

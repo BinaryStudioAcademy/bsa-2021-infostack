@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 
 import { pagesActions, selectPages } from 'store';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { Color } from 'common/enums';
+import { Search } from 'components/search/search';
+import { SearchButton } from 'components/search/search-button';
 import { PageListStack } from 'navigation/page-list-stack';
 import { ExpandedPage } from './screens/expanded-page';
 import { RootPages } from './screens/root-pages';
-import { StyleSheet } from 'react-native';
-import { Search } from 'components/search/search';
-import { SearchButton } from 'components/search/search-button';
 
 export const Pages: React.FC = () => {
   const pages = useAppSelector(selectPages);

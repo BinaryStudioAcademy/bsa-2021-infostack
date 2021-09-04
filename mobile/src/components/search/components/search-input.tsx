@@ -1,4 +1,3 @@
-import { Color } from 'common/enums';
 import * as React from 'react';
 import {
   StyleSheet,
@@ -7,6 +6,8 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+
+import { Color } from 'common/enums';
 
 type Props = {
   text: string;
