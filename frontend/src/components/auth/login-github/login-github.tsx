@@ -1,11 +1,10 @@
 import {
   useHistory,
   useEffect,
-  useAppSelector,
   useAppDispatch,
   useLocation,
 } from 'hooks/hooks';
-import { AppRoute } from 'common/enums';
+import { AppRoute, LocalStorageVariable } from 'common/enums';
 import { githubApi } from 'services';
 import { authActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers/helpers';
@@ -20,7 +19,7 @@ const LoginGitHub: React.FC = () => {
   const location = useLocation();
   const requestedPage = new URLSearchParams(location.search).get('state');
 
-  const { user } = useAppSelector((state) => state.auth);
+  const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
 
   useEffect(() => {
     if (code) {
@@ -31,7 +30,7 @@ const LoginGitHub: React.FC = () => {
   }, []);
 
   const handleGitHub = async (code: string): Promise<void> => {
-    if (!user) {
+    if (!token) {
       await dispatch(authActions.loginGithub(code));
       if (requestedPage) {
         push({ pathname: AppRoute.WORKSPACES, state: { requestedPage } });
