@@ -1,3 +1,22 @@
+:global(.h-popover) {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  padding: 0;
+
+  span {
+    padding: 0.2rem 0.6rem;
+  }
+
+  &::after {
+    border-top: 0.4rem solid rgba(0, 0, 0, 0.15);
+  }
+}
+
+:global(.h-popover:hover) {
+  background-color: rgb(178, 212, 255);
+}
+
 .card {
   box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
   position: static;
@@ -28,23 +47,4 @@
 .quoteIcon {
   font-size: 1.8rem;
   transition: all 0.3s ease;
-}
-
-:global(.h-popover) {
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  padding: 0;
-
-  span {
-    padding: 0.2rem 0.6rem;
-  }
-
-  &::after {
-    border-top: 0.4rem solid rgba(0, 0, 0, 0.15);
-  }
-}
-
-:global(.h-popover:hover) {
-  background-color: rgb(178, 212, 255);
 }
