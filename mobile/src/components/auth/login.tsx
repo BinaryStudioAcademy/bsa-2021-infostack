@@ -78,7 +78,7 @@ export const Login: React.FC = () => {
                   secureTextEntry={isPasswordHidden}
                 />
                 <Icon
-                  name={isPasswordHidden ? 'eye-slash' : 'eye'}
+                  name={isPasswordHidden ? 'eye' : 'eye-off'}
                   size={20}
                   color="grey"
                   onPress={toggleIsPasswordHidden}

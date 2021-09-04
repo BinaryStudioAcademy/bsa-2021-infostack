@@ -17,7 +17,7 @@ export const ExpandedPage: React.FC<Props> = ({ navigation, route }) => {
     const hasChildPages = Boolean(page.childPages.length);
 
     if (hasChildPages) {
-      navigation.navigate('ExpandedPage', { page });
+      navigation.push('ExpandedPage', { page });
     }
   };
 

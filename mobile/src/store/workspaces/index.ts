@@ -7,4 +7,3 @@ const workspacesActions = {
 };
 
 export { workspaceReducer, workspacesActions };
-export { selectWorkspaces } from './selectors';
