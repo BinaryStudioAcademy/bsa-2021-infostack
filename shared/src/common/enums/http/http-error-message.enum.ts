@@ -18,7 +18,7 @@ enum HttpErrorMessage {
   TEAM_EMPTY_STRING = 'Team with empty string is not allowed',
   TEAM_OWNER_ID = 'UserId is required to change Team owner',
   DELETED_FROM_WORKSPACE = 'You were deleted from this workspace',
-  NO_EMAIL = 'You should have email to login',
+  NO_EMAIL = 'You should have publics GitHub email to login',
   NO_PAGE_WITH_SUCH_ID = 'No page with such id',
   INVALID_LOGIN_DATA = 'Incorrect email or password',
   INVALID_FILE_TYPE = 'Invalid file type',
