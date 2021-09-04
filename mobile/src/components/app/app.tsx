@@ -46,9 +46,3 @@ export const App: React.FC = () => {
     </>
   );
 };
-
-// const { main } = StyleSheet.create({
-//   main: {
-//     borderWidth: 1,
-//   },
-// });
