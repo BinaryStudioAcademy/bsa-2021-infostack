@@ -36,23 +36,23 @@ export const uploadFile = (
 ): Promise<S3.ManagedUpload.SendData> => {
   const fileStream = fs.createReadStream(file.path);
 
-  const type = mime.lookup(file.path);
+  const fileType = mime.lookup(file.path);
 
-  if (!type) {
+  if (!fileType) {
     throw new HttpError({
       status: HttpCode.UNPROCESSABLE_ENTITY,
       message: HttpErrorMessage.INVALID_FILE_TYPE,
     });
   }
 
-  const header = mime.contentType(type);
+  const type = mime.contentType(fileType);
 
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
     Key: file.filename,
     ACL: 'public-read',
-    ContentType: header || undefined,
+    ContentType: type || undefined,
   };
   return s3.upload(uploadParams).promise();
 };
