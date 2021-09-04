@@ -1,13 +1,19 @@
 .content {
   word-break: break-all;
+  // height: 90px;
+  // height: 500px;
+  // height: 47vh;
 }
 
-:global(.card) {
+.editor {
+  max-height: 100px !important;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.card {
   max-width: 87vw;
-}
-
-:global(.card) img {
-  max-width: 42vw;
+  min-height: 87vw;
 }
 
 ol {

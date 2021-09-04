@@ -32,9 +32,6 @@ import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {
   const socket = useContext(SocketContext);
-  // const connection = new Sharedb.Connection(socket);
-  // const doc = connection.get('documents', 'firstDocument');
-
   const { user } = useAppSelector((state) => state.auth);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
 
@@ -71,22 +68,14 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
 
-  const [isLiveMode, setIsLiveMode] = useState(true);
-  // const [isLiveMode, setIsLiveMode] = useState(false);
+  // const [isLiveMode, setIsLiveMode] = useState(true);
+  const [isLiveMode, setIsLiveMode] = useState(false);
 
   const onEditTogether = (editors: IPageContributor[]): void => {
     if (editors.length > 1) {
       setIsCollabModalVisible(true);
     }
   };
-
-  // useEffect(() => {
-  //   socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
-
-  //   return (): void => {
-  //     socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
-  //   };
-  // }, [socket]);
 
   useEffect(() => {
     if (user && currentPage?.pageContents[0]) {
@@ -106,18 +95,6 @@ export const ContentEditor: React.FC = () => {
       );
     };
   }, [user]);
-
-  const synchronizeChange = (title: string, content: string): void => {
-    setDraftTitleInputValue(title);
-    setDraftMarkDownContent(content);
-  };
-
-  useEffect(() => {
-    socket.on(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
-    return (): void => {
-      socket.off(SocketEvents.EDITOR_NEW_CONTENT, synchronizeChange);
-    };
-  }, []);
 
   useEffect(() => {
     setSaveDraftShown(true);
@@ -143,12 +120,6 @@ export const ContentEditor: React.FC = () => {
         setDeleteDraftShown(true);
       }, 10000);
 
-      socket.emit(
-        SocketEvents.EDITOR_NEW_CONTENT,
-        user?.id,
-        draftTitleInputValue,
-        draftMarkDownContent,
-      );
       return (): void => clearTimeout(timeoutId);
     }
   }, [draftTitleInputValue, draftMarkDownContent]);
@@ -162,8 +133,6 @@ export const ContentEditor: React.FC = () => {
   const onInputChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement>): void => {
-    // socket.emit(SocketEvents.PAGE_EDIT, user?.id || '');
-    // socket.emit(SocketEvents.PAGE_EDIT);
     setDraftTitleInputValue(target.value);
   };
 
@@ -209,6 +178,7 @@ export const ContentEditor: React.FC = () => {
   };
 
   const handleSaveConfirm = (): void => {
+    console.info('markdown!!', markDownContent, 'sdsdsds');
     if (titleInputValue && isTitleLessThanMaxLength(titleInputValue)) {
       dispatch(
         pagesActions.editPageContent({
@@ -278,6 +248,23 @@ export const ContentEditor: React.FC = () => {
     setIsDeleteModalVisible(true);
   };
 
+  const handleCollabSaveConfirm = (title: string, content: string): void => {
+    dispatch(
+      pagesActions.editPageContent({
+        pageId: paramsId,
+        title: title.trim(),
+        content: content?.length === 0 ? ' ' : content,
+      }),
+    )
+      .unwrap()
+      .then(handleCancel);
+    // setIsLiveMode(false);
+    // setDraftTitleInputValue(title);
+    // setDraftMarkDownContent(content);
+    // handleSaveConfirm();
+    // setIsDeleteModalVisible(true);
+  };
+
   const handleAutosaveAsDraft = (): void => {
     if (
       draftTitleInputValue &&
@@ -302,7 +289,13 @@ export const ContentEditor: React.FC = () => {
     <>
       <div className="p-4">
         {isLiveMode ? (
-          <CollabEditor />
+          <CollabEditor
+            userName={user?.fullName}
+            title={draftTitleInputValue}
+            content={draftMarkDownContent}
+            handleSaveConfirm={handleCollabSaveConfirm}
+            handleCancel={onCancel}
+          />
         ) : (
           <>
             <Row className="mb-4">
@@ -388,7 +381,7 @@ export const ContentEditor: React.FC = () => {
         }}
       />
       <ConfirmModal
-        title="Choose mode"
+        title="Confirmation"
         showModal={isCollabModalVisible}
         modalText="Choose the mode:"
         confirmButton={{

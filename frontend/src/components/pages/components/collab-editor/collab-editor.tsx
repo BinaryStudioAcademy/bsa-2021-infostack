@@ -1,16 +1,87 @@
-import React, { useEffect } from 'react';
+import {
+  InputGroup,
+  FormControl,
+  Button,
+  Card,
+  Col,
+  Row,
+} from 'react-bootstrap';
+import { useState, useEffect } from 'hooks/hooks';
+import { getAllowedClasses } from 'helpers/helpers';
 import * as Y from 'yjs';
-// import Quill from 'quill';
+import Quill from 'quill';
 import { useQuill } from 'react-quilljs';
-import 'quill/dist/quill.snow.css'; // Add css for snow theme
+import QuillCursors from 'quill-cursors';
+import 'quill/dist/quill.snow.css';
+import styles from './styles.module.scss';
+
+import TurndownService from 'turndown';
+import MarkdownIt from 'markdown-it';
 
 import { WebsocketProvider } from 'y-websocket';
-// import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
+import hljs from 'highlight.js';
 
-export const CollabEditor: React.FC = () => {
-  const { quill, quillRef } = useQuill();
-  // const { quillRef } = useQuill({ modules: { cursors: true } });
+const POSITION = 0;
+
+interface Props {
+  userName: string | undefined;
+  title: string | undefined;
+  content: string | undefined;
+  handleSaveConfirm(
+    title: string | undefined,
+    content: string | undefined,
+  ): void;
+  handleCancel(): void;
+}
+
+export const CollabEditor: React.FC<Props> = ({
+  userName,
+  title,
+  content,
+  handleSaveConfirm,
+  handleCancel,
+}) => {
+  const [titleInput, setTitleInput] = useState(title);
+  const [contentInput, setContentInput] = useState('');
+
+  Quill.register('modules/cursors', QuillCursors);
+
+  const { quill, quillRef } = useQuill({
+    modules: {
+      cursors: {
+        transformOnTextChange: true,
+      },
+      syntax: {
+        highlight: (text: string) => hljs.highlightAuto(text).value,
+      },
+      // syntax: true,
+      // table: true,
+      toolbar: [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        ['bold', 'italic', 'strike'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['image', 'link'],
+      ],
+    },
+    formats: [
+      'header',
+      'font',
+      'size',
+      'bold',
+      'italic',
+      'strike',
+      'blockquote',
+      'list',
+      'bullet',
+      'indent',
+      'link',
+      'image',
+      'code-block',
+    ],
+  });
+
   const ydoc = new Y.Doc();
 
   // useEffect(() => {
@@ -25,8 +96,27 @@ export const CollabEditor: React.FC = () => {
   //   new QuillBinding(type, quillRef);
   // }, []);
 
+  const clearEditor = (): void => {
+    const lenght = quill?.getLength() || 0;
+    if (quill && lenght > 0) {
+      quill.deleteText(POSITION, quill?.getLength());
+    }
+    quillRef.current.value = '';
+  };
+
+  const onSave = (): void => {
+    const turndownService = new TurndownService();
+    const markdown = turndownService.turndown(contentInput);
+    handleSaveConfirm(titleInput, markdown);
+    clearEditor();
+  };
+
+  const onCancel = (): void => {
+    clearEditor();
+    handleCancel();
+  };
+
   useEffect(() => {
-    console.info(quillRef.current);
     if (quill) {
       const provider = new WebsocketProvider(
         'wss://localhost:3000/page/c261d359-0d37-4b35-ac6d-19f59506707a/editor',
@@ -36,127 +126,67 @@ export const CollabEditor: React.FC = () => {
       provider.connect();
       const yQuillTextYtype = ydoc.getText('quill');
       new QuillBinding(yQuillTextYtype, quill, provider.awareness);
-      // const handleObserve = e => {
-      // 	if (quill && e.delta[0]) {
-      // 		const text = e.delta[0].insert;
-      // 		quill.clipboard.dangerouslyPasteHTML(props.text);
-      // 		yQuillTextYtype.unobserve(handleObserve);
-      // 	}
-      // }
-      // yQuillTextYtype.observe(handleObserve);
+
+      provider.awareness.setLocalStateField('user', {
+        name: userName,
+        color: 'blue',
+      });
+
+      if (quill.getLength() < 2) {
+        const md = new MarkdownIt();
+        const result = md.render(content || '');
+        quill.clipboard.dangerouslyPasteHTML(result);
+      }
+
+      quill.on('text-change', () => {
+        const html = quill.root.innerHTML;
+        setContentInput(html);
+      });
     }
   }, [quill]);
 
+  const onInputChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>): void => {
+    setTitleInput(target.value);
+  };
+
+  // <div style={{ width: 500, height: 300 }}>
+  {
+    /* <div ref={quillRef} /> */
+  }
+  {
+    /* </div> */
+  }
+
   return (
-    <div style={{ width: 500, height: 300 }}>
-      <div ref={quillRef} />
-    </div>
-    // <div ref={quillRef}/>
+    <>
+      <Row className="mb-4">
+        <Col className="d-flex justify-content-between">
+          <InputGroup>
+            <FormControl value={titleInput} onChange={onInputChange} />
+          </InputGroup>
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <Card border="light" className={getAllowedClasses(styles.content)}>
+            <div className={getAllowedClasses(styles.editor)}>
+              <div ref={quillRef} />
+            </div>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <Button onClick={onSave} variant="success" size="sm" className="me-3">
+            Save
+          </Button>
+          <Button onClick={onCancel} variant="warning" size="sm">
+            Cancel
+          </Button>
+        </Col>
+      </Row>
+    </>
   );
 };
-
-// import React from 'react';
-// import * as Y from 'yjs';
-// import Quill from 'quill';
-// import { QuillBinding } from 'y-quill';
-// import { WebrtcProvider } from 'y-webrtc';
-
-// export const CollabEditor: React.FC = () => {
-//   // const editorContainer = React.useRef<HTMLDivElement>(null);
-//   const editorContainer = React.createRef<HTMLDivElement>();
-
-//   React.useEffect(() => {
-//     // const div = editorContainer.current as Element;
-//   const quill = new Quill(editorContainer.current?.id || '', {
-//     modules: {
-//       cursors: true,
-//       toolbar: [
-//         [{ header: [1, 2, false] }],
-//         ['bold', 'italic', 'underline'],
-//         ['image', 'code-block'],
-//       ],
-//       history: {
-//         userOnly: true,
-//       },
-//     },
-//     theme: 'snow',
-//   });
-
-//   const ydoc = new Y.Doc();
-//   const provider = new WebrtcProvider('quill-demo-room', ydoc);
-//   const ytext = ydoc.getText('quill');
-//   new QuillBinding(ytext, quill, provider.awareness);
-// }, []);
-
-//     return (
-//       <>
-//         {/* <div ref={editorContainer}></div> */}
-//         <div ref={editorContainer}></div>
-//         {/* <div id="editor"></div> */}
-//       </>
-//     );
-// };
-
-// import React from 'react';
-// import * as Y from 'yjs';
-// import ReactQuill, { Quill } from 'react-quill';
-// // import { YText } from "yjs/types/YText";
-// import { WebsocketProvider } from 'y-websocket';
-// import { QuillBinding } from 'y-quill';
-// import 'react-quill/dist/quill.snow.css';
-// import { Button } from 'react-bootstrap';
-
-// export const CollabEditor: React.FC = () => {
-//   let quillRef: Quill | null | undefined = null;
-//   const [reactQuillRef, setReactQuillRef] = React.useState<ReactQuill | null>(null);
-//   // const reactQuillRef = React.createRef<ReactQuill>();
-//   // let reactQuillRef: ReactQuill | null = null;
-
-//   const [value, setValue] = React.useState('');
-
-//   const ydoc = new Y.Doc();
-//   const ytext = ydoc.getText('textarea');
-
-//   React.useEffect(() => {
-//     // attachQuillRefs();
-//     console.info(ytext, value, reactQuillRef);
-//     const provider = new WebsocketProvider('wss://localhost:3000/page/c261d359-0d37-4b35-ac6d-19f59506707a/editor', 'room', ydoc);// change to 'ws://localhost:3000' for local development
-//     // const ydocument = provider.get("textarea");
-//     // const type = ydocument.define("textarea", YText);
-//     quillRef = reactQuillRef?.getEditor();
-//     new QuillBinding(ytext, quillRef, provider.awareness);
-//   }, []);
-
-//   // const attachQuillRefs = (): void => {
-//   //   if (reactQuillRef) {
-//   //   // if (typeof reactQuillRef.getEditor !== 'function') return;
-//   //   quillRef = reactQuillRef.current?.getEditor();
-//   //   }
-//   // };
-
-//   // const insertText = (): void => {
-//   //   if (quillRef) {
-//   //     const range = quillRef.getSelection();
-//   //     const position = range ? range.index : 0;
-//   //     quillRef.insertText(position, 'Hello, World! ');
-//   //   }
-//   // };
-
-//   const setNewValue = (content: string): void => {
-//     setValue(content);
-//   };
-
-//   return (
-//     <div>
-//         <ReactQuill
-//           ref={(el): void => { setReactQuillRef(el); }}
-//           // ref={(el): void => { reactQuillRef = el; }}
-//           // ref={reactQuillRef}
-//           value={value}
-//           onChange={setNewValue}
-//           theme={'snow'} />
-//         <Button>Insert Hello World! in Text</Button>
-//         {/* <Button onClick={insertText}>Insert Hello World! in Text</Button> */}
-//       </div>
-//   );
-// };
