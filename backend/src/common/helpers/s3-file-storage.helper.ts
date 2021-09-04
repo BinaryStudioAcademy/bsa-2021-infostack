@@ -5,6 +5,9 @@ import { AWSError } from 'aws-sdk/lib/error';
 import { env } from '../../env';
 import mime from 'mime-types';
 
+import { HttpCode, HttpErrorMessage } from '../enums';
+import { HttpError } from '../errors/http-error';
+
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
 const bucketName = env.s3.bucketName;
@@ -33,14 +36,23 @@ export const uploadFile = (
 ): Promise<S3.ManagedUpload.SendData> => {
   const fileStream = fs.createReadStream(file.path);
 
-  const type = mime.contentType(file.path);
+  const type = mime.lookup(file.path);
+
+  if (!type) {
+    throw new HttpError({
+      status: HttpCode.UNPROCESSABLE_ENTITY,
+      message: HttpErrorMessage.INVALID_FILE_TYPE,
+    });
+  }
+
+  const header = mime.contentType(type);
 
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
     Key: file.filename,
     ACL: 'public-read',
-    ContentType: type || undefined,
+    ContentType: header || undefined,
   };
   return s3.upload(uploadParams).promise();
 };
