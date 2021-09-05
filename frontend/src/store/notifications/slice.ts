@@ -31,18 +31,6 @@ export const { reducer, actions } = createSlice({
     ) => {
       state.notifications = [...state.notifications, ...action.payload];
     },
-    [ActionType.ADD_NOTIFICATIONS_TO_TOP]: (
-      state,
-      action: PayloadAction<INotification[]>,
-    ) => {
-      state.notifications = [...action.payload, ...state.notifications];
-    },
-    [ActionType.CHANGE_NOTIFICATIONS_ON_TOP]: (
-      state,
-      action: PayloadAction<INotification[]>,
-    ) => {
-      state.notifications.splice(0, action.payload.length, ...action.payload);
-    },
     [ActionType.UPDATE_NOTIFICATION]: (
       state,
       action: PayloadAction<INotification>,
@@ -64,13 +52,18 @@ export const { reducer, actions } = createSlice({
       state.count += 1;
     },
     [ActionType.DECREMENT_COUNT]: (state) => {
-      state.count -= 1;
+      if (state.count > 0) {
+        state.count -= 1;
+      }
     },
     [ActionType.TOGGLE_IS_EXPANDED]: (state) => {
       state.isExpanded = !state.isExpanded;
     },
     [ActionType.SET_IS_EXPANDED]: (state, action: PayloadAction<boolean>) => {
       state.isExpanded = action.payload;
+    },
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
     },
   },
 });

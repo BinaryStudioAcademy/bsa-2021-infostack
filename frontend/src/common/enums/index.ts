@@ -1,5 +1,5 @@
 export * from './app';
-export { HttpHeader, HttpMethod, HttpCode } from './http/http';
+export * from './http/http';
 export { ContentType } from './file/file';
 export { CookieVariable } from './cookies/cookies';
 export { LocalStorageVariable } from './local-storage/local-storage';

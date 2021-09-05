@@ -1,4 +1,4 @@
-import { Form, Button, Spinner } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
   MentionsInput,
@@ -9,19 +9,25 @@ import {
 
 import { useState, useAppSelector, useAppDispatch } from 'hooks/hooks';
 import { RequestStatus } from 'common/enums';
-import { UserAvatar } from 'components/common/common';
+import { UserAvatar, Spinner } from 'components/common/common';
 import { getAllowedClasses } from 'helpers/helpers';
 import { commentsActions } from 'store/comments';
-
-import styles from './styles.module.scss';
 import { RecordVoice } from '../comment-record-voice/comment-record-voice';
 import { commentApi } from 'services';
+import styles from './styles.module.scss';
 
 type Props = {
   pageId: string;
   parentCommentId?: string;
   className?: string;
   placeholder?: string;
+  formState: { text: string; mentions: MentionItem[] };
+  setFormState: React.Dispatch<
+    React.SetStateAction<{
+      text: string;
+      mentions: MentionItem[];
+    }>
+  >;
   onSubmit?: () => void;
   onCancel?: () => void;
 };
@@ -31,16 +37,11 @@ export const CommentForm: React.FC<Props> = ({
   parentCommentId,
   className,
   placeholder,
+  formState,
+  setFormState,
   onSubmit,
   onCancel,
 }) => {
-  const [formState, setFormState] = useState<{
-    text: string;
-    mentions: MentionItem[];
-  }>({
-    text: '',
-    mentions: [],
-  });
   const user = useAppSelector((state) => state.auth.user);
   const { createStatus, fetchStatus, deleteStatus } = useAppSelector(
     (state) => state.comments,
@@ -125,6 +126,7 @@ export const CommentForm: React.FC<Props> = ({
       text: '',
       mentions: [],
     });
+    setRawAudio(undefined);
     onCancel?.();
   };
 
@@ -160,7 +162,7 @@ export const CommentForm: React.FC<Props> = ({
             }`}
           >
             {isSpiner ? (
-              <Spinner animation="border" />
+              <Spinner height={'6rem'} width={'6rem'} />
             ) : (
               <>
                 <UserAvatar
@@ -198,12 +200,14 @@ export const CommentForm: React.FC<Props> = ({
                     Cancel
                   </Button>
                   <Button
-                    disabled={isSubmitDisabled || text.trim() === ''}
+                    disabled={
+                      isSubmitDisabled || (text.trim() === '' && !rawAudio)
+                    }
                     onClick={handleSubmit}
                     className={getAllowedClasses('ms-2', styles.text)}
                     variant="success"
                   >
-                    Comment
+                    Comment{rawAudio && ' with audio'}
                   </Button>
                   <RecordVoice handleRecord={completeRecord} />
                 </div>

@@ -1,6 +1,7 @@
-import { Spinner, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { teamsActions } from 'store/teams';
+import { Spinner } from 'components/common/common';
 import { Item, CreateButton } from './components/components';
 import { CreateTeamModal } from './components/modal/modal';
 import {
@@ -26,7 +27,7 @@ export const TeamSettings: React.FC = () => {
       setUserTeamsMapped(true);
     }
     dispatch(teamsActions.fetchTeams());
-  }, [userId, teams]);
+  }, [userId]);
 
   const teamsToRender = [];
   for (let i = 0; i < teams.length; i++) {
@@ -69,7 +70,7 @@ export const TeamSettings: React.FC = () => {
           {!userTeams ||
             (!isUserTeamsMapped && (
               <div className="d-flex flex-grow-1 align-items-center justify-content-center w-100">
-                <Spinner animation="border" variant="secondary" />
+                <Spinner height={'6rem'} width={'6rem'} />
               </div>
             ))}
           {userTeams && userTeams.length === 0 ? (

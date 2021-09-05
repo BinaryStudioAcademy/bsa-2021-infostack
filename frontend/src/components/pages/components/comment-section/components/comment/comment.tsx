@@ -1,4 +1,6 @@
 import { Collapse, ListGroup } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
+import { MentionItem } from 'react-mentions';
 import { isThisMinute } from 'date-fns/esm';
 import AudioPlayer from 'react-h5-audio-player';
 import { useState, useHistory, useAppSelector } from 'hooks/hooks';
@@ -10,7 +12,6 @@ import { TimeAgo } from 'components/common/time-ago/time-ago';
 import { commentsSelectors } from 'store/comments/slice';
 import { CommentForm } from '../comment-form/comment-form';
 import { Emoji } from '../emoji/emoji';
-
 import styles from './styles.module.scss';
 import { parseMentions } from 'helpers/parse-mentions.helper';
 
@@ -37,6 +38,14 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
 
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
   const history = useHistory();
+
+  const [formState, setFormState] = useState<{
+    text: string;
+    mentions: MentionItem[];
+  }>({
+    text: '',
+    mentions: [],
+  });
 
   const toggleField = (): void => setIsFieldVisible((prev) => !prev);
 
@@ -69,14 +78,25 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
           <span className={styles.metadata}>
             <TimeAgo timestamp={createdAt} />
           </span>
-          <div className={styles.text}>{content}</div>
+          <div className={styles.text}>
+            {content.map((item) => {
+              const isQuote = typeof item === 'string' && item.startsWith('>');
+
+              if (isQuote) {
+                return <ReactMarkdown>{item as string}</ReactMarkdown>;
+              }
+
+              return item;
+            })}
+          </div>
           {voiceRecord && (
             <AudioPlayer
               src={voiceRecord as string}
               layout="horizontal-reverse"
               customAdditionalControls={[]}
               showJumpControls={false}
-              defaultDuration="Loading..."
+              preload="metadata"
+              timeFormat="mm:ss"
             />
           )}
           <Emoji reactions={reactions} commentId={id} />
@@ -101,6 +121,8 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
               placeholder="Add a reply"
               onSubmit={toggleField}
               onCancel={toggleField}
+              formState={formState}
+              setFormState={setFormState}
             />
           )}
           {children && (

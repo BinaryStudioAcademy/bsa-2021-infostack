@@ -1,4 +1,5 @@
 export { Switch, Route } from 'react-router-dom';
+export { AdminRoute } from './admin-route/admin-route';
 export { UserAvatar } from './avatar/avatar';
 export { FormField } from './form-field/form-field';
 export { InputModal } from './input-modal/input-modal';

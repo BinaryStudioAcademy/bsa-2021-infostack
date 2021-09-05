@@ -5,6 +5,7 @@ import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
 import { authActions } from 'store/actions';
 import { signUpSchema } from 'common/validations';
 import { IRegister } from 'common/interfaces/auth';
+import { HttpError } from 'exceptions/exceptions';
 
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,12 +14,26 @@ const SignUp: React.FC = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<IRegister>({ resolver: yupResolver(signUpSchema) });
 
   const handleSubmitForm = async (data: IRegister): Promise<void> => {
-    await dispatch(authActions.register(data));
-    push(AppRoute.ROOT);
+    try {
+      await dispatch(authActions.register(data)).unwrap();
+      push(AppRoute.ROOT);
+    } catch (err) {
+      const error = err as HttpError;
+      if (error.message.toLowerCase().includes('email')) {
+        setError('email', error);
+      }
+      if (error.message.toLowerCase().includes('password')) {
+        setError('password', error);
+      }
+      if (error.message.toLowerCase().includes('name')) {
+        setError('fullName', error);
+      }
+    }
   };
 
   return (

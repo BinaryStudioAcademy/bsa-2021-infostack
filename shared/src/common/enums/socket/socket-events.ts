@@ -10,4 +10,5 @@ export enum SocketEvents {
   EDITOR_JOIN = 'editor/join',
   EDITOR_LEFT = 'editor/left',
   EDITOR_NEW_CONTENT = 'editor/newContent',
+  WORKSPACE_DELETE_USER = 'workspace/deleteUser',
 }

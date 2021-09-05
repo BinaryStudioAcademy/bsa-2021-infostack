@@ -4,10 +4,12 @@ import {
   IUser,
   IUserActivity,
   IUserWithTokens,
+  IInviteUser,
 } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
 import { IPaginated } from 'common/interfaces/common';
+import { IPageRecent } from 'common/interfaces';
 
 class UserApi {
   private http = http;
@@ -23,7 +25,7 @@ class UserApi {
 
   public checkIfUserRegisteredOnInvite(
     token: string | undefined,
-  ): Promise<string> {
+  ): Promise<IInviteUser> {
     return this.http.load(
       `${this.BASE}/check-user-registration?token=${token}`,
     );
@@ -85,6 +87,10 @@ class UserApi {
     return http.load(
       `/api/users/${userId}/activities?skip=${skip}&take=${take}`,
     );
+  }
+
+  public async getRecentPages(userId: string): Promise<IPageRecent[]> {
+    return this.http.load(`${this.BASE}/${userId}/recent-pages`);
   }
 }
 

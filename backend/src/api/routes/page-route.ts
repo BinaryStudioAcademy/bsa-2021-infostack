@@ -35,6 +35,8 @@ import {
   deleteDraft,
   pinPage,
   unpinPage,
+  downloadPDF,
+  sendPDF,
 } from '../../services/page.service';
 import {
   getComments,
@@ -71,7 +73,7 @@ router.get(
 
 router.get(
   '/:id',
-  run((req) => getPage(req.params.id, req.userId)),
+  run((req) => getPage(req.params.id, req.userId, req.workspaceId)),
 );
 
 router.delete(
@@ -120,7 +122,9 @@ router.get(
 router.post(
   '/:id/comments',
   validationMiddleware(createCommentSchema),
-  run((req) => addComment(req.userId, req.params.id, req.body, req.io)),
+  run((req) =>
+    addComment(req.userId, req.params.id, req.workspaceId, req.body, req.io),
+  ),
 );
 
 router.delete(
@@ -232,6 +236,16 @@ router.post(
 router.post(
   '/:id/unpin',
   run((req) => unpinPage(req.userId, req.params.id)),
+);
+
+router.get(
+  '/:id/download-pdf',
+  run((req) => downloadPDF(req.params.id)),
+);
+
+router.post(
+  '/:id/send-pdf',
+  run((req) => sendPDF(req.body, req.params.id)),
 );
 
 export default router;

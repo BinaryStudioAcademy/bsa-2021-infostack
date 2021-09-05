@@ -1,11 +1,12 @@
 .logo {
-  height: 10%;
+  height: 9%;
   margin-bottom: 2%;
 }
 
 .container {
   width: clamp(500px, 30%, 600px);
   padding-bottom: 3%;
+  zoom: 85%;
 }
 
 .header {
@@ -64,4 +65,9 @@
   background-color: rgb(255, 255, 255);
   color: rgba(0, 0, 0, 0.54);
   box-shadow: rgb(66 133 244 / 30%) 0px 0px 3px 3px;
+}
+
+.errorMessage {
+  padding: 0.5rem;
+  font-size: 1.4rem;
 }

@@ -7,6 +7,7 @@ enum ActionType {
   UPDATE_TOTAL_ITEMS = 'updateTotalItems',
   TOGGLE_IS_LOADING = 'toggleIsLoading',
   LOAD_MORE = 'loadMore',
+  RESET = 'reset',
 }
 
 export { ActionType };

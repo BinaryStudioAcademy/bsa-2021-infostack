@@ -11,6 +11,7 @@ import {
   addUser,
   deleteUser,
 } from './actions';
+import { ActionType } from './common';
 
 type State = {
   teams: ITeam[];
@@ -27,16 +28,18 @@ const initialState: State = {
 const { reducer, actions } = createSlice({
   name: ReducerName.TEAMS,
   initialState,
-  reducers: {},
+  reducers: {
+    [ActionType.RESET]: (state) => {
+      Object.assign(state, initialState);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTeams.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(fetchTeams.fulfilled, (state, action) => {
-        if (state.teams.length != action.payload.length) {
-          state.teams = action.payload;
-        }
+        state.teams = action.payload;
         state.isLoading = false;
       })
       .addCase(fetchTeams.rejected, (state) => {

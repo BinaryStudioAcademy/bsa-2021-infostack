@@ -7,6 +7,7 @@ import TeamRepository from './team.repository';
 import NotificationRepository from './notification.repository';
 import NotificationSettingsRepository from './notification-settings.repository';
 import CommentReactionRepository from './comment-reaction.repository';
+import RecentPagesRepository from './recent-pages.repository';
 
 export {
   UserRepository,
@@ -18,4 +19,5 @@ export {
   NotificationSettingsRepository,
   CommentRepository,
   CommentReactionRepository,
+  RecentPagesRepository,
 };

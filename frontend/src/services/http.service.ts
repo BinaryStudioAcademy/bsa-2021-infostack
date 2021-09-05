@@ -68,6 +68,10 @@ class Http {
         return response.text() as unknown as T;
       }
 
+      if (resContentType && resContentType.includes(ContentType.BLOB)) {
+        return response.blob() as unknown as T;
+      }
+
       return this.parseJSON<T>(response);
     } catch (err) {
       this.throwError(err);

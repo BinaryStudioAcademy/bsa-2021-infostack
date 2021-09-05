@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { getRecentPages } from '../../services/page.service';
 import { upload } from '../../common/helpers/multer.helper';
 import { run } from '../../common/helpers/route.helper';
 import {
@@ -60,6 +61,10 @@ router
         userId: req.userId,
       }),
     ),
+  )
+  .get(
+    '/:id/recent-pages',
+    run((req) => getRecentPages(req.userId, req.workspaceId)),
   );
 
 export default router;

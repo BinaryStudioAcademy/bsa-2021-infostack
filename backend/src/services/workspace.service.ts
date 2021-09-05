@@ -28,6 +28,9 @@ import {
   uploadFile,
 } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';
+import { Server } from 'socket.io';
+import { SocketEvents } from '../common/enums/socket';
+import { workspaceMailDeleteUser } from '../common/utils/mail/workspace-mail.util';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -104,16 +107,20 @@ export const updateInviteStatusDeclined = async (
 export const deleteUserFromWorkspace = async (
   userId: string,
   workspaceId: string,
+  io: Server,
 ): Promise<void> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
-  const userWorkspaceToUpdate =
-    await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
-      userId,
-      workspaceId,
-    );
-  const userWorkspaceUpdated = { ...userWorkspaceToUpdate };
-  userWorkspaceUpdated.status = InviteStatus.DELETED;
-  await userWorkspaceRepository.save(userWorkspaceUpdated);
+  const {
+    workspace: { name: workspaceName },
+  } = await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
+    userId,
+    workspaceId,
+  );
+
+  await userWorkspaceRepository.deleteByUserIdAndWorkspaceId(
+    userId,
+    workspaceId,
+  );
 
   const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
@@ -152,6 +159,20 @@ export const deleteUserFromWorkspace = async (
     return page.id;
   });
   await pageRepository.unfollowPages(userId, pageIds);
+
+  io.to(user.id).emit(SocketEvents.WORKSPACE_DELETE_USER, {
+    workspaceId,
+    workspaceName,
+  });
+
+  const { app } = env;
+  const { subject, text } = workspaceMailDeleteUser(workspaceName, app.url);
+
+  await sendMail({
+    to: user.email,
+    subject: subject,
+    text: text,
+  });
 };
 
 export const addUserToWorkspace = async (
@@ -179,6 +200,14 @@ export const getWorkspaceUsers = async (
 ): Promise<IWorkspaceUser[]> => {
   const workspaceRepository = getCustomRepository(WorkspaceRepository);
   const workspace = await workspaceRepository.findByIdWithUsers(workspaceId);
+
+  if (!workspace) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_WORKSPACE_WITH_SUCH_ID,
+    });
+  }
+
   return mapWorkspaceToWorkspaceUsers(workspace);
 };
 
@@ -192,6 +221,14 @@ export const getWorkspace = async (
       userId,
       workspaceId,
     );
+
+  if (!userWorkspace) {
+    throw new HttpError({
+      status: HttpCode.FORBIDDEN,
+      message: HttpErrorMessage.NO_WORKSPACE_ACCESS,
+    });
+  }
+
   const { workspace } = userWorkspace;
 
   return {
@@ -211,15 +248,13 @@ export const getUserWorkspaces = async (
   );
   const workspaces = [] as IWorkspace[];
   for (const userWorkspace of usersWorkspaces) {
-    if (userWorkspace.status !== InviteStatus.DELETED) {
-      const workspace = userWorkspace.workspace;
-      workspaces.push({
-        id: workspace.id,
-        title: workspace.name,
-        status: userWorkspace.status,
-        logo: workspace.logo,
-      });
-    }
+    const workspace = userWorkspace.workspace;
+    workspaces.push({
+      id: workspace.id,
+      title: workspace.name,
+      status: userWorkspace.status,
+      logo: workspace.logo,
+    });
   }
   return workspaces;
 };
@@ -302,4 +337,18 @@ export const deleteLogoById = async (id: string): Promise<void> => {
 
     await workspaceRepository.save({ id, logo: '' });
   }
+};
+
+export const updateRoleByUserIdAndWorkspaceId = async (
+  userId: string,
+  workspaceId: string,
+  role: RoleType,
+): Promise<void> => {
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+
+  await userWorkspaceRepository.updateRoleByUserIdAndWorkspaceId(
+    userId,
+    workspaceId,
+    role,
+  );
 };

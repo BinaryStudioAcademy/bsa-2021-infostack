@@ -11,6 +11,7 @@ import {
   deleteUserFromWorkspace,
   updateById,
   deleteLogoById,
+  updateRoleByUserIdAndWorkspaceId,
 } from '../../services/workspace.service';
 import { permit } from '../middlewares/permissions-middleware';
 import { RoleType } from '../../common/enums/role-type';
@@ -49,10 +50,22 @@ router
     '/:id/decline-invite-status',
     run((req) => updateInviteStatusDeclined(req.userId, req.params.id)),
   )
+  .put(
+    '/current/update-user-role',
+    run((req) =>
+      updateRoleByUserIdAndWorkspaceId(
+        req.body.userId,
+        req.workspaceId,
+        req.body.role,
+      ),
+    ),
+  )
   .delete(
     '/users/:id',
     permit(RoleType.ADMIN),
-    run((req) => deleteUserFromWorkspace(req.params.id, req.workspaceId)),
+    run((req) =>
+      deleteUserFromWorkspace(req.params.id, req.workspaceId, req.io),
+    ),
   )
   .delete(
     '/:id/logo',

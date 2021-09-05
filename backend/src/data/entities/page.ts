@@ -18,6 +18,7 @@ import { Comment } from './comment';
 import { Tag } from './tag';
 import { PageShareLink } from './page-share-link';
 import { Draft } from './draft';
+import { RecentPage } from './recent-pages';
 
 @Entity()
 export class Page extends AbstractEntity {
@@ -86,4 +87,9 @@ export class Page extends AbstractEntity {
   @ManyToMany(() => User, (User) => User.editingPage)
   @JoinTable({ name: 'page_editor' })
   editors: User[];
+
+  @OneToMany(() => RecentPage, (recentPage) => recentPage.page, {
+    onDelete: 'CASCADE',
+  })
+  recentPages: RecentPage[];
 }

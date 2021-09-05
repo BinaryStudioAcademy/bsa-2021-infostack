@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const CreateButton: React.FC<Props> = ({ onClick }) => (
-  <Card className="shadow-sm rounded bg-white border-0">
+  <Card className="shadow-sm rounded bg-white border-0 p-0">
     <Button
       variant="light"
       className={getAllowedClasses(

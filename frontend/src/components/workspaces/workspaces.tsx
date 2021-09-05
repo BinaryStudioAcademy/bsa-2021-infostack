@@ -9,6 +9,7 @@ import {
   useAppDispatch,
   useCookies,
   useHistory,
+  useLocation,
 } from 'hooks/hooks';
 import { workspaceApi } from 'services';
 import { CreateWorkspaceModal, Container } from './components/components';
@@ -28,6 +29,7 @@ const Workspaces: React.FC = () => {
   ]);
 
   const history = useHistory();
+  const { state } = useLocation<{ requestedPage: string } | null>();
 
   useEffect(() => {
     dispatch(workspacesActions.removeCurrentWorkspace());
@@ -66,7 +68,11 @@ const Workspaces: React.FC = () => {
         setCookie(CookieVariable.WORKSPACE_ID, currentWorkspace.id, {
           path: '/',
         });
-        history.push(AppRoute.ROOT);
+        if (state) {
+          history.push(state.requestedPage);
+        } else {
+          history.push(AppRoute.ROOT);
+        }
       } else if (cookies[CookieVariable.WORKSPACE_ID]) {
         removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
       }
@@ -95,7 +101,7 @@ const Workspaces: React.FC = () => {
             onClickDecline={handleInviteDeclined}
           />
         ) : (
-          <Spinner />
+          <Spinner height={'12rem'} width={'12rem'} />
         )}
         <CreateWorkspaceModal
           showModal={isModalVisible}

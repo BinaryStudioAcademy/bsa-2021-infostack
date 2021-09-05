@@ -29,7 +29,7 @@ export const IntegrationSettings: React.FC = () => {
   }, [username]);
 
   const onConnectButtonClick = async (): Promise<void> => {
-    const { url } = await authApi.getLoginGitHubUrl();
+    const { url } = await authApi.getLoginGitHubUrl(null);
     window.location.assign(url);
   };
 
@@ -90,7 +90,7 @@ export const IntegrationSettings: React.FC = () => {
               <hr />
             </>
           ) : (
-            <Spinner />
+            <Spinner height={'6rem'} width={'6rem'} />
           ))}
       </Card.Body>
     </Card>
