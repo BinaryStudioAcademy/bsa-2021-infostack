@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { Controller } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Feather';
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  Keyboard,
+} from 'react-native';
 
 import { authActions } from 'store';
 import {
@@ -21,8 +28,23 @@ export const Login: React.FC = () => {
   const { signInStatus, signInError } = useAppSelector((state) => state.auth);
 
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isKeyboardPresent, setIsKeyboardPresent] = useState(false);
 
   const passwordRef = React.useRef<TextInput>(null);
+
+  React.useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardPresent(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardPresent(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const {
     control,
@@ -48,9 +70,13 @@ export const Login: React.FC = () => {
 
   return (
     <View style={container}>
-      <Logo width={300} height={90} />
-      <Text style={title}>Welcome back</Text>
-      <Text style={description}>Sign in to your account to continue</Text>
+      {!isKeyboardPresent && (
+        <>
+          <Logo width={300} height={90} />
+          <Text style={title}>Welcome back</Text>
+          <Text style={description}>Sign in to your account to continue</Text>
+        </>
+      )}
 
       <View style={formCard}>
         <View style={[formItem]}>
