@@ -228,8 +228,6 @@ export const PageContent: React.FC = () => {
   };
 
   const onEditing = (): void => {
-    // socket.emit(SocketEvents.EDITOR_JOIN, user);
-    // socket.emit(SocketEvents.EDITOR_JOIN, currentPage?.pageContents[0].id || '');
     // if (user) {
     //   dispatch(pagesActions.addEditor(user));
     // }

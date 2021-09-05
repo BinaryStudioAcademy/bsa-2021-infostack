@@ -18,7 +18,8 @@ import styles from './styles.module.scss';
 import TurndownService from 'turndown';
 import MarkdownIt from 'markdown-it';
 
-import { WebsocketProvider } from 'y-websocket';
+import { WebrtcProvider } from 'y-webrtc';
+// import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
 import hljs from 'highlight.js';
 
@@ -118,11 +119,16 @@ export const CollabEditor: React.FC<Props> = ({
 
   useEffect(() => {
     if (quill) {
-      const provider = new WebsocketProvider(
-        'wss://localhost:3000/page/c261d359-0d37-4b35-ac6d-19f59506707a/editor',
-        'quill',
+      const provider = new WebrtcProvider(
+        'wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor',
         ydoc,
       );
+
+      // const provider = new WebsocketProvider(
+      //   'wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor',
+      //   'quill',
+      //   ydoc,
+      // );
       provider.connect();
       const yQuillTextYtype = ydoc.getText('quill');
       new QuillBinding(yQuillTextYtype, quill, provider.awareness);

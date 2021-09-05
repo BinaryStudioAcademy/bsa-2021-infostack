@@ -67,24 +67,24 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
-
-  // const [isLiveMode, setIsLiveMode] = useState(true);
   const [isLiveMode, setIsLiveMode] = useState(false);
 
-  const onEditTogether = (editors: IPageContributor[]): void => {
-    if (editors.length > 1) {
-      setIsCollabModalVisible(true);
-    }
+  const addEditor = (editors: IPageContributor[]): void => {
+    editors.length == 2
+      ? setIsCollabModalVisible(true)
+      : setIsCollabModalVisible(false);
   };
 
   useEffect(() => {
     if (user && currentPage) {
-      socket.emit(SocketEvents.EDITOR_JOIN, currentPage.id, user.id);
-      socket.on(SocketEvents.EDITOR_JOIN, onEditTogether);
+      socket.emit(SocketEvents.EDITOR_JOIN, currentPage.id, user);
+      socket.on(SocketEvents.EDITOR_JOIN, addEditor);
     }
     return (): void => {
-      socket.off(SocketEvents.EDITOR_JOIN, onEditTogether);
-      socket.emit(SocketEvents.EDITOR_LEFT, currentPage?.id, user?.id);
+      socket.off(SocketEvents.EDITOR_JOIN, addEditor);
+      if (user) {
+        socket.emit(SocketEvents.EDITOR_LEFT, currentPage?.id, user.id);
+      }
     };
   }, [user]);
 
@@ -170,7 +170,6 @@ export const ContentEditor: React.FC = () => {
   };
 
   const handleSaveConfirm = (): void => {
-    console.info('markdown!!', markDownContent, 'sdsdsds');
     if (titleInputValue && isTitleLessThanMaxLength(titleInputValue)) {
       dispatch(
         pagesActions.editPageContent({
@@ -234,6 +233,7 @@ export const ContentEditor: React.FC = () => {
   const handleLifeMode = (): void => {
     setIsCollabModalVisible(false);
     setIsLiveMode(true);
+    // socket.emit()
   };
 
   const onDraftDelete = (): void => {
@@ -281,13 +281,16 @@ export const ContentEditor: React.FC = () => {
     <>
       <div className="p-4">
         {isLiveMode ? (
-          <CollabEditor
-            userName={user?.fullName}
-            title={draftTitleInputValue}
-            content={draftMarkDownContent}
-            handleSaveConfirm={handleCollabSaveConfirm}
-            handleCancel={onCancel}
-          />
+          <>
+            {/* {editors.length} */}
+            <CollabEditor
+              userName={user?.fullName}
+              title={draftTitleInputValue}
+              content={draftMarkDownContent}
+              handleSaveConfirm={handleCollabSaveConfirm}
+              handleCancel={onCancel}
+            />
+          </>
         ) : (
           <>
             <Row className="mb-4">
