@@ -255,9 +255,6 @@ export const PageContent: React.FC = () => {
   };
 
   const onEditing = (): void => {
-    // if (user) {
-    //   dispatch(pagesActions.addEditor(user));
-    // }
     history.push(replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || ''));
   };
 

@@ -839,17 +839,14 @@ export const getEditors = async (
 export const addEditor = async (
   pageId: string,
   userId: string,
-  // io: Server,
 ): Promise<void> => {
   const pageRepository = getCustomRepository(PageRepository);
   await pageRepository.addEditor(pageId, userId);
-  // await pageContentRepository.save({ pageContentId, userId});
 };
 
 export const deleteEditor = async (
   pageId: string,
   userId: string,
-  // io: Server,
 ): Promise<void> => {
   const pageRepository = getCustomRepository(PageRepository);
   await pageRepository.deleteEditor(pageId, userId);
