@@ -19,7 +19,10 @@ import Logo from 'assets/svg/logo_dark.svg';
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { signInStatus, signInError } = useAppSelector((state) => state.auth);
+
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  const passwordRef = React.useRef<TextInput>(null);
 
   const {
     control,
@@ -35,6 +38,12 @@ export const Login: React.FC = () => {
 
   const toggleIsPasswordHidden = () => {
     setIsPasswordHidden(!isPasswordHidden);
+  };
+
+  const onEmailSubmit = () => {
+    if (passwordRef.current !== null) {
+      passwordRef.current.focus();
+    }
   };
 
   return (
@@ -54,6 +63,8 @@ export const Login: React.FC = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                onSubmitEditing={onEmailSubmit}
+                blurOnSubmit={false}
               />
             )}
             name="email"
@@ -76,6 +87,8 @@ export const Login: React.FC = () => {
                   onChangeText={onChange}
                   value={value}
                   secureTextEntry={isPasswordHidden}
+                  ref={passwordRef}
+                  onSubmitEditing={handleSubmit(onSubmit)}
                 />
                 {!!value.length && (
                   <Icon
