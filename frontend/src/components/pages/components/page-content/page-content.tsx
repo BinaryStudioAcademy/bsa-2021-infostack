@@ -370,7 +370,11 @@ export const PageContent: React.FC = () => {
   }, [currentPage]);
 
   if (isSpinner || isLeftBlockLoading) {
-    return <Spinner height={'6rem'} width={'6rem'} />;
+    return (
+      <div className="position-relative h-100">
+        <Spinner height={'6rem'} width={'6rem'} />
+      </div>
+    );
   }
 
   const handleDownloadPDF = async (): Promise<void> => {
