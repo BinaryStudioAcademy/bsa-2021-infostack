@@ -29,6 +29,6 @@ export const handlers = (socket: Socket): void => {
 const showEditors = async (socket: Socket, pageId: string): Promise<void> => {
   const editors = await getEditors(pageId);
   const url = env.app;
-  socket.emit(SocketEvents.EDITOR_JOIN, editors, url);
-  socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors, url);
+  socket.emit(SocketEvents.EDITOR_JOIN, editors, url.url);
+  socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors, url.url);
 };

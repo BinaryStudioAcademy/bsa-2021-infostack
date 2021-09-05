@@ -15,8 +15,9 @@ import { QuillBinding } from 'y-quill';
 import TurndownService from 'turndown';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
-import { useState, useEffect } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
+import { useState, useEffect, useParams } from 'hooks/hooks';
+import { AppRoute } from 'common/enums';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 
 import 'quill/dist/quill.snow.css';
 import styles from './styles.module.scss';
@@ -41,6 +42,8 @@ export const CollabEditor: React.FC<Props> = ({
   handleCancel,
   url,
 }) => {
+  const paramsId = useParams<{ id: string }>().id;
+
   const [titleInput, setTitleInput] = useState(title);
   const [contentInput, setContentInput] = useState('');
 
@@ -78,7 +81,6 @@ export const CollabEditor: React.FC<Props> = ({
       'code-block',
     ],
   });
-  const ydoc = new Y.Doc();
 
   const onSave = (): void => {
     const turndownService = new TurndownService();
@@ -92,19 +94,16 @@ export const CollabEditor: React.FC<Props> = ({
 
   useEffect(() => {
     if (quill) {
-      const provider = new WebrtcProvider(`wss://${url}`, ydoc);
+      const pagePath = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
+      const ydoc = new Y.Doc();
+      const provider = new WebrtcProvider(`wss://${url}${pagePath}`, ydoc);
 
-      provider.connect();
       const yQuillTextYtype = ydoc.getText('quill');
       new QuillBinding(yQuillTextYtype, quill, provider?.awareness);
 
       provider.awareness.setLocalStateField('user', {
         name: userName,
         color: 'blue',
-      });
-
-      provider.awareness.setLocalStateField('quillSettings', {
-        isInputSet: false,
       });
 
       provider.awareness.setLocalStateField('quillSettings', {
@@ -127,6 +126,11 @@ export const CollabEditor: React.FC<Props> = ({
         const html = quill.root.innerHTML;
         setContentInput(html);
       });
+
+      return (): void => {
+        provider.destroy();
+        ydoc.destroy();
+      };
     }
   }, [quill]);
 
