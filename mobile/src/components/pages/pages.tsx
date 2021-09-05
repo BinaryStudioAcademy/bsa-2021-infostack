@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
 
-import { pagesActions, selectPages } from 'store';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { pagesActions } from 'store';
+import { useAppDispatch } from 'hooks';
 import { Color } from 'common/enums';
 import { Search } from 'components/search/search';
 import { SearchButton } from 'components/search/search-button';
@@ -11,20 +10,11 @@ import { ExpandedPage } from './screens/expanded-page';
 import { RootPages } from './screens/root-pages';
 
 export const Pages: React.FC = () => {
-  const pages = useAppSelector(selectPages);
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     dispatch(pagesActions.fetchPages());
   }, [dispatch]);
-
-  if (!pages.length) {
-    return (
-      <View style={container}>
-        <ActivityIndicator size="large" color={Color.PRIMARY} />
-      </View>
-    );
-  }
 
   return (
     <PageListStack.Navigator
@@ -45,9 +35,6 @@ export const Pages: React.FC = () => {
           options={{
             title: 'Pages',
           }}
-          initialParams={{
-            pages,
-          }}
         />
         <PageListStack.Screen
           name="ExpandedPage"
@@ -63,10 +50,3 @@ export const Pages: React.FC = () => {
     </PageListStack.Navigator>
   );
 };
-
-const { container } = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-});
