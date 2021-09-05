@@ -1,4 +1,4 @@
-import { http } from 'services';
+import { http } from './http.service';
 import { IPageNav, IFoundPageContent } from 'common/interfaces';
 
 class PageService {

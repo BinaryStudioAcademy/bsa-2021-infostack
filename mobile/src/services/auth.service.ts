@@ -1,4 +1,4 @@
-import { http } from 'services';
+import { http } from './http.service';
 import { HttpMethod, ContentType } from 'common/enums';
 import { ILogin, IUserWithTokens } from 'common/interfaces';
 

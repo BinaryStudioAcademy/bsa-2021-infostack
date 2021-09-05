@@ -1,4 +1,4 @@
-import { http } from 'services';
+import { http } from './http.service';
 import { IWorkspace } from 'common/interfaces';
 
 class WorkspaceService {
