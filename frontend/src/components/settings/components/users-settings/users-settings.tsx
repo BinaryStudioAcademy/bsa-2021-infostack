@@ -58,9 +58,10 @@ export const UsersSettings: React.FC = () => {
     role: RoleType,
     fullname: string,
   ): void => {
-    dispatch(usersActions.chageRole({ userId, role })).then(() => {
-      toast.info(`${fullname} role in the workplace has changed to ${role}`);
-    });
+    dispatch(usersActions.chageRole({ userId, role }))
+      .unwrap()
+      .then(() => toast.info(`${fullname} role in the workplace has changed to ${role}`))
+      .catch(() => toast.error('An error happened while changing role of the user'));
   };
 
   return (
