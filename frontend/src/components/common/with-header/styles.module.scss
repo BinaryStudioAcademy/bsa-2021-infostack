@@ -3,7 +3,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 250px minmax(auto, calc(100vw - 250px));
-  grid-template-rows: 9vh 1fr;
+  grid-template-rows: 70px 1fr;
   grid-template-areas:
     't h'
     't c';
@@ -15,6 +15,10 @@
 
 .toolbar {
   grid-area: t;
+  height: 100vh;
+  left: 0;
+  position: sticky;
+  top: 0;
 }
 
 .content {
