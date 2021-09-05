@@ -223,7 +223,9 @@ const loginOtherService = async (
   return getIUserWithTokens(newUser);
 };
 
-export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
+export const getLoginGoogleUrl = async (
+  requestedPage: string | undefined,
+): Promise<{ url: string }> => {
   const { clientId, clientSecret, redirectUrl } = env.google;
   const oauth2Client = new google.auth.OAuth2(
     clientId,
@@ -234,6 +236,7 @@ export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
   return {
     url: oauth2Client.generateAuthUrl({
       scope: scopes,
+      state: requestedPage,
     }),
   };
 };
@@ -253,11 +256,19 @@ export const loginGoogle = async (
   return await loginOtherService(name, email, picture);
 };
 
-export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
+export const getLoginGitHubUrl = async (
+  requestedPage: string | undefined,
+): Promise<{ url: string }> => {
   const { clientId, redirectUrl } = env.github;
-  return {
-    url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
-  };
+  if (requestedPage) {
+    return {
+      url: `https://github.com/login/oauth/authorize?state=${requestedPage}&client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+    };
+  } else {
+    return {
+      url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+    };
+  }
 };
 
 export const loginGithub = async (

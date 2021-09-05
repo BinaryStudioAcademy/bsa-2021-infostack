@@ -1,6 +1,8 @@
 import { Form, Modal, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'hooks/hooks';
 import { IPageNav } from 'common/interfaces/pages';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 type Props = {
   show: boolean;
@@ -64,6 +66,7 @@ export const FollowModal: React.FC<Props> = ({
                 onClick={(event): Promise<void> => addPage(event, id)}
                 name="childPageName"
                 label={title}
+                className={getAllowedClasses(styles.formCheck)}
               />
             ))}
         </Form.Group>

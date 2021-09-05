@@ -61,7 +61,7 @@ router.post(
 
 router.get(
   '/login/google',
-  run((_) => getLoginGoogleUrl()),
+  run((req) => getLoginGoogleUrl(req.query.requestedPage)),
 );
 
 router.post(
@@ -71,7 +71,7 @@ router.post(
 
 router.get(
   '/login/github',
-  run((_) => getLoginGitHubUrl()),
+  run((req) => getLoginGitHubUrl(req.query.requestedPage)),
 );
 
 export default router;

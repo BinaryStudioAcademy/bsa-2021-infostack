@@ -13,3 +13,4 @@ export * from './page-send-email-share.interface';
 export * from './found-page-content.interface';
 export * from './page-export-pdf.interface';
 export * from './page-recent.interface';
+export * from './page-requested.interface';

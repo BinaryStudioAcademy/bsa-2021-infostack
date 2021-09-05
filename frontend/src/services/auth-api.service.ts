@@ -76,12 +76,24 @@ class AuthApi {
     });
   }
 
-  public async getLoginGoogleUrl(): Promise<{ url: string }> {
-    return this.http.load(`${this.BASE}/login/google`);
+  public async getLoginGoogleUrl(
+    requestedPage: string | null,
+  ): Promise<{ url: string }> {
+    return this.http.load(
+      `${this.BASE}/login/google${
+        requestedPage ? `?requestedPage=${requestedPage}` : ''
+      }`,
+    );
   }
 
-  public async getLoginGitHubUrl(): Promise<{ url: string }> {
-    return this.http.load(`${this.BASE}/login/github`);
+  public async getLoginGitHubUrl(
+    requestedPage: string | null,
+  ): Promise<{ url: string }> {
+    return this.http.load(
+      `${this.BASE}/login/github${
+        requestedPage ? `?requestedPage=${requestedPage}` : ''
+      }`,
+    );
   }
 
   public async loginGoogle(code: string): Promise<IUserWithTokens> {

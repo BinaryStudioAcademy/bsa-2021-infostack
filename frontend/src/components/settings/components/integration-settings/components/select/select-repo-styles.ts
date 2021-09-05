@@ -11,6 +11,7 @@ export default {
     ...provided,
     background: '#fff',
     borderColor: '#9e9e9e',
+    margin: '0.5rem 2rem',
     minHeight: '30px',
     height: '30px',
   }),
