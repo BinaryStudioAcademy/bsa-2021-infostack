@@ -23,8 +23,6 @@ import { AppRoute } from 'common/enums';
 import 'quill/dist/quill.snow.css';
 import styles from './styles.module.scss';
 
-// const POSITION = 0;
-
 interface Props {
   userName: string | undefined;
   title: string | undefined;
@@ -59,7 +57,6 @@ export const CollabEditor: React.FC<Props> = ({
       syntax: {
         highlight: (text: string) => hljs.highlightAuto(text).value,
       },
-      // syntax: true,
       // table: true,
       toolbar: [
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -100,14 +97,6 @@ export const CollabEditor: React.FC<Props> = ({
   //   new QuillBinding(type, quillRef);
   // }, []);
 
-  // const clearEditor = (): void => {
-  //   const lenght = quill?.getLength() || 0;
-  //   if (quill && lenght > 0) {
-  //     quill.deleteText(POSITION, quill?.getLength());
-  //   }
-  //   quillRef.current.value = '';
-  // };
-
   const onSave = (): void => {
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(contentInput);
@@ -117,9 +106,8 @@ export const CollabEditor: React.FC<Props> = ({
 
   const onCancel = (): void => {
     if (provider) {
-      provider.destroy();
+      // provider.destroy();
     }
-    // clearEditor();
     handleCancel();
   };
 
@@ -148,11 +136,29 @@ export const CollabEditor: React.FC<Props> = ({
         color: 'blue',
       });
 
-      if (quill.getLength() < 2) {
-        const md = new MarkdownIt();
-        const result = md.render(content || '');
-        quill.clipboard.dangerouslyPasteHTML(result);
-      }
+      provider.awareness.setLocalStateField('quillSettings', {
+        isInputSet: true,
+      });
+
+      // if (quill.getLength() < 2 && ) {
+      //   const md = new MarkdownIt();
+      //   const result = md.render(content || '');
+      //   quill.clipboard.dangerouslyPasteHTML(result);
+
+      //   provider.awareness.setLocalStateField('quillSettings', { isInputSet: true });
+      // }
+
+      provider.awareness.getStates().forEach((state) => {
+        if (!state.quillSettings.isInputSet) {
+          const md = new MarkdownIt();
+          const result = md.render(content || '');
+          quill.clipboard.dangerouslyPasteHTML(result);
+
+          provider.awareness.setLocalStateField('quillSettings', {
+            isInputSet: true,
+          });
+        }
+      });
 
       quill.on('text-change', () => {
         const html = quill.root.innerHTML;

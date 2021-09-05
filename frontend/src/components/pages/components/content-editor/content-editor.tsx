@@ -73,7 +73,6 @@ export const ContentEditor: React.FC = () => {
 
   const addEditor = (editors: IPageContributor[]): void => {
     setPageEditors(editors);
-    console.info(editors.length > 1, !isLiveMode);
     editors.length > 1 && !isLiveMode
       ? setIsCollabModalVisible(true)
       : setIsCollabModalVisible(false);
@@ -83,6 +82,7 @@ export const ContentEditor: React.FC = () => {
     if (user && currentPage) {
       socket.emit(SocketEvents.EDITOR_JOIN, currentPage.id, user);
       socket.on(SocketEvents.EDITOR_JOIN, addEditor);
+      // setIsLiveMode(false);
     }
     return (): void => {
       socket.off(SocketEvents.EDITOR_JOIN, addEditor);
@@ -119,6 +119,10 @@ export const ContentEditor: React.FC = () => {
       return (): void => clearTimeout(timeoutId);
     }
   }, [draftTitleInputValue, draftMarkDownContent]);
+
+  useEffect(() => {
+    console.info(isLiveMode);
+  }, [isLiveMode]);
 
   useEffect(() => {
     if (draftPageTitle || draftPageContent) {
