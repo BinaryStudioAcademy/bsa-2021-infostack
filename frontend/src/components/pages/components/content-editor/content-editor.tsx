@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { SocketContext } from 'context/socket';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
+import { PageEditors } from '../components';
 import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
@@ -68,9 +69,12 @@ export const ContentEditor: React.FC = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
   const [isLiveMode, setIsLiveMode] = useState(false);
+  const [pageEditors, setPageEditors] = useState<IPageContributor[]>([]);
 
   const addEditor = (editors: IPageContributor[]): void => {
-    editors.length == 2
+    setPageEditors(editors);
+    console.info(editors.length > 1, !isLiveMode);
+    editors.length > 1 && !isLiveMode
       ? setIsCollabModalVisible(true)
       : setIsCollabModalVisible(false);
   };
@@ -228,12 +232,13 @@ export const ContentEditor: React.FC = () => {
 
   const handleUsualMode = (): void => {
     setIsCollabModalVisible(false);
+    setIsLiveMode(false);
+    socket.emit(SocketEvents.EDITOR_LEFT, currentPage?.id, user?.id);
   };
 
   const handleLifeMode = (): void => {
     setIsCollabModalVisible(false);
     setIsLiveMode(true);
-    // socket.emit()
   };
 
   const onDraftDelete = (): void => {
@@ -282,7 +287,7 @@ export const ContentEditor: React.FC = () => {
       <div className="p-4">
         {isLiveMode ? (
           <>
-            {/* {editors.length} */}
+            <PageEditors editors={pageEditors} />
             <CollabEditor
               userName={user?.fullName}
               title={draftTitleInputValue}

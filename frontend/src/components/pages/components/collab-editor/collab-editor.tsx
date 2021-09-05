@@ -6,24 +6,24 @@ import {
   Col,
   Row,
 } from 'react-bootstrap';
-import { useState, useEffect } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
 import * as Y from 'yjs';
 import Quill from 'quill';
 import { useQuill } from 'react-quilljs';
 import QuillCursors from 'quill-cursors';
+import { WebrtcProvider } from 'y-webrtc';
+import { QuillBinding } from 'y-quill';
+import TurndownService from 'turndown';
+import MarkdownIt from 'markdown-it';
+import hljs from 'highlight.js';
+import { useState, useEffect, useParams } from 'hooks/hooks';
+import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
+import { AppRoute } from 'common/enums';
+// import { env } from '';
+
 import 'quill/dist/quill.snow.css';
 import styles from './styles.module.scss';
 
-import TurndownService from 'turndown';
-import MarkdownIt from 'markdown-it';
-
-import { WebrtcProvider } from 'y-webrtc';
-// import { WebsocketProvider } from 'y-websocket';
-import { QuillBinding } from 'y-quill';
-import hljs from 'highlight.js';
-
-const POSITION = 0;
+// const POSITION = 0;
 
 interface Props {
   userName: string | undefined;
@@ -43,8 +43,11 @@ export const CollabEditor: React.FC<Props> = ({
   handleSaveConfirm,
   handleCancel,
 }) => {
+  const paramsId = useParams<{ id: string }>().id;
+
   const [titleInput, setTitleInput] = useState(title);
   const [contentInput, setContentInput] = useState('');
+  const [provider, setProvider] = useState<WebrtcProvider>();
 
   Quill.register('modules/cursors', QuillCursors);
 
@@ -97,41 +100,48 @@ export const CollabEditor: React.FC<Props> = ({
   //   new QuillBinding(type, quillRef);
   // }, []);
 
-  const clearEditor = (): void => {
-    const lenght = quill?.getLength() || 0;
-    if (quill && lenght > 0) {
-      quill.deleteText(POSITION, quill?.getLength());
-    }
-    quillRef.current.value = '';
-  };
+  // const clearEditor = (): void => {
+  //   const lenght = quill?.getLength() || 0;
+  //   if (quill && lenght > 0) {
+  //     quill.deleteText(POSITION, quill?.getLength());
+  //   }
+  //   quillRef.current.value = '';
+  // };
 
   const onSave = (): void => {
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(contentInput);
     handleSaveConfirm(titleInput, markdown);
-    clearEditor();
+    // clearEditor();
   };
 
   const onCancel = (): void => {
-    clearEditor();
+    if (provider) {
+      provider.destroy();
+    }
+    // clearEditor();
     handleCancel();
   };
 
   useEffect(() => {
     if (quill) {
-      const provider = new WebrtcProvider(
-        'wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor',
-        ydoc,
-      );
+      const url = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
+      console.info(url);
+      const provider = new WebrtcProvider(`wss://localhost:3000${url}`, ydoc);
 
-      // const provider = new WebsocketProvider(
+      setProvider(provider);
+
+      // const url = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
+      // setProvider(new WebrtcProvider('wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor', ydoc));
+
+      // const provider = new WebrtcProvider(
       //   'wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor',
-      //   'quill',
       //   ydoc,
       // );
+
       provider.connect();
       const yQuillTextYtype = ydoc.getText('quill');
-      new QuillBinding(yQuillTextYtype, quill, provider.awareness);
+      new QuillBinding(yQuillTextYtype, quill, provider?.awareness);
 
       provider.awareness.setLocalStateField('user', {
         name: userName,
@@ -156,14 +166,6 @@ export const CollabEditor: React.FC<Props> = ({
   }: React.ChangeEvent<HTMLInputElement>): void => {
     setTitleInput(target.value);
   };
-
-  // <div style={{ width: 500, height: 300 }}>
-  {
-    /* <div ref={quillRef} /> */
-  }
-  {
-    /* </div> */
-  }
 
   return (
     <>

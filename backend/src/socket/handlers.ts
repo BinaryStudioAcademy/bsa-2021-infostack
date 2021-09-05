@@ -13,18 +13,20 @@ export const handlers = (socket: Socket): void => {
   socket.on(SocketEvents.EDITOR_JOIN, async (pageId: string, user: IUser) => {
     socket.join(pageId);
     await addEditor(pageId, user.id);
-    const editors = await getEditors(pageId);
-    socket.emit(SocketEvents.EDITOR_JOIN, editors);
-    socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors);
+    await showEditors(socket, pageId);
   });
   socket.on(
     SocketEvents.EDITOR_LEFT,
     async (pageId: string, userId: string) => {
       socket.leave(pageId);
       await deleteEditor(pageId, userId);
-      // const editors = await getEditors(pageId);
-      // socket.emit(SocketEvents.EDITOR_JOIN,  editors);
-      // socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors);
+      await showEditors(socket, pageId);
     },
   );
+};
+
+const showEditors = async (socket: Socket, pageId: string): Promise<void> => {
+  const editors = await getEditors(pageId);
+  socket.emit(SocketEvents.EDITOR_JOIN, editors);
+  socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors);
 };

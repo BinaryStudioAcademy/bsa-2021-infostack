@@ -28,7 +28,7 @@
     "build": "npm run build:frontend && npm run build:backend",
     "start:frontend": "cd frontend && npm run start",
     "start:backend": "cd backend && npm run start:dev",
-    "start:dev": "concurrently -k -p \"{name}\" -n \"FRONTEND,BACKEND\" -c \"green,blue\" \"npm:start:frontend\" \"npm:start:backend\"",
+    "start:dev": "concurrently -k -p \"{name}\" -n \"FRONTEND,BACKEND\" -c \"green,blue\" \"npm:start:frontend\" \"npm:start:backend\" \"npx y-webrtc\"",
     "start": "cd build && npm run start",
     "prepare": "husky install",
     "heroku-prebuild": "npm run install:all",
@@ -51,12 +51,9 @@
     "typescript": "4.3.5"
   },
   "dependencies": {
-    "@types/sharedb": "^1.0.21",
     "nodemailer": "6.6.3",
     "react-toastify": "7.0.4",
-    "sharedb": "^1.9.2",
-    "y-webrtc": "^10.2.0",
-    "y-websocket": "^1.3.14"
+    "y-webrtc": "10.2.0"
   },
   "lint-staged": {
     "*": "npm run lint:editorconfig && npm run lint:fs",
