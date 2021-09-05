@@ -12,30 +12,37 @@ interface Props {
 
 export const PagesRecent: React.FC<Props> = ({ pages, className }) => {
   return (
-    <Card border="light" className={getAllowedClasses(styles.card, className)}>
-      <Card.Header className="bg-white border-0 d-flex align-items-center">
-        Recent pages
-      </Card.Header>
-      <Card.Body>
-        {pages &&
-          pages.map(({ pageId, title, visited }) => (
-            <Link
-              key={pageId}
-              to={replaceIdParam(AppRoute.PAGE, pageId || '') as AppRoute}
-              className={getAllowedClasses(
-                styles.recentlink,
-                'text-decoration-none',
-              )}
-            >
-              <div
-                className={getAllowedClasses(styles.recentItem, 'text-break')}
+    <div className="p-4">
+      <Card
+        border="light"
+        className={getAllowedClasses(styles.card, className)}
+      >
+        <Card.Header className="bg-white border-0 d-flex align-items-center">
+          Recent pages
+        </Card.Header>
+        <Card.Body>
+          {pages &&
+            pages.map(({ pageId, title, visited }) => (
+              <Link
+                key={pageId}
+                to={replaceIdParam(AppRoute.PAGE, pageId || '') as AppRoute}
+                className={getAllowedClasses(
+                  styles.recentlink,
+                  'text-decoration-none',
+                )}
               >
-                {title}
-              </div>
-              <div className={getAllowedClasses(styles.visited)}>{visited}</div>
-            </Link>
-          ))}
-      </Card.Body>
-    </Card>
+                <div
+                  className={getAllowedClasses(styles.recentItem, 'text-break')}
+                >
+                  {title}
+                </div>
+                <div className={getAllowedClasses(styles.visited)}>
+                  {visited}
+                </div>
+              </Link>
+            ))}
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
