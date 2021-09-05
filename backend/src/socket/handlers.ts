@@ -2,6 +2,7 @@ import { Socket } from 'socket.io';
 import { SocketEvents } from '../common/enums/socket';
 import { IUser } from '../common/interfaces/user';
 import { getEditors, addEditor, deleteEditor } from '../services/page.service';
+import { env } from '../env';
 
 export const handlers = (socket: Socket): void => {
   socket.on(SocketEvents.PAGE_JOIN, (pageId: string) => {
@@ -27,6 +28,7 @@ export const handlers = (socket: Socket): void => {
 
 const showEditors = async (socket: Socket, pageId: string): Promise<void> => {
   const editors = await getEditors(pageId);
-  socket.emit(SocketEvents.EDITOR_JOIN, editors);
-  socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors);
+  const url = env.app;
+  socket.emit(SocketEvents.EDITOR_JOIN, editors, url);
+  socket.in(pageId).emit(SocketEvents.EDITOR_JOIN, editors, url);
 };

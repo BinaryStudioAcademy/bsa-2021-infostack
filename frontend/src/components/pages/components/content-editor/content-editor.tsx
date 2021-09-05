@@ -70,19 +70,20 @@ export const ContentEditor: React.FC = () => {
   const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
   const [isLiveMode, setIsLiveMode] = useState(false);
   const [pageEditors, setPageEditors] = useState<IPageContributor[]>([]);
+  const [url, setUrl] = useState('');
 
-  const addEditor = (editors: IPageContributor[]): void => {
+  const addEditor = (editors: IPageContributor[], url: string): void => {
     setPageEditors(editors);
     editors.length > 1 && !isLiveMode
       ? setIsCollabModalVisible(true)
       : setIsCollabModalVisible(false);
+    setUrl(url);
   };
 
   useEffect(() => {
     if (user && currentPage) {
       socket.emit(SocketEvents.EDITOR_JOIN, currentPage.id, user);
       socket.on(SocketEvents.EDITOR_JOIN, addEditor);
-      // setIsLiveMode(false);
     }
     return (): void => {
       socket.off(SocketEvents.EDITOR_JOIN, addEditor);
@@ -119,10 +120,6 @@ export const ContentEditor: React.FC = () => {
       return (): void => clearTimeout(timeoutId);
     }
   }, [draftTitleInputValue, draftMarkDownContent]);
-
-  useEffect(() => {
-    console.info(isLiveMode);
-  }, [isLiveMode]);
 
   useEffect(() => {
     if (draftPageTitle || draftPageContent) {
@@ -259,11 +256,6 @@ export const ContentEditor: React.FC = () => {
     )
       .unwrap()
       .then(handleCancel);
-    // setIsLiveMode(false);
-    // setDraftTitleInputValue(title);
-    // setDraftMarkDownContent(content);
-    // handleSaveConfirm();
-    // setIsDeleteModalVisible(true);
   };
 
   const handleAutosaveAsDraft = (): void => {
@@ -298,6 +290,7 @@ export const ContentEditor: React.FC = () => {
               content={draftMarkDownContent}
               handleSaveConfirm={handleCollabSaveConfirm}
               handleCancel={onCancel}
+              url={url}
             />
           </>
         ) : (

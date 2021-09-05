@@ -15,10 +15,8 @@ import { QuillBinding } from 'y-quill';
 import TurndownService from 'turndown';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
-import { useState, useEffect, useParams } from 'hooks/hooks';
-import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
-import { AppRoute } from 'common/enums';
-// import { env } from '';
+import { useState, useEffect } from 'hooks/hooks';
+import { getAllowedClasses } from 'helpers/helpers';
 
 import 'quill/dist/quill.snow.css';
 import styles from './styles.module.scss';
@@ -32,6 +30,7 @@ interface Props {
     content: string | undefined,
   ): void;
   handleCancel(): void;
+  url: string;
 }
 
 export const CollabEditor: React.FC<Props> = ({
@@ -40,12 +39,10 @@ export const CollabEditor: React.FC<Props> = ({
   content,
   handleSaveConfirm,
   handleCancel,
+  url,
 }) => {
-  const paramsId = useParams<{ id: string }>().id;
-
   const [titleInput, setTitleInput] = useState(title);
   const [contentInput, setContentInput] = useState('');
-  const [provider, setProvider] = useState<WebrtcProvider>();
 
   Quill.register('modules/cursors', QuillCursors);
 
@@ -57,7 +54,6 @@ export const CollabEditor: React.FC<Props> = ({
       syntax: {
         highlight: (text: string) => hljs.highlightAuto(text).value,
       },
-      // table: true,
       toolbar: [
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         ['bold', 'italic', 'strike'],
@@ -82,50 +78,21 @@ export const CollabEditor: React.FC<Props> = ({
       'code-block',
     ],
   });
-
   const ydoc = new Y.Doc();
-
-  // useEffect(() => {
-  // 	if (quill) {
-  // 		setProvider();
-  // 	}
-  // }, []);
-  // useEffect(() => {
-  //   const provider = new WebsocketProvider("wss://yjs-react-example.herokuapp.com/");// change to 'ws://localhost:3000' for local development
-  //   const ydocument = provider.get("textarea");
-  //   const type = ydocument.define("textarea", YText);
-  //   new QuillBinding(type, quillRef);
-  // }, []);
 
   const onSave = (): void => {
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(contentInput);
     handleSaveConfirm(titleInput, markdown);
-    // clearEditor();
   };
 
   const onCancel = (): void => {
-    if (provider) {
-      // provider.destroy();
-    }
     handleCancel();
   };
 
   useEffect(() => {
     if (quill) {
-      const url = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
-      console.info(url);
-      const provider = new WebrtcProvider(`wss://localhost:3000${url}`, ydoc);
-
-      setProvider(provider);
-
-      // const url = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
-      // setProvider(new WebrtcProvider('wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor', ydoc));
-
-      // const provider = new WebrtcProvider(
-      //   'wss://localhost:3000/page/f2868acd-09ec-4661-8bf8-ebf78e51e6c5/editor',
-      //   ydoc,
-      // );
+      const provider = new WebrtcProvider(`wss://${url}`, ydoc);
 
       provider.connect();
       const yQuillTextYtype = ydoc.getText('quill');
@@ -137,16 +104,12 @@ export const CollabEditor: React.FC<Props> = ({
       });
 
       provider.awareness.setLocalStateField('quillSettings', {
-        isInputSet: true,
+        isInputSet: false,
       });
 
-      // if (quill.getLength() < 2 && ) {
-      //   const md = new MarkdownIt();
-      //   const result = md.render(content || '');
-      //   quill.clipboard.dangerouslyPasteHTML(result);
-
-      //   provider.awareness.setLocalStateField('quillSettings', { isInputSet: true });
-      // }
+      provider.awareness.setLocalStateField('quillSettings', {
+        isInputSet: false,
+      });
 
       provider.awareness.getStates().forEach((state) => {
         if (!state.quillSettings.isInputSet) {
