@@ -1,9 +1,10 @@
-import { Button, Modal, Spinner } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import AudioPlayer from 'react-h5-audio-player';
 import useCountDown from 'react-countdown-hook';
-import 'react-h5-audio-player/lib/styles.css';
+import { Button, Modal } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { useState, useRef, useEffect } from 'hooks/hooks';
+import { getAllowedClasses } from 'helpers/helpers';
+import 'react-h5-audio-player/lib/styles.css';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -18,6 +19,7 @@ const RecordModal: React.FC<Props> = (props) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleteRecord, setIsCompleteRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState('');
+  const [audioDuration, setAudioDuration] = useState(0);
   const [audioFile, setAudioFile] = useState<File>();
   const stopButton = useRef<HTMLButtonElement>(null);
   const pauseButton = useRef<HTMLButtonElement>(null);
@@ -113,74 +115,187 @@ const RecordModal: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    if (timeLeft <= 1000) {
+    if (timeLeft <= 999) {
       stopButton.current && stopButton.current.click();
+      setAudioDuration(59);
+    }
+    if (timeLeft > 0) {
+      setAudioDuration(timeLeft);
     }
   }, [timeLeft]);
+
+  let seconds: string | number = 60 - timeLeft / 1000;
+  const secToShow =
+    seconds.toString().length < 2 ? (seconds = '0' + seconds) : seconds;
+
+  let recorderDuration: string | number = 60 - audioDuration / 1000;
+  const durToShow =
+    recorderDuration.toString().length < 2
+      ? (recorderDuration = '0' + recorderDuration)
+      : recorderDuration;
 
   return (
     <Modal
       {...props}
       onHide={onCancel}
-      size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      dialogClassName="modal-20w"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Voice Record
+          Audio Comment
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="text-center">
-        {isCompleteRecord && (
-          <AudioPlayer
-            src={audioUrl}
-            autoPlayAfterSrcChange={false}
-            customAdditionalControls={[]}
-            defaultDuration="Loading..."
-          />
-        )}
-        {isRecording && (
+      <Modal.Body
+        className={getAllowedClasses(styles.modalBody, 'text-center')}
+      >
+        {!isRecording && !isCompleteRecord && (
           <>
-            <Spinner as="span" animation="grow" variant="danger" />
-            {!isPaused ? 'Recording' : 'On pause'}
-            <div>{`${timeLeft / 1000}sec`}</div>
+            <p>Record duration is limited: 1 min</p>
+            <p className={getAllowedClasses(styles.timer)}>00:00</p>
           </>
         )}
-        {!isRecording && !isCompleteRecord && 'Press start to record'}
+        {!isRecording && !isCompleteRecord && (
+          <Button
+            onClick={onStartRecord}
+            className={getAllowedClasses(styles.text, styles.recordButton)}
+            variant="danger"
+          >
+            <i
+              className={getAllowedClasses(styles.startRecordMic, 'bi bi-mic')}
+            />
+          </Button>
+        )}
+
+        {isRecording && (
+          <div>
+            {!isPaused ? 'Recording' : 'On pause'}
+            <p
+              className={getAllowedClasses(styles.timer)}
+            >{`00:${secToShow}`}</p>
+            {isRecording && (
+              <div
+                className={getAllowedClasses(
+                  styles.btnContainer,
+                  'd-flex justify-content-around align-items-center',
+                )}
+              >
+                <div className="d-flex align-items-center w-25">
+                  <Button
+                    ref={pauseButton}
+                    className={
+                      !isPaused
+                        ? getAllowedClasses(styles.text, styles.pauseButton)
+                        : getAllowedClasses(styles.text, styles.resumeButton)
+                    }
+                    variant={!isPaused ? 'link' : 'danger'}
+                  >
+                    {!isPaused ? (
+                      <i
+                        className={getAllowedClasses(
+                          styles.pauseIcon,
+                          'bi bi-pause-fill',
+                        )}
+                      ></i>
+                    ) : (
+                      <>
+                        <i
+                          className={getAllowedClasses(
+                            styles.resumeRecordMic,
+                            'bi bi-mic',
+                          )}
+                        />
+                      </>
+                    )}
+                  </Button>
+                  {isPaused ? (
+                    <span
+                      className={getAllowedClasses(
+                        styles.resumeText,
+                        'd-flex ms-2',
+                      )}
+                    >
+                      Resume
+                    </span>
+                  ) : (
+                    <span className={getAllowedClasses(styles.pauseText)}>
+                      Pause
+                    </span>
+                  )}
+                </div>
+                <div className="d-flex align-items-center">
+                  <Button
+                    ref={stopButton}
+                    className={getAllowedClasses(
+                      styles.stopButton,
+                      'ms-3 me-2',
+                    )}
+                    variant="danger"
+                  ></Button>
+                  <span
+                    className={getAllowedClasses(styles.stopText, 'd-flex')}
+                  >
+                    Stop
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {isCompleteRecord && (
+          <>
+            <p>Record</p>
+            <p className={getAllowedClasses(styles.recordedTime)}>
+              {durToShow > 59 ? '00:59' : `00:${durToShow}`}
+            </p>
+            <AudioPlayer
+              layout="stacked"
+              src={audioUrl}
+              autoPlayAfterSrcChange={false}
+              customAdditionalControls={[]}
+              showJumpControls={false}
+              defaultDuration={durToShow > 59 ? '00:59' : `00:${durToShow}`}
+            />
+            <Button
+              onClick={(): void => onCancel()}
+              className={styles.trashButton}
+              variant="link"
+            >
+              <i
+                className={getAllowedClasses(styles.trashIcon, 'bi bi-trash')}
+                data-toggle="tooltip"
+                data-placement="left"
+                title="Delete audio"
+              ></i>
+            </Button>
+            <Button
+              onClick={onPublish}
+              className={styles.saveButton}
+              variant="link"
+            >
+              <i
+                className={getAllowedClasses(
+                  styles.sendIcon,
+                  'bi bi-file-earmark-plus',
+                )}
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Save audio"
+              ></i>
+            </Button>
+          </>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button
           onClick={(): void => onCancel()}
-          className={styles.text}
-          variant="warning"
+          className={getAllowedClasses(styles.text)}
+          variant="secondary"
         >
           Cancel
         </Button>
-        {!isRecording && (
-          <Button
-            onClick={onStartRecord}
-            className={styles.text}
-            variant="success"
-          >
-            🔴 Start
-          </Button>
-        )}
-        {isRecording && (
-          <>
-            <Button ref={stopButton} className={styles.text} variant="success">
-              ⏹ Stop
-            </Button>
-            <Button ref={pauseButton} className={styles.text} variant="success">
-              {!isPaused ? '⏸ Pause' : '⏺ Resume record'}
-            </Button>
-          </>
-        )}
-        {isCompleteRecord && (
-          <Button onClick={onPublish} className={styles.text} variant="success">
-            Attach audio
-          </Button>
-        )}
       </Modal.Footer>
     </Modal>
   );
