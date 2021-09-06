@@ -20,7 +20,13 @@ export const Page: React.FC = () => {
   const currentPageStatus = useAppSelector(selectCurrentPageStatus);
 
   if (currentPageStatus === RequestStatus.LOADING) {
-    return <ActivityIndicator />;
+    return (
+      <View style={spinnerContainer}>
+        <Text>
+          <ActivityIndicator size="large" />;
+        </Text>
+      </View>
+    );
   }
 
   return (
@@ -38,25 +44,37 @@ export const Page: React.FC = () => {
   );
 };
 
-const { container, titleContainer, scrollView, body, title, text } =
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingTop: 10,
-    },
-    titleContainer: {
-      paddingLeft: 10,
-      marginBottom: 15,
-    },
-    title: {
-      color: '#495057',
-      fontSize: 24,
-    },
-    scrollView: {
-      height: '100%',
-    },
-    body: { paddingLeft: 10, paddingRight: 10 },
-    text: {
-      color: '#333',
-    },
-  });
+const {
+  container,
+  titleContainer,
+  scrollView,
+  body,
+  title,
+  text,
+  spinnerContainer,
+} = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 10,
+  },
+  titleContainer: {
+    paddingLeft: 10,
+    marginBottom: 15,
+  },
+  title: {
+    color: '#495057',
+    fontSize: 24,
+  },
+  scrollView: {
+    height: '100%',
+  },
+  body: { paddingLeft: 10, paddingRight: 10 },
+  text: {
+    color: '#333',
+  },
+  spinnerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
