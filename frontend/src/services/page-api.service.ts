@@ -58,11 +58,6 @@ class PageApi {
   }
 
   public async getMostViewedPages(query?: IQuery): Promise<IPageStatistic[]> {
-    console.log(
-      `${this.BASE}/most-viewed${
-        query ? `?${getStringifiedQuery(query)}` : ''
-      }`,
-    );
     return this.http.load(
       `${this.BASE}/most-viewed${
         query ? `?${getStringifiedQuery(query)}` : ''
@@ -71,11 +66,6 @@ class PageApi {
   }
 
   public async getMostUpdatedPages(query?: IQuery): Promise<IPageStatistic[]> {
-    console.log(
-      `${this.BASE}/most-updated${
-        query ? `?${getStringifiedQuery(query)}` : ''
-      }`,
-    );
     return this.http.load(
       `${this.BASE}/most-updated${
         query ? `?${getStringifiedQuery(query)}` : ''

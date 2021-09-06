@@ -1,5 +1,6 @@
 interface IPageStatistic {
-  count: string;
+  count?: string;
+  visited?: string;
   pageId: string;
   title: string;
 }

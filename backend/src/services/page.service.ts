@@ -28,7 +28,6 @@ import {
   IPageShare,
   IFoundPageContent,
   IExportPDF,
-  IPageRecent,
   IPageStatistic,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
@@ -863,7 +862,7 @@ export const sendPDF = async (
 export const getRecentPages = async (
   userId: string,
   workspaceId: string,
-): Promise<IPageRecent[]> => {
+): Promise<IPageStatistic[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
   const recentPages = await recentPagesRepository.findAllByUserIdandWorkspaceId(
     userId,
