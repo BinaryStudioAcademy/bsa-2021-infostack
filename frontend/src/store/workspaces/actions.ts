@@ -46,8 +46,10 @@ const updateWorkspace = createAsyncThunk(
     const { id, ...data } = payload;
     dispatch(actions.toggleIsUpdatingCurrentWorkspace());
 
-    const updatedWorkspace = await workspaceApi.updateWorkspaceById(id, data);
-    dispatch(actions.setCurrentWorkspace(updatedWorkspace));
+    await workspaceApi.updateWorkspaceById(id, data);
+    const workspace = await workspaceApi.getWorkspace(id);
+
+    dispatch(actions.setCurrentWorkspace(workspace));
 
     dispatch(actions.toggleIsUpdatingCurrentWorkspace());
   },
