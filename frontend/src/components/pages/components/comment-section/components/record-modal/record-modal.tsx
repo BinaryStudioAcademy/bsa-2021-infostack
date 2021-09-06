@@ -115,20 +115,22 @@ const RecordModal: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    if (timeLeft <= 1000) {
+    if (timeLeft <= 999) {
       stopButton.current && stopButton.current.click();
+      setAudioDuration(59);
     }
     if (timeLeft > 0) {
       setAudioDuration(timeLeft);
     }
   }, [timeLeft]);
 
-  let seconds = (60 - timeLeft / 1000).toString();
-  const secToShow = seconds.length < 2 ? (seconds = '0' + seconds) : seconds;
+  let seconds: string | number = 60 - timeLeft / 1000;
+  const secToShow =
+    seconds.toString().length < 2 ? (seconds = '0' + seconds) : seconds;
 
-  let recorderDuration = (60 - audioDuration / 1000).toString();
+  let recorderDuration: string | number = 60 - audioDuration / 1000;
   const durToShow =
-    recorderDuration.length < 2
+    recorderDuration.toString().length < 2
       ? (recorderDuration = '0' + recorderDuration)
       : recorderDuration;
 
@@ -246,7 +248,7 @@ const RecordModal: React.FC<Props> = (props) => {
           <>
             <p>Record</p>
             <p className={getAllowedClasses(styles.recordedTime)}>
-              {durToShow === '60' ? '01:00' : `00:${durToShow}`}
+              {durToShow > 59 ? '00:59' : `00:${durToShow}`}
             </p>
             <AudioPlayer
               layout="stacked"
@@ -254,7 +256,7 @@ const RecordModal: React.FC<Props> = (props) => {
               autoPlayAfterSrcChange={false}
               customAdditionalControls={[]}
               showJumpControls={false}
-              defaultDuration={durToShow === '60' ? '01:00' : `00:${durToShow}`}
+              defaultDuration={durToShow > 59 ? '00:59' : `00:${durToShow}`}
             />
             <Button
               onClick={(): void => onCancel()}
