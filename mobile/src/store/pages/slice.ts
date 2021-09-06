@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { ReducerName } from 'common/enums';
 import { IPage, IPageNav } from 'common/interfaces';
 import { RequestStatus } from 'common/enums';
-import { fetchPages } from './async-actions';
+import { fetchPages, fetchCurrentPage } from './async-actions';
 
 type State = {
   currentPage: IPage | null;
@@ -34,6 +34,16 @@ export const { reducer, actions } = createSlice({
       })
       .addCase(fetchPages.rejected, (state) => {
         state.pagesStatus = RequestStatus.FAILED;
+      })
+      .addCase(fetchCurrentPage.pending, (state) => {
+        state.currentPageStatus = RequestStatus.LOADING;
+      })
+      .addCase(fetchCurrentPage.fulfilled, (state, action) => {
+        state.currentPage = action.payload;
+        state.currentPageStatus = RequestStatus.SUCCEEDED;
+      })
+      .addCase(fetchCurrentPage.rejected, (state) => {
+        state.currentPageStatus = RequestStatus.FAILED;
       });
   },
 });
