@@ -419,22 +419,20 @@ export const PageContent: React.FC = () => {
                   </div>
                 </Row>
                 <Row>
-                  <Col className="d-flex justify-content-between mb-4 align-items-center">
+                  <Col className="d-flex justify-content-between mb-4 align-items-start">
                     <OverlayTrigger
                       trigger="hover"
                       placement="bottom"
                       overlay={
                         <Popover id="popover-positioned-bottom">
-                          <Popover.Body
-                            className={getAllowedClasses(styles.popoverText)}
-                          >
+                          <Popover.Body className={styles.popoverText}>
                             {pageTitle || 'New Page'}
                           </Popover.Body>
                         </Popover>
                       }
                     >
                       <>
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center w-75">
                           <h1
                             className={getAllowedClasses(
                               styles.pageHeading,
@@ -454,7 +452,7 @@ export const PageContent: React.FC = () => {
                         </div>
                       </>
                     </OverlayTrigger>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center w-25">
                       {canRead && (
                         <VersionDropdown
                           currContent={currContent}
