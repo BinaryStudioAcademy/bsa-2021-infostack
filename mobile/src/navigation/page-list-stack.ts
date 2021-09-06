@@ -5,6 +5,7 @@ import { IPageNav } from 'common/interfaces';
 export type PageListStackParamList = {
   RootPages: { pages: IPageNav[] };
   ExpandedPage: { page: IPageNav };
+  Page: { page: IPageNav };
 };
 
 export const PageListStack =

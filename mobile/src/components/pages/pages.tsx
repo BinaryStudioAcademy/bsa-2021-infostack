@@ -8,6 +8,7 @@ import { PageListStack } from 'navigation/page-list-stack';
 import { ExpandedPage } from './screens/expanded-page';
 import { RootPages } from './screens/root-pages';
 import { StyleSheet } from 'react-native';
+import { Page } from './screens/page';
 
 export const Pages: React.FC = () => {
   const pages = useAppSelector(selectPages);
@@ -47,6 +48,11 @@ export const Pages: React.FC = () => {
       <PageListStack.Screen
         name="ExpandedPage"
         component={ExpandedPage}
+        options={({ route }) => ({ title: route.params.page.title })}
+      />
+      <PageListStack.Screen
+        name="Page"
+        component={Page}
         options={({ route }) => ({ title: route.params.page.title })}
       />
     </PageListStack.Navigator>

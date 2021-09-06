@@ -8,25 +8,34 @@ import { Color } from 'common/enums';
 type Props = {
   title: string;
   childPages: IPageNav[];
+  onNameClick: () => void;
   onChevronClick: () => void;
 };
 
 export const PageListItem: React.FC<Props> = ({
   title,
   childPages,
+  onNameClick,
   onChevronClick,
 }) => {
   const hasChildPages = Boolean(childPages.length);
 
   return (
     <View style={row}>
-      <Text style={text}>{title}</Text>
+      <TouchableNativeFeedback
+        onPress={onNameClick}
+        background={TouchableNativeFeedback.Ripple(Color.PRIMARY, false)}
+      >
+        <View style={titleContainer}>
+          <Text style={text}>{title}</Text>
+        </View>
+      </TouchableNativeFeedback>
       {hasChildPages && (
         <TouchableNativeFeedback
           onPress={onChevronClick}
           background={TouchableNativeFeedback.Ripple(Color.PRIMARY, false)}
         >
-          <View>
+          <View style={chevronContainer}>
             <Icon name="chevron-right" size={28} color={Color.SECONDARY} />
           </View>
         </TouchableNativeFeedback>
@@ -35,16 +44,22 @@ export const PageListItem: React.FC<Props> = ({
   );
 };
 
-const { row, text } = StyleSheet.create({
+const { row, text, titleContainer, chevronContainer } = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
     paddingVertical: 15,
-    paddingHorizontal: 20,
   },
   text: {
     fontSize: 20,
+  },
+  titleContainer: {
+    width: '80%',
+    paddingLeft: 20,
+  },
+  chevronContainer: {
+    paddingRight: 20,
   },
 });
