@@ -12,7 +12,7 @@ interface IUserItemProps extends IWorkspaceUser {
   options: IOption[];
   className: string;
   onDelete: (fullName: string, id: string) => void;
-  onChange: (userId: string, role: RoleType) => void;
+  onChange: (userId: string, role: RoleType, fullname: string) => void;
 }
 
 export const UserItem: React.FC<IUserItemProps> = ({
@@ -36,7 +36,7 @@ export const UserItem: React.FC<IUserItemProps> = ({
   const onRoleChange = (selectedOption: IOption | null): void => {
     if (selectedOption) {
       const participantRole: string = selectedOption.value;
-      onChange(id, participantRole as RoleType);
+      onChange(id, participantRole as RoleType, fullName);
     }
   };
 
