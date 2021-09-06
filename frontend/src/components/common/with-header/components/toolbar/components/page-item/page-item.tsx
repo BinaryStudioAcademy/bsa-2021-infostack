@@ -11,7 +11,7 @@ import {
 } from 'hooks/hooks';
 import { pagesActions } from 'store/actions';
 import { IPageRequest } from 'common/interfaces/pages';
-import { PlusButtonRoot } from '../components';
+import { PlusButtonRoot, CrossButtonRoot } from '../components';
 import { RootState } from 'common/types/types';
 import {
   getAllowedClasses,
@@ -25,6 +25,7 @@ type Props = {
   id?: string;
   childPages?: IPageNav[];
   allowSubPageAdd: boolean;
+  allowRemoveAction: boolean;
 };
 
 export const PageItem: React.FC<Props> = ({
@@ -32,6 +33,7 @@ export const PageItem: React.FC<Props> = ({
   id,
   childPages,
   allowSubPageAdd,
+  allowRemoveAction,
 }) => {
   const dispatch = useAppDispatch();
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
@@ -58,6 +60,11 @@ export const PageItem: React.FC<Props> = ({
       });
     await dispatch(pagesActions.getPagesAsync());
     setActiveKey(id);
+  };
+
+  const removePinned = async (id?: string): Promise<void> => {
+    await dispatch(pagesActions.unpinPage(id));
+    await dispatch(pagesActions.getPinnedPagesAsync());
   };
 
   type LinkProps = {
@@ -135,6 +142,7 @@ export const PageItem: React.FC<Props> = ({
                       title={title}
                       childPages={childPages}
                       allowSubPageAdd={allowSubPageAdd}
+                      allowRemoveAction={allowRemoveAction}
                     />
                   ))}
               </Accordion.Body>
@@ -153,6 +161,14 @@ export const PageItem: React.FC<Props> = ({
                   className={getAllowedClasses(styles.plus)}
                 >
                   <PlusButtonRoot />
+                </span>
+              )}
+              {allowRemoveAction && (
+                <span
+                  onClick={(): Promise<void> => removePinned(id)}
+                  className={getAllowedClasses(styles.plus)}
+                >
+                  <CrossButtonRoot />
                 </span>
               )}
             </div>
