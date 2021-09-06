@@ -1,4 +1,5 @@
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import { Link } from 'react-router-dom';
 import { useAppSelector, useParams, useState } from 'hooks/hooks';
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
@@ -57,11 +58,14 @@ export const Breadcrumbs: React.FC = () => {
 
   return (
     <Breadcrumb className={getAllowedClasses(styles.breadcrumb)}>
-      <Breadcrumb.Item href={AppRoute.ROOT}>Home</Breadcrumb.Item>
+      <Breadcrumb.Item linkAs={Link} linkProps={{ to: AppRoute.ROOT }}>
+        Home
+      </Breadcrumb.Item>
       {[...breadcrumbs].reverse().map((breadcrumb, i, breadcrumbs) => (
         <Breadcrumb.Item
           key={breadcrumb.id}
-          href={breadcrumb.href}
+          linkAs={Link}
+          linkProps={{ to: breadcrumb.href }}
           active={i === breadcrumbs.length - 1}
         >
           {breadcrumb.title}
