@@ -135,7 +135,7 @@ const pinPage = createAsyncThunk(
 
 const unpinPage = createAsyncThunk(
   ActionType.GET_PAGE,
-  async (pageId: string, { dispatch }) => {
+  async (pageId: string | undefined, { dispatch }) => {
     await pageApi.unpinPage(pageId);
     const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
