@@ -42,7 +42,7 @@
   }
 
   .cardInputLabel {
-    font-size: 1.32rem;
+    font-size: 1.4rem;
   }
 
   .cardInput {
@@ -96,4 +96,24 @@
   .spaceBetween {
     justify-content: space-between;
   }
+}
+
+.avatarImgContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1.25rem;
+
+  border: 1px solid #ced4da;
+  border-radius: 50%;
+
+  min-height: 12.8rem;
+  min-width: 12.8rem;
+  margin-bottom: 1rem;
+}
+
+.noAvatar {
+  font-size: 3rem;
+  cursor: default;
 }

@@ -1,1 +1,1 @@
-export { LocalStorageVariable } from 'infostack-shared/common/enums';
+export { LocalStorageVariable } from 'infostack-shared';
