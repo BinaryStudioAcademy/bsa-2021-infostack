@@ -7,6 +7,7 @@
 
 const path = require('path');
 const { getDefaultConfig } = require('metro-config');
+const PATH_TO_SHARED = path.join(__dirname, '/../shared/build');
 
 module.exports = async () => {
   const {
@@ -26,12 +27,12 @@ module.exports = async () => {
       assetExts: assetExts.filter((ext) => ext !== 'svg'),
       sourceExts: [...sourceExts, 'svg'],
       extraNodeModules: {
-        'infostack-shared': path.resolve(__dirname + '/../shared/build'),
+        'infostack-shared': path.resolve(PATH_TO_SHARED),
       },
     },
     watchFolders: [
       path.resolve(__dirname, './node_modules'),
-      path.resolve(__dirname + '/../shared/build'),
+      path.resolve(PATH_TO_SHARED),
     ],
   };
 };

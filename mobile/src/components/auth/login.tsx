@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 import { Controller } from 'react-hook-form';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
+import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 
-import Logo from '../../../assets/svg/logo_dark.svg';
+import { authActions } from 'store';
 import {
   useAppDispatch,
   useAppSelector,
@@ -11,10 +11,10 @@ import {
   yupResolver,
   useForm,
 } from 'hooks';
-import { authActions } from 'store';
-import { RequestStatus } from 'common/enums';
 import { ILogin } from 'common/interfaces';
 import { loginSchema } from 'common/validations';
+import { Color, RequestStatus } from 'common/enums';
+import Logo from 'assets/svg/logo_dark.svg';
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -77,12 +77,14 @@ export const Login: React.FC = () => {
                   value={value}
                   secureTextEntry={isPasswordHidden}
                 />
-                <Icon
-                  name={isPasswordHidden ? 'eye-slash' : 'eye'}
-                  size={20}
-                  color="grey"
-                  onPress={toggleIsPasswordHidden}
-                />
+                {!!value.length && (
+                  <Icon
+                    name={isPasswordHidden ? 'eye' : 'eye-off'}
+                    size={20}
+                    color="grey"
+                    onPress={toggleIsPasswordHidden}
+                  />
+                )}
               </View>
             )}
             name="password"
@@ -136,23 +138,25 @@ const {
   },
   title: {
     fontSize: 28,
-    color: '#495070',
+    color: Color.TEXT_DARK,
   },
   description: {
     fontSize: 18,
-    color: '#495057',
+    color: Color.TEXT_DARK,
   },
   formCard: {
     width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: Color.WHITE,
+    elevation: 2,
+    borderRadius: 4,
     marginTop: 40,
     padding: '5%',
   },
   formText: {
     fontSize: 16,
-    color: '#495057',
+    color: Color.TEXT_DARK,
   },
   formItem: {
     width: '100%',
@@ -161,10 +165,10 @@ const {
     width: '100%',
     height: 40,
 
-    color: '#212529',
+    color: Color.TEXT_DARK,
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: '#ced4da',
+    borderColor: Color.BORDER,
     padding: 10,
     textDecorationLine: 'none',
   },
@@ -187,28 +191,27 @@ const {
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: '#ced4da',
+    borderColor: Color.BORDER,
     paddingRight: 10,
     marginTop: 5,
   },
   signInButton: {
-    marginTop: 40,
     padding: 10,
-    backgroundColor: '#4bba73',
+    backgroundColor: Color.PRIMARY,
     borderRadius: 4,
   },
   signInText: {
     fontSize: 20,
-    color: 'white',
+    color: Color.WHITE,
   },
   errorText: {
-    color: '#dc3545',
+    color: Color.DANGER,
   },
   signInErrorText: {
     marginTop: 20,
   },
   errorInput: {
-    borderColor: '#dc3545',
+    borderColor: Color.DANGER,
   },
   emailInput: {
     marginTop: 5,
