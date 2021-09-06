@@ -30,7 +30,7 @@
     "build": "npm run build:frontend && npm run build:backend",
     "start:frontend": "cd frontend && npm run start",
     "start:backend": "cd backend && npm run start:dev",
-    "start:dev": "concurrently -k -p \"{name}\" -n \"FRONTEND,BACKEND\" -c \"green,blue\" \"npm:start:frontend\" \"npm:start:backend\" \"npx y-webrtc\"",
+    "start:dev": "concurrently -k -p \"{name}\" -n \"FRONTEND,BACKEND\" -c \"green,blue\" \"npm:start:frontend\" \"npm:start:backend\"",
     "start": "cd build && npm run start",
     "prepare": "husky install",
     "heroku-prebuild": "npm run install:all",

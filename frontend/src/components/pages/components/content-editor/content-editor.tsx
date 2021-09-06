@@ -54,11 +54,11 @@ export const ContentEditor: React.FC = () => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   }
 
-  const [titleInputValue, setTitleInputValue] = useState(pageTitle);
+  const [titleInputValue, setTitleInputValue] = useState(pageTitle || '');
   const [markDownContent, setMarkDownContent] = useState(content);
 
   const [draftTitleInputValue, setDraftTitleInputValue] = useState(
-    draftPageTitle || pageTitle,
+    draftPageTitle || pageTitle || '',
   );
   const [draftMarkDownContent, setDraftMarkDownContent] = useState(
     draftPageContent || content,
@@ -158,7 +158,7 @@ export const ContentEditor: React.FC = () => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   };
 
-  const showWarningOnTitle = (title: string | undefined): void => {
+  const showWarningOnTitle = (title: string): void => {
     if (title?.trim().length === 0) {
       toast.warning('Title could not be empty');
       return;
@@ -219,7 +219,7 @@ export const ContentEditor: React.FC = () => {
         pauseOnHover: true,
       });
 
-      setDraftTitleInputValue(pageTitle);
+      setDraftTitleInputValue(pageTitle || '');
       setDraftMarkDownContent(content);
 
       setDeleteDraftShown(false);
@@ -247,15 +247,19 @@ export const ContentEditor: React.FC = () => {
   };
 
   const handleCollabSaveConfirm = (title: string, content: string): void => {
-    dispatch(
-      pagesActions.editPageContent({
-        pageId: paramsId,
-        title: title.trim(),
-        content: content?.length === 0 ? ' ' : content,
-      }),
-    )
-      .unwrap()
-      .then(handleCancel);
+    if (title && isTitleLessThanMaxLength(title)) {
+      dispatch(
+        pagesActions.editPageContent({
+          pageId: paramsId,
+          title: title.trim(),
+          content: content?.length === 0 ? ' ' : content,
+        }),
+      )
+        .unwrap()
+        .then(handleCancel);
+      return;
+    }
+    showWarningOnTitle(titleInputValue);
   };
 
   const handleAutosaveAsDraft = (): void => {
@@ -284,14 +288,16 @@ export const ContentEditor: React.FC = () => {
         {isLiveMode ? (
           <>
             <PageEditors editors={pageEditors} />
-            <CollabEditor
-              userName={user?.fullName}
-              title={draftTitleInputValue}
-              content={draftMarkDownContent}
-              handleSaveConfirm={handleCollabSaveConfirm}
-              handleCancel={onCancel}
-              url={url}
-            />
+            {user ? (
+              <CollabEditor
+                userName={user.fullName}
+                title={draftTitleInputValue}
+                content={draftMarkDownContent}
+                handleSaveConfirm={handleCollabSaveConfirm}
+                handleCancel={onCancel}
+                url={url}
+              />
+            ) : null}
           </>
         ) : (
           <>

@@ -23,13 +23,10 @@ import 'quill/dist/quill.snow.css';
 import styles from './styles.module.scss';
 
 interface Props {
-  userName: string | undefined;
-  title: string | undefined;
+  userName: string;
+  title: string;
   content: string | undefined;
-  handleSaveConfirm(
-    title: string | undefined,
-    content: string | undefined,
-  ): void;
+  handleSaveConfirm(title: string, content: string): void;
   handleCancel(): void;
   url: string;
 }
@@ -88,10 +85,6 @@ export const CollabEditor: React.FC<Props> = ({
     handleSaveConfirm(titleInput, markdown);
   };
 
-  const onCancel = (): void => {
-    handleCancel();
-  };
-
   useEffect(() => {
     if (quill) {
       const pagePath = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
@@ -106,21 +99,11 @@ export const CollabEditor: React.FC<Props> = ({
         color: 'blue',
       });
 
-      provider.awareness.setLocalStateField('quillSettings', {
-        isInputSet: false,
-      });
-
-      provider.awareness.getStates().forEach((state) => {
-        if (!state.quillSettings.isInputSet) {
-          const md = new MarkdownIt();
-          const result = md.render(content || '');
-          quill.clipboard.dangerouslyPasteHTML(result);
-
-          provider.awareness.setLocalStateField('quillSettings', {
-            isInputSet: true,
-          });
-        }
-      });
+      if (provider.awareness.states.size == 1) {
+        const md = new MarkdownIt();
+        const result = md.render(content || '');
+        quill.clipboard.dangerouslyPasteHTML(result);
+      }
 
       quill.on('text-change', () => {
         const html = quill.root.innerHTML;
@@ -163,7 +146,7 @@ export const CollabEditor: React.FC<Props> = ({
           <Button onClick={onSave} variant="success" size="sm" className="me-3">
             Save
           </Button>
-          <Button onClick={onCancel} variant="warning" size="sm">
+          <Button onClick={handleCancel} variant="warning" size="sm">
             Cancel
           </Button>
         </Col>

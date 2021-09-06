@@ -74,7 +74,4 @@ export class User extends AbstractEntity {
   recentPages: RecentPage[];
 
   notificationSettings: NotificationSettings[];
-
-  @ManyToMany(() => Page, (Page) => Page.editors)
-  editingPage: Page;
 }
