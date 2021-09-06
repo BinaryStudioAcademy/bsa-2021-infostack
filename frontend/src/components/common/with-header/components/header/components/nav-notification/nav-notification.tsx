@@ -155,7 +155,7 @@ export const NavNotification: React.FC = () => {
       ) : (
         <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
           <Dropdown.Header className="text-center text-dark">
-            There is no notifications
+            There are no notifications
           </Dropdown.Header>
         </Dropdown.Menu>
       )}
