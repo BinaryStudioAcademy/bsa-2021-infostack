@@ -419,7 +419,7 @@ export const PageContent: React.FC = () => {
                   </div>
                 </Row>
                 <Row>
-                  <Col className="d-flex justify-content-between mb-4 align-items-center">
+                  <Col className="d-flex justify-content-between mb-4 align-items-start">
                     <OverlayTrigger
                       trigger="hover"
                       placement="bottom"
