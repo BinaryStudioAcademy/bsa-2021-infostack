@@ -81,8 +81,10 @@ export const NavProfile: React.FC<Props> = ({
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <ProfileItem to={replaceIdParam(AppRoute.PROFILE, userId || '')}>
-          <i className="bi bi-person"></i>
-          Profile
+          <div className="d-flex align-items-center">
+            <i className="bi bi-person"></i>
+            Profile
+          </div>
         </ProfileItem>
         <Dropdown.Divider />
         <ProfileItem onClick={onSelectWorkspace}>Select Workspace</ProfileItem>
