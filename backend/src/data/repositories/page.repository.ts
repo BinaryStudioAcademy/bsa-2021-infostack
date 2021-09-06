@@ -3,6 +3,9 @@ import { IPageStatistic } from '~/common/interfaces/page';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
 import { User } from '../entities/user';
+import { UserPermission } from '../entities/user-permission';
+import { TeamPermission } from '../entities/team-permission';
+import { Team } from '../entities/team';
 
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
@@ -140,15 +143,39 @@ class PageRepository extends Repository<Page> {
   }
 
   public findMostUpdated(
+    userId: string,
     workspaceId: string,
     limit: number,
   ): Promise<IPageStatistic[]> {
     return this.createQueryBuilder('page')
       .select('page.id', 'pageId')
-      .where('page.workspaceId = :workspaceId', { workspaceId: workspaceId })
+      .andWhere('page.workspaceId = :workspaceId', { workspaceId: workspaceId })
       .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
       .addSelect('page.count', 'count')
       .having('page.count > 1')
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(UserPermission, 'permission')
+            .select('COUNT("permission"."id")', 'count')
+            .addSelect('"permission"."pageId"', 'page_id')
+            .groupBy('"permission"."pageId"'),
+        'user_permission',
+        '"user_permission"."page_id" = page.id',
+      )
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(TeamPermission, 'permission')
+            .select('COUNT("permission"."id")', 'count')
+            .leftJoin('team_member', 'member', '"member"."userId" = :userId', {
+              userId,
+            })
+            .groupBy('"permission"."pageId"'),
+        'team_permission',
+        '"team_permission"."page_id" = page.id',
+      )
+      .having('user_permission.count > 0 OR team_permission.count > 0')
       .leftJoin('page.pageContents', 'pageContents')
       .leftJoin(
         (qb) =>
@@ -163,7 +190,7 @@ class PageRepository extends Repository<Page> {
       .leftJoin(
         (qb) =>
           qb
-            .from(PageContent, 'content')
+            .from(Team, 'team')
             .select('content.title', 'title')
             .addSelect('content.createdAt', 'createdAt')
             .groupBy('content.title')

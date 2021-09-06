@@ -59,12 +59,16 @@ router.get(
 
 router.get(
   '/most-viewed',
-  run((req) => getMostViewedPages(req.workspaceId, +req.query.limit)),
+  run((req) =>
+    getMostViewedPages(req.userId, req.workspaceId, +req.query.limit),
+  ),
 );
 
 router.get(
   '/most-updated',
-  run((req) => getMostUpdatedPages(req.workspaceId, +req.query.limit)),
+  run((req) =>
+    getMostUpdatedPages(req.userId, req.workspaceId, +req.query.limit),
+  ),
 );
 
 router.post(

@@ -873,20 +873,27 @@ export const getRecentPages = async (
 };
 
 export const getMostUpdatedPages = async (
+  userId: string,
   workspaceId: string,
   limit?: number,
 ): Promise<IPageStatistic[]> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const pages = await pageRepository.findMostUpdated(workspaceId, limit);
+  const pages = await pageRepository.findMostUpdated(
+    userId,
+    workspaceId,
+    limit,
+  );
   return pages;
 };
 
 export const getMostViewedPages = async (
+  userId: string,
   workspaceId: string,
   limit?: number,
 ): Promise<IPageStatistic[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
   const recentPages = await recentPagesRepository.findMostViewed(
+    userId,
     workspaceId,
     limit,
   );

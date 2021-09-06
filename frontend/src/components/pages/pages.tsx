@@ -66,9 +66,11 @@ const Pages: React.FC = () => {
   };
 
   useEffect(() => {
-    getRecentPages();
-    getMostViewedPages();
-    getMostUpdatedPages();
+    if (!paramsId) {
+      getRecentPages();
+      getMostViewedPages();
+      getMostUpdatedPages();
+    }
   }, [paramsId]);
 
   return (
