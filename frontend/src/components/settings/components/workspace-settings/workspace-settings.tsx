@@ -1,5 +1,6 @@
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import { bytesToMegabytes, getAllowedClasses } from 'helpers/helpers';
 import {
@@ -128,6 +129,7 @@ export const WorkspaceSettings: React.FC = () => {
                     placeholder="Name"
                     onChange={(e): void => setValue('title', e.target.value)}
                     isInvalid={!!errors.title}
+                    as={TextareaAutosize}
                   />
                   {errors.title && (
                     <Form.Control.Feedback type="invalid">
