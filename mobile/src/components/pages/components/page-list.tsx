@@ -15,10 +15,15 @@ import { Color, RequestStatus } from 'common/enums';
 
 type Props = {
   pages: IPageNav[];
-  onItemClick: (page: IPageNav) => void;
+  onItemNameClick: (page: IPageNav) => void;
+  onItemChevronClick: (page: IPageNav) => void;
 };
 
-export const PageList: React.FC<Props> = ({ pages, onItemClick }) => {
+export const PageList: React.FC<Props> = ({
+  pages,
+  onItemNameClick,
+  onItemChevronClick,
+}) => {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const dispatch = useAppDispatch();
   const { pagesStatus } = useAppSelector(selectPagesState);
@@ -51,7 +56,8 @@ export const PageList: React.FC<Props> = ({ pages, onItemClick }) => {
       data={pages}
       renderItem={({ item }) => (
         <PageListItem
-          onClick={() => onItemClick(item)}
+          onNameClick={() => onItemNameClick(item)}
+          onChevronClick={() => onItemChevronClick(item)}
           title={item.title}
           childPages={item.childPages}
         />
