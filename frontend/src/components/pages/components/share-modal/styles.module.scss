@@ -32,8 +32,15 @@
   width: 30rem;
 }
 
+.inputContainer {
+  :global(.mb-3) {
+    width: 100%;
+  }
+}
+
 .sendButton {
-  align-self: center;
+  align-self: flex-start;
   width: 10rem;
-  margin-top: 1rem;
+  margin-left: 2rem;
+  margin-top: 2.7rem;
 }
