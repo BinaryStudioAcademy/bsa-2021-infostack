@@ -1,1 +1,1 @@
-export type { IPage } from 'infostack-shared';
+export type { IPage, IFoundPageContent } from 'infostack-shared';
