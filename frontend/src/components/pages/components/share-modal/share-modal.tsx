@@ -213,7 +213,9 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
               </InputGroup>
             </div>
             <div className={getAllowedClasses(styles.emailContainer)}>
-              <InputGroup className="mb-3">
+              <InputGroup
+                className={getAllowedClasses('mb-3', styles.inputContainer)}
+              >
                 <FormField
                   label="Share by email"
                   type="email"
