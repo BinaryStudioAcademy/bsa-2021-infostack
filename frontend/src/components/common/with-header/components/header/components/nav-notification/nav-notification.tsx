@@ -94,7 +94,7 @@ export const NavNotification: React.FC = () => {
       >
         <IconWithCount count={count} />
       </Dropdown.Toggle>
-      {!!notifications.length && (
+      {notifications.length ? (
         <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
           <Dropdown.Header className="text-center text-dark">
             {count} New Notifications
@@ -151,6 +151,12 @@ export const NavNotification: React.FC = () => {
               </span>
             </div>
           </div>
+        </Dropdown.Menu>
+      ) : (
+        <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
+          <Dropdown.Header className="text-center text-dark">
+            There is no notifications
+          </Dropdown.Header>
         </Dropdown.Menu>
       )}
     </Dropdown>
