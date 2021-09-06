@@ -141,6 +141,7 @@ export const PageItem: React.FC<Props> = ({
                     title={title}
                     childPages={childPages}
                     allowSubPageAdd={allowSubPageAdd}
+                    allowRemoveAction={allowRemoveAction}
                   />
                 ))}
             </Accordion.Body>
@@ -159,6 +160,14 @@ export const PageItem: React.FC<Props> = ({
                 className={getAllowedClasses(styles.plus)}
               >
                 <PlusButtonRoot />
+              </span>
+            )}
+            {allowRemoveAction && (
+              <span
+                onClick={(): Promise<void> => removePinned(id)}
+                className={getAllowedClasses(styles.plus)}
+              >
+                <CrossButtonRoot />
               </span>
             )}
           </div>
