@@ -9,7 +9,7 @@ class PageService {
     return this._http.load(this._BASE);
   }
 
-  getPage(id?: string): Promise<IPage> {
+  getPage(id: string): Promise<IPage> {
     return this._http.load(`${this._BASE}/${id}`);
   }
 
