@@ -42,7 +42,7 @@ export const PageFollowingUsers: React.FC<IPageContributorsProps> = ({
           {followers ? followers.length : 0}
         </Badge>
       </Card.Header>
-      <Card.Body>
+      <Card.Body className={getAllowedClasses(styles.cardBody)}>
         {followers ? (
           <div
             className="d-flex justify-content-start"
