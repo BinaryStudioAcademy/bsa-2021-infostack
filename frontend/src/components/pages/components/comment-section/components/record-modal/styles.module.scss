@@ -1,4 +1,170 @@
+:global(.modal-20w) {
+  width: 20vw !important;
+}
+
+.modalContent {
+  width: 700px;
+}
+
+.modalBody {
+  height: 170px;
+}
+
+.btnContainer {
+  height: 30px;
+}
+
+:global(.rhap_container) {
+  box-shadow: none;
+}
+
+:global(.rhap_progress-section) {
+  width: 260px;
+}
+
+:global(.rhap_play-pause-button) {
+  font-size: 45px;
+  width: 45px;
+  height: 45px;
+  margin-right: -22px;
+}
+
+:global(.rhap_volume-container) {
+  margin-right: -18px;
+}
+
+:global(.rhap_volume-controls) {
+  margin-top: -112px;
+  width: 50px;
+}
+
+:global(.rhap_volume-bar) {
+  width: 75%;
+}
+
+:global(.rhap_current-time) {
+  margin-left: -34px;
+  margin-right: 18px;
+  font-size: 16px;
+  width: 40px;
+}
+
+:global(.rhap_volume-button) {
+  flex: 0 0 26px;
+  font-size: 16px;
+  margin: 0;
+  margin-left: 46px;
+}
+
+:global(.rhap_volume-bar-area) {
+  margin-right: -24px;
+}
+
+:global(.rhap_progress-indicator) {
+  width: 15px;
+  height: 15px;
+  top: -5px;
+}
+
+:global(.rhap_total-time) {
+  margin-right: 7px;
+  margin-left: 11px;
+}
+
+:global(.rhap_stacked .rhap_controls-section) {
+  margin-top: 25px;
+  margin-left: 20px;
+}
+
 .text {
   font-size: 1.32rem;
   line-height: 1.2;
+}
+
+.recordButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.resumeButton {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.startRecordMic {
+  font-size: x-large;
+  color: whitesmoke;
+}
+
+.resumeRecordMic {
+  font-size: small;
+  color: whitesmoke;
+}
+
+.pauseButton {
+  color: transparent;
+  padding: 0;
+}
+
+.pauseButton:hover {
+  box-shadow: none;
+}
+
+.pauseIcon {
+  font-size: xx-large;
+}
+
+.pauseText {
+  font-weight: 500;
+}
+
+.stopButton {
+  width: 20px;
+  height: 20px;
+}
+
+.stopText {
+  color: red;
+  display: block;
+  font-size: 16px;
+}
+
+.resumeText {
+  color: grey;
+  display: block;
+}
+
+.saveButton {
+  position: absolute;
+  margin-left: 20px;
+  margin-top: -51px;
+  font-size: x-large;
+}
+
+.trashButton {
+  position: absolute;
+  font-size: x-large;
+  margin-left: -66px;
+  margin-top: -49px;
+}
+
+.trashIcon:hover {
+  color: rgb(202, 5, 5);
+}
+
+.sendIcon:hover {
+  color: #198754;
+}
+
+.timer {
+  font-size: x-large;
+  margin-bottom: 30px;
+}
+
+.recordedTime {
+  font-size: x-large;
+  margin: 0;
+  margin-top: -13px;
 }

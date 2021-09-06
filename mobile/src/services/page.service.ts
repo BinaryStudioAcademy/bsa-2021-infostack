@@ -1,31 +1,20 @@
-import { IPageNav } from 'common/interfaces';
+import { IPageNav, IPage, IFoundPageContent } from 'common/interfaces';
+import { http } from './http.service';
 
 class PageService {
-  getAll(): Promise<IPageNav[]> {
-    const res = [
-      {
-        id: '1',
-        title: 'first page',
-        childPages: [],
-      },
-      {
-        id: '2',
-        title: 'second page',
-        childPages: [
-          {
-            id: '3',
-            title: 'third page',
-            childPages: [],
-          },
-        ],
-      },
-    ];
+  private readonly _http = http;
+  private readonly _BASE = 'http://10.0.2.2:3001/api/pages';
 
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(res);
-      }, 3000);
-    });
+  getAll(): Promise<IPageNav[]> {
+    return this._http.load(this._BASE);
+  }
+
+  getPage(id: string): Promise<IPage> {
+    return this._http.load(`${this._BASE}/${id}`);
+  }
+
+  searchContent(query: string): Promise<IFoundPageContent[]> {
+    return this._http.load(`${this._BASE}/search?query=${query}`);
   }
 }
 
