@@ -1,5 +1,5 @@
 .cardItem {
-  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   margin-bottom: 200px;
   word-wrap: break-word;
   background-clip: border-box;
@@ -111,6 +111,7 @@
   min-height: 12.8rem;
   min-width: 12.8rem;
   margin-bottom: 1rem;
+  box-shadow: rgb(0 0 0 / 25%) 0px 0px 15px inset;
 }
 
 .noAvatar {
