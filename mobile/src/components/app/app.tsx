@@ -2,26 +2,26 @@ import * as React from 'react';
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { RootStack } from 'navigation/root-stack';
-import { Login } from 'components/auth';
+import { selectUser } from 'store';
 import { useAppSelector } from 'hooks';
 import { Color } from 'common/enums';
+import { MyTheme } from 'common/constants';
+import { Login } from 'components/auth/login';
 import { Pages } from 'components/pages/pages';
 import { Workspaces } from 'components/workspaces/workspaces';
+import { RootStack } from 'navigation/root-stack';
 
 export const App: React.FC = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const user = useAppSelector(selectUser);
   const isSignedIn = !!user?.id;
 
   return (
     <>
       <StatusBar backgroundColor={Color.PRIMARY_DARK} />
-      <NavigationContainer>
+      <NavigationContainer theme={MyTheme}>
         <RootStack.Navigator
           screenOptions={{
             headerTitleAlign: 'center',
-            headerTintColor: '#fff',
-            headerStyle: { backgroundColor: Color.PRIMARY },
           }}
         >
           {isSignedIn ? (

@@ -13,7 +13,7 @@ import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import { toast } from 'react-toastify';
 import { MentionItem } from 'react-mentions';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+import HighlightPop from 'react-highlight-pop';
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums';
 import {
@@ -130,7 +130,13 @@ export const PageContent: React.FC = () => {
     currentPage?.permission === PermissionType.ADMIN;
 
   const [selectedText, setSelectedText] = useState('');
+
   const commentsRef = useRef<HTMLDivElement>(null);
+
+  const [isTextSelected, setIsTextSelected] = useState(
+    !!window?.getSelection(),
+  );
+
   const [formState, setFormState] = useState<{
     text: string;
     mentions: MentionItem[];
@@ -172,6 +178,7 @@ export const PageContent: React.FC = () => {
 
   const handleMouseUp = (): void => {
     const selectedText = window?.getSelection()?.toString();
+    setIsTextSelected(!!selectedText);
     if (selectedText) {
       setSelectedText(selectedText);
     }
@@ -325,11 +332,13 @@ export const PageContent: React.FC = () => {
     isCurrentPagePinned ? handlePageUnpin(paramsId) : handlePagePin(paramsId);
   };
 
-  const handleCommentContent = (_e: MouseEvent): void => {
+  const handleCommentContent = (): void => {
     if (selectedText) {
       const quoteText = '> ' + selectedText + '\n\n';
       setFormState({ text: quoteText, mentions: [] });
       commentsRef?.current?.scrollIntoView();
+      window?.getSelection()?.empty();
+      setIsTextSelected(false);
     }
   };
 
@@ -361,7 +370,11 @@ export const PageContent: React.FC = () => {
   }, [currentPage]);
 
   if (isSpinner || isLeftBlockLoading) {
-    return <Spinner height={'6rem'} width={'6rem'} />;
+    return (
+      <div className="position-relative h-100">
+        <Spinner height={'6rem'} width={'6rem'} />
+      </div>
+    );
   }
 
   const handleDownloadPDF = async (): Promise<void> => {
@@ -419,22 +432,20 @@ export const PageContent: React.FC = () => {
                   </div>
                 </Row>
                 <Row>
-                  <Col className="d-flex justify-content-between mb-4 align-items-center">
+                  <Col className="d-flex justify-content-between mb-4 align-items-start">
                     <OverlayTrigger
                       trigger="hover"
                       placement="bottom"
                       overlay={
                         <Popover id="popover-positioned-bottom">
-                          <Popover.Body
-                            className={getAllowedClasses(styles.popoverText)}
-                          >
+                          <Popover.Body className={styles.popoverText}>
                             {pageTitle || 'New Page'}
                           </Popover.Body>
                         </Popover>
                       }
                     >
                       <>
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center w-75">
                           <h1
                             className={getAllowedClasses(
                               styles.pageHeading,
@@ -454,7 +465,7 @@ export const PageContent: React.FC = () => {
                         </div>
                       </>
                     </OverlayTrigger>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center w-25">
                       {canRead && (
                         <VersionDropdown
                           currContent={currContent}
@@ -483,14 +494,30 @@ export const PageContent: React.FC = () => {
                         className={getAllowedClasses(
                           styles.content,
                           'custom-html-style',
+                          !isTextSelected ? styles.highlightPopHidden : null,
                         )}
                       >
-                        <ContextMenuTrigger id="pageContentContextManu">
+                        <HighlightPop
+                          popoverItems={(itemClass: string): JSX.Element => (
+                            <span
+                              className={itemClass}
+                              onClick={handleCommentContent}
+                            >
+                              <i
+                                className={getAllowedClasses(
+                                  styles.quoteIcon,
+                                  'bi',
+                                  'bi-chat-quote',
+                                )}
+                              ></i>
+                            </span>
+                          )}
+                        >
                           {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
                           <ReactMarkdown remarkPlugins={[slug, gfm]}>
                             {content?.trim() || 'Empty page'}
                           </ReactMarkdown>
-                        </ContextMenuTrigger>
+                        </HighlightPop>
                       </Card.Body>
                     </Card>
                   </Col>
@@ -567,10 +594,6 @@ export const PageContent: React.FC = () => {
           </h1>
         )}
       </div>
-
-      <ContextMenu id="pageContentContextManu">
-        <MenuItem onClick={handleCommentContent}>Comment</MenuItem>
-      </ContextMenu>
     </>
   );
 };

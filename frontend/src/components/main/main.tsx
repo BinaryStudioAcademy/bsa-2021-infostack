@@ -34,16 +34,18 @@ const Main: React.FC = () => {
 
   const onDeleteUser = ({
     workspaceId,
-    name,
+    workspaceName,
   }: {
     workspaceId: string;
-    name: string;
+    workspaceName: string;
   }): void => {
     if (workspaceId === cookies[CookieVariable.WORKSPACE_ID]) {
       history.push(AppRoute.WORKSPACES);
     }
 
-    toast.warning(`You have been deleted from the workspace "${name}".`);
+    toast.warning(
+      `You have been deleted from the workspace "${workspaceName}".`,
+    );
   };
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import { NativeEventEmitter } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { HttpError } from 'exceptions/exceptions';
 import {
   ContentType,
   HttpHeader,
@@ -10,6 +9,7 @@ import {
   HttpCode,
   EmitterEvents,
 } from 'common/enums';
+import { HttpError } from 'exceptions';
 import { HttpOptions } from 'common/types';
 
 class Http {

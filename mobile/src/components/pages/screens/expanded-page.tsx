@@ -1,12 +1,12 @@
 import * as React from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 import { StyleSheet, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { PageListStackParamList } from 'navigation/page-list-stack';
-import Icon from 'react-native-vector-icons/Feather';
 
-import { IPageNav } from 'common/interfaces';
-import { PageList } from '../components/page-list';
 import { Color } from 'common/enums';
+import { IPageNav } from 'common/interfaces';
+import { PageListStackParamList } from 'navigation/page-list-stack';
+import { PageList } from '../components/page-list';
 
 type Props = NativeStackScreenProps<PageListStackParamList, 'ExpandedPage'>;
 
@@ -17,7 +17,7 @@ export const ExpandedPage: React.FC<Props> = ({ navigation, route }) => {
     const hasChildPages = Boolean(page.childPages.length);
 
     if (hasChildPages) {
-      navigation.navigate('ExpandedPage', { page });
+      navigation.push('ExpandedPage', { page });
     }
   };
 
