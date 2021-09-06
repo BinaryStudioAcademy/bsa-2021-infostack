@@ -11,6 +11,8 @@ import {
   deletePage,
   getPages,
   getPinnedPages,
+  getMostViewedPages,
+  getMostUpdatedPages,
   getPage,
   getPermissions,
   setPermission,
@@ -53,6 +55,16 @@ const router: Router = Router();
 router.get(
   '/search',
   run((req) => searchPage(req.query.query, req.userId, req.workspaceId)),
+);
+
+router.get(
+  '/most-viewed',
+  run((req) => getMostViewedPages(req.workspaceId, +req.query.limit)),
+);
+
+router.get(
+  '/most-updated',
+  run((req) => getMostUpdatedPages(req.workspaceId, +req.query.limit)),
 );
 
 router.post(

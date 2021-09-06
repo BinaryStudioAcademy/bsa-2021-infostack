@@ -1,5 +1,7 @@
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { RecentPage } from '../entities/recent-pages';
+import { PageContent } from '../entities/page-content';
+import { IPageStatistic } from '~/common/interfaces/page';
 
 @EntityRepository(RecentPage)
 class RecentPagesRepository extends Repository<RecentPage> {
@@ -14,6 +16,39 @@ class RecentPagesRepository extends Repository<RecentPage> {
       .leftJoinAndSelect('page.pageContents', 'pageContents')
       .orderBy('recent_page.createdAt', 'DESC')
       .getMany();
+  }
+
+  public findMostViewed(
+    workspaceId: string,
+    limit: number,
+  ): Promise<IPageStatistic[]> {
+    return this.createQueryBuilder('recent_page')
+      .select('recent_page.pageId', 'pageId')
+      .addSelect('COUNT(recent_page.pageId)', 'count')
+      .having('COUNT(recent_page.pageId) > 0')
+      .leftJoin('recent_page.page', 'page')
+      .where('page.workspaceId = :workspaceId', { workspaceId })
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('MAX("content"."createdAt")', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = page.id',
+      )
+      .leftJoin(
+        'page.pageContents',
+        'pageContents',
+        '"pageContents"."createdAt" = "last_version"."created_at"',
+      )
+      .addSelect('pageContents.title', 'title')
+      .orderBy('count', 'DESC')
+      .groupBy('recent_page.pageId')
+      .addGroupBy('pageContents.title')
+      .limit(limit)
+      .execute();
   }
 
   public deleteOne(userId: string, pageId: string): Promise<DeleteResult> {

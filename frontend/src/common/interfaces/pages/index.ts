@@ -15,4 +15,5 @@ export type {
   IExportPDF,
   IPageRecent,
   IPageRequested,
+  IPageStatistic,
 } from 'infostack-shared';

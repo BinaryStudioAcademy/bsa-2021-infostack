@@ -29,6 +29,7 @@ import {
   IFoundPageContent,
   IExportPDF,
   IPageRecent,
+  IPageStatistic,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
@@ -870,4 +871,25 @@ export const getRecentPages = async (
   );
 
   return mapToRecentPage(recentPages);
+};
+
+export const getMostUpdatedPages = async (
+  workspaceId: string,
+  limit?: number,
+): Promise<IPageStatistic[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const pages = await pageRepository.findMostUpdated(workspaceId, limit);
+  return pages;
+};
+
+export const getMostViewedPages = async (
+  workspaceId: string,
+  limit?: number,
+): Promise<IPageStatistic[]> => {
+  const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+  const recentPages = await recentPagesRepository.findMostViewed(
+    workspaceId,
+    limit,
+  );
+  return recentPages;
 };

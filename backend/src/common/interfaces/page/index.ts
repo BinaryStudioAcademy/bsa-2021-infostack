@@ -12,4 +12,5 @@ export type {
   IFoundPageContent,
   IExportPDF,
   IPageRecent,
+  IPageStatistic,
 } from 'infostack-shared/common/interfaces';

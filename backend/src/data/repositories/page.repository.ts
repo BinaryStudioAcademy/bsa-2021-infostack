@@ -1,4 +1,5 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
+import { IPageStatistic } from '~/common/interfaces/page';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
 import { User } from '../entities/user';
@@ -136,6 +137,46 @@ class PageRepository extends Repository<Page> {
       .where('page.id = :id', { id: pageId })
       .andWhere('pageContents.id =  :id', { id: versionId })
       .getOne();
+  }
+
+  public findMostUpdated(
+    workspaceId: string,
+    limit: number,
+  ): Promise<IPageStatistic[]> {
+    return this.createQueryBuilder('page')
+      .select('page.id', 'pageId')
+      .where('page.workspaceId = :workspaceId', { workspaceId: workspaceId })
+      .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
+      .addSelect('page.count', 'count')
+      .having('page.count > 1')
+      .leftJoin('page.pageContents', 'pageContents')
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('MAX("content"."createdAt")', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = page.id',
+      )
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('content.title', 'title')
+            .addSelect('content.createdAt', 'createdAt')
+            .groupBy('content.title')
+            .addGroupBy('content.createdAt'),
+        'last_content',
+        '"last_content"."createdAt" = "last_version"."created_at"',
+      )
+      .addSelect('last_content.title', 'title')
+      .orderBy('page.count', 'DESC')
+      .groupBy('page.id')
+      .addGroupBy('last_content.title')
+      .limit(limit)
+      .execute();
   }
 
   public findByIdWithTags(id: string): Promise<Page> {

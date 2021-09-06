@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import Image from 'react-bootstrap/Image';
-import { userApi } from 'services';
+import { userApi, pageApi } from 'services';
 import { useAppSelector, useEffect, useParams, useState } from 'hooks/hooks';
 import { getAllowedClasses } from 'helpers/helpers';
 import { AppRoute } from 'common/enums';
@@ -28,6 +28,8 @@ const Pages: React.FC = () => {
       .catch(() => {
         toast.error('Can not get recent pages');
       });
+    console.log(await pageApi.getMostViewedPages({ limit: 10 }));
+    console.log(await pageApi.getMostUpdatedPages({ limit: 10 }));
     setRecentPagesLoading(false);
   };
 
