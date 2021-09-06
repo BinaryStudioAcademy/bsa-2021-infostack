@@ -1,4 +1,4 @@
-import { IPageNav } from 'common/interfaces';
+import { IPageNav, IPage } from 'common/interfaces';
 import { http } from './http.service';
 
 class PageService {
@@ -7,6 +7,10 @@ class PageService {
 
   getAll(): Promise<IPageNav[]> {
     return this._http.load(this._BASE);
+  }
+
+  getPage(id?: string): Promise<IPage> {
+    return this._http.load(`${this._BASE}/${id}`);
   }
 }
 
