@@ -26,7 +26,7 @@ export const PagesStatistic: React.FC<Props> = ({
       <Card.Header className="bg-white border-0 d-flex align-items-center text-secondary">
         {title}
       </Card.Header>
-      <Card.Body>
+      <Card.Body className={pages?.length ? '' : 'px-3'}>
         {pages?.length ? (
           pages.map((page) => (
             <Link
@@ -52,7 +52,9 @@ export const PagesStatistic: React.FC<Props> = ({
         ) : loading ? (
           <Spinner />
         ) : (
-          <span>{placeholder}</span>
+          <div className={getAllowedClasses(styles.placeholder)}>
+            {placeholder}
+          </div>
         )}
       </Card.Body>
     </Card>
