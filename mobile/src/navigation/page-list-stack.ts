@@ -5,6 +5,7 @@ import { IPageNav } from 'common/interfaces';
 export type PageListStackParamList = {
   RootPages: undefined;
   ExpandedPage: { page: IPageNav };
+  Page: { page: IPageNav };
   Search: undefined;
 };
 

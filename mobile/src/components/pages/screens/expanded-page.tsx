@@ -7,13 +7,21 @@ import { Color } from 'common/enums';
 import { IPageNav } from 'common/interfaces';
 import { PageListStackParamList } from 'navigation/page-list-stack';
 import { PageList } from '../components/page-list';
+import { useAppDispatch } from 'hooks';
+import { pagesActions } from 'store';
 
 type Props = NativeStackScreenProps<PageListStackParamList, 'ExpandedPage'>;
 
 export const ExpandedPage: React.FC<Props> = ({ navigation, route }) => {
+  const dispatch = useAppDispatch();
   const { title, childPages } = route.params.page;
 
-  const handleClick = (page: IPageNav) => {
+  const handleNameClick = (page: IPageNav) => {
+    dispatch(pagesActions.fetchCurrentPage(page.id));
+    navigation.navigate('Page', { page });
+  };
+
+  const handleChevronClick = (page: IPageNav) => {
     const hasChildPages = Boolean(page.childPages.length);
 
     if (hasChildPages) {
@@ -27,7 +35,11 @@ export const ExpandedPage: React.FC<Props> = ({ navigation, route }) => {
         <Icon style={icon} name="file-text" size={28} color={Color.PRIMARY} />
         <Text style={text}>{title}</Text>
       </View>
-      <PageList pages={childPages} onItemClick={handleClick} />
+      <PageList
+        pages={childPages}
+        onItemNameClick={handleNameClick}
+        onItemChevronClick={handleChevronClick}
+      />
     </View>
   );
 };
