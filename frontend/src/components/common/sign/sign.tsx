@@ -97,11 +97,17 @@ export const Sign: React.FC<Props> = ({
                 </Link>
               </div>
             )}
-            <hr className={getAllowedClasses('text-secondary', styles.line)} />
-            <span className={getAllowedClasses('text-secondary', styles.or)}>
-              or
-            </span>
-            <hr className={getAllowedClasses('text-secondary', styles.line)} />
+            <div>
+              <hr
+                className={getAllowedClasses('text-secondary', styles.line)}
+              />
+              <span className={getAllowedClasses('text-secondary', styles.or)}>
+                or
+              </span>
+              <hr
+                className={getAllowedClasses('text-secondary', styles.line)}
+              />
+            </div>
             <GoogleButton
               onClick={googleSignIn}
               type="light"

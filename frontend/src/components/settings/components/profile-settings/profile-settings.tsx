@@ -326,16 +326,30 @@ export const ProfileSettings: React.FC = () => {
             </Col>
             <Col
               md={4}
-              className="d-flex text-center flex-column align-items-center"
+              className="d-flex text-center flex-column align-items-center justify-content-center"
             >
-              <UserAvatar
-                className={`${getAllowedClasses(styles.cardImage)} mb-3`}
-                name={user?.fullName}
-                src={selectedImgURL ? selectedImgURL : user?.avatar}
-                round={true}
-                size="12.8rem"
-                showTooltip={false}
-              />
+              <label className={getAllowedClasses(styles.cardInputLabel)}>
+                Avatar
+              </label>
+              {!selectedImgURL && !user?.avatar ? (
+                <div className={styles.avatarImgContainer}>
+                  <i
+                    className={getAllowedClasses(
+                      'bi bi-card-image',
+                      styles.noAvatar,
+                    )}
+                  ></i>
+                </div>
+              ) : (
+                <UserAvatar
+                  className={`${getAllowedClasses(styles.cardImage)} mb-3`}
+                  name={user?.fullName}
+                  src={user?.avatar}
+                  round={true}
+                  size="12.8rem"
+                  showTooltip={false}
+                />
+              )}
 
               {user?.avatar && (
                 <Button
