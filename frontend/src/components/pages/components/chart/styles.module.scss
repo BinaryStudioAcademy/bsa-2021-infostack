@@ -1,4 +1,9 @@
-.chart {
-  width: 50% !important;
-  height: 45vh !important;
+.card {
+  box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
+  margin: 1.5rem;
+
+  .chart {
+    width: 100% !important;
+    height: 40vh !important;
+  }
 }

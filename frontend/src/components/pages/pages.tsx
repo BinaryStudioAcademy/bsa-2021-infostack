@@ -126,7 +126,10 @@ const Pages: React.FC = () => {
                   />
                 </div>
                 <div className="d-flex flex-column align-items-center">
-                  <Chart />
+                  <Chart
+                    axes="Updates / Day"
+                    className={getAllowedClasses(styles.chartCart)}
+                  />
                 </div>
               </div>
             </>
