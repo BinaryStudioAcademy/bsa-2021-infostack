@@ -8,6 +8,7 @@ import { SearchButton } from 'components/search/search-button';
 import { PageListStack } from 'navigation/page-list-stack';
 import { ExpandedPage } from './screens/expanded-page';
 import { RootPages } from './screens/root-pages';
+import { Page } from './screens/page';
 
 export const Pages: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -46,6 +47,11 @@ export const Pages: React.FC = () => {
         name="Search"
         component={Search}
         options={{ animation: 'none' }}
+      />
+      <PageListStack.Screen
+        name="Page"
+        component={Page}
+        options={({ route }) => ({ title: route.params.page.title })}
       />
     </PageListStack.Navigator>
   );
