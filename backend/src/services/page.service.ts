@@ -274,16 +274,20 @@ export const getPinnedPages = async (
 export const getPage = async (
   pageId: string,
   userId: string,
+  workspaceId: string,
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
+  if (page.workspaceId === workspaceId) {
+    const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+    await recentPagesRepository
+      .deleteOne(userId, pageId)
+      .then(() => recentPagesRepository.save({ userId, pageId }));
 
-  const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  await recentPagesRepository
-    .deleteOne(userId, pageId)
-    .then(() => recentPagesRepository.save({ userId, pageId }));
-
-  return getPageWithPermission(userId, page);
+    return getPageWithPermission(userId, page);
+  } else {
+    return mapPageToIPage(page);
+  }
 };
 
 export const getPageVersionContent = async (

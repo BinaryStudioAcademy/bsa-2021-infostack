@@ -7,3 +7,4 @@ const authActions = {
 };
 
 export { authReducer, authActions };
+export { selectUser } from './selectors';

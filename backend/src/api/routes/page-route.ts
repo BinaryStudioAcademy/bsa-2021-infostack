@@ -73,7 +73,7 @@ router.get(
 
 router.get(
   '/:id',
-  run((req) => getPage(req.params.id, req.userId)),
+  run((req) => getPage(req.params.id, req.userId, req.workspaceId)),
 );
 
 router.delete(

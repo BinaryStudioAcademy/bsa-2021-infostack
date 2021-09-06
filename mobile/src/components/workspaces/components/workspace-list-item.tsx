@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 
+import { Color } from 'common/enums';
+
 type Props = {
   name: string;
   onClick: () => void;
@@ -19,9 +21,9 @@ const { card, text } = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 100,
-    borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 4,
+    backgroundColor: Color.WHITE,
+    elevation: 2,
     marginBottom: 5,
   },
   text: {

@@ -14,4 +14,5 @@ export type {
   IFoundPageContent,
   IExportPDF,
   IPageRecent,
+  IPageRequested,
 } from 'infostack-shared';
