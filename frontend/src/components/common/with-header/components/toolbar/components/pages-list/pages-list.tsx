@@ -4,9 +4,14 @@ import { IPageNav } from 'common/interfaces/pages';
 type Props = {
   pages: IPageNav[] | null;
   allowSubPageAdd: boolean;
+  allowRemoveAction: boolean;
 };
 
-export const PagesList: React.FC<Props> = ({ pages, allowSubPageAdd }) => {
+export const PagesList: React.FC<Props> = ({
+  pages,
+  allowSubPageAdd,
+  allowRemoveAction,
+}) => {
   return (
     <>
       {pages &&
@@ -16,6 +21,7 @@ export const PagesList: React.FC<Props> = ({ pages, allowSubPageAdd }) => {
             key={id}
             title={title}
             allowSubPageAdd={allowSubPageAdd}
+            allowRemoveAction={allowRemoveAction}
             childPages={childPages}
           />
         ))}

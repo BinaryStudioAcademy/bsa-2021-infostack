@@ -1,2464 +1,3314 @@
 {
-  "info": {
-    "_postman_id": "26682ed5-dd7e-4e10-b111-9d56a4e12318",
-    "name": "Infostack - API tests",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Register (valid data)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const responseJson = pm.response.json()",
-              "",
-              "pm.environment.set(\"userEmail\", responseJson.email)",
-              "",
-              "pm.test(\"Response should have status code 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"{{$randomExampleEmail}}\",\r\n  \"password\": \"123456\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/register",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "register"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Register  (email already registered)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'User with such email already exists';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 409', () => {\r",
-              "    pm.expect(pm.response).to.have.status(409);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"123456\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/register",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "register"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Register  (invalid email)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'email must be a valid email';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"11\",\r\n  \"password\": \"123456\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/register",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "register"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Register  (invalid password)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'password must be at least 6 characters';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/register",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "register"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Login (valid data)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"title\": { \"type\": [\"string\", \"null\"] },\r",
-              "        \"fullName\": { \"type\": \"string\" },\r",
-              "        \"email\": { \"type\": \"string\" },\r",
-              "        \"refreshToken\": { \"type\": \"string\" },\r",
-              "        \"avatar\": { \"type\": [\"string\", \"null\"] },\r",
-              "        \"accessToken\": { \"type\": \"string\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"title\",\r",
-              "        \"fullName\",\r",
-              "        \"email\",\r",
-              "        \"refreshToken\",\r",
-              "        \"avatar\",\r",
-              "        \"accessToken\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"Token\", responseJson.accessToken)\r",
-              "pm.environment.set(\"userId\", responseJson.id)\r",
-              "const userEmal = pm.environment.get(\"userEmail\") \r",
-              "\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Test response email\", () => {    \r",
-              "    pm.expect(responseJson.email).to.eql(userEmal);\r",
-              "})"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"123456\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/login",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "login"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Login (invalid email)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'No user with such email';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 404', () => {\r",
-              "    pm.expect(pm.response).to.have.status(404);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"test12@test.com\",\r\n  \"password\": \"123456\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/login",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "login"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Login (invalid password)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Response validation', () => {\r",
-              "    const jsonResponse = pm.response.json();\r",
-              "\r",
-              "    tests['Status code is 400'] = pm.expect(pm.response.to.have.status(400));\r",
-              "\r",
-              "    tests['Response to have body'] = pm.expect(pm.response.to.have.jsonBody());\r",
-              "\r",
-              "    tests['Error message should be correct'] =\r",
-              "        pm.expect(jsonResponse.error).to.eql('Invalid password');\r",
-              "});\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"1234560\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/login",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "login"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Login (invalid extra line)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'this field has unspecified keys: hgffgf';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"123456\",\r\n  \"hgffgf\": \"2\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/auth/login",
-          "host": ["{{app_url}}"],
-          "path": ["api", "auth", "login"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create a workspace",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"title\": { \"type\": \"string\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"title\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"workspaceId\", responseJson.id);\r",
-              "pm.environment.set(\"workspaceTitle\", responseJson.title);\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"id\": \"{{$randomUUID}}\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/workspaces",
-          "host": ["{{app_url}}"],
-          "path": ["api", "workspaces"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create a workspace (invalid - title already exists)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Workspace with such title already exists';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 409', () => {\r",
-              "    pm.expect(pm.response).to.have.status(409);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        },
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [""],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"title\": \"{{workspaceTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/workspaces",
-          "host": ["{{app_url}}"],
-          "path": ["api", "workspaces"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get workspaces",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"title\": { \"type\": \"string\" },\r",
-              "        \"status\": { \"type\": \"string\" },\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"title\",\r",
-              "        \"status\",\r",
-              "\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "If-None-Match",
-            "value": "W/\"12d-vi4z0gXiYombvUisgJVxmzfqn7w\"",
-            "type": "text",
-            "disabled": true
-          },
-          {
-            "key": "Referer",
-            "value": "https://bsa-infostack.herokuapp.com/workspaces",
-            "type": "text",
-            "disabled": true
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/workspaces",
-          "host": ["{{app_url}}"],
-          "path": ["api", "workspaces"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get users data",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"fullName\": { \"type\": \"string\" },\r",
-              "        \"email\": { \"type\": \"string\" },\r",
-              "        \"avatar\": { \"type\": [\"string\",\"null\"] },\r",
-              "        \"title\": { \"type\": [\"string\",\"null\"] },\r",
-              "        \"skills\": { \"type\": \"array\" },\r",
-              "        \"followingPages\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",       \r",
-              "        \"fullName\",\r",
-              "        \"email\",       \r",
-              "        \"avatar\",\r",
-              "        \"title\",\r",
-              "        \"skills\",\r",
-              "        \"followingPages\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/users/{{userId}}/profile",
-          "host": ["{{app_url}}"],
-          "path": ["api", "users", "{{userId}}", "profile"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update full name (valid data)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"fullName\": { \"type\": \"string\" },\r",
-              "        \"email\": { \"type\": \"string\" },\r",
-              "        \"avatar\": { \"type\": [\"string\", \"null\"] },\r",
-              "        \"title\": { \"type\": \"string\" },\r",
-              "        \"skills\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",       \r",
-              "        \"fullName\",\r",
-              "        \"email\",       \r",
-              "        \"avatar\",\r",
-              "        \"title\",\r",
-              "        \"skills\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"userName\", responseJson.fullName)\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"avatar\": \"\",\r\n\"email\": \"{{userEmail}}\",\r\n\"fullName\": \"{{$randomFullName}}\",\r\n\"id\": \"{{userId}}\",\r\n\"skills\": [],\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/users/{{userId}}/profile",
-          "host": ["{{app_url}}"],
-          "path": ["api", "users", "{{userId}}", "profile"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get users",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"role\": { \"type\": \"string\" },\r",
-              "        \"fullName\": { \"type\": \"string\" },\r",
-              "        \"status\": { \"type\": \"array\" },\r",
-              "        \"teams\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"role\",\r",
-              "        \"fullName\",\r",
-              "        \"teams\",\r",
-              "        \"status\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/workspaces/current/users",
-          "host": ["{{app_url}}"],
-          "path": ["api", "workspaces", "current", "users"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create parent page",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"authorId\": { \"type\": \"string\" },\r",
-              "        \"parentPageId\": { \"type\": [\"string\",\"null\"] },\r",
-              "        \"pageContents\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",       \r",
-              "        \"authorId\",    \r",
-              "        \"parentPageId\",\r",
-              "        \"pageContents\"\r",
-              "    ]\r",
-              "};\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"parentPageId\", responseJson.id);\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create parent page (empty title)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'title must be at least 1 characters';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create child page",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"authorId\": { \"type\": \"string\" },\r",
-              "        \"parentPageId\": { \"type\": [\"string\",\"null\"] },\r",
-              "        \"pageContents\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",       \r",
-              "        \"authorId\",    \r",
-              "        \"parentPageId\",\r",
-              "        \"pageContents\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"parentPageId\", responseJson.id);\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create pages (without title)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Internal Server Error';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 500', () => {\r",
-              "    pm.expect(pm.response).to.have.status(500);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"content\": \"\",\r\n\"title\": \"\"\r\n22\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get pages",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"childPages\": { \"type\": \"array\" },\r",
-              "        \"title\": { \"type\": \"string\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"childPages\",\r",
-              "        \"title\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/pages",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create tags",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"name\": { \"type\": \"string\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"name\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"tagId\", responseJson.id);\r",
-              "pm.environment.set(\"tagName\", responseJson.name);\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/tags",
-          "host": ["{{app_url}}"],
-          "path": ["api", "tags"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create tags (tags already created)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Duplicate workspace tag';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 409', () => {\r",
-              "    pm.expect(pm.response).to.have.status(409);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"name\": \"{{tagName}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/tags",
-          "host": ["{{app_url}}"],
-          "path": ["api", "tags"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update tags",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"name\": { \"type\": \"string\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"name\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"id\": \"{{tagId}}\",\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/tags/{{tagId}}",
-          "host": ["{{app_url}}"],
-          "path": ["api", "tags", "{{tagId}}"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update tags ( invalid - empty string)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Empty tag name is not allowed';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "})"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"id\": \"{{tagId}}\",\r\n    \"name\": \"\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/tags/{{tagId}}",
-          "host": ["{{app_url}}"],
-          "path": ["api", "tags", "{{tagId}}"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get tags",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"name\": { \"type\": \"string\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"name\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/tags",
-          "host": ["{{app_url}}"],
-          "path": ["api", "tags"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Delete tags",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Response should have status code 204', () => {\r",
-              "    pm.expect(pm.response).to.have.status(204);        \r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"id\": \"{{tagId}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/tags/{{tagId}}",
-          "host": ["{{app_url}}"],
-          "path": ["api", "tags", "{{tagId}}"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create teams",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"name\": { \"type\": \"string\" },\r",
-              "        \"users\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"name\",\r",
-              "        \"users\"\r",
-              "    ]\r",
-              "};\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"teamId\", responseJson.id);\r",
-              "pm.environment.set(\"teamName\", responseJson.name);\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{    \r\n    \"name\": \"{{$randomJobTitle}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/teams",
-          "host": ["{{app_url}}"],
-          "path": ["api", "teams"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create teams (team already created)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Team with such name already exists';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 409', () => {\r",
-              "    pm.expect(pm.response).to.have.status(409);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});\r",
-              "\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"name\": \"{{teamName}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/teams",
-          "host": ["{{app_url}}"],
-          "path": ["api", "teams"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create teams  ( invalid - empty string)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Team with empty string is not allowed';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"name\": \"\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/teams",
-          "host": ["{{app_url}}"],
-          "path": ["api", "teams"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update teams  ( invalid - empty string \"name\")",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'Team with empty string is not allowed';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n\"id\": \"{{teamId}}\",\r\n\"name\": \"\",\r\n\"users\": []\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/teams/{{teamId}}",
-          "host": ["{{app_url}}"],
-          "path": ["api", "teams", "{{teamId}}"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get teams",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"name\": { \"type\": \"string\" },\r",
-              "        \"users\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"name\",\r",
-              "        \"users\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/teams",
-          "host": ["{{app_url}}"],
-          "path": ["api", "teams"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Delete teams",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Response should have status code 204', () => {\r",
-              "    pm.expect(pm.response).to.have.status(204);        \r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"id\": \"{{teamId}}\",\r\n    \"name\": \"{{teamName}}\",\r\n    \"users\": []\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/teams/{{teamId}}",
-          "host": ["{{app_url}}"],
-          "path": ["api", "teams", "{{teamId}}"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create comments",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"text\": { \"type\": \"string\" },\r",
-              "        \"pageId\": { \"type\": \"string\" },\r",
-              "        \"parentCommentId\": { \"type\": [\"null\",\"string\"] },\r",
-              "        \"author\": { \"type\": [\"object\",\"string\"] }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"text\",\r",
-              "        \"pageId\",\r",
-              "        \"parentCommentId\",\r",
-              "        \"author\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const responseJson = pm.response.json()\r",
-              "\r",
-              "pm.environment.set(\"commentId\", responseJson.id);\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Cookie",
-            "type": "text",
-            "value": "workspaceId={{workspaceId}}"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"text\": \"{{$randomLoremText}}\",\r\n    \"mentionIds\": []\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages", "{{parentPageId}}", "comments"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create comments ( invalid - empty string)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'text must be at least 1 characters';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"text\": \"\",\r\n    \"mentionIds\": []\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages", "{{parentPageId}}", "comments"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get comments",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"text\": { \"type\": \"string\" },\r",
-              "        \"pageId\": { \"type\": \"string\" },\r",
-              "        \"parentCommentId\": { \"type\": [\"null\",\"string\"] },\r",
-              "        \"author\": { \"type\": \"array\" }\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"id\",\r",
-              "        \"text\",\r",
-              "        \"pageId\",\r",
-              "        \"parentCommentId\",\r",
-              "        \"author\"\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages", "{{parentPageId}}", "comments"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create permissions",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"object\",\r",
-              "    \"properties\": {\r",
-              "        \"name\": { \"type\": \"string\" },\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"type\": { \"type\": \"string\" },\r",
-              "        \"role\": { \"type\": \"string\" },\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"name\",\r",
-              "        \"id\",\r",
-              "        \"type\",\r",
-              "        \"role\",\r",
-              "\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"id\": \"{{userId}}\",\r\n    \"name\": \"{{userName}}\",    \r\n    \"type\": \"user\",\r\n    \"role\": \"admin\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages", "{{parentPageId}}", "permissions"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create permissions (without role)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const expectedMessage  = 'role must be one of the following values: read, write, admin';\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test('Response should have status code 400', () => {\r",
-              "    pm.expect(pm.response).to.have.status(400);        \r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should contain correct error message', () => {\r",
-              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"id\": \"{{userId}}\",\r\n    \"name\": \"{{userName}}\",    \r\n    \"type\": \"\",\r\n    \"role\": \"\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages", "{{parentPageId}}", "permissions"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get permissions",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const schema = {\r",
-              "    \"type\": \"array\",\r",
-              "    \"properties\": {\r",
-              "        \"name\": { \"type\": \"string\" },\r",
-              "        \"id\": { \"type\": \"string\" },\r",
-              "        \"type\": { \"type\": \"string\" },\r",
-              "        \"role\": { \"type\": \"string\" },\r",
-              "    },\r",
-              "    \"required\": [\r",
-              "        \"name\",\r",
-              "        \"id\",\r",
-              "        \"type\",\r",
-              "        \"role\",\r",
-              "\r",
-              "    ]\r",
-              "};\r",
-              "\r",
-              "const jsonResponse = pm.response.json();\r",
-              "\r",
-              "pm.test(\"Response should have status code 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test('Response should have JSON body', () => {\r",
-              "    pm.expect(pm.response).to.have.jsonBody();\r",
-              "});\r",
-              "\r",
-              "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "Cookie",
-            "value": "workspaceId={{workspaceId}}",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
-          "host": ["{{app_url}}"],
-          "path": ["api", "pages", "{{parentPageId}}", "permissions"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Delete permissions",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Response should have status code 204', () => {\r",
-              "    pm.expect(pm.response).to.have.status(204);        \r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{Token}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions/user/{{userId}}",
-          "host": ["{{app_url}}"],
-          "path": [
-            "api",
-            "pages",
-            "{{parentPageId}}",
-            "permissions",
-            "user",
-            "{{userId}}"
-          ]
-        }
-      },
-      "response": []
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ]
+	"info": {
+		"_postman_id": "26682ed5-dd7e-4e10-b111-9d56a4e12318",
+		"name": "Infostack - API tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register (valid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.environment.set(\"userEmail\", responseJson.email)",
+							"",
+							"pm.test(\"Response should have status code 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"{{$randomExampleEmail}}\",\r\n  \"password\": \"123456\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/register",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register  (email already registered)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'User with such email already exists';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 409', () => {\r",
+							"    pm.expect(pm.response).to.have.status(409);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"123456\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/register",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register  (invalid email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'email must be a valid email';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"11\",\r\n  \"password\": \"123456\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/register",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register  (invalid password)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'password must be at least 6 characters';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"\",\r\n  \"fullName\": \"{{$randomFullName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/register",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (valid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"title\": { \"type\": [\"string\", \"null\"] },\r",
+							"        \"fullName\": { \"type\": \"string\" },\r",
+							"        \"email\": { \"type\": \"string\" },\r",
+							"        \"refreshToken\": { \"type\": \"string\" },\r",
+							"        \"avatar\": { \"type\": [\"string\", \"null\"] },\r",
+							"        \"accessToken\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"title\",\r",
+							"        \"fullName\",\r",
+							"        \"email\",\r",
+							"        \"refreshToken\",\r",
+							"        \"avatar\",\r",
+							"        \"accessToken\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"Token\", responseJson.accessToken)\r",
+							"pm.environment.set(\"userId\", responseJson.id)\r",
+							"const userEmal = pm.environment.get(\"userEmail\") \r",
+							"\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Test response email\", () => {    \r",
+							"    pm.expect(responseJson.email).to.eql(userEmal);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (invalid email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Incorrect email or password';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"test12@test.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (invalid password)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Incorrect email or password';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"1234560\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (invalid extra line)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'this field has unspecified keys: hgffgf';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"123456\",\r\n  \"hgffgf\": \"2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/auth/login",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a workspace",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"title\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"title\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"workspaceId\", responseJson.id);\r",
+							"pm.environment.set(\"workspaceTitle\", responseJson.title);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{$randomUUID}}\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/workspaces",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"workspaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a workspace (invalid - title already exists)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Workspace with such title already exists';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 409', () => {\r",
+							"    pm.expect(pm.response).to.have.status(409);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"title\": \"{{workspaceTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/workspaces",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"workspaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get workspaces",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"title\": { \"type\": \"string\" },\r",
+							"        \"status\": { \"type\": \"string\" },\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"title\",\r",
+							"        \"status\",\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "If-None-Match",
+						"value": "W/\"12d-vi4z0gXiYombvUisgJVxmzfqn7w\"",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Referer",
+						"value": "https://bsa-infostack.herokuapp.com/workspaces",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/workspaces",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"workspaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get users data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"fullName\": { \"type\": \"string\" },\r",
+							"        \"email\": { \"type\": \"string\" },\r",
+							"        \"avatar\": { \"type\": [\"string\",\"null\"] },\r",
+							"        \"title\": { \"type\": [\"string\",\"null\"] },\r",
+							"        \"skills\": { \"type\": \"array\" },\r",
+							"        \"followingPages\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",       \r",
+							"        \"fullName\",\r",
+							"        \"email\",       \r",
+							"        \"avatar\",\r",
+							"        \"title\",\r",
+							"        \"skills\",\r",
+							"        \"followingPages\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/users/{{userId}}/profile",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{userId}}",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update full name (valid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"fullName\": { \"type\": \"string\" },\r",
+							"        \"email\": { \"type\": \"string\" },\r",
+							"        \"avatar\": { \"type\": [\"string\", \"null\"] },\r",
+							"        \"title\": { \"type\": \"string\" },\r",
+							"        \"skills\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",       \r",
+							"        \"fullName\",\r",
+							"        \"email\",       \r",
+							"        \"avatar\",\r",
+							"        \"title\",\r",
+							"        \"skills\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"userName\", responseJson.fullName)\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"avatar\": \"\",\r\n\"email\": \"{{userEmail}}\",\r\n\"fullName\": \"{{$randomFullName}}\",\r\n\"id\": \"{{userId}}\",\r\n\"skills\": [],\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/users/{{userId}}/profile",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{userId}}",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"role\": { \"type\": \"string\" },\r",
+							"        \"fullName\": { \"type\": \"string\" },\r",
+							"        \"status\": { \"type\": \"array\" },\r",
+							"        \"teams\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"role\",\r",
+							"        \"fullName\",\r",
+							"        \"teams\",\r",
+							"        \"status\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/workspaces/current/users",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"workspaces",
+						"current",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create parent page",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"authorId\": { \"type\": \"string\" },\r",
+							"        \"parentPageId\": { \"type\": [\"string\",\"null\"] },\r",
+							"        \"pageContents\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",       \r",
+							"        \"authorId\",    \r",
+							"        \"parentPageId\",\r",
+							"        \"pageContents\"\r",
+							"    ]\r",
+							"};\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"parentPageId\", responseJson.id);\r",
+							"pm.environment.set(\"parentPageTitle\", responseJson.pageContents[0].title);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"content\": \"\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create parent page (empty title)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'title must be at least 1 characters';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"content\": \"\",\r\n\"title\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create child page",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"authorId\": { \"type\": \"string\" },\r",
+							"        \"parentPageId\": { \"type\": [\"string\",\"null\"] },\r",
+							"        \"pageContents\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",       \r",
+							"        \"authorId\",    \r",
+							"        \"parentPageId\",\r",
+							"        \"pageContents\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"parentPageId\", responseJson.id);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"content\": \"\",\r\n\"title\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create pages (without title)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Internal Server Error';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 500', () => {\r",
+							"    pm.expect(pm.response).to.have.status(500);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"content\": \"\",\r\n\"title\": \"\"\r\n22\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get pages",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"childPages\": { \"type\": \"array\" },\r",
+							"        \"title\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"childPages\",\r",
+							"        \"title\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/pages",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create tags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"name\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"tagId\", responseJson.id);\r",
+							"pm.environment.set(\"tagName\", responseJson.name);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/tags",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create tags (tags already created)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Duplicate workspace tag';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 409', () => {\r",
+							"    pm.expect(pm.response).to.have.status(409);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{tagName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/tags",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update tags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"name\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{tagId}}\",\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/tags/{{tagId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"tags",
+						"{{tagId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update tags ( invalid - empty string)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Empty tag name is not allowed';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{tagId}}\",\r\n    \"name\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/tags/{{tagId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"tags",
+						"{{tagId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"name\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/tags",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete tags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response should have status code 204', () => {\r",
+							"    pm.expect(pm.response).to.have.status(204);        \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{tagId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/tags/{{tagId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"tags",
+						"{{tagId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create teams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"users\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"name\",\r",
+							"        \"users\"\r",
+							"    ]\r",
+							"};\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"teamId\", responseJson.id);\r",
+							"pm.environment.set(\"teamName\", responseJson.name);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"name\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/teams",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create teams (team already created)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Team with such name already exists';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 409', () => {\r",
+							"    pm.expect(pm.response).to.have.status(409);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{teamName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/teams",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create teams  ( invalid - empty string)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Team with empty string is not allowed';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/teams",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update teams  ( invalid - empty string \"name\")",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Team with empty string is not allowed';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{teamId}}\",\r\n\"name\": \"\",\r\n\"users\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/teams/{{teamId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"teams",
+						"{{teamId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get teams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"users\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"name\",\r",
+							"        \"users\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/teams",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete teams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response should have status code 204', () => {\r",
+							"    pm.expect(pm.response).to.have.status(204);        \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{teamId}}\",\r\n    \"name\": \"{{teamName}}\",\r\n    \"users\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/teams/{{teamId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"teams",
+						"{{teamId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create skills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"createdAt\": { \"type\": \"string\" },\r",
+							"        \"updatedAt\": { \"type\": \"string\" },\r",
+							"        \"deletedAt\": { \"type\": [\"string\",\"null\"] },\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"workspaceId\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"createdAt\",\r",
+							"        \"updatedAt\",\r",
+							"        \"deletedAt\",\r",
+							"        \"name\",\r",
+							"        \"workspaceId\"\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"skillsId\", jsonResponse.id);\r",
+							"pm.environment.set(\"skillsName\", jsonResponse.name);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/skills",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"skills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create skills (invalid - already created)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Duplicate workspace skill';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 409', () => {\r",
+							"    pm.expect(pm.response).to.have.status(409);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{skillsName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/skills",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"skills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update skills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"name\"\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{skillsId}}\",\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/skills/{{skillsId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"skills",
+						"{{skillsId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update skills (invalid- empty string)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'Empty skill name is not allowed';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{skillsId}}\",\r\n\"name\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/skills/{{skillsId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"skills",
+						"{{skillsId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get skills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"createdAt\": { \"type\": \"string\" },\r",
+							"        \"updatedAt\": { \"type\": \"string\" },\r",
+							"        \"deletedAt\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"workspaceId\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"createdAt\",\r",
+							"        \"updatedAt\",\r",
+							"        \"deletedAt\",\r",
+							"        \"name\",\r",
+							"        \"workspaceId\"\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{skillsId}}\",\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/skills/",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"skills",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete skills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should have status code 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{skillsId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/skills/{{skillsId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"skills",
+						"{{skillsId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"createdAt\": { \"type\": \"string\" },\r",
+							"        \"text\": { \"type\": \"string\" },\r",
+							"        \"voiceRecord\": { \"type\": [\"string\", \"null\"]},\r",
+							"        \"pageId\": { \"type\": \"string\" },\r",
+							"        \"parentCommentId\": { \"type\": [\"string\", \"null\"]},\r",
+							"        \"author\": { \"type\": \"object\" },\r",
+							"        \"reactions\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"createdAt\",\r",
+							"        \"text\",\r",
+							"        \"voiceRecord\",\r",
+							"        \"pageId\",\r",
+							"        \"parentCommentId\",\r",
+							"        \"author\",\r",
+							"        \"reactions\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const responseJson = pm.response.json()\r",
+							"\r",
+							"pm.environment.set(\"workspaceId\", responseJson.id);\r",
+							"pm.environment.set(\"workspaceTitle\", responseJson.title);\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Hello world\",\r\n    \"mentionIds\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create comments ( invalid - empty string)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'text must be at least 1 characters';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"\",\r\n    \"mentionIds\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"text\": { \"type\": \"string\" },\r",
+							"        \"pageId\": { \"type\": \"string\" },\r",
+							"        \"parentCommentId\": { \"type\": [\"null\", \"string\"] },\r",
+							"        \"author\": { \"type\": \"array\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"text\",\r",
+							"        \"pageId\",\r",
+							"        \"parentCommentId\",\r",
+							"        \"author\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/comments",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create permissions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"type\": { \"type\": \"string\" },\r",
+							"        \"role\": { \"type\": \"string\" },\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"name\",\r",
+							"        \"id\",\r",
+							"        \"type\",\r",
+							"        \"role\",\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{userId}}\",\r\n    \"name\": \"{{userName}}\",    \r\n    \"type\": \"user\",\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create permissions (without role)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedMessage  = 'role must be one of the following values: read, write, admin';\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test('Response should have status code 400', () => {\r",
+							"    pm.expect(pm.response).to.have.status(400);        \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should contain correct error message', () => {\r",
+							"    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{userId}}\",\r\n    \"name\": \"{{userName}}\",    \r\n    \"type\": \"\",\r\n    \"role\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get permissions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"type\": { \"type\": \"string\" },\r",
+							"        \"role\": { \"type\": \"string\" },\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"name\",\r",
+							"        \"id\",\r",
+							"        \"type\",\r",
+							"        \"role\",\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete permissions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response should have status code 204', () => {\r",
+							"    pm.expect(pm.response).to.have.status(204);        \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{app_url}}/api/pages/{{parentPageId}}/permissions/user/{{userId}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"{{parentPageId}}",
+						"permissions",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"pageId\": { \"type\": \"string\" },\r",
+							"        \"title\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"pageId\",\r",
+							"        \"title\"\r",
+							"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/pages/search?query={{parentPageTitle}}",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"pages",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{{parentPageTitle}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get notification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": { \"type\": \"string\" },\r",
+							"        \"createdAt\": { \"type\": \"string\" },\r",
+							"        \"updatedAt\": { \"type\": \"string\" },\r",
+							"        \"deletedAt\": { \"type\": \"string\" },\r",
+							"        \"name\": { \"type\": \"string\" },\r",
+							"        \"workspaceId\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"id\",\r",
+							"        \"createdAt\",\r",
+							"        \"updatedAt\",\r",
+							"        \"deletedAt\",\r",
+							"        \"name\",\r",
+							"        \"workspaceId\"\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"const jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response should have status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have JSON body', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"pm.test('Response validation the schema', () => {\r",
+							"    pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response notification array should be empty', () => {\r",
+							"    pm.expect(jsonResponse.length).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "workspaceId={{workspaceId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{app_url}}/api/notifications?limit=4",
+					"host": [
+						"{{app_url}}"
+					],
+					"path": [
+						"api",
+						"notifications"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
 }

@@ -70,9 +70,12 @@ export const PageContent: React.FC = () => {
   const followedUserPages = useAppSelector((state) => {
     const { user } = state.auth;
     if (user && user.followingPages && childPages) {
-      const pages = childPages.map((child) => ({
-        ...user.followingPages?.find((page) => child.id === page.id),
+      const filteredFollowedPages = childPages.filter((child) =>
+        user.followingPages?.find((page) => child.id === page.id),
+      );
+      const pages = filteredFollowedPages.map((child) => ({
         ...child,
+        ...childPages.find((page) => page.id === child.id),
       }));
       return pages;
     }
