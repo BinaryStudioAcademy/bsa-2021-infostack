@@ -6,19 +6,20 @@ import { pageApi } from 'services';
 import { authActions } from 'store/actions';
 import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
 import { RootState } from 'common/types/types';
+import { HttpError } from 'exceptions/exceptions';
 
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,
   async (createPayload: IPageRequest, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
     try {
       const createPageResponse = await pageApi.createPage(createPayload);
       dispatch(actions.createPage(createPageResponse));
       return createPageResponse;
     } catch (e) {
-      toast.error(e.message);
+      toast.error((e as HttpError).message);
     } finally {
-      dispatch(actions.toggleSpinner());
+      dispatch(actions.spinnerOff());
     }
   },
 );
@@ -36,8 +37,10 @@ const createVersionPage = createAsyncThunk(
 const getPagesAsync = createAsyncThunk(
   ActionType.SET_PAGES,
   async (payload: undefined, { dispatch }) => {
+    dispatch(actions.spinnerOn());
     const response = await pageApi.getPages();
     dispatch(actions.setPages(response));
+    dispatch(actions.spinnerOff());
   },
 );
 
@@ -52,20 +55,20 @@ const getPinnedPagesAsync = createAsyncThunk(
 const getPage = createAsyncThunk(
   ActionType.GET_PAGE,
   async (pageId: string | undefined, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
     const getPageResponse = await pageApi.getPage(pageId);
     dispatch(actions.getPage(getPageResponse));
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOff());
   },
 );
 
 const getPageShared = createAsyncThunk(
   ActionType.GET_PAGE,
   async (getPayload: string | undefined, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
     const pageResponse = await pageApi.getPageShared(getPayload);
     dispatch(actions.getPage(pageResponse));
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOff());
   },
 );
 
@@ -80,11 +83,11 @@ const setPage = createAsyncThunk(
 const deletePage = createAsyncThunk(
   ActionType.DELETE_PAGE,
   async (pageId: string, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
     await pageApi.deletePage(pageId);
     dispatch(actions.deletePage());
     dispatch(getPagesAsync());
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOff());
   },
 );
 
@@ -145,7 +148,7 @@ const unpinPage = createAsyncThunk(
 const editPageContent = createAsyncThunk(
   ActionType.EDIT_PAGE_CONTENT,
   async (getPayload: IEditPageContent, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
     const editContentResponse = await pageApi.editPageContent(getPayload);
     dispatch(actions.getPage(editContentResponse));
 
@@ -153,32 +156,32 @@ const editPageContent = createAsyncThunk(
     dispatch(actions.setPages(response));
     const responsePinned = await pageApi.getPinnedPages();
     dispatch(actions.setPinnedPages(responsePinned));
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOff());
   },
 );
 
 const editDraft = createAsyncThunk(
   ActionType.EDIT_DRAFT,
   async (getPayload: IEditPageContent, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
     const editDraftResponse = await pageApi.editDraft(getPayload);
     dispatch(actions.getPage(editDraftResponse));
 
     const response = await pageApi.getPages();
     dispatch(actions.setPages(response));
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOff());
   },
 );
 
 const deleteDraft = createAsyncThunk(
   ActionType.DELETE_DRAFT,
   async (pageId: string, { dispatch }) => {
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOn());
 
     await pageApi.deleteDraft(pageId);
     const response = await pageApi.getPage(pageId);
     dispatch(actions.getPage(response));
-    dispatch(actions.toggleSpinner());
+    dispatch(actions.spinnerOff());
   },
 );
 
