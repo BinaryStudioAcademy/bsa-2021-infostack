@@ -1,7 +1,9 @@
-import { IPageRecent } from '../../../common/interfaces/page';
+import { IPageStatistic } from '../../../common/interfaces/page';
 import { RecentPage } from '../../../data/entities/recent-pages';
 
-export const mapToRecentPage = (recentPages: RecentPage[]): IPageRecent[] => {
+export const mapToRecentPage = (
+  recentPages: RecentPage[],
+): IPageStatistic[] => {
   const cutRecentPages: RecentPage[] = recentPages.slice(0, 5);
 
   const mappedRecentPages = cutRecentPages.map(

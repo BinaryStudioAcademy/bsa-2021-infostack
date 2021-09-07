@@ -5,11 +5,11 @@ import {
   IUserActivity,
   IUserWithTokens,
   IInviteUser,
-} from 'common/interfaces/user';
+  IPageStatistic,
+  IPaginated,
+} from 'common/interfaces';
 import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
-import { IPaginated } from 'common/interfaces/common';
-import { IPageRecent } from 'common/interfaces';
 
 class UserApi {
   private http = http;
@@ -89,7 +89,7 @@ class UserApi {
     );
   }
 
-  public async getRecentPages(userId: string): Promise<IPageRecent[]> {
+  public async getRecentPages(userId: string): Promise<IPageStatistic[]> {
     return this.http.load(`${this.BASE}/${userId}/recent-pages`);
   }
 }

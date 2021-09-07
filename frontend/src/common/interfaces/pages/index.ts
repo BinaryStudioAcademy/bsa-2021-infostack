@@ -13,6 +13,6 @@ export type {
   IPageShare,
   IFoundPageContent,
   IExportPDF,
-  IPageRecent,
   IPageRequested,
+  IPageStatistic,
 } from 'infostack-shared';
