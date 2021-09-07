@@ -1,5 +1,4 @@
 import 'react-h5-audio-player/lib/styles.css';
-import { Button } from 'react-bootstrap';
 import { getAllowedClasses } from 'helpers/helpers';
 import { useState } from 'hooks/hooks';
 import RecordModal from '../record-modal/record-modal';
@@ -14,18 +13,10 @@ export const RecordVoice: React.FC<Props> = ({ handleRecord }) => {
 
   return (
     <>
-      <Button
+      <i
         onClick={(): void => setModalShow(true)}
-        className={getAllowedClasses('ms-2', styles.text)}
-        variant="success"
-      >
-        <i
-          onClick={(): void => setModalShow(true)}
-          className={getAllowedClasses('bi bi-mic')}
-        >
-          Record
-        </i>
-      </Button>
+        className={getAllowedClasses('bi bi-mic', styles.microphoneIcon)}
+      ></i>
 
       <RecordModal
         completerecord={handleRecord}

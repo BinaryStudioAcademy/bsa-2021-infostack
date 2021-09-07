@@ -41,6 +41,10 @@
   }
   .actions {
     font-size: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(3, min-content);
+    align-items: center;
+
     .action {
       cursor: pointer;
       color: hsl(0 0% 0% / 0.4);

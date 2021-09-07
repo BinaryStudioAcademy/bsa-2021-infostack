@@ -80,7 +80,7 @@ export const FollowModal: React.FC<Props> = ({
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning" onClick={(): void => handler(undefined)}>
+        <Button variant="secondary" onClick={(): void => handler(undefined)}>
           No
         </Button>
         <Button

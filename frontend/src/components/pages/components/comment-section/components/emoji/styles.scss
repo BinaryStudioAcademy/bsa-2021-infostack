@@ -1,7 +1,9 @@
 .emoji {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
+  &--reactions {
+    margin-top: 10px;
+    grid-row: 1;
+    grid-column: 1 / span 4;
+  }
 
   &__container {
     display: flex;
@@ -59,20 +61,15 @@
   }
 
   .dropdown-toggle.btn {
-    font-size: 14px;
-    border-radius: 30px;
-    padding: 0 6px;
-    border: 1px solid transparent;
-    background-color: #d8d8d8;
-    min-width: 30px;
-    height: 24px;
-    text-align: center;
-    margin-bottom: 5px;
-    line-height: 1;
+    font-size: 1.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    line-height: inherit;
+    color: rgba(0, 0, 0, 0.4);
 
     &:hover {
-      background-color: #fff;
-      border-color: #777;
+      color: rgba(0, 0, 0, 0.8);
     }
 
     &:after {
@@ -89,10 +86,6 @@
       background-color: #fff;
       border-color: #777;
     }
-  }
-
-  .bi {
-    color: #222;
   }
 
   aside.emoji-picker-react {
