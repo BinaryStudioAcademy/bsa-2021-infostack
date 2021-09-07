@@ -55,7 +55,8 @@
   },
   "dependencies": {
     "nodemailer": "6.6.3",
-    "react-toastify": "7.0.4"
+    "react-toastify": "7.0.4",
+    "y-webrtc": "10.2.0"
   },
   "lint-staged": {
     "*": "npm run lint:editorconfig && npm run lint:fs",
