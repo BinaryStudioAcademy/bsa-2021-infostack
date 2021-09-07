@@ -7,6 +7,7 @@ const data = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sat'],
   datasets: [
     {
+      label: ' # of Updates',
       data: [12, 19, 3, 5, 2, 3, 15],
       backgroundColor: '#4bba73',
       borderWidth: 4,
@@ -64,6 +65,7 @@ export const Chart: React.FC<Props> = ({ axes, className }) => (
         className={getAllowedClasses(styles.chart)}
         data={data}
         options={options}
+        height={75}
       />
     </Card.Body>
   </Card>

@@ -20,6 +20,19 @@ class UserPermissionRepository extends Repository<UserPermission> {
     return this.manager.save(userPermission);
   }
 
+  public findAvailablePages(
+    userId: string,
+    workspaceId: string,
+  ): Promise<{ pageId: string }[]> {
+    console.log(userId, workspaceId);
+    return this.createQueryBuilder('user_permission')
+      .select('user_permission.pageId', 'pageId')
+      .leftJoin('user_permission.page', 'page')
+      .where('user_permission.userId = :userId', { userId })
+      .andWhere('page.workspaceId = :workspaceId', { workspaceId })
+      .execute();
+  }
+
   public findByUserId(userId: string): Promise<UserPermission[]> {
     return this.find({
       relations: ['page'],

@@ -279,12 +279,14 @@ export const getPage = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
   if (page.workspaceId === workspaceId) {
+    const pageWithPermission = await getPageWithPermission(userId, page);
     const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-    await recentPagesRepository
-      .deleteOne(userId, pageId)
-      .then(() => recentPagesRepository.save({ userId, pageId }));
-
-    return getPageWithPermission(userId, page);
+    await recentPagesRepository.deleteOne(userId, pageId).then(() => {
+      if (pageWithPermission.permission) {
+        recentPagesRepository.save({ userId, pageId });
+      }
+    });
+    return pageWithPermission;
   } else {
     return mapPageToIPage(page);
   }
@@ -872,18 +874,48 @@ export const getRecentPages = async (
   return mapToRecentPage(recentPages);
 };
 
+const getAvailablePages = async (
+  userId: string,
+  workspaceId: string,
+): Promise<string[]> => {
+  const userPermissionRepository = getCustomRepository(
+    UserPermissionRepository,
+  );
+  const teamPermissionRepository = getCustomRepository(
+    TeamPermissionRepository,
+  );
+  const userRepository = getCustomRepository(UserRepository);
+
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+  const availableForTeamsPages =
+    await teamPermissionRepository.findAvailablePages(teamsIds, workspaceId);
+  const availableForUserPages =
+    await userPermissionRepository.findAvailablePages(userId, workspaceId);
+  const availablePagesIds = [
+    ...new Set(availableForTeamsPages.map(({ pageId }) => pageId)),
+    ...new Set(availableForUserPages.map(({ pageId }) => pageId)),
+  ];
+
+  console.log(availablePagesIds);
+  return availablePagesIds;
+};
+
 export const getMostUpdatedPages = async (
   userId: string,
   workspaceId: string,
   limit?: number,
 ): Promise<IPageStatistic[]> => {
   const pageRepository = getCustomRepository(PageRepository);
-  const pages = await pageRepository.findMostUpdated(
-    userId,
-    workspaceId,
-    limit,
-  );
-  return pages;
+  const availablePagesIds = await getAvailablePages(userId, workspaceId);
+  if (availablePagesIds.length) {
+    const recentPages = await pageRepository.findMostUpdated(
+      availablePagesIds,
+      limit,
+    );
+    return recentPages;
+  }
+  return [];
 };
 
 export const getMostViewedPages = async (
@@ -892,10 +924,13 @@ export const getMostViewedPages = async (
   limit?: number,
 ): Promise<IPageStatistic[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
-  const recentPages = await recentPagesRepository.findMostViewed(
-    userId,
-    workspaceId,
-    limit,
-  );
-  return recentPages;
+  const availablePagesIds = await getAvailablePages(userId, workspaceId);
+  if (availablePagesIds.length) {
+    const recentPages = await recentPagesRepository.findMostViewed(
+      availablePagesIds,
+      limit,
+    );
+    return recentPages;
+  }
+  return [];
 };

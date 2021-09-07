@@ -20,20 +20,19 @@ class RecentPagesRepository extends Repository<RecentPage> {
   }
 
   public findMostViewed(
-    userId: string,
-    workspaceId: string,
+    availablePagesIds: string[],
     limit: number,
   ): Promise<IPageStatistic[]> {
+    console.log(availablePagesIds);
     return this.createQueryBuilder('recent_page')
       .select('recent_page.pageId', 'pageId')
-      .addSelect('COUNT(recent_page.pageId)', 'count')
-      .having('COUNT(recent_page.pageId) > 0')
-      .leftJoin('recent_page.page', 'page')
-      .where({ userId })
+      .where('recent_page.pageId IN (:...ids)', { ids: availablePagesIds })
       .andWhere('recent_page.createdAt > :start_at', {
         start_at: Date.today().moveToDayOfWeek(0, -1),
       })
-      .andWhere('page.workspaceId = :workspaceId', { workspaceId })
+      .addSelect('COUNT(recent_page.pageId)', 'count')
+      .having('COUNT(recent_page.pageId) > 0')
+      .leftJoin('recent_page.page', 'page')
       .leftJoin(
         (qb) =>
           qb
