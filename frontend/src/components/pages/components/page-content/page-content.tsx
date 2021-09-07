@@ -414,7 +414,7 @@ export const PageContent: React.FC = () => {
   return (
     <div className="p-4">
       <Row className="gx-5">
-        <Col xs={12} lg={3} xl={2}>
+        <Col xl="auto">
           <PageTableOfContents headings={TOCHeadings} />
           <PageTags />
           <PageContributors className="mt-4" contributors={contributors} />
@@ -423,7 +423,7 @@ export const PageContent: React.FC = () => {
             followers={currentPage?.followingUsers}
           />
         </Col>
-        <Col xs={12} lg={9} xl={10}>
+        <Col className="col">
           <Row>
             <div className="my-2">
               <Breadcrumbs />
@@ -443,7 +443,7 @@ export const PageContent: React.FC = () => {
                 }
               >
                 <>
-                  <div className="d-flex align-items-center w-75">
+                  <div className="d-flex align-items-center">
                     <h1 className={getAllowedClasses(styles.pageHeading, 'h3')}>
                       {pageTitle || 'New Page'}
                     </h1>
@@ -458,7 +458,7 @@ export const PageContent: React.FC = () => {
                   </div>
                 </>
               </OverlayTrigger>
-              <div className="d-flex align-items-center w-25">
+              <div className="d-flex align-items-center">
                 {canRead && (
                   <VersionDropdown
                     currContent={currContent}
