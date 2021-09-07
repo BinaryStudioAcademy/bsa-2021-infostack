@@ -29,10 +29,10 @@ export const NavNotification: React.FC = () => {
 
   const onShowFiltered = (): void => {
     if (!isFiltered) {
-      const notReaded = notifications.filter((notification) => {
+      const notRead = notifications.filter((notification) => {
         return !notification.read;
       });
-      setNotificationsToShow(notReaded);
+      setNotificationsToShow(notRead);
       setIsFiltered(true);
     } else {
       setNotificationsToShow(notifications);
@@ -44,10 +44,10 @@ export const NavNotification: React.FC = () => {
     if (!isFiltered) {
       setNotificationsToShow(notifications);
     } else {
-      const notReaded = notifications.filter((notification) => {
+      const notRead = notifications.filter((notification) => {
         return !notification.read;
       });
-      setNotificationsToShow(notReaded);
+      setNotificationsToShow(notRead);
     }
   }, [notifications]);
 
@@ -165,7 +165,7 @@ export const NavNotification: React.FC = () => {
           <div className={getAllowedClasses(isExpanded ? styles.expanded : '')}>
             {!notificationsToShow.length && isFiltered && (
               <div className={getAllowedClasses(styles.noUnread)}>
-                There are no unread notification
+                There are no unread notifications
               </div>
             )}
             {[...notificationsToShow]
