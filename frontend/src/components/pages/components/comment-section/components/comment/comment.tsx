@@ -99,7 +99,6 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
               timeFormat="mm:ss"
             />
           )}
-          <Emoji reactions={reactions} commentId={id} />
           <div className={styles.actions}>
             <a className={styles.action} onClick={toggleField}>
               reply
@@ -112,6 +111,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
                 delete
               </a>
             )}
+            <Emoji reactions={reactions} commentId={id} />
           </div>
           {isFieldVisible && (
             <CommentForm

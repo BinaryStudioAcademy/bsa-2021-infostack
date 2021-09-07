@@ -280,7 +280,7 @@ export const ContentEditor: React.FC = () => {
                 Delete Draft
               </Button>
             ) : null}
-            <Button onClick={onCancel} variant="warning" size="sm">
+            <Button onClick={onCancel} variant="secondary" size="sm">
               Cancel
             </Button>
           </Col>
