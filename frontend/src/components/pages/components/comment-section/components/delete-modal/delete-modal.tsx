@@ -15,7 +15,7 @@ export const DeleteModal: React.FC<Props> = ({ show, isDisabled, handler }) => {
       actions={[
         {
           text: 'No',
-          buttonVariant: 'warning',
+          buttonVariant: 'secondary',
           handler: (): void => handler(false),
         },
         {

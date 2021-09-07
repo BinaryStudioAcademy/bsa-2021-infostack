@@ -191,25 +191,27 @@ export const CommentForm: React.FC<Props> = ({
                       displayTransform={(_, display): string => `@${display}`}
                     />
                   </MentionsInput>
-                  <Button
-                    disabled={isCancelDisabled}
-                    onClick={handleCancel}
-                    className={styles.text}
-                    variant="warning"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    disabled={
-                      isSubmitDisabled || (text.trim() === '' && !rawAudio)
-                    }
-                    onClick={handleSubmit}
-                    className={getAllowedClasses('ms-2', styles.text)}
-                    variant="success"
-                  >
-                    Comment{rawAudio && ' with audio'}
-                  </Button>
-                  <RecordVoice handleRecord={completeRecord} />
+                  <div className={getAllowedClasses(styles.containerButtons)}>
+                    <Button
+                      disabled={isCancelDisabled}
+                      onClick={handleCancel}
+                      className={styles.text}
+                      variant="secondary"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      disabled={
+                        isSubmitDisabled || (text.trim() === '' && !rawAudio)
+                      }
+                      onClick={handleSubmit}
+                      className={getAllowedClasses('ms-2', styles.text)}
+                      variant="success"
+                    >
+                      Comment{rawAudio && ' with audio'}
+                    </Button>
+                    <RecordVoice handleRecord={completeRecord} />
+                  </div>
                 </div>
               </>
             )}
