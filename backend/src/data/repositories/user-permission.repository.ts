@@ -24,7 +24,6 @@ class UserPermissionRepository extends Repository<UserPermission> {
     userId: string,
     workspaceId: string,
   ): Promise<{ pageId: string }[]> {
-    console.log(userId, workspaceId);
     return this.createQueryBuilder('user_permission')
       .select('user_permission.pageId', 'pageId')
       .leftJoin('user_permission.page', 'page')

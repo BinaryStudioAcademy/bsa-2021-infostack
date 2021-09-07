@@ -888,16 +888,17 @@ const getAvailablePages = async (
 
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
+
   const availableForTeamsPages =
     await teamPermissionRepository.findAvailablePages(teamsIds, workspaceId);
   const availableForUserPages =
     await userPermissionRepository.findAvailablePages(userId, workspaceId);
+
   const availablePagesIds = [
     ...new Set(availableForTeamsPages.map(({ pageId }) => pageId)),
     ...new Set(availableForUserPages.map(({ pageId }) => pageId)),
   ];
 
-  console.log(availablePagesIds);
   return availablePagesIds;
 };
 
@@ -909,11 +910,11 @@ export const getMostUpdatedPages = async (
   const pageRepository = getCustomRepository(PageRepository);
   const availablePagesIds = await getAvailablePages(userId, workspaceId);
   if (availablePagesIds.length) {
-    const recentPages = await pageRepository.findMostUpdated(
+    const pages = await pageRepository.findMostUpdated(
       availablePagesIds,
       limit,
     );
-    return recentPages;
+    return pages;
   }
   return [];
 };

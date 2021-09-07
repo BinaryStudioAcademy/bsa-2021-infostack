@@ -143,23 +143,25 @@ class PageRepository extends Repository<Page> {
     availablePagesIds: string[],
     limit: number,
   ): Promise<IPageStatistic[]> {
-    const dateWeekAgo = new Date()
-      .moveToDayOfWeek(new Date().getDay(), -1)
-      .setUTCHours(0, 0, 0, 0);
+    // const dateWeekAgo = new Date()
+    //   .moveToDayOfWeek(new Date().getDay(), -1)
+    //   .setUTCHours(0, 0, 0, 0);
+    const dateWeekAgo = new Date('August 14, 2021 19:00:00');
+    // .setUTCHours(0, 0, 0, 0);
+    console.log(new Date(dateWeekAgo).toISOString());
     return this.createQueryBuilder('page')
       .select('page.id', 'pageId')
       .where('page.id IN (:...ids)', { ids: availablePagesIds })
-      .loadRelationCountAndMap(
-        'page.count',
-        'page.pageContents',
-        'count',
-        (qb) =>
-          qb.where('count.createdAt > :start_at', {
-            start_at: new Date(dateWeekAgo).toISOString(),
-          }),
-      )
+      .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
       .addSelect('page.count', 'count')
-      .leftJoin('page.pageContents', 'pageContents')
+      .leftJoin(
+        'page.pageContents',
+        'pageContents',
+        'pageContents.createdAt > :start_at',
+        {
+          start_at: new Date(dateWeekAgo).toISOString(),
+        },
+      )
       .leftJoin(
         (qb) =>
           qb

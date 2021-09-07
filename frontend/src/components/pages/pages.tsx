@@ -47,7 +47,6 @@ const Pages: React.FC = () => {
       .catch(() => {
         toast.error('Can not get most viewed pages');
       });
-    console.log(mostViewedPages);
     setMostViewedPagesLoading(false);
   };
 
@@ -61,7 +60,6 @@ const Pages: React.FC = () => {
       .catch(() => {
         toast.error('Can not get most updated pages');
       });
-    console.log(mostUpdatedPages);
     setMostUpdatedLoading(false);
   };
 
