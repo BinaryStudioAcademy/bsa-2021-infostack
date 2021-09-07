@@ -1,6 +1,6 @@
 .popover {
   width: 25vw;
-
+  padding-bottom: 0;
   .footerText {
     color: #6c757d;
     font-size: 1.2rem;
@@ -16,4 +16,13 @@
   background: #fff;
   height: 53vh;
   overflow-y: auto;
+  position: relative;
+}
+
+.noUnread {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
