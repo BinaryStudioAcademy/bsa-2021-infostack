@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { Controller } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Feather';
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  Keyboard,
+} from 'react-native';
 
 import { authActions } from 'store';
 import {
@@ -19,7 +26,25 @@ import Logo from 'assets/svg/logo_dark.svg';
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { signInStatus, signInError } = useAppSelector((state) => state.auth);
+
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isKeyboardPresent, setIsKeyboardPresent] = useState(false);
+
+  const passwordRef = React.useRef<TextInput>(null);
+
+  React.useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardPresent(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardPresent(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const {
     control,
@@ -37,11 +62,21 @@ export const Login: React.FC = () => {
     setIsPasswordHidden(!isPasswordHidden);
   };
 
+  const onEmailSubmit = () => {
+    if (passwordRef.current !== null) {
+      passwordRef.current.focus();
+    }
+  };
+
   return (
     <View style={container}>
-      <Logo width={300} height={90} />
-      <Text style={title}>Welcome back</Text>
-      <Text style={description}>Sign in to your account to continue</Text>
+      {!isKeyboardPresent && (
+        <>
+          <Logo width={300} height={90} />
+          <Text style={title}>Welcome back</Text>
+          <Text style={description}>Sign in to your account to continue</Text>
+        </>
+      )}
 
       <View style={formCard}>
         <View style={[formItem]}>
@@ -54,6 +89,8 @@ export const Login: React.FC = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                onSubmitEditing={onEmailSubmit}
+                blurOnSubmit={false}
               />
             )}
             name="email"
@@ -76,6 +113,8 @@ export const Login: React.FC = () => {
                   onChangeText={onChange}
                   value={value}
                   secureTextEntry={isPasswordHidden}
+                  ref={passwordRef}
+                  onSubmitEditing={handleSubmit(onSubmit)}
                 />
                 {!!value.length && (
                   <Icon

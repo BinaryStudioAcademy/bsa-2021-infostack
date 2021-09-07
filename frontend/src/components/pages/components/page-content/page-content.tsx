@@ -458,7 +458,7 @@ export const PageContent: React.FC = () => {
                   </div>
                 </>
               </OverlayTrigger>
-              <div className="d-flex align-items-center w-25">
+              <div className="d-flex align-items-center justify-content-end w-25">
                 {canRead && (
                   <VersionDropdown
                     currContent={currContent}
