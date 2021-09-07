@@ -44,7 +44,7 @@ export const PagesStatistic: React.FC<Props> = ({
                   {page.title}
                 </div>
                 <div className={getAllowedClasses(styles.info)}>
-                  {page.visited || page.count}
+                  {page.date || page.count}
                 </div>
               </div>
             </Link>

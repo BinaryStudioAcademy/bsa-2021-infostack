@@ -73,6 +73,14 @@ class PageApi {
     );
   }
 
+  public async getСountOfUpdates(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/count-of-updates${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
+  }
+
   public async getPage(id?: string): Promise<IPage> {
     return this.http.load(`${this.BASE}/${id}`, {
       method: HttpMethod.GET,
