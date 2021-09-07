@@ -61,7 +61,9 @@ export const SkillSettings: React.FC = () => {
               </tbody>
             </Table>
           ) : (
-            <div>There are no skills in this workspace. Start adding</div>
+            <span className={getAllowedClasses(styles.emptyMessage)}>
+              There are no skills in this workspace. Start adding
+            </span>
           )
         ) : (
           <div className="text-center">
