@@ -1,0 +1,17 @@
+.content {
+  word-break: break-all;
+}
+
+.editor {
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.card {
+  max-width: 87vw;
+  min-height: 87vw;
+}
+
+ol {
+  list-style-position: inside;
+}

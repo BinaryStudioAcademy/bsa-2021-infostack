@@ -1,4 +1,4 @@
-import AudioPlayer from 'react-h5-audio-player';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import useCountDown from 'react-countdown-hook';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -137,7 +137,7 @@ const RecordModal: React.FC<Props> = (props) => {
       onHide={onCancel}
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      dialogClassName="modal-20w"
+      dialogClassName="modalWindow"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
@@ -250,9 +250,17 @@ const RecordModal: React.FC<Props> = (props) => {
             <AudioPlayer
               layout="stacked"
               src={audioUrl}
+              customProgressBarSection={[
+                RHAP_UI.CURRENT_TIME,
+                RHAP_UI.PROGRESS_BAR,
+                RHAP_UI.DURATION,
+                RHAP_UI.VOLUME,
+              ]}
               autoPlayAfterSrcChange={false}
               customAdditionalControls={[]}
+              customVolumeControls={[]}
               showJumpControls={false}
+              timeFormat="mm:ss"
               defaultDuration={`00:${durToShow}`}
             />
             <Button
