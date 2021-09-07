@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
+import 'datejs';
 import { generatePDFUtil } from '../common/utils/generate-pdf.util';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
@@ -905,6 +906,7 @@ const getAvailablePages = async (
 export const getMostUpdatedPages = async (
   userId: string,
   workspaceId: string,
+  dateFrom: string,
   limit?: number,
 ): Promise<IPageStatistic[]> => {
   const pageRepository = getCustomRepository(PageRepository);
@@ -913,6 +915,7 @@ export const getMostUpdatedPages = async (
     const pages = await pageRepository.findMostUpdated(
       availablePagesIds,
       limit,
+      dateFrom,
     );
     return pages;
   }
@@ -922,6 +925,7 @@ export const getMostUpdatedPages = async (
 export const getMostViewedPages = async (
   userId: string,
   workspaceId: string,
+  dateFrom: string,
   limit?: number,
 ): Promise<IPageStatistic[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
@@ -930,8 +934,43 @@ export const getMostViewedPages = async (
     const recentPages = await recentPagesRepository.findMostViewed(
       availablePagesIds,
       limit,
+      dateFrom,
     );
     return recentPages;
+  }
+  return [];
+};
+
+export const getСountOfUpdates = async (
+  userId: string,
+  workspaceId: string,
+  dateFrom: string,
+): Promise<IPageStatistic[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const availablePagesIds = await getAvailablePages(userId, workspaceId);
+  if (availablePagesIds.length) {
+    const times = await pageRepository.findСountOfUpdates(
+      availablePagesIds,
+      dateFrom,
+    );
+    const countsOfUpdates = [];
+    const date = new Date(dateFrom);
+    while (date.valueOf() < new Date().setUTCHours(0, 0, 0, 0)) {
+      const count = times
+        .filter(
+          (time) =>
+            new Date(time.date) >= date &&
+            new Date(time.date) <= new Date(date).addDays(1),
+        )
+        .map((time) => +time.count)
+        .reduce((a, b) => a + b, 0);
+      countsOfUpdates.push({
+        count: String(count),
+        date: new Date(date).toISOString(),
+      });
+      date.setDate(date.getDate() + 1);
+    }
+    return countsOfUpdates;
   }
   return [];
 };

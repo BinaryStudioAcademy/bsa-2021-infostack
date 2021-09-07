@@ -13,6 +13,7 @@ import {
   getPinnedPages,
   getMostViewedPages,
   getMostUpdatedPages,
+  getСountOfUpdates,
   getPage,
   getPermissions,
   setPermission,
@@ -60,14 +61,31 @@ router.get(
 router.get(
   '/most-viewed',
   run((req) =>
-    getMostViewedPages(req.userId, req.workspaceId, +req.query.limit),
+    getMostViewedPages(
+      req.userId,
+      req.workspaceId,
+      req.query.dateFrom,
+      +req.query.limit,
+    ),
   ),
 );
 
 router.get(
   '/most-updated',
   run((req) =>
-    getMostUpdatedPages(req.userId, req.workspaceId, +req.query.limit),
+    getMostUpdatedPages(
+      req.userId,
+      req.workspaceId,
+      req.query.dateFrom,
+      +req.query.limit,
+    ),
+  ),
+);
+
+router.get(
+  '/count-of-updates',
+  run((req) =>
+    getСountOfUpdates(req.userId, req.workspaceId, req.query.dateFrom),
   ),
 );
 

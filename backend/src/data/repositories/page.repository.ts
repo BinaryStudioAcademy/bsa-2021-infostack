@@ -142,13 +142,8 @@ class PageRepository extends Repository<Page> {
   public findMostUpdated(
     availablePagesIds: string[],
     limit: number,
+    dateFrom: string,
   ): Promise<IPageStatistic[]> {
-    // const dateWeekAgo = new Date()
-    //   .moveToDayOfWeek(new Date().getDay(), -1)
-    //   .setUTCHours(0, 0, 0, 0);
-    const dateWeekAgo = new Date('August 14, 2021 19:00:00');
-    // .setUTCHours(0, 0, 0, 0);
-    console.log(new Date(dateWeekAgo).toISOString());
     return this.createQueryBuilder('page')
       .select('page.id', 'pageId')
       .where('page.id IN (:...ids)', { ids: availablePagesIds })
@@ -158,9 +153,7 @@ class PageRepository extends Repository<Page> {
         'page.pageContents',
         'pageContents',
         'pageContents.createdAt > :start_at',
-        {
-          start_at: new Date(dateWeekAgo).toISOString(),
-        },
+        { start_at: dateFrom },
       )
       .leftJoin(
         (qb) =>
@@ -188,6 +181,26 @@ class PageRepository extends Repository<Page> {
       .groupBy('page.id')
       .addGroupBy('last_content.title')
       .limit(limit)
+      .execute();
+  }
+
+  public findСountOfUpdates(
+    availablePagesIds: string[],
+    dateFrom: string,
+  ): Promise<IPageStatistic[]> {
+    return this.createQueryBuilder('page')
+      .where('page.id IN (:...ids)', { ids: availablePagesIds })
+      .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
+      .select('page.count', 'count')
+      .leftJoin(
+        'page.pageContents',
+        'pageContents',
+        'pageContents.createdAt > :start_at',
+        { start_at: dateFrom },
+      )
+      .addSelect('pageContents.createdAt', 'date')
+      .orderBy('page.count', 'DESC')
+      .groupBy('pageContents.createdAt')
       .execute();
   }
 

@@ -1,5 +1,4 @@
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import 'datejs';
 import { RecentPage } from '../entities/recent-pages';
 import { PageContent } from '../entities/page-content';
 import { IPageStatistic } from '~/common/interfaces/page';
@@ -22,15 +21,13 @@ class RecentPagesRepository extends Repository<RecentPage> {
   public findMostViewed(
     availablePagesIds: string[],
     limit: number,
+    dateFrom: string,
   ): Promise<IPageStatistic[]> {
-    const dateWeekAgo = new Date()
-      .moveToDayOfWeek(new Date().getDay(), -1)
-      .setUTCHours(0, 0, 0, 0);
     return this.createQueryBuilder('recent_page')
       .select('recent_page.pageId', 'pageId')
       .where('recent_page.pageId IN (:...ids)', { ids: availablePagesIds })
       .andWhere('recent_page.createdAt > :start_at', {
-        start_at: new Date(dateWeekAgo).toISOString(),
+        start_at: dateFrom,
       })
       .addSelect('COUNT(recent_page.pageId)', 'count')
       .having('COUNT(recent_page.pageId) > 0')
