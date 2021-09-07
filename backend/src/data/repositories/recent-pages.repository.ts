@@ -23,12 +23,14 @@ class RecentPagesRepository extends Repository<RecentPage> {
     availablePagesIds: string[],
     limit: number,
   ): Promise<IPageStatistic[]> {
-    console.log(availablePagesIds);
+    const dateWeekAgo = new Date()
+      .moveToDayOfWeek(new Date().getDay(), -1)
+      .setUTCHours(0, 0, 0, 0);
     return this.createQueryBuilder('recent_page')
       .select('recent_page.pageId', 'pageId')
       .where('recent_page.pageId IN (:...ids)', { ids: availablePagesIds })
       .andWhere('recent_page.createdAt > :start_at', {
-        start_at: Date.today().moveToDayOfWeek(0, -1),
+        start_at: new Date(dateWeekAgo).toISOString(),
       })
       .addSelect('COUNT(recent_page.pageId)', 'count')
       .having('COUNT(recent_page.pageId) > 0')
