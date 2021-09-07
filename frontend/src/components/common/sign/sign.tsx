@@ -65,7 +65,12 @@ export const Sign: React.FC<Props> = ({
       <div className={styles.container}>
         <h2 className={getAllowedClasses('h4', styles.header)}>{header}</h2>
         <p className="text-secondary">{secondaryText}</p>
-        <Form className="text-start text-secondary bg-white shadow-sm rounded p-5">
+        <Form
+          className={getAllowedClasses(
+            'text-start text-secondary bg-white rounded p-5',
+            styles.formContainer,
+          )}
+        >
           {generalError && (
             <div
               className={getAllowedClasses(
@@ -97,11 +102,17 @@ export const Sign: React.FC<Props> = ({
                 </Link>
               </div>
             )}
-            <hr className={getAllowedClasses('text-secondary', styles.line)} />
-            <span className={getAllowedClasses('text-secondary', styles.or)}>
-              or
-            </span>
-            <hr className={getAllowedClasses('text-secondary', styles.line)} />
+            <div>
+              <hr
+                className={getAllowedClasses('text-secondary', styles.line)}
+              />
+              <span className={getAllowedClasses('text-secondary', styles.or)}>
+                or
+              </span>
+              <hr
+                className={getAllowedClasses('text-secondary', styles.line)}
+              />
+            </div>
             <GoogleButton
               onClick={googleSignIn}
               type="light"

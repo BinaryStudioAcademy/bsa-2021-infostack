@@ -62,17 +62,25 @@ export const FollowModal: React.FC<Props> = ({
             childPages.map(({ id, title }) => (
               <Form.Check
                 key={id}
-                type="checkbox"
-                onClick={(event): Promise<void> => addPage(event, id)}
-                name="childPageName"
-                label={title}
-                className={getAllowedClasses(styles.formCheck)}
-              />
+                className={getAllowedClasses(styles.checkContainer)}
+              >
+                <Form.Check.Input
+                  type="checkbox"
+                  id={id}
+                  onClick={(event): Promise<void> => addPage(event, id)}
+                />
+                <Form.Check.Label
+                  htmlFor={id}
+                  className={getAllowedClasses(styles.formLabel)}
+                >
+                  {title}
+                </Form.Check.Label>
+              </Form.Check>
             ))}
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning" onClick={(): void => handler(undefined)}>
+        <Button variant="secondary" onClick={(): void => handler(undefined)}>
           No
         </Button>
         <Button

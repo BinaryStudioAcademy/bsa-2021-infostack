@@ -111,7 +111,7 @@ export const ExportPDFModal: React.FC<Props> = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning" onClick={closeModal}>
+        <Button variant="secondary" onClick={closeModal}>
           Cancel
         </Button>
 

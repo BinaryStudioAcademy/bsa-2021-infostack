@@ -13,7 +13,7 @@ import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import { toast } from 'react-toastify';
 import { MentionItem } from 'react-mentions';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+import HighlightPop from 'react-highlight-pop';
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums';
 import {
@@ -70,9 +70,12 @@ export const PageContent: React.FC = () => {
   const followedUserPages = useAppSelector((state) => {
     const { user } = state.auth;
     if (user && user.followingPages && childPages) {
-      const pages = childPages.map((child) => ({
-        ...user.followingPages?.find((page) => child.id === page.id),
+      const filteredFollowedPages = childPages.filter((child) =>
+        user.followingPages?.find((page) => child.id === page.id),
+      );
+      const pages = filteredFollowedPages.map((child) => ({
         ...child,
+        ...childPages.find((page) => page.id === child.id),
       }));
       return pages;
     }
@@ -122,15 +125,19 @@ export const PageContent: React.FC = () => {
     ? currContent.content
     : currentPage?.pageContents[0].content || undefined;
 
-  const canView = currentPage?.permission ? true : false;
-
   const canRead =
     currentPage?.permission === PermissionType.READ ||
     currentPage?.permission === PermissionType.WRITE ||
     currentPage?.permission === PermissionType.ADMIN;
 
   const [selectedText, setSelectedText] = useState('');
+
   const commentsRef = useRef<HTMLDivElement>(null);
+
+  const [isTextSelected, setIsTextSelected] = useState(
+    !!window?.getSelection(),
+  );
+
   const [formState, setFormState] = useState<{
     text: string;
     mentions: MentionItem[];
@@ -172,6 +179,7 @@ export const PageContent: React.FC = () => {
 
   const handleMouseUp = (): void => {
     const selectedText = window?.getSelection()?.toString();
+    setIsTextSelected(!!selectedText);
     if (selectedText) {
       setSelectedText(selectedText);
     }
@@ -325,11 +333,13 @@ export const PageContent: React.FC = () => {
     isCurrentPagePinned ? handlePageUnpin(paramsId) : handlePagePin(paramsId);
   };
 
-  const handleCommentContent = (_e: MouseEvent): void => {
+  const handleCommentContent = (): void => {
     if (selectedText) {
       const quoteText = '> ' + selectedText + '\n\n';
       setFormState({ text: quoteText, mentions: [] });
       commentsRef?.current?.scrollIntoView();
+      window?.getSelection()?.empty();
+      setIsTextSelected(false);
     }
   };
 
@@ -344,6 +354,9 @@ export const PageContent: React.FC = () => {
   };
 
   useEffect(() => {
+    if (currentPage && !currentPage.permission) {
+      history.push('/*');
+    }
     if (currentPage?.followingUsers) {
       currentPage.followingUsers.map((follower) => {
         if (follower.id === user?.id) {
@@ -361,7 +374,11 @@ export const PageContent: React.FC = () => {
   }, [currentPage]);
 
   if (isSpinner || isLeftBlockLoading) {
-    return <Spinner height={'6rem'} width={'6rem'} />;
+    return (
+      <div className="position-relative h-100">
+        <Spinner height={'6rem'} width={'6rem'} />
+      </div>
+    );
   }
 
   const handleDownloadPDF = async (): Promise<void> => {
@@ -395,182 +412,174 @@ export const PageContent: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="p-4">
-        {canView ? (
-          <>
-            <Row className="gx-5">
-              <Col xs={12} lg={3} xl={2}>
-                <PageTableOfContents headings={TOCHeadings} />
-                <PageTags />
-                <PageContributors
-                  className="mt-4"
-                  contributors={contributors}
-                />
-                <PageFollowingUsers
-                  className="mt-4"
-                  followers={currentPage?.followingUsers}
-                />
-              </Col>
-              <Col xs={12} lg={9} xl={10}>
-                <Row>
-                  <div className="my-2">
-                    <Breadcrumbs />
-                  </div>
-                </Row>
-                <Row>
-                  <Col className="d-flex justify-content-between mb-4 align-items-center">
-                    <OverlayTrigger
-                      trigger="hover"
-                      placement="bottom"
-                      overlay={
-                        <Popover id="popover-positioned-bottom">
-                          <Popover.Body
-                            className={getAllowedClasses(styles.popoverText)}
-                          >
-                            {pageTitle || 'New Page'}
-                          </Popover.Body>
-                        </Popover>
-                      }
-                    >
-                      <>
-                        <div className="d-flex align-items-center">
-                          <h1
-                            className={getAllowedClasses(
-                              styles.pageHeading,
-                              'h3',
-                            )}
-                          >
-                            {pageTitle || 'New Page'}
-                          </h1>
-                          {isRefreshButtonShowed && (
-                            <Button
-                              className="btn-success ms-2"
-                              onClick={(): void => onRefresh(paramsId)}
-                            >
-                              Refresh
-                            </Button>
-                          )}
-                        </div>
-                      </>
-                    </OverlayTrigger>
-                    <div className="d-flex align-items-center">
-                      {canRead && (
-                        <VersionDropdown
-                          currContent={currContent}
-                          contributors={contributors}
-                        />
-                      )}
-
-                      <PageActionsDropdown
-                        onAssign={onAssign}
-                        onEditing={onEditing}
-                        onPageFollow={onPageFollow}
-                        onPagePin={onPagePin}
-                        onDelete={onDelete}
-                        onShare={onShare}
-                        onExportPDF={onExportPDF}
-                        isCurrentPageFollowed={isCurrentPageFollowed}
-                        isCurrentPagePinned={isCurrentPagePinned}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col>
-                    <Card border="light" className={styles.card}>
-                      <Card.Body
-                        className={getAllowedClasses(
-                          styles.content,
-                          'custom-html-style',
-                        )}
+    <div className="p-4">
+      <Row className="gx-5">
+        <Col xs={12} lg={3} xl={2}>
+          <PageTableOfContents headings={TOCHeadings} />
+          <PageTags />
+          <PageContributors className="mt-4" contributors={contributors} />
+          <PageFollowingUsers
+            className="mt-4"
+            followers={currentPage?.followingUsers}
+          />
+        </Col>
+        <Col xs={12} lg={9} xl={10}>
+          <Row>
+            <div className="my-2">
+              <Breadcrumbs />
+            </div>
+          </Row>
+          <Row>
+            <Col className="d-flex justify-content-between mb-4 align-items-start">
+              <OverlayTrigger
+                trigger="hover"
+                placement="bottom"
+                overlay={
+                  <Popover id="popover-positioned-bottom">
+                    <Popover.Body className={styles.popoverText}>
+                      {pageTitle || 'New Page'}
+                    </Popover.Body>
+                  </Popover>
+                }
+              >
+                <>
+                  <div className="d-flex align-items-center w-75">
+                    <h1 className={getAllowedClasses(styles.pageHeading, 'h3')}>
+                      {pageTitle || 'New Page'}
+                    </h1>
+                    {isRefreshButtonShowed && (
+                      <Button
+                        className="btn-success ms-2"
+                        onClick={(): void => onRefresh(paramsId)}
                       >
-                        <ContextMenuTrigger id="pageContentContextManu">
-                          {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
-                          <ReactMarkdown remarkPlugins={[slug, gfm]}>
-                            {content?.trim() || 'Empty page'}
-                          </ReactMarkdown>
-                        </ContextMenuTrigger>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <CommentSection
-                      pageId={paramsId}
-                      commentsRef={commentsRef}
-                      formState={formState}
-                      setFormState={setFormState}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Popup
-              query="Users & Teams"
-              isVisible={isPermissionsModalVisible}
-              cancelButton={{
-                text: 'Cancel',
-                onClick: handleAssignCancel,
-              }}
-              inviteButton={{
-                text: 'Add user',
-                onClick: handleAssignConfirm,
-              }}
-            />
-            <InviteModal
-              onModalClose={handleIviteCancel}
-              showModal={isInviteModalVisible}
-            />
-            <ShareModal
-              show={isShareModalVisible}
-              onModalClose={handleShareCancel}
-              pageId={paramsId}
-            />
-            <ExportPDFModal
-              show={isExportModalVisible}
-              onModalClose={handleExportPDFCancel}
-              onDownloadPDF={handleDownloadPDF}
-              onSendPDF={handleSendPDF}
-            />
-            <FollowModal
-              show={isFollowModalVisible}
-              isFollowing={isCurrentPageFollowed}
-              childPages={
-                isCurrentPageFollowed ? followedUserPages : notFollowedUserPages
-              }
-              handler={
-                isCurrentPageFollowed
-                  ? handlePageUnfollow(paramsId)
-                  : handlePageFollow(paramsId)
-              }
-            />
-            <ConfirmModal
-              title="Delete confirmation"
-              showModal={isDeleteModalVisible}
-              modalText="Are you sure you want to delete this page? If this page contains subpages they will be deleted as well."
-              confirmButton={{
-                text: 'Delete',
-                onClick: handleDeleteConfirm,
-                variant: 'danger',
-              }}
-              cancelButton={{
-                text: 'Close',
-                onClick: handleDeleteCancel,
-              }}
-            />
-          </>
-        ) : (
-          <h1 className="d-flex justify-content-center">
-            No permission to view the requested page
-          </h1>
-        )}
-      </div>
+                        Refresh
+                      </Button>
+                    )}
+                  </div>
+                </>
+              </OverlayTrigger>
+              <div className="d-flex align-items-center w-25">
+                {canRead && (
+                  <VersionDropdown
+                    currContent={currContent}
+                    contributors={contributors}
+                  />
+                )}
 
-      <ContextMenu id="pageContentContextManu">
-        <MenuItem onClick={handleCommentContent}>Comment</MenuItem>
-      </ContextMenu>
-    </>
+                <PageActionsDropdown
+                  onAssign={onAssign}
+                  onEditing={onEditing}
+                  onPageFollow={onPageFollow}
+                  onPagePin={onPagePin}
+                  onDelete={onDelete}
+                  onShare={onShare}
+                  onExportPDF={onExportPDF}
+                  isCurrentPageFollowed={isCurrentPageFollowed}
+                  isCurrentPagePinned={isCurrentPagePinned}
+                />
+              </div>
+            </Col>
+          </Row>
+          <Row className="mb-4">
+            <Col>
+              <Card border="light" className={styles.card}>
+                <Card.Body
+                  className={getAllowedClasses(
+                    styles.content,
+                    'custom-html-style',
+                    !isTextSelected ? styles.highlightPopHidden : null,
+                  )}
+                >
+                  <HighlightPop
+                    popoverItems={(itemClass: string): JSX.Element => (
+                      <span
+                        className={itemClass}
+                        onClick={handleCommentContent}
+                      >
+                        <i
+                          className={getAllowedClasses(
+                            styles.quoteIcon,
+                            'bi',
+                            'bi-chat-quote',
+                          )}
+                        ></i>
+                      </span>
+                    )}
+                  >
+                    {/* @ts-expect-error see https://github.com/rehypejs/rehype/discussions/63 */}
+                    <ReactMarkdown remarkPlugins={[slug, gfm]}>
+                      {content?.trim() || 'Empty page'}
+                    </ReactMarkdown>
+                  </HighlightPop>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <CommentSection
+                pageId={paramsId}
+                commentsRef={commentsRef}
+                formState={formState}
+                setFormState={setFormState}
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Popup
+        query="Users & Teams"
+        isVisible={isPermissionsModalVisible}
+        cancelButton={{
+          text: 'Cancel',
+          onClick: handleAssignCancel,
+        }}
+        inviteButton={{
+          text: 'Add user',
+          onClick: handleAssignConfirm,
+        }}
+      />
+      <InviteModal
+        onModalClose={handleIviteCancel}
+        showModal={isInviteModalVisible}
+      />
+      <ShareModal
+        show={isShareModalVisible}
+        onModalClose={handleShareCancel}
+        pageId={paramsId}
+      />
+      <ExportPDFModal
+        show={isExportModalVisible}
+        onModalClose={handleExportPDFCancel}
+        onDownloadPDF={handleDownloadPDF}
+        onSendPDF={handleSendPDF}
+      />
+      <FollowModal
+        show={isFollowModalVisible}
+        isFollowing={isCurrentPageFollowed}
+        childPages={
+          isCurrentPageFollowed ? followedUserPages : notFollowedUserPages
+        }
+        handler={
+          isCurrentPageFollowed
+            ? handlePageUnfollow(paramsId)
+            : handlePageFollow(paramsId)
+        }
+      />
+      <ConfirmModal
+        title="Delete confirmation"
+        showModal={isDeleteModalVisible}
+        modalText="Are you sure you want to delete this page? If this page contains subpages they will be deleted as well."
+        confirmButton={{
+          text: 'Delete',
+          onClick: handleDeleteConfirm,
+          variant: 'danger',
+        }}
+        cancelButton={{
+          text: 'Close',
+          onClick: handleDeleteCancel,
+        }}
+      />
+    </div>
   );
 };

@@ -8,38 +8,58 @@ import { IPageNav } from 'common/interfaces';
 type Props = {
   title: string;
   childPages: IPageNav[];
-  onClick: () => void;
+  onNameClick: () => void;
+  onChevronClick: () => void;
 };
 
 export const PageListItem: React.FC<Props> = ({
   title,
   childPages,
-  onClick,
+  onNameClick,
+  onChevronClick,
 }) => {
   const hasChildPages = Boolean(childPages.length);
 
   return (
-    <TouchableNativeFeedback onPress={onClick}>
-      <View style={row}>
-        <Text style={text}>{title}</Text>
-        {hasChildPages && (
-          <Icon name="chevron-right" size={28} color={Color.SECONDARY} />
-        )}
-      </View>
-    </TouchableNativeFeedback>
+    <View style={row}>
+      <TouchableNativeFeedback
+        onPress={onNameClick}
+        background={TouchableNativeFeedback.Ripple(Color.PRIMARY, false)}
+      >
+        <View style={titleContainer}>
+          <Text style={text}>{title}</Text>
+        </View>
+      </TouchableNativeFeedback>
+      {hasChildPages && (
+        <TouchableNativeFeedback
+          onPress={onChevronClick}
+          background={TouchableNativeFeedback.Ripple(Color.PRIMARY, false)}
+        >
+          <View style={chevronContainer}>
+            <Icon name="chevron-right" size={28} color={Color.SECONDARY} />
+          </View>
+        </TouchableNativeFeedback>
+      )}
+    </View>
   );
 };
 
-const { row, text } = StyleSheet.create({
+const { row, text, titleContainer, chevronContainer } = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexGrow: 1,
     paddingVertical: 15,
-    paddingHorizontal: 20,
   },
   text: {
     fontSize: 20,
+  },
+  titleContainer: {
+    width: '80%',
+    paddingLeft: 20,
+  },
+  chevronContainer: {
+    paddingRight: 20,
   },
 });

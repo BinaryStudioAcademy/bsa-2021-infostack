@@ -28,7 +28,7 @@ export const InviteItem: React.FC<Props> = ({
         </Button>
         <Button
           onClick={(): void => onClickDecline(workspace.id)}
-          variant="warning"
+          variant="secondary"
         >
           Decline
         </Button>
