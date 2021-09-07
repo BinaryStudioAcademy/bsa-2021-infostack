@@ -63,6 +63,11 @@ export const IntegrationSettings: React.FC = () => {
         {!username && <ConnectButton onClick={onConnectButtonClick} />}
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody, 'text-dark')}>
+        {!username && !repos && (
+          <span className={getAllowedClasses(styles.emptyMessage)}>
+            There are no integrations in this workspace. Start adding
+          </span>
+        )}
         {username &&
           (repos || currentRepo ? (
             <>
