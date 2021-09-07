@@ -56,7 +56,7 @@ export const InputModal: React.FC<Props> = ({
       <Modal.Footer>
         {cancelButton && (
           <Button
-            variant="warning"
+            variant="secondary"
             onClick={cancelButton.onClick}
             disabled={cancelButton.disabled}
             className="me-2"

@@ -90,16 +90,17 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
             })}
           </div>
           {voiceRecord && (
-            <AudioPlayer
-              src={voiceRecord as string}
-              layout="horizontal-reverse"
-              customAdditionalControls={[]}
-              showJumpControls={false}
-              preload="metadata"
-              timeFormat="mm:ss"
-            />
+            <div className={styles.audioWrapper}>
+              <AudioPlayer
+                src={voiceRecord as string}
+                layout="horizontal-reverse"
+                customAdditionalControls={[]}
+                showJumpControls={false}
+                preload="metadata"
+                timeFormat="mm:ss"
+              />
+            </div>
           )}
-          <Emoji reactions={reactions} commentId={id} />
           <div className={styles.actions}>
             <a className={styles.action} onClick={toggleField}>
               reply
@@ -112,6 +113,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
                 delete
               </a>
             )}
+            <Emoji reactions={reactions} commentId={id} />
           </div>
           {isFieldVisible && (
             <CommentForm

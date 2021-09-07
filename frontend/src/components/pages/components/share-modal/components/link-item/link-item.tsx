@@ -154,7 +154,7 @@ export const LinkItem: React.FC<Props> = ({
             </div>
             <Button
               size="sm"
-              variant="warning"
+              variant="secondary"
               className="me-2"
               onClick={(): void => {
                 setIsExtended(false);
@@ -181,7 +181,7 @@ export const LinkItem: React.FC<Props> = ({
             <div className={getAllowedClasses(styles.deleteContainer)}>
               <Button
                 size="sm"
-                variant="warning"
+                variant="secondary"
                 className="me-2"
                 onClick={(): void => {
                   setIsDeleted(false);

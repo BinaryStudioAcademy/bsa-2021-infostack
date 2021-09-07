@@ -96,7 +96,7 @@ export const CropAvatar: React.FC<Props> = ({
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button variant="success" onClick={onSave}>

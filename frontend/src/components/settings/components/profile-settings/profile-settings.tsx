@@ -37,6 +37,7 @@ export const ProfileSettings: React.FC = () => {
   const [allSkills, setAllSkills] = useState<ISkill[]>([]);
   const [userSkills, setUserSkills] = useState<ISkill[]>([]);
   const [selectedImgURL, setSelectedImgURL] = useState('');
+  const [croppedImgURL, setCroppedImgURL] = useState('');
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isCropModalVisible, setCropModalVisible] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
@@ -167,13 +168,17 @@ export const ProfileSettings: React.FC = () => {
         );
       } else {
         const reader = new FileReader();
+
         reader.onload = (e): void => {
           if (e.target && e.target.result) {
             setSelectedImgURL(e.target.result.toString());
           }
         };
+
         const selectedFile = e.target.files[0];
+
         reader.readAsDataURL(selectedFile);
+
         setSelectedFile(selectedFile);
         setCropModalVisible(true);
       }
@@ -211,6 +216,10 @@ export const ProfileSettings: React.FC = () => {
   };
 
   const handleCropModalClose = (): void => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+
     setCropModalVisible(false);
   };
 
@@ -225,8 +234,12 @@ export const ProfileSettings: React.FC = () => {
 
     const croppedImageDataURL = canvasToDataURL(croppedImageCanvas);
 
-    setSelectedImgURL(croppedImageDataURL);
+    setCroppedImgURL(croppedImageDataURL);
     setSelectedFile(croppedImageFile);
+
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
 
     setCropModalVisible(false);
   };
@@ -326,16 +339,30 @@ export const ProfileSettings: React.FC = () => {
             </Col>
             <Col
               md={4}
-              className="d-flex text-center flex-column align-items-center"
+              className="d-flex text-center flex-column align-items-center justify-content-center"
             >
-              <UserAvatar
-                className={`${getAllowedClasses(styles.cardImage)} mb-3`}
-                name={user?.fullName}
-                src={selectedImgURL ? selectedImgURL : user?.avatar}
-                round={true}
-                size="12.8rem"
-                showTooltip={false}
-              />
+              <label className={getAllowedClasses(styles.cardInputLabel)}>
+                Avatar
+              </label>
+              {!croppedImgURL && !user?.avatar ? (
+                <div className={styles.avatarImgContainer}>
+                  <i
+                    className={getAllowedClasses(
+                      'bi bi-card-image',
+                      styles.noAvatar,
+                    )}
+                  ></i>
+                </div>
+              ) : (
+                <UserAvatar
+                  className={`${getAllowedClasses(styles.cardImage)} mb-3`}
+                  name={user?.fullName}
+                  src={croppedImgURL ? croppedImgURL : user?.avatar}
+                  round={true}
+                  size="12.8rem"
+                  showTooltip={false}
+                />
+              )}
 
               {user?.avatar && (
                 <Button

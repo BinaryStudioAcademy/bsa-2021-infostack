@@ -100,30 +100,37 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
   };
 
   return (
-    <div className="emoji">
+    <>
       {chosenEmoji && (
-        <div className="emoji__container">
-          {chosenEmoji.map(({ id, emoji, counter, isActive, users = [] }) => (
-            <OverlayTrigger
-              placement="top"
-              trigger={['hover', 'click']}
-              overlay={
-                <Tooltip id="users-tooltip" className="emoji__users">
-                  {users ? users.join(', ') : ''}
-                </Tooltip>
-              }
-              key={id}
-            >
-              <div
-                className={`emoji__item ${isActive ? 'active' : ''}`}
-                onClick={(event): void => onEmojiClick(event, { unified: id })}
+        <div className="emoji emoji--reactions">
+          <div className="emoji__container">
+            {chosenEmoji.map(({ id, emoji, counter, isActive, users = [] }) => (
+              <OverlayTrigger
+                placement="top"
+                trigger={['hover', 'click']}
+                overlay={
+                  <Tooltip id="users-tooltip" className="emoji__users">
+                    {users ? users.join(', ') : ''}
+                  </Tooltip>
+                }
+                key={id}
               >
-                <span className="emoji__symbol">{emoji}</span>{' '}
-                <span className="emoji__counter">{counter}</span>
-              </div>
-            </OverlayTrigger>
-          ))}
-
+                <div
+                  className={`emoji__item ${isActive ? 'active' : ''}`}
+                  onClick={(event): void =>
+                    onEmojiClick(event, { unified: id })
+                  }
+                >
+                  <span className="emoji__symbol">{emoji}</span>{' '}
+                  <span className="emoji__counter">{counter}</span>
+                </div>
+              </OverlayTrigger>
+            ))}
+          </div>
+        </div>
+      )}
+      {chosenEmoji && (
+        <div className="emoji">
           <Dropdown
             drop="up"
             align="start"
@@ -138,7 +145,7 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
               <Dropdown.Toggle
                 onClick={(): void => setIsDropdownShown(!isDropdownShown)}
               >
-                <i className="bi bi-plus-circle"></i>
+                react
               </Dropdown.Toggle>
             </OverlayTrigger>
 
@@ -153,6 +160,6 @@ export const Emoji: React.FC<Props> = ({ reactions = [], commentId = '' }) => {
           </Dropdown>
         </div>
       )}
-    </div>
+    </>
   );
 };

@@ -87,7 +87,7 @@ export const SkillEdit: React.FC<{
         </Button>
       </td>
       <td className={getAllowedClasses(styles.tdButton)}>
-        <Button onClick={handleCancel} variant="warning" size="sm">
+        <Button onClick={handleCancel} variant="secondary" size="sm">
           Cancel
         </Button>
       </td>
