@@ -137,7 +137,7 @@ const RecordModal: React.FC<Props> = (props) => {
       onHide={onCancel}
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      dialogClassName="modal-20w"
+      dialogClassName="modalWindow"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">

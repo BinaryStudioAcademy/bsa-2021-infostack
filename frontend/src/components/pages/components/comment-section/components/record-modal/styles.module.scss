@@ -1,5 +1,6 @@
-:global(.modal-20w) {
+:global(.modalWindow) {
   width: 20vw !important;
+  min-width: 385px;
 }
 
 .modalContent {
