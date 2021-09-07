@@ -208,6 +208,24 @@ class PageRepository extends Repository<Page> {
       .of(pageId)
       .remove(userId);
   }
+
+  public getEditors(id: string): Promise<User[]> {
+    return this.createQueryBuilder()
+      .relation(Page, 'editors')
+      .of(id)
+      .loadMany();
+  }
+
+  public addEditor(pageId: string, userId: string): Promise<void> {
+    return this.createQueryBuilder().relation('editors').of(pageId).add(userId);
+  }
+
+  public deleteEditor(pageId: string, userId: string): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('editors')
+      .of(pageId)
+      .remove(userId);
+  }
 }
 
 export default PageRepository;
