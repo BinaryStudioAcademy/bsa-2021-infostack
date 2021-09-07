@@ -3,9 +3,6 @@ import { IPageStatistic } from '~/common/interfaces/page';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
 import { User } from '../entities/user';
-import { UserPermission } from '../entities/user-permission';
-import { TeamPermission } from '../entities/team-permission';
-import { Team } from '../entities/team';
 
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
@@ -143,39 +140,25 @@ class PageRepository extends Repository<Page> {
   }
 
   public findMostUpdated(
-    userId: string,
-    workspaceId: string,
+    availablePagesIds: string[],
     limit: number,
   ): Promise<IPageStatistic[]> {
+    const dateWeekAgo = new Date()
+      .moveToDayOfWeek(new Date().getDay(), -1)
+      .setUTCHours(0, 0, 0, 0);
     return this.createQueryBuilder('page')
       .select('page.id', 'pageId')
-      .andWhere('page.workspaceId = :workspaceId', { workspaceId: workspaceId })
-      .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
+      .where('page.id IN (:...ids)', { ids: availablePagesIds })
+      .loadRelationCountAndMap(
+        'page.count',
+        'page.pageContents',
+        'count',
+        (qb) =>
+          qb.where('count.createdAt > :start_at', {
+            start_at: new Date(dateWeekAgo).toISOString(),
+          }),
+      )
       .addSelect('page.count', 'count')
-      .having('page.count > 1')
-      .leftJoin(
-        (qb) =>
-          qb
-            .from(UserPermission, 'permission')
-            .select('COUNT("permission"."id")', 'count')
-            .addSelect('"permission"."pageId"', 'page_id')
-            .groupBy('"permission"."pageId"'),
-        'user_permission',
-        '"user_permission"."page_id" = page.id',
-      )
-      .leftJoin(
-        (qb) =>
-          qb
-            .from(TeamPermission, 'permission')
-            .select('COUNT("permission"."id")', 'count')
-            .leftJoin('team_member', 'member', '"member"."userId" = :userId', {
-              userId,
-            })
-            .groupBy('"permission"."pageId"'),
-        'team_permission',
-        '"team_permission"."page_id" = page.id',
-      )
-      .having('user_permission.count > 0 OR team_permission.count > 0')
       .leftJoin('page.pageContents', 'pageContents')
       .leftJoin(
         (qb) =>
@@ -190,7 +173,7 @@ class PageRepository extends Repository<Page> {
       .leftJoin(
         (qb) =>
           qb
-            .from(Team, 'team')
+            .from(PageContent, 'content')
             .select('content.title', 'title')
             .addSelect('content.createdAt', 'createdAt')
             .groupBy('content.title')
