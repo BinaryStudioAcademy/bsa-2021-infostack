@@ -354,10 +354,8 @@ export const PageContent: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentPage) {
-      if (!currentPage?.permission) {
-        history.push('/*');
-      }
+    if (currentPage && !currentPage.permission) {
+      history.push('/*');
     }
     if (currentPage?.followingUsers) {
       currentPage.followingUsers.map((follower) => {
