@@ -30,6 +30,7 @@
 .cardBody {
   padding: 1.6rem 2rem;
   font-size: 1.42rem;
+  margin-left: 0;
 
   .title {
     margin: 0.5rem 0 1rem 0;
@@ -38,6 +39,13 @@
 
   .label {
     margin: 0.5rem 0 1rem 0;
+  }
+
+  .emptyMessage {
+    color: #6c757d;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.625;
   }
 }
 
