@@ -2,7 +2,6 @@
   border: 0;
   margin: 0.5em 0 0;
   padding: 0.5em 0 0;
-
   blockquote {
     position: relative;
     margin: 1.6rem 0;
@@ -13,41 +12,33 @@
     border-left-color: #d6dbdf;
     border-left-style: solid;
     border-left-width: 1rem;
-
     p {
       margin-bottom: 0;
     }
   }
-
   > div:first-child {
     float: left;
   }
-
   .content {
     margin-left: 5rem;
   }
-
   .avatar {
     float: left;
   }
-
   .author {
     color: #495057;
     font-weight: 500;
     font-size: 1.4rem;
   }
-
   .metadata {
     font-size: 1.25rem;
     color: hsl(0 0% 0% / 0.4);
   }
-
   .text {
     font-size: 1.32rem;
     line-height: 1.2;
     margin: 0.25em 0 0.5em;
   }
-
   .actions {
     font-size: 1.25rem;
     display: grid;
@@ -59,10 +50,14 @@
       color: hsl(0 0% 0% / 0.4);
       text-decoration: none;
       margin-right: 0.5em;
-
       &:hover {
         color: hsl(0 0% 0% / 0.8);
       }
     }
+  }
+  .audioWrapper {
+    width: 98%;
+    padding-right: 115px;
+    box-shadow: 0 0 3px 0 rgb(0 0 0 / 20%);
   }
 }
