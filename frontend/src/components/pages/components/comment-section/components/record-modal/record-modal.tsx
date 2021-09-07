@@ -1,4 +1,4 @@
-import AudioPlayer from 'react-h5-audio-player';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import useCountDown from 'react-countdown-hook';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -73,7 +73,6 @@ const RecordModal: React.FC<Props> = (props) => {
       setAudioUrl(url);
       show && setIsCompleteRecord(true);
       setAudioFile(recordFile);
-
       stream.getTracks().forEach((track) => track.stop());
     });
 
@@ -117,20 +116,18 @@ const RecordModal: React.FC<Props> = (props) => {
   useEffect(() => {
     if (timeLeft <= 999) {
       stopButton.current && stopButton.current.click();
-      setAudioDuration(59);
     }
     if (timeLeft > 0) {
       setAudioDuration(timeLeft);
     }
   }, [timeLeft]);
 
-  let seconds: string | number = 60 - timeLeft / 1000;
-  const secToShow =
-    seconds.toString().length < 2 ? (seconds = '0' + seconds) : seconds;
+  let seconds = (60 - timeLeft / 1000).toString();
+  const secToShow = seconds.length < 2 ? (seconds = '0' + seconds) : seconds;
 
-  let recorderDuration: string | number = 60 - audioDuration / 1000;
+  let recorderDuration = (60 - audioDuration / 1000).toString();
   const durToShow =
-    recorderDuration.toString().length < 2
+    recorderDuration.length < 2
       ? (recorderDuration = '0' + recorderDuration)
       : recorderDuration;
 
@@ -140,7 +137,7 @@ const RecordModal: React.FC<Props> = (props) => {
       onHide={onCancel}
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      dialogClassName="modal-20w"
+      dialogClassName="modalWindow"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
@@ -248,15 +245,23 @@ const RecordModal: React.FC<Props> = (props) => {
           <>
             <p>Record</p>
             <p className={getAllowedClasses(styles.recordedTime)}>
-              {durToShow > 59 ? '00:59' : `00:${durToShow}`}
+              {`00:${durToShow}`}
             </p>
             <AudioPlayer
               layout="stacked"
               src={audioUrl}
+              customProgressBarSection={[
+                RHAP_UI.CURRENT_TIME,
+                RHAP_UI.PROGRESS_BAR,
+                RHAP_UI.DURATION,
+                RHAP_UI.VOLUME,
+              ]}
               autoPlayAfterSrcChange={false}
               customAdditionalControls={[]}
+              customVolumeControls={[]}
               showJumpControls={false}
-              defaultDuration={durToShow > 59 ? '00:59' : `00:${durToShow}`}
+              timeFormat="mm:ss"
+              defaultDuration={`00:${durToShow}`}
             />
             <Button
               onClick={(): void => onCancel()}

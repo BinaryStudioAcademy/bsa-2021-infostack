@@ -1,5 +1,5 @@
+import { IPageNav, IPage, IFoundPageContent } from 'common/interfaces';
 import { http } from './http.service';
-import { IPageNav, IFoundPageContent } from 'common/interfaces';
 
 class PageService {
   private readonly _http = http;
@@ -7,6 +7,10 @@ class PageService {
 
   getAll(): Promise<IPageNav[]> {
     return this._http.load(this._BASE);
+  }
+
+  getPage(id: string): Promise<IPage> {
+    return this._http.load(`${this._BASE}/${id}`);
   }
 
   searchContent(query: string): Promise<IFoundPageContent[]> {

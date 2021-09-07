@@ -8,3 +8,8 @@ export const fetchPages = createAsyncThunk<IPageNav[]>(
   ActionType.FETCH_PAGES,
   () => pageService.getAll(),
 );
+
+export const fetchCurrentPage = createAsyncThunk(
+  ActionType.FETCH_CURRENT_PAGE,
+  (id: string) => pageService.getPage(id),
+);

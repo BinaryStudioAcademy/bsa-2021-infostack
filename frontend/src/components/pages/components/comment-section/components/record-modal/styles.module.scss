@@ -1,5 +1,6 @@
-:global(.modal-20w) {
+:global(.modalWindow) {
   width: 20vw !important;
+  min-width: 385px;
 }
 
 .modalContent {
@@ -8,70 +9,35 @@
 
 .modalBody {
   height: 170px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
 }
 
 .btnContainer {
   height: 30px;
 }
 
+:global(.rhap_volume-container) {
+  margin-left: 0px;
+  margin-right: 7px;
+  width: 30px;
+}
+
 :global(.rhap_container) {
   box-shadow: none;
-}
-
-:global(.rhap_progress-section) {
-  width: 260px;
-}
-
-:global(.rhap_play-pause-button) {
-  font-size: 45px;
-  width: 45px;
-  height: 45px;
-  margin-right: -22px;
-}
-
-:global(.rhap_volume-container) {
-  margin-right: -18px;
-}
-
-:global(.rhap_volume-controls) {
-  margin-top: -112px;
-  width: 50px;
-}
-
-:global(.rhap_volume-bar) {
-  width: 75%;
-}
-
-:global(.rhap_current-time) {
-  margin-left: -37px;
-  margin-right: 7px;
-  font-size: 16px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 :global(.rhap_volume-button) {
-  flex: 0 0 26px;
-  font-size: 16px;
+  font-size: 20px;
   margin: 0;
-  margin-left: 46px;
-}
-
-:global(.rhap_volume-bar-area) {
-  margin-right: -24px;
-}
-
-:global(.rhap_progress-indicator) {
-  width: 15px;
-  height: 15px;
-  top: -5px;
-}
-
-:global(.rhap_total-time) {
-  margin-right: 10px;
+  margin-left: 10px;
 }
 
 :global(.rhap_stacked .rhap_controls-section) {
   margin-top: 25px;
-  margin-left: 20px;
 }
 
 .text {
@@ -136,7 +102,7 @@
 
 .saveButton {
   position: absolute;
-  margin-left: 20px;
+  margin-left: 21px;
   margin-top: -51px;
   font-size: x-large;
 }
@@ -144,7 +110,7 @@
 .trashButton {
   position: absolute;
   font-size: x-large;
-  margin-left: -66px;
+  margin-left: -61px;
   margin-top: -49px;
 }
 
