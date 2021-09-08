@@ -22,7 +22,7 @@ export const PagesStatistic: React.FC<Props> = ({
   placeholder,
 }) => {
   return (
-    <div className="p-4">
+    <div className={getAllowedClasses('p-4', styles.statisticContainer)}>
       <Card
         border="light"
         className={getAllowedClasses(styles.card, className)}
