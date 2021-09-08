@@ -1,4 +1,5 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
+import { IPageStatistic } from '~/common/interfaces/page';
 import { Page } from '../entities/page';
 import { PageContent } from '../entities/page-content';
 import { User } from '../entities/user';
@@ -136,6 +137,71 @@ class PageRepository extends Repository<Page> {
       .where('page.id = :id', { id: pageId })
       .andWhere('pageContents.id =  :id', { id: versionId })
       .getOne();
+  }
+
+  public findMostUpdated(
+    availablePagesIds: string[],
+    limit: number,
+    dateFrom: string,
+  ): Promise<IPageStatistic[]> {
+    return this.createQueryBuilder('page')
+      .select('page.id', 'pageId')
+      .where('page.id IN (:...ids)', { ids: availablePagesIds })
+      .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
+      .addSelect('page.count', 'count')
+      .leftJoin(
+        'page.pageContents',
+        'pageContents',
+        'pageContents.createdAt > :start_at',
+        { start_at: dateFrom },
+      )
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('MAX("content"."createdAt")', 'created_at')
+            .addSelect('"content"."pageId"', 'page_id')
+            .groupBy('"page_id"'),
+        'last_version',
+        '"last_version"."page_id" = page.id',
+      )
+      .leftJoin(
+        (qb) =>
+          qb
+            .from(PageContent, 'content')
+            .select('content.title', 'title')
+            .addSelect('content.createdAt', 'createdAt')
+            .groupBy('content.title')
+            .addGroupBy('content.createdAt'),
+        'last_content',
+        '"last_content"."createdAt" = "last_version"."created_at"',
+      )
+      .addSelect('last_content.title', 'title')
+      .orderBy('page.count', 'DESC')
+      .groupBy('page.id')
+      .addGroupBy('last_content.title')
+      .limit(limit)
+      .execute();
+  }
+
+  public findСountOfUpdates(
+    availablePagesIds: string[],
+    dateFrom: string,
+  ): Promise<IPageStatistic[]> {
+    return this.createQueryBuilder('page')
+      .where('page.id IN (:...ids)', { ids: availablePagesIds })
+      .loadRelationCountAndMap('page.count', 'page.pageContents', 'count')
+      .select('page.count', 'count')
+      .leftJoin(
+        'page.pageContents',
+        'pageContents',
+        'pageContents.createdAt > :start_at',
+        { start_at: dateFrom },
+      )
+      .addSelect('pageContents.createdAt', 'date')
+      .orderBy('page.count', 'DESC')
+      .groupBy('pageContents.createdAt')
+      .execute();
   }
 
   public findByIdWithTags(id: string): Promise<Page> {

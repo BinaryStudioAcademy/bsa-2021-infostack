@@ -26,11 +26,6 @@ export const Toolbar: React.FC = () => {
 
   const pages = useAppSelector((state: RootState) => state.pages);
 
-  useEffect(() => {
-    dispatch(pagesActions.getPagesAsync());
-    dispatch(pagesActions.getPinnedPagesAsync());
-  }, []);
-
   const addPage = async (): Promise<void> => {
     const payload: IPageRequest = { title: 'New Page', content: '' };
     await dispatch(pagesActions.createPage(payload))

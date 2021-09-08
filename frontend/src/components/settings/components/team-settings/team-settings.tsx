@@ -74,7 +74,9 @@ export const TeamSettings: React.FC = () => {
               </div>
             ))}
           {userTeams && userTeams.length === 0 ? (
-            <div>There is no teams in this workspace. Start adding</div>
+            <span className={getAllowedClasses(styles.emptyMessage)}>
+              There are no teams in this workspace. Start adding
+            </span>
           ) : (
             <div
               className={getAllowedClasses(

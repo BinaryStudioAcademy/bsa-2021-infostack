@@ -117,7 +117,7 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
               </Tooltip>
             }
           >
-            <i className="bi bi-info-circle" />
+            <i className="bi bi-info-circle ms-5" />
           </OverlayTrigger>
         )}
       </Card.Header>
