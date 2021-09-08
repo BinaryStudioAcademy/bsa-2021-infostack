@@ -450,7 +450,7 @@ export const PageContent: React.FC = () => {
   return (
     <div className="p-4">
       <Row className="gx-5">
-        <Col xl="auto">
+        <Col xxl={2} xl={3}>
           <PageTableOfContents headings={TOCHeadings} />
           <PageTags />
           <PageContributors className="mt-4" contributors={contributors} />
@@ -459,11 +459,9 @@ export const PageContent: React.FC = () => {
             followers={currentPage?.followingUsers}
           />
         </Col>
-        <Col className="col">
+        <Col>
           <Row>
-            <div className="my-2">
-              <Breadcrumbs />
-            </div>
+            <Breadcrumbs />
           </Row>
           <Row>
             <Col className="d-flex justify-content-between mb-4 align-items-start">

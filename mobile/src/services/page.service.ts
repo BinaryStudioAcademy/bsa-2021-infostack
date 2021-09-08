@@ -1,9 +1,10 @@
+import { API_URL } from 'common/constants';
 import { IPageNav, IPage, IFoundPageContent } from 'common/interfaces';
 import { http } from './http.service';
 
 class PageService {
   private readonly _http = http;
-  private readonly _BASE = 'http://10.0.2.2:3001/api/pages';
+  private readonly _BASE = `${API_URL}/api/pages`;
 
   getAll(): Promise<IPageNav[]> {
     return this._http.load(this._BASE);

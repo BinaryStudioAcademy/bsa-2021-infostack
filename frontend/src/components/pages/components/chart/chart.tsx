@@ -15,6 +15,7 @@ interface Props {
 export const Chart: React.FC<Props> = ({ axes, className, countOfUpdates }) => {
   const counts = countOfUpdates?.map((note) => +(note.count || 0)) as number[];
   const dates = countOfUpdates?.map((note) => note.date) as string[];
+  const maxCount = Math.max.apply(null, counts);
 
   const data = {
     labels: dates.map((date) => days[new Date(date).getDay()]),
@@ -34,7 +35,7 @@ export const Chart: React.FC<Props> = ({ axes, className, countOfUpdates }) => {
     scales: {
       y: {
         min: 0,
-        max: Math.max.apply(null, counts) + 5,
+        max: maxCount + 5 - (maxCount % 5),
         ticks: {
           stepSize: 5,
           font: {

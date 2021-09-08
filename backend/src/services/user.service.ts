@@ -22,21 +22,28 @@ import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import ActivityRepository from '../data/repositories/activity.repository';
 import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
-export const getUserById = async (id: string): Promise<IUser> => {
+export const getUserById = async (
+  userId: string,
+  workspaceId: string,
+): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
   const { fullName, email, avatar, title, skills, links, followingPages } =
-    await userRepository.findById(id);
+    await userRepository.findById(userId);
   const mappedLinks = links.map((link) => mapLinkToILink(link));
   const mappedFollowingPages = followingPages?.map((page) =>
     mapPageToIPage(page),
   );
+  const userSkillsInWorkspace = skills.filter(
+    (skill) => skill.workspaceId === workspaceId,
+  );
+
   return {
-    id,
+    id: userId,
     fullName,
     email,
     avatar,
     title,
-    skills,
+    skills: userSkillsInWorkspace,
     links: mappedLinks,
     followingPages: mappedFollowingPages,
   };
@@ -83,6 +90,10 @@ export const getUserByIdWithWorkspace = async (
   const newFollowingPages = followingPagesInCurrentWorkspace.map((page) =>
     mapPageToIPage(page),
   );
+
+  const skillsInWorkspace = skills.filter(
+    (skill) => skill.workspaceId === workspaceId,
+  );
   let permission = false;
   workspaces.map((workspace) =>
     workspace.id === workspaceId ? (permission = true) : null,
@@ -94,7 +105,7 @@ export const getUserByIdWithWorkspace = async (
       email,
       avatar,
       title,
-      skills,
+      skills: skillsInWorkspace,
       followingPages: newFollowingPages,
     };
   } else {
@@ -112,6 +123,7 @@ export const getUserByIdWithWorkspace = async (
 
 export const updateUserInfo = async (
   id: string,
+  workspaceId: string,
   body: { fullName: string; title: string; skills: string[] },
 ): Promise<IUser> => {
   const userRepository = getCustomRepository(UserRepository);
@@ -122,7 +134,14 @@ export const updateUserInfo = async (
 
   const skillRepository = getCustomRepository(SkillRepository);
   const foundSkills = await skillRepository.getSkillsById(body.skills);
-  userToUpdate.skills = foundSkills;
+  const userSkillsWithoutCurrentWorkspace = userToUpdate.skills.filter(
+    (skill) => skill.workspaceId !== workspaceId,
+  );
+  const newAllUserSkills = [
+    ...userSkillsWithoutCurrentWorkspace,
+    ...foundSkills,
+  ];
+  userToUpdate.skills = newAllUserSkills;
 
   const { fullName, email, avatar, title, skills, followingPages } =
     await userRepository.save(userToUpdate);
