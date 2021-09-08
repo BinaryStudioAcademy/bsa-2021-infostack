@@ -14,6 +14,7 @@ type Props = {
   register?: UseFormRegisterReturn;
   errors?: FieldError | undefined;
   value?: string;
+  inputClassName?: string;
 };
 
 export const FormField: React.FC<Props> = ({
@@ -25,6 +26,7 @@ export const FormField: React.FC<Props> = ({
   errors,
   controlId,
   value,
+  inputClassName,
 }) => (
   <Form.Group className="mb-3" controlId={controlId}>
     <Form.Label className={getAllowedClasses(styles.label)}>{label}</Form.Label>
@@ -36,6 +38,7 @@ export const FormField: React.FC<Props> = ({
         type={type}
         placeholder={placeholder}
         isInvalid={!!errors}
+        className={inputClassName}
       />
     )}
     {errors && (
