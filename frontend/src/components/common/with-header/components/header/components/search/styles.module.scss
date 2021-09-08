@@ -31,9 +31,14 @@
     cursor: pointer;
     display: flex;
     font-size: 14px;
+    align-items: center;
+    i {
+      font-size: 2rem;
+      margin-right: 2rem;
+    }
     .content {
       display: inline-block;
-      width: 29rem;
+      width: 25rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
