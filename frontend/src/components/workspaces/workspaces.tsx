@@ -1,7 +1,7 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
 import { Spinner } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums';
-import { workspacesActions } from 'store/actions';
+import { authActions, workspacesActions } from 'store/actions';
 import {
   useState,
   useEffect,
@@ -68,6 +68,7 @@ const Workspaces: React.FC = () => {
         setCookie(CookieVariable.WORKSPACE_ID, currentWorkspace.id, {
           path: '/',
         });
+        dispatch(authActions.loadUser());
         if (state) {
           history.push(state.requestedPage);
         } else {

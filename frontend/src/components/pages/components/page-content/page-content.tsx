@@ -12,8 +12,10 @@ import gfm from 'remark-gfm';
 import slug from 'remark-slug';
 import isUUID from 'is-uuid';
 import { toast } from 'react-toastify';
+import * as rangy from 'rangy';
 import { MentionItem } from 'react-mentions';
 import HighlightPop from 'react-highlight-pop';
+import TurndownService from 'turndown';
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums';
 import {
@@ -29,7 +31,11 @@ import { RootState } from 'common/types/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums';
 import { pageApi } from 'services';
-import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
+import {
+  replaceIdParam,
+  getAllowedClasses,
+  getParentsWithSkipping,
+} from 'helpers/helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
 import { ConfirmModal, InviteModal, Spinner } from 'components/common/common';
 import {
@@ -177,8 +183,38 @@ export const PageContent: React.FC = () => {
     dispatch(pagesActions.getPage(pageId));
   };
 
+  const getSelectionInHtml = (): string | undefined => {
+    const html = rangy.getSelection().toHtml();
+    const parentNode = window?.getSelection()?.anchorNode?.parentElement;
+    if (!parentNode) {
+      return;
+    }
+    const parentTags = getParentsWithSkipping(parentNode);
+    const wrappedHtml = parentTags.reduce(
+      (acc, tag) => `<${tag}>${acc}</${tag}>`,
+      html,
+    );
+
+    return wrappedHtml;
+  };
+
+  const getSelectionInMarkdown = (): string | undefined => {
+    const html = getSelectionInHtml();
+    if (!html) {
+      return;
+    }
+    const turndownService = new TurndownService({ emDelimiter: '*' });
+    turndownService.addRule('del', {
+      filter: ['del'],
+      replacement: (content) => '~~' + content + '~~',
+    });
+
+    const selectedText = turndownService.turndown(html);
+    return selectedText;
+  };
+
   const handleMouseUp = (): void => {
-    const selectedText = window?.getSelection()?.toString();
+    const selectedText = getSelectionInMarkdown();
     setIsTextSelected(!!selectedText);
     if (selectedText) {
       setSelectedText(selectedText);
@@ -414,7 +450,7 @@ export const PageContent: React.FC = () => {
   return (
     <div className="p-4">
       <Row className="gx-5">
-        <Col xl="auto">
+        <Col xxl={2} xl={3}>
           <PageTableOfContents headings={TOCHeadings} />
           <PageTags />
           <PageContributors className="mt-4" contributors={contributors} />
@@ -423,11 +459,9 @@ export const PageContent: React.FC = () => {
             followers={currentPage?.followingUsers}
           />
         </Col>
-        <Col className="col">
+        <Col>
           <Row>
-            <div className="my-2">
-              <Breadcrumbs />
-            </div>
+            <Breadcrumbs />
           </Row>
           <Row>
             <Col className="d-flex justify-content-between mb-4 align-items-start">
