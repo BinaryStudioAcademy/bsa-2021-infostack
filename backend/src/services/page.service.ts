@@ -890,8 +890,9 @@ const getAvailablePages = async (
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
 
-  const availableForTeamsPages =
-    await teamPermissionRepository.findAvailablePages(teamsIds, workspaceId);
+  const availableForTeamsPages = teamsIds.length
+    ? await teamPermissionRepository.findAvailablePages(teamsIds, workspaceId)
+    : [];
   const availableForUserPages =
     await userPermissionRepository.findAvailablePages(userId, workspaceId);
 
