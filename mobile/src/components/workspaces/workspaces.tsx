@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { workspacesActions } from 'store';
 import { useAppDispatch, useAppSelector, useEffect } from 'hooks';
+import { API_URL } from 'common/constants';
 import { IWorkspace } from 'common/interfaces';
 import { RequestStatus, CookieVariable } from 'common/enums';
 import { RootParamList } from 'navigation/root-stack';
@@ -23,7 +24,7 @@ export const Workspaces: React.FC<Props> = ({ navigation }) => {
   }, [dispatch]);
 
   const handleClick = async (workspace: IWorkspace) => {
-    await CookieManager.set('http://10.0.2.2:3001', {
+    await CookieManager.set(API_URL, {
       name: CookieVariable.WORKSPACE_ID,
       value: workspace.id,
       path: '/',

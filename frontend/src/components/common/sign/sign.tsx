@@ -23,6 +23,7 @@ type Props = {
   children: JSX.Element | JSX.Element[];
   onSubmit: (e: React.SyntheticEvent) => void;
   isSubmitDisabled?: boolean;
+  submitClassName?: string;
   altRoute?: AlternativeRoute;
   generalError?: string;
 };
@@ -36,6 +37,7 @@ export const Sign: React.FC<Props> = ({
   isSubmitDisabled,
   altRoute,
   generalError,
+  submitClassName,
 }) => {
   const { state } = useLocation<IPageRequested | undefined>();
 
@@ -90,7 +92,7 @@ export const Sign: React.FC<Props> = ({
               size="lg"
               onClick={onSubmit}
               disabled={isSubmitDisabled}
-              className="my-3"
+              className={getAllowedClasses('my-3', submitClassName)}
             >
               {submitText}
             </Button>
