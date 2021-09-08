@@ -18,7 +18,7 @@ const router: Router = Router();
 router
   .get(
     '/me/profile',
-    run((req) => getUserById(req.userId)),
+    run((req) => getUserById(req.userId, req.workspaceId)),
   )
   .get(
     '/:id/profile',
@@ -31,7 +31,7 @@ router
 
   .put(
     '/:id/profile',
-    run((req) => updateUserInfo(req.params.id, req.body)),
+    run((req) => updateUserInfo(req.params.id, req.workspaceId, req.body)),
   )
 
   .put(
