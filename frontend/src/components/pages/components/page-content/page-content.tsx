@@ -423,11 +423,9 @@ export const PageContent: React.FC = () => {
             followers={currentPage?.followingUsers}
           />
         </Col>
-        <Col className="col">
+        <Col className="col-10">
           <Row>
-            <div className="my-2">
-              <Breadcrumbs />
-            </div>
+            <Breadcrumbs />
           </Row>
           <Row>
             <Col className="d-flex justify-content-between mb-4 align-items-start">
