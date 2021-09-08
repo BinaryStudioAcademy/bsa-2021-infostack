@@ -175,10 +175,6 @@ h6 {
   flex-direction: column;
 }
 
-/* .caption__content {
-  width: 40%;
-} */
-
 .caption__title {
   font-size: 1.8rem;
   letter-spacing: -0.03rem;
