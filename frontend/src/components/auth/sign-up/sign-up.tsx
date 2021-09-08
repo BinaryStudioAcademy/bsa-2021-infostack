@@ -6,6 +6,7 @@ import { authActions } from 'store/actions';
 import { signUpSchema } from 'common/validations';
 import { IRegister } from 'common/interfaces/auth';
 import { HttpError } from 'exceptions/exceptions';
+import commonStyles from '../styles.module.scss';
 
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ const SignUp: React.FC = () => {
       secondaryText="Start creating the best possible user experience"
       submitText="Sign up"
       onSubmit={handleSubmit(handleSubmitForm)}
+      submitClassName={commonStyles.submitButton}
       altRoute={{
         question: 'Already have an account?',
         linkText: 'Sign in',
@@ -55,6 +57,7 @@ const SignUp: React.FC = () => {
         controlId="signUpFullName"
         register={register('fullName')}
         errors={errors.fullName}
+        inputClassName={commonStyles.input}
       />
       <FormField
         label="Email"
@@ -63,6 +66,7 @@ const SignUp: React.FC = () => {
         controlId="signUpEmail"
         register={register('email')}
         errors={errors.email}
+        inputClassName={commonStyles.input}
       />
       <FormField
         label="Password"
@@ -71,6 +75,7 @@ const SignUp: React.FC = () => {
         controlId="signUpPassword"
         register={register('password')}
         errors={errors.password}
+        inputClassName={commonStyles.input}
       />
     </Sign>
   );
