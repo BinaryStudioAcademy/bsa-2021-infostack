@@ -1,3 +1,11 @@
+:global(.card) {
+  max-width: 87vw;
+}
+
+:global(.card) img {
+  max-width: 100%;
+}
+
 .content {
   word-break: break-all;
 
@@ -8,14 +16,6 @@
   :global(.sec-md) {
     border-right: 2px solid #e0e0e0;
   }
-}
-
-:global(.card) {
-  max-width: 87vw;
-}
-
-:global(.card) img {
-  max-width: 100%;
 }
 
 ol {
