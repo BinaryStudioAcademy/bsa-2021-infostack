@@ -16,6 +16,7 @@ import { HttpErrorMessage } from 'common/enums';
 import { HttpError } from 'exceptions/exceptions';
 import { getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import commonStyles from '../styles.module.scss';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -52,6 +53,7 @@ const Login: React.FC = () => {
       secondaryText="Sign in to your account to continue"
       submitText="Sign in"
       onSubmit={handleSubmit(handleSubmitForm)}
+      submitClassName={commonStyles.submitButton}
       altRoute={{
         // prettier-ignore
         question: 'Don\'t have an account?',
@@ -66,6 +68,7 @@ const Login: React.FC = () => {
         controlId="loginEmail"
         register={register('email')}
         errors={errors.email}
+        inputClassName={commonStyles.input}
       />
       <FormField
         register={register('password')}
@@ -73,6 +76,7 @@ const Login: React.FC = () => {
         type="password"
         placeholder="Enter your password"
         errors={errors.password}
+        inputClassName={commonStyles.input}
         helper={
           <Link
             className={getAllowedClasses(styles.link)}
