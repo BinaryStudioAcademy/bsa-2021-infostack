@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { HttpCode } from '../../common/enums/http-code';
+import { HttpCode } from '../../common/enums/http';
 import UserWorkspaceRepository from '../../data/repositories/user-workspace.repository';
-import { RoleType } from '../../common/enums/role-type';
+import { RoleType } from '../../common/enums/role';
 import { IRequestWithUser } from '../../common/interfaces/http';
 
 export const permit = (...permittedRoles: RoleType[]) => {

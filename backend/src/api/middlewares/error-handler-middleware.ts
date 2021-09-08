@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpCode } from '../../common/enums/http-code';
+import { HttpCode } from '../../common/enums/http';
 import { HttpError } from '../../common/errors/http-error';
 import { logger } from '../../common/utils/logger.util';
 import { HttpErrorMessage } from '../../common/enums/http-error-message';

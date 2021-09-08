@@ -19,11 +19,11 @@ import {
 } from '../common/utils/tokens.util';
 import { prNotification } from '../common/utils/notifications';
 import { prMail } from '../common/utils/mail';
-import { isNotify } from '../common/helpers/is-notify.helper';
+import { isNotify } from '../common/helpers/check-notify.helper';
 import { sendMail } from '../common/utils/mailer.util';
-import { TagType } from '../common/enums/tag-type';
-import { HttpCode } from '../common/enums/http-code';
-import { EntityType } from '../common/enums/entity-type';
+import { TagType } from '../common/enums/tags';
+import { HttpCode } from '../common/enums/http';
+import { EntityType } from '../common/enums/notifications/entity-type';
 import { NotificationType } from '../common/enums/notification-type';
 import { SocketEvents } from '../common/enums/socket';
 import { env } from '../env';

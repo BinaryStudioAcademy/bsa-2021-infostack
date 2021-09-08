@@ -13,9 +13,9 @@ import TagRepository from '../data/repositories/tag.repository';
 import PageShareLinkRepository from '../data/repositories/share-link.repository';
 import DraftRepository from '../data/repositories/draft.repository';
 import { SocketEvents } from '../common/enums/socket';
-import { PermissionType } from '../common/enums/permission-type';
-import { ParticipantType } from '../common/enums/participant-type';
-import { InviteStatus } from '../common/enums/invite-status';
+import { PermissionType } from '../common/enums/permissions';
+import { ParticipantType } from '../common/enums/participant';
+import { InviteStatus } from '../common/enums/workspace';
 import { IParticipant } from '../common/interfaces/participant';
 import {
   IPageRequest,
@@ -35,13 +35,13 @@ import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-na
 import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
 import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
 import { mapPermissionstoParticipants } from '../common/mappers/page/map-permissions-to-participants';
-import { maximum } from '../common/helpers/permissions.helper';
+import { getMaxPermission } from '../common/helpers/permissions.helper';
 import { Page } from '../data/entities/page';
 import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
 import { ITag } from '../common/interfaces/tag';
 import { parseHeadings } from '../common/utils/markdown.util';
 import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { decrypt, encrypt } from '../common/helpers/crypto.helper';
 import { env } from '../env';
@@ -50,7 +50,7 @@ import elasticPageContentRepository from '../elasticsearch/repositories/page-con
 import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
 import { RecentPagesRepository } from '../data/repositories';
 import { mapToRecentPage } from '../common/mappers/page/map-recent-pages.helper';
-import { RoleType } from '../common/enums/role-type';
+import { RoleType } from '../common/enums/role';
 
 export const createPage = async (
   userId: string,
@@ -186,7 +186,7 @@ const addPermissionField = async <T extends { id?: string }>(
     }
   }
   if (teamPermissions.length) {
-    return { ...page, permission: maximum(teamPermissions) };
+    return { ...page, permission: getMaxPermission(teamPermissions) };
   }
   return page;
 };

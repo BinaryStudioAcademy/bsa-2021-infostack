@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import SkillRepository from '../data/repositories/skill.repository';
 import { ISkill } from '../common/interfaces/skill';
 import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 
 export const getAllByWorkspaceId = async (

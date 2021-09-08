@@ -3,4 +3,4 @@ export {
   IWorkspaceUser,
   IWorkspaceCreation,
   IWorkspaceUpdate,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';

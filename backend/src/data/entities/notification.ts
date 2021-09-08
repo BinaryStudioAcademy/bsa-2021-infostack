@@ -1,8 +1,8 @@
 import { Entity, Column, RelationId, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
-import { EntityType } from '../../common/enums/entity-type';
+import { EntityType } from '../../common/enums/notifications/entity-type';
 import { Workspace } from './workspace';
-import { MAX_NOTIFICATION_TITLE_LENGTH } from '../../common/constants/constants';
+import { MAX_NOTIFICATION_TITLE_LENGTH } from '../../common/constants';
 
 @Entity()
 export class Notification extends AbstractEntity {

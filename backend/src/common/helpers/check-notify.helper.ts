@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { NotificationSettingsRepository } from '../../data/repositories';
 import { NotificationType } from '../enums/notification-type';
 
-export const isNotify = async (
+export const checkIsNotify = async (
   userId: string,
   notificationType: NotificationType,
 ): Promise<boolean> => {
@@ -20,7 +20,7 @@ export const isNotify = async (
   return isNotify;
 };
 
-export const isNotifyMany = async (
+export const checkIsNotifyMany = async (
   userIds: string[],
   notificationType: NotificationType,
 ): Promise<string[]> => {

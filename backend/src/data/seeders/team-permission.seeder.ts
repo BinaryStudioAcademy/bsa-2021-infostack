@@ -4,7 +4,7 @@ import { asyncForEach } from '../../common/helpers/array.helper';
 import { getCustomRepository } from 'typeorm';
 import TeamRepository from '../repositories/team.repository';
 import PageRepository from '../repositories/page.repository';
-import { PermissionType } from '../../common/enums/permission-type';
+import { PermissionType } from '../../common/enums/permissions';
 
 export default class TeamPermissionSeeder {
   public static async execute(): Promise<void> {

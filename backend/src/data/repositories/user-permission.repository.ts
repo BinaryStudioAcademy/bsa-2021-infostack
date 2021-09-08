@@ -2,7 +2,7 @@ import { EntityRepository, In, Repository } from 'typeorm';
 import { UserPermission } from '../entities/user-permission';
 import { User } from '../entities/user';
 import { Page } from '../entities/page';
-import { PermissionType } from '../../common/enums/permission-type';
+import { PermissionType } from '../../common/enums/permissions';
 
 @EntityRepository(UserPermission)
 class UserPermissionRepository extends Repository<UserPermission> {

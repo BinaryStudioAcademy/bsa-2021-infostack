@@ -1,6 +1,6 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
 import { Notification } from '../entities/notification';
-import { EntityType } from '../../common/enums/entity-type';
+import { EntityType } from '../../common/enums/notifications/entity-type';
 
 @EntityRepository(Notification)
 class NotificationRepository extends Repository<Notification> {

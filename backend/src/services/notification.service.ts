@@ -1,5 +1,5 @@
 import { getCustomRepository } from 'typeorm';
-import { EntityType } from '../common/enums/entity-type';
+import { EntityType } from '../common/enums/notifications/entity-type';
 import { INotification } from '../common/interfaces/notification';
 import {
   CommentRepository,

@@ -13,15 +13,15 @@ import {
   CommentReactionRepository,
   UserRepository,
 } from '../data/repositories';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { NotificationType } from '../common/enums/notification-type';
-import { isNotify, isNotifyMany } from '../common/helpers/is-notify.helper';
+import { isNotify, isNotifyMany } from '../common/helpers/check-notify.helper';
 import { HttpError } from '../common/errors/http-error';
 import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
 import { sendMail } from '../common/utils/mailer.util';
 import { env } from '../env';
-import { EntityType } from '../common/enums/entity-type';
+import { EntityType } from '../common/enums/notifications/entity-type';
 import { SocketEvents } from '../common/enums/socket';
 import { uploadFile } from '../common/helpers/s3-file-storage.helper';
 import { unlinkFile } from '../common/helpers/multer.helper';

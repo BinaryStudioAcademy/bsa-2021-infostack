@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import { ITag } from '../common/interfaces/tag';
 import TagRepository from '../data/repositories/tag.repository';
 import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 
 export const getAllByWorkspaceId = async (

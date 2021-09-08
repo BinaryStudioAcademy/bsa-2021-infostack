@@ -6,7 +6,7 @@ import { env } from '../../env';
 import mime from 'mime-types';
 
 import { HttpCode, HttpErrorMessage } from '../enums';
-import { HttpError } from '../errors/http-error';
+import { HttpError } from '../errors';
 
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
@@ -17,7 +17,7 @@ const s3 = new S3({
   secretAccessKey,
 });
 
-export const isFileExists = async (
+export const checkIsFileExists = async (
   fileName: string,
 ): Promise<PromiseResult<S3.HeadObjectOutput, AWSError>> => {
   const params = { Bucket: bucketName, Key: fileName };

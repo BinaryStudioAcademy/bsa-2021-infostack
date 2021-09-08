@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { HttpCode } from '../../common/enums/http-code';
+import { HttpCode } from '../../common/enums/http';
 import { IRequestWithUser } from '../../common/interfaces/http/request-with-user.interface';
 
 export const verifyWorkspaceId = (

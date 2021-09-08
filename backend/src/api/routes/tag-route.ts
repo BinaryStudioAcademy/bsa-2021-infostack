@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RoleType } from '../../common/enums/role-type';
+import { RoleType } from '../../common/enums/role';
 import {
   create,
   getAllByWorkspaceId,

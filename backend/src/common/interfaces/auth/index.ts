@@ -7,4 +7,4 @@ export {
   ISetPassword,
   ITokens,
   IInviteUser,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';

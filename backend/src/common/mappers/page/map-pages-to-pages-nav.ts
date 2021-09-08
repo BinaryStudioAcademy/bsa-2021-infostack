@@ -1,5 +1,5 @@
 import { Page } from 'src/data/entities/page';
-import { IPageNav } from 'src/common/interfaces/page';
+import { IPageNav } from '~/common/interfaces/page';
 
 export const mapPagesToPagesNav = (pages: Page[]): IPageNav[] => {
   return pages.map(({ id, pageContents, childPages }) => {

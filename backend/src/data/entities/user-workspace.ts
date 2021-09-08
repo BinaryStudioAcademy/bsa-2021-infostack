@@ -1,8 +1,8 @@
 import { Entity, Column, ManyToOne, BaseEntity } from 'typeorm';
 import { User } from './user';
 import { Workspace } from './workspace';
-import { RoleType } from '../../common/enums/role-type';
-import { InviteStatus } from '../../common/enums/invite-status';
+import { RoleType } from '../../common/enums/role';
+import { InviteStatus } from '../../common/enums/workspace';
 
 @Entity()
 export class UserWorkspace extends BaseEntity {

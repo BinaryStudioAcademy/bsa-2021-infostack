@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { HttpCode } from '../../common/enums/http-code';
+import { HttpCode } from '../../common/enums/http';
 import { HttpErrorMessage } from '../../common/enums/http-error-message';
 import whiteListRoutes from '../../config/white-list-routes-config';
 import { IRequestWithUser } from 'src/common/interfaces/http';

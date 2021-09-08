@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne, BaseEntity } from 'typeorm';
 import { User } from './user';
 import { Page } from './page';
-import { PermissionType } from '../../common/enums/permission-type';
+import { PermissionType } from '../../common/enums/permissions';
 
 @Entity()
 export class UserPermission extends BaseEntity {

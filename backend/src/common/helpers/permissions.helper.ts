@@ -1,4 +1,4 @@
-import { PermissionType } from '../../common/enums/permission-type';
+import { PermissionType } from '../enums/permissions';
 
 const permissions = {
   [PermissionType.ADMIN]: 3,
@@ -6,7 +6,9 @@ const permissions = {
   [PermissionType.READ]: 1,
 };
 
-export const maximum = (array: PermissionType[]): PermissionType | void => {
+export const getMaxPermission = (
+  array: PermissionType[],
+): PermissionType | void => {
   const nums = array.map((item) => permissions[item]);
   const maxValue = Math.max.apply(null, nums);
   switch (maxValue) {

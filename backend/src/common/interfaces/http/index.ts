@@ -1,1 +1,1 @@
-export { IRequestWithUser } from './request-with-user.interface';
+export type { IRequestWithUser } from './request-with-user.interface';

@@ -1,4 +1,4 @@
-import { IPageStatistic } from '../../../common/interfaces/page';
+import { IPageStatistic } from '../../interfaces/page';
 import { RecentPage } from '../../../data/entities/recent-pages';
 
 export const mapToRecentPage = (

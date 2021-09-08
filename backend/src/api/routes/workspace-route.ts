@@ -14,7 +14,7 @@ import {
   updateRoleByUserIdAndWorkspaceId,
 } from '../../services/workspace.service';
 import { permit } from '../middlewares/permissions-middleware';
-import { RoleType } from '../../common/enums/role-type';
+import { RoleType } from '../../common/enums/role';
 import { validationMiddleware, verifyWorkspaceId } from '../middlewares';
 import { workspaceSchema } from '../../common/validations';
 import { upload } from '../../common/helpers/multer.helper';

@@ -11,12 +11,12 @@ import UserWorkspaceRepository from '../data/repositories/user-workspace.reposit
 import UserRepository from '../data/repositories/user.repository';
 import PageRepository from '../data/repositories/page.repository';
 import UserPermissionRepository from '../data/repositories/user-permission.repository';
-import { RoleType } from '../common/enums/role-type';
+import { RoleType } from '../common/enums/role';
 import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
 import { sendMail } from '../common/utils/mailer.util';
-import { InviteStatus } from '../common/enums/invite-status';
+import { InviteStatus } from '../common/enums/workspace';
 import { IRegister } from '../common/interfaces/auth';
 import { DefaultUserName } from '../common/enums/default-username';
 import { generateInviteToken } from '../common/utils/tokens.util';

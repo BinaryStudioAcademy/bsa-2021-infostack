@@ -2,7 +2,7 @@ import { Entity, Column, RelationId, ManyToOne, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { Page } from './page';
 import { Workspace } from './workspace';
-import { TagType } from '../../common/enums/tag-type';
+import { TagType } from '../../common/enums/tags';
 
 @Entity()
 export class Tag extends AbstractEntity {

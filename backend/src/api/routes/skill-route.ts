@@ -7,7 +7,7 @@ import {
   updateNameById,
 } from '../../services/skill.service';
 import { permit } from '../middlewares/permissions-middleware';
-import { RoleType } from '../../common/enums/role-type';
+import { RoleType } from '../../common/enums/role';
 
 const router: Router = Router();
 

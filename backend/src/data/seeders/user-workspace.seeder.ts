@@ -4,7 +4,7 @@ import { asyncForEach } from '../../common/helpers/array.helper';
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../repositories/user.repository';
 import WorkspaceRepository from '../repositories/workspace.repository';
-import { RoleType } from '../../common/enums/role-type';
+import { RoleType } from '../../common/enums/role';
 
 export default class UserWorkspaceSeeder {
   public static async execute(): Promise<void> {

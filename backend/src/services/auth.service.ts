@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { IUserWithTokens, IUser } from '../common/interfaces/user';
 import {
   generateTokens,

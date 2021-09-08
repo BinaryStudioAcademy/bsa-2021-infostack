@@ -12,4 +12,4 @@ export type {
   IFoundPageContent,
   IExportPDF,
   IPageStatistic,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';

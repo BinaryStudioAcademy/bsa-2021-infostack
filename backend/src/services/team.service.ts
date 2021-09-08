@@ -13,9 +13,9 @@ import { ITeam, ITeamCreation } from '../common/interfaces/team';
 import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
 import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
 import { mapTeamToITeamWithoutRoles } from '../common/mappers/team/map-team-to-iteam-without-roles';
-import { HttpCode } from '../common/enums/http-code';
+import { HttpCode } from '../common/enums/http';
 import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { EntityType } from '../common/enums/entity-type';
+import { EntityType } from '../common/enums/notifications/entity-type';
 import { SocketEvents } from '../common/enums/socket';
 import { NotificationType } from '../common/enums/notification-type';
 import { HttpError } from '../common/errors/http-error';
@@ -30,7 +30,7 @@ import {
   teamMailDeleteUser,
   teamMailDelete,
 } from '../common/utils/mail';
-import { isNotify } from '../common/helpers/is-notify.helper';
+import { isNotify } from '../common/helpers/check-notify.helper';
 import { env } from '../env';
 
 export const getAllByWorkspaceId = async (

@@ -1,1 +1,1 @@
-export type { ICommentReaction } from 'infostack-shared/common/interfaces';
+export type { ICommentReaction } from 'infostack-shared';

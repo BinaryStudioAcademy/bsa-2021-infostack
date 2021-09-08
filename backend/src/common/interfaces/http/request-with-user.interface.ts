@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { RoleType } from 'src/common/enums/role-type';
+import { RoleType } from '~/common/enums/role';
 
 export interface IRequestWithUser extends Request {
   userId?: string;

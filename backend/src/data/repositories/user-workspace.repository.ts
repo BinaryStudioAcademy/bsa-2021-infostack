@@ -1,6 +1,6 @@
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import { InviteStatus } from '../../common/enums/invite-status';
-import { RoleType } from '../../common/enums/role-type';
+import { InviteStatus } from '../../common/enums/workspace';
+import { RoleType } from '../../common/enums/role';
 import { UserWorkspace } from '../entities/user-workspace';
 
 @EntityRepository(UserWorkspace)
