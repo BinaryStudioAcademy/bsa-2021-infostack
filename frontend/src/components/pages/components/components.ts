@@ -7,3 +7,5 @@ export { PageFollowingUsers } from './page-following-users/page-following-users'
 export { PageTableOfContents } from './page-table-of-contents/page-table-of-contents';
 export { Popup } from './popup/popup';
 export { PageActionsDropdown } from './page-dropdown/page-dropdown';
+export { PagesStatistic } from './pages-statistic/pages-statistic';
+export { Chart } from './chart/chart';

@@ -12,9 +12,12 @@ import {
   IPageShare,
   IFoundPageContent,
   IExportPDF,
-} from 'common/interfaces/pages';
+  ITag,
+  IQuery,
+  IPageStatistic,
+} from 'common/interfaces';
+import { getStringifiedQuery } from 'helpers/helpers';
 import { http } from 'services/http.service';
-import { ITag } from 'common/interfaces/tag';
 
 class PageApi {
   private http = http;
@@ -52,6 +55,30 @@ class PageApi {
     return this.http.load(`${this.BASE}/pinned`, {
       method: HttpMethod.GET,
     });
+  }
+
+  public async getMostViewedPages(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/most-viewed${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
+  }
+
+  public async getMostUpdatedPages(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/most-updated${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
+  }
+
+  public async getСountOfUpdates(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/count-of-updates${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
   }
 
   public async getPage(id?: string): Promise<IPage> {
