@@ -11,6 +11,7 @@ import {
 } from 'common/enums';
 import { HttpError } from 'exceptions';
 import { HttpOptions } from 'common/types';
+import { API_URL } from 'common/constants';
 
 class Http {
   private areTokensRefreshing;
@@ -134,7 +135,7 @@ class Http {
     );
     if (refreshToken) {
       try {
-        const response = await fetch('/api/auth/refresh', {
+        const response = await fetch(`${API_URL}/api/auth/refresh`, {
           method: HttpMethod.POST,
           body: JSON.stringify({ refreshToken }),
           headers: this.getHeaders(ContentType.JSON),
