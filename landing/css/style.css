@@ -170,6 +170,9 @@ h6 {
 .caption {
   padding: 24px;
   text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .caption__title {
@@ -186,10 +189,32 @@ h6 {
   letter-spacing: -0.06rem;
 }
 
-.caption__img {
-  max-width: 500px;
+.caption__carousel {
   margin-top: 24px;
-  width: 100%;
+  max-width: 80%;
+}
+
+.caption__images {
+  width: 800px;
+  height: 300px;
+  position: relative;
+}
+
+.caption__img {
+  position: absolute;
+  aspect-ratio: 16 / 9;
+  width: 350px;
+}
+
+.img-2 {
+  top: 50px;
+  right: 0;
+  z-index: 1;
+}
+
+.img-3 {
+  bottom: 0;
+  left: 20px;
 }
 
 .benefits {
@@ -465,7 +490,7 @@ h6 {
 }
 
 .start__title {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   font-size: 1.4rem;
   line-height: 2.47rem;
   color: var(--charcoal-600);
@@ -542,12 +567,17 @@ h6 {
 @media (min-width: 992px) {
   .caption {
     margin-top: 50px;
-    display: flex;
     text-align: left;
+    flex-direction: row;
   }
 
   .caption__content {
     padding-right: 60px;
+    flex-basis: 40%;
+  }
+
+  .caption__carousel {
+    flex-basis: 60%;
   }
 
   .caption__title {

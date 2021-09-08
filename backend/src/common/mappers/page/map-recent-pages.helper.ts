@@ -8,7 +8,7 @@ export const mapToRecentPage = (
 
   const mappedRecentPages = cutRecentPages.map(
     ({ pageId, createdAt, page }) => ({
-      visited: createdAt.toLocaleString(),
+      date: createdAt.toLocaleString(),
       pageId,
       title: page.pageContents.sort((a, b) =>
         b.updatedAt > a.updatedAt ? 1 : -1,

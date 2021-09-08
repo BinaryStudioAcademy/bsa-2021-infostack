@@ -4,6 +4,7 @@ import {
   useParams,
   useAppDispatch,
   useAppSelector,
+  useHistory,
 } from 'hooks/hooks';
 import {
   Container,
@@ -41,6 +42,7 @@ const ProfileInfo: React.FC = () => {
   const [pageId, setPageId] = useState<string>();
   const { id } = useParams<{ id?: string }>();
 
+  const history = useHistory();
   useEffect(() => {
     let mounted = true;
     const getUser = async (): Promise<void> => {
@@ -50,7 +52,7 @@ const ProfileInfo: React.FC = () => {
             setPermission(true);
             setUser(user);
           } else {
-            setPermission(false);
+            history.push('/*');
           }
         }
       });
@@ -224,9 +226,7 @@ const ProfileInfo: React.FC = () => {
             </Row>
           </>
         ) : null
-      ) : (
-        <h1 className="d-flex justify-content-center">Permission denied</h1>
-      )}
+      ) : null}
     </Container>
   );
 };
