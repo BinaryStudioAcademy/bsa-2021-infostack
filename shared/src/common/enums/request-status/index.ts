@@ -1,1 +1,1 @@
-export { RequestStatus } from './request-status.enum';
+export * from './request-status.enum';

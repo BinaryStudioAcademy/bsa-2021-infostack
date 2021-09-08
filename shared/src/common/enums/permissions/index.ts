@@ -1,1 +1,1 @@
-export { PermissionType } from './permission-type.enum';
+export * from './permission-type.enum';

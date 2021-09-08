@@ -191,7 +191,7 @@ export const ProfileSettings: React.FC = () => {
     if (lastSkill) {
       const lastSkillName = lastSkill.value ?? '';
 
-      if (lastSkill.__isNew__) {
+      if (lastSkill.isNew) {
         skillApi.createSkill(lastSkillName).then((response: ISkill) => {
           setAllSkills((oldSkills) => {
             const newSkills = [...oldSkills];

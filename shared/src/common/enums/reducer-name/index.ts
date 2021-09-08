@@ -1,1 +1,1 @@
-export { ReducerName } from './reducer-name.enum';
+export * from './reducer-name.enum';

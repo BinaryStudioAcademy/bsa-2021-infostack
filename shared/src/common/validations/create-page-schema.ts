@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { titleRegex } from './regex/regex';
+import { TITLE_REGEX } from './regex';
 
 export const createPageSchema = yup
   .object()
@@ -13,7 +13,7 @@ export const createPageSchema = yup
       .min(1)
       .max(50)
       .matches(
-        titleRegex,
+        TITLE_REGEX,
         'title must consist min 1 up to 50 latin letters or numbers',
       )
       .required(),

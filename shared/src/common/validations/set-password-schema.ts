@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { passwordRegex } from './regex/regex';
+import { PASSWORD_REGEX } from './regex';
 
 export const setPasswordSchema = yup.object().shape({
   password: yup
@@ -7,7 +7,7 @@ export const setPasswordSchema = yup.object().shape({
     .min(6)
     .max(12)
     .matches(
-      passwordRegex,
+      PASSWORD_REGEX,
       'password must consist of latin letters (upper and lower case), numbers, and symbols',
     )
     .required(),

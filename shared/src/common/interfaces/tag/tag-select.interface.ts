@@ -4,7 +4,7 @@ interface ITagSelect {
   id?: string;
   name?: string;
   type: TagType;
-  __isNew__?: boolean;
+  isNew?: boolean;
   value?: string;
   label?: string;
   icon?: string;

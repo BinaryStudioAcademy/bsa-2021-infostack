@@ -2,7 +2,7 @@ interface ISkill {
   id?: string;
   name?: string;
   skills?: string;
-  __isNew__?: boolean;
+  isNew?: boolean;
   value?: string;
   label?: string;
 }

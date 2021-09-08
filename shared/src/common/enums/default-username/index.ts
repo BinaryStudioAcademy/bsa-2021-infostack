@@ -1,1 +1,1 @@
-export { DefaultUserName } from './default-username.enum';
+export * from './default-username.enum';

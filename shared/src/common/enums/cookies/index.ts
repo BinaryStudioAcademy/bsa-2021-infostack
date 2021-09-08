@@ -1,1 +1,1 @@
-export { CookieVariable } from './cookie-variable';
+export * from './cookie-variable';

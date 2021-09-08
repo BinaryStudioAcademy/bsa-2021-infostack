@@ -1,4 +1,4 @@
-export { checkIsOneOf, containsNoEmptyStrings } from './boolean/boolean';
+export { checkIsOneOf, checkContainsNoEmptyStrings } from './boolean/boolean';
 export { replaceIdParam } from './route/route';
 export { replacePageIdParamAndVersionId } from './route/route';
 export { sortObjByName, sortObjByDate } from './array/array';

@@ -1,1 +1,1 @@
-export { TagType } from './tag-type.enum';
+export * from './tag-type.enum';

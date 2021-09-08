@@ -1,1 +1,1 @@
-export { EntityType } from './entity-type.enum';
+export * from './entity-type.enum';

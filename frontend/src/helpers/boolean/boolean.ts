@@ -1,1 +1,4 @@
-export { checkIsOneOf, containsNoEmptyStrings } from 'infostack-shared/helpers';
+export {
+  checkIsOneOf,
+  checkContainsNoEmptyStrings,
+} from 'infostack-shared/helpers';

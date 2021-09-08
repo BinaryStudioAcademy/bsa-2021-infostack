@@ -1,1 +1,1 @@
-export { PageTitle } from './page-title.enum';
+export * from './page-title.enum';

@@ -1,1 +1,1 @@
-export { InviteStatus } from './invite-status.enum';
+export * from './invite-status.enum';

@@ -32,7 +32,7 @@ const PageTags: React.FC = () => {
     if (lastTag) {
       const lastTagName = lastTag.value ?? '';
 
-      if (workspaceRole === RoleType.ADMIN && lastTag.__isNew__) {
+      if (workspaceRole === RoleType.ADMIN && lastTag.isNew) {
         tagApi
           .add(lastTagName)
           .then((response: ITagSelect) => {
