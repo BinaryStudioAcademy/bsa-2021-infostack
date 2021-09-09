@@ -121,7 +121,7 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
           </OverlayTrigger>
         )}
       </Card.Header>
-      {!!headings.length && (
+      {headings.length ? (
         <Card.Body className={styles.accordion}>
           <Accordion flush>
             {headings.map((heading) => {
@@ -129,6 +129,8 @@ export const PageTableOfContents: React.FC<IPageTableOfContentsProps> = ({
             })}
           </Accordion>
         </Card.Body>
+      ) : (
+        <span className={getAllowedClasses(styles.noContent)}>No content</span>
       )}
     </Card>
   );

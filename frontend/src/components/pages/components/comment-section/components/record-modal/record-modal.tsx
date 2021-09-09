@@ -181,12 +181,8 @@ const RecordModal: React.FC<Props> = (props) => {
                 <div className="d-flex align-items-center w-25">
                   <Button
                     ref={pauseButton}
-                    className={
-                      !isPaused
-                        ? getAllowedClasses(styles.text, styles.pauseButton)
-                        : getAllowedClasses(styles.text, styles.resumeButton)
-                    }
-                    variant={!isPaused ? 'link' : 'danger'}
+                    className={getAllowedClasses(styles.pauseButton, 'd-flex')}
+                    variant="white"
                   >
                     {!isPaused ? (
                       <i
@@ -196,45 +192,36 @@ const RecordModal: React.FC<Props> = (props) => {
                         )}
                       ></i>
                     ) : (
-                      <>
+                      <Button
+                        variant="danger"
+                        className={getAllowedClasses(styles.resumeButton)}
+                      >
                         <i
                           className={getAllowedClasses(
                             styles.resumeRecordMic,
                             'bi bi-mic',
                           )}
                         />
-                      </>
+                      </Button>
                     )}
+                    {isPaused ? 'Resume' : 'Pause'}
                   </Button>
-                  {isPaused ? (
-                    <span
-                      className={getAllowedClasses(
-                        styles.resumeText,
-                        'd-flex ms-2',
-                      )}
-                    >
-                      Resume
-                    </span>
-                  ) : (
-                    <span className={getAllowedClasses(styles.pauseText)}>
-                      Pause
-                    </span>
-                  )}
                 </div>
                 <div className="d-flex align-items-center">
                   <Button
                     ref={stopButton}
                     className={getAllowedClasses(
                       styles.stopButton,
-                      'ms-3 me-2',
+                      'text-danger',
                     )}
-                    variant="danger"
-                  ></Button>
-                  <span
-                    className={getAllowedClasses(styles.stopText, 'd-flex')}
+                    variant="white"
                   >
+                    <Button
+                      variant="danger"
+                      className={getAllowedClasses(styles.stopButtonIcon)}
+                    ></Button>
                     Stop
-                  </span>
+                  </Button>
                 </div>
               </div>
             )}

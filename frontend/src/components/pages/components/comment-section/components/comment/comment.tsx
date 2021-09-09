@@ -47,6 +47,10 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
     mentions: [],
   });
 
+  const avatarStyles: React.CSSProperties = {
+    cursor: 'pointer',
+  };
+
   const toggleField = (): void => setIsFieldVisible((prev) => !prev);
 
   const handleAvatarClick = (userId?: string): void => {
@@ -67,6 +71,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
       <div className={styles.comment}>
         <UserAvatar
           size="40"
+          style={avatarStyles}
           name={name}
           src={avatar}
           round

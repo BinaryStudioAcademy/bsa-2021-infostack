@@ -26,7 +26,7 @@ export const SkillItem: React.FC<{
     <tr className={getAllowedClasses(styles.tr)}>
       <td className={getAllowedClasses(styles.td)}>{name}</td>
       <td className={getAllowedClasses(styles.tdButton)}>
-        <Button onClick={handleEdit} variant="warning" size="sm">
+        <Button onClick={handleEdit} variant="secondary" size="sm">
           Rename
         </Button>
       </td>

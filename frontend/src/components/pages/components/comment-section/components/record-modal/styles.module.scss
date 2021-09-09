@@ -52,9 +52,11 @@
 }
 
 .resumeButton {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
+  padding: 0;
+  margin-right: 5px;
 }
 
 .startRecordMic {
@@ -63,21 +65,17 @@
 }
 
 .resumeRecordMic {
-  font-size: small;
   color: whitesmoke;
 }
 
 .pauseButton {
-  color: transparent;
-  padding: 0;
-}
-
-.pauseButton:hover {
-  box-shadow: none;
+  font-size: 16px;
+  align-items: center;
 }
 
 .pauseIcon {
   font-size: xx-large;
+  margin-right: 5px;
 }
 
 .pauseText {
@@ -85,19 +83,21 @@
 }
 
 .stopButton {
+  display: flex;
+  font-size: 16px;
+  align-items: center;
+}
+
+.stopButton:focus,
+.resumeButton:focus,
+.pauseButton:focus {
+  box-shadow: none;
+}
+
+.stopButtonIcon {
   width: 20px;
   height: 20px;
-}
-
-.stopText {
-  color: red;
-  display: block;
-  font-size: 16px;
-}
-
-.resumeText {
-  color: grey;
-  display: block;
+  margin-right: 9px;
 }
 
 .saveButton {

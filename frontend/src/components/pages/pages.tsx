@@ -118,27 +118,27 @@ const Pages: React.FC = () => {
               </div>
             ) : (
               <div className="d-flex flex-column">
-                <div className="d-flex justify-content-between">
+                <div className="row justify-content-between g-0">
                   <PagesStatistic
                     loading={recentPagesLoading}
                     title="Recent pages"
                     placeholder="No recent pages"
                     pages={recentPages}
-                    className="col-xl col-md"
+                    className="col-xl-4 col-md-12"
                   />
                   <PagesStatistic
                     loading={mostViewedPagesLoading}
                     title="Most viewed pages for the last week"
                     placeholder="No viewed pages for the last week"
                     pages={mostViewedPages}
-                    className="col-xl col-md"
+                    className="col-xl-4 col-md-6"
                   />
                   <PagesStatistic
                     loading={mostUpdatedLoading}
                     title="Most updated pages for the last week"
                     placeholder="No updated pages for the last week"
                     pages={mostUpdatedPages}
-                    className="col-xl col-md"
+                    className="col-xl-4 col-md-6"
                   />
                 </div>
                 <div className="d-flex flex-column align-items-center">
