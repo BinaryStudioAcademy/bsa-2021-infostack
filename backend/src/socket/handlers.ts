@@ -29,6 +29,10 @@ export const handlers = (socket: Socket): void => {
       await showEditors(socket, pageId);
     },
   );
+  socket.on(SocketEvents.SIGN_OUT, (userId: string, pageId?: string) => {
+    pageId && socket.leave(pageId);
+    socket.leave(userId);
+  });
 };
 
 const showEditors = async (socket: Socket, pageId: string): Promise<void> => {
