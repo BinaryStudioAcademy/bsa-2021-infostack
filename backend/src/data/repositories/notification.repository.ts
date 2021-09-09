@@ -1,6 +1,7 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
-import { Notification } from '../entities/notification';
-import { EntityType } from '../../common/enums/notifications/entity-type';
+
+import { Notification } from '../entities';
+import { EntityType } from '../../common/enums';
 
 @EntityRepository(Notification)
 class NotificationRepository extends Repository<Notification> {
@@ -56,13 +57,13 @@ class NotificationRepository extends Repository<Notification> {
     userId: string,
     workspaceId: string,
     skip: number,
-    limit: number,
+    take: number,
   ): Promise<Notification[]> {
-    if (limit) {
+    if (take) {
       return this.find({
         where: { userId, workspaceId },
         skip: skip,
-        take: limit,
+        take: take,
         order: {
           createdAt: 'DESC',
         },
@@ -90,4 +91,4 @@ class NotificationRepository extends Repository<Notification> {
   }
 }
 
-export default NotificationRepository;
+export { NotificationRepository };

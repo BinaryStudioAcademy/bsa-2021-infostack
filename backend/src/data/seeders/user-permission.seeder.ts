@@ -1,8 +1,8 @@
-import { asyncForEach } from '../../common/helpers/array.helper';
-import { UserPermission } from '../entities/user-permission';
+import { asyncForEach } from '../../common/helpers';
+import { UserPermission } from '../entities';
 import { userPermissions } from '../seed-data/user-permission.data';
 
-class UserPermissionSeeder {
+export class UserPermissionSeeder {
   public static async execute(): Promise<void> {
     await asyncForEach(async (userPermission) => {
       await Object.assign(new UserPermission(), {
@@ -13,5 +13,3 @@ class UserPermissionSeeder {
     }, userPermissions);
   }
 }
-
-export default UserPermissionSeeder;

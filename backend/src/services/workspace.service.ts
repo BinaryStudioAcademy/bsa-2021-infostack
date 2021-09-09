@@ -1,36 +1,43 @@
 import { getCustomRepository } from 'typeorm';
+import { Server } from 'socket.io';
+
 import {
   IWorkspace,
   IWorkspaceUser,
   IWorkspaceCreation,
   IWorkspaceUpdate,
-} from '../common/interfaces/workspace';
-import { mapWorkspaceToWorkspaceUsers } from '../common/mappers/workspace/map-workspace-to-workspace-users';
-import WorkspaceRepository from '../data/repositories/workspace.repository';
-import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import UserRepository from '../data/repositories/user.repository';
-import PageRepository from '../data/repositories/page.repository';
-import UserPermissionRepository from '../data/repositories/user-permission.repository';
-import { RoleType } from '../common/enums/role';
-import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { sendMail } from '../common/utils/mailer.util';
-import { InviteStatus } from '../common/enums/workspace';
-import { IRegister } from '../common/interfaces/auth';
-import { DefaultUserName } from '../common/enums/default-username';
-import { generateInviteToken } from '../common/utils/tokens.util';
-import { env } from '../env';
-import TeamRepository from '../data/repositories/team.repository';
+  IRegister,
+} from '../common/interfaces';
+import { mapWorkspaceToWorkspaceUsers } from '../common/mappers';
+import {
+  WorkspaceRepository,
+  UserWorkspaceRepository,
+  UserRepository,
+  PageRepository,
+  UserPermissionRepository,
+  TeamRepository,
+} from '../data/repositories';
+import {
+  RoleType,
+  HttpCode,
+  HttpErrorMessage,
+  InviteStatus,
+  DefaultUserName,
+  SocketEvents,
+} from '../common/enums';
+import { HttpError } from '../common/errors';
+import {
+  sendMail,
+  generateInviteToken,
+  workspaceMailDeleteUser,
+} from '../common/utils';
 import {
   deleteFile,
-  isFileExists,
+  checkIsFileExists,
   uploadFile,
-} from '../common/helpers/s3-file-storage.helper';
-import { unlinkFile } from '../common/helpers/multer.helper';
-import { Server } from 'socket.io';
-import { SocketEvents } from '../common/enums/socket';
-import { workspaceMailDeleteUser } from '../common/utils/mail/workspace-mail.util';
+  unlinkFile,
+} from '../common/helpers';
+import { env } from '../env';
 
 export const inviteToWorkspace = async (
   body: IRegister,
@@ -304,7 +311,7 @@ export const updateById = async (
   if (logo) {
     if (workspace.logo) {
       const fileName = workspace.logo.split('/').pop();
-      const isExistsAvatar = await isFileExists(fileName);
+      const isExistsAvatar = await checkIsFileExists(fileName);
       if (isExistsAvatar) {
         await deleteFile(workspace.logo);
       }

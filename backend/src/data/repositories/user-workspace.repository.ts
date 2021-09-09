@@ -1,7 +1,7 @@
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import { InviteStatus } from '../../common/enums/workspace';
-import { RoleType } from '../../common/enums/role';
-import { UserWorkspace } from '../entities/user-workspace';
+
+import { InviteStatus, RoleType } from '../../common/enums';
+import { UserWorkspace } from '../entities';
 
 @EntityRepository(UserWorkspace)
 class UserWorkspaceRepository extends Repository<UserWorkspace> {
@@ -70,4 +70,4 @@ class UserWorkspaceRepository extends Repository<UserWorkspace> {
   }
 }
 
-export default UserWorkspaceRepository;
+export { UserWorkspaceRepository };

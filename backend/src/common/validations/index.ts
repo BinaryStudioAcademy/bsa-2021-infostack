@@ -1,6 +1,5 @@
-export { signUpSchema } from 'infostack-shared';
-export { loginSchema } from 'infostack-shared';
-export { createPageSchema } from 'infostack-shared';
-export { setPermissionsSchema } from 'infostack-shared';
-export { createCommentSchema } from 'infostack-shared';
-export { workspaceSchema } from 'infostack-shared';
+export * from './auth';
+export * from './comment';
+export * from './page';
+export * from './permissions';
+export * from './workspace';

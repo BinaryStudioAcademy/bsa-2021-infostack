@@ -1,12 +1,11 @@
 import { getCustomRepository } from 'typeorm';
 
-import { asyncForEach } from '../../common/helpers/array.helper';
+import { asyncForEach } from '../../common/helpers';
 import { pageContents } from '../../data/seed-data/page-content.data';
+import { PageRepository } from '../../data/repositories';
+import { elasticPageContentRepository } from '../repositories';
 
-import PageRepository from '../../data/repositories/page.repository';
-import elasticPageContentRepository from '../repositories/page-content.repository';
-
-class ElasticPageContentSeeder {
+export class ElasticPageContentSeeder {
   private static _insertedPageIds = new Set<string>();
 
   public static async execute(): Promise<void> {
@@ -30,5 +29,3 @@ class ElasticPageContentSeeder {
     }, pageContents.reverse());
   }
 }
-
-export default ElasticPageContentSeeder;

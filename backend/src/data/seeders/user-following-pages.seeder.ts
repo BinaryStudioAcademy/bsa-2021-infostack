@@ -1,10 +1,10 @@
 import { getCustomRepository } from 'typeorm';
-import UserRepository from '../repositories/user.repository';
-import PageRepository from '../repositories/page.repository';
-import { userFollowingPages } from '../seed-data/user-following-pages.data';
-import { asyncForEach } from '../../common/helpers/array.helper';
 
-export default class UserFollowingPagesSeeder {
+import { UserRepository, PageRepository } from '../repositories';
+import { userFollowingPages } from '../seed-data/user-following-pages.data';
+import { asyncForEach } from '../../common/helpers';
+
+export class UserFollowingPagesSeeder {
   public static async execute(): Promise<void> {
     const userRepository = getCustomRepository(UserRepository);
     const pageRepository = getCustomRepository(PageRepository);

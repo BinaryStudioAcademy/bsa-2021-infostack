@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
-import { IPageContributor } from '../common/interfaces/page';
-import { SocketEvents } from '../common/enums/socket';
-import { IUser } from '../common/interfaces/user';
+import { IPageContributor, IUser } from '../common/interfaces';
+import { SocketEvents } from '../common/enums';
 import { env } from '../env';
 
 let page_editors: { pageId: string; user: IPageContributor }[] = [];

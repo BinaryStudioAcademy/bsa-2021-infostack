@@ -8,7 +8,7 @@ import { createConnection } from 'typeorm';
 import cookieParser from 'cookie-parser';
 import { env } from './env';
 import routes from './api/routes';
-import ormconfig from './config/ormconfig';
+import { dbConfig } from './config';
 import { handlers as socketHandlers } from './socket/handlers';
 import { logger } from './common/utils/logger.util';
 import {
@@ -50,7 +50,7 @@ app.use('*', (_req, res) => {
 
 httpServer.listen(port, async () => {
   try {
-    await createConnection(ormconfig);
+    await createConnection(dbConfig);
   } catch (error) {
     logger.info(`App started with error: ${error}`);
   }

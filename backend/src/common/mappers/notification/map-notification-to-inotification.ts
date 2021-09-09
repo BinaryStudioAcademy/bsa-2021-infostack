@@ -1,6 +1,6 @@
-import { Notification } from 'src/data/entities/notification';
-import { INotification } from '../../interfaces/notification';
-import { EntityType } from '../../enums/notifications/entity-type';
+import { Notification } from 'src/data/entities';
+import { INotification } from '../../interfaces';
+import { EntityType } from '../../enums';
 
 export const mapNotificationToINotification = (
   notification: Notification,

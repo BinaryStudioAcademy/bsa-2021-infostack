@@ -1,12 +1,12 @@
-import { IComment } from '../../interfaces/comment';
+import { IComment } from '../../interfaces';
 
 export const mapChildToParent = (comments: IComment[]): IComment[] => {
-  const commentMap = new Map();
+  const mappedComments = new Map();
 
-  comments.forEach((c) => commentMap.set(c.id, c));
+  comments.forEach((c) => mappedComments.set(c.id, c));
   comments.forEach((c) => {
     if (c.parentCommentId) {
-      const parentComment = commentMap.get(c.parentCommentId);
+      const parentComment = mappedComments.get(c.parentCommentId);
       (parentComment.children = parentComment.children || []).push(c);
     }
   });

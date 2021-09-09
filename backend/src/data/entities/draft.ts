@@ -6,7 +6,8 @@ import {
   Unique,
   JoinColumn,
 } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { Page } from './page';
 
 @Entity()

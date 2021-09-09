@@ -1,7 +1,7 @@
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import { RecentPage } from '../entities/recent-pages';
-import { PageContent } from '../entities/page-content';
-import { IPageStatistic } from '~/common/interfaces/page';
+
+import { RecentPage, PageContent } from '../entities';
+import { IPageStatistic } from '~/common/interfaces';
 
 @EntityRepository(RecentPage)
 class RecentPagesRepository extends Repository<RecentPage> {
@@ -64,4 +64,4 @@ class RecentPagesRepository extends Repository<RecentPage> {
   }
 }
 
-export default RecentPagesRepository;
+export { RecentPagesRepository };

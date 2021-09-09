@@ -1,4 +1,4 @@
-import { PermissionType } from '../enums/permissions';
+import { PermissionType } from '../enums';
 
 const permissions = {
   [PermissionType.ADMIN]: 3,

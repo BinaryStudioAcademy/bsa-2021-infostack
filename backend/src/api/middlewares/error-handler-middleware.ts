@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpCode } from '../../common/enums/http';
-import { HttpError } from '../../common/errors/http-error';
-import { logger } from '../../common/utils/logger.util';
-import { HttpErrorMessage } from '../../common/enums/http-error-message';
+
+import { HttpCode, HttpErrorMessage } from '../../common/enums';
+import { HttpError } from '../../common/errors';
+import { logger } from '../../common/utils';
 
 export const errorHandlerMiddleware = (
   err: HttpError,

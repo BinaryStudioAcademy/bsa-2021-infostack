@@ -1,25 +1,28 @@
 import { createConnection } from 'typeorm';
-import UserSeeder from './seeders/user.seeder';
-import WorkspaceSeeder from './seeders/workspace.seeder';
-import UserWorkspaceSeeder from './seeders/user-workspace.seeder';
-import PageSeeder from './seeders/page.seeder';
-import TeamSeeder from './seeders/team.seeder';
-import SkillSeeder from './seeders/skills.seeder';
-import TeamMemberSeeder from './seeders/team-member.seeder';
-import TeamPermissionSeeder from './seeders/team-permission.seeder';
-import UserFollowingPagesSeeder from './seeders/user-following-pages.seeder';
-import CommentSeeder from './seeders/comment.seeder';
-import { logger } from '../common/utils/logger.util';
-import ormconfig from '../config/ormconfig';
-import TagSeeder from './seeders/tag.seeder';
-import PageTagSeeder from './seeders/page-tag.seeder';
-import PageContentSeeder from './seeders/page-content.seeder';
-import UserPermissionSeeder from './seeders/user-permission.seeder';
-import NotificationSeeder from './seeders/notification.seeder';
-import DraftSeeder from './seeders/draft.seeder';
+
+import {
+  UserSeeder,
+  WorkspaceSeeder,
+  UserWorkspaceSeeder,
+  PageSeeder,
+  TeamSeeder,
+  SkillSeeder,
+  TeamMemberSeeder,
+  TeamPermissionSeeder,
+  UserFollowingPagesSeeder,
+  CommentSeeder,
+  TagSeeder,
+  PageTagSeeder,
+  PageContentSeeder,
+  UserPermissionSeeder,
+  NotificationSeeder,
+  DraftSeeder,
+} from './seeders/index';
+import { logger } from '../common/utils';
+import { dbConfig } from '../config';
 
 const seeders = async (): Promise<void> => {
-  await createConnection(ormconfig);
+  await createConnection(dbConfig);
   logger.info('Connection created');
   logger.info('Seeding users');
   await UserSeeder.execute();

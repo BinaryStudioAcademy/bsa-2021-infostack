@@ -1,10 +1,10 @@
 import { getCustomRepository } from 'typeorm';
-import { asyncForEach } from '../../common/helpers/array.helper';
-import PageRepository from '../repositories/page.repository';
-import TagRepository from '../repositories/tag.repository';
+
+import { asyncForEach } from '../../common/helpers';
+import { PageRepository, TagRepository } from '../repositories';
 import { pageTags } from '../seed-data/page-tag.data';
 
-export default class PageTagSeeder {
+export class PageTagSeeder {
   public static async execute(): Promise<void> {
     const pageRepository = getCustomRepository(PageRepository);
     const tagRepository = getCustomRepository(TagRepository);

@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { run } from '../../common/helpers/route.helper';
+
+import { run } from '../../common/helpers';
 import {
   createPageSchema,
   setPermissionsSchema,
   createCommentSchema,
 } from '../../common/validations';
-
 import {
   createPage,
   deletePage,
@@ -49,7 +49,7 @@ import {
   transcriptAudioComment,
 } from '../../services/comment.service';
 import { validationMiddleware } from '../middlewares';
-import { upload } from '../../common/helpers/multer.helper';
+import { upload } from '../../common/helpers';
 
 const router: Router = Router();
 

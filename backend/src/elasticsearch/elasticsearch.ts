@@ -6,4 +6,4 @@ const { elasticsearch } = env;
 
 const elasticsearchClient = new Client({ node: elasticsearch.node });
 
-export default elasticsearchClient;
+export { elasticsearchClient };

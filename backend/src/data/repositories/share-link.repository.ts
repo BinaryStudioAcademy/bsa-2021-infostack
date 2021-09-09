@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { PageShareLink } from '../entities/page-share-link';
+
+import { PageShareLink } from '../entities';
 
 @EntityRepository(PageShareLink)
 class PageShareLinkRepository extends Repository<PageShareLink> {
@@ -15,4 +16,4 @@ class PageShareLinkRepository extends Repository<PageShareLink> {
   }
 }
 
-export default PageShareLinkRepository;
+export { PageShareLinkRepository };

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { run } from '../../common/helpers/route.helper';
+
+import { run } from '../../common/helpers';
 import {
   createAccessToken,
   getUsername,
@@ -9,6 +10,7 @@ import {
   prWebhookHandler,
   labelWebhookHandler,
 } from '../../services/github.service';
+
 const router: Router = Router();
 
 router.post(

@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { HttpCode } from '../../common/enums/http';
-import { IRequestWithUser } from '../../common/interfaces/http/request-with-user.interface';
+
+import { HttpCode } from '../../common/enums';
+import { IRequestWithUser } from '../../common/interfaces';
 
 export const verifyUserId = (
   req: IRequestWithUser,

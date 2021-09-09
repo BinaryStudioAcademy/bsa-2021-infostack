@@ -1,18 +1,17 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { RefreshToken } from '../entities/refresh-token';
+
+import { RefreshToken } from '../entities';
 
 @EntityRepository(RefreshToken)
-class refreshTokenRepository extends Repository<RefreshToken> {
+class RefreshTokenRepository extends Repository<RefreshToken> {
   public findByToken(token: string): Promise<RefreshToken> {
     return this.findOne(
       { token },
       {
-        relations: [
-          'user',
-        ],
+        relations: ['user'],
       },
     );
   }
 }
 
-export default refreshTokenRepository;
+export { RefreshTokenRepository };

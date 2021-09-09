@@ -1,7 +1,6 @@
-import { IParticipant } from '~/common/interfaces/participant';
-import { UserPermission } from 'src/data/entities/user-permission';
-import { TeamPermission } from 'src/data/entities/team-permission';
-import { ParticipantType } from '../../enums/participant';
+import { IParticipant } from '~/common/interfaces';
+import { UserPermission, TeamPermission } from 'src/data/entities';
+import { ParticipantType } from '../../enums';
 
 export const mapPermissionstoParticipants = (
   usersPermissions: UserPermission[],

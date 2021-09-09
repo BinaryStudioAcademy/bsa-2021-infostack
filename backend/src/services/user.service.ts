@@ -1,26 +1,28 @@
-import { getCustomRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
-import UserRepository from '../data/repositories/user.repository';
-import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
+import { getCustomRepository } from 'typeorm';
+
+import {
+  UserRepository,
+  UserWorkspaceRepository,
+  SkillRepository,
+  ActivityRepository,
+} from '../data/repositories';
 import {
   deleteFile,
-  isFileExists,
+  checkIsFileExists,
   uploadFile,
-} from '../common/helpers/s3-file-storage.helper';
-import { unlinkFile } from '../common/helpers/multer.helper';
+  unlinkFile,
+} from '../common/helpers';
 import {
   IUser,
   IGetActivities,
   IGetUserActivities,
   IUserActivity,
-} from '../common/interfaces/user';
-import { IInviteUser } from '../common/interfaces/auth';
-import { IPaginated } from '../common/interfaces/common';
+  IInviteUser,
+  IPaginated,
+} from '../common/interfaces';
+import { mapPageToIPage, mapLinkToILink } from '../common/mappers';
 import { env } from '../env';
-import SkillRepository from '../data/repositories/skill.repository';
-import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
-import ActivityRepository from '../data/repositories/activity.repository';
-import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
 export const getUserById = async (
   userId: string,
@@ -170,7 +172,7 @@ export const updateAvatar = async (
 
   if (userToUpdate.avatar) {
     const fileName = userToUpdate.avatar.split('/').pop();
-    const isExistsAvatar = await isFileExists(fileName);
+    const isExistsAvatar = await checkIsFileExists(fileName);
     if (isExistsAvatar) {
       await deleteFile(userToUpdate.avatar);
     }

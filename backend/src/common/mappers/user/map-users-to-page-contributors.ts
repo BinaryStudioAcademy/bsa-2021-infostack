@@ -1,5 +1,5 @@
-import { IPageContributor } from '../../interfaces/page';
-import { User } from '../../../data/entities/user';
+import { IPageContributor } from '../../interfaces';
+import { User } from '../../../data/entities';
 
 export const mapUsersToPageContributers = (
   users: User[],

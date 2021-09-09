@@ -1,8 +1,9 @@
 import puppeteer from 'puppeteer-core';
 import MarkdownIt from 'markdown-it';
+
 import { logger } from './logger.util';
 
-export const generatePDFUtil = async (
+export const generatePDF = async (
   title: string,
   content: string,
 ): Promise<Buffer> => {
@@ -30,7 +31,7 @@ export const generatePDFUtil = async (
       },
     });
   } catch (error) {
-    logger.info(error);
+    logger.info(error as string);
   } finally {
     if (browser) {
       browser.close();

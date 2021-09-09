@@ -1,35 +1,38 @@
 import { Router } from 'express';
-import { RoleType } from '../../common/enums/role';
+
+import { run } from '../../common/helpers';
 import {
   create,
   getAllByWorkspaceId,
   updateNameById,
   deleteById,
 } from '../../services/tag.service';
-import { run } from '../../common/helpers/route.helper';
-import { permit } from '../middlewares/permissions-middleware';
+import { permit } from '../middlewares';
+import { RoleType } from '../../common/enums';
 
 const router: Router = Router();
 
-router
-  .get(
-    '/',
-    run((req) => getAllByWorkspaceId(req.workspaceId)),
-  )
-  .post(
-    '/',
-    permit(RoleType.ADMIN),
-    run((req) => create(req.workspaceId, req.body.name)),
-  )
-  .put(
-    '/:id',
-    permit(RoleType.ADMIN),
-    run((req) => updateNameById(req.workspaceId, req.params.id, req.body.name)),
-  )
-  .delete(
-    '/:id',
-    permit(RoleType.ADMIN),
-    run((req) => deleteById(req.params.id)),
-  );
+router.get(
+  '/',
+  run((req) => getAllByWorkspaceId(req.workspaceId)),
+);
+
+router.post(
+  '/',
+  permit(RoleType.ADMIN),
+  run((req) => create(req.workspaceId, req.body.name)),
+);
+
+router.put(
+  '/:id',
+  permit(RoleType.ADMIN),
+  run((req) => updateNameById(req.workspaceId, req.params.id, req.body.name)),
+);
+
+router.delete(
+  '/:id',
+  permit(RoleType.ADMIN),
+  run((req) => deleteById(req.params.id)),
+);
 
 export default router;

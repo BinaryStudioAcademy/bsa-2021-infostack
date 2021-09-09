@@ -1,6 +1,6 @@
 import { ApiResponse } from '@elastic/elasticsearch/lib/Transport';
 
-import elasticsearchClient from '../elasticsearch';
+import { elasticsearchClient } from '../elasticsearch';
 import { env } from '../../env';
 import { IElasticPageContentAndComments } from '../entities';
 
@@ -34,4 +34,4 @@ class ElasticCommentRepository {
 
 const elasticCommentRepository = new ElasticCommentRepository();
 
-export default elasticCommentRepository;
+export { elasticCommentRepository };

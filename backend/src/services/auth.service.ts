@@ -1,19 +1,12 @@
-import { getCustomRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
-import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http';
-import { IUserWithTokens, IUser } from '../common/interfaces/user';
+import { getCustomRepository } from 'typeorm';
+import { google } from 'googleapis';
+
+import { HttpError } from '../common/errors';
+import { HttpCode, HttpErrorMessage } from '../common/enums';
 import {
-  generateTokens,
-  generateAccessToken,
-} from '../common/utils/tokens.util';
-import UserRepository from '../data/repositories/user.repository';
-import RefreshTokenRepository from '../data/repositories/refresh-token.repository';
-import { hash, verify } from '../common/utils/hash.util';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { sendMail } from '../common/utils/mailer.util';
-import { getAccessToken, getUser } from '../common/utils/github.util';
-import {
+  IUserWithTokens,
+  IUser,
   IResetPassword,
   IRegister,
   IRefreshToken,
@@ -21,12 +14,20 @@ import {
   ILogin,
   ISetPassword,
   IUpdatePasswordAndFullName,
-} from '../common/interfaces/auth';
+} from '../common/interfaces';
+import {
+  generateTokens,
+  generateAccessToken,
+  hash,
+  verify,
+  sendMail,
+  getAccessToken,
+  getUser,
+} from '../common/utils';
+import { mapPageToIPage, mapLinkToILink } from '../common/mappers';
+import { UserRepository, RefreshTokenRepository } from '../data/repositories';
+import { User } from '~/data/entities';
 import { env } from '../env';
-import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
-import { google } from 'googleapis';
-import { User } from '~/data/entities/user';
-import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
 
 const setTokens = async (user: IUser): Promise<ITokens> => {
   const tokens = generateTokens(user.id);
@@ -41,11 +42,11 @@ const setTokens = async (user: IUser): Promise<ITokens> => {
 };
 
 export const register = async (
-  body: IRegister,
+  payload: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
   const existingUser = await userRepository.findByEmail(
-    body.email.toLowerCase(),
+    payload.email.toLowerCase(),
   );
 
   if (existingUser && existingUser.password !== null) {
@@ -55,10 +56,10 @@ export const register = async (
     });
   }
 
-  const hashedPassword = await hash(body.password);
+  const hashedPassword = await hash(payload.password);
   const userData = {
-    ...body,
-    email: body.email.toLowerCase(),
+    ...payload,
+    email: payload.email.toLowerCase(),
     password: hashedPassword,
   };
 
@@ -74,11 +75,11 @@ export const register = async (
 };
 
 export const login = async (
-  body: ILogin,
+  payload: ILogin,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
 
-  const user = await userRepository.findByEmail(body.email.toLowerCase());
+  const user = await userRepository.findByEmail(payload.email.toLowerCase());
   if (!user || user.password === null) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
@@ -86,7 +87,7 @@ export const login = async (
     });
   }
 
-  const isPasswordCorrect = await verify(body.password, user.password);
+  const isPasswordCorrect = await verify(payload.password, user.password);
   if (!isPasswordCorrect) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
@@ -97,9 +98,9 @@ export const login = async (
   return getIUserWithTokens(user);
 };
 
-export const resetPassword = async (body: IResetPassword): Promise<void> => {
+export const resetPassword = async (payload: IResetPassword): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findByEmail(body.email.toLowerCase());
+  const user = await userRepository.findByEmail(payload.email.toLowerCase());
   if (!user) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
@@ -114,9 +115,9 @@ export const resetPassword = async (body: IResetPassword): Promise<void> => {
   await sendMail({ to: user.email, subject: 'Reset Password', text: url });
 };
 
-export const setPassword = async (body: ISetPassword): Promise<void> => {
+export const setPassword = async (payload: ISetPassword): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
-  const { token, password } = body;
+  const { token, password } = payload;
   if (!token) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
@@ -135,11 +136,11 @@ export const setPassword = async (body: ISetPassword): Promise<void> => {
 };
 
 export const updatePasswordAndFullName = async (
-  body: IUpdatePasswordAndFullName,
+  payload: IUpdatePasswordAndFullName,
 ): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
 
-  const { token, password, fullName } = body;
+  const { token, password, fullName } = payload;
   if (!token) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
@@ -160,9 +161,11 @@ export const updatePasswordAndFullName = async (
   await userRepository.save(userToUpdate);
 };
 
-export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
+export const refreshTokens = async (
+  payload: IRefreshToken,
+): Promise<ITokens> => {
   try {
-    const { refreshToken } = body;
+    const { refreshToken } = payload;
     jwt.verify(refreshToken, env.app.secretKey);
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
     const userRefreshToken = await refreshTokenRepository.findByToken(
@@ -193,8 +196,8 @@ export const refreshTokens = async (body: IRefreshToken): Promise<ITokens> => {
   }
 };
 
-export const logout = async (body: IRefreshToken): Promise<void> => {
-  const { refreshToken } = body;
+export const logout = async (payload: IRefreshToken): Promise<void> => {
+  const { refreshToken } = payload;
   const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
   const userRefreshToken = await refreshTokenRepository.findByToken(
     refreshToken,

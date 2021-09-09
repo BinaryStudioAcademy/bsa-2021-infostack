@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { Server } from 'socket.io';
-import { RequestWithSocket } from '../../common/interfaces/socket';
+
+import { RequestWithSocket } from '../../common/interfaces';
 
 export const socketInjector =
   (io: Server) =>

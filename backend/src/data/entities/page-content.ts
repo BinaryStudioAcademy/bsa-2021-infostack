@@ -1,5 +1,6 @@
 import { Entity, Column, ManyToOne, RelationId } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { Page } from './page';
 import { User } from './user';
 

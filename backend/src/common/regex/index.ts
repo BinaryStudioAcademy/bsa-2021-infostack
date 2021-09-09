@@ -1,1 +1,1 @@
-export { MENTION_CONTENTS_REGEX } from 'infostack-shared';
+export * from './mentions';

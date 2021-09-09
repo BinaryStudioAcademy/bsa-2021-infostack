@@ -1,11 +1,12 @@
 import Slugger from 'github-slugger';
-import { IPageTableOfContentsHeading } from '../interfaces/page';
+
+import { IPageTableOfContentsHeading } from '../interfaces';
 
 const parseHeadings = (markdown: string): IPageTableOfContentsHeading[] => {
   const slugger = new Slugger();
   const headings: IPageTableOfContentsHeading[] = [];
 
-  const isAlternateSyntaxHeading = (string: string): boolean => {
+  const checkIsAlternateSyntaxHeading = (string: string): boolean => {
     const trimmedString = string.trim();
     if (!trimmedString) return false;
 
@@ -56,7 +57,7 @@ const parseHeadings = (markdown: string): IPageTableOfContentsHeading[] => {
 
     const headingRegEx = /^\s{0,3}[#]{1,6}\s/;
     const isHeading = headingRegEx.test(line);
-    const isAlternateHeading = isAlternateSyntaxHeading(line);
+    const isAlternateHeading = checkIsAlternateSyntaxHeading(line);
 
     if (isHeading) {
       const level = getHeadingLevel(line);
@@ -77,7 +78,7 @@ const parseHeadings = (markdown: string): IPageTableOfContentsHeading[] => {
       const isPreviousLineHeading = headingRegEx.test(previousLine);
       const isPreviousLineEmpty = !previousLine;
       const isPreviousLineAlternateSyntaxHeading =
-        isAlternateSyntaxHeading(previousLine);
+        checkIsAlternateSyntaxHeading(previousLine);
 
       if (
         isPreviousLineHeading ||

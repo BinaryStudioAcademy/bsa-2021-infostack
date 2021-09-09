@@ -1,6 +1,7 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
-import { NotificationSettings } from '../entities/notification-settings';
-import { NotificationType } from '../../common/enums/notification-type';
+
+import { NotificationSettings } from '../entities';
+import { NotificationType } from '../../common/enums';
 
 @EntityRepository(NotificationSettings)
 class NotificationSettingsRepository extends Repository<NotificationSettings> {
@@ -25,12 +26,12 @@ class NotificationSettingsRepository extends Repository<NotificationSettings> {
     });
   }
 
-  findByUserIdsAndType(
+  public findByUserIdsAndType(
     userIds: string[],
-    type: NotificationType,
+    notificationType: NotificationType,
   ): Promise<NotificationSettings[]> {
     return this.createQueryBuilder()
-      .where('"notificationType" = :type', { type })
+      .where('"notificationType" = :type', { type: notificationType })
       .andWhere('"userId" IN (:...ids)', { ids: userIds })
       .getMany();
   }
@@ -49,4 +50,4 @@ class NotificationSettingsRepository extends Repository<NotificationSettings> {
   }
 }
 
-export default NotificationSettingsRepository;
+export { NotificationSettingsRepository };

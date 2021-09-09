@@ -1,32 +1,34 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
-import { ICommentReaction } from '../common/interfaces/comment-reaction';
-import { IRequestWithUser } from '../common/interfaces/http/request-with-user.interface';
+
 import {
   IComment,
   ICommentRequest,
   ICommentResponse,
-} from '../common/interfaces/comment';
+  ICommentReaction,
+  IRequestWithUser,
+} from '../common/interfaces';
 import {
   CommentRepository,
   NotificationRepository,
   CommentReactionRepository,
   UserRepository,
+  PageRepository,
 } from '../data/repositories';
-import { HttpCode } from '../common/enums/http';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { NotificationType } from '../common/enums/notification-type';
-import { isNotify, isNotifyMany } from '../common/helpers/check-notify.helper';
-import { HttpError } from '../common/errors/http-error';
-import { mapChildToParent } from '../common/mappers/comment/map-child-to-parent';
-import { sendMail } from '../common/utils/mailer.util';
-import { env } from '../env';
-import { EntityType } from '../common/enums/notifications/entity-type';
-import { SocketEvents } from '../common/enums/socket';
-import { uploadFile } from '../common/helpers/s3-file-storage.helper';
-import { unlinkFile } from '../common/helpers/multer.helper';
-import { transcriptAudio } from '../common/helpers/google-speach.helper';
-import PageRepository from '../data/repositories/page.repository';
+import {
+  HttpCode,
+  HttpErrorMessage,
+  NotificationType,
+  EntityType,
+  SocketEvents,
+} from '../common/enums';
+import {
+  checkIsNotify,
+  checkIsNotifyMany,
+  uploadFile,
+  unlinkFile,
+  transcriptAudio,
+} from '../common/helpers';
 import {
   commentNotification,
   commentMail,
@@ -34,8 +36,12 @@ import {
   mentionNotification,
   parseMentions,
   mentionMail,
+  sendMail,
 } from '../common/utils';
-import elasticCommentRepository from '../elasticsearch/repositories/comments.repository';
+import { HttpError } from '../common/errors';
+import { mapChildToParent } from '../common/mappers';
+import { elasticCommentRepository } from '../elasticsearch/repositories/comments.repository';
+import { env } from '../env';
 
 export const getComments = async (
   pageId: string,
@@ -75,7 +81,7 @@ export const notifyUsers = async (
     const { title, body } = mentionNotification(fullName, text);
     const mentions = mentionIds.filter((mention) => mention !== authorId);
 
-    const isNotifyCommentIds = await isNotifyMany(
+    const isNotifyCommentIds = await checkIsNotifyMany(
       mentions,
       NotificationType.COMMENT,
     );
@@ -96,7 +102,7 @@ export const notifyUsers = async (
 
     io.to(mentions).emit(SocketEvents.NOTIFICATION_NEW);
 
-    const isNotifyEmailIds = await isNotifyMany(
+    const isNotifyEmailIds = await checkIsNotifyMany(
       mentions,
       NotificationType.COMMENT_EMAIL,
     );
@@ -132,11 +138,11 @@ export const notifyUsers = async (
       return;
     }
 
-    const isNotifyComment = await isNotify(
+    const isNotifyComment = await checkIsNotify(
       parentAuthor.id,
       NotificationType.COMMENT,
     );
-    const isNotifyEmail = await isNotify(
+    const isNotifyEmail = await checkIsNotify(
       parentAuthor.id,
       NotificationType.COMMENT_EMAIL,
     );
@@ -180,7 +186,7 @@ export const notifyUsers = async (
 
   const followerIds = followers.map((follower) => follower.id);
 
-  const isNotifyCommentIds = await isNotifyMany(
+  const isNotifyCommentIds = await checkIsNotifyMany(
     followerIds,
     NotificationType.COMMENT,
   );
@@ -203,7 +209,7 @@ export const notifyUsers = async (
 
   io.to(commentNotificationIds).emit(SocketEvents.NOTIFICATION_NEW);
 
-  const isNotifyEmailIds = await isNotifyMany(
+  const isNotifyEmailIds = await checkIsNotifyMany(
     followerIds,
     NotificationType.COMMENT_EMAIL,
   );

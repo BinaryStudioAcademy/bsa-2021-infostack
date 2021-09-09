@@ -1,5 +1,6 @@
 import { EntityRepository, Repository, In } from 'typeorm';
-import { Skill } from '../entities/skill';
+
+import { Skill } from '../entities';
 
 @EntityRepository(Skill)
 class SkillRepository extends Repository<Skill> {
@@ -12,4 +13,4 @@ class SkillRepository extends Repository<Skill> {
   }
 }
 
-export default SkillRepository;
+export { SkillRepository };

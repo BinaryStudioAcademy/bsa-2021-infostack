@@ -1,8 +1,7 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
-import { IPageStatistic } from '~/common/interfaces/page';
-import { Page } from '../entities/page';
-import { PageContent } from '../entities/page-content';
-import { User } from '../entities/user';
+
+import { IPageStatistic } from '~/common/interfaces';
+import { Page, PageContent, User } from '../entities';
 
 @EntityRepository(Page)
 class PageRepository extends Repository<Page> {
@@ -294,4 +293,4 @@ class PageRepository extends Repository<Page> {
   }
 }
 
-export default PageRepository;
+export { PageRepository };

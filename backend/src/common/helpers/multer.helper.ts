@@ -1,8 +1,8 @@
 import multer, { Multer } from 'multer';
-import { Request } from 'express';
 import path from 'path';
 import util from 'util';
 import fs from 'fs';
+import { Request } from 'express';
 
 const fileFilter = (
   _req: Request,

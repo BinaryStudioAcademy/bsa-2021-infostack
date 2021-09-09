@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt from 'jsonwebtoken';
+
 import { env } from '../../env';
 import {
   ACCESS_TOKEN_EXPIRES_IN,
   REFRESH_TOKEN_EXPIRES_IN,
   INVITE_TOKEN_EXPIRES_IN,
 } from '../../config/jwt-config';
-import { ITokens } from '../interfaces/auth';
+import { ITokens } from '../interfaces';
 
 const { secretKey } = env.app;
 

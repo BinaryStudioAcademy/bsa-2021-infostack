@@ -1,8 +1,9 @@
 import { Entity, Column, RelationId, ManyToOne, ManyToMany } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { Page } from './page';
 import { Workspace } from './workspace';
-import { TagType } from '../../common/enums/tags';
+import { TagType } from '../../common/enums';
 
 @Entity()
 export class Tag extends AbstractEntity {

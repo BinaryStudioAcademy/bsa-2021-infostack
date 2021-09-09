@@ -1,7 +1,7 @@
 import { Hit } from '@elastic/elasticsearch/api/types';
 
 import { IElasticPageContentAndComments } from '../../../elasticsearch';
-import { IFoundPageContent } from '../../interfaces/page';
+import { IFoundPageContent } from '../../interfaces';
 
 const mapSearchHitElasticPageContentToFoundPageContent = (
   hits: Hit<IElasticPageContentAndComments>[],
@@ -53,4 +53,4 @@ const mapSearchHitElasticPageContentToFoundPageContent = (
     .flat();
 };
 
-export default mapSearchHitElasticPageContentToFoundPageContent;
+export { mapSearchHitElasticPageContentToFoundPageContent };

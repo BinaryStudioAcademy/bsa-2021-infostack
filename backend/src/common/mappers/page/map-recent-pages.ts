@@ -1,12 +1,12 @@
-import { IPageStatistic } from '../../interfaces/page';
-import { RecentPage } from '../../../data/entities/recent-pages';
+import { IPageStatistic } from '../../interfaces';
+import { RecentPage } from '../../../data/entities';
 
 export const mapToRecentPage = (
   recentPages: RecentPage[],
 ): IPageStatistic[] => {
-  const cutRecentPages: RecentPage[] = recentPages.slice(0, 5);
+  const slicedRecentPages: RecentPage[] = recentPages.slice(0, 5);
 
-  const mappedRecentPages = cutRecentPages.map(
+  const mappedRecentPages = slicedRecentPages.map(
     ({ pageId, createdAt, page }) => ({
       date: createdAt.toLocaleString(),
       pageId,

@@ -1,9 +1,9 @@
-import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { HttpCode } from '../../common/enums/http';
-import { HttpErrorMessage } from '../../common/enums/http-error-message';
-import whiteListRoutes from '../../config/white-list-routes-config';
-import { IRequestWithUser } from 'src/common/interfaces/http';
+import { Response, NextFunction } from 'express';
+
+import { HttpErrorMessage, HttpCode } from '../../common/enums';
+import { whiteListRoutes } from '../../config';
+import { IRequestWithUser } from '../../common/interfaces';
 import { env } from '../../env';
 
 export const auth = (

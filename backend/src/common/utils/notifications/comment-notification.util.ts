@@ -1,4 +1,4 @@
-import { MAX_NOTIFICATION_TITLE_LENGTH } from '../../constants/notification';
+import { MAX_NOTIFICATION_TITLE_LENGTH } from '../../constants';
 import { NotificationGen } from '../../types';
 
 export const commentNotification = (

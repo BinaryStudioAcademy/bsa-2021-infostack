@@ -1,11 +1,11 @@
 import { users } from '../seed-data/user.data';
-import { User } from '../entities/user';
-import { asyncForEach } from '../../common/helpers/array.helper';
-import { hash } from '../../common/utils/hash.util';
+import { User } from '../entities';
+import { asyncForEach } from '../../common/helpers';
+import { hash } from '../../common/utils';
 
-export default class UserSeeder {
+export class UserSeeder {
   public static async execute(): Promise<void> {
-    await asyncForEach(async user => {
+    await asyncForEach(async (user) => {
       const password = await hash(user.password);
       await Object.assign(new User(), { ...user, password }).save();
     }, users);

@@ -1,6 +1,7 @@
 import { Entity, PrimaryColumn, ManyToOne, RelationId, Index } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
-import { NotificationType } from '../../common/enums/notification-type';
+
+import { AbstractEntity } from '../abstract';
+import { NotificationType } from '../../common/enums';
 import { User } from './user';
 
 @Entity()

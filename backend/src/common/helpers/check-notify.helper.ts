@@ -1,6 +1,7 @@
 import { getCustomRepository } from 'typeorm';
+
 import { NotificationSettingsRepository } from '../../data/repositories';
-import { NotificationType } from '../enums/notification-type';
+import { NotificationType } from '../enums';
 
 export const checkIsNotify = async (
   userId: string,

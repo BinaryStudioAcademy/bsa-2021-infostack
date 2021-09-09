@@ -1,9 +1,9 @@
 import fs from 'fs';
 import S3 from 'aws-sdk/clients/s3';
+import mime from 'mime-types';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/error';
 import { env } from '../../env';
-import mime from 'mime-types';
 
 import { HttpCode, HttpErrorMessage } from '../enums';
 import { HttpError } from '../errors';

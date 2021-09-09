@@ -1,4 +1,4 @@
-import { IUserActivity, IUserActivityRawResult } from '../../interfaces/user';
+import { IUserActivity, IUserActivityRawResult } from '../../interfaces';
 
 const mapUserActivitiesRawResultsToUserActivities = (
   result: IUserActivityRawResult[],

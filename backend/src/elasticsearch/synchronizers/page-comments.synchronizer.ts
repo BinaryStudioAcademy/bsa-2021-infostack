@@ -1,9 +1,8 @@
 import { getCustomRepository } from 'typeorm';
 
-import { asyncForEach } from '../../common/helpers/array.helper';
-import CommentRepository from '../../data/repositories/comment.repository';
-import PageRepository from '../../data/repositories/page.repository';
-import elasticCommentRepository from '../repositories/comments.repository';
+import { asyncForEach } from '../../common/helpers';
+import { PageRepository, CommentRepository } from '../../data/repositories';
+import { elasticCommentRepository } from '../repositories';
 
 class ElasticCommentsSynchronizer {
   public static async execute(): Promise<void> {
@@ -23,4 +22,4 @@ class ElasticCommentsSynchronizer {
   }
 }
 
-export default ElasticCommentsSynchronizer;
+export { ElasticCommentsSynchronizer };

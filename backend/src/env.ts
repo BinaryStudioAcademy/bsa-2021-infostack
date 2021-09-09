@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
-import { isStringTrue } from './common/helpers/boolean.helper';
-import { getOsEnv } from './common/helpers/path.helper';
+import { checkIsStringTrue, getOsEnv } from './common/helpers';
 
 dotenv.config();
 
@@ -20,11 +19,11 @@ export const env = {
     username: getOsEnv('TYPEORM_USERNAME'),
     password: getOsEnv('TYPEORM_PASSWORD'),
     name: getOsEnv('TYPEORM_DATABASE'),
-    synchronize: isStringTrue(getOsEnv('TYPEORM_SYNCHRONIZE')),
-    migrationsRun: isStringTrue(getOsEnv('TYPEORM_MIGRATIONS_RUN')),
+    synchronize: checkIsStringTrue(getOsEnv('TYPEORM_SYNCHRONIZE')),
+    migrationsRun: checkIsStringTrue(getOsEnv('TYPEORM_MIGRATIONS_RUN')),
     migrationsDir: getOsEnv('TYPEORM_MIGRATIONS'),
     enititiesDir: getOsEnv('TYPEORM_ENTITIES'),
-    logging: isStringTrue(getOsEnv('TYPEORM_LOGGING')),
+    logging: checkIsStringTrue(getOsEnv('TYPEORM_LOGGING')),
   },
   s3: {
     accessKeyId: getOsEnv('AWS_ACCESS_KEY'),

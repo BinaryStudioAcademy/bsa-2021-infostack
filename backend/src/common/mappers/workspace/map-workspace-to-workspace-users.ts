@@ -1,5 +1,5 @@
-import { IWorkspaceUser } from '../../interfaces/workspace';
-import { Workspace } from '../../../data/entities/workspace';
+import { IWorkspaceUser } from '../../interfaces';
+import { Workspace } from '../../../data/entities';
 
 export const mapWorkspaceToWorkspaceUsers = (
   workspace: Workspace,

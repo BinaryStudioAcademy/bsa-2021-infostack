@@ -1,5 +1,5 @@
-import { PageShareLink } from 'src/data/entities/page-share-link';
-import { ILink } from '~/common/interfaces/link';
+import { PageShareLink } from '~/data/entities';
+import { ILink } from '~/common/interfaces';
 
 export const mapLinkToILink = (link: PageShareLink): ILink => {
   const { id, pageId, userId, createdAt, expireAt, name } = link;

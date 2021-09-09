@@ -1,10 +1,9 @@
 import { getCustomRepository } from 'typeorm';
 
-import { asyncForEach } from '../../common/helpers/array.helper';
+import { asyncForEach } from '../../common/helpers';
 import { comments } from '../../data/seed-data/comment.data';
-
-import PageRepository from '../../data/repositories/page.repository';
-import elasticCommentRepository from '../repositories/comments.repository';
+import { PageRepository } from '../../data/repositories';
+import { elasticCommentRepository } from '../repositories';
 
 class ElasticCommentSeeder {
   private static _insertedCommentIds = new Set<string>();
@@ -30,4 +29,4 @@ class ElasticCommentSeeder {
   }
 }
 
-export default ElasticCommentSeeder;
+export { ElasticCommentSeeder };

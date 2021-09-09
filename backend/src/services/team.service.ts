@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
+
 import {
   UserRepository,
   UserWorkspaceRepository,
@@ -8,29 +9,31 @@ import {
   TeamPermissionRepository,
   TeamRepository,
 } from '../data/repositories';
-import { Team } from '../data/entities/team';
-import { ITeam, ITeamCreation } from '../common/interfaces/team';
-import { mapTeamToITeam } from '../common/mappers/team/map-team-to-iteam';
-import { mapTeamsToITeams } from '../common/mappers/team/map-teams-to-iteams';
-import { mapTeamToITeamWithoutRoles } from '../common/mappers/team/map-team-to-iteam-without-roles';
-import { HttpCode } from '../common/enums/http';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { EntityType } from '../common/enums/notifications/entity-type';
-import { SocketEvents } from '../common/enums/socket';
-import { NotificationType } from '../common/enums/notification-type';
-import { HttpError } from '../common/errors/http-error';
-import { sendMail } from '../common/utils/mailer.util';
+import { ITeam, ITeamCreation } from '../common/interfaces';
+import {
+  mapTeamToITeam,
+  mapTeamsToITeams,
+  mapTeamToITeamWithoutRoles,
+} from '../common/mappers';
+import {
+  HttpCode,
+  HttpErrorMessage,
+  EntityType,
+  SocketEvents,
+  NotificationType,
+} from '../common/enums';
 import {
   teamNotificationAddUser,
   teamNotificationDeleteUser,
   teamNotificationDelete,
-} from '../common/utils/notifications';
-import {
   teamMailAddUser,
   teamMailDeleteUser,
   teamMailDelete,
-} from '../common/utils/mail';
-import { isNotify } from '../common/helpers/check-notify.helper';
+  sendMail,
+} from '../common/utils';
+import { checkIsNotify } from '../common/helpers';
+import { HttpError } from '../common/errors';
+import { Team } from '../data/entities';
 import { env } from '../env';
 
 export const getAllByWorkspaceId = async (
@@ -204,8 +207,8 @@ export const remove = async (
     if (user.id === team.owner) {
       continue;
     }
-    const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
-    const isNotifyTeamEmail = await isNotify(
+    const isNotifyTeam = await checkIsNotify(user.id, NotificationType.TEAM);
+    const isNotifyTeamEmail = await checkIsNotify(
       user.id,
       NotificationType.TEAM_EMAIL,
     );
@@ -259,8 +262,8 @@ export const addUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
-  const isNotifyTeamEmail = await isNotify(
+  const isNotifyTeam = await checkIsNotify(user.id, NotificationType.TEAM);
+  const isNotifyTeamEmail = await checkIsNotify(
     user.id,
     NotificationType.TEAM_EMAIL,
   );
@@ -315,8 +318,8 @@ export const deleteUser = async (
 
   const teamsWithUsersRoles = mapTeamsToITeams(teams);
 
-  const isNotifyTeam = await isNotify(user.id, NotificationType.TEAM);
-  const isNotifyTeamEmail = await isNotify(
+  const isNotifyTeam = await checkIsNotify(user.id, NotificationType.TEAM);
+  const isNotifyTeamEmail = await checkIsNotify(
     user.id,
     NotificationType.TEAM_EMAIL,
   );

@@ -8,7 +8,8 @@ import {
   TreeParent,
   OneToMany,
 } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { Page } from './page';
 import { User } from './user';
 import { Reaction } from './reaction';

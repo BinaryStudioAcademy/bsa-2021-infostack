@@ -1,12 +1,12 @@
-import { userWorkspaces } from '../seed-data/user-workspace.data';
-import { UserWorkspace } from '../entities/user-workspace';
-import { asyncForEach } from '../../common/helpers/array.helper';
 import { getCustomRepository } from 'typeorm';
-import UserRepository from '../repositories/user.repository';
-import WorkspaceRepository from '../repositories/workspace.repository';
-import { RoleType } from '../../common/enums/role';
 
-export default class UserWorkspaceSeeder {
+import { userWorkspaces } from '../seed-data/user-workspace.data';
+import { UserWorkspace } from '../entities';
+import { asyncForEach } from '../../common/helpers';
+import { UserRepository, WorkspaceRepository } from '../repositories';
+import { RoleType } from '../../common/enums';
+
+export class UserWorkspaceSeeder {
   public static async execute(): Promise<void> {
     const userRepository = getCustomRepository(UserRepository);
     const workspaceRepository = getCustomRepository(WorkspaceRepository);

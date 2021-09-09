@@ -1,5 +1,6 @@
 import { Entity, Column, OneToMany, ManyToMany } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { RefreshToken } from './refresh-token';
 import { UserWorkspace } from './user-workspace';
 import { Page } from './page';

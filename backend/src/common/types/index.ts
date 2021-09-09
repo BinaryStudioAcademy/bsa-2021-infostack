@@ -1,2 +1,2 @@
-export { MailGen } from './mail-gen.type';
-export { NotificationGen } from './notification-gen.type';
+export * from './mail-gen.type';
+export * from './notification-gen.type';

@@ -1,9 +1,8 @@
 import { pages } from '../seed-data/page.data';
-import { Page } from '../entities/page';
-import { UserPermission } from '../entities/user-permission';
-import { asyncForEach } from '../../common/helpers/array.helper';
+import { Page, UserPermission } from '../entities';
+import { asyncForEach } from '../../common/helpers';
 
-export default class PageSeeder {
+export class PageSeeder {
   public static async execute(): Promise<void> {
     await asyncForEach(async (page) => {
       const { id: pageId, authorId: userId } = page;

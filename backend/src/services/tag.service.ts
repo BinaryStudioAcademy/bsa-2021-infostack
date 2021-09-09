@@ -1,9 +1,9 @@
 import { getCustomRepository } from 'typeorm';
-import { ITag } from '../common/interfaces/tag';
-import TagRepository from '../data/repositories/tag.repository';
-import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
+
+import { ITag } from '../common/interfaces';
+import { TagRepository } from '../data/repositories';
+import { HttpError } from '../common/errors';
+import { HttpErrorMessage, HttpCode } from '../common/enums';
 
 export const getAllByWorkspaceId = async (
   workspaceId: string,

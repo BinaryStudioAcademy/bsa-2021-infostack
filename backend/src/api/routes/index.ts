@@ -1,4 +1,5 @@
 import { Express } from 'express';
+
 import userRoute from './user-route';
 import authRoute from './auth-route';
 import pageRoute from './page-route';

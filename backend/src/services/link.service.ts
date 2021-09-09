@@ -1,10 +1,10 @@
 import { getCustomRepository } from 'typeorm';
-import { IShareLink } from '../common/interfaces/page';
-import PageShareLinkRepository from '../data/repositories/share-link.repository';
-import { mapLinkToILink } from '../common/mappers/link/map-link-to-ilink';
-import { ILinkShareable } from '../common/interfaces/link';
+
+import { IShareLink, ILinkShareable } from '../common/interfaces';
+import { PageShareLinkRepository } from '../data/repositories';
+import { mapLinkToILink } from '../common/mappers';
+import { encrypt } from '../common/helpers';
 import { env } from '../env';
-import { encrypt } from '../common/helpers/crypto.helper';
 
 export const extendExpirationDate = async (
   id: string,

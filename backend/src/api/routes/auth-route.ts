@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { run } from '../../common/helpers/route.helper';
-import { signUpSchema, loginSchema } from '../../common/validations';
+
+import { run } from '../../common/helpers';
+import { signupSchema, loginSchema } from '../../common/validations';
 import {
   login,
   register,
@@ -19,7 +20,7 @@ const router: Router = Router();
 
 router.post(
   '/register',
-  validationMiddleware(signUpSchema),
+  validationMiddleware(signupSchema),
   run((req) => register(req.body)),
 );
 

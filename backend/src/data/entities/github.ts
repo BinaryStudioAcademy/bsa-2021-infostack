@@ -1,5 +1,6 @@
 import { Entity, Column, RelationId, OneToOne } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { Workspace } from './workspace';
 
 @Entity()

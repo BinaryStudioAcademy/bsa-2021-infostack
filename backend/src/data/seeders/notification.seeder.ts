@@ -1,8 +1,8 @@
 import { notifications } from '../seed-data/notification.data';
-import { Notification } from '../entities/notification';
-import { asyncForEach } from '../../common/helpers/array.helper';
+import { Notification } from '../entities';
+import { asyncForEach } from '../../common/helpers';
 
-export default class NotificationSeeder {
+export class NotificationSeeder {
   public static async execute(): Promise<void> {
     await asyncForEach(async (notification) => {
       await Object.assign(new Notification(), { ...notification }).save();

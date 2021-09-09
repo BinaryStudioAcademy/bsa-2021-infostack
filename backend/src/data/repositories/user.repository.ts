@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { PageContent } from '../entities/page-content';
-import { User } from '../entities/user';
+
+import { PageContent, User } from '../entities';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
@@ -86,4 +86,4 @@ class UserRepository extends Repository<User> {
   }
 }
 
-export default UserRepository;
+export { UserRepository };

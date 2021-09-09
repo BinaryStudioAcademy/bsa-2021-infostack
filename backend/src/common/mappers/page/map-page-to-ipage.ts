@@ -1,5 +1,5 @@
-import { Page } from 'src/data/entities/page';
-import { IPage } from '~/common/interfaces/page';
+import { Page } from 'src/data/entities';
+import { IPage } from '~/common/interfaces';
 
 export const mapPageToIPage = (page: Page): IPage => {
   const {
@@ -14,7 +14,7 @@ export const mapPageToIPage = (page: Page): IPage => {
   } = page;
 
   const mappedChildren = childPages?.map(mapPageToIPage);
-  const mappedpageContents = pageContents?.map((content) => ({
+  const mappedPageContents = pageContents?.map((content) => ({
     ...content,
     createdAt: content.createdAt?.toISOString(),
     updatedAt: content.updatedAt?.toISOString(),
@@ -54,7 +54,7 @@ export const mapPageToIPage = (page: Page): IPage => {
     authorId,
     parentPageId,
     childPages: mappedChildren,
-    pageContents: mappedpageContents,
+    pageContents: mappedPageContents,
     followingUsers: mappedFollowingUsers,
     pinnedUsers: mappedPinnedUsers,
     draft: mappedDraft,

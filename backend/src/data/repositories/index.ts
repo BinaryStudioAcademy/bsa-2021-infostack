@@ -1,23 +1,20 @@
-import CommentRepository from './comment.repository';
-import UserRepository from './user.repository';
-import UserWorkspaceRepository from './user-workspace.repository';
-import WorkspaceRepository from './workspace.repository';
-import TeamPermissionRepository from './team-permission.repository';
-import TeamRepository from './team.repository';
-import NotificationRepository from './notification.repository';
-import NotificationSettingsRepository from './notification-settings.repository';
-import CommentReactionRepository from './comment-reaction.repository';
-import RecentPagesRepository from './recent-pages.repository';
-
-export {
-  UserRepository,
-  UserWorkspaceRepository,
-  WorkspaceRepository,
-  TeamRepository,
-  TeamPermissionRepository,
-  NotificationRepository,
-  NotificationSettingsRepository,
-  CommentRepository,
-  CommentReactionRepository,
-  RecentPagesRepository,
-};
+export * from './activity.repository';
+export * from './comment-reaction.repository';
+export * from './comment.repository';
+export * from './draft.repository';
+export * from './github.repository';
+export * from './notification.repository';
+export * from './notification-settings.repository';
+export * from './page-content.repository';
+export * from './page.repository';
+export * from './recent-pages.repository';
+export * from './refresh-token.repository';
+export * from './share-link.repository';
+export * from './skill.repository';
+export * from './tag.repository';
+export * from './team-permission.repository';
+export * from './team.repository';
+export * from './user-permission.repository';
+export * from './user-workspace.repository';
+export * from './user.repository';
+export * from './workspace.repository';

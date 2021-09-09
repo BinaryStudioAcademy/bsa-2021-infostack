@@ -8,7 +8,8 @@ import {
   OneToOne,
   JoinTable,
 } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { User } from './user';
 import { Workspace } from './workspace';
 import { UserPermission } from './user-permission';

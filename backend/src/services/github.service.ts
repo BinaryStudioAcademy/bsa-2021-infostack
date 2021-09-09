@@ -2,30 +2,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
-import TagRepository from '../data/repositories/tag.repository';
-import GitHubRepository from '../data/repositories/github.repository';
-import PageRepository from '../data/repositories/page.repository';
-import { NotificationRepository } from '../data/repositories';
+
+import {
+  TagRepository,
+  GitHubRepository,
+  PageRepository,
+  NotificationRepository,
+} from '../data/repositories';
 import {
   getAccessToken,
   getUser,
   getRepositories,
   getRepoLabels,
   createWebhook,
-} from '../common/utils/github.util';
-import {
   generateGithubAccessToken,
   decodeToken,
-} from '../common/utils/tokens.util';
-import { prNotification } from '../common/utils/notifications';
-import { prMail } from '../common/utils/mail';
-import { isNotify } from '../common/helpers/check-notify.helper';
-import { sendMail } from '../common/utils/mailer.util';
-import { TagType } from '../common/enums/tags';
-import { HttpCode } from '../common/enums/http';
-import { EntityType } from '../common/enums/notifications/entity-type';
-import { NotificationType } from '../common/enums/notification-type';
-import { SocketEvents } from '../common/enums/socket';
+  prNotification,
+  prMail,
+  sendMail,
+} from '../common/utils';
+import {
+  TagType,
+  HttpCode,
+  EntityType,
+  NotificationType,
+  SocketEvents,
+} from '../common/enums';
+import { checkIsNotify } from '../common/helpers';
 import { env } from '../env';
 
 export const createAccessToken = async (
@@ -163,8 +166,11 @@ export const prWebhookHandler = async (io: Server, pr: any): Promise<void> => {
       for (const followingUser of followingUsers) {
         const { id, email } = followingUser;
 
-        const isNotifyPage = await isNotify(id, NotificationType.PAGE);
-        const isNotifyEmail = await isNotify(id, NotificationType.PAGE_EMAIL);
+        const isNotifyPage = await checkIsNotify(id, NotificationType.PAGE);
+        const isNotifyEmail = await checkIsNotify(
+          id,
+          NotificationType.PAGE_EMAIL,
+        );
         if (isNotifyPage) {
           io.to(id).emit(SocketEvents.NOTIFICATION_NEW);
           const { title, body } = prNotification(pr.title);

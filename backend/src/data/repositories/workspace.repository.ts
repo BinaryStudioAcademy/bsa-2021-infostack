@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Workspace } from '../entities/workspace';
+
+import { Workspace } from '../entities';
 
 @EntityRepository(Workspace)
 class WorkspaceRepository extends Repository<Workspace> {
@@ -34,4 +35,4 @@ class WorkspaceRepository extends Repository<Workspace> {
   }
 }
 
-export default WorkspaceRepository;
+export { WorkspaceRepository };

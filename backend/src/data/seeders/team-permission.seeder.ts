@@ -1,12 +1,12 @@
-import { teamPermissions } from '../seed-data/team-permission.data';
-import { TeamPermission } from '../entities/team-permission';
-import { asyncForEach } from '../../common/helpers/array.helper';
 import { getCustomRepository } from 'typeorm';
-import TeamRepository from '../repositories/team.repository';
-import PageRepository from '../repositories/page.repository';
-import { PermissionType } from '../../common/enums/permissions';
 
-export default class TeamPermissionSeeder {
+import { teamPermissions } from '../seed-data/team-permission.data';
+import { TeamPermission } from '../entities';
+import { asyncForEach } from '../../common/helpers';
+import { TeamRepository, PageRepository } from '../repositories';
+import { PermissionType } from '../../common/enums';
+
+export class TeamPermissionSeeder {
   public static async execute(): Promise<void> {
     const teamRepository = getCustomRepository(TeamRepository);
     const pageRepository = getCustomRepository(PageRepository);

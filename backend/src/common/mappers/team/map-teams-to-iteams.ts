@@ -1,5 +1,5 @@
-import { ITeam } from '../../interfaces/team';
-import { Team } from '../../../data/entities/team';
+import { ITeam } from '../../interfaces';
+import { Team } from '../../../data/entities';
 
 export const mapTeamsToITeams = (teams: Team[]): ITeam[] => {
   const teamsWithRoles = teams.map((team) => {

@@ -1,6 +1,6 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
-import { Comment } from '../entities/comment';
-import { User } from '../entities/user';
+
+import { Comment, User } from '../entities';
 
 @EntityRepository(Comment)
 class CommentRepository extends Repository<Comment> {
@@ -54,7 +54,7 @@ class CommentRepository extends Repository<Comment> {
       .execute();
   }
 
-  public async findPageByCommentId(id: string): Promise<Comment> {
+  public findPageByCommentId(id: string): Promise<Comment> {
     return this.findOne(
       { id },
       {
@@ -64,4 +64,4 @@ class CommentRepository extends Repository<Comment> {
   }
 }
 
-export default CommentRepository;
+export { CommentRepository };

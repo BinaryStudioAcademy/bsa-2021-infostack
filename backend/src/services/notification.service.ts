@@ -1,13 +1,14 @@
 import { getCustomRepository } from 'typeorm';
-import { EntityType } from '../common/enums/notifications/entity-type';
-import { INotification } from '../common/interfaces/notification';
+
+import { EntityType } from '../common/enums';
+import { INotification } from '../common/interfaces';
 import {
   CommentRepository,
   NotificationRepository,
+  PageRepository,
 } from '../data/repositories';
-import PageRepository from '../data/repositories/page.repository';
-import { mapNotificationToINotification } from '../common/mappers/notification/map-notification-to-inotification';
-import { Notification } from '../data/entities/notification';
+import { mapNotificationToINotification } from '../common/mappers';
+import { Notification } from '../data/entities';
 
 const setSubtitleToComment = async (
   notification: Notification,

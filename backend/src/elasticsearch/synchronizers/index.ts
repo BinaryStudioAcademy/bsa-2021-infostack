@@ -2,12 +2,12 @@ import { createConnection } from 'typeorm';
 
 import { logger } from '../../common/utils/logger.util';
 
-import ormconfig from '../../config/ormconfig';
-import ElasticCommentsSynchronizer from './page-comments.synchronizer';
-import ElasticPageContentSynchronizer from './page-content.synchronizer';
+import { dbConfig } from '../../config/ormconfig';
+import { ElasticCommentsSynchronizer } from './page-comments.synchronizer';
+import { ElasticPageContentSynchronizer } from './page-content.synchronizer';
 
 const synchronizers = async (): Promise<void> => {
-  await createConnection(ormconfig);
+  await createConnection(dbConfig);
   logger.info('Connection created');
 
   logger.info('Synchronizing elastic with db page contents');

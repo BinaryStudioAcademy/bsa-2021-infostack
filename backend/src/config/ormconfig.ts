@@ -1,13 +1,14 @@
 import { parse } from 'pg-connection-string';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+
 import { env } from '../env';
 
 const getDbConfig = (): PostgresConnectionOptions => {
   const ssl =
     env.app.nodeEnv === 'production'
       ? {
-        rejectUnauthorized: false,
-      }
+          rejectUnauthorized: false,
+        }
       : false;
 
   const baseConfig: PostgresConnectionOptions = {
@@ -48,4 +49,4 @@ const getDbConfig = (): PostgresConnectionOptions => {
   };
 };
 
-export default getDbConfig();
+export const dbConfig = getDbConfig();

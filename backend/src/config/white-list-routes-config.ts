@@ -1,4 +1,4 @@
-export default [
+export const whiteListRoutes = [
   '/auth/login',
   '/auth/login/google',
   '/auth/login/github',

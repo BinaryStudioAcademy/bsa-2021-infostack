@@ -7,7 +7,8 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { Workspace } from './workspace';
 import { TeamPermission } from './team-permission';
 import { User } from './user';

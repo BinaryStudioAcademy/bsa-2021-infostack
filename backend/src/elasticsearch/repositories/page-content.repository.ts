@@ -6,7 +6,7 @@ import {
 } from '@elastic/elasticsearch/lib/Transport';
 
 import { IElasticPageContentAndComments } from '../entities';
-import elasticsearchClient from '../elasticsearch';
+import { elasticsearchClient } from '../elasticsearch';
 import { env } from '../../env';
 
 const {
@@ -83,4 +83,4 @@ class ElasticPageContentRepository {
 
 const elasticPageContentRepository = new ElasticPageContentRepository();
 
-export default elasticPageContentRepository;
+export { elasticPageContentRepository };

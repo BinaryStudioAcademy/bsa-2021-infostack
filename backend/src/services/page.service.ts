@@ -1,23 +1,32 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
 import 'datejs';
-import { generatePDFUtil } from '../common/utils/generate-pdf.util';
-import PageRepository from '../data/repositories/page.repository';
-import UserRepository from '../data/repositories/user.repository';
-import TeamRepository from '../data/repositories/team.repository';
-import TeamPermissionRepository from '../data/repositories/team-permission.repository';
-import UserPermissionRepository from '../data/repositories/user-permission.repository';
-import PageContentRepository from '../data/repositories/page-content.repository';
-import UserWorkspaceRepository from '../data/repositories/user-workspace.repository';
-import TagRepository from '../data/repositories/tag.repository';
-import PageShareLinkRepository from '../data/repositories/share-link.repository';
-import DraftRepository from '../data/repositories/draft.repository';
-import { SocketEvents } from '../common/enums/socket';
-import { PermissionType } from '../common/enums/permissions';
-import { ParticipantType } from '../common/enums/participant';
-import { InviteStatus } from '../common/enums/workspace';
-import { IParticipant } from '../common/interfaces/participant';
+
+import { generatePDF, parseHeadings, sendMail } from '../common/utils';
 import {
+  PageRepository,
+  UserRepository,
+  TeamRepository,
+  TeamPermissionRepository,
+  UserPermissionRepository,
+  PageContentRepository,
+  UserWorkspaceRepository,
+  TagRepository,
+  PageShareLinkRepository,
+  DraftRepository,
+  RecentPagesRepository,
+} from '../data/repositories';
+import {
+  SocketEvents,
+  PermissionType,
+  ParticipantType,
+  InviteStatus,
+  HttpCode,
+  HttpErrorMessage,
+  RoleType,
+} from '../common/enums';
+import {
+  IParticipant,
   IPageRequest,
   IPageNav,
   IPage,
@@ -29,28 +38,23 @@ import {
   IPageShare,
   IFoundPageContent,
   IExportPDF,
+  ITag,
   IPageStatistic,
-} from '../common/interfaces/page';
-import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
-import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
-import { mapPageToIPage } from '../common/mappers/page/map-page-to-ipage';
-import { mapPermissionstoParticipants } from '../common/mappers/page/map-permissions-to-participants';
-import { getMaxPermission } from '../common/helpers/permissions.helper';
-import { Page } from '../data/entities/page';
-import { mapPageToContributors } from '../common/mappers/page/map-page-contents-to-contributors';
-import { ITag } from '../common/interfaces/tag';
-import { parseHeadings } from '../common/utils/markdown.util';
-import { HttpError } from '../common/errors/http-error';
-import { HttpCode } from '../common/enums/http';
-import { HttpErrorMessage } from '../common/enums/http-error-message';
-import { decrypt, encrypt } from '../common/helpers/crypto.helper';
+} from '../common/interfaces';
+import {
+  mapPagesToPagesNav,
+  mapPagesToPagesNavWithoutChildren,
+  mapPageToIPage,
+  mapPermissionstoParticipants,
+  mapPageToContributors,
+  mapSearchHitElasticPageContentToFoundPageContent,
+  mapToRecentPage,
+} from '../common/mappers';
+import { getMaxPermission, decrypt, encrypt } from '../common/helpers';
+import { Page } from '../data/entities';
+import { HttpError } from '../common/errors';
+import { elasticPageContentRepository } from '../elasticsearch/repositories/page-content.repository';
 import { env } from '../env';
-import { sendMail } from '../common/utils/mailer.util';
-import elasticPageContentRepository from '../elasticsearch/repositories/page-content.repository';
-import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
-import { RecentPagesRepository } from '../data/repositories';
-import { mapToRecentPage } from '../common/mappers/page/map-recent-pages.helper';
-import { RoleType } from '../common/enums/role';
 
 export const createPage = async (
   userId: string,
@@ -834,7 +838,7 @@ export const downloadPDF = async (pageId: string): Promise<Buffer> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithLastContent(pageId);
   const { title, content } = page.pageContents[0];
-  const file = await generatePDFUtil(title, content);
+  const file = await generatePDF(title, content);
 
   return file;
 };
@@ -848,7 +852,7 @@ export const sendPDF = async (
   const page = await pageRepository.findByIdWithLastContent(pageId);
   const { title, content } = page.pageContents[0];
 
-  const file = await generatePDFUtil(title, content);
+  const file = await generatePDF(title, content);
 
   await sendMail({
     to: email,

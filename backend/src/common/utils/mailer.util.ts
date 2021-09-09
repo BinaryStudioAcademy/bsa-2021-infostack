@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
-import { env } from '../../env';
 import { google } from 'googleapis';
+
+import { env } from '../../env';
 
 const { mailer } = env;
 

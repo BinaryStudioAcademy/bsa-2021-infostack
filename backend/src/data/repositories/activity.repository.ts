@@ -1,15 +1,16 @@
-import { IPagination } from '../../common/interfaces/common';
 import { getManager } from 'typeorm';
-import { mapGetActivitiesResultToUserActivities } from '../../common/mappers/user/map-user-activities-raw-results-to-user-activities';
-import { IUserActivity } from '../../common/interfaces/user';
+
+import { IPagination } from '../../common/interfaces';
+import { mapGetActivitiesResultToUserActivities } from '../../common/mappers';
+import { IUserActivity } from '../../common/interfaces';
 
 class ActivityRepository {
-  private _manager = getManager();
+  private manager = getManager();
 
   public async getAll(
     options?: Partial<IPagination> & { userId: string; workspaceId: string },
   ): Promise<IUserActivity[]> {
-    const result = await this._manager.query(
+    const result = await this.manager.query(
       `
       select * from (
         select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
@@ -42,7 +43,7 @@ ${options.skip ? `offset ${options.skip}` : ''}`,
   }
 
   public async countAll(userId: string, workspaceId: string): Promise<number> {
-    const [{ count }] = await this._manager.query(
+    const [{ count }] = await this.manager.query(
       `
       select count(id) from (select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
       inner join "user" on comment."authorId" = "user".id
@@ -69,7 +70,7 @@ where u.id = $1 and "pageId" = records."pageId")`,
   public async getCreatedByUserId(
     options: Partial<IPagination> & { userId: string; workspaceId: string },
   ): Promise<IUserActivity[]> {
-    const result = await this._manager.query(
+    const result = await this.manager.query(
       `
       select * from (
         select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
@@ -103,7 +104,7 @@ where u.id = $1 and "pageId" = records."pageId")`,
     userId: string,
     workspaceId: string,
   ): Promise<number> {
-    const [{ count }] = await this._manager.query(
+    const [{ count }] = await this.manager.query(
       `
       select count(id) from (
         select comment.id as id, comment."authorId", "user"."fullName", "user".avatar, (extract(epoch from comment."createdAt"::timestamp)) as "createdAtTimestamp", comment."pageId", text as content, ('comment') as type, p.title, (true) as "isNew" from comment
@@ -131,4 +132,4 @@ where u.id = $1 and "pageId" = records."pageId")`,
   }
 }
 
-export default ActivityRepository;
+export { ActivityRepository };

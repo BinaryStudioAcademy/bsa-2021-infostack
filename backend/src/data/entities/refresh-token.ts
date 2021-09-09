@@ -6,6 +6,7 @@ import {
   RelationId,
   BaseEntity,
 } from 'typeorm';
+
 import { User } from './user';
 
 @Entity()
@@ -17,6 +18,6 @@ export class RefreshToken extends BaseEntity {
   @Column()
   readonly userId: string;
 
-  @ManyToOne(() => User, user => user.refreshTokens)
+  @ManyToOne(() => User, (user) => user.refreshTokens)
   user: User;
 }

@@ -2,18 +2,19 @@ import { createConnection } from 'typeorm';
 
 import { logger } from '../../common/utils/logger.util';
 
-import ormconfig from '../../config/ormconfig';
+import { dbConfig } from '../../config/ormconfig';
+import { HttpError } from '../../common/errors';
 import { env } from '../../env';
-import elasticsearchClient from '../elasticsearch';
-import ElasticCommentSeeder from './comment.seeder';
-import ElasticPageContentSeeder from './page-content.seeder';
+import { elasticsearchClient } from '../elasticsearch';
+import { ElasticCommentSeeder } from './comment.seeder';
+import { ElasticPageContentSeeder } from './page-content.seeder';
 
 const {
   elasticsearch: { index },
 } = env;
 
 const seeders = async (): Promise<void> => {
-  await createConnection(ormconfig);
+  await createConnection(dbConfig);
   logger.info('Connection created');
 
   logger.info('Checking if index exist in elastic');
@@ -22,7 +23,7 @@ const seeders = async (): Promise<void> => {
       index,
     });
   } catch (err) {
-    const { message } = err;
+    const { message } = err as HttpError;
     if (message.includes('index_not_found_exception')) {
       logger.info('Creating elastic index');
 
@@ -30,7 +31,7 @@ const seeders = async (): Promise<void> => {
         index,
       });
     } else {
-      return logger.error(err);
+      return logger.error(err as HttpError);
     }
   }
 

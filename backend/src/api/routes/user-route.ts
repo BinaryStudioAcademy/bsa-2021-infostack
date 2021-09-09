@@ -1,7 +1,7 @@
 import { Router } from 'express';
+
+import { run } from '../../common/helpers';
 import { getRecentPages } from '../../services/page.service';
-import { upload } from '../../common/helpers/multer.helper';
-import { run } from '../../common/helpers/route.helper';
 import {
   getUserById,
   updateUserInfo,
@@ -12,59 +12,65 @@ import {
   getActivities,
   getUserActivities,
 } from '../../services/user.service';
+import { upload } from '../../common/helpers';
 
 const router: Router = Router();
 
-router
-  .get(
-    '/me/profile',
-    run((req) => getUserById(req.userId, req.workspaceId)),
-  )
-  .get(
-    '/:id/profile',
-    run((req) => getUserByIdWithWorkspace(req.params.id, req.workspaceId)),
-  )
-  .get(
-    '/check-user-registration',
-    run((req) => getInviteUserById(req.query.token)),
-  )
+router.get(
+  '/me/profile',
+  run((req) => getUserById(req.userId, req.workspaceId)),
+);
 
-  .put(
-    '/:id/profile',
-    run((req) => updateUserInfo(req.params.id, req.workspaceId, req.body)),
-  )
+router.get(
+  '/:id/profile',
+  run((req) => getUserByIdWithWorkspace(req.params.id, req.workspaceId)),
+);
 
-  .put(
-    '/:id/avatar',
-    upload().single('image'),
-    run((req) => updateAvatar(req.params.id, req.file)),
-  )
-  .delete(
-    '/:id/avatar',
-    run((req) => deleteAvatar(req.userId)),
-  )
-  .get(
-    '/activities',
-    run((req) =>
-      getActivities(req.userId, req.workspaceId, {
-        skip: req.query.skip,
-        take: req.query.take,
-      }),
-    ),
-  )
-  .get(
-    '/:id/activities',
-    run((req) =>
-      getUserActivities(req.workspaceId, {
-        skip: req.query.skip,
-        take: req.query.take,
-        userId: req.userId,
-      }),
-    ),
-  )
-  .get(
-    '/:id/recent-pages',
-    run((req) => getRecentPages(req.userId, req.workspaceId)),
-  );
+router.get(
+  '/check-user-registration',
+  run((req) => getInviteUserById(req.query.token)),
+);
+
+router.put(
+  '/:id/profile',
+  run((req) => updateUserInfo(req.params.id, req.workspaceId, req.body)),
+);
+
+router.put(
+  '/:id/avatar',
+  upload().single('image'),
+  run((req) => updateAvatar(req.params.id, req.file)),
+);
+
+router.delete(
+  '/:id/avatar',
+  run((req) => deleteAvatar(req.userId)),
+);
+
+router.get(
+  '/activities',
+  run((req) =>
+    getActivities(req.userId, req.workspaceId, {
+      skip: req.query.skip,
+      take: req.query.take,
+    }),
+  ),
+);
+
+router.get(
+  '/:id/activities',
+  run((req) =>
+    getUserActivities(req.workspaceId, {
+      skip: req.query.skip,
+      take: req.query.take,
+      userId: req.userId,
+    }),
+  ),
+);
+
+router.get(
+  '/:id/recent-pages',
+  run((req) => getRecentPages(req.userId, req.workspaceId)),
+);
 
 export default router;

@@ -1,5 +1,6 @@
 import { Entity, Column, OneToMany } from 'typeorm';
-import { AbstractEntity } from '../abstract/abstract.entity';
+
+import { AbstractEntity } from '../abstract';
 import { UserWorkspace } from './user-workspace';
 import { Team } from './team';
 import { Page } from './page';

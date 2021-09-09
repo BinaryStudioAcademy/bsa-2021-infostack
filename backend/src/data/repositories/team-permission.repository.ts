@@ -1,8 +1,7 @@
 import { EntityRepository, Repository, DeleteResult } from 'typeorm';
-import { Team } from '../entities/team';
-import { Page } from '../entities/page';
-import { TeamPermission } from '../entities/team-permission';
-import { PermissionType } from '../../common/enums/permissions';
+
+import { Team, Page, TeamPermission } from '../entities';
+import { PermissionType } from '../../common/enums';
 
 @EntityRepository(TeamPermission)
 class TeamPermissionRepository extends Repository<TeamPermission> {
@@ -77,4 +76,4 @@ class TeamPermissionRepository extends Repository<TeamPermission> {
   }
 }
 
-export default TeamPermissionRepository;
+export { TeamPermissionRepository };

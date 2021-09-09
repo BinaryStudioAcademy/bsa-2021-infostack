@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Github } from './../entities/github';
+
+import { Github } from './../entities';
 
 @EntityRepository(Github)
 class GitHubRepository extends Repository<Github> {
@@ -35,4 +36,4 @@ class GitHubRepository extends Repository<Github> {
   }
 }
 
-export default GitHubRepository;
+export { GitHubRepository };
