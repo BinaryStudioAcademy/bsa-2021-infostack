@@ -1,4 +1,6 @@
 import { Collapse, ListGroup } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
+import { MentionItem } from 'react-mentions';
 import { isThisMinute } from 'date-fns/esm';
 import AudioPlayer from 'react-h5-audio-player';
 import { useState, useHistory, useAppSelector } from 'hooks/hooks';
@@ -10,7 +12,6 @@ import { TimeAgo } from 'components/common/time-ago/time-ago';
 import { commentsSelectors } from 'store/comments/slice';
 import { CommentForm } from '../comment-form/comment-form';
 import { Emoji } from '../emoji/emoji';
-
 import styles from './styles.module.scss';
 import { parseMentions } from 'helpers/parse-mentions.helper';
 
@@ -38,6 +39,18 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
   const [isFieldVisible, setIsFieldVisible] = useState<boolean>(false);
   const history = useHistory();
 
+  const [formState, setFormState] = useState<{
+    text: string;
+    mentions: MentionItem[];
+  }>({
+    text: '',
+    mentions: [],
+  });
+
+  const avatarStyles: React.CSSProperties = {
+    cursor: 'pointer',
+  };
+
   const toggleField = (): void => setIsFieldVisible((prev) => !prev);
 
   const handleAvatarClick = (userId?: string): void => {
@@ -58,6 +71,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
       <div className={styles.comment}>
         <UserAvatar
           size="40"
+          style={avatarStyles}
           name={name}
           src={avatar}
           round
@@ -69,17 +83,29 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
           <span className={styles.metadata}>
             <TimeAgo timestamp={createdAt} />
           </span>
-          <div className={styles.text}>{content}</div>
+          <div className={styles.text}>
+            {content.map((item) => {
+              const isQuote = typeof item === 'string' && item.startsWith('>');
+
+              if (isQuote) {
+                return <ReactMarkdown>{item as string}</ReactMarkdown>;
+              }
+
+              return item;
+            })}
+          </div>
           {voiceRecord && (
-            <AudioPlayer
-              src={voiceRecord as string}
-              layout="horizontal-reverse"
-              customAdditionalControls={[]}
-              showJumpControls={false}
-              defaultDuration="Loading..."
-            />
+            <div className={styles.audioWrapper}>
+              <AudioPlayer
+                src={voiceRecord as string}
+                layout="horizontal-reverse"
+                customAdditionalControls={[]}
+                showJumpControls={false}
+                preload="metadata"
+                timeFormat="mm:ss"
+              />
+            </div>
           )}
-          <Emoji reactions={reactions} commentId={id} />
           <div className={styles.actions}>
             <a className={styles.action} onClick={toggleField}>
               reply
@@ -92,6 +118,7 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
                 delete
               </a>
             )}
+            <Emoji reactions={reactions} commentId={id} />
           </div>
           {isFieldVisible && (
             <CommentForm
@@ -101,6 +128,8 @@ export const Comment: React.FC<Props> = ({ id, handleDelete }) => {
               placeholder="Add a reply"
               onSubmit={toggleField}
               onCancel={toggleField}
+              formState={formState}
+              setFormState={setFormState}
             />
           )}
           {children && (

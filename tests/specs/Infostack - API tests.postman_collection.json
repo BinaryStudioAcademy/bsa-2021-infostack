@@ -279,12 +279,12 @@
           "listen": "test",
           "script": {
             "exec": [
-              "const expectedMessage  = 'No user with such email';\r",
+              "const expectedMessage  = 'Incorrect email or password';\r",
               "\r",
               "const jsonResponse = pm.response.json();\r",
               "\r",
-              "pm.test('Response should have status code 404', () => {\r",
-              "    pm.expect(pm.response).to.have.status(404);        \r",
+              "pm.test('Response should have status code 400', () => {\r",
+              "    pm.expect(pm.response).to.have.status(400);        \r",
               "});\r",
               "\r",
               "pm.test('Response should have JSON body', () => {\r",
@@ -337,16 +337,21 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test('Response validation', () => {\r",
-              "    const jsonResponse = pm.response.json();\r",
+              "const expectedMessage  = 'Incorrect email or password';\r",
               "\r",
-              "    tests['Status code is 400'] = pm.expect(pm.response.to.have.status(400));\r",
+              "const jsonResponse = pm.response.json();\r",
               "\r",
-              "    tests['Response to have body'] = pm.expect(pm.response.to.have.jsonBody());\r",
-              "\r",
-              "    tests['Error message should be correct'] =\r",
-              "        pm.expect(jsonResponse.error).to.eql('Invalid password');\r",
+              "pm.test('Response should have status code 400', () => {\r",
+              "    pm.expect(pm.response).to.have.status(400);        \r",
               "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should contain correct error message', () => {\r",
+              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+              "})\r",
               ""
             ],
             "type": "text/javascript"
@@ -895,6 +900,7 @@
               "const responseJson = pm.response.json()\r",
               "\r",
               "pm.environment.set(\"parentPageId\", responseJson.id);\r",
+              "pm.environment.set(\"parentPageTitle\", responseJson.pageContents[0].title);\r",
               "\r",
               "pm.test(\"Response should have status code 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
@@ -1996,7 +2002,7 @@
       "response": []
     },
     {
-      "name": "Create comments",
+      "name": "Create skills",
       "event": [
         {
           "listen": "test",
@@ -2006,23 +2012,27 @@
               "    \"type\": \"object\",\r",
               "    \"properties\": {\r",
               "        \"id\": { \"type\": \"string\" },\r",
-              "        \"text\": { \"type\": \"string\" },\r",
-              "        \"pageId\": { \"type\": \"string\" },\r",
-              "        \"parentCommentId\": { \"type\": [\"null\",\"string\"] },\r",
-              "        \"author\": { \"type\": [\"object\",\"string\"] }\r",
+              "        \"createdAt\": { \"type\": \"string\" },\r",
+              "        \"updatedAt\": { \"type\": \"string\" },\r",
+              "        \"deletedAt\": { \"type\": [\"string\",\"null\"] },\r",
+              "        \"name\": { \"type\": \"string\" },\r",
+              "        \"workspaceId\": { \"type\": \"string\" }\r",
               "    },\r",
               "    \"required\": [\r",
               "        \"id\",\r",
-              "        \"text\",\r",
-              "        \"pageId\",\r",
-              "        \"parentCommentId\",\r",
-              "        \"author\"\r",
+              "        \"createdAt\",\r",
+              "        \"updatedAt\",\r",
+              "        \"deletedAt\",\r",
+              "        \"name\",\r",
+              "        \"workspaceId\"\r",
+              "\r",
               "    ]\r",
               "};\r",
               "\r",
-              "const responseJson = pm.response.json()\r",
+              "const jsonResponse = pm.response.json();\r",
               "\r",
-              "pm.environment.set(\"commentId\", responseJson.id);\r",
+              "pm.environment.set(\"skillsId\", jsonResponse.id);\r",
+              "pm.environment.set(\"skillsName\", jsonResponse.name);\r",
               "\r",
               "pm.test(\"Response should have status code 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
@@ -2055,13 +2065,431 @@
         "header": [
           {
             "key": "Cookie",
-            "type": "text",
-            "value": "workspaceId={{workspaceId}}"
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
           }
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"text\": \"{{$randomLoremText}}\",\r\n    \"mentionIds\": []\r\n}",
+          "raw": "{\r\n    \"name\": \"{{$randomJobTitle}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/skills",
+          "host": ["{{app_url}}"],
+          "path": ["api", "skills"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create skills (invalid - already created)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const expectedMessage  = 'Duplicate workspace skill';\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test('Response should have status code 409', () => {\r",
+              "    pm.expect(pm.response).to.have.status(409);        \r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should contain correct error message', () => {\r",
+              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+              "})"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"{{skillsName}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/skills",
+          "host": ["{{app_url}}"],
+          "path": ["api", "skills"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update skills",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"object\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"name\": { \"type\": \"string\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",\r",
+              "        \"name\"\r",
+              "\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"id\": \"{{skillsId}}\",\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/skills/{{skillsId}}",
+          "host": ["{{app_url}}"],
+          "path": ["api", "skills", "{{skillsId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update skills (invalid- empty string)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const expectedMessage  = 'Empty skill name is not allowed';\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test('Response should have status code 400', () => {\r",
+              "    pm.expect(pm.response).to.have.status(400);        \r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should contain correct error message', () => {\r",
+              "    pm.expect(jsonResponse.error).to.eql(expectedMessage);\r",
+              "})"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"id\": \"{{skillsId}}\",\r\n\"name\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/skills/{{skillsId}}",
+          "host": ["{{app_url}}"],
+          "path": ["api", "skills", "{{skillsId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get skills",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"array\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"createdAt\": { \"type\": \"string\" },\r",
+              "        \"updatedAt\": { \"type\": \"string\" },\r",
+              "        \"deletedAt\": { \"type\": \"string\" },\r",
+              "        \"name\": { \"type\": \"string\" },\r",
+              "        \"workspaceId\": { \"type\": \"string\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",\r",
+              "        \"createdAt\",\r",
+              "        \"updatedAt\",\r",
+              "        \"deletedAt\",\r",
+              "        \"name\",\r",
+              "        \"workspaceId\"\r",
+              "\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"id\": \"{{skillsId}}\",\r\n\"name\": \"{{$randomJobTitle}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/skills/",
+          "host": ["{{app_url}}"],
+          "path": ["api", "skills", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete skills",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response should have status code 204\", function () {\r",
+              "    pm.response.to.have.status(204);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"id\": \"{{skillsId}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{app_url}}/api/skills/{{skillsId}}",
+          "host": ["{{app_url}}"],
+          "path": ["api", "skills", "{{skillsId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create comments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"object\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"createdAt\": { \"type\": \"string\" },\r",
+              "        \"text\": { \"type\": \"string\" },\r",
+              "        \"voiceRecord\": { \"type\": [\"string\", \"null\"]},\r",
+              "        \"pageId\": { \"type\": \"string\" },\r",
+              "        \"parentCommentId\": { \"type\": [\"string\", \"null\"]},\r",
+              "        \"author\": { \"type\": \"object\" },\r",
+              "        \"reactions\": { \"type\": \"array\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",\r",
+              "        \"createdAt\",\r",
+              "        \"text\",\r",
+              "        \"voiceRecord\",\r",
+              "        \"pageId\",\r",
+              "        \"parentCommentId\",\r",
+              "        \"author\",\r",
+              "        \"reactions\"\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const responseJson = pm.response.json()\r",
+              "\r",
+              "pm.environment.set(\"workspaceId\", responseJson.id);\r",
+              "pm.environment.set(\"workspaceTitle\", responseJson.title);\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"text\": \"Hello world\",\r\n    \"mentionIds\": []\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -2146,7 +2574,7 @@
               "        \"id\": { \"type\": \"string\" },\r",
               "        \"text\": { \"type\": \"string\" },\r",
               "        \"pageId\": { \"type\": \"string\" },\r",
-              "        \"parentCommentId\": { \"type\": [\"null\",\"string\"] },\r",
+              "        \"parentCommentId\": { \"type\": [\"null\", \"string\"] },\r",
               "        \"author\": { \"type\": \"array\" }\r",
               "    },\r",
               "    \"required\": [\r",
@@ -2169,7 +2597,7 @@
               "});\r",
               "\r",
               "pm.test('Response validation the schema', () => {\r",
-              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "    pm.expect(pm.response).to.have.jsonSchema(schema);\r",
               "});"
             ],
             "type": "text/javascript"
@@ -2439,6 +2867,159 @@
             "permissions",
             "user",
             "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"array\",\r",
+              "    \"properties\": {\r",
+              "        \"pageId\": { \"type\": \"string\" },\r",
+              "        \"title\": { \"type\": \"string\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"pageId\",\r",
+              "        \"title\"\r",
+              "\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "        pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{app_url}}/api/pages/search?query={{parentPageTitle}}",
+          "host": ["{{app_url}}"],
+          "path": ["api", "pages", "search"],
+          "query": [
+            {
+              "key": "query",
+              "value": "{{parentPageTitle}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get notification",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const schema = {\r",
+              "    \"type\": \"array\",\r",
+              "    \"properties\": {\r",
+              "        \"id\": { \"type\": \"string\" },\r",
+              "        \"createdAt\": { \"type\": \"string\" },\r",
+              "        \"updatedAt\": { \"type\": \"string\" },\r",
+              "        \"deletedAt\": { \"type\": \"string\" },\r",
+              "        \"name\": { \"type\": \"string\" },\r",
+              "        \"workspaceId\": { \"type\": \"string\" }\r",
+              "    },\r",
+              "    \"required\": [\r",
+              "        \"id\",\r",
+              "        \"createdAt\",\r",
+              "        \"updatedAt\",\r",
+              "        \"deletedAt\",\r",
+              "        \"name\",\r",
+              "        \"workspaceId\"\r",
+              "    ]\r",
+              "};\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response should have status code 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response should have JSON body', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonBody();\r",
+              "});\r",
+              "\r",
+              "pm.test('Response validation the schema', () => {\r",
+              "    pm.expect(pm.response).to.have.jsonSchema(schema);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response notification array should be empty', () => {\r",
+              "    pm.expect(jsonResponse.length).to.eql(0);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "workspaceId={{workspaceId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{app_url}}/api/notifications?limit=4",
+          "host": ["{{app_url}}"],
+          "path": ["api", "notifications"],
+          "query": [
+            {
+              "key": "limit",
+              "value": "4"
+            }
           ]
         }
       },

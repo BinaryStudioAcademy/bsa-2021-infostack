@@ -1,58 +1,62 @@
 .form {
-  width: 27rem;
+  width: 33rem;
 }
 
 .foundList {
-  width: 27rem;
+  width: calc(33rem - 1px);
   min-height: 4rem;
-
+  max-height: 60vh;
   position: absolute;
   display: flex;
   flex-direction: column;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
   background-color: white;
-
   color: #6c757d;
-
   border: 1px solid rgb(206, 212, 218);
   border-top: none;
-
   z-index: 999;
-
-  .nothingFound {
-    color: #ffc107;
-    padding: 1.4rem;
+  padding: 1rem;
+  border-radius: 0px 0px 10px 10px;
+  .resultList {
+    overflow: hidden;
+    overflow-y: auto;
   }
-
+  .nothingFound {
+    color: #cac8bf;
+    font-size: 14px;
+  }
+  .resultCount {
+    font-size: 12px;
+    margin: 0px;
+  }
   .foundItem {
-    padding: 1.4rem;
+    padding: 0.8rem;
     cursor: pointer;
-
-    .title {
-      display: block;
-      color: #495057;
-      font-weight: 500;
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    i {
+      font-size: 2rem;
+      margin-right: 2rem;
     }
-
     .content {
       display: inline-block;
-      width: 24.2rem;
-
+      width: 25rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
-    mark {
-      background-color: yellow;
+    .contentTitle {
+      font-size: 12px;
     }
-
+    mark {
+      background-color: #58a6ff42;
+    }
     &:hover {
-      background-color: #f4f7f9;
+      background-color: #dbebf7;
+      border-radius: 7px;
     }
   }
 }

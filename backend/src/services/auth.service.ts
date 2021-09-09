@@ -44,8 +44,11 @@ export const register = async (
   body: IRegister,
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
-  const isEmailUsed = await userRepository.findByEmail(body.email);
-  if (isEmailUsed) {
+  const existingUser = await userRepository.findByEmail(
+    body.email.toLowerCase(),
+  );
+
+  if (existingUser && existingUser.password !== null) {
     throw new HttpError({
       status: HttpCode.CONFLICT,
       message: HttpErrorMessage.EMAIL_ALREADY_EXISTS,
@@ -53,10 +56,19 @@ export const register = async (
   }
 
   const hashedPassword = await hash(body.password);
-  const user = await userRepository.save({
+  const userData = {
     ...body,
+    email: body.email.toLowerCase(),
     password: hashedPassword,
-  });
+  };
+
+  const user =
+    existingUser?.password === null
+      ? await userRepository.save({
+          ...existingUser,
+          ...userData,
+        })
+      : await userRepository.save(userData);
 
   return getIUserWithTokens(user);
 };
@@ -66,11 +78,11 @@ export const login = async (
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const userRepository = getCustomRepository(UserRepository);
 
-  const user = await userRepository.findByEmail(body.email);
-  if (!user) {
+  const user = await userRepository.findByEmail(body.email.toLowerCase());
+  if (!user || user.password === null) {
     throw new HttpError({
-      status: HttpCode.NOT_FOUND,
-      message: HttpErrorMessage.NO_SUCH_EMAIL,
+      status: HttpCode.BAD_REQUEST,
+      message: HttpErrorMessage.INVALID_LOGIN_DATA,
     });
   }
 
@@ -78,7 +90,7 @@ export const login = async (
   if (!isPasswordCorrect) {
     throw new HttpError({
       status: HttpCode.BAD_REQUEST,
-      message: HttpErrorMessage.INVALID_PASSWORD,
+      message: HttpErrorMessage.INVALID_LOGIN_DATA,
     });
   }
 
@@ -87,10 +99,10 @@ export const login = async (
 
 export const resetPassword = async (body: IResetPassword): Promise<void> => {
   const userRepository = getCustomRepository(UserRepository);
-  const user = await userRepository.findByEmail(body.email);
+  const user = await userRepository.findByEmail(body.email.toLowerCase());
   if (!user) {
     throw new HttpError({
-      status: HttpCode.NOT_FOUND,
+      status: HttpCode.BAD_REQUEST,
       message: HttpErrorMessage.NO_SUCH_EMAIL,
     });
   }
@@ -211,7 +223,9 @@ const loginOtherService = async (
   return getIUserWithTokens(newUser);
 };
 
-export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
+export const getLoginGoogleUrl = async (
+  requestedPage: string | undefined,
+): Promise<{ url: string }> => {
   const { clientId, clientSecret, redirectUrl } = env.google;
   const oauth2Client = new google.auth.OAuth2(
     clientId,
@@ -222,6 +236,7 @@ export const getLoginGoogleUrl = async (): Promise<{ url: string }> => {
   return {
     url: oauth2Client.generateAuthUrl({
       scope: scopes,
+      state: requestedPage,
     }),
   };
 };
@@ -241,11 +256,19 @@ export const loginGoogle = async (
   return await loginOtherService(name, email, picture);
 };
 
-export const getLoginGitHubUrl = async (): Promise<{ url: string }> => {
+export const getLoginGitHubUrl = async (
+  requestedPage: string | undefined,
+): Promise<{ url: string }> => {
   const { clientId, redirectUrl } = env.github;
-  return {
-    url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
-  };
+  if (requestedPage) {
+    return {
+      url: `https://github.com/login/oauth/authorize?state=${requestedPage}&client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+    };
+  } else {
+    return {
+      url: `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=repo`,
+    };
+  }
 };
 
 export const loginGithub = async (
@@ -253,7 +276,6 @@ export const loginGithub = async (
 ): Promise<Omit<IUserWithTokens, 'refreshToken'>> => {
   const accessToken = await getAccessToken(code);
   const githubUser = await getUser(accessToken);
-  console.log(githubUser);
   const { email, name, login, avatar_url } = githubUser;
 
   if (!email) {

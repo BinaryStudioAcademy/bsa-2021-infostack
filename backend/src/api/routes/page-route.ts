@@ -11,6 +11,9 @@ import {
   deletePage,
   getPages,
   getPinnedPages,
+  getMostViewedPages,
+  getMostUpdatedPages,
+  getСountOfUpdates,
   getPage,
   getPermissions,
   setPermission,
@@ -35,6 +38,8 @@ import {
   deleteDraft,
   pinPage,
   unpinPage,
+  downloadPDF,
+  sendPDF,
 } from '../../services/page.service';
 import {
   getComments,
@@ -51,6 +56,37 @@ const router: Router = Router();
 router.get(
   '/search',
   run((req) => searchPage(req.query.query, req.userId, req.workspaceId)),
+);
+
+router.get(
+  '/most-viewed',
+  run((req) =>
+    getMostViewedPages(
+      req.userId,
+      req.workspaceId,
+      req.query.dateFrom,
+      +req.query.limit,
+    ),
+  ),
+);
+
+router.get(
+  '/most-updated',
+  run((req) =>
+    getMostUpdatedPages(
+      req.userId,
+      req.workspaceId,
+      req.query.dateFrom,
+      +req.query.limit,
+    ),
+  ),
+);
+
+router.get(
+  '/count-of-updates',
+  run((req) =>
+    getСountOfUpdates(req.userId, req.workspaceId, req.query.dateFrom),
+  ),
 );
 
 router.post(
@@ -71,7 +107,7 @@ router.get(
 
 router.get(
   '/:id',
-  run((req) => getPage(req.params.id, req.userId)),
+  run((req) => getPage(req.params.id, req.userId, req.workspaceId)),
 );
 
 router.delete(
@@ -234,6 +270,16 @@ router.post(
 router.post(
   '/:id/unpin',
   run((req) => unpinPage(req.userId, req.params.id)),
+);
+
+router.get(
+  '/:id/download-pdf',
+  run((req) => downloadPDF(req.params.id)),
+);
+
+router.post(
+  '/:id/send-pdf',
+  run((req) => sendPDF(req.body, req.params.id)),
 );
 
 export default router;

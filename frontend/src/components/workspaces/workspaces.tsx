@@ -1,7 +1,7 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
 import { Spinner } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums';
-import { workspacesActions } from 'store/actions';
+import { authActions, workspacesActions } from 'store/actions';
 import {
   useState,
   useEffect,
@@ -9,10 +9,13 @@ import {
   useAppDispatch,
   useCookies,
   useHistory,
+  useLocation,
 } from 'hooks/hooks';
 import { workspaceApi } from 'services';
 import { CreateWorkspaceModal, Container } from './components/components';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
+import { getAllowedClasses } from 'helpers/helpers';
+import styles from './styles.module.scss';
 
 const Workspaces: React.FC = () => {
   const { workspaces, currentWorkspace } = useAppSelector(
@@ -28,9 +31,9 @@ const Workspaces: React.FC = () => {
   ]);
 
   const history = useHistory();
+  const { state } = useLocation<{ requestedPage: string } | null>();
 
   useEffect(() => {
-    dispatch(workspacesActions.removeCurrentWorkspace());
     if (cookies[CookieVariable.WORKSPACE_ID]) {
       removeCookie(CookieVariable.WORKSPACE_ID);
     }
@@ -66,7 +69,12 @@ const Workspaces: React.FC = () => {
         setCookie(CookieVariable.WORKSPACE_ID, currentWorkspace.id, {
           path: '/',
         });
-        history.push(AppRoute.ROOT);
+        dispatch(authActions.loadUser());
+        if (state) {
+          history.push(state.requestedPage);
+        } else {
+          history.push(AppRoute.ROOT);
+        }
       } else if (cookies[CookieVariable.WORKSPACE_ID]) {
         removeCookie(CookieVariable.WORKSPACE_ID, { path: '/' });
       }
@@ -86,6 +94,7 @@ const Workspaces: React.FC = () => {
     <div className="bg-light">
       <BootstrapContainer className="position-relative d-flex flex-column align-items-center pt-5 vh-100">
         <h1 className="h3 mb-5">Select the workspace</h1>
+
         {workspaces ? (
           <Container
             workspaces={workspaces}
@@ -95,7 +104,17 @@ const Workspaces: React.FC = () => {
             onClickDecline={handleInviteDeclined}
           />
         ) : (
-          <Spinner />
+          <Spinner height={'12rem'} width={'12rem'} />
+        )}
+        {currentWorkspace?.id && (
+          <button
+            className={styles.crossButton}
+            onClick={(): void => handleItemClick(currentWorkspace?.id)}
+          >
+            <i
+              className={getAllowedClasses(styles.crossIcon, 'bi bi-x-lg')}
+            ></i>
+          </button>
         )}
         <CreateWorkspaceModal
           showModal={isModalVisible}

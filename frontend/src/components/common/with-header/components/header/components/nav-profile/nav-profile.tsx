@@ -1,5 +1,11 @@
 import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
-import { useAppDispatch, useCookies, useHistory } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useContext,
+  useCookies,
+  useHistory,
+} from 'hooks/hooks';
 import {
   activitiesActions,
   authActions,
@@ -16,7 +22,13 @@ import {
 import { ProfileItem } from './components/components';
 import { replaceIdParam } from 'helpers/helpers';
 import { UserAvatar } from 'components/common/common';
-import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
+import {
+  AppRoute,
+  CookieVariable,
+  LocalStorageVariable,
+  SocketEvents,
+} from 'common/enums';
+import { SocketContext } from 'context/socket';
 import './styles.scss';
 
 type Props = {
@@ -32,8 +44,10 @@ export const NavProfile: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const socket = useContext(SocketContext);
 
   const [cookies, , removeCookie] = useCookies([CookieVariable.WORKSPACE_ID]);
+  const { currentPage } = useAppSelector((state) => state.pages);
 
   const cleanWorkspaceStore = (): void => {
     dispatch(activitiesActions.reset());
@@ -58,6 +72,7 @@ export const NavProfile: React.FC<Props> = ({
     localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
     localStorage.removeItem(LocalStorageVariable.GITHUB_ACCESS_TOKEN);
     localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);
+    socket.emit(SocketEvents.SIGN_OUT, userId, currentPage?.id);
     history.push(AppRoute.LOGIN);
   };
 
@@ -81,8 +96,10 @@ export const NavProfile: React.FC<Props> = ({
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <ProfileItem to={replaceIdParam(AppRoute.PROFILE, userId || '')}>
-          <i className="bi bi-person"></i>
-          Profile
+          <div className="d-flex align-items-center">
+            <i className="bi bi-person"></i>
+            Profile
+          </div>
         </ProfileItem>
         <Dropdown.Divider />
         <ProfileItem onClick={onSelectWorkspace}>Select Workspace</ProfileItem>

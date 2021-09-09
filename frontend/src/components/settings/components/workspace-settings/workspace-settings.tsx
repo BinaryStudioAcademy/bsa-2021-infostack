@@ -1,5 +1,6 @@
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import { bytesToMegabytes, getAllowedClasses } from 'helpers/helpers';
 import {
@@ -26,6 +27,7 @@ export const WorkspaceSettings: React.FC = () => {
     isUpdatingCurrentWorkspace,
     isDeletingCurrentWorkspaceLogo,
   } = useAppSelector((state) => state.workspaces);
+
   const [selectedImgURL, setSelectedImgURL] = useState('');
 
   const {
@@ -127,6 +129,7 @@ export const WorkspaceSettings: React.FC = () => {
                     placeholder="Name"
                     onChange={(e): void => setValue('title', e.target.value)}
                     isInvalid={!!errors.title}
+                    as={TextareaAutosize}
                   />
                   {errors.title && (
                     <Form.Control.Feedback type="invalid">
@@ -148,7 +151,12 @@ export const WorkspaceSettings: React.FC = () => {
                       src={selectedImgURL || currentWorkspace?.logo}
                     />
                   ) : (
-                    <span className={styles.noLogo}>no logo</span>
+                    <i
+                      className={getAllowedClasses(
+                        'bi bi-card-image',
+                        styles.noLogo,
+                      )}
+                    ></i>
                   )}
                 </div>
 

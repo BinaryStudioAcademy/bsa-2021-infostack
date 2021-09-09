@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { getRecentPages } from '../../services/page.service';
 import { upload } from '../../common/helpers/multer.helper';
 import { run } from '../../common/helpers/route.helper';
 import {
@@ -17,7 +18,7 @@ const router: Router = Router();
 router
   .get(
     '/me/profile',
-    run((req) => getUserById(req.userId)),
+    run((req) => getUserById(req.userId, req.workspaceId)),
   )
   .get(
     '/:id/profile',
@@ -30,7 +31,7 @@ router
 
   .put(
     '/:id/profile',
-    run((req) => updateUserInfo(req.params.id, req.body)),
+    run((req) => updateUserInfo(req.params.id, req.workspaceId, req.body)),
   )
 
   .put(
@@ -60,6 +61,10 @@ router
         userId: req.userId,
       }),
     ),
+  )
+  .get(
+    '/:id/recent-pages',
+    run((req) => getRecentPages(req.userId, req.workspaceId)),
   );
 
 export default router;

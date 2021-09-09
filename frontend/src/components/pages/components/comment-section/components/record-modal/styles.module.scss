@@ -1,4 +1,134 @@
+:global(.modalWindow) {
+  width: 20vw !important;
+  min-width: 385px;
+}
+
+.modalContent {
+  width: 700px;
+}
+
+.modalBody {
+  height: 170px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.btnContainer {
+  height: 30px;
+}
+
+:global(.rhap_volume-container) {
+  margin-left: 0px;
+  margin-right: 7px;
+  width: 30px;
+}
+
+:global(.rhap_container) {
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+:global(.rhap_volume-button) {
+  font-size: 20px;
+  margin: 0;
+  margin-left: 10px;
+}
+
+:global(.rhap_stacked .rhap_controls-section) {
+  margin-top: 25px;
+}
+
 .text {
   font-size: 1.32rem;
   line-height: 1.2;
+}
+
+.recordButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.resumeButton {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  padding: 0;
+  margin-right: 5px;
+}
+
+.startRecordMic {
+  font-size: x-large;
+  color: whitesmoke;
+}
+
+.resumeRecordMic {
+  color: whitesmoke;
+}
+
+.pauseButton {
+  font-size: 16px;
+  align-items: center;
+}
+
+.pauseIcon {
+  font-size: xx-large;
+  margin-right: 5px;
+}
+
+.pauseText {
+  font-weight: 500;
+}
+
+.stopButton {
+  display: flex;
+  font-size: 16px;
+  align-items: center;
+}
+
+.stopButton:focus,
+.resumeButton:focus,
+.pauseButton:focus {
+  box-shadow: none;
+}
+
+.stopButtonIcon {
+  width: 20px;
+  height: 20px;
+  margin-right: 9px;
+}
+
+.saveButton {
+  position: absolute;
+  margin-left: 21px;
+  margin-top: -51px;
+  font-size: x-large;
+}
+
+.trashButton {
+  position: absolute;
+  font-size: x-large;
+  margin-left: -61px;
+  margin-top: -49px;
+}
+
+.trashIcon:hover {
+  color: rgb(202, 5, 5);
+}
+
+.sendIcon:hover {
+  color: #198754;
+}
+
+.timer {
+  font-size: x-large;
+  margin-bottom: 30px;
+}
+
+.recordedTime {
+  font-size: x-large;
+  margin: 0;
+  margin-top: -13px;
 }

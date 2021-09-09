@@ -6,15 +6,20 @@ import {
   Col,
   Row,
 } from 'react-bootstrap';
+import { useContext } from 'react';
 import Editor, { Plugins } from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { toast } from 'react-toastify';
+import { SocketContext } from 'context/socket';
 import { useHistory } from 'react-router';
 import { RootState } from 'common/types/types';
-import { AppRoute, PageTitle } from 'common/enums';
+import { PageEditors } from '../components';
+import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common/common';
+import { IPageContributor } from 'common/interfaces/pages';
+import { CollabEditor } from '../collab-editor/collab-editor';
 import {
   useState,
   useAppDispatch,
@@ -27,6 +32,8 @@ import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {
+  const socket = useContext(SocketContext);
+  const { user } = useAppSelector((state) => state.auth);
   const { currentPage } = useAppSelector((state: RootState) => state.pages);
 
   const pageTitle = currentPage?.pageContents[0].title;
@@ -47,11 +54,11 @@ export const ContentEditor: React.FC = () => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   }
 
-  const [titleInputValue, setTitleInputValue] = useState(pageTitle);
+  const [titleInputValue, setTitleInputValue] = useState(pageTitle || '');
   const [markDownContent, setMarkDownContent] = useState(content);
 
   const [draftTitleInputValue, setDraftTitleInputValue] = useState(
-    draftPageTitle || pageTitle,
+    draftPageTitle || pageTitle || '',
   );
   const [draftMarkDownContent, setDraftMarkDownContent] = useState(
     draftPageContent || content,
@@ -60,6 +67,31 @@ export const ContentEditor: React.FC = () => {
   const [isSaveDraftShown, setSaveDraftShown] = useState(false);
   const [isDeleteDraftShown, setDeleteDraftShown] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isCollabModalVisible, setIsCollabModalVisible] = useState(false);
+  const [isLiveMode, setIsLiveMode] = useState(false);
+  const [pageEditors, setPageEditors] = useState<IPageContributor[]>([]);
+  const [url, setUrl] = useState('');
+
+  const addEditor = (editors: IPageContributor[], url: string): void => {
+    setPageEditors(editors);
+    editors.length > 1 && !isLiveMode
+      ? setIsCollabModalVisible(true)
+      : setIsCollabModalVisible(false);
+    setUrl(url);
+  };
+
+  useEffect(() => {
+    if (user && currentPage) {
+      socket.emit(SocketEvents.EDITOR_JOIN, currentPage.id, user);
+      socket.on(SocketEvents.EDITOR_JOIN, addEditor);
+    }
+    return (): void => {
+      socket.off(SocketEvents.EDITOR_JOIN, addEditor);
+      if (user) {
+        socket.emit(SocketEvents.EDITOR_LEFT, currentPage?.id, user.id);
+      }
+    };
+  }, [user]);
 
   useEffect(() => {
     setSaveDraftShown(true);
@@ -84,6 +116,7 @@ export const ContentEditor: React.FC = () => {
         handleAutosaveAsDraft();
         setDeleteDraftShown(true);
       }, 10000);
+
       return (): void => clearTimeout(timeoutId);
     }
   }, [draftTitleInputValue, draftMarkDownContent]);
@@ -125,7 +158,7 @@ export const ContentEditor: React.FC = () => {
     history.push(replaceIdParam(AppRoute.PAGE, paramsId || ''));
   };
 
-  const showWarningOnTitle = (title: string | undefined): void => {
+  const showWarningOnTitle = (title: string): void => {
     if (title?.trim().length === 0) {
       toast.warning('Title could not be empty');
       return;
@@ -186,7 +219,7 @@ export const ContentEditor: React.FC = () => {
         pauseOnHover: true,
       });
 
-      setDraftTitleInputValue(pageTitle);
+      setDraftTitleInputValue(pageTitle || '');
       setDraftMarkDownContent(content);
 
       setDeleteDraftShown(false);
@@ -198,8 +231,35 @@ export const ContentEditor: React.FC = () => {
     setIsDeleteModalVisible(false);
   };
 
+  const handleUsualMode = (): void => {
+    setIsCollabModalVisible(false);
+    setIsLiveMode(false);
+    socket.emit(SocketEvents.EDITOR_LEFT, currentPage?.id, user?.id);
+  };
+
+  const handleLifeMode = (): void => {
+    setIsCollabModalVisible(false);
+    setIsLiveMode(true);
+  };
+
   const onDraftDelete = (): void => {
     setIsDeleteModalVisible(true);
+  };
+
+  const handleCollabSaveConfirm = (title: string, content: string): void => {
+    if (title && isTitleLessThanMaxLength(title)) {
+      dispatch(
+        pagesActions.editPageContent({
+          pageId: paramsId,
+          title: title.trim(),
+          content: content?.length === 0 ? ' ' : content,
+        }),
+      )
+        .unwrap()
+        .then(handleCancel);
+      return;
+    }
+    showWarningOnTitle(titleInputValue);
   };
 
   const handleAutosaveAsDraft = (): void => {
@@ -225,66 +285,89 @@ export const ContentEditor: React.FC = () => {
   return (
     <>
       <div className="p-4">
-        <Row className="mb-4">
-          <Col className="d-flex justify-content-between">
-            <InputGroup>
-              <FormControl
-                value={draftTitleInputValue}
-                onChange={onInputChange}
+        {isLiveMode ? (
+          <>
+            <PageEditors editors={pageEditors} />
+            {user ? (
+              <CollabEditor
+                userName={user.fullName}
+                title={draftTitleInputValue}
+                content={draftMarkDownContent}
+                handleSaveConfirm={handleCollabSaveConfirm}
+                handleCancel={onCancel}
+                url={url}
               />
-            </InputGroup>
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
-            <Card border="light" className={getAllowedClasses(styles.content)}>
-              <Editor
-                value={draftMarkDownContent}
-                onChange={({ text }): void => setDraftMarkDownContent(text)}
-                onImageUpload={onImageUpload}
-                renderHTML={(text): JSX.Element => (
-                  <ReactMarkdown remarkPlugins={[gfm]}>{text}</ReactMarkdown>
-                )}
-                ref={editorRef}
-              />
-            </Card>
-          </Col>
-        </Row>
-        <Row className="mb-4">
-          <Col>
-            <Button
-              onClick={handleSaveConfirm}
-              variant="success"
-              size="sm"
-              className="me-3"
-            >
-              Save
-            </Button>
-            {isSaveDraftShown ? (
-              <Button
-                onClick={handleSaveAsDraftConfirm}
-                variant="success"
-                size="sm"
-                className="me-3"
-              >
-                Save as Draft
-              </Button>
             ) : null}
-            {isDeleteDraftShown ? (
-              <Button
-                onClick={onDraftDelete}
-                variant="danger"
-                size="sm"
-                className="me-3"
-              >
-                Delete Draft
-              </Button>
-            ) : null}
-            <Button onClick={onCancel} variant="warning" size="sm">
-              Cancel
-            </Button>
-          </Col>
-        </Row>
+          </>
+        ) : (
+          <>
+            <Row className="mb-4">
+              <Col className="d-flex justify-content-between">
+                <InputGroup>
+                  <FormControl
+                    value={draftTitleInputValue}
+                    onChange={onInputChange}
+                  />
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col>
+                <Card
+                  border="light"
+                  className={getAllowedClasses(styles.content)}
+                >
+                  <Editor
+                    value={draftMarkDownContent}
+                    onChange={({ text }): void => setDraftMarkDownContent(text)}
+                    onImageUpload={onImageUpload}
+                    renderHTML={(text): JSX.Element => (
+                      <ReactMarkdown remarkPlugins={[gfm]}>
+                        {text}
+                      </ReactMarkdown>
+                    )}
+                    ref={editorRef}
+                  />
+                </Card>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col>
+                <Button
+                  onClick={handleSaveConfirm}
+                  variant="success"
+                  size="sm"
+                  className="me-3"
+                >
+                  Save
+                </Button>
+                {isSaveDraftShown ? (
+                  <Button
+                    onClick={handleSaveAsDraftConfirm}
+                    variant="success"
+                    size="sm"
+                    className="me-3"
+                  >
+                    Save as Draft
+                  </Button>
+                ) : null}
+                {isDeleteDraftShown ? (
+                  <Button
+                    onClick={onDraftDelete}
+                    variant="danger"
+                    size="sm"
+                    className="me-3"
+                  >
+                    Delete Draft
+                  </Button>
+                ) : null}
+                <Button onClick={onCancel} variant="secondary" size="sm">
+                  Cancel
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
       </div>
       <ConfirmModal
         title="Delete confirmation"
@@ -298,6 +381,19 @@ export const ContentEditor: React.FC = () => {
         cancelButton={{
           text: 'Close',
           onClick: handleDeleteCancel,
+        }}
+      />
+      <ConfirmModal
+        title="Confirmation"
+        showModal={isCollabModalVisible}
+        modalText="Choose the mode:"
+        confirmButton={{
+          text: 'Usual',
+          onClick: handleUsualMode,
+        }}
+        cancelButton={{
+          text: 'Live',
+          onClick: handleLifeMode,
         }}
       />
     </>

@@ -12,4 +12,7 @@ export type {
   IShareLink,
   IPageShare,
   IFoundPageContent,
+  IExportPDF,
+  IPageRequested,
+  IPageStatistic,
 } from 'infostack-shared';

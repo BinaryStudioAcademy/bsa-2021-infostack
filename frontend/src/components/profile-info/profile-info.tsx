@@ -4,6 +4,7 @@ import {
   useParams,
   useAppDispatch,
   useAppSelector,
+  useHistory,
 } from 'hooks/hooks';
 import {
   Container,
@@ -22,20 +23,46 @@ import { AppRoute } from 'common/enums';
 import './profile-info.scss';
 import { replaceIdParam } from 'helpers/helpers';
 import { Activities } from './components/components';
+import { IUser } from 'common/interfaces';
+import { userApi } from 'services';
 
 const ProfileInfo: React.FC = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const [user, setUser] = useState<IUser>({
+    id: '',
+    avatar: '',
+    fullName: '',
+    email: '',
+    title: '',
+    skills: [],
+    followingPages: [],
+  });
+  const { user: currentUser } = useAppSelector((state) => state.auth);
 
   const [permission, setPermission] = useState(true);
   const [pageId, setPageId] = useState<string>();
   const { id } = useParams<{ id?: string }>();
 
+  const history = useHistory();
   useEffect(() => {
-    if (user && user.id.length > 0) {
-      setPermission(true);
-      return;
-    }
-    setPermission(false);
+    let mounted = true;
+    const getUser = async (): Promise<void> => {
+      await userApi.getUserInfo(id).then((user) => {
+        if (mounted) {
+          if (user.id) {
+            setPermission(true);
+            setUser(user);
+          } else {
+            history.push('/*');
+          }
+        }
+      });
+    };
+
+    getUser();
+
+    return (): void => {
+      mounted = false;
+    };
   }, [id]);
 
   const dispatch = useAppDispatch();
@@ -159,16 +186,18 @@ const ProfileInfo: React.FC = () => {
                                           <i className="bi bi-file-text-fill"></i>
                                           {page.pageContents[0].title}
                                         </Link>
-                                        <Button
-                                          variant="danger"
-                                          className="ms-3"
-                                          size="sm"
-                                          onClick={(): Promise<void> =>
-                                            onPageUnfollow(page.id)
-                                          }
-                                        >
-                                          Unfollow
-                                        </Button>
+                                        {currentUser?.id === id && (
+                                          <Button
+                                            variant="danger"
+                                            className="ms-3"
+                                            size="sm"
+                                            onClick={(): Promise<void> =>
+                                              onPageUnfollow(page.id)
+                                            }
+                                          >
+                                            Unfollow
+                                          </Button>
+                                        )}
                                       </div>
                                       <FollowModal
                                         show={isFollowModalVisible}
@@ -197,9 +226,7 @@ const ProfileInfo: React.FC = () => {
             </Row>
           </>
         ) : null
-      ) : (
-        <h1 className="d-flex justify-content-center">Permission denied</h1>
-      )}
+      ) : null}
     </Container>
   );
 };

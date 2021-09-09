@@ -21,6 +21,12 @@ export const { reducer, actions } = createSlice({
     [ActionType.RESET]: (state) => {
       Object.assign(state, initialState);
     },
+    [ActionType.CHANGE_ROLE]: (state, action) => {
+      const { userId, role } = action.payload;
+      const userIndex = state.users.findIndex((user) => user.id === userId);
+
+      state.users[userIndex].role = role;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -29,7 +35,7 @@ export const { reducer, actions } = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.users = action.payload;
-        state.status = RequestStatus.LOADING;
+        state.status = RequestStatus.SUCCEEDED;
       })
       .addCase(fetchUsers.rejected, (state) => {
         state.status = RequestStatus.FAILED;

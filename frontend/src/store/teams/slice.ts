@@ -39,9 +39,7 @@ const { reducer, actions } = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchTeams.fulfilled, (state, action) => {
-        if (state.teams.length != action.payload.length) {
-          state.teams = action.payload;
-        }
+        state.teams = action.payload;
         state.isLoading = false;
       })
       .addCase(fetchTeams.rejected, (state) => {
@@ -61,6 +59,7 @@ const { reducer, actions } = createSlice({
       })
       .addCase(createTeam.fulfilled, (state, action) => {
         state.teams.push(action.payload);
+        state.userTeams.push(action.payload);
       })
       .addCase(createTeam.rejected, () => {
         toast.error('Error happened while creating a team.');

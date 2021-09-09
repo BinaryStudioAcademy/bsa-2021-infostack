@@ -1,2 +1,5 @@
-export type { IPage } from './page.interface';
-export type { IPageNav } from './page-nav.interface';
+export * from './page.interface';
+export * from './user.interface';
+export * from './auth.interface';
+export * from './page-nav.interface';
+export * from './workspace.interface';

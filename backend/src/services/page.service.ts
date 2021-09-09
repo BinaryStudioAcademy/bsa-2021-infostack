@@ -1,5 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { Server } from 'socket.io';
+import 'datejs';
+import { generatePDFUtil } from '../common/utils/generate-pdf.util';
 import PageRepository from '../data/repositories/page.repository';
 import UserRepository from '../data/repositories/user.repository';
 import TeamRepository from '../data/repositories/team.repository';
@@ -26,6 +28,8 @@ import {
   IShareLink,
   IPageShare,
   IFoundPageContent,
+  IExportPDF,
+  IPageStatistic,
 } from '../common/interfaces/page';
 import { mapPagesToPagesNav } from '../common/mappers/page/map-pages-to-pages-nav';
 import { mapPagesToPagesNavWithoutChildren } from '../common/mappers/page/map-pages-to-pages-nav-without-children';
@@ -44,6 +48,9 @@ import { env } from '../env';
 import { sendMail } from '../common/utils/mailer.util';
 import elasticPageContentRepository from '../elasticsearch/repositories/page-content.repository';
 import mapSearchHitElasticPageContentToFoundPageContent from '../common/mappers/page/map-search-hit-elastice-page-content-to-found-page-content';
+import { RecentPagesRepository } from '../data/repositories';
+import { mapToRecentPage } from '../common/mappers/page/map-recent-pages.helper';
+import { RoleType } from '../common/enums/role-type';
 
 export const createPage = async (
   userId: string,
@@ -209,6 +216,13 @@ export const getPages = async (
 ): Promise<IPageNav[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const userRepository = getCustomRepository(UserRepository);
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+
+  const { role: userRole } =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
 
   const { teams } = await userRepository.findUserTeams(userId);
   const teamsIds = teams.map((team) => team.id);
@@ -236,6 +250,10 @@ export const getPages = async (
 
   const finalPages = pagesWithPermissions.filter((page) => page.permission);
 
+  if (userRole === RoleType.ADMIN) {
+    return pagesToShow;
+  }
+
   return finalPages;
 };
 
@@ -257,11 +275,22 @@ export const getPinnedPages = async (
 export const getPage = async (
   pageId: string,
   userId: string,
+  workspaceId: string,
 ): Promise<IPage> => {
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithContents(pageId);
-
-  return getPageWithPermission(userId, page);
+  if (page.workspaceId === workspaceId) {
+    const pageWithPermission = await getPageWithPermission(userId, page);
+    const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+    await recentPagesRepository.deleteOne(userId, pageId).then(() => {
+      if (pageWithPermission.permission) {
+        recentPagesRepository.save({ userId, pageId });
+      }
+    });
+    return pageWithPermission;
+  } else {
+    return mapPageToIPage(page);
+  }
 };
 
 export const getPageVersionContent = async (
@@ -499,6 +528,13 @@ export const getContributors = async (
   const pageRepository = getCustomRepository(PageRepository);
   const page = await pageRepository.findByIdWithAuthorAndContent(pageId);
 
+  if (!page) {
+    throw new HttpError({
+      status: HttpCode.NOT_FOUND,
+      message: HttpErrorMessage.NO_PAGE_WITH_SUCH_ID,
+    });
+  }
+
   return mapPageToContributors(page);
 };
 
@@ -699,7 +735,7 @@ export const searchPage = async (
   query: string,
   userId: string,
   workspaceId: string,
-): Promise<IFoundPageContent[]> => {
+): Promise<Partial<IFoundPageContent>[]> => {
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
   );
@@ -793,3 +829,149 @@ export const unpinPage = async (
   pageId: string,
 ): Promise<void> =>
   getCustomRepository(PageRepository).unpinPage(userId, pageId);
+
+export const downloadPDF = async (pageId: string): Promise<Buffer> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const { title, content } = page.pageContents[0];
+  const file = await generatePDFUtil(title, content);
+
+  return file;
+};
+
+export const sendPDF = async (
+  data: IExportPDF,
+  pageId: string,
+): Promise<void> => {
+  const { email } = data;
+  const pageRepository = getCustomRepository(PageRepository);
+  const page = await pageRepository.findByIdWithLastContent(pageId);
+  const { title, content } = page.pageContents[0];
+
+  const file = await generatePDFUtil(title, content);
+
+  await sendMail({
+    to: email,
+    subject: `${title} pdf file`,
+    attachments: [
+      {
+        filename: `${title}.pdf`,
+        content: file,
+      },
+    ],
+  });
+};
+
+export const getRecentPages = async (
+  userId: string,
+  workspaceId: string,
+): Promise<IPageStatistic[]> => {
+  const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+  const recentPages = await recentPagesRepository.findAllByUserIdandWorkspaceId(
+    userId,
+    workspaceId,
+  );
+
+  return mapToRecentPage(recentPages);
+};
+
+const getAvailablePages = async (
+  userId: string,
+  workspaceId: string,
+): Promise<string[]> => {
+  const userPermissionRepository = getCustomRepository(
+    UserPermissionRepository,
+  );
+  const teamPermissionRepository = getCustomRepository(
+    TeamPermissionRepository,
+  );
+  const userRepository = getCustomRepository(UserRepository);
+
+  const { teams } = await userRepository.findUserTeams(userId);
+  const teamsIds = teams.map((team) => team.id);
+
+  const availableForTeamsPages = teamsIds.length
+    ? await teamPermissionRepository.findAvailablePages(teamsIds, workspaceId)
+    : [];
+  const availableForUserPages =
+    await userPermissionRepository.findAvailablePages(userId, workspaceId);
+
+  const availablePagesIds = [
+    ...new Set(availableForTeamsPages.map(({ pageId }) => pageId)),
+    ...new Set(availableForUserPages.map(({ pageId }) => pageId)),
+  ];
+
+  return availablePagesIds;
+};
+
+export const getMostUpdatedPages = async (
+  userId: string,
+  workspaceId: string,
+  dateFrom: string,
+  limit?: number,
+): Promise<IPageStatistic[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const availablePagesIds = await getAvailablePages(userId, workspaceId);
+  if (availablePagesIds.length) {
+    const pages = await pageRepository.findMostUpdated(
+      availablePagesIds,
+      limit,
+      dateFrom,
+    );
+    return pages;
+  }
+  return [];
+};
+
+export const getMostViewedPages = async (
+  userId: string,
+  workspaceId: string,
+  dateFrom: string,
+  limit?: number,
+): Promise<IPageStatistic[]> => {
+  const recentPagesRepository = getCustomRepository(RecentPagesRepository);
+  const availablePagesIds = await getAvailablePages(userId, workspaceId);
+  if (availablePagesIds.length) {
+    const recentPages = await recentPagesRepository.findMostViewed(
+      availablePagesIds,
+      limit,
+      dateFrom,
+    );
+    return recentPages;
+  }
+  return [];
+};
+
+export const getСountOfUpdates = async (
+  userId: string,
+  workspaceId: string,
+  dateFrom: string,
+): Promise<IPageStatistic[]> => {
+  const pageRepository = getCustomRepository(PageRepository);
+  const availablePagesIds = await getAvailablePages(userId, workspaceId);
+  if (availablePagesIds.length) {
+    const times = await pageRepository.findСountOfUpdates(
+      availablePagesIds,
+      dateFrom,
+    );
+    const countsOfUpdates = [];
+    const date = new Date(dateFrom);
+    while (date.valueOf() < new Date().setUTCHours(0, 0, 0, 0)) {
+      const count = times
+        .filter(
+          (time) =>
+            new Date(time.date) >= date &&
+            new Date(time.date) <= new Date(date).addDays(1),
+        )
+        .map((time) => +time.count)
+        .reduce((a, b) => a + b, 0);
+      countsOfUpdates.push({
+        count: String(count),
+        date: new Date(date).toISOString(),
+      });
+      date.setDate(date.getDate() + 1);
+    }
+    return countsOfUpdates;
+  }
+  return [];
+};

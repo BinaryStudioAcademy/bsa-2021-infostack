@@ -29,7 +29,7 @@ export const IntegrationSettings: React.FC = () => {
   }, [username]);
 
   const onConnectButtonClick = async (): Promise<void> => {
-    const { url } = await authApi.getLoginGitHubUrl();
+    const { url } = await authApi.getLoginGitHubUrl(null);
     window.location.assign(url);
   };
 
@@ -63,6 +63,11 @@ export const IntegrationSettings: React.FC = () => {
         {!username && <ConnectButton onClick={onConnectButtonClick} />}
       </Card.Header>
       <Card.Body className={getAllowedClasses(styles.cardBody, 'text-dark')}>
+        {!username && !repos && (
+          <span className={getAllowedClasses(styles.emptyMessage)}>
+            There are no integrations in this workspace. Start adding
+          </span>
+        )}
         {username &&
           (repos || currentRepo ? (
             <>
@@ -90,7 +95,7 @@ export const IntegrationSettings: React.FC = () => {
               <hr />
             </>
           ) : (
-            <Spinner />
+            <Spinner height={'6rem'} width={'6rem'} />
           ))}
       </Card.Body>
     </Card>

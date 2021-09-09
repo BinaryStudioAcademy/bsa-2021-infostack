@@ -55,8 +55,11 @@ const { reducer, actions } = createSlice({
       state.isCurrentPageFollowed = false;
       state.isCurrentPagePinned = false;
     },
-    [ActionType.TOGGLE_SPINNER]: (state) => {
-      state.isSpinner = !state.isSpinner;
+    [ActionType.SPINNER_ON]: (state) => {
+      state.isSpinner = true;
+    },
+    [ActionType.SPINNER_OFF]: (state) => {
+      state.isSpinner = false;
     },
     [ActionType.CLEAR_CURRENT_PAGE]: (state) => {
       state.currentPage = null;

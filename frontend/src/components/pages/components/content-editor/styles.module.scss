@@ -1,13 +1,22 @@
-.content {
-  word-break: break-all;
-}
-
 :global(.card) {
   max-width: 87vw;
 }
 
 :global(.card) img {
-  max-width: 42vw;
+  max-width: 100%;
+  max-height: 10rem;
+}
+
+.content {
+  word-break: break-all;
+
+  :global(.rc-md-editor) {
+    padding-bottom: 0;
+  }
+
+  :global(.sec-md) {
+    border-right: 2px solid #e0e0e0;
+  }
 }
 
 ol {

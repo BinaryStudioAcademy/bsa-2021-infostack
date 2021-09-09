@@ -35,7 +35,7 @@ const { reducer, actions } = createSlice({
     ) => {
       state.currentWorkspace = action.payload;
     },
-    [ActionType.REMOVE_CURREND_WORKSPACE]: (state) => {
+    [ActionType.REMOVE_CURRENT_WORKSPACE]: (state) => {
       state.currentWorkspace = null;
     },
     [ActionType.SET_CREATING_ERROR]: (state, action: PayloadAction<string>) => {

@@ -11,9 +11,13 @@ import {
   IShareLink,
   IPageShare,
   IFoundPageContent,
-} from 'common/interfaces/pages';
+  IExportPDF,
+  ITag,
+  IQuery,
+  IPageStatistic,
+} from 'common/interfaces';
+import { getStringifiedQuery } from 'helpers/helpers';
 import { http } from 'services/http.service';
-import { ITag } from 'common/interfaces/tag';
 
 class PageApi {
   private http = http;
@@ -51,6 +55,30 @@ class PageApi {
     return this.http.load(`${this.BASE}/pinned`, {
       method: HttpMethod.GET,
     });
+  }
+
+  public async getMostViewedPages(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/most-viewed${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
+  }
+
+  public async getMostUpdatedPages(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/most-updated${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
+  }
+
+  public async getСountOfUpdates(query?: IQuery): Promise<IPageStatistic[]> {
+    return this.http.load(
+      `${this.BASE}/count-of-updates${
+        query ? `?${getStringifiedQuery(query)}` : ''
+      }`,
+    );
   }
 
   public async getPage(id?: string): Promise<IPage> {
@@ -233,6 +261,21 @@ class PageApi {
   public async unpinPage(pageId: string | undefined): Promise<void> {
     return this.http.load(`${this.BASE}/${pageId}/unpin`, {
       method: HttpMethod.POST,
+    });
+  }
+
+  public async downloadPDF(pageId: IExportPDF): Promise<Blob> {
+    return this.http.load(`${this.BASE}/${pageId}/download-pdf`, {
+      method: HttpMethod.GET,
+    });
+  }
+
+  public async sendPDF(payload: IExportPDF): Promise<void> {
+    const { pageId, email } = payload;
+    return this.http.load(`${this.BASE}/${pageId}/send-pdf`, {
+      method: HttpMethod.POST,
+      contentType: ContentType.JSON,
+      payload: JSON.stringify({ email }),
     });
   }
 }

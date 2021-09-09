@@ -127,15 +127,19 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
   }, [user]);
 
   return (
-    <Modal dialogClassName="w-75 mw-100 rounded" show={show}>
-      <Modal.Header>
+    <Modal
+      dialogClassName="w-75 mw-100 rounded"
+      show={show}
+      onHide={closeModal}
+    >
+      <Modal.Header closeButton>
         <Modal.Title className={getAllowedClasses('m-0', styles.title)}>
           Share Page
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className={getAllowedClasses(styles.creationContainer)}>
-          <h5>Create new link</h5>
+          <Form.Label style={{ fontWeight: 500 }}>Create new link</Form.Label>
           <div>
             <Form.Label>Set expiration time:</Form.Label>
             <div className={getAllowedClasses(styles.timeSettingsContainer)}>
@@ -209,7 +213,9 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
               </InputGroup>
             </div>
             <div className={getAllowedClasses(styles.emailContainer)}>
-              <InputGroup className="mb-3">
+              <InputGroup
+                className={getAllowedClasses('mb-3', styles.inputContainer)}
+              >
                 <FormField
                   label="Share by email"
                   type="email"
@@ -231,7 +237,7 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
             </div>
           </div>
         )}
-        <h5>Active links</h5>
+        <Form.Label style={{ fontWeight: 500 }}>Active links</Form.Label>
         <Table>
           <TableHead headers={TABLE_HEADERS} />
           <tbody>
@@ -252,11 +258,6 @@ export const ShareModal: React.FC<Props> = ({ show, onModalClose, pageId }) => {
           </tbody>
         </Table>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="warning" onClick={closeModal}>
-          Close
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

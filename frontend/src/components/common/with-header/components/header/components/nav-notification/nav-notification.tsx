@@ -5,6 +5,7 @@ import {
   useAppSelector,
   useContext,
   useEffect,
+  useState,
 } from 'hooks/hooks';
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums';
@@ -12,6 +13,7 @@ import { notificationsActions } from 'store/actions';
 import { EntityType } from 'common/enums';
 import { toDayJS, sortObjByDate, getAllowedClasses } from 'helpers/helpers';
 import styles from './styles.module.scss';
+import { INotification } from 'common/interfaces';
 
 const NOTIFICATIONS_LIMIT = 4;
 
@@ -21,6 +23,33 @@ export const NavNotification: React.FC = () => {
   const { notifications, count, isExpanded } = useAppSelector(
     (state) => state.notifications,
   );
+  const [notificationsToShow, setNotificationsToShow] =
+    useState<INotification[]>(notifications);
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const onShowFiltered = (): void => {
+    if (!isFiltered) {
+      const notRead = notifications.filter((notification) => {
+        return !notification.read;
+      });
+      setNotificationsToShow(notRead);
+      setIsFiltered(true);
+    } else {
+      setNotificationsToShow(notifications);
+      setIsFiltered(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isFiltered) {
+      setNotificationsToShow(notifications);
+    } else {
+      const notRead = notifications.filter((notification) => {
+        return !notification.read;
+      });
+      setNotificationsToShow(notRead);
+    }
+  }, [notifications]);
 
   const onNotificationNew = (): void => {
     if (isExpanded) {
@@ -38,6 +67,8 @@ export const NavNotification: React.FC = () => {
   useEffect(() => {
     socket.on(SocketEvents.NOTIFICATION_NEW, onNotificationNew);
     socket.on(SocketEvents.NOTIFICATION_DELETE, onNotificationDelete);
+
+    setIsFiltered(false);
 
     return (): void => {
       socket.off(SocketEvents.NOTIFICATION_NEW, onNotificationNew);
@@ -73,6 +104,7 @@ export const NavNotification: React.FC = () => {
   const onShowAll = (): void => {
     if (isExpanded) {
       dispatch(notificationsActions.removeNotifications());
+      setIsFiltered(false);
     }
     dispatch(notificationsActions.toggleIsExpanded());
   };
@@ -94,54 +126,13 @@ export const NavNotification: React.FC = () => {
       >
         <IconWithCount count={count} />
       </Dropdown.Toggle>
-      {!!notifications.length && (
+      {notifications.length ? (
         <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
           <Dropdown.Header className="text-center text-dark">
             {count} New Notifications
           </Dropdown.Header>
           <Dropdown.Divider className="mb-0" />
-          <div className={getAllowedClasses(isExpanded ? styles.expanded : '')}>
-            {[...notifications].sort(sortObjByDate).map((notification, i) => (
-              <>
-                {!!i && <Dropdown.Divider className="my-0" />}
-                {((!isExpanded && i < 4) || isExpanded) && (
-                  <NotificationItem
-                    key={notification.id}
-                    id={notification.id}
-                    type={notification.type}
-                    icon={
-                      notification.type === EntityType.COMMENT
-                        ? 'bi bi-chat-left'
-                        : notification.type === EntityType.TEAM
-                        ? 'bi bi-people'
-                        : notification.type === EntityType.PAGE
-                        ? 'bi bi-file-text-fill'
-                        : 'bi bi-info-circle'
-                    }
-                    title={notification.title}
-                    subtitle={notification.subtitle}
-                    subtitleId={notification.subtitleId}
-                    body={notification.body}
-                    read={notification.read}
-                    time={toDayJS(notification.createdAt).fromNow()}
-                    onRead={onRead}
-                  />
-                )}
-              </>
-            ))}
-          </div>
-          <Dropdown.Divider className="mt-0" />
           <div className="d-flex justify-content-around align-items-center p-1">
-            {isExpanded && (
-              <div
-                className="d-flex justify-content-center align-items-center p-1"
-                onClick={onReadAll}
-              >
-                <span className={getAllowedClasses(styles.footerText)}>
-                  Make all read
-                </span>
-              </div>
-            )}
             <div
               className="d-flex justify-content-center align-items-center p-1"
               onClick={onShowAll}
@@ -150,7 +141,72 @@ export const NavNotification: React.FC = () => {
                 {isExpanded ? 'Hide' : 'Show'} all messages
               </span>
             </div>
+
+            <div
+              className="d-flex justify-content-center align-items-center p-1"
+              onClick={onReadAll}
+            >
+              <span className={getAllowedClasses(styles.footerText)}>
+                Make all read
+              </span>
+            </div>
+            {isExpanded && (
+              <div
+                className="d-flex justify-content-center align-items-center p-1"
+                onClick={onShowFiltered}
+              >
+                <span className={getAllowedClasses(styles.footerText)}>
+                  {!isFiltered ? 'Filter by unread' : 'Cancel filtering'}
+                </span>
+              </div>
+            )}
           </div>
+          {isExpanded && <Dropdown.Divider className="mb-0 mt-0" />}
+          <div className={getAllowedClasses(isExpanded ? styles.expanded : '')}>
+            {!notificationsToShow.length && isFiltered && (
+              <div className={getAllowedClasses(styles.noUnread)}>
+                There are no unread notifications
+              </div>
+            )}
+            {[...notificationsToShow]
+              .sort(sortObjByDate)
+              .map((notification, i) => (
+                <>
+                  {(!!i || !isExpanded) && (
+                    <Dropdown.Divider className="my-0" />
+                  )}
+                  {((!isExpanded && i < 4) || isExpanded) && (
+                    <NotificationItem
+                      key={notification.id}
+                      id={notification.id}
+                      type={notification.type}
+                      icon={
+                        notification.type === EntityType.COMMENT
+                          ? 'bi bi-chat-left'
+                          : notification.type === EntityType.TEAM
+                          ? 'bi bi-people'
+                          : notification.type === EntityType.PAGE
+                          ? 'bi bi-file-text-fill'
+                          : 'bi bi-info-circle'
+                      }
+                      title={notification.title}
+                      subtitle={notification.subtitle}
+                      subtitleId={notification.subtitleId}
+                      body={notification.body}
+                      read={notification.read}
+                      time={toDayJS(notification.createdAt).fromNow()}
+                      onRead={onRead}
+                    />
+                  )}
+                </>
+              ))}
+          </div>
+        </Dropdown.Menu>
+      ) : (
+        <Dropdown.Menu className={getAllowedClasses(styles.popover)}>
+          <Dropdown.Header className="text-center text-dark">
+            There are no notifications
+          </Dropdown.Header>
         </Dropdown.Menu>
       )}
     </Dropdown>

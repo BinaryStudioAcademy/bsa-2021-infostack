@@ -29,13 +29,14 @@ export const ConfirmModal: React.FC<Props> = ({
       <Modal.Header closeButton>
         <Modal.Title className="fs-6">{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{modalText}</Modal.Body>
+      <Modal.Body className="text-center">{modalText}</Modal.Body>
       <Modal.Footer>
         {cancelButton && (
           <Button
-            variant="warning"
+            variant="secondary"
             onClick={cancelButton.onClick}
             disabled={cancelButton.disabled}
+            className="me-2"
           >
             {cancelButton.text}
           </Button>

@@ -20,6 +20,18 @@ class TeamPermissionRepository extends Repository<TeamPermission> {
     return this.manager.save(userPermission);
   }
 
+  public findAvailablePages(
+    teamsIds: string[],
+    workspaceId: string,
+  ): Promise<{ pageId: string }[]> {
+    return this.createQueryBuilder('team_permission')
+      .select('team_permission.pageId', 'pageId')
+      .leftJoin('team_permission.page', 'page')
+      .where('team_permission.teamId IN (:...teamsIds)', { teamsIds })
+      .andWhere('page.workspaceId = :workspaceId', { workspaceId })
+      .execute();
+  }
+
   public findByTeamId(teamId: string): Promise<TeamPermission[]> {
     return this.find({
       relations: ['page'],

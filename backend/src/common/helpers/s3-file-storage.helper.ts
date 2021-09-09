@@ -3,6 +3,10 @@ import S3 from 'aws-sdk/clients/s3';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/error';
 import { env } from '../../env';
+import mime from 'mime-types';
+
+import { HttpCode, HttpErrorMessage } from '../enums';
+import { HttpError } from '../errors/http-error';
 
 const accessKeyId = env.s3.accessKeyId;
 const secretAccessKey = env.s3.secretAccessKey;
@@ -31,11 +35,24 @@ export const uploadFile = (
   file: Express.Multer.File,
 ): Promise<S3.ManagedUpload.SendData> => {
   const fileStream = fs.createReadStream(file.path);
+
+  const fileType = mime.lookup(file.path);
+
+  if (!fileType) {
+    throw new HttpError({
+      status: HttpCode.UNPROCESSABLE_ENTITY,
+      message: HttpErrorMessage.INVALID_FILE_TYPE,
+    });
+  }
+
+  const type = mime.contentType(fileType);
+
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
     Key: file.filename,
     ACL: 'public-read',
+    ContentType: type || undefined,
   };
   return s3.upload(uploadParams).promise();
 };

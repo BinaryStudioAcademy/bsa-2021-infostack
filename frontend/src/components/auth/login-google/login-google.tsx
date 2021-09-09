@@ -1,4 +1,9 @@
-import { useAppDispatch, useHistory, useEffect } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useHistory,
+  useEffect,
+  useLocation,
+} from 'hooks/hooks';
 import { authActions } from 'store/auth';
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers/helpers';
@@ -10,6 +15,9 @@ const LoginGoogle: React.FC = () => {
   const search = new URL(window.location.href).searchParams;
   const code = search.get('code');
 
+  const location = useLocation();
+  const requestedPage = new URLSearchParams(location.search).get('state');
+
   useEffect(() => {
     if (code) {
       handleGoogle(code);
@@ -20,7 +28,11 @@ const LoginGoogle: React.FC = () => {
 
   const handleGoogle = async (code: string): Promise<void> => {
     await dispatch(authActions.loginGoogle(code));
-    push(AppRoute.WORKSPACES);
+    if (requestedPage) {
+      push({ pathname: AppRoute.WORKSPACES, state: { requestedPage } });
+    } else {
+      push(AppRoute.WORKSPACES);
+    }
   };
 
   return (
