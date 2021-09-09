@@ -1,12 +1,12 @@
-export const configureStore = `# \`configureStore\`
+import { createPageContent } from '../../../../../common/utils';
+import * as pages from '../../../pages';
 
+const content = [
+  `# configureStore
 A friendly abstraction over the standard Redux \`createStore\` function that adds good defaults
 to the store setup for a better development experience.
-
 ## Parameters
-
 \`configureStore\` accepts a single configuration object parameter, with the following options:
-
 \`\`\`ts no-transpile
 type ConfigureEnhancersCallback = (
   defaultEnhancers: StoreEnhancer[]
@@ -60,18 +60,14 @@ interface ConfigureStoreOptions<
 function configureStore<S = any, A extends Action = AnyAction>(
   options: ConfigureStoreOptions<S, A>
 ): EnhancedStore<S, A>
-\`\`\`
-
-### \`reducer\`
-
+\`\`\``,
+  `### \`reducer\`
 If this is a single function, it will be directly used as the root reducer for the store.
 
 If it is an object of slice reducers, like \`{users : usersReducer, posts : postsReducer}\`,
 \`configureStore\` will automatically create the root reducer by passing this object to the
 [Redux \`combineReducers\` utility](https://redux.js.org/api/combinereducers).
-
 ### \`middleware\`
-
 An optional array of Redux middleware functions
 
 If this option is provided, it should contain all the middleware functions you
@@ -85,10 +81,8 @@ you may pass a callback function that will receive \`getDefaultMiddleware\` as i
 and should return a middleware array.
 
 For more details on how the \`middleware\` parameter works and the list of middleware that are added by default, see the
-[\`getDefaultMiddleware\` docs page](./getDefaultMiddleware.mdx).
-
-### \`devTools\`
-
+[\`getDefaultMiddleware\` docs page](./getDefaultMiddleware.mdx).`,
+  `### \`devTools\`
 If this is a boolean, it will be used to indicate whether \`configureStore\` should automatically enable support for [the Redux DevTools browser extension](https://github.com/zalmoxisus/redux-devtools-extension).
 
 If it is an object, then the DevTools Extension will be enabled, and the options object will be passed to \`composeWithDevtools()\`. See
@@ -100,13 +94,9 @@ Defaults to \`true\`.
 The Redux DevTools Extension recently added [support for showing action stack traces](https://github.com/zalmoxisus/redux-devtools-extension/blob/d4ef75691ad294646f74bca38b973b19850a37cf/docs/Features/Trace.md) that show exactly where each action was dispatched. Capturing the traces can add a bit of overhead, so the DevTools Extension allows users to configure whether action stack traces are captured.
 
 If the DevTools are enabled by passing \`true\` or an object, then \`configureStore\` will default to enabling capturing action stack traces in development mode only.
-
 ### \`preloadedState\`
-
 An optional initial state value to be passed to the Redux \`createStore\` function.
-
 ### \`enhancers\`
-
 An optional array of Redux store enhancers, or a callback function to customize the array of enhancers.
 
 If defined as an array, these will be passed to [the Redux \`compose\` function](https://redux.js.org/api/compose), and the combined enhancer will be passed to \`createStore\`.
@@ -120,12 +110,9 @@ and should return a new array of enhancers. This is primarily useful for cases w
 in front of \`applyMiddleware\`, such as \`redux-first-router\` or \`redux-offline\`.
 
 Example: \`enhancers: (defaultEnhancers) => [offline, ...defaultEnhancers]\` will result in a final setup
-of \`[offline, applyMiddleware, devToolsExtension]\`.
-
-## Usage
-
+of \`[offline, applyMiddleware, devToolsExtension]\`.`,
+  `## Usage
 ### Basic Example
-
 \`\`\`ts
 // file: reducers.ts noEmit
 import { Reducer } from '@reduxjs/toolkit'
@@ -140,9 +127,7 @@ import rootReducer from './reducers'
 const store = configureStore({ reducer: rootReducer })
 // The store now has redux-thunk added and the Redux DevTools Extension is turned on
 \`\`\`
-
 ### Full Example
-
 \`\`\`ts no-transpile
 // file: todos/todosReducer.ts noEmit
 import { Reducer } from '@reduxjs/toolkit'
@@ -198,4 +183,14 @@ const store = configureStore({
 // - redux-thunk and redux-logger were added as middleware
 // - The Redux DevTools Extension is disabled for production
 // - The middleware, batch, and devtools enhancers were composed together
-\`\`\``;
+\`\`\``,
+];
+
+const startDate = new Date('2021-09-09T08:12:45+0000');
+
+export const configureStore = createPageContent(
+  content,
+  pages.configureStore.id,
+  'configureStore',
+  startDate,
+);

@@ -1,13 +1,14 @@
-export const immutabilityMiddleware = `# Immutability Middleware
+import { createPageContent } from '../../../../../common/utils';
+import * as pages from '../../../pages';
 
+const content = [
+  `# Immutability Middleware
 A port of the [\`redux-immutable-state-invariant\`](https://github.com/leoasis/redux-immutable-state-invariant) middleware, customized for use with Redux Toolkit. Any detected mutations will be thrown as errors.
 
 This middleware is added to the store by default by [\`configureStore\`](./configureStore.mdx) and [\`getDefaultMiddleware\`](./getDefaultMiddleware.mdx).
 
 You can customize the behavior of this middleware by passing any of the supported options as the \`immutableCheck\` value for \`getDefaultMiddleware\`.
-
 ## Options
-
 \`\`\`ts no-transpile
 type IsImmutableFunc = (value: any) => boolean
 
@@ -30,18 +31,14 @@ interface ImmutableStateInvariantMiddlewareOptions {
   // @deprecated. Use ignoredPaths
   ignore?: string[]
 }
-\`\`\`
-
-## Exports
-
+\`\`\``,
+  `## Exports
 ### \`createImmutableStateInvariantMiddleware\`
-
 Creates an instance of the immutability check middleware, with the given options.
 
 You will most likely not need to call this yourself, as \`getDefaultMiddleware\` already does so.
 
 Example:
-
 \`\`\`ts
 // file: exampleSlice.ts
 
@@ -81,9 +78,7 @@ const store = configureStore({
   middleware: [immutableInvariantMiddleware],
 })
 \`\`\`
-
 doing the same without removing all other middlewares, using [getDetfaultMiddleware](./getDefaultMiddleware):
-
 \`\`\`ts
 // file: exampleSlice.ts noEmit
 
@@ -119,16 +114,22 @@ const store = configureStore({
       },
     }),
 })
-\`\`\`
-
-### \`isImmutableDefault\`
-
+\`\`\``,
+  `### \`isImmutableDefault\`
 Default implementation of the "is this value immutable?" check. Currently implemented as:
-
 \`\`\`js
 return (
   typeof value !== 'object' || value === null || typeof value === 'undefined'
 )
 \`\`\`
+This will return true for primitive types (like numbers, strings, booleans, null and undefined)`,
+];
 
-This will return true for primitive types (like numbers, strings, booleans, null and undefined)`;
+const startDate = new Date('2021-09-09T011:21:19+0000');
+
+export const immutabilityMiddleware = createPageContent(
+  content,
+  pages.immutabilityMiddleware.id,
+  'Immutability Middleware',
+  startDate,
+);

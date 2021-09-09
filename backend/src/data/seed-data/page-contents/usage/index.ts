@@ -1,3 +1,9 @@
-export { usageGuide } from './usage-guide';
-export { usageWithTypeScript } from './usage-with-typescript';
-export { writingReducersWithImmer } from './writing-reducers-with-immer';
+import { usingReduxToolkit } from './usage-guide';
+import { usageWithTypeScript } from './usage-with-typescript';
+import { writingReducersWithImmer } from './writing-reducers-with-immer';
+
+export const usageContent = [
+  ...usingReduxToolkit,
+  ...usageWithTypeScript,
+  ...writingReducersWithImmer,
+];

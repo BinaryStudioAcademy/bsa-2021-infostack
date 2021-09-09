@@ -1,13 +1,14 @@
-export const serializabilityMiddleware = `# Serializability Middleware
+import { createPageContent } from '../../../../../common/utils';
+import * as pages from '../../../pages';
 
+const content = [
+  `# Serializability Middleware
 A custom middleware that detects if any non-serializable values have been included in state or dispatched actions, modeled after \`redux-immutable-state-invariant\`. Any detected non-serializable values will be logged to the console.
 
 This middleware is added to the store by default by [\`configureStore\`](./configureStore.mdx) and [\`getDefaultMiddleware\`](./getDefaultMiddleware.mdx).
 
-You can customize the behavior of this middleware by passing any of the supported options as the \`serializableCheck\` value for \`getDefaultMiddleware\`.
-
-## Options
-
+You can customize the behavior of this middleware by passing any of the supported options as the \`serializableCheck\` value for \`getDefaultMiddleware\`.`,
+  `## Options
 \`\`\`ts no-transpile
 interface SerializableStateInvariantMiddlewareOptions {
   /**
@@ -52,18 +53,14 @@ interface SerializableStateInvariantMiddlewareOptions {
    */
   ignoreState?: boolean
 }
-\`\`\`
-
-## Exports
-
+\`\`\``,
+  `## Exports
 ### \`createSerializableStateInvariantMiddleware\`
-
 Creates an instance of the serializability check middleware, with the given options.
 
 You will most likely not need to call this yourself, as \`getDefaultMiddleware\` already does so.
 
 Example:
-
 \`\`\`ts
 // file: reducer.ts noEmit
 
@@ -98,13 +95,10 @@ const store = configureStore({
   middleware: [serializableMiddleware],
 })
 \`\`\`
-
 ### \`isPlain\`
-
 Checks whether the given value is considered a "plain value" or not.
 
 Currently implemented as:
-
 \`\`\`ts
 // file: src/isPlainObject.ts noEmit
 
@@ -126,5 +120,14 @@ export function isPlain(val: any) {
   )
 }
 \`\`\`
+This will accept all standard JS objects, arrays, and primitives, but return false for \`Date\`s, \`Map\`s, and other similar class instances.`,
+];
 
-This will accept all standard JS objects, arrays, and primitives, but return false for \`Date\`s, \`Map\`s, and other similar class instances.`;
+const startDate = new Date('2021-09-09T15:21:19+0000');
+
+export const serializabilityMiddleware = createPageContent(
+  content,
+  pages.serializabilityMiddleware.id,
+  'Serializability Middleware',
+  startDate,
+);

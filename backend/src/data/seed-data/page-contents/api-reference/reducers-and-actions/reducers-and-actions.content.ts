@@ -11,7 +11,7 @@ const content = [
 `,
 ];
 
-const startDate = new Date('2021-09-10T014:20:00+0000');
+const startDate = new Date('2021-09-10T14:20:00+0000');
 
 export const reducersAndActions = createPageContent(
   content,

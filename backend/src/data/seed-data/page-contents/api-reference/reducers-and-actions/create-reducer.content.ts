@@ -236,7 +236,7 @@ const slice = createSlice({
 \`\`\``,
 ];
 
-const startDate = new Date('2021-09-10T016:00:00+0000');
+const startDate = new Date('2021-09-10T16:00:00+0000');
 
 export const createReducer = createPageContent(
   content,
