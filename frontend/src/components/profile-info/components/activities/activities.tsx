@@ -1,11 +1,7 @@
+import ReactMarkdown from 'react-markdown';
 import { Button, Card, Dropdown, NavLink } from 'react-bootstrap';
 
-import {
-  useAppDispatch,
-  useAppSelector,
-  useEffect,
-  useHistory,
-} from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks';
 import { activitiesActions } from 'store/activities';
 import { IUserActivity } from 'common/interfaces';
 import { getAllowedClasses, replaceIdParam } from 'helpers';

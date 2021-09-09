@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 type Props = {
