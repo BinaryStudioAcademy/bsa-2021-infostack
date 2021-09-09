@@ -1,5 +1,5 @@
-import { AppRoute, HttpErrorMessage } from 'common/enums';
-import { FormField, Link, Sign } from 'components/common';
+import { AppRoute } from 'common/enums';
+import { FormField, FormPasswordField, Link, Sign } from 'components/common';
 import { loginSchema } from 'common/validations';
 import {
   useAppDispatch,
@@ -69,10 +69,9 @@ export const Login: React.FC = () => {
         errors={errors.email}
         inputClassName={commonStyles.input}
       />
-      <FormField
+      <FormPasswordField
         register={register('password')}
         label="Password"
-        type="password"
         placeholder="Enter your password"
         errors={errors.password}
         inputClassName={commonStyles.input}

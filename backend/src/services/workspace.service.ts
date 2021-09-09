@@ -117,6 +117,8 @@ export const deleteUserFromWorkspace = async (
   io: Server,
 ): Promise<void> => {
   const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userRepository = getCustomRepository(UserRepository);
+  const pageRepository = getCustomRepository(PageRepository);
   const {
     workspace: { name: workspaceName },
   } = await userWorkspaceRepository.findByUserIdAndWorkspaceIdDetailed(
@@ -129,7 +131,6 @@ export const deleteUserFromWorkspace = async (
     workspaceId,
   );
 
-  const userRepository = getCustomRepository(UserRepository);
   const user = await userRepository.findById(userId);
   const userTeamsInWorkspace = user.teams.filter(
     (team) => team.workspaceId === workspaceId,
@@ -144,10 +145,9 @@ export const deleteUserFromWorkspace = async (
     }),
   );
 
-  const pageRepository = getCustomRepository(PageRepository);
-  const allPagesForPermissions = await pageRepository.findPages(workspaceId);
+  const allPages = await pageRepository.findPages(workspaceId);
   await Promise.all(
-    allPagesForPermissions.map(async (page) => {
+    allPages.map(async (page) => {
       const userPermissionRepository = getCustomRepository(
         UserPermissionRepository,
       );
@@ -161,11 +161,11 @@ export const deleteUserFromWorkspace = async (
     }),
   );
 
-  const allPagesForFollowings = await pageRepository.findPages(workspaceId);
-  const pageIds = allPagesForFollowings.map((page) => {
+  const pageIds = allPages.map((page) => {
     return page.id;
   });
   await pageRepository.unfollowPages(userId, pageIds);
+  await pageRepository.unpinPages(userId, pageIds);
 
   io.to(user.id).emit(SocketEvents.WORKSPACE_DELETE_USER, {
     workspaceId,

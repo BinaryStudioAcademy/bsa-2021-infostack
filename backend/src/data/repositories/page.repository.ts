@@ -274,6 +274,12 @@ class PageRepository extends Repository<Page> {
       .remove(userId);
   }
 
+  public unpinPages(userId: string, pageIds: string[]): Promise<void> {
+    return this.createQueryBuilder()
+      .relation('pinnedUsers')
+      .of(pageIds)
+      .remove(userId);
+  }
   public getEditors(id: string): Promise<User[]> {
     return this.createQueryBuilder()
       .relation(Page, 'editors')

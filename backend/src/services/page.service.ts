@@ -165,6 +165,7 @@ const addPermissionField = async <T extends { id?: string }>(
   userId: string,
   teamsIds: string[],
   page: T,
+  workspaceId: string,
 ): Promise<T> => {
   const userPermissionRepository = getCustomRepository(
     UserPermissionRepository,
@@ -172,6 +173,16 @@ const addPermissionField = async <T extends { id?: string }>(
   const teamPermissionRepository = getCustomRepository(
     TeamPermissionRepository,
   );
+  const userWorkspaceRepository = getCustomRepository(UserWorkspaceRepository);
+  const userWorkspace =
+    await userWorkspaceRepository.findByUserIdAndWorkspaceId(
+      userId,
+      workspaceId,
+    );
+  if (userWorkspace?.role === RoleType.ADMIN) {
+    return { ...page, permission: RoleType.ADMIN };
+  }
+
   const userPermission = await userPermissionRepository.findByUserAndPageId(
     userId,
     page.id,
@@ -199,16 +210,23 @@ const addPermissions = async (
   userId: string,
   teamsIds: string[],
   page: IPageNav,
+  workspaceId: string,
 ): Promise<IPageNav> => {
   const pageWithPermissions = await addPermissionField<IPageNav>(
     userId,
     teamsIds,
     page,
+    workspaceId,
   );
   const children = page.childPages;
   const childrenWithPermissions = [] as IPageNav[];
   for (const child of children) {
-    const childWithPermissions = await addPermissions(userId, teamsIds, child);
+    const childWithPermissions = await addPermissions(
+      userId,
+      teamsIds,
+      child,
+      workspaceId,
+    );
     childrenWithPermissions.push(childWithPermissions);
   }
   return { ...pageWithPermissions, childPages: childrenWithPermissions };
@@ -248,7 +266,12 @@ export const getPages = async (
 
   const pagesWithPermissions = [] as IPageNav[];
   for (const page of pagesToShow) {
-    const pageWithPermissions = await addPermissions(userId, teamsIds, page);
+    const pageWithPermissions = await addPermissions(
+      userId,
+      teamsIds,
+      page,
+      workspaceId,
+    );
     pagesWithPermissions.push(pageWithPermissions);
   }
 
@@ -795,6 +818,7 @@ export const getPageWithPermission = async (
     userId,
     teamsIds,
     mapPageToIPage(page),
+    page.workspaceId,
   );
 
   return pageWithPermission;
