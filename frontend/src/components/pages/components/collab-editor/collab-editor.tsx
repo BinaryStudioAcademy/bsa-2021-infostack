@@ -7,6 +7,7 @@ import {
   Row,
 } from 'react-bootstrap';
 import * as Y from 'yjs';
+import { useContext } from 'react';
 import Quill from 'quill';
 import { useQuill } from 'react-quilljs';
 import QuillCursors from 'quill-cursors';
@@ -17,6 +18,8 @@ import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import { useState, useEffect, useParams } from 'hooks/hooks';
 import { AppRoute } from 'common/enums';
+import { SocketContext } from 'context/socket';
+import { SocketEvents } from 'common/enums';
 import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 
 import 'quill/dist/quill.snow.css';
@@ -29,6 +32,7 @@ interface Props {
   handleSaveConfirm(title: string, content: string): void;
   handleCancel(): void;
   url: string;
+  isContentInserted: boolean;
 }
 
 export const CollabEditor: React.FC<Props> = ({
@@ -38,8 +42,10 @@ export const CollabEditor: React.FC<Props> = ({
   handleSaveConfirm,
   handleCancel,
   url,
+  isContentInserted,
 }) => {
   const paramsId = useParams<{ id: string }>().id;
+  const socket = useContext(SocketContext);
 
   const [titleInput, setTitleInput] = useState(title);
   const [contentInput, setContentInput] = useState('');
@@ -86,6 +92,21 @@ export const CollabEditor: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    if (!isContentInserted) {
+      const md = new MarkdownIt();
+      const result = md.render(content || '');
+      quill?.clipboard.dangerouslyPasteHTML(result);
+      socket.emit(SocketEvents.CONTENT_INSERTED, true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (contentInput) {
+      socket.emit(SocketEvents.CONTENT_INSERTED, true);
+    }
+  }, [contentInput]);
+
+  useEffect(() => {
     if (quill) {
       const pagePath = replaceIdParam(AppRoute.CONTENT_SETTING, paramsId || '');
       const ydoc = new Y.Doc();
@@ -98,12 +119,6 @@ export const CollabEditor: React.FC<Props> = ({
         name: userName,
         color: 'blue',
       });
-
-      if (provider.awareness.states.size == 1) {
-        const md = new MarkdownIt();
-        const result = md.render(content || '');
-        quill.clipboard.dangerouslyPasteHTML(result);
-      }
 
       quill.on('text-change', () => {
         const html = quill.root.innerHTML;

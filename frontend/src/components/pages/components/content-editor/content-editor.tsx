@@ -71,13 +71,19 @@ export const ContentEditor: React.FC = () => {
   const [isLiveMode, setIsLiveMode] = useState(false);
   const [pageEditors, setPageEditors] = useState<IPageContributor[]>([]);
   const [url, setUrl] = useState('');
+  const [isContentInserted, setIsContentInserted] = useState(false);
 
-  const addEditor = (editors: IPageContributor[], url: string): void => {
+  const addEditor = (
+    editors: IPageContributor[],
+    url: string,
+    isContentInserted: boolean,
+  ): void => {
     setPageEditors(editors);
     editors.length > 1 && !isLiveMode
       ? setIsCollabModalVisible(true)
       : setIsCollabModalVisible(false);
     setUrl(url);
+    setIsContentInserted(isContentInserted);
   };
 
   useEffect(() => {
@@ -296,6 +302,7 @@ export const ContentEditor: React.FC = () => {
                 handleSaveConfirm={handleCollabSaveConfirm}
                 handleCancel={onCancel}
                 url={url}
+                isContentInserted={isContentInserted}
               />
             ) : null}
           </>
