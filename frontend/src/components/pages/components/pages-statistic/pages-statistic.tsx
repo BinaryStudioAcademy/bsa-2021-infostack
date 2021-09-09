@@ -1,4 +1,4 @@
-import { Card } from 'react-bootstrap';
+import { Card, OverlayTrigger, Popover } from 'react-bootstrap';
 import { AppRoute } from 'common/enums';
 import { Link } from 'components/common/common';
 import { IPageStatistic } from 'common/interfaces';
@@ -22,11 +22,10 @@ export const PagesStatistic: React.FC<Props> = ({
   placeholder,
 }) => {
   return (
-    <div className={getAllowedClasses('p-4', styles.statisticContainer)}>
-      <Card
-        border="light"
-        className={getAllowedClasses(styles.card, className)}
-      >
+    <div
+      className={getAllowedClasses('p-4', styles.statisticContainer, className)}
+    >
+      <Card border="light" className={getAllowedClasses(styles.card)}>
         <Card.Header className="bg-white border-0 d-flex align-items-center text-secondary">
           {title}
         </Card.Header>
@@ -50,7 +49,23 @@ export const PagesStatistic: React.FC<Props> = ({
                       'text-break',
                     )}
                   >
-                    {page.title}
+                    <OverlayTrigger
+                      trigger="hover"
+                      placement="bottom"
+                      overlay={
+                        <Popover id="popover-positioned-bottom">
+                          <Popover.Body
+                            className={getAllowedClasses(styles.popoverText)}
+                          >
+                            {page.title}
+                          </Popover.Body>
+                        </Popover>
+                      }
+                    >
+                      <span className={getAllowedClasses(styles.pageTitle)}>
+                        {page.title}
+                      </span>
+                    </OverlayTrigger>
                   </div>
                   <div className={getAllowedClasses(styles.info)}>
                     {page.date || page.count}

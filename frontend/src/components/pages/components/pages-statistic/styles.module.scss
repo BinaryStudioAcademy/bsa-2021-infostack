@@ -6,10 +6,25 @@
   font-size: 1.5rem;
   margin: 1rem 0;
 }
+
 .recentItem {
   margin-top: 10px;
   color: var(--bs-gray);
+  min-width: 5rem;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+
+.pageTitle {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 .recentItem::before {
   position: absolute;
   left: 20px;
@@ -22,16 +37,20 @@
   background-position: top 3px right calc(0.375em + 0.1875rem);
   background-size: 85% 85%;
 }
+
 .recentIcon {
   margin-right: 1rem;
   color: var(--bs-success);
 }
+
 .info {
   margin-top: 10px;
   font-size: 12px;
   margin-left: 2.5rem;
   color: var(--bs-gray);
+  white-space: nowrap;
 }
+
 .placeholder {
   margin-top: 10px;
   margin-left: 0 !important;
@@ -39,6 +58,8 @@
   width: 100%;
 }
 
-.statisticContainer {
-  flex: 1;
+.popoverText {
+  font-size: 1.32rem;
+  color: #737373;
+  font-family: 'Poppins', sans-serif;
 }
