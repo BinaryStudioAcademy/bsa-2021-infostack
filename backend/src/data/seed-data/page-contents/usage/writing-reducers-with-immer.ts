@@ -380,7 +380,7 @@ To resolve this, you can tell the ESLint rule to ignore mutations to a parameter
 See [the Immer documentation](https://immerjs.github.io/immer/) for more details on Immer's APIs, edge cases, and behavior.`,
 ];
 
-const startDate = new Date('2021-09-08T012:21:19+0000');
+const startDate = new Date('2021-09-08T12:21:19+0000');
 
 export const writingReducersWithImmer = createPageContent(
   content,

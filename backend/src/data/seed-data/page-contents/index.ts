@@ -1,4 +1,11 @@
-export * from './introduction';
-export * from './tutorials';
-export * from './usage';
-export * from './api-reference';
+import { introductionContent } from './introduction';
+import { tutorialsContent } from './tutorials';
+import { usageContent } from './usage';
+import { apiReferenceContent } from './api-reference';
+
+export const content = [
+  ...introductionContent,
+  ...tutorialsContent,
+  ...usageContent,
+  ...apiReferenceContent,
+];

@@ -1,1 +1,3 @@
-export { gettingStarted } from './getting-started';
+import { gettingStarted } from './getting-started';
+
+export const introductionContent = [...gettingStarted];

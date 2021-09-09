@@ -1,4 +1,8 @@
-export const queryQuickStart = `# RTK Query Quick Start
+import { createPageContent } from '../../../../common/utils';
+import * as pages from '../../pages';
+
+const content = [
+  `# RTK Query Quick Start
 ## What You'll Learn
 - How to set up and use Redux Toolkit's "RTK Query" data fetching functionality
 ## Prerequisites
@@ -10,8 +14,8 @@ RTK Query is an advanced data fetching and caching tool, designed to simplify co
 
 RTK Query is included in the \`@reduxjs/toolkit\` package as an additional addon. You are not required to use the RTK Query APIs when you use Redux Toolkit, but we think many users will benefit from RTK Query's data fetching and caching in their apps.
 ### How to Read This Tutorial
-For this tutorial, we assume that you're using Redux Toolkit with React, but you can also use it with other UI layers as well. The examples are based on [a typical Create-React-App folder structure](https://create-react-app.dev/docs/folder-structure) where all the application code is in a \`src\`, but the patterns can be adapted to whatever project or folder setup you're using.
-## Setting up your store and API service
+For this tutorial, we assume that you're using Redux Toolkit with React, but you can also use it with other UI layers as well. The examples are based on [a typical Create-React-App folder structure](https://create-react-app.dev/docs/folder-structure) where all the application code is in a \`src\`, but the patterns can be adapted to whatever project or folder setup you're using.`,
+  `## Setting up your store and API service
 To see how RTK Query works, let's walk through a basic usage example. For this example, we'll assume you're using React and want to make use of RTK Query's auto-generated React hooks.
 ### Create an API service
 First, we'll create a service definition that queries the publicly available [PokeAPI](https://pokeapi.co/).
@@ -88,12 +92,9 @@ export const store = configureStore({
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
 // see \`setupListeners\` docs - takes an optional callback as the 2nd arg for customization
 setupListeners(store.dispatch)
-\`\`\`
-
-### Wrap your application with the \`Provider\`
-
+\`\`\``,
+  `### Wrap your application with the \`Provider\`
 If you haven't already done so, follow the standard pattern for providing the Redux store to the rest of your React application component tree:
-
 \`\`\`ts title="src/index.tsx"
 // file: App.tsx noEmit
 import React from 'react'
@@ -123,12 +124,9 @@ render(
   </Provider>,
   rootElement
 )
-\`\`\`
-
-## Use the query in a component
-
+\`\`\``,
+  `## Use the query in a component
 Once a service has been defined, you can import the hooks to make a request.
-
 \`\`\`ts title="src/App.tsx"
 // file: services/pokemon.ts noEmit
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
@@ -174,5 +172,14 @@ export default function App() {
   )
 }
 \`\`\`
+When making a request, you're able to track the state in several ways. You can always check \`data\`, \`status\`, and \`error\` to determine the right UI to render. In addition, \`useQuery\` also provides utility booleans like \`isLoading\`, \`isFetching\`, \`isSuccess\`, and \`isError\` for the latest request.`,
+];
 
-When making a request, you're able to track the state in several ways. You can always check \`data\`, \`status\`, and \`error\` to determine the right UI to render. In addition, \`useQuery\` also provides utility booleans like \`isLoading\`, \`isFetching\`, \`isSuccess\`, and \`isError\` for the latest request.`;
+const startDate = new Date('2021-09-06T16:21:19+0000');
+
+export const queryQuickStart = createPageContent(
+  content,
+  pages.queryQuickStart.id,
+  'RTK Query Quick Start',
+  startDate,
+);

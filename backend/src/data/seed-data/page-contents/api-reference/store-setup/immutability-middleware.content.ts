@@ -125,7 +125,7 @@ return (
 This will return true for primitive types (like numbers, strings, booleans, null and undefined)`,
 ];
 
-const startDate = new Date('2021-09-09T011:21:19+0000');
+const startDate = new Date('2021-09-09T11:21:19+0000');
 
 export const immutabilityMiddleware = createPageContent(
   content,

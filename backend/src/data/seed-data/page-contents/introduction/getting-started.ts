@@ -1,4 +1,8 @@
-export const gettingStarted = `# Getting Started with Redux Toolkit
+import { createPageContent } from '../../../../common/utils';
+import * as pages from '../../pages';
+
+const content = [
+  `# Getting Started with Redux Toolkit
 ## Purpose
 The **Redux Toolkit** package is intended to be the standard way to write [Redux](https://redux.js.org) logic. It was originally created to help address three common concerns about Redux:
 - "Configuring a Redux store is too complicated"
@@ -10,8 +14,8 @@ Redux Toolkit also includes a powerful data fetching and caching capability that
 
 **These tools should be beneficial to all Redux users**. Whether you're a brand new Redux user setting up your
 first project, or an experienced user who wants to simplify an existing application, **Redux Toolkit** can help
-you make your Redux code better.
-## Installation
+you make your Redux code better.`,
+  `## Installation
 ### Using Create React App
 The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) or [Redux+TS template](https://github.com/reduxjs/cra-template-redux-typescript) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of **[Redux Toolkit](https://redux-toolkit.js.org/)** and React Redux's integration with React components.
 \`\`\`bash
@@ -33,8 +37,8 @@ or
 yarn add @reduxjs/toolkit
 \`\`\`
 It is also available as a precompiled UMD package that defines a \`window.RTK\` global variable.
-The UMD package can be used as a [\`<script>\` tag](https://unpkg.com/@reduxjs/toolkit/dist/redux-toolkit.umd.js) directly.
-## What's Included
+The UMD package can be used as a [\`<script>\` tag](https://unpkg.com/@reduxjs/toolkit/dist/redux-toolkit.umd.js) directly.`,
+  `## What's Included
 Redux Toolkit includes these APIs:
 - [\`configureStore()\`](../api/configureStore.mdx): wraps \`createStore\` to provide simplified configuration options and good defaults. It can automatically combine your slice reducers, adds whatever Redux middleware you supply, includes \`redux-thunk\` by default, and enables use of the Redux DevTools Extension.
 - [\`createReducer()\`](../api/createReducer.mdx): that lets you supply a lookup table of action types to case reducer functions, rather than writing switch statements. In addition, it automatically uses the [\`immer\` library](https://github.com/immerjs/immer) to let you write simpler immutable updates with normal mutative code, like \`state.todos[3].completed = true\`.
@@ -42,8 +46,8 @@ Redux Toolkit includes these APIs:
 - [\`createSlice()\`](../api/createSlice.mdx): accepts an object of reducer functions, a slice name, and an initial state value, and automatically generates a slice reducer with corresponding action creators and action types.
 - [\`createAsyncThunk\`](../api/createAsyncThunk.mdx): accepts an action type string and a function that returns a promise, and generates a thunk that dispatches \`pending/fulfilled/rejected\` action types based on that promise
 - [\`createEntityAdapter\`](../api/createEntityAdapter.mdx): generates a set of reusable reducers and selectors to manage normalized data in the store
-- The [\`createSelector\` utility](../api/createSelector.mdx) from the [Reselect](https://github.com/reduxjs/reselect) library, re-exported for ease of use.
-## RTK Query
+- The [\`createSelector\` utility](../api/createSelector.mdx) from the [Reselect](https://github.com/reduxjs/reselect) library, re-exported for ease of use.`,
+  `## RTK Query
 [**RTK Query**](../rtk-query/overview.md) is provided as an optional addon within the \`@reduxjs/toolkit\` package. It is purpose-built to solve the use case of data fetching and caching, supplying a compact, but powerful toolset to define an API interface layer for your app. It is intended to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
 
 RTK Query is built on top of the Redux Toolkit core for its implementation, using [Redux](https://redux.js.org/) internally for its architecture. Although knowledge of Redux and RTK are not required to use RTK Query, you should explore all of the additional global store management capabilities they provide, as well as installing the [Redux DevTools browser extension](https://github.com/reduxjs/redux-devtools), which works flawlessly with RTK Query to traverse and replay a timeline of your request & cache behavior.
@@ -55,8 +59,8 @@ import { createApi } from '@reduxjs/toolkit/query'
 /* React-specific entry point that automatically generates
    hooks corresponding to the defined endpoints */
 import { createApi } from '@reduxjs/toolkit/query/react'
-\`\`\`
-### What's included
+\`\`\``,
+  `### What's included
 RTK Query includes these APIs:
 - [\`createApi()\`](../rtk-query/api/createApi.mdx): The core of RTK Query's functionality. It allows you to define a set of endpoints describe how to retrieve data from a series of endpoints, including configuration of how to fetch and transform that data. In most cases, you should use this once per app, with "one API slice per base URL" as a rule of thumb.
 - [\`fetchBaseQuery()\`](../rtk-query/api/fetchBaseQuery.mdx): A small wrapper around [\`fetch\`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) that aims to simplify requests. Intended as the recommended \`baseQuery\` to be used in \`createApi\` for the majority of users.
@@ -75,4 +79,14 @@ See [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/le
 ## Help and Discussion
 The **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** of the **[Reactiflux Discord community](http://www.reactiflux.com)** is our official resource for all questions related to learning and using Redux. Reactiflux is a great place to hang out, ask questions, and learn - come join us!
 
-You can also ask questions on [Stack Overflow](https://stackoverflow.com) using the **[#redux tag](https://stackoverflow.com/questions/tagged/redux)**.`;
+You can also ask questions on [Stack Overflow](https://stackoverflow.com) using the **[#redux tag](https://stackoverflow.com/questions/tagged/redux)**.`,
+];
+
+const startDate = new Date('2021-09-05T12:21:19+0000');
+
+export const gettingStarted = createPageContent(
+  content,
+  pages.gettingStarted.id,
+  'Getting Started',
+  startDate,
+);

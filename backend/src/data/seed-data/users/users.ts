@@ -15,7 +15,7 @@ export const users = [
     email: 'olga.pustovoit@email.com',
     avatar: '',
     password,
-    createAt: '2021-09-05T11:22:48+0000',
+    createdAt: '2021-09-05T11:22:48+0000',
   },
   {
     id: 'ff362159-a26f-46e1-8727-c940338c1ef7',
@@ -23,7 +23,7 @@ export const users = [
     email: 'alexander.kuharenko@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T11:35:48+0000',
+    createdAt: '2021-08-31T11:35:48+0000',
   },
   {
     id: '5a00fc52-da9f-471e-a525-ad9fcb45d5c4',
@@ -31,7 +31,7 @@ export const users = [
     email: 'alik.rakhmonov@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T11:40:48+0000',
+    createdAt: '2021-08-31T11:40:48+0000',
   },
   {
     id: 'e24fa567-fb77-4f5c-aa41-3054b958eeff',
@@ -39,7 +39,7 @@ export const users = [
     email: 'alina.myrchenko@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T11:45:48+0000',
+    createdAt: '2021-08-31T11:45:48+0000',
   },
   {
     id: '98506076-2db7-4707-a304-5913bcdb72a0',
@@ -47,7 +47,7 @@ export const users = [
     email: 'andrii.popov@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T11:50:48+0000',
+    createdAt: '2021-08-31T11:50:48+0000',
   },
   {
     id: '93eeef9a-7df8-4ca1-9db6-9dcfd9f51f14',
@@ -55,7 +55,7 @@ export const users = [
     email: 'denis.klemeshov@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T11:55:48+0000',
+    createdAt: '2021-08-31T11:55:48+0000',
   },
   {
     id: 'f77e31da-7fb3-4b50-89a5-31a6b0dc8dd1',
@@ -63,7 +63,7 @@ export const users = [
     email: 'denys.tsymbalenko@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T12:00:48+0000',
+    createdAt: '2021-08-31T12:00:48+0000',
   },
   {
     id: '45ee5a2b-9e11-43fd-a9f8-65af45a5a857',
@@ -71,7 +71,7 @@ export const users = [
     email: 'max.chudak@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T12:05:48+0000',
+    createdAt: '2021-08-31T12:05:48+0000',
   },
   {
     id: 'ae102d07-7ab4-45ea-ab04-8017fb412980',
@@ -79,7 +79,7 @@ export const users = [
     email: 'nelia.kunyk@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T12:10:48+0000',
+    createdAt: '2021-08-31T12:10:48+0000',
   },
   {
     id: 'ed155f2e-a2f6-4e31-be0b-3d8bba0df09d',
@@ -87,7 +87,7 @@ export const users = [
     email: 'oleksandr.kapitula@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T12:15:48+0000',
+    createdAt: '2021-08-31T12:15:48+0000',
   },
   {
     id: '4796642f-3228-432a-928e-3bd059e8dbe6',
@@ -95,7 +95,7 @@ export const users = [
     email: 'oleksii.ovchynnikov@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T12:20:48+0000',
+    createdAt: '2021-08-31T12:20:48+0000',
   },
   {
     id: 'da21f830-fe29-4d54-a75e-d27fffdaf986',
@@ -103,6 +103,6 @@ export const users = [
     email: 'sophia.chernaya@email.com',
     avatar: '',
     password,
-    createAt: '2021-08-31T12:25:48+0000',
+    createdAt: '2021-08-31T12:25:48+0000',
   },
 ];
