@@ -1,13 +1,15 @@
 import { Button, Card, Table } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+
 import { UserItem, DeleteUserModal } from './components';
-import { TableHead } from '../../shared/components';
+import { TableHead } from '../common';
 import { useEffect, useAppDispatch, useAppSelector, useState } from 'hooks';
 import { usersActions } from 'store/actions';
 import { InviteModal } from 'components/common';
 import { getAllowedClasses } from 'helpers';
-import styles from './styles.module.scss';
 import { RoleType } from 'common/enums';
-import { toast } from 'react-toastify';
+
+import styles from './styles.module.scss';
 
 export const TABLE_HEADERS = [
   'Name',

@@ -1,7 +1,9 @@
 import { Button } from 'react-bootstrap';
+
 import { Link } from 'components/common';
 import { getAllowedClasses, replaceIdParam } from 'helpers';
 import { EntityType, AppRoute } from 'common/enums';
+
 import styles from './styles.module.scss';
 
 type Props = {

@@ -3,6 +3,7 @@ import { OptionsType } from 'react-select';
 import { toast } from 'react-toastify';
 import { CSSObject } from '@emotion/serialize';
 import { Button, Form, Col, Row, Card } from 'react-bootstrap';
+
 import {
   useState,
   useEffect,
@@ -12,8 +13,7 @@ import {
 } from 'hooks';
 import { authActions } from 'store/actions';
 import { userApi, skillApi } from 'services';
-import { ISkill } from 'common/interfaces/skill';
-import { IUserAccount } from 'common/interfaces/user';
+import { ISkill, IUserAccount } from 'common/interfaces';
 import { useForm, yupResolver } from 'hooks';
 import { accountInfoSchema } from 'common/validations';
 import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from 'common/constants';
@@ -24,7 +24,8 @@ import {
   canvasToBlob,
   canvasToDataURL,
 } from 'helpers';
-import { CropAvatar } from './components/crop-avatar/crop-avatar';
+import { CropAvatar } from './components';
+
 import styles from './styles.module.scss';
 
 export const ProfileSettings: React.FC = () => {

@@ -2,13 +2,13 @@ import Select from 'react-select';
 import { Modal, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { IButton } from 'common/interfaces';
+import { IButton, ITeamUser } from 'common/interfaces';
 import { useEffect, useAppDispatch, useAppSelector } from 'hooks';
 import { usersActions, teamsActions } from 'store/actions';
-import { TableHead, Item } from './components/components';
+import { TableHead, Item } from './components';
 import { InviteStatus, RoleType } from 'common/enums';
 import { sortObjByName } from 'helpers';
-import { ITeamUser } from 'common/interfaces/team';
+
 import selectParticipantStyles from './select-participant-styles';
 
 type Props = {

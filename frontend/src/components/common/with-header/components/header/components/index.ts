@@ -1,3 +1,3 @@
-export { NavNotification } from './nav-notification/nav-notification';
-export { NavProfile } from './nav-profile/nav-profile';
-export { Search } from './search/search';
+export * from './nav-notification/nav-notification';
+export * from './nav-profile/nav-profile';
+export * from './search/search';

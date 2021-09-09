@@ -6,20 +6,25 @@ import {
   Modal,
   Table,
 } from 'react-bootstrap';
-import { getAllowedClasses } from 'helpers/dom';
 import { toast } from 'react-toastify';
-import styles from './styles.module.scss';
-import { useAppSelector, useForm, useState, yupResolver } from 'hooks';
+
+import { getAllowedClasses } from 'helpers';
+import {
+  useAppSelector,
+  useForm,
+  useState,
+  useEffect,
+  yupResolver,
+} from 'hooks';
 import { pageApi } from 'services';
-import { IWorkspaceInvite } from 'common/interfaces/workspace';
+import { IWorkspaceInvite, IRegister, ILinkShareable } from 'common/interfaces';
 import { resetPasswordSchema } from 'common/validations';
 import { FormField } from 'components/common';
-import { IRegister } from 'common/interfaces/auth';
-import { ILinkShareable } from 'common/interfaces/links';
-import { LinkItem } from './components/link-item/link-item';
-import { useEffect } from 'react';
-import { shareLinkApi } from 'services/index';
-import { TableHead } from 'components/settings/shared/components';
+import { LinkItem } from './components';
+import { shareLinkApi } from 'services';
+import { TableHead } from 'components/settings/common/components';
+
+import styles from './styles.module.scss';
 
 type Props = {
   show: boolean;

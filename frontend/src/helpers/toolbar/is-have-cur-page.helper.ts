@@ -1,4 +1,4 @@
-import { IPageNav } from 'common/interfaces/pages';
+import { IPageNav } from 'common/interfaces';
 
 const isHaveCurPage = (
   childPages: IPageNav[] | undefined,

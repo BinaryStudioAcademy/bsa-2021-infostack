@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'hooks';
-import { useForm } from 'hooks';
-import { yupResolver } from 'hooks';
+import { useEffect, useState, useForm, yupResolver } from 'hooks';
 import { teamNameSchema } from 'common/validations';
 import { ITeamCreation } from 'common/interfaces/team';
 import { InputModal } from 'components/common/input-modal/input-modal';

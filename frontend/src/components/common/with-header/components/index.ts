@@ -1,2 +1,2 @@
-export { Header } from './header/header';
-export { Toolbar } from './toolbar/toolbar';
+export * from './header/header';
+export * from './toolbar/toolbar';

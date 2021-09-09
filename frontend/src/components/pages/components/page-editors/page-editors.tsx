@@ -1,6 +1,7 @@
 import { Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { IPageContributor } from 'common/interfaces/pages';
+
+import { IPageContributor } from 'common/interfaces';
 import { AppRoute } from 'common/enums';
 import { UserAvatar } from 'components/common';
 import { replaceIdParam } from 'helpers';

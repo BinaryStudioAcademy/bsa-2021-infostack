@@ -1,8 +1,10 @@
 import { Card } from 'react-bootstrap';
-import { ITeam } from 'common/interfaces/team';
+
+import { ITeam } from 'common/interfaces';
 import { DropDown } from '..';
 import { UserAvatar } from 'components/common/avatar/avatar';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 export const Item: React.FC<{ team: ITeam; userId: string }> = ({

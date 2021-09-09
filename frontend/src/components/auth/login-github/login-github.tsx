@@ -3,9 +3,10 @@ import { AppRoute, LocalStorageVariable } from 'common/enums';
 import { githubApi } from 'services';
 import { authActions } from 'store/actions';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
-const LoginGitHub: React.FC = () => {
+export const LoginGitHub: React.FC = () => {
   const dispatch = useAppDispatch();
   const { push } = useHistory();
   const search = new URL(window.location.href).searchParams;
@@ -44,5 +45,3 @@ const LoginGitHub: React.FC = () => {
     </div>
   );
 };
-
-export default LoginGitHub;

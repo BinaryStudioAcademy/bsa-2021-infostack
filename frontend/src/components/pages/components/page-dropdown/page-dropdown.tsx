@@ -1,8 +1,10 @@
 import { Dropdown, NavLink } from 'react-bootstrap';
+
 import { useAppSelector } from 'hooks';
 import { PermissionType } from 'common/enums';
 import { getAllowedClasses } from 'helpers';
 import { RootState } from 'common/types';
+
 import styles from './styles.module.scss';
 
 interface Props {

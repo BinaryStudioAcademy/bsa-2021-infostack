@@ -1,21 +1,23 @@
+import NavLink from 'react-bootstrap/NavLink';
+import Avatar from 'react-avatar';
 import { Dropdown } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+
 import { VersionItem } from '../version-item/version-item';
 import { BlueCircle } from '../version-item/blue-circle/blue-circle';
 import { useAppSelector, useParams } from 'hooks';
-import NavLink from 'react-bootstrap/NavLink';
 import {
   getAllowedClasses,
   replaceIdParam,
   getFormattedVersionDate,
 } from 'helpers';
 import { AppRoute } from 'common/enums';
-import { useHistory } from 'react-router-dom';
 import {
   IPageContributor,
   IPageContent,
   IPageContentWithAuthor,
-} from 'common/interfaces/pages';
-import Avatar from 'react-avatar';
+} from 'common/interfaces';
+
 import styles from './styles.module.scss';
 
 type Props = {

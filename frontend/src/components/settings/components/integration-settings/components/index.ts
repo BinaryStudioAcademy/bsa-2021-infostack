@@ -1,2 +1,2 @@
-export { ConnectButton } from './connect-button/connect-button';
-export { SelectRepo } from './select/select';
+export * from './connect-button/connect-button';
+export * from './select/select';

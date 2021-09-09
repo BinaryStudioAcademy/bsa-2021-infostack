@@ -1,6 +1,8 @@
-import { IWorkspace } from 'common/interfaces/workspace';
 import { Button, Card } from 'react-bootstrap';
+
+import { IWorkspace } from 'common/interfaces';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 type Props = {

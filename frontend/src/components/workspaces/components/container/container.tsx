@@ -1,7 +1,8 @@
 import { CreateButton, Item, InviteItem } from '..';
-import { IWorkspace } from 'common/interfaces/workspace';
+import { IWorkspace } from 'common/interfaces';
 import { InviteStatus } from 'common/enums';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 type Props = {

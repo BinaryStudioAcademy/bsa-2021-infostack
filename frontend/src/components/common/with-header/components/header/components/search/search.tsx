@@ -6,7 +6,7 @@ import Highlighter from 'react-highlight-words';
 
 import { useDebouncedCallback, useHistory, useState } from 'hooks';
 import { pageApi } from 'services';
-import { IFoundPageContent } from 'common/interfaces/pages';
+import { IFoundPageContent } from 'common/interfaces';
 import { getAllowedClasses, replaceIdParam } from 'helpers';
 import { AppRoute } from 'common/enums/app';
 

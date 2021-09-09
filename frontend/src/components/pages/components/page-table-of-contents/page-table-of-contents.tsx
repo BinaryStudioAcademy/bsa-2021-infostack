@@ -6,12 +6,14 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { Link as ScrollLink } from 'react-scroll';
+
 import {
   IPageTableOfContents,
   IPageTableOfContentsHeading,
-} from 'common/interfaces/pages';
+} from 'common/interfaces';
 import { useState } from 'hooks';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 const SCROLL_OFFSET = 50;

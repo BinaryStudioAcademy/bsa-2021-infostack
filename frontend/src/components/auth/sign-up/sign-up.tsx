@@ -1,14 +1,14 @@
-import React from 'react';
 import { AppRoute } from 'common/enums';
 import { Sign, FormField } from 'components/common';
 import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks';
 import { authActions } from 'store/actions';
 import { signupSchema } from 'common/validations';
-import { IRegister } from 'common/interfaces/auth';
+import { IRegister } from 'common/interfaces';
 import { HttpError } from 'exceptions';
+
 import commonStyles from '../styles.module.scss';
 
-const SignUp: React.FC = () => {
+export const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const { push } = useHistory();
 
@@ -80,5 +80,3 @@ const SignUp: React.FC = () => {
     </Sign>
   );
 };
-
-export default SignUp;

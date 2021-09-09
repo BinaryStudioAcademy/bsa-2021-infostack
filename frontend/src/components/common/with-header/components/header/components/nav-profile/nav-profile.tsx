@@ -1,4 +1,5 @@
 import { Dropdown, NavItem, NavLink } from 'react-bootstrap';
+
 import {
   useAppDispatch,
   useAppSelector,
@@ -28,7 +29,8 @@ import {
   LocalStorageVariable,
   SocketEvents,
 } from 'common/enums';
-import { SocketContext } from 'context/socket';
+import { SocketContext } from 'context';
+
 import './styles.scss';
 
 type Props = {

@@ -1,13 +1,14 @@
 import { toast } from 'react-toastify';
+
 import { Sign, FormField } from 'components/common';
 import { authApi } from 'services';
 import { resetPasswordSchema } from 'common/validations';
 import { useForm, useState, yupResolver } from 'hooks';
-import { IResetPassword } from 'common/interfaces/auth';
+import { IResetPassword } from 'common/interfaces';
 import { HttpErrorMessage } from 'common/enums';
 import { HttpError } from 'exceptions';
 
-const ResetPassword: React.FC = () => {
+export const ResetPassword: React.FC = () => {
   const [isSendingMail, setIsSendingMail] = useState(false);
   const [generalError, setGeneralError] = useState('');
   const {
@@ -57,5 +58,3 @@ const ResetPassword: React.FC = () => {
     </Sign>
   );
 };
-
-export default ResetPassword;

@@ -1,5 +1,5 @@
-export { Container } from './container/container';
-export { Item } from './item/item';
-export { CreateButton } from './create-button/create-button';
-export { CreateWorkspaceModal } from './modal/modal';
-export { InviteItem } from './invite-item/invite-item';
+export * from './container/container';
+export * from './item/item';
+export * from './create-button/create-button';
+export * from './modal/modal';
+export * from './invite-item/invite-item';

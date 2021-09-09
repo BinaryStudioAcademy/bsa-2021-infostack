@@ -1,5 +1,7 @@
 import { Card, Button } from 'react-bootstrap';
+
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 type Props = {

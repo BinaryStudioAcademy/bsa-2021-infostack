@@ -1,6 +1,6 @@
 import { Modal as BSModal, Button } from 'react-bootstrap';
 
-import { getAllowedClasses } from 'helpers/dom';
+import { getAllowedClasses } from 'helpers';
 import { Child } from 'common/types';
 
 import styles from './styles.module.scss';

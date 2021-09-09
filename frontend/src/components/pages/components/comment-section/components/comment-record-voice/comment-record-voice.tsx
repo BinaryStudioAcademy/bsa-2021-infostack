@@ -1,7 +1,9 @@
 import 'react-h5-audio-player/lib/styles.css';
+
 import { getAllowedClasses } from 'helpers';
 import { useState } from 'hooks';
 import RecordModal from '../record-modal/record-modal';
+
 import styles from './styles.module.scss';
 
 type Props = {

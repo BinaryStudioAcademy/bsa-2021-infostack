@@ -1,4 +1,5 @@
 import { Button, Modal } from 'react-bootstrap';
+
 import { IButton } from 'common/interfaces';
 
 type Props = {

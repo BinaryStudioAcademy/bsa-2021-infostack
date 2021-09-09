@@ -6,6 +6,7 @@ import {
   useRouteMatch,
   Route,
 } from 'react-router-dom';
+
 import {
   Menu,
   ProfileSettings,
@@ -19,8 +20,9 @@ import {
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers';
 import { AdminRoute } from 'components/common';
-import styles from './styles.module.scss';
 import { WorkspaceSettings } from './components/workspace-settings/workspace-settings';
+
+import styles from './styles.module.scss';
 
 const Settings: React.FC = () => {
   const match = useRouteMatch();

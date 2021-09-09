@@ -2,9 +2,10 @@ import { useAppDispatch, useHistory, useEffect, useLocation } from 'hooks';
 import { authActions } from 'store/auth';
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
-const LoginGoogle: React.FC = () => {
+export const LoginGoogle: React.FC = () => {
   const dispatch = useAppDispatch();
   const { push } = useHistory();
   const search = new URL(window.location.href).searchParams;
@@ -36,5 +37,3 @@ const LoginGoogle: React.FC = () => {
     </div>
   );
 };
-
-export default LoginGoogle;

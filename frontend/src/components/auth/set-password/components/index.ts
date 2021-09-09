@@ -1,1 +1,1 @@
-export { ToastContent } from './toast-content/toast-content';
+export * from './toast-content/toast-content';

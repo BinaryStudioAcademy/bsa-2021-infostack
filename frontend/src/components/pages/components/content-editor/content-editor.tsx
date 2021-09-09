@@ -11,14 +11,15 @@ import Editor, { Plugins } from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { toast } from 'react-toastify';
-import { SocketContext } from 'context/socket';
 import { useHistory } from 'react-router';
+
 import { RootState } from 'common/types';
+import { SocketContext } from 'context';
 import { PageEditors } from '..';
 import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
 import { ConfirmModal } from 'components/common';
-import { IPageContributor } from 'common/interfaces/pages';
+import { IPageContributor } from 'common/interfaces';
 import { CollabEditor } from '../collab-editor/collab-editor';
 import {
   useState,
@@ -29,6 +30,7 @@ import {
   useEffect,
 } from 'hooks';
 import { replaceIdParam, getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {

@@ -16,8 +16,8 @@ import * as rangy from 'rangy';
 import { MentionItem } from 'react-mentions';
 import HighlightPop from 'react-highlight-pop';
 import TurndownService from 'turndown';
-import { SocketContext } from 'context/socket';
-import { SocketEvents } from 'common/enums';
+
+import { SocketContext } from 'context';
 import {
   useAppDispatch,
   useAppSelector,
@@ -29,7 +29,7 @@ import {
 } from 'hooks';
 import { RootState } from 'common/types';
 import { pagesActions } from 'store/actions';
-import { AppRoute, PermissionType } from 'common/enums';
+import { AppRoute, PermissionType, SocketEvents } from 'common/enums';
 import { pageApi } from 'services';
 import {
   replaceIdParam,
@@ -53,12 +53,13 @@ import {
   IPageTableOfContentsHeading,
   IPageNav,
   IExportPDF,
-} from 'common/interfaces/pages';
+} from 'common/interfaces';
 import { FollowModal } from '../follow-modal/follow-modal';
 import { ShareModal } from '../share-modal/share-modal';
 import { ExportPDFModal } from '../export-pdf-modal/export-pdf-modal';
 import { Breadcrumbs } from '../breadcrumbs/breadcrumbs';
 import PageTags from '../page-tags/page-tags';
+
 import styles from './styles.module.scss';
 
 export const PageContent: React.FC = () => {

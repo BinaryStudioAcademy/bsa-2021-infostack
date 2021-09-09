@@ -1,6 +1,7 @@
 import { Accordion } from 'react-bootstrap';
+
 import { Link } from 'components/common';
-import { IPageNav } from 'common/interfaces/pages';
+import { IPageNav, IPageRequest } from 'common/interfaces';
 import { AppRoute } from 'common/enums';
 import {
   useAppDispatch,
@@ -10,10 +11,10 @@ import {
   useState,
 } from 'hooks';
 import { pagesActions } from 'store/actions';
-import { IPageRequest } from 'common/interfaces/pages';
 import { PlusButtonRoot, CrossButtonRoot } from '..';
 import { RootState } from 'common/types';
 import { getAllowedClasses, replaceIdParam, isHaveCurPage } from 'helpers';
+
 import styles from '../../styles.module.scss';
 
 type Props = {

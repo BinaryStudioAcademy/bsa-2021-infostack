@@ -1,9 +1,11 @@
 import { Card, Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { IPageContributor } from 'common/interfaces/pages';
+
+import { IPageContributor } from 'common/interfaces';
 import { AppRoute } from 'common/enums';
 import { UserAvatar } from 'components/common';
 import { getAllowedClasses, replaceIdParam } from 'helpers';
+
 import styles from './styles.module.scss';
 
 interface IPageContributorsProps {

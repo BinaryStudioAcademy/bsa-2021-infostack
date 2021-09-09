@@ -1,4 +1,4 @@
-import { AppRoute } from 'common/enums';
+import { AppRoute, HttpErrorMessage } from 'common/enums';
 import { FormField, Link, Sign } from 'components/common';
 import { loginSchema } from 'common/validations';
 import {
@@ -10,15 +10,14 @@ import {
   useLocation,
 } from 'hooks';
 import { authActions } from 'store/actions';
-import { ILogin } from 'common/interfaces/auth';
-import { IPageRequested } from 'common/interfaces/pages';
-import { HttpErrorMessage } from 'common/enums';
+import { ILogin, IPageRequested } from 'common/interfaces';
 import { HttpError } from 'exceptions';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 import commonStyles from '../styles.module.scss';
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { push } = useHistory();
   const [generalError, setGeneralError] = useState('');
@@ -89,5 +88,3 @@ const Login: React.FC = () => {
     </Sign>
   );
 };
-
-export default Login;

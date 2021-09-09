@@ -1,11 +1,12 @@
-import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
-import { Route, Switch, WithHeader } from 'components/common';
+import { toast } from 'react-toastify';
+
 import NotFound from 'components/not-found/not-found';
 import Pages from 'components/pages/pages';
 import ProfileInfo from 'components/profile-info/profile-info';
 import Settings from 'components/settings/settings';
-import { ContentEditor } from 'components/pages/components';
-import { PageContent } from 'components/pages/components';
+import { ContentEditor, PageContent } from 'components/pages/components';
+import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
+import { Route, Switch, WithHeader } from 'components/common';
 import {
   useAppDispatch,
   useAppSelector,
@@ -14,14 +15,13 @@ import {
   useCookies,
   useContext,
 } from 'hooks';
-import { SocketContext } from 'context/socket';
+import { SocketContext } from 'context';
 import { SocketEvents } from 'common/enums';
 import {
   authActions,
   workspacesActions,
   notificationsActions,
 } from 'store/actions';
-import { toast } from 'react-toastify';
 
 const Main: React.FC = () => {
   const { currentWorkspace } = useAppSelector((state) => state.workspaces);

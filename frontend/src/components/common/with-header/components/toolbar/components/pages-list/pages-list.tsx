@@ -1,5 +1,5 @@
 import { PageItem } from '..';
-import { IPageNav } from 'common/interfaces/pages';
+import { IPageNav } from 'common/interfaces';
 
 type Props = {
   pages: IPageNav[] | null;

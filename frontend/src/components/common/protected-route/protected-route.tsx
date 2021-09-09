@@ -1,4 +1,5 @@
 import { Redirect, Route, RouteProps } from 'react-router-dom';
+
 import { AppRoute, LocalStorageVariable, CookieVariable } from 'common/enums';
 import {
   useLocation,
@@ -7,6 +8,7 @@ import {
   useHistory,
   useCookies,
 } from 'hooks';
+
 export const ProtectedRoute = ({ ...rest }: RouteProps): JSX.Element => {
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
   const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);

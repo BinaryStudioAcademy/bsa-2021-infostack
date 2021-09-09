@@ -1,1 +1,1 @@
-export { ProfileItem } from './profile-item/profile-item';
+export * from './profile-item/profile-item';

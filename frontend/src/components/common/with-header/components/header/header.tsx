@@ -1,6 +1,8 @@
 import Navbar from 'react-bootstrap/Navbar';
+
 import { NavProfile, NavNotification, Search } from './components';
 import { useAppSelector } from 'hooks';
+
 import './styles.scss';
 
 export const Header: React.FC = () => {

@@ -1,2 +1,2 @@
-export { IconWithCount } from './icon-with-count/icon-with-count';
-export { NotificationItem } from './natification-item/natification-item';
+export * from './icon-with-count/icon-with-count';
+export * from './natification-item/natification-item';

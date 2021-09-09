@@ -1,5 +1,6 @@
 import Select from 'react-select';
 import { Modal, Button, Table } from 'react-bootstrap';
+
 import { IButton, IParticipant, IOption } from 'common/interfaces';
 import { sortObjByName } from 'helpers';
 import { InviteStatus, ParticipantType, PermissionType } from 'common/enums';

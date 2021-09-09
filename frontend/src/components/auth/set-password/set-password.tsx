@@ -1,13 +1,14 @@
 import { toast } from 'react-toastify';
+
 import { Sign, FormField } from 'components/common';
 import { authApi } from 'services';
 import { AppRoute } from 'common/enums';
 import { ToastContent } from './components';
 import { setPasswordSchema } from 'common/validations';
 import { useForm, useHistory, yupResolver } from 'hooks';
-import { ISetPasswordValidation } from 'common/interfaces/auth';
+import { ISetPasswordValidation } from 'common/interfaces';
 
-const SetPassword: React.FC = () => {
+export const SetPassword: React.FC = () => {
   const history = useHistory();
 
   const {
@@ -69,5 +70,3 @@ const SetPassword: React.FC = () => {
     </Sign>
   );
 };
-
-export default SetPassword;

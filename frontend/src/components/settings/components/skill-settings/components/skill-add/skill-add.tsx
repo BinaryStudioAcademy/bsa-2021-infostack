@@ -1,7 +1,9 @@
 import { Form } from 'react-bootstrap';
+
 import { useAppDispatch, useAppSelector, useState } from 'hooks';
 import { skillActions } from 'store/skills';
 import { getAllowedClasses } from 'helpers';
+
 import styles from '../../styles.module.scss';
 
 export const SkillAdd: React.FC<{

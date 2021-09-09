@@ -1,12 +1,4 @@
 import {
-  useState,
-  useEffect,
-  useParams,
-  useAppDispatch,
-  useAppSelector,
-  useHistory,
-} from 'hooks';
-import {
   Container,
   Row,
   Col,
@@ -15,16 +7,26 @@ import {
   ListGroup,
   Button,
 } from 'react-bootstrap';
+
+import {
+  useState,
+  useEffect,
+  useParams,
+  useAppDispatch,
+  useAppSelector,
+  useHistory,
+} from 'hooks';
 import { Link, UserAvatar } from 'components/common';
-import { IPageNav } from 'common/interfaces/pages';
+import { IPageNav } from 'common/interfaces';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
 import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums';
-import './profile-info.scss';
 import { replaceIdParam } from 'helpers';
 import { Activities } from './components';
 import { IUser } from 'common/interfaces';
 import { userApi } from 'services';
+
+import './profile-info.scss';
 
 const ProfileInfo: React.FC = () => {
   const [user, setUser] = useState<IUser>({

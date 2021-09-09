@@ -1,13 +1,15 @@
+import ReactMarkdown from 'react-markdown';
 import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
+
 import { useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks';
 import { activitiesActions } from 'store/activities';
-import { IUserActivity } from 'common/interfaces/user';
+import { IUserActivity } from 'common/interfaces';
 import { getAllowedClasses, replaceIdParam } from 'helpers';
 import { FilterOption, FILTER_OPTIONS } from 'store/activities/slice';
 import { Spinner, UserAvatar } from 'components/common';
 import { AppRoute } from 'common/enums';
+
 import styles from './styles.module.scss';
-import ReactMarkdown from 'react-markdown';
 
 const Activities: React.FC = () => {
   const dispatch = useAppDispatch();

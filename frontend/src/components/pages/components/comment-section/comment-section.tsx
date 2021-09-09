@@ -1,6 +1,7 @@
 import { Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MentionItem } from 'react-mentions';
+
 import {
   useAppDispatch,
   useAppSelector,
@@ -8,9 +9,9 @@ import {
   useEffect,
   useState,
 } from 'hooks';
-import { SocketContext } from 'context/socket';
+import { SocketContext } from 'context';
 import { commentsActions, usersActions } from 'store/actions';
-import { IComment } from 'common/interfaces/comment';
+import { IComment } from 'common/interfaces';
 import { SocketEvents } from 'common/enums';
 import { getAllowedClasses } from 'helpers';
 import { CommentList, CommentForm, DeleteModal } from './components';

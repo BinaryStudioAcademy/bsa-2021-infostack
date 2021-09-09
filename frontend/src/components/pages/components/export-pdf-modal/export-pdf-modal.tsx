@@ -1,8 +1,10 @@
 import { Button, Form, Modal, Spinner } from 'react-bootstrap';
+
 import { useForm, useState, yupResolver } from 'hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'common/validations';
-import { getAllowedClasses } from 'helpers/dom';
+import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 type Props = {

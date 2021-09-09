@@ -14,6 +14,7 @@ import { getAllowedClasses } from 'helpers';
 import { commentsActions } from 'store/comments';
 import { RecordVoice } from '../comment-record-voice/comment-record-voice';
 import { commentApi } from 'services';
+
 import styles from './styles.module.scss';
 
 type Props = {

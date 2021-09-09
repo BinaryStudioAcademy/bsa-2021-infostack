@@ -1,6 +1,7 @@
 import { useAppSelector } from 'hooks';
 import { Spinner } from 'components/common';
 import { Header, Toolbar } from './components';
+
 import styles from './styles.module.scss';
 
 export const WithHeader: React.FC<{ Component: React.FC }> = ({

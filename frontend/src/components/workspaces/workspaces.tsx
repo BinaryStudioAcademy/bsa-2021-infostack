@@ -1,4 +1,5 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
+
 import { Spinner } from 'components/common';
 import { AppRoute, CookieVariable } from 'common/enums';
 import { authActions, workspacesActions } from 'store/actions';
@@ -13,8 +14,9 @@ import {
 } from 'hooks';
 import { workspaceApi } from 'services';
 import { CreateWorkspaceModal, Container } from './components';
-import { IWorkspaceCreation } from 'common/interfaces/workspace';
+import { IWorkspaceCreation } from 'common/interfaces';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 const Workspaces: React.FC = () => {

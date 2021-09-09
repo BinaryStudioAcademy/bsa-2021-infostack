@@ -1,4 +1,5 @@
 import { NavLink as AppLink } from 'react-router-dom';
+
 import { AppRoute } from 'common/enums';
 
 type Props = {

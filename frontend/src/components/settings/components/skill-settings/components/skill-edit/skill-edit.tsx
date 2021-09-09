@@ -1,8 +1,10 @@
 import { Button, Form } from 'react-bootstrap';
+
 import { useAppDispatch, useAppSelector, useRef, useState } from 'hooks';
 import { skillActions } from 'store/skills';
 import { getAllowedClasses } from 'helpers';
 import { authActions } from 'store/auth';
+
 import styles from '../../styles.module.scss';
 
 export const SkillEdit: React.FC<{

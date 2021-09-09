@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+
 import {
   useEffect,
   useState,
@@ -7,7 +8,7 @@ import {
   useAppSelector,
 } from 'hooks';
 import { workspaceSchema } from 'common/validations';
-import { IWorkspaceCreation } from 'common/interfaces/workspace';
+import { IWorkspaceCreation } from 'common/interfaces';
 import { InputModal } from 'components/common';
 
 type Props = {

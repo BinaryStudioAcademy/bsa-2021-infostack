@@ -1,11 +1,13 @@
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
 import { AppRoute } from 'common/enums';
 import {
   getAllowedClasses,
   replaceIdParam,
   replacePageIdParamAndVersionId,
 } from 'helpers';
+
 import styles from './styles.module.scss';
 
 type Child = string | JSX.Element;

@@ -1,4 +1,4 @@
-export { CreateButton } from './create-button/create-button';
-export { DropDown } from './drop-down/drop-down';
-export { Item } from './item/item';
-export { CreateTeamModal } from './modal/modal';
+export * from './create-button/create-button';
+export * from './drop-down/drop-down';
+export * from './item/item';
+export * from './modal/modal';

@@ -1,11 +1,13 @@
 import { Card } from 'react-bootstrap';
-import { ITeam, ITeamCreation } from 'common/interfaces/team';
+
+import { ITeam, ITeamCreation } from 'common/interfaces';
 import { teamsActions } from 'store/teams';
 import { Spinner } from 'components/common';
 import { Item, CreateButton } from './components';
 import { CreateTeamModal } from './components/modal/modal';
 import { useState, useEffect, useAppSelector, useAppDispatch } from 'hooks';
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 export const TeamSettings: React.FC = () => {

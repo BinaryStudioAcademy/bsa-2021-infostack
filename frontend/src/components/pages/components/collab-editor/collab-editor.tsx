@@ -15,6 +15,7 @@ import { QuillBinding } from 'y-quill';
 import TurndownService from 'turndown';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
+
 import { useState, useEffect, useParams } from 'hooks';
 import { AppRoute } from 'common/enums';
 import { getAllowedClasses, replaceIdParam } from 'helpers';

@@ -1,6 +1,8 @@
 import { Dropdown, SafeAnchor } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
 import { getAllowedClasses } from 'helpers';
+
 import styles from './styles.module.scss';
 
 type Child = string | JSX.Element;

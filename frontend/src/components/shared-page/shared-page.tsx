@@ -1,8 +1,8 @@
-import { Card, Col, Row } from 'react-bootstrap';
-import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import slug from 'remark-slug';
+import { Card, Col, Row } from 'react-bootstrap';
+
 import {
   useAppDispatch,
   useAppSelector,
@@ -18,7 +18,8 @@ import { pageApi } from 'services';
 import { getAllowedClasses } from 'helpers';
 import { Spinner } from 'components/common';
 import { PageTableOfContents } from '../pages/components';
-import { IPageTableOfContentsHeading } from 'common/interfaces/pages';
+import { IPageTableOfContentsHeading } from 'common/interfaces';
+
 import styles from './styles.module.scss';
 
 export const SharedPage: React.FC = () => {
