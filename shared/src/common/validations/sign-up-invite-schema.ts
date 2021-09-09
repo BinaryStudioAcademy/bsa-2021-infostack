@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { TITLE_REGEX, PASSWORD_REGEX } from './regex';
 
-export const signppInviteSchema = yup.object().shape({
+export const signupInviteSchema = yup.object().shape({
   fullName: yup
     .string()
     .trim()

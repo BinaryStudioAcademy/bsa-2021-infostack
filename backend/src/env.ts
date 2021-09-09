@@ -55,4 +55,4 @@ export const env = {
     node: getOsEnv('ELASTICSEARCH_NODE'),
     index: getOsEnv('ELASTICSEARCH_INDEX'),
   },
-} as const;
+};

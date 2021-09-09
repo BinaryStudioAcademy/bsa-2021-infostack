@@ -3,7 +3,7 @@ export {
   loginSchema,
   resetPasswordSchema,
   setPasswordSchema,
-  signUpInviteSchema,
+  signupInviteSchema,
   signUpSchema,
   teamNameSchema,
   workspaceSchema,

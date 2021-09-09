@@ -3,7 +3,7 @@ import { AppRoute } from 'common/enums';
 import { Sign, FormField } from 'components/common/common';
 import { useHistory, useForm, yupResolver, useEffect } from 'hooks/hooks';
 import { authApi, userApi } from 'services';
-import { signUpInviteSchema } from 'common/validations';
+import { signupInviteSchema } from 'common/validations';
 import { IRegister, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
 import { DefaultUserName } from 'common/enums';
 
@@ -33,7 +33,7 @@ const SignUpInvite: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IRegister>({ resolver: yupResolver(signUpInviteSchema) });
+  } = useForm<IRegister>({ resolver: yupResolver(signupInviteSchema) });
 
   const handleSubmitForm = async (
     data: IUpdatePasswordAndFullName,
