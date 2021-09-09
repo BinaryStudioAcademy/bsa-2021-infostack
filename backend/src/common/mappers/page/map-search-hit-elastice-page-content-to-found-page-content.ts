@@ -24,12 +24,13 @@ const mapSearchHitElasticPageContentToFoundPageContent = (
         results.push(...titles);
       }
 
-      if (highlight?.content?.length) {
+      if (highlight?.content?.length && !highlight?.title) {
         const contents = highlight?.content.map((content) => {
           return {
             id: _source.id,
             pageId: _source.pageId,
             content: content,
+            title: _source.title,
           };
         });
 
