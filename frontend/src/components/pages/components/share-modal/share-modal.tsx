@@ -22,7 +22,7 @@ import { resetPasswordSchema } from 'common/validations';
 import { FormField } from 'components/common';
 import { LinkItem } from './components';
 import { shareLinkApi } from 'services';
-import { TableHead } from 'components/settings/common/components';
+import { TableHead } from 'components/settings/components/common';
 
 import styles from './styles.module.scss';
 
