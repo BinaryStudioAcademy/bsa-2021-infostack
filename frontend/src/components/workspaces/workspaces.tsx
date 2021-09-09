@@ -1,4 +1,4 @@
-import { Button, Container as BootstrapContainer } from 'react-bootstrap';
+import { Container as BootstrapContainer } from 'react-bootstrap';
 import { Spinner } from 'components/common/common';
 import { AppRoute, CookieVariable } from 'common/enums';
 import { authActions, workspacesActions } from 'store/actions';
@@ -94,21 +94,7 @@ const Workspaces: React.FC = () => {
     <div className="bg-light">
       <BootstrapContainer className="position-relative d-flex flex-column align-items-center pt-5 vh-100">
         <h1 className="h3 mb-5">Select the workspace</h1>
-        {currentWorkspace?.id && (
-          <Button
-            variant="secondary"
-            className="align-self-start d-flex align-items-center justify-content-center"
-            onClick={(): void => handleItemClick(currentWorkspace?.id)}
-          >
-            <i
-              className={getAllowedClasses(
-                styles.backIcon,
-                'bi',
-                'bi-chevron-left',
-              )}
-            ></i>
-          </Button>
-        )}
+
         {workspaces ? (
           <Container
             workspaces={workspaces}
@@ -119,6 +105,16 @@ const Workspaces: React.FC = () => {
           />
         ) : (
           <Spinner height={'12rem'} width={'12rem'} />
+        )}
+        {currentWorkspace?.id && (
+          <button
+            className={styles.crossButton}
+            onClick={(): void => handleItemClick(currentWorkspace?.id)}
+          >
+            <i
+              className={getAllowedClasses(styles.crossIcon, 'bi bi-x-lg')}
+            ></i>
+          </button>
         )}
         <CreateWorkspaceModal
           showModal={isModalVisible}

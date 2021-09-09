@@ -29,7 +29,7 @@ export const TagItem: React.FC<{
         {type === TagType.GITHUB && <i className="bi bi-github ms-2" />}
       </td>
       <td className={getAllowedClasses(styles.tdButton)}>
-        <Button onClick={handleEdit} variant="warning" size="sm">
+        <Button onClick={handleEdit} variant="secondary" size="sm">
           Rename
         </Button>
       </td>
