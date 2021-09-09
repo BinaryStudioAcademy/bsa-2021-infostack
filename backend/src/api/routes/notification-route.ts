@@ -15,8 +15,8 @@ router.get(
     getNotifications(
       req.userId,
       req.workspaceId,
-      req.query.limit,
-      req.query.from,
+      req.query.take,
+      req.query.skip,
     ),
   ),
 );

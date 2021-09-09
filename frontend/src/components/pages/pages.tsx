@@ -47,7 +47,7 @@ const Pages: React.FC = () => {
   const getMostViewedPages = async (): Promise<void> => {
     setMostViewedPagesLoading(true);
     await pageApi
-      .getMostViewedPages({ limit: LIMIT, dateFrom: dateWeekAgo })
+      .getMostViewedPages({ take: LIMIT, dateFrom: dateWeekAgo })
       .then((res) => {
         setMostViewedPages(res);
       })
@@ -60,7 +60,7 @@ const Pages: React.FC = () => {
   const getMostUpdatedPages = async (): Promise<void> => {
     setMostUpdatedLoading(true);
     await pageApi
-      .getMostUpdatedPages({ limit: LIMIT, dateFrom: dateWeekAgo })
+      .getMostUpdatedPages({ take: LIMIT, dateFrom: dateWeekAgo })
       .then((res) => {
         setMostUpdatedPages(res);
       })

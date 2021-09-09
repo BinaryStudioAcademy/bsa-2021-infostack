@@ -40,17 +40,17 @@ const setSubtitleToPage = async (
 export const getNotifications = async (
   userId: string,
   workspaceId: string,
-  limit?: number,
-  from?: number,
+  take?: number,
+  skip?: number,
 ): Promise<INotification[]> => {
   const notificationRepository = getCustomRepository(NotificationRepository);
-  const start = from || 0;
+  const from = skip || 0;
   const notifications =
     await notificationRepository.findSomeByUserIdAndWorkspaceId(
       userId,
       workspaceId,
-      start,
-      limit,
+      from,
+      take,
     );
 
   const commentNotifications = notifications.filter(

@@ -908,14 +908,14 @@ export const getMostUpdatedPages = async (
   userId: string,
   workspaceId: string,
   dateFrom: string,
-  limit?: number,
+  take?: number,
 ): Promise<IPageStatistic[]> => {
   const pageRepository = getCustomRepository(PageRepository);
   const availablePagesIds = await getAvailablePages(userId, workspaceId);
   if (availablePagesIds.length) {
     const pages = await pageRepository.findMostUpdated(
       availablePagesIds,
-      limit,
+      take,
       dateFrom,
     );
     return pages;
@@ -927,14 +927,14 @@ export const getMostViewedPages = async (
   userId: string,
   workspaceId: string,
   dateFrom: string,
-  limit?: number,
+  take?: number,
 ): Promise<IPageStatistic[]> => {
   const recentPagesRepository = getCustomRepository(RecentPagesRepository);
   const availablePagesIds = await getAvailablePages(userId, workspaceId);
   if (availablePagesIds.length) {
     const recentPages = await recentPagesRepository.findMostViewed(
       availablePagesIds,
-      limit,
+      take,
       dateFrom,
     );
     return recentPages;

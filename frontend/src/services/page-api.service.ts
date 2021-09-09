@@ -13,7 +13,7 @@ import {
   IFoundPageContent,
   IExportPDF,
   ITag,
-  IQuery,
+  IStatisticQuery,
   IPageStatistic,
 } from 'common/interfaces';
 import { getStringifiedQuery } from 'helpers/helpers';
@@ -57,7 +57,9 @@ class PageApi {
     });
   }
 
-  public async getMostViewedPages(query?: IQuery): Promise<IPageStatistic[]> {
+  public async getMostViewedPages(
+    query?: IStatisticQuery,
+  ): Promise<IPageStatistic[]> {
     return this.http.load(
       `${this.BASE}/most-viewed${
         query ? `?${getStringifiedQuery(query)}` : ''
@@ -65,7 +67,9 @@ class PageApi {
     );
   }
 
-  public async getMostUpdatedPages(query?: IQuery): Promise<IPageStatistic[]> {
+  public async getMostUpdatedPages(
+    query?: IStatisticQuery,
+  ): Promise<IPageStatistic[]> {
     return this.http.load(
       `${this.BASE}/most-updated${
         query ? `?${getStringifiedQuery(query)}` : ''
@@ -73,7 +77,9 @@ class PageApi {
     );
   }
 
-  public async getСountOfUpdates(query?: IQuery): Promise<IPageStatistic[]> {
+  public async getСountOfUpdates(
+    query?: IStatisticQuery,
+  ): Promise<IPageStatistic[]> {
     return this.http.load(
       `${this.BASE}/count-of-updates${
         query ? `?${getStringifiedQuery(query)}` : ''

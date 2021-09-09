@@ -53,9 +53,9 @@ export const NavNotification: React.FC = () => {
 
   const onNotificationNew = (): void => {
     if (isExpanded) {
-      dispatch(notificationsActions.loadMoreNotifications({ limit: 1 }));
+      dispatch(notificationsActions.loadMoreNotifications({ take: 1 }));
     } else {
-      dispatch(notificationsActions.loadMoreNotifications({ limit: 1 }));
+      dispatch(notificationsActions.loadMoreNotifications({ take: 1 }));
     }
     dispatch(notificationsActions.incrementCount());
   };
@@ -80,12 +80,12 @@ export const NavNotification: React.FC = () => {
     if (isExpanded) {
       dispatch(
         notificationsActions.loadMoreNotifications({
-          from: NOTIFICATIONS_LIMIT,
+          skip: NOTIFICATIONS_LIMIT,
         }),
       );
     } else {
       dispatch(
-        notificationsActions.loadNotifications({ limit: NOTIFICATIONS_LIMIT }),
+        notificationsActions.loadNotifications({ take: NOTIFICATIONS_LIMIT }),
       );
     }
   }, [isExpanded]);
@@ -93,7 +93,7 @@ export const NavNotification: React.FC = () => {
   const onDropdownToggle = (isOpen: boolean): void => {
     if (isOpen) {
       dispatch(
-        notificationsActions.loadNotifications({ limit: NOTIFICATIONS_LIMIT }),
+        notificationsActions.loadNotifications({ take: NOTIFICATIONS_LIMIT }),
       );
     } else {
       dispatch(notificationsActions.removeNotifications());

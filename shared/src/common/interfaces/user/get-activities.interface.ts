@@ -1,4 +1,4 @@
-import { IPagination } from '../common';
+import { IPagination } from '../pagination';
 
 interface IGetActivities extends Partial<IPagination> {}
 

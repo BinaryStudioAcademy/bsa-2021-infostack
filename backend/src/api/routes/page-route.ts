@@ -65,7 +65,7 @@ router.get(
       req.userId,
       req.workspaceId,
       req.query.dateFrom,
-      +req.query.limit,
+      +req.query.take,
     ),
   ),
 );
@@ -77,7 +77,7 @@ router.get(
       req.userId,
       req.workspaceId,
       req.query.dateFrom,
-      +req.query.limit,
+      +req.query.take,
     ),
   ),
 );

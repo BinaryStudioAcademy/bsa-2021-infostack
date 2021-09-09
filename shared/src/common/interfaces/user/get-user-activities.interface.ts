@@ -1,4 +1,4 @@
-import { IPagination } from '../common';
+import { IPagination } from '../pagination';
 
 interface IGetUserActivities extends Partial<IPagination> {
   userId: string;
