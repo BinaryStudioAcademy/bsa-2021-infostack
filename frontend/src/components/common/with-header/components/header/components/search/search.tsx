@@ -67,53 +67,71 @@ export const Search: React.FC = () => {
           <p className={getAllowedClasses(styles.resultCount, 'ms-2')}>
             {pages.length} results
           </p>
-          {pages.map(({ content, text, id, pageId, title }) => {
-            const splittedQuery = query.split(' ');
+          <div className={styles.resultList}>
+            {pages.map(({ content, text, id, pageId, title }) => {
+              const splittedQuery = query.split(' ');
 
-            return (
-              <>
-                <div
-                  className={styles.foundItem}
-                  key={id}
-                  onClick={handleClick.bind(null, pageId)}
-                >
-                  {title || content ? (
-                    <i
-                      className={getAllowedClasses('bi bi-clipboard me-3 mt-1')}
-                    ></i>
-                  ) : (
-                    <i
-                      className={getAllowedClasses('bi-chat-square-text me-3')}
-                    ></i>
-                  )}
-                  {title && (
-                    <Highlighter
-                      className={styles.content}
-                      searchWords={splittedQuery}
-                      autoEscape={true}
-                      textToHighlight={title}
-                    />
-                  )}
-                  {content && (
-                    <Highlighter
-                      className={styles.content}
-                      searchWords={splittedQuery}
-                      autoEscape={true}
-                      textToHighlight={content}
-                    />
-                  )}
-                  {text && (
-                    <Highlighter
-                      className={styles.content}
-                      searchWords={splittedQuery}
-                      autoEscape={true}
-                      textToHighlight={text}
-                    />
-                  )}
-                </div>
-              </>
-            );
-          })}
+              return (
+                <>
+                  <div
+                    className={styles.foundItem}
+                    key={id}
+                    onClick={handleClick.bind(null, pageId)}
+                  >
+                    {title || content ? (
+                      <i
+                        className={getAllowedClasses(
+                          'bi bi-clipboard me-3 mt-1',
+                        )}
+                      ></i>
+                    ) : (
+                      <i
+                        className={getAllowedClasses(
+                          'bi-chat-square-text me-3',
+                        )}
+                      ></i>
+                    )}
+                    {title && !content && (
+                      <Highlighter
+                        className={styles.content}
+                        searchWords={splittedQuery}
+                        autoEscape={true}
+                        textToHighlight={title}
+                      />
+                    )}
+                    {content && (
+                      <div className="d-flex flex-column">
+                        {title && (
+                          <div
+                            className={getAllowedClasses(
+                              styles.content,
+                              styles.contentTitle,
+                            )}
+                          >
+                            {title}
+                          </div>
+                        )}
+                        <Highlighter
+                          className={styles.content}
+                          searchWords={splittedQuery}
+                          autoEscape={true}
+                          textToHighlight={content}
+                        />
+                      </div>
+                    )}
+                    {text && (
+                      <Highlighter
+                        className={styles.content}
+                        searchWords={splittedQuery}
+                        autoEscape={true}
+                        textToHighlight={text}
+                      />
+                    )}
+                  </div>
+                </>
+              );
+            })}
+          </div>
         </div>
       ) : null}
 
