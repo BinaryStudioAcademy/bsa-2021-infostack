@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
-import { checkIsStringTrue, getOsEnv } from './common/helpers';
+import { checkIsStringTrue } from './common/helpers/boolean.helper';
+import { getOsEnv } from './common/helpers/path.helper';
 
 dotenv.config();
 
