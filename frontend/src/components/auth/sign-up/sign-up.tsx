@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppRoute } from 'common/enums';
-import { Sign, FormField } from 'components/common/common';
+import { Sign, FormField, FormPasswordField } from 'components/common/common';
 import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
 import { authActions } from 'store/actions';
 import { signUpSchema } from 'common/validations';
@@ -68,9 +68,8 @@ const SignUp: React.FC = () => {
         errors={errors.email}
         inputClassName={commonStyles.input}
       />
-      <FormField
+      <FormPasswordField
         label="Password"
-        type="password"
         placeholder="Enter password"
         controlId="signUpPassword"
         register={register('password')}

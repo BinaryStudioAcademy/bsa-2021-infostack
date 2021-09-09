@@ -2,6 +2,7 @@ export { Switch, Route } from 'react-router-dom';
 export { AdminRoute } from './admin-route/admin-route';
 export { UserAvatar } from './avatar/avatar';
 export { FormField } from './form-field/form-field';
+export { FormPasswordField } from './form-password-field/form-password-field';
 export { InputModal } from './input-modal/input-modal';
 export { InviteModal } from './invite-modal/invite-modal';
 export { ConfirmModal } from './confirm-modal/confirm-modal';
