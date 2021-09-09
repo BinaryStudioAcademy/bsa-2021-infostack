@@ -1,12 +1,12 @@
 import { Card, Table } from 'react-bootstrap';
-import { useAppDispatch, useEffect, useAppSelector } from 'hooks/hooks';
-import { TableRow } from './components/components';
-import { TableHead } from '../../shared/components/components';
-import { Spinner } from 'components/common/common';
+import { useAppDispatch, useEffect, useAppSelector } from 'hooks';
+import { TableRow } from './components';
+import { TableHead } from '../../shared/components';
+import { Spinner } from 'components/common';
 import { notificationsSettingsActions } from 'store/actions';
-import { RootState } from 'common/types/types';
+import { RootState } from 'common/types';
 import { NotificationType } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 export const TABLE_HEADERS = ['Notification', 'System', 'Email'];

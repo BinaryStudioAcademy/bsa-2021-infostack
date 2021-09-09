@@ -1,17 +1,17 @@
 import { Dropdown, Button } from 'react-bootstrap';
-import { IconWithCount, NotificationItem } from './components/components';
+import { IconWithCount, NotificationItem } from './components';
 import {
   useAppDispatch,
   useAppSelector,
   useContext,
   useEffect,
   useState,
-} from 'hooks/hooks';
+} from 'hooks';
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums';
 import { notificationsActions } from 'store/actions';
 import { EntityType } from 'common/enums';
-import { toDayJS, sortObjByDate, getAllowedClasses } from 'helpers/helpers';
+import { toDayJS, sortObjByDate, getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 import { INotification } from 'common/interfaces';
 

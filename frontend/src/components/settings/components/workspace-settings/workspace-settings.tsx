@@ -2,7 +2,7 @@ import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import TextareaAutosize from 'react-textarea-autosize';
 
-import { bytesToMegabytes, getAllowedClasses } from 'helpers/helpers';
+import { bytesToMegabytes, getAllowedClasses } from 'helpers';
 import {
   useAppSelector,
   useState,
@@ -10,7 +10,7 @@ import {
   useRef,
   yupResolver,
   useAppDispatch,
-} from 'hooks/hooks';
+} from 'hooks';
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from 'common/constants/file';
 import { IWorkspaceUpdate } from 'common/interfaces/workspace';
 import { workspaceSchema } from 'common/validations';

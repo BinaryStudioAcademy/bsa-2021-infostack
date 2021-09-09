@@ -1,6 +1,6 @@
 import { AppRoute } from 'common/enums';
-import { Link } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
+import { Link } from 'components/common';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 export const ToastContent: React.FC = () => {

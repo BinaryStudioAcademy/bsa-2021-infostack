@@ -1,15 +1,10 @@
 import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
-import {
-  useAppDispatch,
-  useAppSelector,
-  useEffect,
-  useHistory,
-} from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useEffect, useHistory } from 'hooks';
 import { activitiesActions } from 'store/activities';
 import { IUserActivity } from 'common/interfaces/user';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers';
 import { FilterOption, FILTER_OPTIONS } from 'store/activities/slice';
-import { Spinner, UserAvatar } from 'components/common/common';
+import { Spinner, UserAvatar } from 'components/common';
 import { AppRoute } from 'common/enums';
 import styles from './styles.module.scss';
 import ReactMarkdown from 'react-markdown';

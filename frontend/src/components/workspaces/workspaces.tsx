@@ -1,5 +1,5 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
-import { Spinner } from 'components/common/common';
+import { Spinner } from 'components/common';
 import { AppRoute, CookieVariable } from 'common/enums';
 import { authActions, workspacesActions } from 'store/actions';
 import {
@@ -10,11 +10,11 @@ import {
   useCookies,
   useHistory,
   useLocation,
-} from 'hooks/hooks';
+} from 'hooks';
 import { workspaceApi } from 'services';
-import { CreateWorkspaceModal, Container } from './components/components';
+import { CreateWorkspaceModal, Container } from './components';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 const Workspaces: React.FC = () => {

@@ -1,12 +1,12 @@
-import { http } from 'services';
 import { ICommentReaction } from 'common/interfaces';
 import { HttpMethod, ContentType } from 'common/enums';
+import { http } from 'services';
 
 class CommentReactionApi {
   private http = http;
   private BASE = '/api/comments';
 
-  public async handleCommentReaction(
+  public handleCommentReaction(
     commentId: string,
     reaction: string,
   ): Promise<ICommentReaction[]> {

@@ -1,10 +1,10 @@
 import { toast } from 'react-toastify';
-import { Sign, FormField } from 'components/common/common';
+import { Sign, FormField } from 'components/common';
 import { authApi } from 'services';
 import { AppRoute } from 'common/enums';
-import { ToastContent } from './components/components';
+import { ToastContent } from './components';
 import { setPasswordSchema } from 'common/validations';
-import { useForm, useHistory, yupResolver } from 'hooks/hooks';
+import { useForm, useHistory, yupResolver } from 'hooks';
 import { ISetPasswordValidation } from 'common/interfaces/auth';
 
 const SetPassword: React.FC = () => {

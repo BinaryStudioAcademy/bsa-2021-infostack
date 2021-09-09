@@ -4,7 +4,7 @@ export {
   resetPasswordSchema,
   setPasswordSchema,
   signupInviteSchema,
-  signUpSchema,
+  signupSchema,
   teamNameSchema,
   workspaceSchema,
 } from 'infostack-shared';

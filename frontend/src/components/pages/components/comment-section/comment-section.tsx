@@ -7,12 +7,12 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'hooks/hooks';
+} from 'hooks';
 import { SocketContext } from 'context/socket';
 import { commentsActions, usersActions } from 'store/actions';
 import { IComment } from 'common/interfaces/comment';
 import { SocketEvents } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import { CommentList, CommentForm, DeleteModal } from './components';
 
 import styles from './styles.module.scss';

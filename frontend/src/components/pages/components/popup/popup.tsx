@@ -1,20 +1,11 @@
 import Select from 'react-select';
 import { Modal, Button, Table } from 'react-bootstrap';
 import { IButton, IParticipant, IOption } from 'common/interfaces';
-import { sortObjByName } from 'helpers/helpers';
+import { sortObjByName } from 'helpers';
 import { InviteStatus, ParticipantType, PermissionType } from 'common/enums';
-import {
-  useEffect,
-  useAppDispatch,
-  useAppSelector,
-  useState,
-} from 'hooks/hooks';
+import { useEffect, useAppDispatch, useAppSelector, useState } from 'hooks';
 import { usersActions, teamsActions, participantsActions } from 'store/actions';
-import {
-  TableHead,
-  Item,
-  DeleteParticipantModal,
-} from './components/components';
+import { TableHead, Item, DeleteParticipantModal } from './components';
 import selectParticipantStyles from './select-participant-styles';
 
 type Props = {

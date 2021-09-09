@@ -4,7 +4,7 @@ import {
   IWorkspaceInvite,
   IWorkspaceUpdate,
   IWorkspaceUser,
-} from 'common/interfaces/workspace';
+} from 'common/interfaces';
 import { ContentType, HttpMethod, RoleType } from 'common/enums';
 import { http } from 'services/http.service';
 

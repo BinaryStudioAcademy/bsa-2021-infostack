@@ -1,13 +1,8 @@
-import {
-  useHistory,
-  useEffect,
-  useAppDispatch,
-  useLocation,
-} from 'hooks/hooks';
+import { useHistory, useEffect, useAppDispatch, useLocation } from 'hooks';
 import { AppRoute, LocalStorageVariable } from 'common/enums';
 import { githubApi } from 'services';
 import { authActions } from 'store/actions';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 const LoginGitHub: React.FC = () => {

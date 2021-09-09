@@ -1,7 +1,7 @@
 import { Button, Form, Popover, OverlayTrigger } from 'react-bootstrap';
-import { useState } from 'hooks/hooks';
-import { getFormattedLinkDate } from 'helpers/helpers';
-import { getAllowedClasses } from 'helpers/dom/dom';
+import { useState } from 'hooks';
+import { getFormattedLinkDate } from 'helpers';
+import { getAllowedClasses } from 'helpers/dom';
 import styles from './styles.module.scss';
 
 type Props = {

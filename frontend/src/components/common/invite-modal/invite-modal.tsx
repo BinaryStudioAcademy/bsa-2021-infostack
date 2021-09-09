@@ -1,13 +1,13 @@
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector, useForm, useState } from 'hooks/hooks';
-import { yupResolver } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useForm, useState } from 'hooks';
+import { yupResolver } from 'hooks';
 import { IWorkspaceInvite } from 'common/interfaces/workspace';
 import { resetPasswordSchema } from 'common/validations';
 import { workspaceApi } from 'services';
 import { IRegister } from 'common/interfaces/auth';
 import { usersActions } from 'store/users';
 import { InputModal } from '../input-modal/input-modal';
-import { InviteStatus } from 'common/enums/invite-status/invite-status';
+import { InviteStatus } from 'common/enums/invite-status';
 
 type Props = {
   showModal: boolean;

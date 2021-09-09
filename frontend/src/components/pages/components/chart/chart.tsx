@@ -1,7 +1,7 @@
 import { Line } from 'react-chartjs-2';
 import { Card } from 'react-bootstrap';
 import { IPageStatistic } from 'common/interfaces';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

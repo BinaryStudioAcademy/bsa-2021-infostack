@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch } from 'hooks';
 import { skillActions } from 'store/skills';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import { authActions } from 'store/auth';
 import styles from '../../styles.module.scss';
 

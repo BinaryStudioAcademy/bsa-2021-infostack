@@ -1,9 +1,9 @@
 import { Card, Table } from 'react-bootstrap';
-import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks/hooks';
+import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks';
 import { tagActions } from 'store/tags';
-import { getAllowedClasses } from 'helpers/helpers';
-import { TagAdd, TagItem, TagEdit } from './components/components';
-import { Spinner } from 'components/common/common';
+import { getAllowedClasses } from 'helpers';
+import { TagAdd, TagItem, TagEdit } from './components';
+import { Spinner } from 'components/common';
 import styles from './styles.module.scss';
 
 export const TagSettings: React.FC = () => {

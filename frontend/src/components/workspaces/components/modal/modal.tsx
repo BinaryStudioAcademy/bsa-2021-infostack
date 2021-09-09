@@ -5,10 +5,10 @@ import {
   useForm,
   yupResolver,
   useAppSelector,
-} from 'hooks/hooks';
+} from 'hooks';
 import { workspaceSchema } from 'common/validations';
 import { IWorkspaceCreation } from 'common/interfaces/workspace';
-import { InputModal } from 'components/common/common';
+import { InputModal } from 'components/common';
 
 type Props = {
   showModal: boolean;

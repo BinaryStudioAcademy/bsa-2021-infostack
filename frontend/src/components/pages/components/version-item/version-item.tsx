@@ -5,7 +5,7 @@ import {
   getAllowedClasses,
   replaceIdParam,
   replacePageIdParamAndVersionId,
-} from 'helpers/helpers';
+} from 'helpers';
 import styles from './styles.module.scss';
 
 type Child = string | JSX.Element;

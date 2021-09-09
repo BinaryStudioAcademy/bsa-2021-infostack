@@ -1,12 +1,7 @@
-import {
-  useAppDispatch,
-  useHistory,
-  useEffect,
-  useLocation,
-} from 'hooks/hooks';
+import { useAppDispatch, useHistory, useEffect, useLocation } from 'hooks';
 import { authActions } from 'store/auth';
 import { AppRoute } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 const LoginGoogle: React.FC = () => {

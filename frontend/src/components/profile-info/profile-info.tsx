@@ -5,7 +5,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useHistory,
-} from 'hooks/hooks';
+} from 'hooks';
 import {
   Container,
   Row,
@@ -15,14 +15,14 @@ import {
   ListGroup,
   Button,
 } from 'react-bootstrap';
-import { Link, UserAvatar } from 'components/common/common';
+import { Link, UserAvatar } from 'components/common';
 import { IPageNav } from 'common/interfaces/pages';
 import { FollowModal } from '../pages/components/follow-modal/follow-modal';
 import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums';
 import './profile-info.scss';
-import { replaceIdParam } from 'helpers/helpers';
-import { Activities } from './components/components';
+import { replaceIdParam } from 'helpers';
+import { Activities } from './components';
 import { IUser } from 'common/interfaces';
 import { userApi } from 'services';
 

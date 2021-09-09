@@ -10,14 +10,14 @@ import {
   useState,
   useHistory,
   useLocation,
-} from 'hooks/hooks';
-import { RootState } from 'common/types/types';
+} from 'hooks';
+import { RootState } from 'common/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute } from 'common/enums';
 import { pageApi } from 'services';
-import { getAllowedClasses } from 'helpers/helpers';
-import { Spinner } from 'components/common/common';
-import { PageTableOfContents } from '../pages/components/components';
+import { getAllowedClasses } from 'helpers';
+import { Spinner } from 'components/common';
+import { PageTableOfContents } from '../pages/components';
 import { IPageTableOfContentsHeading } from 'common/interfaces/pages';
 import styles from './styles.module.scss';
 

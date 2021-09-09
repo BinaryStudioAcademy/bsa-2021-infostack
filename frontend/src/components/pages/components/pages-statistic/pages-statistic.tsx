@@ -1,9 +1,9 @@
 import { Card, OverlayTrigger, Popover } from 'react-bootstrap';
 import { AppRoute } from 'common/enums';
-import { Link } from 'components/common/common';
+import { Link } from 'components/common';
 import { IPageStatistic } from 'common/interfaces';
-import { Spinner } from 'components/common/common';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { Spinner } from 'components/common';
+import { getAllowedClasses, replaceIdParam } from 'helpers';
 import styles from './styles.module.scss';
 
 interface Props {

@@ -1,4 +1,4 @@
-import { ISkill } from 'common/interfaces/skill';
+import { ISkill } from 'common/interfaces';
 import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
 

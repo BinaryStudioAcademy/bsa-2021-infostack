@@ -1,8 +1,8 @@
 import { Card, Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { AppRoute } from 'common/enums';
-import { UserAvatar } from 'components/common/common';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { UserAvatar } from 'components/common';
+import { getAllowedClasses, replaceIdParam } from 'helpers';
 import styles from './styles.module.scss';
 import { IUser } from 'common/interfaces/user';
 

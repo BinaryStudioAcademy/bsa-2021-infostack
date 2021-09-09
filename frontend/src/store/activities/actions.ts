@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ActionType } from './common';
 import { userApi } from 'services';
 import { actions } from './slice';
-import { RootState } from 'common/types/types';
+import { RootState } from 'common/types';
 import { IUserActivity } from 'common/interfaces/user';
 import { IPaginated } from 'common/interfaces/common';
 

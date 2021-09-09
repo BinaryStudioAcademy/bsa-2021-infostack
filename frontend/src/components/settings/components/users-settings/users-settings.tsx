@@ -1,15 +1,10 @@
 import { Button, Card, Table } from 'react-bootstrap';
-import { UserItem, DeleteUserModal } from './components/components';
-import { TableHead } from '../../shared/components/components';
-import {
-  useEffect,
-  useAppDispatch,
-  useAppSelector,
-  useState,
-} from 'hooks/hooks';
+import { UserItem, DeleteUserModal } from './components';
+import { TableHead } from '../../shared/components';
+import { useEffect, useAppDispatch, useAppSelector, useState } from 'hooks';
 import { usersActions } from 'store/actions';
-import { InviteModal } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
+import { InviteModal } from 'components/common';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 import { RoleType } from 'common/enums';
 import { toast } from 'react-toastify';

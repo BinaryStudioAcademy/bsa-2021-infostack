@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, ListGroup } from 'react-bootstrap';
-import { Link } from 'components/common/common';
+import { Link } from 'components/common';
 import { AppRoute, RoleType } from 'common/enums';
-import { useAppSelector } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
+import { useAppSelector } from 'hooks';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 export const Menu: React.FC = () => {

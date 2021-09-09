@@ -26,8 +26,8 @@ import {
   useParams,
   useHistory,
   useRef,
-} from 'hooks/hooks';
-import { RootState } from 'common/types/types';
+} from 'hooks';
+import { RootState } from 'common/types';
 import { pagesActions } from 'store/actions';
 import { AppRoute, PermissionType } from 'common/enums';
 import { pageApi } from 'services';
@@ -35,9 +35,9 @@ import {
   replaceIdParam,
   getAllowedClasses,
   getParentsWithSkipping,
-} from 'helpers/helpers';
+} from 'helpers';
 import VersionDropdown from '../version-dropdown/version-dropdown';
-import { ConfirmModal, InviteModal, Spinner } from 'components/common/common';
+import { ConfirmModal, InviteModal, Spinner } from 'components/common';
 import {
   PageTableOfContents,
   PageContributors,
@@ -45,7 +45,7 @@ import {
   CommentSection,
   Popup,
   PageActionsDropdown,
-} from '../components';
+} from '..';
 import {
   IPageContent,
   IPageContributor,

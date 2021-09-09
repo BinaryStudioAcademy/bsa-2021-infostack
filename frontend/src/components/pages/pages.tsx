@@ -2,13 +2,13 @@ import { toast } from 'react-toastify';
 import Image from 'react-bootstrap/Image';
 import 'datejs';
 import { userApi, pageApi } from 'services';
-import { useAppSelector, useEffect, useParams, useState } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
+import { useAppSelector, useEffect, useParams, useState } from 'hooks';
+import { getAllowedClasses } from 'helpers';
 import { AppRoute } from 'common/enums';
 import { IPageStatistic } from 'common/interfaces';
-import { PageContent } from './components/components';
-import { Switch, ProtectedRoute, Spinner } from 'components/common/common';
-import { PagesStatistic, Chart } from './components/components';
+import { PageContent } from './components';
+import { Switch, ProtectedRoute, Spinner } from 'components/common';
+import { PagesStatistic, Chart } from './components';
 import Logo from 'assets/img/workspace-welcome-logo.png';
 import styles from './styles.module.scss';
 

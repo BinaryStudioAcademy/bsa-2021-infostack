@@ -1,4 +1,4 @@
-import { ITeam, ITeamEditing, ITeamAddUser } from 'common/interfaces/team';
+import { ITeam, ITeamEditing, ITeamAddUser } from 'common/interfaces';
 import { ContentType, HttpMethod } from 'common/enums';
 import { http } from 'services/http.service';
 

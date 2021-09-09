@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AppRoute } from 'common/enums';
-import { Sign, FormField } from 'components/common/common';
-import { useHistory, useForm, yupResolver, useEffect } from 'hooks/hooks';
+import { Sign, FormField } from 'components/common';
+import { useHistory, useForm, yupResolver, useEffect } from 'hooks';
 import { authApi, userApi } from 'services';
 import { signupInviteSchema } from 'common/validations';
 import { IRegister, IUpdatePasswordAndFullName } from 'common/interfaces/auth';

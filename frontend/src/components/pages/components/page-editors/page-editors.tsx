@@ -2,8 +2,8 @@ import { Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { IPageContributor } from 'common/interfaces/pages';
 import { AppRoute } from 'common/enums';
-import { UserAvatar } from 'components/common/common';
-import { replaceIdParam } from 'helpers/helpers';
+import { UserAvatar } from 'components/common';
+import { replaceIdParam } from 'helpers';
 
 interface IPageEditorsProps {
   className?: string;

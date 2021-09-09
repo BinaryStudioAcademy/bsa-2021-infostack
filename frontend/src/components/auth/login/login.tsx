@@ -1,5 +1,5 @@
 import { AppRoute } from 'common/enums';
-import { FormField, Link, Sign } from 'components/common/common';
+import { FormField, Link, Sign } from 'components/common';
 import { loginSchema } from 'common/validations';
 import {
   useAppDispatch,
@@ -8,13 +8,13 @@ import {
   yupResolver,
   useState,
   useLocation,
-} from 'hooks/hooks';
+} from 'hooks';
 import { authActions } from 'store/actions';
 import { ILogin } from 'common/interfaces/auth';
 import { IPageRequested } from 'common/interfaces/pages';
 import { HttpErrorMessage } from 'common/enums';
-import { HttpError } from 'exceptions/exceptions';
-import { getAllowedClasses } from 'helpers/helpers';
+import { HttpError } from 'exceptions';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 import commonStyles from '../styles.module.scss';
 

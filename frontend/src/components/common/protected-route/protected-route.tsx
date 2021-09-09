@@ -6,7 +6,7 @@ import {
   useEffect,
   useHistory,
   useCookies,
-} from 'hooks/hooks';
+} from 'hooks';
 export const ProtectedRoute = ({ ...rest }: RouteProps): JSX.Element => {
   const token = localStorage.getItem(LocalStorageVariable.ACCESS_TOKEN);
   const [cookies] = useCookies([CookieVariable.WORKSPACE_ID]);

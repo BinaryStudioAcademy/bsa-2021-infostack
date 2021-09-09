@@ -2,14 +2,9 @@ import { toast } from 'react-toastify';
 import { Badge, Card } from 'react-bootstrap';
 import { OptionsType } from 'react-select';
 import { ITagSelect } from 'common/interfaces/tag';
-import { RootState } from 'common/types/types';
-import {
-  useAppDispatch,
-  useAppSelector,
-  useEffect,
-  useState,
-} from 'hooks/hooks';
-import { EditModal } from './components/components';
+import { RootState } from 'common/types';
+import { useAppDispatch, useAppSelector, useEffect, useState } from 'hooks';
+import { EditModal } from './components';
 import { pageApi, tagApi } from 'services';
 import { tagActions } from 'store/tags';
 import { PermissionType, RoleType, TagType } from 'common/enums';

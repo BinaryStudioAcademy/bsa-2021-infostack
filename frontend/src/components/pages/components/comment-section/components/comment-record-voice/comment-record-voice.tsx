@@ -1,6 +1,6 @@
 import 'react-h5-audio-player/lib/styles.css';
-import { getAllowedClasses } from 'helpers/helpers';
-import { useState } from 'hooks/hooks';
+import { getAllowedClasses } from 'helpers';
+import { useState } from 'hooks';
 import RecordModal from '../record-modal/record-modal';
 import styles from './styles.module.scss';
 

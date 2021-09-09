@@ -10,8 +10,8 @@ import {
   IPageTableOfContents,
   IPageTableOfContentsHeading,
 } from 'common/interfaces/pages';
-import { useState } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
+import { useState } from 'hooks';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 const SCROLL_OFFSET = 50;

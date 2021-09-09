@@ -3,10 +3,10 @@ import { Card } from 'react-bootstrap';
 import { authApi } from 'services';
 import { IOption } from 'common/interfaces';
 import { githubActions } from 'store/actions';
-import { Spinner } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
-import { useAppSelector, useAppDispatch, useEffect } from 'hooks/hooks';
-import { ConnectButton, SelectRepo } from './components/components';
+import { Spinner } from 'components/common';
+import { getAllowedClasses } from 'helpers';
+import { useAppSelector, useAppDispatch, useEffect } from 'hooks';
+import { ConnectButton, SelectRepo } from './components';
 
 import styles from './styles.module.scss';
 

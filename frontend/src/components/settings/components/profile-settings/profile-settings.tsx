@@ -9,21 +9,21 @@ import {
   useAppDispatch,
   useAppSelector,
   useRef,
-} from 'hooks/hooks';
+} from 'hooks';
 import { authActions } from 'store/actions';
 import { userApi, skillApi } from 'services';
 import { ISkill } from 'common/interfaces/skill';
 import { IUserAccount } from 'common/interfaces/user';
-import { useForm, yupResolver } from 'hooks/hooks';
+import { useForm, yupResolver } from 'hooks';
 import { accountInfoSchema } from 'common/validations';
-import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from 'common/constants/constants';
-import { UserAvatar } from 'components/common/common';
+import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from 'common/constants';
+import { UserAvatar } from 'components/common';
 import {
   getAllowedClasses,
   bytesToMegabytes,
   canvasToBlob,
   canvasToDataURL,
-} from 'helpers/helpers';
+} from 'helpers';
 import { CropAvatar } from './components/crop-avatar/crop-avatar';
 import styles from './styles.module.scss';
 

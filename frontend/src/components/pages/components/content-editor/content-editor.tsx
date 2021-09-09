@@ -13,11 +13,11 @@ import gfm from 'remark-gfm';
 import { toast } from 'react-toastify';
 import { SocketContext } from 'context/socket';
 import { useHistory } from 'react-router';
-import { RootState } from 'common/types/types';
-import { PageEditors } from '../components';
+import { RootState } from 'common/types';
+import { PageEditors } from '..';
 import { AppRoute, PageTitle, SocketEvents } from 'common/enums';
 import { pagesActions } from 'store/actions';
-import { ConfirmModal } from 'components/common/common';
+import { ConfirmModal } from 'components/common';
 import { IPageContributor } from 'common/interfaces/pages';
 import { CollabEditor } from '../collab-editor/collab-editor';
 import {
@@ -27,8 +27,8 @@ import {
   useParams,
   useRef,
   useEffect,
-} from 'hooks/hooks';
-import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
+} from 'hooks';
+import { replaceIdParam, getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 export const ContentEditor: React.FC = () => {

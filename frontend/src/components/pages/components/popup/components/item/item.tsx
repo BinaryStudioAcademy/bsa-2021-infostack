@@ -2,8 +2,8 @@ import Select from 'react-select';
 import Badge from 'react-bootstrap/Badge';
 
 import { IParticipant, IOption } from 'common/interfaces';
-import { useRef } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
+import { useRef } from 'hooks';
+import { getAllowedClasses } from 'helpers';
 import selectRoleStyles from './select-role-styles';
 
 import styles from '../styles.module.scss';

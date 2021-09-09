@@ -7,10 +7,10 @@ import {
   MentionItem,
 } from 'react-mentions';
 
-import { useState, useAppSelector, useAppDispatch } from 'hooks/hooks';
+import { useState, useAppSelector, useAppDispatch } from 'hooks';
 import { RequestStatus } from 'common/enums';
-import { UserAvatar, Spinner } from 'components/common/common';
-import { getAllowedClasses } from 'helpers/helpers';
+import { UserAvatar, Spinner } from 'components/common';
+import { getAllowedClasses } from 'helpers';
 import { commentsActions } from 'store/comments';
 import { RecordVoice } from '../comment-record-voice/comment-record-voice';
 import { commentApi } from 'services';

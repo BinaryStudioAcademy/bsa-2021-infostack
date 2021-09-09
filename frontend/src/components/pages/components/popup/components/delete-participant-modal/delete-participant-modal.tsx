@@ -1,8 +1,8 @@
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { participantsActions } from 'store/participants';
 import { IParticipant } from 'common/interfaces/participant';
-import { ConfirmModal } from 'components/common/common';
+import { ConfirmModal } from 'components/common';
 
 type Props = {
   showModal: boolean;

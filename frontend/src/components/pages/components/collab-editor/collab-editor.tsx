@@ -15,9 +15,9 @@ import { QuillBinding } from 'y-quill';
 import TurndownService from 'turndown';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
-import { useState, useEffect, useParams } from 'hooks/hooks';
+import { useState, useEffect, useParams } from 'hooks';
 import { AppRoute } from 'common/enums';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers';
 
 import 'quill/dist/quill.snow.css';
 import styles from './styles.module.scss';

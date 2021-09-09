@@ -15,10 +15,10 @@ import {
   SkillSettings,
   IntegrationSettings,
   NotificationsSettings,
-} from './components/components';
+} from './components';
 import { AppRoute } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
-import { AdminRoute } from 'components/common/common';
+import { getAllowedClasses } from 'helpers';
+import { AdminRoute } from 'components/common';
 import styles from './styles.module.scss';
 import { WorkspaceSettings } from './components/workspace-settings/workspace-settings';
 

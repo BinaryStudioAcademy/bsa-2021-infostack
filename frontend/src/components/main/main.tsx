@@ -1,11 +1,11 @@
 import { AppRoute, CookieVariable, LocalStorageVariable } from 'common/enums';
-import { Route, Switch, WithHeader } from 'components/common/common';
+import { Route, Switch, WithHeader } from 'components/common';
 import NotFound from 'components/not-found/not-found';
 import Pages from 'components/pages/pages';
 import ProfileInfo from 'components/profile-info/profile-info';
 import Settings from 'components/settings/settings';
-import { ContentEditor } from 'components/pages/components/components';
-import { PageContent } from 'components/pages/components/components';
+import { ContentEditor } from 'components/pages/components';
+import { PageContent } from 'components/pages/components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -13,7 +13,7 @@ import {
   useHistory,
   useCookies,
   useContext,
-} from 'hooks/hooks';
+} from 'hooks';
 import { SocketContext } from 'context/socket';
 import { SocketEvents } from 'common/enums';
 import {

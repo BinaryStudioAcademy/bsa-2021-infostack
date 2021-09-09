@@ -2,10 +2,10 @@ import { Dropdown, NavLink } from 'react-bootstrap';
 import { ITeam, ITeamCreation } from 'common/interfaces/team';
 import { CreateTeamModal } from '../modal/modal';
 import { teamsActions } from 'store/actions';
-import { useState, useAppDispatch } from 'hooks/hooks';
+import { useState, useAppDispatch } from 'hooks';
 import { Popup } from '../popup-invite/popup-invite';
-import { getAllowedClasses } from 'helpers/helpers';
-import { ConfirmModal } from 'components/common/common';
+import { getAllowedClasses } from 'helpers';
+import { ConfirmModal } from 'components/common';
 import styles from './styles.module.scss';
 
 type Props = {

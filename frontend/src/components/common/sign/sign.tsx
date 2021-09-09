@@ -1,13 +1,13 @@
 import React from 'react';
 import GoogleButton from 'react-google-button';
 import { Form, Button } from 'react-bootstrap';
-import { Link } from 'components/common/common';
+import { Link } from 'components/common';
 import { AppRoute } from 'common/enums';
 import { authApi } from 'services';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import logo from 'assets/img/logo_dark.svg';
 import styles from './styles.module.scss';
-import { useLocation } from 'hooks/hooks';
+import { useLocation } from 'hooks';
 import { IPageRequested } from 'common/interfaces/pages';
 
 type AlternativeRoute = {

@@ -5,7 +5,7 @@ import {
   useContext,
   useCookies,
   useHistory,
-} from 'hooks/hooks';
+} from 'hooks';
 import {
   activitiesActions,
   authActions,
@@ -19,9 +19,9 @@ import {
   usersActions,
   workspacesActions,
 } from 'store/actions';
-import { ProfileItem } from './components/components';
-import { replaceIdParam } from 'helpers/helpers';
-import { UserAvatar } from 'components/common/common';
+import { ProfileItem } from './components';
+import { replaceIdParam } from 'helpers';
+import { UserAvatar } from 'components/common';
 import {
   AppRoute,
   CookieVariable,

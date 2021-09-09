@@ -5,8 +5,8 @@ import { ActionType } from './common';
 import { pageApi } from 'services';
 import { authActions } from 'store/actions';
 import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
-import { RootState } from 'common/types/types';
-import { HttpError } from 'exceptions/exceptions';
+import { RootState } from 'common/types';
+import { HttpError } from 'exceptions';
 
 const createPage = createAsyncThunk(
   ActionType.CREATE_PAGE,

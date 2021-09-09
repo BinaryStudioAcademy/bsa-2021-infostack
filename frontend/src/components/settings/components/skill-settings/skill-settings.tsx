@@ -1,9 +1,9 @@
 import { Card, Table } from 'react-bootstrap';
-import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks/hooks';
+import { useAppDispatch, useEffect, useAppSelector, useRef } from 'hooks';
 import { skillActions } from 'store/skills';
-import { getAllowedClasses } from 'helpers/helpers';
-import { SkillAdd, SkillItem, SkillEdit } from './components/components';
-import { Spinner } from 'components/common/common';
+import { getAllowedClasses } from 'helpers';
+import { SkillAdd, SkillItem, SkillEdit } from './components';
+import { Spinner } from 'components/common';
 import styles from './styles.module.scss';
 
 export const SkillSettings: React.FC = () => {

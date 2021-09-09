@@ -1,5 +1,5 @@
 import Button from 'react-bootstrap/Button';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 type Props = {

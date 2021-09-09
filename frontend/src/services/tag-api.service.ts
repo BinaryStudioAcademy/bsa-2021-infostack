@@ -1,4 +1,4 @@
-import { ITag } from 'common/interfaces/tag';
+import { ITag } from 'common/interfaces';
 import { HttpMethod, ContentType } from 'common/enums';
 import { http } from 'services/http.service';
 

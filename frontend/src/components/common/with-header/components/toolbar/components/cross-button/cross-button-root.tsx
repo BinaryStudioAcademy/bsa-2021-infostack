@@ -1,4 +1,4 @@
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from '../../styles.module.scss';
 
 export const CrossButtonRoot: React.FC = () => (

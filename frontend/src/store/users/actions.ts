@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { IWorkspaceUser } from 'common/interfaces';
-import { RootState } from 'common/types/types';
+import { RootState } from 'common/types';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
 import { RequestStatus, RoleType } from 'common/enums';

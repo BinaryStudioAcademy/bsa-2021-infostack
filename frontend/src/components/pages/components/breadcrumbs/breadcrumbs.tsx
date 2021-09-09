@@ -1,8 +1,8 @@
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { Link } from 'react-router-dom';
-import { useAppSelector, useParams, useState } from 'hooks/hooks';
+import { useAppSelector, useParams, useState } from 'hooks';
 import { AppRoute } from 'common/enums';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers';
 import { IPageNav } from 'common/interfaces';
 import { useEffect } from 'react';
 import styles from './styles.module.scss';

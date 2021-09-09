@@ -7,7 +7,7 @@ import {
 import { createSelector } from 'reselect';
 import { ReducerName, RequestStatus } from 'common/enums';
 import { ICommentNormalized } from 'common/interfaces/comment';
-import { RootState } from 'common/types/types';
+import { RootState } from 'common/types';
 import { fetchComments, createComment, deleteComment } from './actions';
 import { ActionType } from './common';
 

@@ -2,7 +2,7 @@ import Picker from 'emoji-picker-react';
 import { MutableRefObject, SyntheticEvent } from 'react';
 import { Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import { useAppSelector, useEffect, useState, useRef } from 'hooks/hooks';
+import { useAppSelector, useEffect, useState, useRef } from 'hooks';
 import { commentReactionApi } from 'services';
 import { ICommentReaction, IEmoji } from 'common/interfaces';
 

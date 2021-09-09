@@ -1,4 +1,4 @@
-import { PageItem } from '../components';
+import { PageItem } from '..';
 import { IPageNav } from 'common/interfaces/pages';
 
 type Props = {

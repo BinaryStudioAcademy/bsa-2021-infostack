@@ -3,7 +3,7 @@ import 'react-image-crop/lib/ReactCrop.scss';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { useState } from 'hooks/hooks';
+import { useState } from 'hooks';
 import { ICropData } from 'common/interfaces';
 
 type Props = {

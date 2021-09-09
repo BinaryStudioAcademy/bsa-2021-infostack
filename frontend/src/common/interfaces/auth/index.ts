@@ -7,4 +7,4 @@ export type {
   IUpdatePasswordAndFullName,
   ILogin,
   IRegister,
-} from 'infostack-shared/common/interfaces';
+} from 'infostack-shared';

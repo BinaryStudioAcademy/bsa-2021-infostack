@@ -1,8 +1,8 @@
 import { Button } from 'react-bootstrap';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch } from 'hooks';
 import { tagActions } from 'store/tags';
 import { TagType } from 'common/enums';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from '../../styles.module.scss';
 
 export const TagItem: React.FC<{

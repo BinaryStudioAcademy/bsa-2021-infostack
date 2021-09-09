@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
-import { useState } from 'hooks/hooks';
+import { useState } from 'hooks';
 import { ITeamUser } from 'common/interfaces/team';
-import { ConfirmModal } from 'components/common/common';
+import { ConfirmModal } from 'components/common';
 
 type Props = {
   owner: string;

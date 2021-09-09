@@ -1,8 +1,8 @@
 import { Button } from 'react-bootstrap';
 
 import { RequestStatus } from 'common/enums/app';
-import { Spinner } from 'components/common/common';
-import { useAppSelector, useAppDispatch } from 'hooks/hooks';
+import { Spinner } from 'components/common';
+import { useAppSelector, useAppDispatch } from 'hooks';
 import { commentsActions } from 'store/comments';
 import { selectRootIds } from 'store/comments/slice';
 import { Comment } from '../comment/comment';

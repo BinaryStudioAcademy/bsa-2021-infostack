@@ -2,8 +2,8 @@ import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import useCountDown from 'react-countdown-hook';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useState, useRef, useEffect } from 'hooks/hooks';
-import { getAllowedClasses } from 'helpers/helpers';
+import { useState, useRef, useEffect } from 'hooks';
+import { getAllowedClasses } from 'helpers';
 import 'react-h5-audio-player/lib/styles.css';
 import styles from './styles.module.scss';
 

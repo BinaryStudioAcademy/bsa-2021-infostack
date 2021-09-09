@@ -1,5 +1,6 @@
 import EventEmitter from 'events';
-import { HttpError } from 'exceptions/exceptions';
+
+import { HttpError } from 'exceptions';
 import {
   ContentType,
   HttpHeader,
@@ -8,7 +9,7 @@ import {
   HttpCode,
   EmitterEvents,
 } from 'common/enums';
-import { HttpOptions } from 'common/types/types';
+import { HttpOptions } from 'common/types';
 
 class Http {
   private areTokensRefreshing;
@@ -26,16 +27,17 @@ class Http {
     try {
       return await this.sendRequest(url, options);
     } catch (err) {
-      if (err.status === HttpCode.UNAUTHORIZED) {
+      const error = err as HttpError;
+      if (error.status === HttpCode.UNAUTHORIZED) {
         if (this.areTokensRefreshing) {
           return await this.sendRequestAfterGetToken(url, options);
         } else {
           this.areTokensRefreshing = true;
-          const accessToken = await this.refreshTokens(err);
+          const accessToken = await this.refreshTokens(error);
           return await this.sendRequest(url, options, accessToken);
         }
       } else {
-        this.throwError(err);
+        this.throwError(error);
       }
     }
   }
@@ -74,7 +76,8 @@ class Http {
 
       return this.parseJSON<T>(response);
     } catch (err) {
-      this.throwError(err);
+      const error = err as HttpError;
+      this.throwError(error);
     }
   }
 
@@ -150,7 +153,8 @@ class Http {
         );
         this.areTokensRefreshing = false;
         return tokens.accessToken;
-      } catch (error) {
+      } catch (e) {
+        const error = e as HttpError;
         if (error.status === HttpCode.UNAUTHORIZED) {
           localStorage.removeItem(LocalStorageVariable.ACCESS_TOKEN);
           localStorage.removeItem(LocalStorageVariable.REFRESH_TOKEN);

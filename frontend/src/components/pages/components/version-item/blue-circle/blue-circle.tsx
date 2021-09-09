@@ -1,4 +1,4 @@
-import { getAllowedClasses } from 'helpers/dom/dom';
+import { getAllowedClasses } from 'helpers/dom';
 import styles from './styles.module.scss';
 
 export const BlueCircle: React.FC = () => (

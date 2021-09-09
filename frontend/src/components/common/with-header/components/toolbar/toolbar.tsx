@@ -1,5 +1,5 @@
 import { Accordion, Navbar } from 'react-bootstrap';
-import { RootState } from 'common/types/types';
+import { RootState } from 'common/types';
 import {
   useAppDispatch,
   useAppSelector,
@@ -7,14 +7,14 @@ import {
   useHistory,
   useLocation,
   useParams,
-} from 'hooks/hooks';
+} from 'hooks';
 import { pagesActions } from 'store/actions';
-import { PagesList, PlusButtonRoot } from './components/components';
+import { PagesList, PlusButtonRoot } from './components';
 import { IPageRequest } from 'common/interfaces/pages';
-import { replaceIdParam, getAllowedClasses } from 'helpers/helpers';
+import { replaceIdParam, getAllowedClasses } from 'helpers';
 import { AppRoute } from 'common/enums';
 import styles from './styles.module.scss';
-import { Link } from 'components/common/common';
+import { Link } from 'components/common';
 
 export const Toolbar: React.FC = () => {
   const dispatch = useAppDispatch();

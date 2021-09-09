@@ -1,14 +1,13 @@
-import { http } from 'services/http.service';
-import { INotification } from 'common/interfaces/notification';
+import { INotification, IPagination } from 'common/interfaces';
 import { ContentType, HttpMethod } from 'common/enums';
-import { getStringifiedQuery } from 'helpers/helpers';
-import { IQuery } from 'common/interfaces/statistic-query';
+import { getStringifiedQuery } from 'helpers';
+import { http } from 'services/http.service';
 
 class NotificationApi {
   private readonly BASE = '/api/notifications';
   private readonly _httpService = http;
 
-  public async get(query?: IQuery): Promise<INotification[]> {
+  public async get(query?: IPagination): Promise<INotification[]> {
     return this._httpService.load(
       `${this.BASE}${query ? `?${getStringifiedQuery(query)}` : ''}`,
     );

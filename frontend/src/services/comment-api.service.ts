@@ -1,10 +1,6 @@
-import { http } from 'services/http.service';
-import {
-  IComment,
-  ICommentRequest,
-  ICommentResponse,
-} from 'common/interfaces/comment';
+import { IComment, ICommentRequest, ICommentResponse } from 'common/interfaces';
 import { ContentType, HttpMethod } from 'common/enums';
+import { http } from 'services/http.service';
 
 class CommentApi {
   private readonly BASE = '/api/pages';

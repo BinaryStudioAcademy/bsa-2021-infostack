@@ -1,14 +1,9 @@
 import { Form } from 'react-bootstrap';
-import {
-  useEffect,
-  useState,
-  useAppDispatch,
-  useAppSelector,
-} from 'hooks/hooks';
+import { useEffect, useState, useAppDispatch, useAppSelector } from 'hooks';
 import { notificationsSettingsActions } from 'store/actions';
 import { NotificationType, GeneralNotificationType } from 'common/enums';
-import { RootState } from 'common/types/types';
-import { getAllowedClasses } from 'helpers/helpers';
+import { RootState } from 'common/types';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 type Props = {

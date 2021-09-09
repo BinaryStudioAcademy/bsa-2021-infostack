@@ -7,7 +7,7 @@ import { actions } from './slice';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
 import { HttpCode } from 'common/enums';
-import { RootState } from 'common/types/types';
+import { RootState } from 'common/types';
 
 const loadWorkspaces = createAsyncThunk(
   ActionType.SET_WORKSPACES,

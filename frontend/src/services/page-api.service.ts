@@ -1,4 +1,3 @@
-import { IParticipant } from 'common/interfaces/participant';
 import { ContentType, HttpMethod } from 'common/enums';
 import {
   IPage,
@@ -15,8 +14,9 @@ import {
   ITag,
   IStatisticQuery,
   IPageStatistic,
+  IParticipant,
 } from 'common/interfaces';
-import { getStringifiedQuery } from 'helpers/helpers';
+import { getStringifiedQuery } from 'helpers';
 import { http } from 'services/http.service';
 
 class PageApi {

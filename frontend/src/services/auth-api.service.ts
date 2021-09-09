@@ -1,4 +1,3 @@
-import { IUserWithTokens } from 'common/interfaces/user';
 import { HttpMethod, ContentType } from 'common/enums';
 import {
   IResetPassword,
@@ -7,42 +6,31 @@ import {
   IRefreshToken,
   ILogin,
   IRegister,
-} from 'common/interfaces/auth';
+  IUserWithTokens,
+} from 'common/interfaces';
 import { http } from 'services/http.service';
 
 class AuthApi {
   private http = http;
   private BASE = '/api/auth';
 
-  public async loginUser(loginPayload: ILogin): Promise<IUserWithTokens> {
-    const loginResponse: IUserWithTokens = await this.http.load(
-      `${this.BASE}/login`,
-      {
-        method: HttpMethod.POST,
-        payload: JSON.stringify(loginPayload),
-        contentType: ContentType.JSON,
-      },
-    );
-
-    return loginResponse;
+  public loginUser(loginPayload: ILogin): Promise<IUserWithTokens> {
+    return this.http.load(`${this.BASE}/login`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(loginPayload),
+      contentType: ContentType.JSON,
+    });
   }
 
-  public async registerUser(
-    registerPayload: IRegister,
-  ): Promise<IUserWithTokens> {
-    const registerResponse: IUserWithTokens = await this.http.load(
-      `${this.BASE}/register`,
-      {
-        method: HttpMethod.POST,
-        payload: JSON.stringify(registerPayload),
-        contentType: ContentType.JSON,
-      },
-    );
-
-    return registerResponse;
+  public registerUser(registerPayload: IRegister): Promise<IUserWithTokens> {
+    return this.http.load(`${this.BASE}/register`, {
+      method: HttpMethod.POST,
+      payload: JSON.stringify(registerPayload),
+      contentType: ContentType.JSON,
+    });
   }
 
-  public async resetPassword(payload: IResetPassword): Promise<void> {
+  public resetPassword(payload: IResetPassword): Promise<void> {
     return this.http.load(`${this.BASE}/reset-password`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
@@ -50,7 +38,7 @@ class AuthApi {
     });
   }
 
-  public async setPassword(payload: ISetPassword): Promise<void> {
+  public setPassword(payload: ISetPassword): Promise<void> {
     return this.http.load(`${this.BASE}/set-password`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
@@ -58,7 +46,7 @@ class AuthApi {
     });
   }
 
-  public async updatePasswordAndFullName(
+  public updatePasswordAndFullName(
     payload: IUpdatePasswordAndFullName,
   ): Promise<string> {
     return this.http.load(`${this.BASE}/update-password-and-fullname`, {
@@ -68,7 +56,7 @@ class AuthApi {
     });
   }
 
-  public async logout(payload: IRefreshToken): Promise<void> {
+  public logout(payload: IRefreshToken): Promise<void> {
     return this.http.load(`${this.BASE}/logout`, {
       method: HttpMethod.POST,
       payload: JSON.stringify(payload),
@@ -76,7 +64,7 @@ class AuthApi {
     });
   }
 
-  public async getLoginGoogleUrl(
+  public getLoginGoogleUrl(
     requestedPage: string | null,
   ): Promise<{ url: string }> {
     return this.http.load(
@@ -86,7 +74,7 @@ class AuthApi {
     );
   }
 
-  public async getLoginGitHubUrl(
+  public getLoginGitHubUrl(
     requestedPage: string | null,
   ): Promise<{ url: string }> {
     return this.http.load(
@@ -96,7 +84,7 @@ class AuthApi {
     );
   }
 
-  public async loginGoogle(code: string): Promise<IUserWithTokens> {
+  public loginGoogle(code: string): Promise<IUserWithTokens> {
     return this.http.load(`${this.BASE}/login/google`, {
       method: HttpMethod.POST,
       payload: JSON.stringify({ code }),
@@ -104,7 +92,7 @@ class AuthApi {
     });
   }
 
-  public async loginGithub(code: string): Promise<IUserWithTokens> {
+  public loginGithub(code: string): Promise<IUserWithTokens> {
     return this.http.load(`${this.BASE}/login/github`, {
       method: HttpMethod.POST,
       payload: JSON.stringify({ code }),

@@ -1,7 +1,7 @@
 import { Form, Modal, Button } from 'react-bootstrap';
-import { useState, useEffect } from 'hooks/hooks';
+import { useState, useEffect } from 'hooks';
 import { IPageNav } from 'common/interfaces/pages';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from './styles.module.scss';
 
 type Props = {

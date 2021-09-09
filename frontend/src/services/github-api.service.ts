@@ -5,7 +5,7 @@ class GitHubApi {
   private http = http;
   private BASE = '/api/github';
 
-  public async addAccessToken(code: string): Promise<void> {
+  public addAccessToken(code: string): Promise<void> {
     return this.http.load(`${this.BASE}/access-token`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -13,15 +13,15 @@ class GitHubApi {
     });
   }
 
-  public async getUsername(): Promise<{ username: string }> {
+  public getUsername(): Promise<{ username: string }> {
     return this.http.load(`${this.BASE}/username`);
   }
 
-  public async getRepos(): Promise<{ repos: string[] }> {
+  public getRepos(): Promise<{ repos: string[] }> {
     return this.http.load(`${this.BASE}/repos`);
   }
 
-  public async addCurrentRepo(repo: string): Promise<void> {
+  public addCurrentRepo(repo: string): Promise<void> {
     return this.http.load(`${this.BASE}/current-repo`, {
       method: HttpMethod.POST,
       contentType: ContentType.JSON,
@@ -29,7 +29,7 @@ class GitHubApi {
     });
   }
 
-  public async getCurrentRepo(): Promise<{ currentRepo: string }> {
+  public getCurrentRepo(): Promise<{ currentRepo: string }> {
     return this.http.load(`${this.BASE}/current-repo`);
   }
 }

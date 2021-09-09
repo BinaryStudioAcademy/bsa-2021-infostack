@@ -1,7 +1,7 @@
 import { Form } from 'react-bootstrap';
-import { useAppDispatch, useAppSelector, useState } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useState } from 'hooks';
 import { tagActions } from 'store/tags';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from '../../styles.module.scss';
 
 export const TagAdd: React.FC<{

@@ -1,7 +1,7 @@
 import { Button, Form } from 'react-bootstrap';
-import { useAppDispatch, useAppSelector, useRef, useState } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useRef, useState } from 'hooks';
 import { tagActions } from 'store/tags';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses } from 'helpers';
 import styles from '../../styles.module.scss';
 
 export const TagEdit: React.FC<{

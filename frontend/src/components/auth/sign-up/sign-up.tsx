@@ -1,11 +1,11 @@
 import React from 'react';
 import { AppRoute } from 'common/enums';
-import { Sign, FormField } from 'components/common/common';
-import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks/hooks';
+import { Sign, FormField } from 'components/common';
+import { useAppDispatch, useHistory, useForm, yupResolver } from 'hooks';
 import { authActions } from 'store/actions';
-import { signUpSchema } from 'common/validations';
+import { signupSchema } from 'common/validations';
 import { IRegister } from 'common/interfaces/auth';
-import { HttpError } from 'exceptions/exceptions';
+import { HttpError } from 'exceptions';
 import commonStyles from '../styles.module.scss';
 
 const SignUp: React.FC = () => {
@@ -17,7 +17,7 @@ const SignUp: React.FC = () => {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<IRegister>({ resolver: yupResolver(signUpSchema) });
+  } = useForm<IRegister>({ resolver: yupResolver(signupSchema) });
 
   const handleSubmitForm = async (data: IRegister): Promise<void> => {
     try {

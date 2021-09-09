@@ -3,17 +3,17 @@ import ReactMarkdown from 'react-markdown';
 import { MentionItem } from 'react-mentions';
 import { isThisMinute } from 'date-fns/esm';
 import AudioPlayer from 'react-h5-audio-player';
-import { useState, useHistory, useAppSelector } from 'hooks/hooks';
-import { replaceIdParam } from 'helpers/helpers';
+import { useState, useHistory, useAppSelector } from 'hooks';
+import { replaceIdParam } from 'helpers';
 import { AppRoute } from 'common/enums';
-import { UserAvatar } from 'components/common/common';
+import { UserAvatar } from 'components/common';
 import { ICommentNormalized } from 'common/interfaces/comment';
 import { TimeAgo } from 'components/common/time-ago/time-ago';
 import { commentsSelectors } from 'store/comments/slice';
 import { CommentForm } from '../comment-form/comment-form';
 import { Emoji } from '../emoji/emoji';
 import styles from './styles.module.scss';
-import { parseMentions } from 'helpers/parse-mentions.helper';
+import { parseMentions } from 'helpers/comment/parse-mentions.helper';
 
 type Props = {
   id: string;

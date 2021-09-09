@@ -4,10 +4,10 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import Highlighter from 'react-highlight-words';
 
-import { useDebouncedCallback, useHistory, useState } from 'hooks/hooks';
+import { useDebouncedCallback, useHistory, useState } from 'hooks';
 import { pageApi } from 'services';
 import { IFoundPageContent } from 'common/interfaces/pages';
-import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers';
 import { AppRoute } from 'common/enums/app';
 
 import styles from './styles.module.scss';
