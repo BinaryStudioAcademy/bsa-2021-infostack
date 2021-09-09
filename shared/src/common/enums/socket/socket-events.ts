@@ -11,4 +11,5 @@ export enum SocketEvents {
   EDITOR_LEFT = 'editor/left',
   EDITOR_NEW_CONTENT = 'editor/newContent',
   WORKSPACE_DELETE_USER = 'workspace/deleteUser',
+  SIGN_OUT = 'app/signOut',
 }
