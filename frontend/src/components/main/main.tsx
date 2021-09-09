@@ -40,6 +40,7 @@ const Main: React.FC = () => {
     workspaceName: string;
   }): void => {
     if (workspaceId === cookies[CookieVariable.WORKSPACE_ID]) {
+      dispatch(workspacesActions.removeCurrentWorkspace());
       history.push(AppRoute.WORKSPACES);
     }
 

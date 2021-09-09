@@ -160,7 +160,7 @@ const PageTags: React.FC = () => {
           handleInputChange={handleInputChange}
         />
       </Card.Header>
-      {!!pageTags?.length && (
+      {pageTags?.length ? (
         <Card.Body>
           <div className="d-flex align-items-start flex-wrap">
             {pageTags.map(({ id, name, type }) => (
@@ -171,6 +171,8 @@ const PageTags: React.FC = () => {
             ))}
           </div>
         </Card.Body>
+      ) : (
+        <span className="no-tags">No tags</span>
       )}
     </Card>
   );

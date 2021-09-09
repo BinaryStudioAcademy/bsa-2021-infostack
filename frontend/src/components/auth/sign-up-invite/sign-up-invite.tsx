@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { AppRoute } from 'common/enums';
-import { Sign, FormField } from 'components/common/common';
+import { Sign, FormField, FormPasswordField } from 'components/common/common';
 import { useHistory, useForm, yupResolver, useEffect } from 'hooks/hooks';
 import { authApi, userApi } from 'services';
 import { signUpInviteSchema } from 'common/validations';
 import { IRegister, IUpdatePasswordAndFullName } from 'common/interfaces/auth';
 import { DefaultUserName } from 'common/enums';
+import commonStyles from '../styles.module.scss';
 
 const SignUpInvite: React.FC = () => {
   const history = useHistory();
@@ -53,6 +54,7 @@ const SignUpInvite: React.FC = () => {
       secondaryText="Let us know your name"
       submitText="Sign up"
       onSubmit={handleSubmit(handleSubmitForm)}
+      submitClassName={commonStyles.submitButton}
     >
       <FormField
         label="Full Name"
@@ -61,14 +63,15 @@ const SignUpInvite: React.FC = () => {
         controlId="signUpFullName"
         register={register('fullName')}
         errors={errors.fullName}
+        inputClassName={commonStyles.input}
       />
-      <FormField
+      <FormPasswordField
         label="Create password"
-        type="password"
         placeholder="Enter password"
         controlId="signUpPassword"
         register={register('password')}
         errors={errors.password}
+        inputClassName={commonStyles.input}
       />
     </Sign>
   );

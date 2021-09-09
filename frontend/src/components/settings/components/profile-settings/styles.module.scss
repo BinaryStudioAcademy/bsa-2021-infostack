@@ -11,19 +11,16 @@
   min-width: 0;
   position: relative;
   min-height: 32.5rem;
-
   .cardBody {
     flex: 1 1 auto;
     padding: 2rem;
   }
-
   .cardHeader {
     background-color: #fff;
     border-bottom: 0 solid transparent;
     margin-bottom: 0;
     padding: 1.6rem 2rem;
   }
-
   .cardButton {
     font-size: 1.32rem;
     padding: 0.4rem 1.12rem;
@@ -32,19 +29,15 @@
     height: 3rem;
     margin-top: 3rem;
   }
-
   .cardTitle {
     font-size: 1.52rem;
     margin-bottom: 0;
-
     padding-top: 0.6rem;
     padding-bottom: 0.6rem;
   }
-
   .cardInputLabel {
     font-size: 1.4rem;
   }
-
   .cardInput {
     appearance: none;
     background-clip: padding-box;
@@ -59,40 +52,33 @@
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     width: 100%;
   }
-
   .cardImage {
     object-fit: cover;
+    max-height: 100%;
   }
-
   .uploadLabel {
     display: flex;
     align-items: center;
   }
-
   .uploadText {
     display: inline-block;
     font-size: 1.2rem;
     line-height: 2.3rem;
   }
-
   .uploadIcon {
     font-size: 1.6rem;
     max-height: 100%;
   }
-
   .avatarControlButton {
     width: 9.5rem;
     height: 36px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 1.32rem;
     padding: 0.4rem 1.12rem;
     border-radius: 0.2rem;
   }
-
   .spaceBetween {
     justify-content: space-between;
   }
@@ -102,12 +88,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 1.25rem;
-
   border: 1px solid #ced4da;
   border-radius: 50%;
-
   min-height: 12.8rem;
   min-width: 12.8rem;
   margin-bottom: 1rem;

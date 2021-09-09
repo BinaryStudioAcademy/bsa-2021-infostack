@@ -25,22 +25,21 @@
 .cardTitle {
   font-size: 1.52rem;
   margin-bottom: 0;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 
 .cardBody {
-  padding: 1.6rem 2rem;
+  padding: 2rem 2rem;
   font-size: 1.42rem;
   margin-left: 0;
-
   .title {
     margin: 0.5rem 0 1rem 0;
     font-weight: 500;
   }
-
   .label {
     margin: 0.5rem 0 1rem 0;
   }
-
   .emptyMessage {
     color: #6c757d;
     font-size: 1.6rem;

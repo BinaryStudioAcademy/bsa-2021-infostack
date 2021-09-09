@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Button, Card, Dropdown, NavLink } from 'react-bootstrap';
 import {
   useAppDispatch,
   useAppSelector,
@@ -39,24 +39,30 @@ const Activities: React.FC = () => {
       >
         <span>Activities</span>
 
-        <DropdownButton
-          title={filter}
-          id="activity-filter"
-          size="sm"
-          variant="success"
-          className={styles.menu}
-        >
-          {FILTER_OPTIONS.map((option) => {
-            return (
-              <Dropdown.Item
-                key={option}
-                onClick={(): void => updateFilter(option)}
-              >
-                {option}
-              </Dropdown.Item>
-            );
-          })}
-        </DropdownButton>
+        <Dropdown title={filter} id="activity-filter" className={styles.menu}>
+          <Dropdown.Toggle
+            as={NavLink}
+            className={getAllowedClasses(
+              styles.dropdownToggle,
+              'sm text-secondary',
+            )}
+          >
+            <span className="me-2">{filter}</span>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {FILTER_OPTIONS.map((option) => {
+              return (
+                <Dropdown.Item
+                  key={option}
+                  className={styles.dropdownItem}
+                  onClick={(): void => updateFilter(option)}
+                >
+                  {option}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
       </Card.Title>
 
       <div className={styles.container}>
