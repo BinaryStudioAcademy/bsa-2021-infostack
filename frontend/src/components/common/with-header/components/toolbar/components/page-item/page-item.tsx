@@ -91,9 +91,7 @@ export const PageItem: React.FC<Props> = ({
           `${isSelected}`,
         )}
       >
-        <span className={allowSubPageAdd ? 'text-break' : 'text-break my-2'}>
-          {title}
-        </span>
+        <span className="text-break">{title}</span>
       </Link>
     );
   };

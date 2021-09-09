@@ -4,7 +4,6 @@
   .footerText {
     color: #6c757d;
     font-size: 1.2rem;
-
     &:hover {
       cursor: pointer;
       text-decoration: underline;
@@ -14,7 +13,7 @@
 
 .expanded {
   background: #fff;
-  height: 53vh;
+  max-height: 53vh;
   overflow-y: auto;
   position: relative;
 }

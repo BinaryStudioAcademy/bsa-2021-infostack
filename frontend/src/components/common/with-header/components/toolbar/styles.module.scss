@@ -7,6 +7,7 @@
   min-height: 100vh;
   height: 100%;
 }
+
 .navbar a {
   text-decoration: none;
 }
@@ -176,7 +177,7 @@
 }
 
 .sectionName {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   color: #ced4da;
   display: inline-block;
 }
@@ -186,6 +187,7 @@
   margin-bottom: 0px;
   margin-left: 0px;
 }
+
 .pageItem .selectedPage {
   color: white;
   text-decoration: none;
@@ -193,5 +195,5 @@
 
 .logo {
   max-width: 20rem;
-  max-height: 20rem;
+  max-height: 10rem;
 }
