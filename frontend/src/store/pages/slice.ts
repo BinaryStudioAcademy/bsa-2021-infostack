@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { IPageNav, IPage } from 'common/interfaces/pages';
+
+import { ReducerName } from 'common/enums';
+import { IPageNav, IPage } from 'common/interfaces';
 import { ActionType } from './common';
 
 type State = {

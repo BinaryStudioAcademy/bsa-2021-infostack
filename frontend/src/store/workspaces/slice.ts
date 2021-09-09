@@ -1,6 +1,7 @@
-import { IWorkspace } from 'common/interfaces/workspace';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
+
+import { IWorkspace } from 'common/interfaces';
+import { ReducerName } from 'common/enums';
 import { ActionType } from './common';
 
 type State = {

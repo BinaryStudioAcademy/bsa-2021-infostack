@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ITeamEditing, ITeam, ITeamAddUser } from 'common/interfaces/team';
+
+import { ITeamEditing, ITeam, ITeamAddUser } from 'common/interfaces';
 import { teamApi } from 'services';
 import { ActionType } from './common';
 

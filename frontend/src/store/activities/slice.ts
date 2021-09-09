@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { IUserActivity } from 'common/interfaces/user';
-import { IPagination } from 'common/interfaces/common';
+
+import { ReducerName } from 'common/enums';
+import { IUserActivity, IPagination } from 'common/interfaces';
 import { ActionType } from './common';
 
 const FILTER_OPTIONS = ['All', 'Me'] as const;

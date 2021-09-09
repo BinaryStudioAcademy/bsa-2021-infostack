@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { normalize } from 'normalizr';
+
 import { ActionType } from './common';
 import { commentApi } from 'services';
 import {
   IComment,
   ICommentRequest,
   ICommentNormalized,
-} from 'common/interfaces/comment';
+} from 'common/interfaces';
 import { commentListSchema } from './schema';
 
 export const fetchComments = createAsyncThunk(

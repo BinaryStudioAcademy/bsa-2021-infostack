@@ -1,8 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { actions } from './slice';
 import { ActionType } from './common';
 import { skillApi } from 'services';
-import { ISkill } from 'common/interfaces/skill';
+import { ISkill } from 'common/interfaces';
+import { HttpError } from 'exceptions';
 
 const SKILL_EMPTY_NAME = 'Empty skill name is not allowed';
 const SKILL_SINGLE_SPEC_CHAR = 'Special characters are not allowed as skills';
@@ -31,7 +33,8 @@ const requestUpdate = createAsyncThunk(
         dispatch(actions.setEditSkillError(SKILL_EMPTY_NAME));
       }
     } catch (err) {
-      dispatch(actions.setEditSkillError(err.message));
+      const error = err as HttpError;
+      dispatch(actions.setEditSkillError(error.message));
     }
   },
 );
@@ -50,7 +53,8 @@ const requestAdd = createAsyncThunk(
         dispatch(actions.setAddSkillError(SKILL_EMPTY_NAME));
       }
     } catch (err) {
-      dispatch(actions.setAddSkillError(err.message));
+      const error = err as HttpError;
+      dispatch(actions.setAddSkillError(error.message));
     }
   },
 );

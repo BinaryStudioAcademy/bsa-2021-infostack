@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { ActionType } from './common';
 import { userApi } from 'services';
 import { actions } from './slice';
 import { RootState } from 'common/types';
-import { IUserActivity } from 'common/interfaces/user';
-import { IPaginated } from 'common/interfaces/common';
+import { IUserActivity, IPaginated } from 'common/interfaces';
 
 const fetchActivities = createAsyncThunk(
   ActionType.FETCH_ACTIVITIES,
@@ -55,7 +55,9 @@ const loadMoreActivities = createAsyncThunk(
 
     dispatch(actions.updateActivities(result.items));
     dispatch(
-      actions.updatePagination({ skip: pagination.skip + result.items.length }),
+      actions.updatePagination({
+        skip: pagination.skip || 0 + result.items.length,
+      }),
     );
     dispatch(actions.updateTotalItems(result.totalItems));
     dispatch(actions.toggleIsLoading());

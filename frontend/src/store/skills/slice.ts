@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { ISkill } from 'common/interfaces/skill';
+
+import { ReducerName } from 'common/enums';
+import { ISkill } from 'common/interfaces';
 import { ActionType } from './common';
 
 type State = {

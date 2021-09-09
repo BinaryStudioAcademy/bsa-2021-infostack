@@ -1,13 +1,12 @@
-import {
-  IWorkspaceCreation,
-  IWorkspaceUpdate,
-} from 'common/interfaces/workspace';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { IWorkspaceCreation, IWorkspaceUpdate } from 'common/interfaces';
 import { actions } from './slice';
 import { ActionType } from './common';
 import { workspaceApi } from 'services';
 import { HttpCode } from 'common/enums';
 import { RootState } from 'common/types';
+import { HttpError } from 'exceptions';
 
 const loadWorkspaces = createAsyncThunk(
   ActionType.SET_WORKSPACES,
@@ -25,8 +24,9 @@ const createWorkspace = createAsyncThunk(
       dispatch(actions.setCurrentWorkspace(workspace));
       dispatch(actions.removeCreatingError());
     } catch (err) {
-      if (err.status === HttpCode.CONFLICT) {
-        dispatch(actions.setCreatingError(err.message));
+      const error = err as HttpError;
+      if (error.status === HttpCode.CONFLICT) {
+        dispatch(actions.setCreatingError(error.message));
       }
     }
   },

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { IWorkspaceUser } from 'common/interfaces';
 import { RootState } from 'common/types';
 import { ActionType } from './common';

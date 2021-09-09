@@ -1,8 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { actions } from './slice';
 import { ActionType } from './common';
 import { tagApi } from 'services';
-import { ITag } from 'common/interfaces/tag';
+import { ITag } from 'common/interfaces';
+import { HttpError } from 'exceptions';
 
 const TAG_EMPTY_NAME = 'Empty tag name is not allowed';
 const TAG_SINGLE_SPEC_CHAR = 'Special characters are not allowed as tags';
@@ -29,7 +31,8 @@ const requestUpdate = createAsyncThunk(
         dispatch(actions.setEditTagError(TAG_EMPTY_NAME));
       }
     } catch (err) {
-      dispatch(actions.setEditTagError(err.message));
+      const error = err as HttpError;
+      dispatch(actions.setEditTagError(error.message));
     }
   },
 );
@@ -48,7 +51,8 @@ const requestAdd = createAsyncThunk(
         dispatch(actions.setAddTagError(TAG_EMPTY_NAME));
       }
     } catch (err) {
-      dispatch(actions.setAddTagError(err.message));
+      const error = err as HttpError;
+      dispatch(actions.setAddTagError(error.message));
     }
   },
 );

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { actions } from './slice';
 import { ActionType } from './common';
 import { githubApi } from 'services';

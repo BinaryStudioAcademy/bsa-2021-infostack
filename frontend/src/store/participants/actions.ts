@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { actions } from './slice';
 import { ActionType } from './common';
 import { pageApi } from 'services';
-import { IParticipant } from 'common/interfaces/participant';
+import { IParticipant } from 'common/interfaces';
 
 const loadParticipants = createAsyncThunk(
   ActionType.SET_PARTICIPANTS,

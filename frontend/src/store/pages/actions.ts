@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+
 import { actions } from './slice';
 import { ActionType } from './common';
 import { pageApi } from 'services';
 import { authActions } from 'store/actions';
-import { IPageRequest, IEditPageContent } from 'common/interfaces/pages';
+import { IPageRequest, IEditPageContent } from 'common/interfaces';
 import { RootState } from 'common/types';
 import { HttpError } from 'exceptions';
 

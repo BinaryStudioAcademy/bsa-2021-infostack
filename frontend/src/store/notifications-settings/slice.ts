@@ -6,7 +6,8 @@ import {
   PayloadAction,
   isAnyOf,
 } from '@reduxjs/toolkit';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
+
+import { ReducerName } from 'common/enums';
 import { ActionType } from './common';
 
 type State = {

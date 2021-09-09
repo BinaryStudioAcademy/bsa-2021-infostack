@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { ReducerName } from 'common/enums/app/reducer-name.enum';
-import { ITeam } from 'common/interfaces/team';
+
+import { ReducerName } from 'common/enums';
+import { ITeam } from 'common/interfaces';
 import {
   fetchTeams,
   fetchTeamsForUser,
