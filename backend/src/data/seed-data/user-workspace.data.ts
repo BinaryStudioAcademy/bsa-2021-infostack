@@ -1,5 +1,18 @@
 export const userWorkspaces = [
   {
+    userId: '70889243-6bf0-4426-9c8a-78f8ffd8fb41',
+    workspaceId: '4b422d96-2b58-474c-9902-6450810da8ca',
+    role: 'admin',
+    createAt: '2021-08-31T11:25:48+0000',
+  },
+  {
+    userId: '78d6613c-74a4-4b3b-9c36-0bacca03fd23',
+    workspaceId: '4b422d96-2b58-474c-9902-6450810da8ca',
+    role: 'admin',
+    createAt: '2021-08-31T11:26:48+0000',
+  },
+
+  {
     userId: '9a25ad37-a647-4c1a-897f-59dbf275765d',
     workspaceId: 'b6e959fd-09b3-42cd-8a30-90c31054198a',
     role: 'admin',
