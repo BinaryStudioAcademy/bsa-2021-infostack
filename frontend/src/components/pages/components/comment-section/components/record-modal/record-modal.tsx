@@ -181,7 +181,7 @@ const RecordModal: React.FC<Props> = (props) => {
                 <div className="d-flex align-items-center w-25">
                   <Button
                     ref={pauseButton}
-                    className={getAllowedClasses(styles.stopButton, 'd-flex')}
+                    className={getAllowedClasses(styles.pauseButton, 'd-flex')}
                     variant="white"
                   >
                     {!isPaused ? (
