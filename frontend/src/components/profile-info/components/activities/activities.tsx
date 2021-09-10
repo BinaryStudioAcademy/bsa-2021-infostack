@@ -105,6 +105,10 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
     history.push(replaceIdParam(AppRoute.PAGE, page.id));
   };
 
+  const handleAvatarClick = (): void => {
+    history.push(replaceIdParam(AppRoute.PROFILE, user.id));
+  };
+
   const getMessage = (): string => {
     if (isNew && type === 'page') {
       return ' created a new page ';
@@ -158,15 +162,17 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
   };
 
   return (
-    <div className={styles.activity} onClick={handleClick}>
+    <div className={styles.activity}>
       <UserAvatar
         size="40"
         name={user.fullName}
         src={user.avatar}
         round={true}
+        className={getAllowedClasses(styles.userAvatar)}
+        onClick={handleAvatarClick}
       />
 
-      <div className={styles.infoContainer}>
+      <div className={styles.infoContainer} onClick={handleClick}>
         <span className={styles.heading}>
           <b>{user.fullName}</b>
           {getMessage()}
