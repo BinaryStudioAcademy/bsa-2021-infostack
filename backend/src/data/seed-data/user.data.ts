@@ -1,6 +1,9 @@
+import { users as userEntities } from './users';
+
 const password = 'admin123';
 
 export const users = [
+  ...userEntities,
   {
     id: '9a25ad37-a647-4c1a-897f-59dbf275765d',
     fullName: 'User1',

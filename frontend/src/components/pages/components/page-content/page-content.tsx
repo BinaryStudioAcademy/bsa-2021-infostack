@@ -459,7 +459,7 @@ export const PageContent: React.FC = () => {
             followers={currentPage?.followingUsers}
           />
         </Col>
-        <Col>
+        <Col xxl={10} xl={9}>
           <Row>
             <Breadcrumbs />
           </Row>
