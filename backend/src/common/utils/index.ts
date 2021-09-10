@@ -11,3 +11,5 @@ export {
   generateTokens,
 } from './tokens.util';
 export { parseMentions } from './mention.util';
+export { getRandomFromArray } from './get-random-from-array.util';
+export { createPageContent } from './create-page-content.util';
