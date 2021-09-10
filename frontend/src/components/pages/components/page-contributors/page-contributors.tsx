@@ -45,7 +45,7 @@ export const PageContributors: React.FC<IPageContributorsProps> = ({
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         {contributors ? (
           <div
-            className="d-flex justify-content-start"
+            className="d-flex justify-content-start flex-wrap"
             style={{ marginLeft: +avatarSize / 2 }}
           >
             {contributors.map(({ id, fullName, avatar }) => (
