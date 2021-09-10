@@ -45,7 +45,7 @@ export const PageFollowingUsers: React.FC<IPageContributorsProps> = ({
       <Card.Body className={getAllowedClasses(styles.cardBody)}>
         {followers ? (
           <div
-            className="d-flex justify-content-start"
+            className="d-flex justify-content-start flex-wrap"
             style={{ marginLeft: +avatarSize / 2 }}
           >
             {followers.map(({ id, fullName, avatar }) => (
