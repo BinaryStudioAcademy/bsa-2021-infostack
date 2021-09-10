@@ -99,15 +99,17 @@ export const CollabEditor: React.FC<Props> = ({
         color: 'blue',
       });
 
-      if (provider.awareness.states.size == 1) {
-        const md = new MarkdownIt();
-        const result = md.render(content || '');
-        quill.clipboard.dangerouslyPasteHTML(result);
-      }
+      const md = new MarkdownIt();
+      const result = md.render(content || '');
+      quill.clipboard.dangerouslyPasteHTML(result);
 
       quill.on('text-change', () => {
-        const html = quill.root.innerHTML;
+        const { innerHTML: html, innerText: text } = quill.root;
         setContentInput(html);
+        const middleOfText = text.length / 2;
+        if (text.slice(0, middleOfText) === text.slice(middleOfText)) {
+          quill.deleteText(0, middleOfText);
+        }
       });
 
       return (): void => {
