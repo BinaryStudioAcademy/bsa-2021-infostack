@@ -1,7 +1,6 @@
 .title {
   display: flex;
   justify-content: space-between;
-
   .menu {
     button {
       &::after {
@@ -14,59 +13,44 @@
 .container {
   display: flex;
   flex-direction: column;
-
   min-height: 6rem;
 }
 
 .activity {
   display: flex;
   align-items: flex-start;
-
   width: 100%;
-
   padding: 1rem 1.25rem 1rem 1.25rem;
   font-size: 1.5rem;
   text-decoration: none;
   font-weight: 500;
   color: #495057;
-
   cursor: pointer;
-
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-
   .infoContainer {
     display: flex;
     flex-direction: column;
-
     width: 90%;
-
     margin-left: 0.8rem;
-
     .heading {
       font-size: 1.25rem;
     }
-
     .createdAt {
       font-size: 1.25rem;
       text-decoration: none;
       font-weight: 500;
       color: #495057;
     }
-
     .contentContainer {
       margin-top: 1rem;
       border: 1px solid rgb(222, 230, 237) !important;
       box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%);
-
       .content {
         display: block;
         display: -webkit-box;
-
         max-width: 95rem;
-
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
-
         line-height: 2rem;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -83,4 +67,9 @@
 .dropdownToggle,
 .dropdownItem {
   font-size: 1.4rem;
+  padding: 6px 0px 6px 14px;
+}
+
+.dropdownMenu {
+  padding: 0;
 }
