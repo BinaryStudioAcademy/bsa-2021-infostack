@@ -1,6 +1,7 @@
 import { Dropdown } from 'react-bootstrap';
 import { VersionItem } from '../version-item/version-item';
 import { BlueCircle } from '../version-item/blue-circle/blue-circle';
+import { UserAvatar } from 'components/common/common';
 import { useAppSelector, useParams } from 'hooks/hooks';
 import NavLink from 'react-bootstrap/NavLink';
 import {
@@ -15,7 +16,6 @@ import {
   IPageContent,
   IPageContentWithAuthor,
 } from 'common/interfaces/pages';
-import Avatar from 'react-avatar';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -126,12 +126,14 @@ const VersionDropdown: React.FC<Props> = ({ currContent, contributors }) => {
                   styles.avatarContainer,
                 )}
               >
-                <Avatar
+                <UserAvatar
                   key={id}
                   name={author ? author?.fullName : 'not found'}
                   src={author ? author?.avatar : ''}
                   round={true}
                   size="20"
+                  className={getAllowedClasses(styles.userAvatarVersions)}
+                  showTooltip={false}
                 />
                 <p
                   className={getAllowedClasses(

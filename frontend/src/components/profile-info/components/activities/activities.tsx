@@ -39,7 +39,12 @@ const Activities: React.FC = () => {
       >
         <span>Activities</span>
 
-        <Dropdown title={filter} id="activity-filter" className={styles.menu}>
+        <Dropdown
+          title={filter}
+          id="activity-filter"
+          className={styles.menu}
+          align="end"
+        >
           <Dropdown.Toggle
             as={NavLink}
             className={getAllowedClasses(
@@ -49,7 +54,7 @@ const Activities: React.FC = () => {
           >
             <span className="me-2">{filter}</span>
           </Dropdown.Toggle>
-          <Dropdown.Menu>
+          <Dropdown.Menu className={styles.dropdownMenu}>
             {FILTER_OPTIONS.map((option) => {
               return (
                 <Dropdown.Item
