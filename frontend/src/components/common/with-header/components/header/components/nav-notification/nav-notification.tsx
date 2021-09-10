@@ -99,6 +99,7 @@ export const NavNotification: React.FC = () => {
       dispatch(notificationsActions.removeNotifications());
       dispatch(notificationsActions.setIsExpanded(false));
     }
+    setIsFiltered(false);
   };
 
   const onShowAll = (): void => {
@@ -161,7 +162,7 @@ export const NavNotification: React.FC = () => {
               </div>
             )}
           </div>
-          {isExpanded && <Dropdown.Divider className="mb-0 mt-0" />}
+          <Dropdown.Divider className="mb-0 mt-0" />
           <div className={getAllowedClasses(isExpanded ? styles.expanded : '')}>
             {!notificationsToShow.length && isFiltered && (
               <div className={getAllowedClasses(styles.noUnread)}>
@@ -172,31 +173,31 @@ export const NavNotification: React.FC = () => {
               .sort(sortObjByDate)
               .map((notification, i) => (
                 <>
-                  {(!!i || !isExpanded) && (
-                    <Dropdown.Divider className="my-0" />
-                  )}
                   {((!isExpanded && i < 4) || isExpanded) && (
-                    <NotificationItem
-                      key={notification.id}
-                      id={notification.id}
-                      type={notification.type}
-                      icon={
-                        notification.type === EntityType.COMMENT
-                          ? 'bi bi-chat-left'
-                          : notification.type === EntityType.TEAM
-                          ? 'bi bi-people'
-                          : notification.type === EntityType.PAGE
-                          ? 'bi bi-file-text-fill'
-                          : 'bi bi-info-circle'
-                      }
-                      title={notification.title}
-                      subtitle={notification.subtitle}
-                      subtitleId={notification.subtitleId}
-                      body={notification.body}
-                      read={notification.read}
-                      time={toDayJS(notification.createdAt).fromNow()}
-                      onRead={onRead}
-                    />
+                    <>
+                      <NotificationItem
+                        key={notification.id}
+                        id={notification.id}
+                        type={notification.type}
+                        icon={
+                          notification.type === EntityType.COMMENT
+                            ? 'bi bi-chat-left'
+                            : notification.type === EntityType.TEAM
+                            ? 'bi bi-people'
+                            : notification.type === EntityType.PAGE
+                            ? 'bi bi-file-text-fill'
+                            : 'bi bi-info-circle'
+                        }
+                        title={notification.title}
+                        subtitle={notification.subtitle}
+                        subtitleId={notification.subtitleId}
+                        body={notification.body}
+                        read={notification.read}
+                        time={toDayJS(notification.createdAt).fromNow()}
+                        onRead={onRead}
+                      />
+                      <Dropdown.Divider className="my-0" />
+                    </>
                   )}
                 </>
               ))}
