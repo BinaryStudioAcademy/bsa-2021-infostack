@@ -100,7 +100,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
     history.push(replaceIdParam(AppRoute.PAGE, page.id));
   };
 
-  const handleAvatrClick = (): void => {
+  const handleAvatarClick = (): void => {
     history.push(replaceIdParam(AppRoute.PROFILE, user.id));
   };
 
@@ -164,7 +164,7 @@ const Activity: React.FC<{ activity: IUserActivity }> = ({ activity }) => {
         src={user.avatar}
         round={true}
         className={getAllowedClasses(styles.userAvatar)}
-        onClick={handleAvatrClick}
+        onClick={handleAvatarClick}
       />
 
       <div className={styles.infoContainer} onClick={handleClick}>
