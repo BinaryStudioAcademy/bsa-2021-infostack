@@ -7,7 +7,7 @@
   },
   "scripts": {
     "move:deploy": "mv backend/build . && mv backend/node_modules build && mv frontend/build/* build/public",
-    "lint:editorconfig": "editorconfig-checker --exclude 'tests/specs|mobile/ios|mobile/android'",
+    "lint:editorconfig": "editorconfig-checker --exclude 'tests/specs|mobile/ios|mobile/android|backend/src/data/seed-data'",
     "lint:fs": "ls-lint",
     "lint:shared:js": "cd shared && npm run lint:js",
     "lint:shared": "cd shared && npm run lint",
