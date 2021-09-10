@@ -44,11 +44,12 @@
 }
 
 .info {
-  margin-top: 10px;
+  margin-top: 13px;
   font-size: 12px;
   margin-left: 2.5rem;
   color: var(--bs-gray);
   white-space: nowrap;
+  align-self: flex-start;
 }
 
 .placeholder {
