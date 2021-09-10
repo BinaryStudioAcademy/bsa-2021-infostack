@@ -1,8 +1,10 @@
 import { Card } from 'react-bootstrap';
+import { useHistory } from 'hooks/hooks';
 import { ITeam } from 'common/interfaces/team';
+import { AppRoute } from 'common/enums';
 import { DropDown } from '../components';
 import { UserAvatar } from 'components/common/avatar/avatar';
-import { getAllowedClasses } from 'helpers/helpers';
+import { getAllowedClasses, replaceIdParam } from 'helpers/helpers';
 import styles from './styles.module.scss';
 
 export const Item: React.FC<{ team: ITeam; userId: string }> = ({
@@ -10,6 +12,15 @@ export const Item: React.FC<{ team: ITeam; userId: string }> = ({
   team,
   team: { name, users, owner },
 }) => {
+  const history = useHistory();
+
+  const handleAvatarClick = (
+    _event: React.SyntheticEvent<Element, Event>,
+    userId: string,
+  ): void => {
+    history.push(replaceIdParam(AppRoute.PROFILE, userId));
+  };
+
   return (
     <Card
       className={getAllowedClasses(
@@ -36,6 +47,7 @@ export const Item: React.FC<{ team: ITeam; userId: string }> = ({
               src={avatar}
               round={true}
               className={getAllowedClasses(styles.userAvatar)}
+              onClick={(event): void => handleAvatarClick(event, id)}
             />
           ))}
       </Card.Body>
